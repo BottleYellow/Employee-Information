@@ -1,0 +1,12 @@
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.deps.json
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csprojAssemblyReference.cache
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CoreCompileInputs.cache
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfoInputs.cache
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfo.cs
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CopyComplete
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
+E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb
