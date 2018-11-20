@@ -123,8 +123,7 @@ namespace EIS.Data
                 #region[Other]
                 //For EmployeeOtherAddress 
 
-                modelBuilder.Entity<Other>().Property(p => p.FirstName).HasColumnType("nvarchar(50)").IsRequired();
-                modelBuilder.Entity<Other>().Property(p => p.LastName).HasColumnType("nvarchar(50)").IsRequired();
+                modelBuilder.Entity<Other>().Property(p => p.AddressType).HasColumnType("nvarchar(30)").IsRequired();
                 modelBuilder.Entity<Other>().Property(p => p.Address).HasColumnType("nvarchar(400)");
                 modelBuilder.Entity<Other>().Property(p => p.City).HasColumnType("nvarchar(50)");
                 modelBuilder.Entity<Other>().Property(p => p.State).HasColumnType("nvarchar(50)");

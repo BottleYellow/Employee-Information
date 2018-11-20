@@ -1,4 +1,4 @@
-﻿using EIS.Entities.Employee;
+﻿○using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,7 +10,7 @@ namespace EIS.WebAPI.Controllers
     public class EmployeeController : Controller
     {
         public readonly IRepositoryWrapper _repository;
-        public EmployeeController(IRepositoryWrapper repository) //: base(repository)
+        public EmployeeController(IRepositoryWrapper repository)
         {
             _repository= repository  ;
         }

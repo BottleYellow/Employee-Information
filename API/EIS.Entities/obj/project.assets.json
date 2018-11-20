@@ -687,11 +687,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Entities\\EIS.Entities.csproj",
+      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EIS.Entities\\EIS.Entities.csproj",
       "projectName": "EIS.Entities",
-      "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Entities\\EIS.Entities.csproj",
+      "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.Entities\\EIS.Entities.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Entities\\obj\\",
+      "outputPath": "E:\\aadyam\\Employee Information\\API\\EIS.Entities\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

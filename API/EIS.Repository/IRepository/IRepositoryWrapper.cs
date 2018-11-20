@@ -8,6 +8,7 @@ namespace EIS.Repositories.IRepository
         ICurrentAddressRepository CurrentAddress { get; }
         IPermanentAddressRepository PermanentAddress { get; }
         IEmergencyAddressRepository EmergencyAddress { get; }
+        IOtherAddressRepository OtherAddress { get; }
         IAttendanceRepository Attendance { get; }
         ILeaveRepository Leave { get; }
         ILoginRepository Login { get; }

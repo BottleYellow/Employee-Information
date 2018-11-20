@@ -9,7 +9,6 @@ namespace EIS.Entities.Address
     public class Permanent : BaseEntity<int>
     {
         public int PersonId { get; set; }
-
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }

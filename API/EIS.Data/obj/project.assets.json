@@ -7179,11 +7179,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Data\\EIS.Data.csproj",
+      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EIS.Data\\EIS.Data.csproj",
       "projectName": "EIS.Data",
-      "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Data\\EIS.Data.csproj",
+      "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.Data\\EIS.Data.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Data\\obj\\",
+      "outputPath": "E:\\aadyam\\Employee Information\\API\\EIS.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -7202,8 +7202,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Entities\\EIS.Entities.csproj": {
-              "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Entities\\EIS.Entities.csproj"
+            "E:\\aadyam\\Employee Information\\API\\EIS.Entities\\EIS.Entities.csproj": {
+              "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.Entities\\EIS.Entities.csproj"
             }
           }
         }

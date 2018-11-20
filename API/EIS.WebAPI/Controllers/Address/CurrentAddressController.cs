@@ -2,16 +2,19 @@
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/CurrentAddress")]
     [ApiController]
-    public class CurrentAddressController : BaseController
+    public class CurrentAddressController : Controller
     {
-        public CurrentAddressController(IRepositoryWrapper repository) : base(repository)
+        public readonly IRepositoryWrapper _repository;
+        public CurrentAddressController(IRepositoryWrapper repository)
         {
+            _repository = repository;
         }
 
         // GET: api/Currents
@@ -30,14 +33,14 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Current = _repository.CurrentAddress.FindByCondition(addr=>addr.Id==id);
+            var current = _repository.CurrentAddress.FindByCondition(addr=>addr.Id==id);
 
-            if (Current == null)
+            if (current == null)
             {
                 return NotFound();
             }
 
-            return Ok(Current);
+            return Ok(current);
         }
 
         // PUT: api/Currents/5
@@ -92,15 +95,29 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Current = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
-            if (Current == null)
+            var current = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
+            if (current == null)
             {
                 return NotFound();
             }
-
-            _repository.CurrentAddress.Delete(Current);
+            Other other = new Other();
+            other.AddressType = "Current Address";
+            other.PersonId = current.PersonId;
+            other.Address = current.Address;
+            other.City = current.City;
+            other.State = current.State;
+            other.Country = current.Country;
+            other.Person = current.Person;
+            other.PhoneNumber = current.PhoneNumber;
+            other.PinCode = current.PinCode;
+            other.IsActive = current.IsActive;
+            other.CreatedDate = current.CreatedDate;
+            other.UpdatedDate = DateTime.Now;
+            _repository.OtherAddress.Create(other);
+            _repository.OtherAddress.Save();
+            _repository.CurrentAddress.Delete(current);
             _repository.CurrentAddress.Save();
-            return Ok(Current);
+            return Ok(current);
         }
     }
 }

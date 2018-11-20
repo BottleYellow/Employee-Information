@@ -12849,11 +12849,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "projectUniqueName": "E:\\aadyam\\Employee Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
       "projectName": "EIS.WebAPI",
-      "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.WebAPI\\obj\\",
+      "outputPath": "E:\\aadyam\\Employee Information\\API\\EIS.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12872,11 +12872,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Repository\\EIS.Repositories.csproj": {
-              "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Repository\\EIS.Repositories.csproj"
+            "E:\\aadyam\\Employee Information\\API\\EIS.Repository\\EIS.Repositories.csproj": {
+              "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.Repository\\EIS.Repositories.csproj"
             },
-            "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Validations\\EIS.Validations.csproj": {
-              "projectPath": "E:\\aadyam\\Employee Information\\API\\EmployeeInformationSystem\\EIS.Validations\\EIS.Validations.csproj"
+            "E:\\aadyam\\Employee Information\\API\\EIS.Validations\\EIS.Validations.csproj": {
+              "projectPath": "E:\\aadyam\\Employee Information\\API\\EIS.Validations\\EIS.Validations.csproj"
             }
           }
         }

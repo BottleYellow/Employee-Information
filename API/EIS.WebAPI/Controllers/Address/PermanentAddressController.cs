@@ -2,16 +2,19 @@
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/PermanentAddress")]
     [ApiController]
-    public class PermanentAddressController : BaseController
+    public class PermanentAddressController : Controller
     {
-        public PermanentAddressController(IRepositoryWrapper repository) : base(repository)
+        public readonly IRepositoryWrapper _repository;
+        public PermanentAddressController(IRepositoryWrapper repository)
         {
+            _repository = repository;
         }
 
         // GET: api/Permanents
@@ -53,7 +56,6 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest();
             }
-
             _repository.PermanentAddress.Update(permanent);
            
             try
@@ -92,15 +94,29 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Permanent = _repository.PermanentAddress.FindByCondition(addr => addr.Id == id);
-            if (Permanent == null)
+            var permanent = _repository.PermanentAddress.FindByCondition(addr => addr.Id == id);
+            if (permanent == null)
             {
                 return NotFound();
             }
-
-            _repository.PermanentAddress.Delete(Permanent);
+            Other other = new Other();
+            other.AddressType = "Permanent Address";
+            other.PersonId = permanent.PersonId;
+            other.Address = permanent.Address;
+            other.City = permanent.City;
+            other.State = permanent.State;
+            other.Country = permanent.Country;
+            other.Person = permanent.Person;
+            other.PhoneNumber = permanent.PhoneNumber;
+            other.PinCode = permanent.PinCode;
+            other.IsActive = permanent.IsActive;
+            other.CreatedDate = permanent.CreatedDate;
+            other.UpdatedDate = DateTime.Now;
+            _repository.OtherAddress.Create(other);
+            _repository.OtherAddress.Save();
+            _repository.PermanentAddress.Delete(permanent);
             _repository.PermanentAddress.Save();
-            return Ok(Permanent);
+            return Ok(permanent);
         }
     }
 }

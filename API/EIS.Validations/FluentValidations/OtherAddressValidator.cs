@@ -7,8 +7,7 @@ namespace EIS.Validations.FluentValidations
     {
         public OtherAddressValidator()
         {
-            RuleFor(x => x.FirstName).Matches("^[a-zA-Z ]*$").NotNull();
-            RuleFor(x => x.LastName).Matches("^[a-zA-Z ]*$").NotNull();
+            
             RuleFor(x => x.Address).NotNull();
             RuleFor(x => x.City).Matches("^[a-zA-Z ]*$");
             RuleFor(x => x.State).Matches("^[a-zA-Z ]*$");

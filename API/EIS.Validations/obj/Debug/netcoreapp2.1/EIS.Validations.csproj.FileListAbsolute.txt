@@ -12,3 +12,17 @@ E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Validations\obj
 E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CopyComplete
 E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
 E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+E:\aadyam\Employee Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csprojAssemblyReference.cache
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CoreCompileInputs.cache
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.AssemblyInfoInputs.cache
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.AssemblyInfo.cs
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CopyComplete
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
+E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb

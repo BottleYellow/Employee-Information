@@ -6,12 +6,14 @@ using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Leaves")]
     [ApiController]
-    public class LeavesController : BaseController
+    public class LeavesController : Controller
     {
-        public LeavesController(IRepositoryWrapper repository) : base(repository)
+        public readonly IRepositoryWrapper _repository;
+        public LeavesController(IRepositoryWrapper repository) 
         {
+            _repository = repository;
         }
 
         // GET: api/Leaves

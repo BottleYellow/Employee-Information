@@ -16,6 +16,8 @@ namespace EIS.Repositories.Repository
 
         private IEmergencyAddressRepository _emergencyAddress;
 
+        private IOtherAddressRepository _otherAddress;
+
         private IAttendanceRepository _attendance;
 
         private ILeaveRepository _leave;
@@ -64,6 +66,17 @@ namespace EIS.Repositories.Repository
                     _emergencyAddress = new EmergencyAddressRepository(_dbContext);
                 }
                 return _emergencyAddress;
+            }
+        }
+        public IOtherAddressRepository OtherAddress
+        {
+            get
+            {
+                if (_otherAddress == null)
+                {
+                    _otherAddress = new OtherAddressRepository(_dbContext);
+                }
+                return _otherAddress;
             }
         }
 
