@@ -1,0 +1,75 @@
+﻿@model EIS.Entities.User.Users
+@{ 
+    Layout = null;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-state=1" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('images/bg.jpg');">
+            <div class="wrap-login100">
+                <form asp-action="Login" method="post" class="login100-form validate-form">
+                    <span class="login100-form-logo">
+                        <i class="zmdi zmdi-landscape">
+                            <img src="~/images/favicon1.ico" />
+                        </i>
+                    </span>
+
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Log in
+                    </span>
+                    <div class="form-group">
+                        
+                        <div class="inner-addon left-addon">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <input asp-for="UserName" type="text" class="form-control" placeholder="Email" style="color:antiquewhite"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        
+                        <div class="inner-addon left-addon">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" style="color:antiquewhite"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        
+                        <div class="inner-addon left-addon" style="text-align:center">
+                            <div class="inner-addon left-addon">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <select asp-for="Role" class="form-control solid" style="color:antiquewhite">
+                                    <option>Role</option>
+                                    <option>Sample</option>
+                                    <option>Sample</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="checkbox">
+                            <label><input asp-for="RememberMe" type="checkbox" />Remember me</label>
+                        </div>
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn" type="submit">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="text-center p-t-90">
+                            <a href="#" style="color:aliceblue">
+                                Forgot Password?
+                            </a>
+                        </div>
+</form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

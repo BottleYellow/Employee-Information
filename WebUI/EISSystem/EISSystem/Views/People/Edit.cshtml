@@ -1,0 +1,128 @@
+﻿@model EIS.Entities.Employee.Person
+@using Microsoft.Net.Http;
+@using EIS.Entities.Enums;
+
+@*@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+@{
+    EIS.Entities.Employee.Person person = new EIS.Entities.Employee.Person(); }
+<h2>Edit</h2>
+
+<h4>Person</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="RowVersion" />
+            <div class="form-group">
+                <img src="@ViewBag.ImageData" style="height:70px; width:70px;" />
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label asp-for="IdCard" class="control-label"></label>
+                        <input asp-for="IdCard" class="form-control" style="width:250px" />
+                        <span asp-validation-for="IdCard" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AadharCard" class="control-label"></label>
+                        <input asp-for="AadharCard" class="form-control" style="width:250px" />
+                        <span asp-validation-for="AadharCard" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" style="width:250px" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" style="width:250px" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LeavingDate" class="control-label"></label>
+                        <input asp-for="LeavingDate" class="form-control" style="width:250px" />
+                        <span asp-validation-for="LeavingDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MobileNumber" class="control-label"></label>
+                        <input asp-for="MobileNumber" class="form-control" style="width:250px" />
+                        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <select style="width:250px" asp-for="Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control">
+                            <option>Select Gender</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" style="width:250px" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label asp-for="PanCard" class="control-label"></label>
+                        <input asp-for="PanCard" class="form-control" style="width:250px" />
+                        <span asp-validation-for="PanCard" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Designation" class="control-label"></label>
+                        <select asp-for="Designation" asp-items="@new SelectList(Enum.GetValues(typeof(Designation)))" class="form-control" style="width:250px">
+                            <option>Select Designation</option>
+                        </select>
+                        <span asp-validation-for="Designation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MiddleName" class="control-label"></label>
+                        <input asp-for="MiddleName" class="form-control" style="width:250px" />
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="JoinDate" class="control-label"></label>
+                        <input asp-for="JoinDate" class="form-control" style="width:250px" />
+                        <span asp-validation-for="JoinDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateOfBirth" class="control-label"></label>
+                        <input asp-for="DateOfBirth" class="form-control" style="width:250px" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" style="width:250px" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Salary" class="control-label"></label>
+                        <input asp-for="Salary" class="form-control" style="width:250px" />
+                        <span asp-validation-for="Salary" class="text-danger"></span>
+                    </div>
+
+
+                </div>
+                <div class="col-sm-4">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

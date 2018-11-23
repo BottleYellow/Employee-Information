@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EIS.Data">
+      <HintPath>..\..\..\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Entities">
+      <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Repositories">
+      <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Validations">
+      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.WebAPI">
+      <HintPath>..\..\..\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

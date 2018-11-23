@@ -1,0 +1,333 @@
+﻿@model EIS.Entities.Employee.Person
+@using Microsoft.AspNetCore.Http;
+
+@{
+    Layout = "_FinalLayout";
+}
+@{ 
+    if(TempData["Id"]==null)
+    {
+        return RedirectResult()
+    }
+}
+<html>
+<head>
+    <title>Profile</title>
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .deco-none {
+            text-decoration: none !important;
+        }
+
+        .red-class {
+            color: red !important;
+        }
+
+        .panel-collapse {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-3">
+                <div class="card profile-card">
+                    <div class="profile-header">&nbsp;</div>
+                    <div class="profile-body">
+                        <div class="image-area">
+                            <img src="@ViewBag.ImageData" alt="AdminBSB - Profile Image" />
+                        </div>
+                        <div class="content-area">
+                            <h3>@ViewBag.Name</h3>
+                            <p>Web Software Developer</p>
+                            <p>Employee</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="card card-about-me">
+                    <div class="header">
+                        <h2>ABOUT ME</h2>
+                    </div>
+                    <div class="body">
+                        <ul>
+                            <li>
+                                <div class="title">
+                                    <i class="material-icons">location_on</i>
+                                    Location
+                                </div>
+                                <div class="content">
+                                    Malibu, California
+                                </div>
+                            </li>
+                            <li>
+                                <div class="title">
+                                    <i class="material-icons">notes</i>
+                                    Description
+                                </div>
+                                <div class="content">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <div class="card">
+                    <div class="body">
+                        <div>
+                            <ul class="nav nav-tabs responsive" role="tablist">
+                                <li role="presentation" class="active"><a href="#profile_details" aria-controls="settings" role="tab" data-toggle="tab">Personal Details</a></li>
+                                <li role="presentation"><a href="#padd" aria-controls="settings" role="tab" data-toggle="tab">Permanent Address</a></li>
+                                <li role="presentation"><a href="#cadd" aria-controls="settings" role="tab" data-toggle="tab">Current Addresses</a></li>
+                                <li role="presentation"><a href="#eadd" aria-controls="settings" role="tab" data-toggle="tab">Emergency Addresses</a></li>
+                                <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Change Password</a></li>
+                            </ul>
+                            <div class="tab-content responsive">
+                                <div role="tabpanel" class="tab-pane fade in active" id="profile_details">
+                                    <div class="panel-body">
+                                        <div class="form-horizontal">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Full Name : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.MiddleName) @Html.DisplayFor(model => model.LastName)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Email Address : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.EmailAddress)</label>
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Date Of Birth : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.DateOfBirth)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Mobile No. : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.MobileNumber)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Designation : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.Designation)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Gender : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.Gender)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Aadhar No. : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.AadharCard)</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2">Pan No. : </label>
+                                                <div class="col-md-10">
+                                                    <label class="control-label">@Html.DisplayFor(model => model.PanCard)</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade in" id="padd">
+                                    <div class="panel-body">
+                                        <div class="body table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <tr>
+                                                    <th>Address</th>
+                                                    <th>Active Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" data-parent="#accordion" data-toggle="ajax-modal" class="btn btn-primary waves-effect">
+                                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                            <span><strong>Edit</strong></span>
+                                                        </button>
+                                                        <button id="btndeletepermanent" type="button" class="btn btn btn-danger waves-effect">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                            <span><strong>Delete</strong></span>
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade in" id="cadd">
+                                    <div class="panel-body">
+                                        <div class="body table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <tr>
+                                                    <th>Address</th>
+                                                    <th>Active Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        A/P Khadpoli Wakanwadi,Tal-Chiplun, Dist-Ratnagiri, Maharashtra-415603
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" data-parent="#accordion" data-toggle="ajax-modal" class="btn btn-primary waves-effect">
+                                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                            <span><strong>Edit</strong></span>
+                                                        </button>
+                                                        <button id="btndeletepermanent" type="button" class="btn btn btn-danger waves-effect">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                            <span><strong>Delete</strong></span>
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade in" id="eadd">
+                                    <div class="panel-body">
+                                        <div class="body table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <tr>
+                                                    <th>Address</th>
+                                                    <th>Active Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        A/P Khadpoli Wakanwadi,Tal-Chiplun, Dist-Ratnagiri, Maharashtra-415603
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" data-parent="#accordion" data-toggle="ajax-modal" class="btn btn-primary waves-effect">
+                                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                            <span><strong>Edit</strong></span>
+                                                        </button>
+                                                        <button id="btndeletepermanent" type="button" class="btn btn btn-danger waves-effect">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                            <span><strong>Delete</strong></span>
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                    <div>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="OldPassword" class="col-sm-3 control-label">Old Password</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input type="password" class="form-control" id="OldPassword" name="OldPassword" placeholder="Old Password" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="NewPassword" class="col-sm-3 control-label">New Password</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input type="password" class="form-control" id="NewPassword" name="NewPassword" placeholder="New Password" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="NewPasswordConfirm" class="col-sm-3 control-label">New Password (Confirm)</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input type="password" class="form-control" id="NewPasswordConfirm" name="NewPasswordConfirm" placeholder="New Password (Confirm)" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-9">
+                                                    <button type="submit" class="btn btn-danger">SUBMIT</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/responsive-tabs.js"></script>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('.collapse.in').prev('.panel-heading').addClass('active');
+        $('#accordion, #bs-collapse')
+            .on('show.bs.collapse', function (a) {
+                $(a.target).prev('.panel-heading').addClass('active');
+            })
+            .on('hide.bs.collapse', function (a) {
+                $(a.target).prev('.panel-heading').removeClass('active');
+            });
+    });
+    $('ul.nav.nav-tabs  a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    (function ($) {
+        // Test for making sure event are maintained
+        $('.js-alert-test').click(function () {
+            alert('Button Clicked: Event was maintained');
+        });
+        fakewaffle.responsiveTabs(['xs', 'sm']);
+    })(jQuery);
+</script>
