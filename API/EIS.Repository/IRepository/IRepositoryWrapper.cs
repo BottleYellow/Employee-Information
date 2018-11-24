@@ -1,5 +1,6 @@
 ﻿
 
+
 namespace EIS.Repositories.IRepository
 {
     public interface IRepositoryWrapper
@@ -11,7 +12,7 @@ namespace EIS.Repositories.IRepository
         IOtherAddressRepository OtherAddress { get; }
         IAttendanceRepository Attendance { get; }
         ILeaveRepository Leave { get; }
-        ILoginRepository Login { get; }
-
+        IUserRepository Users { get; }
+        IRoleRepository RoleManager { get; }
     }
 }

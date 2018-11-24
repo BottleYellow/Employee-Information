@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
+using EIS.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,7 @@ namespace EIS.Entities.Employee
         #endregion
 
         #region [Relations]
+        public virtual Users User { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual Designation Designation { get; set; }
         public virtual ICollection<Leaves> Leaves { get; set; }

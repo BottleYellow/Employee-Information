@@ -44,3 +44,25 @@ E:\aadyam\Employee Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI
 E:\aadyam\Employee Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CopyComplete
 E:\aadyam\Employee Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.dll
 E:\aadyam\Employee Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csprojResolveAssemblyReference.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CoreCompileInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cs
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.AssemblyInfoInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.AssemblyInfo.cs
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.deps.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.runtimeconfig.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.runtimeconfig.dev.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Data.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Repositories.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Validations.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorTargetAssemblyInfo.cache

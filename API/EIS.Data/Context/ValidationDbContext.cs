@@ -10,9 +10,9 @@ using System.Text;
 
 namespace EIS.Data.Context
 {
-   public class ValidationDbContext : IDesignTimeDbContextFactory<EIS.Data.Context.DbContext>
+   public class ValidationDbContext : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
-        public EIS.Data.Context.DbContext CreateDbContext(string[] args)
+        public ApplicationDbContext CreateDbContext(string[] args)
         {
             //Get Connection string through app.settings
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -21,9 +21,9 @@ namespace EIS.Data.Context
            .Build();
             string connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            var builder = new DbContextOptionsBuilder<EIS.Data.Context.DbContext>();
-            builder.UseSqlServer(connectionString, optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(EIS.Data.Context.DbContext).GetTypeInfo().Assembly.GetName().Name));
-            return new EIS.Data.Context.DbContext(builder.Options);
+            var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            builder.UseSqlServer(connectionString, optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name));
+            return new ApplicationDbContext(builder.Options);
         }
     }
 }

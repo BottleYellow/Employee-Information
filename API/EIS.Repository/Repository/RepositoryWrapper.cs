@@ -1,12 +1,12 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
+using Microsoft.Extensions.Options;
 
 namespace EIS.Repositories.Repository
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        
-        private readonly DbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
         private IEmployeeRepository _employee;
 
@@ -22,7 +22,9 @@ namespace EIS.Repositories.Repository
 
         private ILeaveRepository _leave;
 
-        private ILoginRepository _login;
+        private IUserRepository _user;
+
+        IRoleRepository _roleManager;
 
      public IEmployeeRepository Employee 
         {
@@ -102,18 +104,29 @@ namespace EIS.Repositories.Repository
                 return _leave;
             }
         }
-        public ILoginRepository Login
+        public IUserRepository Users
         {
             get
             {
-                if (_login == null)
+                if (_user == null)
                 {
-                    _login = new LoginRepository(_dbContext);
+                    _user = new UserRepository(_dbContext);
                 }
-                return _login;
+                return _user;
             }
         }
-        public RepositoryWrapper(DbContext dbContext)
+        public IRoleRepository RoleManager
+        {
+            get
+            {
+                if (_roleManager == null)
+                {
+                    _roleManager = new RoleRepository(_dbContext);
+                }
+                return _roleManager;
+            }
+        }
+        public RepositoryWrapper(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

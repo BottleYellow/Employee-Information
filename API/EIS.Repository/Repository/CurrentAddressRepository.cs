@@ -6,7 +6,7 @@ namespace EIS.Repositories.Repository
 {
     public class CurrentAddressRepository :RepositoryBase<Current>,ICurrentAddressRepository
     {
-        public CurrentAddressRepository(DbContext dbContext) : base(dbContext)
+        public CurrentAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         { }
     }
 }

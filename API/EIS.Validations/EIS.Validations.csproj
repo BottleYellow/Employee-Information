@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EIS.Data\EIS.Data.csproj" />
+    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,3 +16,12 @@ E:\aadyam\Employee Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Enti
 E:\aadyam\Employee Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs
 E:\aadyam\Employee Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
 E:\aadyam\Employee Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.deps.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CoreCompileInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfoInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csprojResolveAssemblyReference.cache

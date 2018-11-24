@@ -1,15 +1,17 @@
-﻿using EIS.Entities.Address;
-using EIS.Entities.Admin;
+﻿using EIS.Data.Context;
+using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Menu;
+using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace EIS.Data
 {
-    public class BuilderExtension : Microsoft.EntityFrameworkCore.DbContext
+    public class BuilderExtension : DbContext
     {
-        private readonly DbContextOptions<EIS.Data.Context.DbContext> options;
+        private readonly DbContextOptions<ApplicationDbContext> options;
 
-        public BuilderExtension(DbContextOptions<EIS.Data.Context.DbContext> options)
+        public BuilderExtension(DbContextOptions<ApplicationDbContext> options)
         {
             this.options = options;
         }
@@ -18,11 +20,11 @@ namespace EIS.Data
         {
             try
             {
-                #region[Admin]
-                //For Admin Login
-                modelBuilder.Entity<Login>().Property(p => p.UserName).HasColumnType("varchar(50)").IsRequired();
-                modelBuilder.Entity<Login>().Property(p => p.Password).HasColumnType("varchar(50)").IsRequired();
-                modelBuilder.Entity<Login>().Property(p => p.Role).HasColumnType("varchar(50)").IsRequired();
+
+                #region[Users]
+                modelBuilder.Entity<Users>().Property(p => p.UserName).HasColumnType("nvarchar(256)").IsRequired();
+                modelBuilder.Entity<Users>().Property(p => p.Password).HasColumnType("nvarchar(max)").IsRequired();
+                modelBuilder.Entity<Users>().Property(p => p.PersonId).HasColumnType("int").IsRequired();
                 #endregion
 
                 #region[Person]
@@ -135,6 +137,25 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
+                #region[Roles]
+                modelBuilder.Entity<Role>().Property(p => p.RoleId).HasColumnType("nvarchar(450)").IsRequired();
+                modelBuilder.Entity<Role>().Property(p => p.Name).HasColumnType("nvarchar(256)").IsRequired();
+                #endregion
+
+                #region[User Roles]
+                modelBuilder.Entity<UserRoles>().Property(p => p.UserId).HasColumnType("nvarchar(450)").IsRequired();
+                modelBuilder.Entity<UserRoles>().Property(p => p.RoleId).HasColumnType("nvarchar(450)").IsRequired();
+                #endregion
+
+                #region[Menu Master]               
+                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuId).HasColumnType("varchar(30)").IsRequired();
+                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuName).HasColumnType("varchar(30)").IsRequired();
+                modelBuilder.Entity<MenuMaster>().Property(p => p.ParentMenuId).HasColumnType("varchar(30)").IsRequired();
+                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuFileName).HasColumnType("varchar(100)").IsRequired();
+                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuURL).HasColumnType("varchar(500)").IsRequired();
+                modelBuilder.Entity<MenuMaster>().Property(p => p.USE_YN).HasColumnType("char(1)");
+                #endregion
+
                 #region[Table Relationship]
                 //one employees has many leaves
                 modelBuilder.Entity<Leaves>()
@@ -172,10 +193,15 @@ namespace EIS.Data
                    .WithMany(g => g.OtherAddress)
                    .HasForeignKey(s => s.PersonId);
 
+                modelBuilder.Entity<Users>()
+                    .HasOne(s => s.Person)
+                    .WithOne(g => g.User)
+                    .HasForeignKey<Users>(s => s.PersonId);
+
                 #endregion
 
                 #region[Table Schema]
-                modelBuilder.Entity<Login>().ToTable("Login", "Admin");
+                modelBuilder.Entity<Users>().ToTable("Users", "Account");
                 modelBuilder.Entity<Person>().ToTable("Person", "Employee");
                 modelBuilder.Entity<Leaves>().ToTable("Leaves", "Employee");
                 modelBuilder.Entity<Attendance>().ToTable("Attendance", "Employee");

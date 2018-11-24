@@ -10,9 +10,9 @@ namespace EIS.Repositories.Repository
 {
     public abstract class RepositoryBase<T> : IRepositorybase<T> where T : class
     {
-            protected DbContext _dbcontext { get; set; }
+            protected ApplicationDbContext _dbcontext { get; set; }
 
-            public RepositoryBase(DbContext dbcontext)
+            public RepositoryBase(ApplicationDbContext dbcontext)
             {
                 _dbcontext = dbcontext;
             }

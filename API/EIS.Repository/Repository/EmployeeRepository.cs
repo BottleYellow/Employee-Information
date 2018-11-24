@@ -6,7 +6,7 @@ namespace EIS.Repositories.Repository
 {
     public class EmployeeRepository :RepositoryBase<Person>,IEmployeeRepository
     {
-        public EmployeeRepository(DbContext dbContext) : base(dbContext)
+        public EmployeeRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
 
         }

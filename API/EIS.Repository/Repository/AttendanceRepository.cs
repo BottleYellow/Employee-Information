@@ -6,7 +6,7 @@ namespace EIS.Repositories.Repository
 {
     public class AttendanceRepository: RepositoryBase<Attendance>,IAttendanceRepository
     {
-        public AttendanceRepository(DbContext dbContext) : base(dbContext)
+        public AttendanceRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
 
         }

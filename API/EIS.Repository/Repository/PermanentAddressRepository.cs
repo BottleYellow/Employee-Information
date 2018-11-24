@@ -7,7 +7,7 @@ namespace EIS.Repositories.Repository
 {
     public class PermanentAddressRepository :RepositoryBase<Permanent>,IPermanentAddressRepository
     {
-        public PermanentAddressRepository(DbContext dbContext) : base(dbContext)
+        public PermanentAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }

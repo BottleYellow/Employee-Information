@@ -9,7 +9,7 @@ namespace EIS.Repositories.Repository
 {
     public class OtherAddressRepository : RepositoryBase<Other>, IOtherAddressRepository
     {
-        public OtherAddressRepository(DbContext dbContext) : base(dbContext)
+        public OtherAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }

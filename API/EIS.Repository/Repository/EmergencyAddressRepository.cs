@@ -6,7 +6,7 @@ namespace EIS.Repositories.Repository
 {
     public class EmergencyAddressRepository :RepositoryBase<Emergency>,IEmergencyAddressRepository
     {
-        public EmergencyAddressRepository(DbContext dbContext) : base(dbContext)
+        public EmergencyAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         { }
     }
 }
