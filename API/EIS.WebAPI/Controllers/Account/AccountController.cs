@@ -75,6 +75,7 @@ namespace EIS.WebAPI.Controllers
         public IEnumerable<Users> GetLogins()
         {
             return _repository.Users.FindAll();
+            
         }
 
         // GET: api/Logins/5
@@ -162,12 +163,11 @@ namespace EIS.WebAPI.Controllers
             var claimsdata = new[] { new Claim(ClaimTypes.Name, username) };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"));
             var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
             var token = new JwtSecurityToken(
                 issuer: "mysite.com",
                 audience: "mysite.com",
-                notBefore: TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE),
-                expires: TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE).AddDays(1),
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddDays(1),
                 claims: claimsdata,
                 signingCredentials: signInCred
                 );

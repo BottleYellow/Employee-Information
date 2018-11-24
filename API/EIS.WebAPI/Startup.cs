@@ -55,6 +55,7 @@ namespace EIS.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "mysite.com",
                     ValidAudience = "mysite.com",
+                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"))
                 };
             });
