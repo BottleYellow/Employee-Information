@@ -5,9 +5,10 @@ using System.Text;
 
 namespace EIS.Entities.User
 {
-    public class Role
+    public class Role : BaseEntity<int>
     {
-        public string RoleId { get; set; }
         public string Name { get; set; }
+        public UserRoles UserRole { get; set; }
+        
     }
 }

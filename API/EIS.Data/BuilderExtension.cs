@@ -27,6 +27,12 @@ namespace EIS.Data
                 modelBuilder.Entity<Users>().Property(p => p.PersonId).HasColumnType("int").IsRequired();
                 #endregion
 
+                #region[AccessTokens]
+                modelBuilder.Entity<AccessToken>().Property(p => p.TokenName).HasColumnType("nvarchar(max)").IsRequired();
+                modelBuilder.Entity<AccessToken>().Property(p => p.IPAddress).HasColumnType("nvarchar(50)").IsRequired();
+                modelBuilder.Entity<AccessToken>().Property(p => p.DeviceName).HasColumnType("nvarchar(max)").IsRequired();
+                #endregion
+
                 #region[Person]
                 //For Employee model validation
 
@@ -138,13 +144,13 @@ namespace EIS.Data
                 #endregion
 
                 #region[Roles]
-                modelBuilder.Entity<Role>().Property(p => p.RoleId).HasColumnType("nvarchar(450)").IsRequired();
+                modelBuilder.Entity<Role>().Property(p => p.Id).HasColumnType("int").IsRequired();
                 modelBuilder.Entity<Role>().Property(p => p.Name).HasColumnType("nvarchar(256)").IsRequired();
                 #endregion
 
                 #region[User Roles]
-                modelBuilder.Entity<UserRoles>().Property(p => p.UserId).HasColumnType("nvarchar(450)").IsRequired();
-                modelBuilder.Entity<UserRoles>().Property(p => p.RoleId).HasColumnType("nvarchar(450)").IsRequired();
+                modelBuilder.Entity<UserRoles>().Property(p => p.UserId).HasColumnType("int").IsRequired();
+                modelBuilder.Entity<UserRoles>().Property(p => p.RoleId).HasColumnType("int").IsRequired();
                 #endregion
 
                 #region[Menu Master]               
@@ -198,10 +204,25 @@ namespace EIS.Data
                     .WithOne(g => g.User)
                     .HasForeignKey<Users>(s => s.PersonId);
 
+                modelBuilder.Entity<UserRoles>()
+                    .HasOne(u => u.Role)
+                    .WithOne(r => r.UserRole)
+                    .HasForeignKey<UserRoles>(u => u.RoleId);
+
+                modelBuilder.Entity<UserRoles>()
+                    .HasOne(u => u.User)
+                    .WithOne(u1 => u1.Role)
+                    .HasForeignKey<UserRoles>(u => u.UserId);
+
+
+
                 #endregion
 
                 #region[Table Schema]
                 modelBuilder.Entity<Users>().ToTable("Users", "Account");
+                modelBuilder.Entity<UserRoles>().ToTable("UserRoles", "Account");
+                modelBuilder.Entity<Role>().ToTable("Role", "Account");
+                modelBuilder.Entity<AccessToken>().ToTable("Tokens", "Account");
                 modelBuilder.Entity<Person>().ToTable("Person", "Employee");
                 modelBuilder.Entity<Leaves>().ToTable("Leaves", "Employee");
                 modelBuilder.Entity<Attendance>().ToTable("Attendance", "Employee");

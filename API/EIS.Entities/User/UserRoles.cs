@@ -8,6 +8,8 @@ namespace EIS.Entities.User
     public class UserRoles : BaseEntity<int>
     {
         public int UserId { get; set; }
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
+        public Users User { get; set; }
     }
 }

@@ -20,23 +20,27 @@ namespace EIS.Repositories.Repository
         public void CreateRole(string RoleName)
         {
             Role role = new Role();
-            role.RoleId = new Guid().ToString();
             role.Name = RoleName;
+            role.IsActive = true;
+            role.CreatedDate = DateTime.Now;
+            role.UpdatedDate = DateTime.Now;
             dbContext.Roles.Add(role);
         }
 
         public async Task CreateRoleAsync(string RoleName)
         {
             Role role = new Role();
-            role.RoleId = new Guid().ToString();
             role.Name = RoleName;
+            role.IsActive = true;
+            role.CreatedDate = DateTime.Now;
+            role.UpdatedDate = DateTime.Now;
             await dbContext.Roles.AddAsync(role);
         }
 
         public string GetRole(Users user)
         {
             string role=null;
-            role = dbContext.Roles.Where(x => x.RoleId == (dbContext.UserRoles.Where(u => u.Id == user.Id).Select(u => u.RoleId).FirstOrDefault())).Select(x => x.Name).FirstOrDefault();
+            role = dbContext.Roles.Where(x => x.Id == (dbContext.UserRoles.Where(u => u.Id == user.Id).Select(u => u.RoleId).FirstOrDefault())).Select(x => x.Name).FirstOrDefault();
             if (role != null)
             {
                 return role;
@@ -44,7 +48,7 @@ namespace EIS.Repositories.Repository
             return role;
         }
 
-        public void MapRole(int UserId, string RoleId)
+        public void MapRole(int UserId, int RoleId)
         {
             UserRoles u = new UserRoles();
             u.UserId = UserId;
@@ -70,8 +74,8 @@ namespace EIS.Repositories.Repository
 
         public async Task<bool> RoleExistsAsync(string RoleName)
         {
-            var id = dbContext.Roles.Where(x => x.Name == RoleName).Select(x => x.RoleId).FirstOrDefault();
-            if (id != null)
+            var id = dbContext.Roles.Where(x => x.Name == RoleName).Select(x => x.Id).FirstOrDefault();
+            if (id != 0)
             {
                 var role =await dbContext.Roles.FindAsync(id);
                 if (role != null)

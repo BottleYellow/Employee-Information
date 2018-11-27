@@ -15,7 +15,7 @@ using EIS.WebAPI.Filters;
 
 namespace EIS.WebAPI.Controllers
 {
-   
+    [Authorization]
     [Route("api/account")]
     [ApiController]
     public class AccountController : BaseController
@@ -25,15 +25,17 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("login")]
         public IActionResult Login(Users user)
         {
             string s = _repository.Users.ValidateUser(user);
             if (s == "success")
             {
-                JwtSecurityToken token = GenerateToken(user.UserName);
+                Users u=_repository.Users.FindByUserName(user.UserName);
+                JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
-                return Ok(token);
+                return Ok(s1);
             }
                 
             else
@@ -69,9 +71,24 @@ namespace EIS.WebAPI.Controllers
         //}
         #endregion
 
+        [HttpPost]
+        [Route("logout/{id}")]
+        public IActionResult Logout(int id)
+        {
+            int n=_repository.Users.RemoveToken(id);
+            if (n > 0)
+            {
+                return Ok("Successfully Logged out.");
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         // GET: api/Logins
-        
         [HttpGet]
+        [Route("all")]
         public IEnumerable<Users> GetLogins()
         {
             return _repository.Users.FindAll();
@@ -97,47 +114,8 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
 
-        // PUT: api/Logins/5
-        [HttpPut("{id}")]
-        public IActionResult PutLogin([FromRoute] int id, [FromBody] Users login)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        
 
-            if (id != login.Id)
-            {
-                return BadRequest();
-            }
-            _repository.Users.Update(login);
-
-            try
-            {
-                _repository.Users.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                
-                    throw;
-                
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Logins
-        [HttpPost]
-        public IActionResult PostLogin([FromBody] Users login)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _repository.Users.Create(login);
-            _repository.Users.Save();
-            return CreatedAtAction("GetLogin", new { id = login.Id }, login);
-        }
 
         // DELETE: api/Logins/5
         [HttpDelete("{id}")]
@@ -156,23 +134,6 @@ namespace EIS.WebAPI.Controllers
             _repository.Users.Delete(login);
             _repository.Users.Save();
             return Ok(login);
-        }
-
-        public JwtSecurityToken GenerateToken(string username)
-        {
-            var claimsdata = new[] { new Claim(ClaimTypes.Name, username) };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"));
-            var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            var token = new JwtSecurityToken(
-                issuer: "mysite.com",
-                audience: "mysite.com",
-                notBefore: DateTime.Now,
-                expires: DateTime.Now.AddDays(1),
-                claims: claimsdata,
-                signingCredentials: signInCred
-                );
-            var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
-            return token;   
         }
     }
 }

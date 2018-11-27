@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181123073010_Initial")]
+    [Migration("20181127112332_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -443,19 +443,57 @@ namespace EIS.Data.Migrations
                     b.ToTable("MenuMaster");
                 });
 
+            modelBuilder.Entity("EIS.Entities.User.AccessToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Expiry");
+
+                    b.Property<string>("IPAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("IssuedAt");
+
+                    b.Property<string>("TokenName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tokens","Account");
+                });
+
             modelBuilder.Entity("EIS.Entities.User.Role", b =>
                 {
-                    b.Property<string>("RoleId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("RoleId");
+                    b.Property<DateTime>("UpdatedDate");
 
-                    b.ToTable("Roles");
+                    b.HasKey("Id");
+
+                    b.ToTable("Role","Account");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.UserRoles", b =>
@@ -468,20 +506,23 @@ namespace EIS.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 64)))
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRoles");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserRoles","Account");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
@@ -568,6 +609,27 @@ namespace EIS.Data.Migrations
                     b.HasOne("EIS.Entities.Employee.Person", "Person")
                         .WithMany("Leaves")
                         .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.User.AccessToken", b =>
+                {
+                    b.HasOne("EIS.Entities.User.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.User.UserRoles", b =>
+                {
+                    b.HasOne("EIS.Entities.User.Role", "Role")
+                        .WithOne("UserRole")
+                        .HasForeignKey("EIS.Entities.User.UserRoles", "RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.User.Users", "User")
+                        .WithOne("Role")
+                        .HasForeignKey("EIS.Entities.User.UserRoles", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

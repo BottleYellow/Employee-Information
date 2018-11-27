@@ -40,6 +40,8 @@ namespace EIS.Data.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<MenuMaster> MenuMaster { get; set; }
+
+        public DbSet<AccessToken> Tokens { get; set; }
         #endregion
     }
 }

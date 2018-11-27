@@ -16,6 +16,6 @@ namespace EIS.Entities.User
         public int AccessFailedCount { get; set; }
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
-
+        public UserRoles Role { get; set; }
     }
 }

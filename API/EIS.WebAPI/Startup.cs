@@ -41,10 +41,10 @@ namespace EIS.WebAPI
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddMvc(options =>
-            //{
-            //    options.Filters.Add(typeof(Authorization));
-            //});
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(Authorization));
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -55,7 +55,7 @@ namespace EIS.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "mysite.com",
                     ValidAudience = "mysite.com",
-                    ClockSkew = TimeSpan.Zero,
+                    ClockSkew=TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"))
                 };
             });
