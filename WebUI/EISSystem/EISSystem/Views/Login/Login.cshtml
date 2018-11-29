@@ -1,14 +1,17 @@
 ﻿@model EIS.Entities.User.Users
-@{ 
+@{
     Layout = null;
 }
+
+
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-state=1" />
+
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" rel="stylesheet" />
+
+
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
@@ -26,50 +29,48 @@
                         Log in
                     </span>
                     <div class="form-group">
-                        
+
                         <div class="inner-addon left-addon">
                             <i class="glyphicon glyphicon-user"></i>
-                            <input asp-for="UserName" type="text" class="form-control" placeholder="Email" style="color:antiquewhite"/>
+                            <input asp-for="UserName" type="text" class="form-control" placeholder="UserName" style="color:antiquewhite" required="required" />
                         </div>
                     </div>
                     <div class="form-group">
-                        
+
                         <div class="inner-addon left-addon">
                             <i class="glyphicon glyphicon-lock"></i>
-                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" style="color:antiquewhite"/>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" style="color:antiquewhite" required="required" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        
-                        <div class="inner-addon left-addon" style="text-align:center">
-                            <div class="inner-addon left-addon">
-                                <i class="glyphicon glyphicon-user"></i>
-                                <select asp-for="Role" class="form-control solid" style="color:antiquewhite">
-                                    <option>Role</option>
-                                    <option>Sample</option>
-                                    <option>Sample</option>
-                                </select>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="checkbox">
-                            <label><input asp-for="RememberMe" type="checkbox" />Remember me</label>
-                        </div>
-                        <div class="container-login100-form-btn">
-                            <button class="login100-form-btn" type="submit">
-                                Login
-                            </button>
-                        </div>
-
-                        <div class="text-center p-t-90">
-                            <a href="#" style="color:aliceblue">
-                                Forgot Password?
-                            </a>
-                        </div>
-</form>
+                    <div class="checkbox">
+                        <label><input type="checkbox" />Remember me</label>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn" type="submit">
+                            Login
+                        </button>
+                    </div>
+                    <div class="text-center p-t-90">
+                        <a href="#" style="color:aliceblue">
+                            Forgot Password?
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    
+
 </body>
+
 </html>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+@*<script src="~/SweetAlert/SweetAlert.js"></script>*@
+@*<script type="text/javascript">
+        $("#sub").click(function () {
+                    swal("","@ViewBag.Message","error");
+                });
+    </script>*@
+
+@Html.Raw(TempData["Message"])

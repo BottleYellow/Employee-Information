@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EIS.Entities.Address;
+﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
@@ -13,9 +9,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +28,7 @@ namespace EIS.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<EIS.Data.Context.DbContext>(config =>
+            services.AddDbContext<EIS.Data.Context.ApplicationDbContext>(config =>
             {
                 config.UseSqlServer(Configuration.GetConnectionString("connection"));
             });
@@ -54,6 +47,12 @@ namespace EIS.WebApp
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddSession();
             services.AddTransient<IEISService, EISService>();
+
+            //Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +68,7 @@ namespace EIS.WebApp
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

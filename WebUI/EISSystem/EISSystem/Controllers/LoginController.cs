@@ -1,10 +1,8 @@
 ﻿using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http;
-using Microsoft.AspNetCore.Http;
+
 namespace EIS.WebApp.Controllers
 {
     public class LoginController : Controller
@@ -17,22 +15,25 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
+
             return View("Login");
         }
         [HttpPost]
         public IActionResult Login(Users user)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/Users").Result;
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Users> data = JsonConvert.DeserializeObject<List<Users>>(stringData);
-            Users users = data.Find(p => p.UserName == user.UserName && p.Password==user.Password && p.Role==user.Role);
-            if(users != null)
+            HttpResponseMessage response = client.PostAsJsonAsync("api/account/login",user).Result;
+            if (response.IsSuccessStatusCode == false)
             {
-                HttpContext.Session.SetInt32("Id", users.PersonId);
-                return RedirectToAction("Details", "People", new { id = users.PersonId });
+                TempData["Message"] = "<script>swal('','Access Denied','error');</script>";
+
+                return View("Login");
             }
-            return View();
+            else
+            {
+                TempData["Message"] = "<script>swal('Good job!', 'You are login successfully', 'success').then(function(){window.location.href='../People/Index';});</script>";
+                return View("Login");
+            } 
         }
     }
 }

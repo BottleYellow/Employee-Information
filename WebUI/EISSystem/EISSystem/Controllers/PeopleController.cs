@@ -1,5 +1,7 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.User;
 using EIS.WebApp.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +26,6 @@ namespace EIS.WebApp.Controllers
             this.service = service;
             
         }
-
-        //Get: People
         public IActionResult Index()
         {
             HttpClient client = service.GetService();
