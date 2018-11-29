@@ -49,3 +49,27 @@ F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.xml
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.deps.json
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Data.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.Extensions.Identity.Core.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.Extensions.Identity.Core.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.xml
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojAssemblyReference.cache
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CoreCompileInputs.cache
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfoInputs.cache
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfo.cs
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb

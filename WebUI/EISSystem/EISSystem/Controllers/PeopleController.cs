@@ -30,6 +30,10 @@ namespace EIS.WebApp.Controllers
         {
             HttpClient client = service.GetService();
             HttpResponseMessage response = client.GetAsync("api/employee").Result;
+            if(response.IsSuccessStatusCode==false)
+            {
+                return View("Views/Error/Error.cshtml");
+            }
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
             return View(data);

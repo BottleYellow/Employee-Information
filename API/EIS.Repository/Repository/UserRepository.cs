@@ -82,8 +82,9 @@ namespace EIS.Repositories.Repository
             if (token != null)
             {
                 string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
-            
-                string myIP = Dns.GetHostEntry(hostName).AddressList[2].ToString();
+                var addresses = Dns.GetHostAddresses(hostName);
+                string myIP = addresses[1].ToString();
+                //string myIP = Dns.GetHostEntry(hostName).AddressList[2].ToString();
                 AccessToken accessToken = new AccessToken();    
                 accessToken.TokenName = tokenstring;
                 accessToken.DeviceName = Environment.MachineName;

@@ -2808,11 +2808,10 @@
       ]
     },
     "Microsoft.AspNetCore.Routing.Abstractions/2.1.1": {
-      "sha512": "9saJjHhST3JmFKuZ1mPU9FJcpgUyPNoJxRMSV2nkSjiEekQN4jxswtBBeIRVDonjq50KKqSWbcyyQtvV4tgKzw==",
+      "sha512": "+Yxsy/ZcCthcziktuhfC6WpQ/cZzgD/IsQ96xefNKrCzIm9jXjfNK3ONsoScvyFFihNohp7zAVPiic5J6CvUDw==",
       "type": "package",
       "path": "microsoft.aspnetcore.routing.abstractions/2.1.1",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Routing.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Routing.Abstractions.xml",
@@ -3619,7 +3618,7 @@
       ]
     },
     "Microsoft.NETCore.Platforms/2.1.0": {
-      "sha512": "aSTPL94NloSiQVL5Len8wbjFKOnoAX/vOh3s3DF6g3c7GUUMLCDvnBhmA72M2iN2AedyA8hpr7m89kzSAKUnJQ==",
+      "sha512": "TT+QCi9LcxGTjBssH7S7n5+8DVcwfG4DYgXX7Dk7+BfZ4oVHj8Q0CbYk9glzAlHLsSt3bYzol+fOdra2iu6GOw==",
       "type": "package",
       "path": "microsoft.netcore.platforms/2.1.0",
       "files": [
@@ -5479,12 +5478,10 @@
       ]
     },
     "System.Interactive.Async/3.1.1": {
-      "sha512": "x9y2omkjEudKbIVuhUzeWw7ZlouEzpk4W98woCEq1lq9gJxERBKRKDTHF5JPEws9E0f4/Uei/2vLxEy1IrfmMg==",
+      "sha512": "hZccYiIE5RS1/J9Tb/BNtosAGVggdlsJm4Ojdu+gDV0p4AIi+LUfUogMKkRacljQEJd2AG6vYzvcjhQFkqoZmw==",
       "type": "package",
       "path": "system.interactive.async/3.1.1",
       "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
         "lib/net45/System.Interactive.Async.dll",
         "lib/net45/System.Interactive.Async.xml",
         "lib/net46/System.Interactive.Async.dll",
@@ -8119,11 +8116,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Repository\\EIS.Repositories.csproj",
+      "projectUniqueName": "E:\\Training Project\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj",
       "projectName": "EIS.Repositories",
-      "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Repository\\EIS.Repositories.csproj",
+      "projectPath": "E:\\Training Project\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Repository\\obj\\",
+      "outputPath": "E:\\Training Project\\Employee-Information\\API\\EIS.Repository\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -8142,11 +8139,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Data\\EIS.Data.csproj": {
-              "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Data\\EIS.Data.csproj"
+            "E:\\Training Project\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj": {
+              "projectPath": "E:\\Training Project\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj"
             },
-            "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Entities\\EIS.Entities.csproj": {
-              "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information1\\API\\EIS.Entities\\EIS.Entities.csproj"
+            "E:\\Training Project\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj": {
+              "projectPath": "E:\\Training Project\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj"
             }
           }
         }
