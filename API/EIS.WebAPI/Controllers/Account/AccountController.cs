@@ -15,7 +15,7 @@ using EIS.WebAPI.Filters;
 
 namespace EIS.WebAPI.Controllers
 {
-    [Authorization]
+    [AllowAnonymous]
     [Route("api/account")]
     [ApiController]
     public class AccountController : BaseController
@@ -25,7 +25,6 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("login")]
         public IActionResult Login(Users user)
         {
@@ -85,16 +84,6 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest();
             }
         }
-
-        // GET: api/Logins
-        [HttpGet]
-        [Route("all")]
-        public IEnumerable<Users> GetLogins()
-        {
-            return _repository.Users.FindAll();
-            
-        }
-
         // GET: api/Logins/5
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)

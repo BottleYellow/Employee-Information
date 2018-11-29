@@ -1,57 +1,60 @@
 ﻿using EIS.Data.Context;
-using EIS.Repositories.IRepository;
-using EIS.Repositories.Methods;
 using EIS.Repositories.Repository;
-using Microsoft.AspNetCore.Authorization;
+using EIS.WebAPI.Values;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace EIS.WebAPI.Filters
+namespace EIS.WebAPI.Middleware
 {
-    public class Authorization : AuthorizeAttribute,IAuthorizationFilter
+    public class CustomAuthenticationMiddleware
     {
-       
-        public void OnAuthorization(AuthorizationFilterContext filterContext)
+        private readonly RequestDelegate _next;
+        public CustomAuthenticationMiddleware(RequestDelegate next)
         {
-
-            bool skipAuthorization = filterContext.Filters.Any(item => item is IAllowAnonymousFilter);
-
-            if (skipAuthorization)
+            _next = next;
+        }
+        public async Task Invoke(HttpContext context)
+        {
+            if (context.Request.Path.StartsWithSegments(SkipSecurity.Login))
             {
-                return;
+                await _next.Invoke(context);
             }
-            try
+            else
             {
-                Exception ex;
-                var key = filterContext.HttpContext.Request.Headers["authorization"].First();
-
-                if (!IsValid(key, out ex))
+                try
                 {
-                    // unauthorized!
+                    Exception ex;
+                    var key = context.Request.Headers["Authorization"].First();
 
-                    filterContext.Result = new CustomUnauthorizedResult(ex.Message);
+                    if (!IsValid(key, out ex))
+                    {
+
+                        context.Response.StatusCode = 401; //Unauthorized
+                        await context.Response.WriteAsync(ex.Message, new System.Threading.CancellationToken());
+                        return;
+                        //filterContext.Result = new CustomUnauthorizedResult(ex.Message);
+                    }
+                    else
+                    {
+
+                        await _next.Invoke(context);
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    context.Response.StatusCode = 401; //Unauthorized
+                    return;
                 }
             }
-            catch (InvalidOperationException)
-            {
-                filterContext.Result = new UnauthorizedResult();
-            }
         }
-
         private bool IsValid(string key, out Exception ex)
         {
             var tokenHandler = new RepositoryWrapper(new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>()));
@@ -77,6 +80,5 @@ namespace EIS.WebAPI.Filters
                 ValidateAudience = true
             };
         }
-        
     }
 }

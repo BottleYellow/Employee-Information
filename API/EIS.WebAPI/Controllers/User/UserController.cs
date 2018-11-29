@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,14 +16,15 @@ namespace EIS.WebAPI.Controllers.User
     [Route("api/user")]
     public class UserController : BaseController
     {
+        
         public UserController(IRepositoryWrapper repository) : base(repository)
         {
         }
-        // GET: api/<controller>
+        
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Users> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _repository.Users.FindAll();
         }
 
         // GET api/<controller>/5
@@ -32,6 +35,7 @@ namespace EIS.WebAPI.Controllers.User
         }
 
         // POST api/<controller>
+        [AllowAnonymous]
         [HttpPost]
         [Route("create")]
         public void Post([FromBody]Users user)
