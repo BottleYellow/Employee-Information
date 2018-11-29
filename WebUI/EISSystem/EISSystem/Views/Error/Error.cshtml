@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Error";
+    Layout = null;
+}
+
+<html>
+<head>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div style="height:100px"></div>
+                    <div>
+                        <div class="col-md-1">
+                            <br />
+                            <img src="~/images/access.jpg" class="image" width="40" height="40" />
+                        </div>
+                        <div class="col-md-11">
+                            <div><h1><b>Access Is Denied !</b></h1></div>
+                            <div>
+                                <p>
+                                    Sorry about that. But You do not have permission to access the requested page.
+                                </p>
+                            </div>
+                            
+                            <div><a asp-action="Index" asp-controller="Login">Back</a></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
