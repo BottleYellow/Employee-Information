@@ -1,7 +1,6 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Address;
 using EIS.Entities.Employee;
-using EIS.Entities.Menu;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,12 +24,6 @@ namespace EIS.Data
                 modelBuilder.Entity<Users>().Property(p => p.UserName).HasColumnType("nvarchar(256)").IsRequired();
                 modelBuilder.Entity<Users>().Property(p => p.Password).HasColumnType("nvarchar(max)").IsRequired();
                 modelBuilder.Entity<Users>().Property(p => p.PersonId).HasColumnType("int").IsRequired();
-                #endregion
-
-                #region[AccessTokens]
-                modelBuilder.Entity<AccessToken>().Property(p => p.TokenName).HasColumnType("nvarchar(max)").IsRequired();
-                modelBuilder.Entity<AccessToken>().Property(p => p.IPAddress).HasColumnType("nvarchar(50)").IsRequired();
-                modelBuilder.Entity<AccessToken>().Property(p => p.DeviceName).HasColumnType("nvarchar(max)").IsRequired();
                 #endregion
 
                 #region[Person]
@@ -146,20 +139,12 @@ namespace EIS.Data
                 #region[Roles]
                 modelBuilder.Entity<Role>().Property(p => p.Id).HasColumnType("int").IsRequired();
                 modelBuilder.Entity<Role>().Property(p => p.Name).HasColumnType("nvarchar(256)").IsRequired();
+                modelBuilder.Entity<Role>().Property(p => p.Access).HasColumnType("nvarchar(max)").IsRequired();
                 #endregion
 
                 #region[User Roles]
                 modelBuilder.Entity<UserRoles>().Property(p => p.UserId).HasColumnType("int").IsRequired();
                 modelBuilder.Entity<UserRoles>().Property(p => p.RoleId).HasColumnType("int").IsRequired();
-                #endregion
-
-                #region[Menu Master]               
-                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuId).HasColumnType("varchar(30)").IsRequired();
-                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuName).HasColumnType("varchar(30)").IsRequired();
-                modelBuilder.Entity<MenuMaster>().Property(p => p.ParentMenuId).HasColumnType("varchar(30)").IsRequired();
-                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuFileName).HasColumnType("varchar(100)").IsRequired();
-                modelBuilder.Entity<MenuMaster>().Property(p => p.MenuURL).HasColumnType("varchar(500)").IsRequired();
-                modelBuilder.Entity<MenuMaster>().Property(p => p.USE_YN).HasColumnType("char(1)");
                 #endregion
 
                 #region[Table Relationship]

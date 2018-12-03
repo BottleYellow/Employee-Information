@@ -22,19 +22,6 @@ E:\aadyam\Employee Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.Ass
 E:\aadyam\Employee Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CopyComplete
 E:\aadyam\Employee Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
 E:\aadyam\Employee Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CoreCompileInputs.cache
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfoInputs.cache
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfo.cs
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.deps.json
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.json
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.dev.json
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.dll
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csprojResolveAssemblyReference.cache
 E:\Training Project\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.deps.json
 E:\Training Project\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.json
 E:\Training Project\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.dev.json
@@ -49,3 +36,16 @@ E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EI
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csprojResolveAssemblyReference.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CoreCompileInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfoInputs.cache
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfo.cs
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.deps.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.dev.json
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb

@@ -79,22 +79,22 @@ namespace EIS.Repositories.Repository
                 signingCredentials: signInCred
                 );
             var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
-            if (token != null)
-            {
-                string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
-                var addresses = Dns.GetHostAddresses(hostName);
-                string myIP = addresses[1].ToString();
-                //string myIP = Dns.GetHostEntry(hostName).AddressList[2].ToString();
-                AccessToken accessToken = new AccessToken();    
-                accessToken.TokenName = tokenstring;
-                accessToken.DeviceName = Environment.MachineName;
-                accessToken.IPAddress = myIP;
-                accessToken.IssuedAt = token.ValidFrom;
-                accessToken.Expiry = token.ValidTo;
-                accessToken.UserId = UserId;
-                dbContext.Tokens.Add(accessToken);
-                dbContext.SaveChanges();
-            }
+            //if (token != null)
+            //{
+            //    string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
+            //    var addresses = Dns.GetHostAddresses(hostName);
+            //    string myIP = addresses[1].ToString();
+            //    //string myIP = Dns.GetHostEntry(hostName).AddressList[2].ToString();
+            //    AccessToken accessToken = new AccessToken();    
+            //    accessToken.TokenName = tokenstring;
+            //    accessToken.DeviceName = Environment.MachineName;
+            //    accessToken.IPAddress = myIP;
+            //    accessToken.IssuedAt = token.ValidFrom;
+            //    accessToken.Expiry = token.ValidTo;
+            //    accessToken.UserId = UserId;
+            //    dbContext.Tokens.Add(accessToken);
+            //    dbContext.SaveChanges();
+            //}
             return token;
         }
         public static string GetBoardMaker()
@@ -125,11 +125,6 @@ namespace EIS.Repositories.Repository
                 return token;
             }
             return null;
-        }
-
-        public void RefreshToken(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public bool isTokenExists(int id)
@@ -203,21 +198,6 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public bool isTokenMatched(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int RemoveToken(int id)
-        {
-            int n=0;
-            var token = dbContext.Tokens.Where(x => x.UserId == id).FirstOrDefault();
-            if (token != null)
-            {
-                dbContext.Tokens.Remove(token);
-                n=dbContext.SaveChanges();
-            }
-            return n;
-        }
     }
 }

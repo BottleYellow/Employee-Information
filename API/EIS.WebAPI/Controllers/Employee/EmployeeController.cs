@@ -1,18 +1,27 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
+
+using EIS.WebAPI.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
+using System.Text;
 
 namespace EIS.WebAPI.Controllers
 {
+    [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
     public class EmployeeController : Controller
     {
+
+        public readonly IDistributedCache distributedCache;
         public readonly IRepositoryWrapper _repository;
-        public EmployeeController(IRepositoryWrapper repository)
+        public EmployeeController(IRepositoryWrapper repository,IDistributedCache distributedCache)
         {
             _repository= repository  ;
+            this.distributedCache = distributedCache;
         }
 
         [HttpGet]
@@ -24,12 +33,15 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
-        {         
+        {
+
+            int pid = Convert.ToInt32(distributedCache.GetString("PersonId"));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var employee = _repository.Employee.FindByCondition(e => e.Id == id);
+            var employee = _repository.Employee.FindByCondition(e => e.Id == pid);
 
             if (employee == null)
             {

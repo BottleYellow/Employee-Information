@@ -7,6 +7,7 @@ using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+
 using EIS.WebAPI.Data;
 using EIS.WebAPI.Filters;
 using EIS.WebAPI.Middleware;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -30,11 +32,13 @@ namespace EIS.WebAPI
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+     
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,11 +48,11 @@ namespace EIS.WebAPI
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            //services.AddMvc(options =>
-            //{
-            //    options.Filters.Add(typeof(Authorization));
-            //});
+            
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(Authorization));
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -80,19 +84,13 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
-            app.UseMiddleware<CustomAuthenticationMiddleware>();
-            //app.UseAuthentication();
+            //app.UseMiddleware<CustomAuthenticationMiddleware>();
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
 
             //SeedDatabase.Initialize(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider).Wait();
         }
     }
-    //public static class CustomMiddleware
-    //{
-    //    public static IApplicationBuilder UseMyAuthorize(this IApplicationBuilder builder)
-    //    {
-    //        return builder.UseMiddleware<Authorization>();
-    //    }
-    //}
+    
 }
