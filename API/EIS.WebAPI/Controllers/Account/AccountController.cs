@@ -41,6 +41,13 @@ namespace EIS.WebAPI.Controllers
                 Users u = _repository.Users.FindByUserName(user.UserName);
                 JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
+<<<<<<< HEAD
+                AccessToken accessToken = new AccessToken()
+                {
+                    TokenName = s1
+                };
+                return Ok(accessToken);
+=======
                 int pid = u.PersonId;
                 if (s1!= null)
                 {
@@ -52,6 +59,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 
                 return Ok(s1);
+>>>>>>> 4b7df7bf4ea2fc79ed053883b74234bbcd638f16
             }
 
             else
