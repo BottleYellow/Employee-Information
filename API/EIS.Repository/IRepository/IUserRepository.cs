@@ -16,8 +16,7 @@ namespace EIS.Repositories.IRepository
         string GetToken(int id);
         void RefreshToken(int id);
         bool isTokenExists(int id);
-
-        bool isTokenMatched(int id);
+        bool isTokenMatched();
         bool isTokenExpired (int id );
         bool CheckIfFromSameIpAddress(int id, string address);
         bool IsValidToken(string token,out Exception ex);

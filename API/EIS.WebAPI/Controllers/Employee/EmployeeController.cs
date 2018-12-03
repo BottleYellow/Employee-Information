@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,15 +10,17 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class EmployeeController : Controller
     {
+        public readonly IUserRepository userRepository;
         public readonly IRepositoryWrapper _repository;
-        public EmployeeController(IRepositoryWrapper repository)
+        public EmployeeController(IRepositoryWrapper repository, IUserRepository userRepository)
         {
+            this.userRepository = userRepository;
             _repository= repository  ;
         }
 
         [HttpGet]
         public IActionResult GetAllEmployee()
-        {
+        { 
             var employees = _repository.Employee.FindAll();
             return Ok(employees);
         }

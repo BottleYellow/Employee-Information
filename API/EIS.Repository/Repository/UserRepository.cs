@@ -203,10 +203,7 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public bool isTokenMatched(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public int RemoveToken(int id)
         {
@@ -218,6 +215,11 @@ namespace EIS.Repositories.Repository
                 n=dbContext.SaveChanges();
             }
             return n;
+        }
+
+        public bool isTokenMatched()
+        {
+            throw new NotImplementedException();
         }
     }
 }
