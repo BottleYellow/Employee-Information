@@ -16,10 +16,10 @@ namespace EIS.Data.Context
        : base(options)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-            connectionString = configuration.GetConnectionString("DefaultConnection");
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+                connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

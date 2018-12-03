@@ -207,7 +207,6 @@ namespace EIS.Data
                 modelBuilder.Entity<Users>().ToTable("Users", "Account");
                 modelBuilder.Entity<UserRoles>().ToTable("UserRoles", "Account");
                 modelBuilder.Entity<Role>().ToTable("Role", "Account");
-                modelBuilder.Entity<AccessToken>().ToTable("Tokens", "Account");
                 modelBuilder.Entity<Person>().ToTable("Person", "Employee");
                 modelBuilder.Entity<Leaves>().ToTable("Leaves", "Employee");
                 modelBuilder.Entity<Attendance>().ToTable("Attendance", "Employee");

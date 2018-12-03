@@ -9,8 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EIS.Data\EIS.Data.csproj" />
-    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
+    <Reference Include="EIS.Data">
+      <HintPath>..\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Entities">
+      <HintPath>..\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
-using EIS.Repositories.Methods;
 using EIS.Repositories.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

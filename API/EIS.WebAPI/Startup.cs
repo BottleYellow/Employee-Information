@@ -10,7 +10,6 @@ using EIS.Repositories.Repository;
 
 using EIS.WebAPI.Data;
 using EIS.WebAPI.Filters;
-using EIS.WebAPI.Middleware;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -50,22 +50,13 @@ namespace EIS.WebAPI.Controllers
                     distributedCache.SetString("TokenValue", s1, options);
                     distributedCache.SetString("PersonId", pid.ToString(), options);
                 }
-                AccessToken accessToken = new AccessToken()
-                {
-                    TokenName = s1,
-                    UserId=u.PersonId
-                };
-                return Ok(accessToken);
+                
+                return Ok(s1);
             }
 
             else
             {
-                AccessToken accessToken = new AccessToken()
-                {
-                    TokenName = null
-                    
-                };
-                return NotFound(accessToken);
+                return NotFound("");
             }
                  
         }
