@@ -1,4 +1,6 @@
 ﻿using EIS.WebApp.IServices;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +14,16 @@ namespace EIS.WebApp.Services
     {
         public HttpClient GetService()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:54830");
+
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:54830")
+            };
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             return client;
         }
+
+        
     }
 }

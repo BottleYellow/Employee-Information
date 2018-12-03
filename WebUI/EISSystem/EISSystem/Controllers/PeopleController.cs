@@ -28,7 +28,7 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
-            HttpClient client = service.GetService();
+            HttpClient client = service.GetService("");
             HttpResponseMessage response = client.GetAsync("api/employee").Result;
             if(response.IsSuccessStatusCode==false)
             {
@@ -40,16 +40,16 @@ namespace EIS.WebApp.Controllers
         }
 
         //Get : People by id
-        public IActionResult Details(int id)
+        public IActionResult Profile(int id)
         {
             TempData["Id"]=HttpContext.Session.GetInt32("Id");
-            HttpClient client = service.GetService();
+            HttpClient client = service.GetService(HttpContext.Session.GetString("TokenValue"));
             HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
-            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            ViewBag.ImageData = imageDataURL;
+            //imageBase64Data = Convert.ToBase64String(data.Image);
+            //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+            //ViewBag.ImageData = imageDataURL;
             ViewBag.Name = data.FirstName + " " + data.LastName;
             return View("Profile",data);
         }
@@ -79,7 +79,7 @@ namespace EIS.WebApp.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    HttpClient client = service.GetService();
+                    HttpClient client = service.GetService("");
                     string stringData = JsonConvert.SerializeObject(person);
                     var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
                     HttpResponseMessage response = client.PostAsync("api/employee/Create", contentData).Result;
@@ -95,7 +95,7 @@ namespace EIS.WebApp.Controllers
         // GET: People/Edit/5
         public IActionResult Edit(int id)
         {
-            HttpClient client = service.GetService();
+            HttpClient client = service.GetService("");
             HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -129,7 +129,7 @@ namespace EIS.WebApp.Controllers
             {
                 try
                 {
-                    HttpClient client = service.GetService();
+                    HttpClient client = service.GetService("");
                     HttpResponseMessage response = client.PutAsJsonAsync("api/employee/Edit/" + id + "", person).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
@@ -160,7 +160,7 @@ namespace EIS.WebApp.Controllers
         // GET: People/Delete/5
         public IActionResult Delete(int id)
         {
-            HttpClient client = service.GetService();
+            HttpClient client = service.GetService("");
             HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -175,7 +175,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            HttpClient client = service.GetService();
+            HttpClient client = service.GetService("");
             HttpResponseMessage response = client.DeleteAsync("api/employee/Delete/" + id + "").Result;
             return RedirectToAction(nameof(Index));
         }

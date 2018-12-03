@@ -9,14 +9,17 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace EIS.WebApp
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,12 +50,15 @@ namespace EIS.WebApp
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddSession();
             services.AddTransient<IEISService, EISService>();
+            services.AddSingleton<IControllerService, ControllerService>();
+
 
             //Authorization
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,12 +78,14 @@ namespace EIS.WebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseSession();
+            
+            string controller="Login";
+            string action = "Index";
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=Index}");
+                    template: "{controller="+controller+"}/{action="+action+"}");
             });
         }
     }
