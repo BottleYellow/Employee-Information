@@ -12,37 +12,61 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using EIS.WebAPI.Filters;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net;
+using Microsoft.Extensions.Caching.Distributed;
+
 
 namespace EIS.WebAPI.Controllers
 {
-    [AllowAnonymous]
     [Route("api/account")]
     [ApiController]
     public class AccountController : BaseController
     {
-        public AccountController(IRepositoryWrapper repository) : base(repository)
+        protected IDistributedCache distributedCache;
+        public AccountController(IRepositoryWrapper repository,IDistributedCache distributedCache) : base(repository)
         {
+            this.distributedCache = distributedCache;
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("login")]
         public IActionResult Login(Users user)
         {
             string s = _repository.Users.ValidateUser(user);
             if (s == "success")
             {
-                Users u=_repository.Users.FindByUserName(user.UserName);
+                Users u = _repository.Users.FindByUserName(user.UserName);
                 JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
+<<<<<<< HEAD
                 AccessToken accessToken = new AccessToken()
                 {
                     TokenName = s1
                 };
                 return Ok(accessToken);
-            }
+=======
+                int pid = u.PersonId;
+                if (s1!= null)
+                {
+
+                    var options = new DistributedCacheEntryOptions();
+                    options.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                    distributedCache.SetString("TokenValue", s1, options);
+                    distributedCache.SetString("PersonId", pid.ToString(), options);
+                }
                 
+                return Ok(s1);
+>>>>>>> 4b7df7bf4ea2fc79ed053883b74234bbcd638f16
+            }
+
             else
-                return BadRequest("Username or password incorrect");
+            {
+                return NotFound("");
+            }
+                 
         }
         #region comment
         //[HttpPost("token")]
@@ -78,15 +102,16 @@ namespace EIS.WebAPI.Controllers
         [Route("logout/{id}")]
         public IActionResult Logout(int id)
         {
-            int n=_repository.Users.RemoveToken(id);
-            if (n > 0)
-            {
-                return Ok("Successfully Logged out.");
-            }
-            else
-            {
-                return BadRequest();
-            }
+            //int n=_repository.Users.RemoveToken(id);
+            //if (n > 0)
+            //{
+            //    return Ok("Successfully Logged out.");
+            //}
+            //else
+            //{
+            //    return BadRequest();
+            //}
+            return BadRequest();
         }
         // GET: api/Logins/5
         [HttpGet("{id}")]

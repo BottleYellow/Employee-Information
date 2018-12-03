@@ -17,23 +17,13 @@ namespace EIS.Repositories.Repository
             this.dbContext = dbContext;
         }
 
-        public void CreateRole(string RoleName)
+        public void CreateRole(Role role)
         {
-            Role role = new Role();
-            role.Name = RoleName;
-            role.IsActive = true;
-            role.CreatedDate = DateTime.Now;
-            role.UpdatedDate = DateTime.Now;
             dbContext.Roles.Add(role);
         }
 
-        public async Task CreateRoleAsync(string RoleName)
+        public async Task CreateRoleAsync(Role role)
         {
-            Role role = new Role();
-            role.Name = RoleName;
-            role.IsActive = true;
-            role.CreatedDate = DateTime.Now;
-            role.UpdatedDate = DateTime.Now;
             await dbContext.Roles.AddAsync(role);
         }
 

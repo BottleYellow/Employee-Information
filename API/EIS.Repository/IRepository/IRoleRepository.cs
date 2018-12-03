@@ -8,12 +8,12 @@ namespace EIS.Repositories.IRepository
 {
     public interface IRoleRepository : IRepositorybase<Role>
     {
-        void CreateRole(string RoleName);
+        void CreateRole(Role role);
         void UpdateRole(int id,Role role);
         void MapRole(int UserId, int RoleId);
         string GetRole(Users user);
         bool RoleExists(string RoleName);
-        Task CreateRoleAsync(string RoleName);
+        Task CreateRoleAsync(Role role);
         Task<bool> RoleExistsAsync(string RoleName);
     }
 }

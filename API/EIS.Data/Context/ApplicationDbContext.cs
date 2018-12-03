@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
-using EIS.Entities.Menu;
 
 namespace EIS.Data.Context
 {
@@ -17,10 +16,10 @@ namespace EIS.Data.Context
        : base(options)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-            connectionString = configuration.GetConnectionString("DefaultConnection");
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+                connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,9 +38,6 @@ namespace EIS.Data.Context
         public DbSet<Other> OtherAddresses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
-        public DbSet<MenuMaster> MenuMaster { get; set; }
-
-        public DbSet<AccessToken> Tokens { get; set; }
         #endregion
     }
 }

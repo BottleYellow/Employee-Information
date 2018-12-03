@@ -1,6 +1,5 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
-using EIS.Repositories.Methods;
 using EIS.Repositories.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -24,58 +24,33 @@ namespace EIS.WebAPI.Filters
 {
     public class Authorization : AuthorizeAttribute,IAuthorizationFilter
     {
-       
+        public readonly IDistributedCache distributedCache;
+        public Authorization(IDistributedCache _distributedCache)
+        {
+            distributedCache = _distributedCache;
+        }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
-
+            //Authentication
             bool skipAuthorization = filterContext.Filters.Any(item => item is IAllowAnonymousFilter);
-
             if (skipAuthorization)
             {
                 return;
             }
             try
-            {
-                Exception ex;
-                var key = filterContext.HttpContext.Request.Headers["authorization"].First();
-
-                if (!IsValid(key, out ex))
+            { 
+                string token = distributedCache.GetString("TokenValue");
+                if (token==null)
                 {
                     // unauthorized!
-
-                    filterContext.Result = new CustomUnauthorizedResult(ex.Message);
+                    filterContext.Result = new UnauthorizedResult();
                 }
+                
             }
             catch (InvalidOperationException)
             {
                 filterContext.Result = new UnauthorizedResult();
             }
-        }
-
-        private bool IsValid(string key, out Exception ex)
-        {
-            var tokenHandler = new RepositoryWrapper(new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>()));
-            var validationParameters = GetValidationParameters();
-            var token = key.Substring("Bearer ".Length).Trim();
-            if (tokenHandler.Users.IsValidToken(token, out ex))
-            {
-                return true;
-            }
-            return false;
-
-        }
-
-        private static TokenValidationParameters GetValidationParameters()
-        {
-            return new TokenValidationParameters
-            {
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda")),
-                ValidIssuer = "mysite.com",
-                ValidAudience = "mysite.com",
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidateAudience = true
-            };
         }
         
     }

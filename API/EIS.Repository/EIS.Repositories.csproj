@@ -11,11 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EIS.Data\EIS.Data.csproj" />
-    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Reference Include="EIS.Data">
+      <HintPath>..\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Entities">
+      <HintPath>..\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.cryptography.keyderivation\2.1.1\lib\netcoreapp2.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll</HintPath>
     </Reference>

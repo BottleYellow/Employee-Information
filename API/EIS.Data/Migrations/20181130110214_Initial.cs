@@ -18,28 +18,6 @@ namespace EIS.Data.Migrations
                 name: "Account");
 
             migrationBuilder.CreateTable(
-                name: "MenuMaster",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    MenuId = table.Column<string>(type: "varchar(30)", nullable: false),
-                    MenuName = table.Column<string>(type: "varchar(30)", nullable: false),
-                    ParentMenuId = table.Column<string>(type: "varchar(30)", nullable: false),
-                    MenuFileName = table.Column<string>(type: "varchar(100)", nullable: false),
-                    MenuURL = table.Column<string>(type: "varchar(500)", nullable: false),
-                    USE_YN = table.Column<string>(type: "char(1)", nullable: false),
-                    RoleId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuMaster", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Role",
                 schema: "Account",
                 columns: table => new
@@ -49,7 +27,8 @@ namespace EIS.Data.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(256)", nullable: false),
+                    Access = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -432,9 +411,6 @@ namespace EIS.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "MenuMaster");
-
             migrationBuilder.DropTable(
                 name: "Tokens",
                 schema: "Account");

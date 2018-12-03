@@ -79,42 +79,12 @@ namespace EIS.Repositories.Repository
                 signingCredentials: signInCred
                 );
             var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
-            if (token != null)
-            {
-                string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
-                var addresses = Dns.GetHostAddresses(hostName);
-                string myIP = addresses[1].ToString();
-                //string myIP = Dns.GetHostEntry(hostName).AddressList[2].ToString();
-                AccessToken accessToken = new AccessToken();    
-                accessToken.TokenName = tokenstring;
-                accessToken.DeviceName = Environment.MachineName;
-                accessToken.IPAddress = myIP;
-                accessToken.IssuedAt = token.ValidFrom;
-                accessToken.Expiry = token.ValidTo;
-                accessToken.UserId = UserId;
-                dbContext.Tokens.Add(accessToken);
-                dbContext.SaveChanges();
-            }
             return token;
         }
-        public static string GetBoardMaker()
-        {
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem");
 
-            foreach (ManagementObject wmi in searcher.Get())
-            {
-                try
-                {
-                    return wmi.GetPropertyValue("Manufacturer").ToString()+" "+wmi.GetPropertyValue("Model").ToString()+" "+ wmi.GetPropertyValue("System Type").ToString();
-                }
 
-                catch { }
-
-            }
-
-            return "Board Maker: Unknown";
-
+<<<<<<< HEAD
         }
         public string GetToken(int id)
         {
@@ -221,5 +191,7 @@ namespace EIS.Repositories.Repository
         {
             throw new NotImplementedException();
         }
+=======
+>>>>>>> 4b7df7bf4ea2fc79ed053883b74234bbcd638f16
     }
 }
