@@ -1,7 +1,5 @@
 ﻿using EIS.Entities.Employee;
-using EIS.Entities.User;
 using EIS.WebApp.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,19 +26,22 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
-            HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/employee").Result;
-            if(response.IsSuccessStatusCode==false)
+            var token=HttpContext.Session.GetString("token");
+            if (token == null)
             {
-                return View("Views/Error/Error.cshtml");
+                return RedirectToAction("Login", "Login");
             }
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
-            return View(data);
+            else {
+                HttpClient client = service.GetService();
+                HttpResponseMessage response = client.GetAsync("api/employee").Result;
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+                return View(data);
+            }
         }
 
         //Get : People by id
-        public IActionResult Details(int id)
+        public IActionResult Profile(int id)
         {
             TempData["Id"]=HttpContext.Session.GetInt32("Id");
             HttpClient client = service.GetService();

@@ -1,4 +1,4 @@
-﻿/*
+/*
 Author: W3layout
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -121,13 +121,13 @@ q {
     quotes: none;
 }
 
-    blockquote:before,
-    blockquote:after,
-    q:before,
-    q:after {
-        content: '';
-        content: none;
-    }
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
 
 table {
     border-collapse: collapse;
@@ -217,9 +217,9 @@ img {
 /*--end reset--*/
 
 body {
-    font-family: 'Source Sans Pro', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
     font-size: 100%;
-    background: url('../images/bg.jpg')no-repeat center;
+
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -227,7 +227,6 @@ body {
     -ms-background-size: cover;
     text-align: center;
 }
-
 .w3ls-login {
     display: -webkit-flex;
     display: -webkit-box;
@@ -253,9 +252,20 @@ h1 {
     letter-spacing: 3px;
     padding: 1em 1vw;
     text-align: center;
-    font-family: 'Source Sans Pro', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
 }
 
+h3 {
+    font-size: 3.2em;
+    font-weight: 300;
+    text-transform: capitalize;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    letter-spacing: 3px;
+    padding: 1em 1vw;
+    text-align: center;
+    font-family: 'Source Sans Pro', sans-serif;
+}
 .w3ls-login form {
     position: relative;
     max-width: 550px;
@@ -295,16 +305,16 @@ h1 {
     width: 100%;
     color: #fff;
     outline: none;
-    font-size: 15px;
+     font-size: 15px;
     letter-spacing: 2px;
     /* line-height: 25px; */
     padding: 15px 20px;
     box-sizing: border-box;
     border: none;
-    border: 1px solid #eee;
-    border-radius: 30px;
+     border: 1px solid #eee;
+	 border-radius: 30px;
     -webkit-appearance: none;
-    font-family: 'Source Sans Pro', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
     background: transparent;
 }
 
@@ -326,16 +336,17 @@ label.check {
 
 .agile-right {
     float: right;
-    margin: 20px 10px 0 0;
+     margin: 20px 10px 0 0;
+
 }
 
-    .agile-right a {
-        font-size: 15px;
-        color: #fff;
-        margin-bottom: 10px;
-        text-transform: capitalize;
-        letter-spacing: 2px;
-    }
+.agile-right a {
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+}
 
 .w3ls-login.w3l-sub {
     margin-top: 1em;
@@ -357,51 +368,51 @@ label.check {
     height: 100px;
 }
 
-    .spinner > span,
-    .spinner > span:before,
-    .spinner > span:after {
-        content: "";
-        display: block;
-        border-radius: 50%;
-        border: 2px solid #fd5c63;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-    }
+.spinner > span,
+.spinner > span:before,
+.spinner > span:after {
+    content: "";
+    display: block;
+    border-radius: 50%;
+    border: 2px solid #fd5c63;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
-    .spinner > span {
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        border-left-color: transparent;
-        -webkit-animation: effect-2 2s infinite linear;
-        -moz-animation: effect-2 2s infinite linear;
-        -o-animation: effect-2 2s infinite linear;
-        animation: effect-2 2s infinite linear;
-    }
+}
 
-        .spinner > span:before {
-            width: 75%;
-            height: 75%;
-            border-right-color: transparent;
-        }
+.spinner > span {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-left-color: transparent;
+    -webkit-animation: effect-2 2s infinite linear;
+    -moz-animation: effect-2 2s infinite linear;
+    -o-animation: effect-2 2s infinite linear;
+    animation: effect-2 2s infinite linear;
+}
 
-        .spinner > span:after {
-            width: 50%;
-            height: 50%;
-            border-bottom-color: transparent;
-        }
+.spinner > span:before {
+    width: 75%;
+    height: 75%;
+    border-right-color: transparent;
+}
+
+.spinner > span:after {
+    width: 50%;
+    height: 50%;
+    border-bottom-color: transparent;
+}
 
 @-webkit-keyframes effect-2 {
     from {
         transform: rotate(0deg);
     }
-
     to {
         transform: rotate(360deg);
     }
@@ -411,7 +422,6 @@ label.check {
     from {
         transform: rotate(0deg);
     }
-
     to {
         transform: rotate(360deg);
     }
@@ -420,25 +430,21 @@ label.check {
 
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    color: #aaa;
+  color: #aaa;
 }
-
 ::-moz-placeholder { /* Firefox 19+ */
-    color: #aaa;
+  color: #aaa;
 }
-
 :-ms-input-placeholder { /* IE 10+ */
-    color: #aaa;
+  color: #aaa;
 }
-
 :-moz-placeholder { /* Firefox 18- */
-    color: #aaa;
+  color: #aaa;
 }
-
 .w3ls-login input[type=submit] {
     color: #fff;
     width: 50%;
-    margin: auto;
+	margin: auto;
     padding: 0.7em 0;
     margin-top: 0em;
     font-size: 1em;
@@ -446,12 +452,12 @@ label.check {
     cursor: pointer;
     border: none;
     outline: none;
-    border-radius: 30px;
-    font-weight: 600;
+     border-radius: 30px;
+	 font-weight: 600;
     background: #fd5c63;
     color: #fff;
     border: 1px solid transparent;
-    font-family: 'Source Sans Pro', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
     transition: 0.5s all ease;
     -webkit-transition: 0.5s all ease;
     -moz-transition: 0.5s all ease;
@@ -459,11 +465,11 @@ label.check {
     -ms-transition: 0.5s all ease;
 }
 
-    .w3ls-login input[type=submit]:hover {
-        border: 1px solid #fd5c63;
-        color: #fd5c63;
-        background: transparent;
-    }
+.w3ls-login input[type=submit]:hover {
+    border: 1px solid #fd5c63;
+    color: #fd5c63;
+	background: transparent;
+}
 
 .w3ls-bot {
     margin-top: 0em;
@@ -513,30 +519,30 @@ label.switch {
     background-color: #666;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 10px;
+     border-radius: 10px;
 }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 10px;
-        width: 10px;
-        left: 4px;
-        bottom: 5px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 4px;
+    bottom: 5px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: #00ba9d;
 }
 
-input:focus + .slider {
+input:focus+.slider {
     box-shadow: 0 0 1px #00ba9d;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
     -webkit-transform: translateX(18px);
     -ms-transform: translateX(18px);
     transform: translateX(18px);
@@ -546,7 +552,7 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 0%;
-    border-radius: 10px;
+     border-radius: 10px;
 }
 
 /* //switch */
@@ -562,26 +568,26 @@ input:checked + .slider:before {
     padding: 2em 0 2em;
 }
 
-    .copy-wthree p {
-        color: #ccc;
-        font-size: 16px;
-        letter-spacing: 1px;
-        line-height: 1.8;
-        margin: 0 3vw;
-    }
+.copy-wthree p {
+    color: #ccc;
+    font-size: 16px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+    margin: 0 3vw;
+}
 
-        .copy-wthree p a {
-            color: #fff;
-            transition: 0.5s all ease;
-            -webkit-transition: 0.5s all ease;
-            -moz-transition: 0.5s all ease;
-            -o-transition: 0.5s all ease;
-            -ms-transition: 0.5s all ease;
-        }
+.copy-wthree p a {
+    color: #fff;
+    transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
 
-            .copy-wthree p a:hover {
-                color: #fd5c63;
-            }
+.copy-wthree p a:hover {
+    color: #fd5c63;
+}
 
 /*--//copyright--*/
 
@@ -604,55 +610,49 @@ input:checked + .slider:before {
         font-size: 5vw;
     }
 }
-
 @media(max-width:667px) {
-    h1 {
-        font-size: 7vw;
-    }
+	h1 {
+		font-size: 7vw;
+	}
 }
 
 @media(max-width:480px) {
     h1 {
         font-size: 2.5em;
     }
-
     .w3ls-login form {
         padding: 7.5vw;
     }
 }
 
 @media(max-width:414px) {
-    .w3ls-login form {
-        padding: 4.5vw;
-    }
-
-    .w3ls-login input[type="text"], .w3ls-login input[type="password"] {
-        font-size: 14px;
-        padding: 13px 20px;
-    }
-
-    .spinner > span {
-        width: 80%;
-        height: 80%;
-    }
-
-    .w3ls-login input[type=submit] {
-        padding: 0.6em 0;
-    }
+	.w3ls-login form {
+		padding: 4.5vw;
+	}
+	.w3ls-login input[type="text"], .w3ls-login input[type="password"] {
+		font-size: 14px;
+		padding: 13px 20px;
+	}
+	.spinner > span {
+		width: 80%;
+		height: 80%;
+	}
+	.w3ls-login input[type=submit] {
+		padding: 0.6em 0;
+	}
 }
 
 @media(max-width:440px) {
     h1 {
         font-size: 2.3em;
     }
-
     .parent {
         display: block;
     }
 }
 
 @media(max-width:384px) {
-    .agile_label, .agile-right {
+    .agile_label,.agile-right {
         float: none;
     }
 }
@@ -661,7 +661,6 @@ input:checked + .slider:before {
     h1 {
         font-size: 1.8em;
     }
-
     .w3ls-login form {
         padding: 25px 8px;
     }

@@ -1,7 +1,10 @@
 ﻿using EIS.Entities.User;
 using EIS.WebApp.IServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
 {
@@ -13,27 +16,51 @@ namespace EIS.WebApp.Controllers
             this.service = service;
 
         }
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Login()
         {
-
             return View("Login");
         }
         [HttpPost]
         public IActionResult Login(Users user)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.PostAsJsonAsync("api/account/login",user).Result;
+            HttpResponseMessage response = client.PostAsJsonAsync("api/account/login", user).Result;
             if (response.IsSuccessStatusCode == false)
             {
-                TempData["Message"] = "<script>swal('','Access Denied','error');</script>";
-
+                TempData["Message"] = "<p style='color: orange'>Please check username or password</p>";
                 return View("Login");
             }
             else
             {
-                TempData["Message"] = "<script>swal('Good job!', 'You are login successfully', 'success').then(function(){window.location.href='../People/Index';});</script>";
-                return View("Login");
-            } 
+                Task<AccessToken> tokenResult = response.Content.ReadAsAsync<AccessToken>();
+                string token = tokenResult.Result.TokenName;
+                if (token != null)
+                {
+                    HttpContext.Session.SetString("token", token);
+                }
+            }
+            return RedirectToAction("Index","People");
+        }
+
+        [HttpPost]
+        public IActionResult LogOut(int id)
+        { 
+            HttpClient client = service.GetService();
+            HttpResponseMessage response = client.PostAsJsonAsync("api/account/logout",id).Result;
+            return View("Login");
+        }
+
+        [HttpGet]
+        public IActionResult ForGot_Pass()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForGot_Pass(Users users)
+        {
+            return View();
         }
     }
 }
