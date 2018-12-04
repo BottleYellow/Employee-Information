@@ -13,16 +13,5 @@ namespace EIS.Repositories.IRepository
         string ValidateUser(Users user);
         Users FindByUserName(string Username);
         JwtSecurityToken GenerateToken(int UserId);
-<<<<<<< HEAD
-        string GetToken(int id);
-        void RefreshToken(int id);
-        bool isTokenExists(int id);
-        bool isTokenMatched();
-        bool isTokenExpired (int id );
-        bool CheckIfFromSameIpAddress(int id, string address);
-        bool IsValidToken(string token,out Exception ex);
-        int RemoveToken(int id);
-=======
->>>>>>> 4b7df7bf4ea2fc79ed053883b74234bbcd638f16
     }
 }

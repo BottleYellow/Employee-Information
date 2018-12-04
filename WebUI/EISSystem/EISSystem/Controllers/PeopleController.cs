@@ -26,33 +26,29 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
-            var token=HttpContext.Session.GetString("token");
-            if (token == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-            else {
-                HttpClient client = service.GetService();
-                HttpResponseMessage response = client.GetAsync("api/employee").Result;
-                string stringData = response.Content.ReadAsStringAsync().Result;
-                List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
-                return View(data);
-            }
+            HttpResponseMessage response = service.GetResponse("api/employee");
+            
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            Response.StatusCode = (int)response.StatusCode;
+            return View(data);
+            
+           
         }
 
         //Get : People by id
         public IActionResult Profile(int id)
         {
-            TempData["Id"]=HttpContext.Session.GetInt32("Id");
-            HttpClient client = service.GetService(HttpContext.Session.GetString("TokenValue"));
-            HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
+            HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             //imageBase64Data = Convert.ToBase64String(data.Image);
             //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             //ViewBag.ImageData = imageDataURL;
-            ViewBag.Name = data.FirstName + " " + data.LastName;
-            return View("Profile",data);
+            if(data!=null)
+                ViewBag.Name = data.FirstName + " " + data.LastName;
+            Response.StatusCode = (int)response.StatusCode;
+            return View("Profile", data);
         }
 
         // GET: People/Create
@@ -80,7 +76,7 @@ namespace EIS.WebApp.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    HttpClient client = service.GetService("");
+                    HttpClient client = service.GetService();
                     string stringData = JsonConvert.SerializeObject(person);
                     var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
                     HttpResponseMessage response = client.PostAsync("api/employee/Create", contentData).Result;
@@ -96,7 +92,7 @@ namespace EIS.WebApp.Controllers
         // GET: People/Edit/5
         public IActionResult Edit(int id)
         {
-            HttpClient client = service.GetService("");
+            HttpClient client = service.GetService();
             HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -130,7 +126,7 @@ namespace EIS.WebApp.Controllers
             {
                 try
                 {
-                    HttpClient client = service.GetService("");
+                    HttpClient client = service.GetService();
                     HttpResponseMessage response = client.PutAsJsonAsync("api/employee/Edit/" + id + "", person).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
@@ -161,7 +157,7 @@ namespace EIS.WebApp.Controllers
         // GET: People/Delete/5
         public IActionResult Delete(int id)
         {
-            HttpClient client = service.GetService("");
+            HttpClient client = service.GetService();
             HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -176,7 +172,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            HttpClient client = service.GetService("");
+            HttpClient client = service.GetService();
             HttpResponseMessage response = client.DeleteAsync("api/employee/Delete/" + id + "").Result;
             return RedirectToAction(nameof(Index));
         }

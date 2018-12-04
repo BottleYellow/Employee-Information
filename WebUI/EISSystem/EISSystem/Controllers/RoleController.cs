@@ -55,20 +55,26 @@ namespace EIS.WebApp.Controllers
                 UpdatedDate = DateTime.Now,
                 IsActive = true
             };
+            string access = "";
             if (viewModel.SelectedControllers != null && viewModel.SelectedControllers.Any())
             {
                 foreach (var controller in viewModel.SelectedControllers)
                     foreach (var action in controller.Actions)
+                    {
                         action.ControllerId = controller.Id;
+                        access += "/" + controller.Name + "/" + action.Name;
+                        access += ",";
+
+                    }
 
                 var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
-                role.Access = accessJson;
+                role.Access = access;
             }
 
-            HttpClient client = _service.GetService("");
-            string stringData = JsonConvert.SerializeObject(role);
-            var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync("api/role", contentData).Result;
+            HttpClient client = _service.GetService();
+            //string stringData = JsonConvert.SerializeObject(role);
+            //var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PostAsJsonAsync("api/role", role).Result;
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));

@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <title>Spin Login Form Responsive Widget Template :: w3layouts</title>
+    <title>Aadyam-Login</title>
     <!-- Meta-Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
@@ -38,14 +38,14 @@
         </div>*@
     <div class="w3ls-login box box--big">
         <!-- form starts here -->
-        <form action="#" method="post">
+        <form asp-action="Login" method="post">
             <div class="agile-field-txt">
                 <label><i class="fa fa-user" aria-hidden="true"></i> Username </label>
-                <input type="text" name="name" placeholder="Enter User Name" required="" />
+                <input asp-for="UserName" type="text" placeholder="Enter User Name" required="" />
             </div>
             <div class="agile-field-txt">
                 <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> password </label>
-                <input type="password" name="password" placeholder="Enter Password" required="" id="myInput" />
+                <input asp-for="Password" type="password" placeholder="Enter Password" required="" id="myInput" />
                 <div class="agile_label">
                     <input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
                     <label class="check" for="check3">Show password</label>
@@ -72,10 +72,10 @@
     <!-- //form ends here -->
     <!--copyright-->
     <div class="copy-wthree">
-        @*<p>
-            © 2018 Spin Login Form . All Rights Reserved | Design by
-            <a href="http://w3layouts.com/" target="_blank">W3layouts</a>
-        </p>*@
+        <p>
+            © 2018 - Employee Information System
+            @*<a href="http://w3layouts.com/" target="_blank">W3layouts</a>*@
+        </p>
     </div>
     <!--//copyright-->
 </body>

@@ -4,11 +4,13 @@ using EIS.Entities.User;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace EIS.WebApp
 {
@@ -39,6 +43,10 @@ namespace EIS.WebApp
             });
 
             services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(CustomActionFilter));
+            });
             services.AddMvc().AddFluentValidation();
 
             #region[Validations]
@@ -51,18 +59,18 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
             #endregion
 
+            
             //for generic repository
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddSession();
             services.AddTransient<IEISService, EISService>();
             services.AddSingleton<IControllerService, ControllerService>();
-
-
-            //Authorization
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
+            
+            ////Authorization
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            //});
             
         }
 
@@ -80,12 +88,12 @@ namespace EIS.WebApp
             }
 
             app.UseAuthentication();
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
             
             string controller="Login";
-            string action = "Index";
+            string action = "Login";
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

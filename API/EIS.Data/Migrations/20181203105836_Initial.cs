@@ -286,32 +286,6 @@ namespace EIS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tokens",
-                schema: "Account",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TokenName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeviceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IPAddress = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    IssuedAt = table.Column<DateTime>(nullable: false),
-                    Expiry = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tokens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tokens_Users_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "Account",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 schema: "Account",
                 columns: table => new
@@ -342,12 +316,6 @@ namespace EIS.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tokens_UserId",
-                schema: "Account",
-                table: "Tokens",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -411,10 +379,6 @@ namespace EIS.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Tokens",
-                schema: "Account");
-
             migrationBuilder.DropTable(
                 name: "UserRoles",
                 schema: "Account");

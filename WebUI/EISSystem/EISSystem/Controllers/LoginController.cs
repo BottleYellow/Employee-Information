@@ -45,6 +45,7 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult Login(Users user)
         {
+            string pid = "";
             HttpClient client = service.GetService();
             HttpResponseMessage response = client.PostAsJsonAsync("api/account/login", user).Result;
             if (response.IsSuccessStatusCode == false)
@@ -54,14 +55,10 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
-                Task<AccessToken> tokenResult = response.Content.ReadAsAsync<AccessToken>();
-                string token = tokenResult.Result.TokenName;
-                if (token != null)
-                {
-                    HttpContext.Session.SetString("token", token);
-                }
+                Task<string> tokenResult = response.Content.ReadAsAsync<string>();
+                pid = tokenResult.Result.ToString();
             }
-            return RedirectToAction("Index","People");
+            return RedirectToAction("Profile","People",new { id=Convert.ToInt32(pid)});
         }
 
         [HttpPost]

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181130110214_Initial")]
+    [Migration("20181203105836_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -399,37 +399,6 @@ namespace EIS.Data.Migrations
                     b.ToTable("Person","Employee");
                 });
 
-            modelBuilder.Entity("EIS.Entities.User.AccessToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Expiry");
-
-                    b.Property<string>("IPAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("IssuedAt");
-
-                    b.Property<string>("TokenName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tokens","Account");
-                });
-
             modelBuilder.Entity("EIS.Entities.User.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -569,14 +538,6 @@ namespace EIS.Data.Migrations
                     b.HasOne("EIS.Entities.Employee.Person", "Person")
                         .WithMany("Leaves")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EIS.Entities.User.AccessToken", b =>
-                {
-                    b.HasOne("EIS.Entities.User.Users", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
