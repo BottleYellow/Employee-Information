@@ -16,7 +16,11 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net;
 using Microsoft.Extensions.Caching.Distributed;
+using WebMatrix.WebData;
 
+using EIS.WebAPI.Messanger;
+using EIS.Repositories.Helpers;
+using Microsoft.Extensions.Configuration;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -24,10 +28,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
+        public readonly IConfiguration configuration;
         protected IDistributedCache distributedCache;
-        public AccountController(IRepositoryWrapper repository,IDistributedCache distributedCache) : base(repository)
+        public AccountController(IRepositoryWrapper repository, IDistributedCache distributedCache, IConfiguration configuration) : base(repository)
         {
             this.distributedCache = distributedCache;
+            this.configuration = configuration;
         }
 
         [HttpPost]
@@ -41,15 +47,9 @@ namespace EIS.WebAPI.Controllers
                 Users u = _repository.Users.FindByUserName(user.UserName);
                 JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
-<<<<<<< HEAD
-                AccessToken accessToken = new AccessToken()
-                {
-                    TokenName = s1
-                };
-                return Ok(accessToken);
-=======
+
                 int pid = u.PersonId;
-                if (s1!= null)
+                if (s1 != null)
                 {
 
                     var options = new DistributedCacheEntryOptions();
@@ -57,16 +57,15 @@ namespace EIS.WebAPI.Controllers
                     distributedCache.SetString("TokenValue", s1, options);
                     distributedCache.SetString("PersonId", pid.ToString(), options);
                 }
-                
+
                 return Ok(s1);
->>>>>>> 4b7df7bf4ea2fc79ed053883b74234bbcd638f16
             }
 
             else
             {
                 return NotFound("");
             }
-                 
+
         }
         #region comment
         //[HttpPost("token")]
@@ -132,7 +131,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
 
-        
+
 
 
         // DELETE: api/Logins/5
@@ -152,6 +151,44 @@ namespace EIS.WebAPI.Controllers
             _repository.Users.Delete(login);
             _repository.Users.Save();
             return Ok(login);
+        }
+
+        [HttpPost]
+        [Route("forgot/{username}")]
+        [AllowAnonymous]
+        public IActionResult ForGot_Pass(String username)
+        {
+            string password = CreateRandomPassword(8);
+
+            string To, UserID, Password, SMTPPort, Host;
+            UserID = configuration["appSettings:UserID"];
+            To = username;
+            Password = configuration["appSettings:Password"];
+            SMTPPort = configuration["appSettings:SMTPPort"];
+            Host = configuration["appSettings:Host"];
+            string subject = "New Password";
+            //var password = ;
+            string body = "Hello!" +"\n"+
+                "Your new password is :" + password;
+
+            EmailManager.SendEmail(UserID, subject, body, To, UserID, Password, SMTPPort, Host);
+            var user = _repository.Users.FindByUserName(username);
+            user.Password = Helper.Encrypt(password);
+            _repository.Users.Save();
+            return Ok();
+        }
+
+        public static string CreateRandomPassword(int PasswordLength)
+        {
+            string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
+            Random randNum = new Random();
+            char[] chars = new char[PasswordLength];
+            int allowedCharCount = _allowedChars.Length;
+            for (int i = 0; i < PasswordLength; i++)
+            {
+                chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
+            }
+            return new string(chars);
         }
     }
 }

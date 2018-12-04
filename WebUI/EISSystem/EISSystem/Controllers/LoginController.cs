@@ -2,8 +2,11 @@
 using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
@@ -33,12 +36,7 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
-                Task<AccessToken> tokenResult = response.Content.ReadAsAsync<AccessToken>();
-                string token = tokenResult.Result.TokenName;
-                if (token != null)
-                {
-                    HttpContext.Session.SetString("token", token);
-                }
+                
             }
             return RedirectToAction("Index","People");
         }
@@ -52,15 +50,26 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult ForGot_Pass()
+        public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult ForGot_Pass(Users users)
-        {
-            return View();
+        public IActionResult ForgotPassword(string username)
+        { 
+            HttpClient client = service.GetService();
+            HttpResponseMessage response = client.PostAsJsonAsync("api/account/forgot/"+username+"",username).Result;
+            if(response.IsSuccessStatusCode==true)
+            {
+                TempData["Msg"] ="<script>alert('Your password has been reset successfully. Your new password has been sent to your primary email address.');</script>";
+                return RedirectToAction("ForgotPassword");
+            }
+            else
+            {
+                TempData["Msg"] = "<script>alert('Something went wrong!')</script>";
+            }
+            return View("Login");
         }
     }
 }

@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <title>Spin Login Form Responsive Widget Template :: w3layouts</title>
+    <title>Login Form</title>
     <!-- Meta-Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
@@ -38,20 +38,20 @@
         </div>*@
     <div class="w3ls-login box box--big">
         <!-- form starts here -->
-        <form action="#" method="post">
+        <form asp-action="Login">
             <div class="agile-field-txt">
                 <label><i class="fa fa-user" aria-hidden="true"></i> Username </label>
-                <input type="text" name="name" placeholder="Enter User Name" required="" />
+                <input asp-for="UserName" placeholder="Enter User Name" required=""/>
             </div>
             <div class="agile-field-txt">
                 <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> password </label>
-                <input type="password" name="password" placeholder="Enter Password" required="" id="myInput" />
+                <input asp-for="Password" name="password" placeholder="Enter Password" required="" id="myInput" type="password"/>
                 <div class="agile_label">
                     <input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
                     <label class="check" for="check3">Show password</label>
                 </div>
                 <div class="agile-right">
-                    <a asp-action="ForGot_Pass" asp-controller="Login">Forgot Password?</a>
+                    <a asp-action="ForgotPassword" asp-controller="Login">Forgot Password?</a>
                 </div>
             </div>
             <!-- script for show password -->

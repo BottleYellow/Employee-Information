@@ -9,14 +9,7 @@ using System.Threading.Tasks;
 namespace EIS.WebAPI.Messanger
 {
     public class EmailManager
-    {
-        public static void AppSettings(out string UserID, out string Password, out string SMTPPort, out string Host)
-        {
-            UserID = ConfigurationManager.AppSettings.Get("UserID");
-            Password = ConfigurationManager.AppSettings.Get("Password");
-            SMTPPort = ConfigurationManager.AppSettings.Get("SMTPPort");
-            Host = ConfigurationManager.AppSettings.Get("Host");
-        }
+    { 
         public static void SendEmail(string From, string Subject, string Body, string To, string UserID, string Password, string SMTPPort, string Host)
         {
             System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
