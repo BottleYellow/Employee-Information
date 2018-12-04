@@ -13,6 +13,5 @@ namespace EIS.Repositories.IRepository
         string ValidateUser(Users user);
         Users FindByUserName(string Username);
         JwtSecurityToken GenerateToken(int UserId);
-
     }
 }

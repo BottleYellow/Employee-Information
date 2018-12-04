@@ -26,33 +26,29 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
-            var token=HttpContext.Session.GetString("token");
-            if (token == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-            else {
-                HttpClient client = service.GetService();
-                HttpResponseMessage response = client.GetAsync("api/employee").Result;
-                string stringData = response.Content.ReadAsStringAsync().Result;
-                List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
-                return View(data);
-            }
+            HttpResponseMessage response = service.GetResponse("api/employee");
+            
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            Response.StatusCode = (int)response.StatusCode;
+            return View(data);
+            
+           
         }
 
         //Get : People by id
         public IActionResult Profile(int id)
         {
-            TempData["Id"]=HttpContext.Session.GetInt32("Id");
-            HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
+            HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
-            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            ViewBag.ImageData = imageDataURL;
-            ViewBag.Name = data.FirstName + " " + data.LastName;
-            return View("Profile",data);
+            //imageBase64Data = Convert.ToBase64String(data.Image);
+            //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+            //ViewBag.ImageData = imageDataURL;
+            if(data!=null)
+                ViewBag.Name = data.FirstName + " " + data.LastName;
+            Response.StatusCode = (int)response.StatusCode;
+            return View("Profile", data);
         }
 
         // GET: People/Create

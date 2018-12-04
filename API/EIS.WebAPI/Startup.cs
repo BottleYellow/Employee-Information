@@ -65,6 +65,18 @@ namespace EIS.WebAPI
                     ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"))
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed=(ctx)=>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 401)
+                        {
+                            ctx.Response.Redirect("/Login/Login");
+                        }
+                       
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         }

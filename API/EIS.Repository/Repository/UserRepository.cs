@@ -81,9 +81,5 @@ namespace EIS.Repositories.Repository
             var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
             return token;
         }
-
-
-
-
     }
 }

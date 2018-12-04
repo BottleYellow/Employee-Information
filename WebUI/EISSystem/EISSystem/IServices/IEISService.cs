@@ -9,5 +9,6 @@ namespace EIS.WebApp.IServices
     public interface IEISService
     {
         HttpClient GetService();
+        HttpResponseMessage GetResponse(string url);
     }
 }
