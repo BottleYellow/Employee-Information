@@ -52,7 +52,7 @@ namespace EIS.WebAPI.Controllers
                 {
 
                     var options = new DistributedCacheEntryOptions();
-                    options.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                    options.SetAbsoluteExpiration(TimeSpan.FromDays(1));
                     distributedCache.SetString("TokenValue", s1, options);
                     distributedCache.SetString("PersonId", pid.ToString(), options);
                 }
@@ -97,19 +97,12 @@ namespace EIS.WebAPI.Controllers
         #endregion
 
         [HttpPost]
-        [Route("logout/{id}")]
-        public IActionResult Logout(int id)
+        [Route("logout")]
+        public IActionResult Logout()
         {
-            //int n=_repository.Users.RemoveToken(id);
-            //if (n > 0)
-            //{
-            //    return Ok("Successfully Logged out.");
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-            return BadRequest();
+            distributedCache.Remove("TokenValue");
+            distributedCache.Remove("PersonId");
+            return Ok("Successfully Logged out.");
         }
         // GET: api/Logins/5
         [HttpGet("{id}")]

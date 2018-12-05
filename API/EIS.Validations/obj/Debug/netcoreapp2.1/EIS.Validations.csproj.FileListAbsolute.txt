@@ -29,9 +29,7 @@ E:\aadyam\Employee Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.V
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.dll
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csprojResolveAssemblyReference.cache
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CoreCompileInputs.cache
@@ -48,6 +46,7 @@ E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreap
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb

@@ -10,5 +10,7 @@ namespace EIS.WebApp.IServices
     {
         HttpClient GetService();
         HttpResponseMessage GetResponse(string url);
+
+        HttpResponseMessage PostResponse(string url,HttpContent content);
     }
 }

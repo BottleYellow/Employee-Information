@@ -25,12 +25,16 @@ namespace EIS.WebAPI.Filters
     public class Authorization : AuthorizeAttribute,IAuthorizationFilter
     {
         public readonly IDistributedCache distributedCache;
-        public Authorization(IDistributedCache _distributedCache)
+        public readonly IRepositoryWrapper repositoryWrapper;
+        public Authorization(IDistributedCache _distributedCache, IRepositoryWrapper _repositoryWrapper)
         {
             distributedCache = _distributedCache;
+            repositoryWrapper = _repositoryWrapper;
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
+            string actionName = filterContext.HttpContext.Request.Headers["Action"].ToString();
+            string controllerName = filterContext.HttpContext.Request.Headers["Controller"].ToString();
             //Authentication
             bool skipAuthorization = filterContext.Filters.Any(item => item is IAllowAnonymousFilter);
             if (skipAuthorization)
@@ -40,12 +44,22 @@ namespace EIS.WebAPI.Filters
             try
             { 
                 string token = distributedCache.GetString("TokenValue");
-                if (token==null)
+                if (token == null)
                 {
                     // unauthorized!
                     filterContext.Result = new UnauthorizedResult();
                 }
-                
+                //else
+                //{
+                //    string access = "/" + controllerName + "/" + actionName;
+                //    string role = "Manager";
+                //    var data = repositoryWrapper.RoleManager.FindByCondition(r => r.Name == role).Access;
+                //    if (!data.Contains(access))
+                //    {
+                //        filterContext.Result = new UnauthorizedResult();
+                //    }
+                //}
+
             }
             catch (InvalidOperationException)
             {

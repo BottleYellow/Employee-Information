@@ -42,10 +42,10 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            //imageBase64Data = Convert.ToBase64String(data.Image);
-            //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            //ViewBag.ImageData = imageDataURL;
-            if(data!=null)
+            imageBase64Data = Convert.ToBase64String(data.Image);
+            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+            ViewBag.ImageData = imageDataURL;
+            if (data!=null)
                 ViewBag.Name = data.FirstName + " " + data.LastName;
             Response.StatusCode = (int)response.StatusCode;
             return View("Profile", data);

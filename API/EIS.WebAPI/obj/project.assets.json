@@ -4643,27 +4643,25 @@
       ]
     },
     "Microsoft.AspNet.WebPages.Data/2.0.20710": {
-      "sha512": "M7nkqAUlaQAYY+516G6CbQumDBtsfAPgGPPS0bvGvpHC35ef9vss+XAhl6qcW9RWsgRUvf5rtc6T7kMrJ+Xkjg==",
+      "sha512": "PTwS5C1vF69FDikWhUkJZ4qb96yxtdVuVR90Hjt7e/GDNVOeR7tXMYWHs9cPP0v35EiO+V6BUj1c8dNCUXW7Ag==",
       "type": "package",
       "path": "microsoft.aspnet.webpages.data/2.0.20710",
       "files": [
-        ".signature.p7s",
+        "Microsoft.AspNet.WebPages.Data.2.0.20710.nupkg.sha512",
+        "Microsoft.AspNet.WebPages.Data.nuspec",
         "lib/net40/WebMatrix.Data.dll",
-        "lib/net40/WebMatrix.Data.xml",
-        "microsoft.aspnet.webpages.data.2.0.20710.nupkg.sha512",
-        "microsoft.aspnet.webpages.data.nuspec"
+        "lib/net40/WebMatrix.Data.xml"
       ]
     },
     "Microsoft.AspNet.WebPages.WebData/2.0.20710": {
-      "sha512": "twHL/SIg9qfAkVrH66QN9g1iHjqioeibYhRycqP+3GUh2LJQawuL8+pdO3IZRGgkRobnvUAK1UWDxeXkAZEonA==",
+      "sha512": "BZsx1iI2qZ9c21QKD3KAk7BGrGQ3gkGw8a7AdkmDNJoK+RyEcEy46lyzpyiD7BkVKvlszO7er2m2nR2NWK6u9Q==",
       "type": "package",
       "path": "microsoft.aspnet.webpages.webdata/2.0.20710",
       "files": [
-        ".signature.p7s",
+        "Microsoft.AspNet.WebPages.WebData.2.0.20710.nupkg.sha512",
+        "Microsoft.AspNet.WebPages.WebData.nuspec",
         "lib/net40/WebMatrix.WebData.dll",
-        "lib/net40/WebMatrix.WebData.xml",
-        "microsoft.aspnet.webpages.webdata.2.0.20710.nupkg.sha512",
-        "microsoft.aspnet.webpages.webdata.nuspec"
+        "lib/net40/WebMatrix.WebData.xml"
       ]
     },
     "Microsoft.AspNetCore/2.1.1": {
@@ -12206,13 +12204,12 @@
       ]
     },
     "WebMatrix.WebData/2.0.30506": {
-      "sha512": "xv+DZtcq684tcg4b8SbTxVCU62LPOKN2TSvIBlgyXRVEUIGhX4XdG7Fs5DFjoxviHP/D4RBe26rQieK8WzKIbA==",
+      "sha512": "kDz6OjnVNm/asletyqpHmb0y/56KduvxWhi6KJdAgnT45LZPu6IUETXNISA1icfoRwBWrUirQxAZw6JwhYrqoQ==",
       "type": "package",
       "path": "webmatrix.webdata/2.0.30506",
       "files": [
-        ".signature.p7s",
-        "webmatrix.webdata.2.0.30506.nupkg.sha512",
-        "webmatrix.webdata.nuspec"
+        "WebMatrix.WebData.2.0.30506.nupkg.sha512",
+        "WebMatrix.WebData.nuspec"
       ]
     }
   },
