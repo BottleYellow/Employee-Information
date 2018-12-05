@@ -83,7 +83,19 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = client.PostAsJsonAsync("api/account/forgot/"+username+"",username).Result;
             if(response.IsSuccessStatusCode==true)
             {
-                TempData["Msg"] ="<script>alert('Your password has been reset successfully. Your new password has been sent to your primary email address.');</script>";
+                //TempData["Msg"] = "<div class='alert alert-success alert-dismissible col-md-8' style='position:absolute; margin:auto; top: 0; right: 0; left: 0; border-radius: 3px; height:50px'>Your password has been reset successfully. Your new password has been sent to your primary email address.</div>";
+
+                TempData["Msg"] = "" +
+                    "<div id='myAlert' class='alert alert-success col-md-9' style='position:absolute; margin:auto; top: 0; right: 0; left: 0; border-radius: 3px; height:50px'>" +
+                    "<a href='#' class='close' data-dismiss='alert'>&times;</a>" +
+                    "<strong>Your password has been reset successfully. Your new password has been sent to your primary email address.</strong></div>" +
+                    "<script>" +
+                        "$(document).ready(function(){" +
+                            "setTimeout(function(){" +
+                                "$('#myAlert').hide('fade');" +
+                            "},2000);" +
+                        "});" +
+                    "</script>";
                 return RedirectToAction("ForgotPassword");
             }
             else

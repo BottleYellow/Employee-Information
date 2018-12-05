@@ -39,17 +39,15 @@ F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.AssemblyInfo.cs
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.dll
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csprojAssemblyReference.cache
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CoreCompileInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.AssemblyInfoInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.AssemblyInfo.cs
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
 E:\Training Project\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
-E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
+E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
