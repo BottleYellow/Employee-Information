@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
         static string imageBase64Data;
         public readonly IEISService service;
         public readonly IDistributedCache distributedCache;
-        public LoginController(IEISService service,IDistributedCache distributedCache)
+        public AccountController(IEISService service,IDistributedCache distributedCache)
         {
             this.service = service;
             this.distributedCache = distributedCache;
@@ -63,10 +63,9 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult LogOut(int id)
+        public IActionResult LogOut()
         { 
-            HttpClient client = service.GetService();
-            HttpResponseMessage response = client.PostAsJsonAsync("api/account/logout",id).Result;
+            HttpResponseMessage response = service.PostResponse("api/account/logout",null);
             return View("Login");
         }
 

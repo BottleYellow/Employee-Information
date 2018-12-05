@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -65,13 +66,12 @@ namespace EIS.WebApp
             services.AddSession();
             services.AddTransient<IEISService, EISService>();
             services.AddSingleton<IControllerService, ControllerService>();
-            
             ////Authorization
             //services.AddAuthorization(options =>
             //{
             //    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             //});
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,11 +88,11 @@ namespace EIS.WebApp
             }
 
             app.UseAuthentication();
-            
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             
-            string controller="Login";
+            string controller="Account";
             string action = "Login";
             app.UseMvc(routes =>
             {

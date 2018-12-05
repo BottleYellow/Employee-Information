@@ -10632,8 +10632,10 @@ fieldset[disabled] .form-control {
 
     .profile-card .profile-body .image-area img {
         border: 2px solid rgba(33, 150, 243,1);
+        max-width:60%;
         padding: 2px;
         margin: 2px;
+        object-fit:cover;
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
         -ms-border-radius: 50%;

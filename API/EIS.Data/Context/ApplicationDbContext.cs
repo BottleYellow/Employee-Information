@@ -19,7 +19,7 @@ namespace EIS.Data.Context
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-                connectionString = configuration.GetConnectionString("ConnectionStrings:DefaultConnection");
+                connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
