@@ -39,7 +39,7 @@ namespace EIS.WebApp
             
             services.AddDbContext<EIS.Data.Context.ApplicationDbContext>(config =>
             {
-                config.UseSqlServer(Configuration.GetConnectionString("connection"));
+                config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddMvc();

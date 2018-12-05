@@ -55,20 +55,20 @@ namespace EIS.WebApp.Controllers
                 UpdatedDate = DateTime.Now,
                 IsActive = true
             };
-            string access = "";
+            List<string> access = new List<string>();
             if (viewModel.SelectedControllers != null && viewModel.SelectedControllers.Any())
             {
                 foreach (var controller in viewModel.SelectedControllers)
                     foreach (var action in controller.Actions)
                     {
                         action.ControllerId = controller.Id;
-                        access += "/" + controller.Name + "/" + action.Name;
-                        access += ",";
-
+                        access.Add("/" + controller.Name + "/" + action.Name);
+                        //access += "/" + controller.Name + "/" + action.Name;
+                        //access += ",";
                     }
 
                 var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
-                role.Access = access;
+                role.Access = JsonConvert.SerializeObject(access);
             }
 
             HttpClient client = _service.GetService();

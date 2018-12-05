@@ -25,9 +25,11 @@ namespace EIS.WebAPI.Filters
     public class Authorization : AuthorizeAttribute,IAuthorizationFilter
     {
         public readonly IDistributedCache distributedCache;
-        public Authorization(IDistributedCache _distributedCache)
+        public readonly IRepositoryWrapper repositoryWrapper;
+        public Authorization(IDistributedCache _distributedCache, IRepositoryWrapper _repositoryWrapper)
         {
             distributedCache = _distributedCache;
+            repositoryWrapper = _repositoryWrapper;
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
@@ -40,11 +42,12 @@ namespace EIS.WebAPI.Filters
             try
             { 
                 string token = distributedCache.GetString("TokenValue");
-                if (token==null)
+                if (token == null)
                 {
                     // unauthorized!
                     filterContext.Result = new UnauthorizedResult();
                 }
+               
                 
             }
             catch (InvalidOperationException)
