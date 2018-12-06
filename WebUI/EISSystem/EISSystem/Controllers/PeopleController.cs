@@ -87,7 +87,7 @@ namespace EIS.WebApp.Controllers
                 }
             }
 
-            return View(person);
+            return View( new {file=uploadedImage});
 
         }
 
