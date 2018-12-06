@@ -76,9 +76,7 @@ namespace EIS.WebApp.Controllers
             //var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = client.PostAsJsonAsync("api/role", role).Result;
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-            if (response.IsSuccessStatusCode)
-                return RedirectToAction(nameof(Index));
-
+            Response.StatusCode = (int)response.StatusCode;
             ViewData["Controllers"] = _controllerService.GetControllers();
 
             return View(viewModel);

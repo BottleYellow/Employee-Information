@@ -62,11 +62,10 @@ namespace EIS.WebApp.Controllers
             return RedirectToAction("Profile","People",new { id=Convert.ToInt32(pid)});
         }
 
-        [HttpPost]
         public IActionResult LogOut()
         { 
             HttpResponseMessage response = service.PostResponse("api/account/logout",null);
-            return View("Login");
+            return RedirectToAction("login");
         }
 
         [HttpGet]

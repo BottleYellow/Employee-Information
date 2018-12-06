@@ -16,7 +16,6 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net;
 using Microsoft.Extensions.Caching.Distributed;
-using WebMatrix.WebData;
 
 using EIS.WebAPI.Messanger;
 using EIS.Repositories.Helpers;
@@ -53,8 +52,11 @@ namespace EIS.WebAPI.Controllers
 
                     var options = new DistributedCacheEntryOptions();
                     options.SetAbsoluteExpiration(TimeSpan.FromDays(1));
+                    var role = _repository.RoleManager.GetRole(u.Id);
+                    var data = _repository.RoleManager.FindByCondition(r => r.Name == role).Access;
                     distributedCache.SetString("TokenValue", s1, options);
                     distributedCache.SetString("PersonId", pid.ToString(), options);
+                    distributedCache.SetString("Access", data);
                 }
                 
                 return Ok(pid.ToString());

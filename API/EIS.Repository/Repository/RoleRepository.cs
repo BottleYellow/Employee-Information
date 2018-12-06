@@ -27,15 +27,16 @@ namespace EIS.Repositories.Repository
             await dbContext.Roles.AddAsync(role);
         }
 
-        public string GetRole(Users user)
+        public string GetRole(int UserId)
         {
-            string role=null;
-            role = dbContext.Roles.Where(x => x.Id == (dbContext.UserRoles.Where(u => u.Id == user.Id).Select(u => u.RoleId).FirstOrDefault())).Select(x => x.Name).FirstOrDefault();
+            //string role=null;
+            var role = dbContext.UserRoles.Where(u => u.UserId == UserId).Select(u => u.Role).FirstOrDefault();
+            //role = dbContext.Roles.Where(x => x.Id == dbContext.UserRoles.Where(u => u.UserId == UserId).Select(u => u.RoleId).FirstOrDefault()).Select(x => x.Name).FirstOrDefault();
             if (role != null)
             {
-                return role;
+                return role.Name;
             }
-            return role;
+            return role.Name;
         }
 
         public void MapRole(int UserId, int RoleId)

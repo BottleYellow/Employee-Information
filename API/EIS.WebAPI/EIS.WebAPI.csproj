@@ -19,7 +19,6 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
-    <PackageReference Include="WebMatrix.WebData" Version="2.0.30506" />
   </ItemGroup>
 
   <ItemGroup>

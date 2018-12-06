@@ -42,11 +42,13 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
-            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            ViewBag.ImageData = imageDataURL;
-            if (data!=null)
+            if (data != null)
+            {
+                imageBase64Data = Convert.ToBase64String(data.Image);
+                string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+                ViewBag.ImageData = imageDataURL;
                 ViewBag.Name = data.FirstName + " " + data.LastName;
+            }
             Response.StatusCode = (int)response.StatusCode;
             return View("Profile", data);
         }
@@ -79,13 +81,13 @@ namespace EIS.WebApp.Controllers
                     HttpClient client = service.GetService();
                     string stringData = JsonConvert.SerializeObject(person);
                     var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = client.PostAsync("api/employee/Create", contentData).Result;
+                    HttpResponseMessage response = client.PostAsync("api/employee", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            return View(person);
 
         }
 
@@ -127,7 +129,7 @@ namespace EIS.WebApp.Controllers
                 try
                 {
                     HttpClient client = service.GetService();
-                    HttpResponseMessage response = client.PutAsJsonAsync("api/employee/Edit/" + id + "", person).Result;
+                    HttpResponseMessage response = client.PutAsJsonAsync("api/employee/" + id + "", person).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }

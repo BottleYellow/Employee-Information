@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -49,16 +50,20 @@ namespace EIS.WebAPI.Filters
                     // unauthorized!
                     filterContext.Result = new UnauthorizedResult();
                 }
-                //else
-                //{
-                //    string access = "/" + controllerName + "/" + actionName;
-                //    string role = "Manager";
-                //    var data = repositoryWrapper.RoleManager.FindByCondition(r => r.Name == role).Access;
-                //    if (!data.Contains(access))
-                //    {
-                //        filterContext.Result = new UnauthorizedResult();
-                //    }
-                //}
+                else
+                {
+                    string access = "/" + controllerName + "/" + actionName;
+                    var data = distributedCache.GetString("Access");
+                    CultureInfo culture = new CultureInfo("en-US");
+                    if (culture.CompareInfo.IndexOf(data, access, CompareOptions.IgnoreCase) == 0)
+                    {
+                        filterContext.Result = new UnauthorizedResult();
+                    }
+                    //if (!data.Contains(access))
+                    //{
+                    //    filterContext.Result = new UnauthorizedResult();
+                    //}
+                }
 
             }
             catch (InvalidOperationException)

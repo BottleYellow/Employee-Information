@@ -11,7 +11,7 @@ namespace EIS.Repositories.IRepository
         void CreateRole(Role role);
         void UpdateRole(int id,Role role);
         void MapRole(int UserId, int RoleId);
-        string GetRole(Users user);
+        string GetRole(int UserId);
         bool RoleExists(string RoleName);
         Task CreateRoleAsync(Role role);
         Task<bool> RoleExistsAsync(string RoleName);

@@ -5,11 +5,13 @@ using EIS.Entities.User;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Filters;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EIS.WebAPI.Controllers.Roles
 {
+    [TypeFilter(typeof(Authorization))]
     [Route("api/role")]
     [ApiController]
     public class RoleController : Controller
