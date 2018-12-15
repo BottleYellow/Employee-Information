@@ -27,7 +27,6 @@
         ViewBag.Message = null;
     }
 }
-
 @*<link href="../../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">*@
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
@@ -147,13 +146,20 @@
     $("#create").click(function () {
         window.location.href = '/People/Create';
     });
-</script>
-<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-
-<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+                    $(document).ready(function () {
+                        var table = $('#example').DataTable({
+                            rowReorder: {
+                                selector: 'td:nth-child(2)'
+                            },
+                            responsive: true
+                        });
+                    });
+                </script>
+                <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+                <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+                
+                <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+                <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
 
 
