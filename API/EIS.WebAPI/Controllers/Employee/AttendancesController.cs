@@ -35,7 +35,7 @@ namespace EIS.WebAPI.Controllers
             }
 
             
-            var Attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == id);
+            var Attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == id );
             if (Attendance == null)
             {
                 return NotFound();
