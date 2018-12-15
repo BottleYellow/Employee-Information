@@ -1,4 +1,5 @@
-﻿using EIS.Entities.Generic;
+﻿using EIS.Entities.Enums;
+using EIS.Entities.Generic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

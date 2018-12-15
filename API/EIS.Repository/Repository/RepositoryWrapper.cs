@@ -26,6 +26,8 @@ namespace EIS.Repositories.Repository
 
         IRoleRepository _roleManager;
 
+        
+
      public IEmployeeRepository Employee 
         {
             get {
@@ -82,7 +84,7 @@ namespace EIS.Repositories.Repository
             }
         }
 
-        public IAttendanceRepository Attendance
+        public IAttendanceRepository Attendances
         {
             get
             {
@@ -126,6 +128,7 @@ namespace EIS.Repositories.Repository
                 return _roleManager;
             }
         }
+
         public RepositoryWrapper(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
