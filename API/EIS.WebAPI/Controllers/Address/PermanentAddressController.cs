@@ -33,7 +33,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.Id==id);
+            var Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.PersonId==id);
 
             if (Permanent == null)
             {
@@ -44,27 +44,22 @@ namespace EIS.WebAPI.Controllers
         }
 
         // PUT: api/Permanents/5
-        [HttpPut("{id}")]
-        public IActionResult PutPermanent([FromRoute] int id, [FromBody] Permanent permanent)
+        [HttpPut]
+        public IActionResult PutPermanent([FromBody] Permanent permanent)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != permanent.Id)
-            {
-                return BadRequest();
-            }
             _repository.PermanentAddress.Update(permanent);
            
             try
             {          
-                _repository.Employee.Save();
+                _repository.PermanentAddress.Save();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-               
+                return StatusCode(500, ex.Message);
             }
 
             return NoContent();
@@ -109,7 +104,7 @@ namespace EIS.WebAPI.Controllers
             other.Person = permanent.Person;
             other.PhoneNumber = permanent.PhoneNumber;
             other.PinCode = permanent.PinCode;
-            other.IsActive = permanent.IsActive;
+            other.IsActive = false;
             other.CreatedDate = permanent.CreatedDate;
             other.UpdatedDate = DateTime.Now;
             _repository.OtherAddress.Create(other);

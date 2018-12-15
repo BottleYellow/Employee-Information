@@ -1,0 +1,93 @@
+﻿@model IEnumerable<EIS.Entities.User.Role>
+@{
+    //ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<html>
+<head>
+    <title>Roles</title>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+            <div class="block-header">
+                <h1>Roles List</h1>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="body">
+                            @*<p>
+                                <button class="btn btn-primary waves-effect" asp-controller="Role" asp-action="Create">
+                                    <i class="glyphicon glyphicon-plus"></i> Create New
+                                </button>
+                            </p>*@
+                            
+                            <p>
+                                <a class="btn btn-primary waves-effect" asp-controller="Role" asp-action="Create"><span><i class="glyphicon glyphicon-plus"></i><text style="font-size:16px;">Create New</text></span></a>
+                            </p>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Name
+                                            </th>
+
+                                            <th>
+                                                Actions
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
+                                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-left">
+                                        <li><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+
+                                        <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#example').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        });
+    });
+</script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>

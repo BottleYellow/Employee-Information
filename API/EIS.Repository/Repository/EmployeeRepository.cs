@@ -1,4 +1,5 @@
-﻿using EIS.Data.Context;
+﻿using System.Collections.Generic;
+using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 
@@ -10,6 +11,5 @@ namespace EIS.Repositories.Repository
         {
 
         }
-
     }
 }

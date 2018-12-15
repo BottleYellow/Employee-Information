@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -24,7 +27,7 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet]
         public IActionResult GetAllEmployee()
-        { 
+        {
             var employees = _repository.Employee.FindAll();
             return Ok(employees);
         }

@@ -23,16 +23,30 @@ namespace EIS.WebAPI.Controllers.Roles
         }
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult GetAllRoles()
         {
-            return new string[] { "value1", "value2" };
+            var roles = _repository.RoleManager.FindAll();
+            return Ok(roles);
         }
 
-        // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetById([FromRoute]int id)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var role = _repository.RoleManager.FindByCondition(e => e.Id == id);
+
+            if (role == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(role);
+            }
+
         }
 
         // POST api/<controller>
@@ -48,11 +62,32 @@ namespace EIS.WebAPI.Controllers.Roles
             return Ok();
         }
 
-        // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult UpdateData([FromRoute]int id, [FromBody]Role role)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != role.Id)
+            {
+                return BadRequest();
+            }
+            _repository.RoleManager.Update(role);
+            try
+            {
+                _repository.RoleManager.Save();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                throw;
+            }
+
+            return NoContent();
         }
+
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]

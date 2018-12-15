@@ -35,7 +35,8 @@ namespace EIS.Repositories.Repository
 
             public void Update(T entity)
             {
-                   _dbcontext.Set<T>().Update(entity);
+                _dbcontext.Set<T>().Update(entity);
+                
             }
 
             public void Delete(T entity)

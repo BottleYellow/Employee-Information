@@ -1,6 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,14 @@ namespace EIS.WebAPI.Filters
 {
     public class Authorization : AuthorizeAttribute,IAuthorizationFilter
     {
+        public RedisAgent Cache;
         public readonly IDistributedCache distributedCache;
         public readonly IRepositoryWrapper repositoryWrapper;
         public Authorization(IDistributedCache _distributedCache, IRepositoryWrapper _repositoryWrapper)
         {
             distributedCache = _distributedCache;
             repositoryWrapper = _repositoryWrapper;
+            Cache = new RedisAgent();
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
@@ -43,28 +46,14 @@ namespace EIS.WebAPI.Filters
                 return;
             }
             try
-            { 
-                string token = distributedCache.GetString("TokenValue");
+            {
+                string token = Cache.GetStringValue("TokenValue");
                 if (token == null)
                 {
                     // unauthorized!
                     filterContext.Result = new UnauthorizedResult();
                 }
-                else
-                {
-                    string access = "/" + controllerName + "/" + actionName;
-                    var data = distributedCache.GetString("Access");
-                    CultureInfo culture = new CultureInfo("en-US");
-                    if (culture.CompareInfo.IndexOf(data, access, CompareOptions.IgnoreCase) == 0)
-                    {
-                        filterContext.Result = new UnauthorizedResult();
-                    }
-                    //if (!data.Contains(access))
-                    //{
-                    //    filterContext.Result = new UnauthorizedResult();
-                    //}
-                }
-
+                
             }
             catch (InvalidOperationException)
             {

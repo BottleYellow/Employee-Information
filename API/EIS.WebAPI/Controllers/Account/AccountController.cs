@@ -20,6 +20,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using EIS.WebAPI.Messanger;
 using EIS.Repositories.Helpers;
 using Microsoft.Extensions.Configuration;
+using EIS.WebAPI.RedisCache;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -27,12 +28,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
+        public RedisAgent Cache;
         public readonly IConfiguration configuration;
-        protected IDistributedCache distributedCache;
-        public AccountController(IRepositoryWrapper repository, IDistributedCache distributedCache, IConfiguration configuration) : base(repository)
+        public AccountController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
-            this.distributedCache = distributedCache;
             this.configuration = configuration;
+            Cache = new RedisAgent();
         }
 
         [HttpPost]
@@ -47,18 +48,21 @@ namespace EIS.WebAPI.Controllers
                 JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
                 int pid = u.PersonId;
+                string role = "";
                 if (s1 != null)
                 {
 
                     var options = new DistributedCacheEntryOptions();
                     options.SetAbsoluteExpiration(TimeSpan.FromDays(1));
-                    var role = _repository.RoleManager.GetRole(u.Id);
+                    role = _repository.RoleManager.GetRole(u.Id);
                     var data = _repository.RoleManager.FindByCondition(r => r.Name == role).Access;
-                    distributedCache.SetString("TokenValue", s1, options);
-                    distributedCache.SetString("PersonId", pid.ToString(), options);
-                    distributedCache.SetString("Access", data);
+                    Cache.SetStringValue("TokenValue", s1);
+                    Cache.SetStringValue("PersonId", pid.ToString());
+                    Cache.SetStringValue("Access", data);
                 }
-                
+                Response.Cookies.Append("Role", role);
+                Response.Headers.Add("Role", role);
+                Cache.SetStringValue("Role", role);
                 return Ok(pid.ToString());
             }
 
@@ -102,8 +106,10 @@ namespace EIS.WebAPI.Controllers
         [Route("logout")]
         public IActionResult Logout()
         {
-            distributedCache.Remove("TokenValue");
-            distributedCache.Remove("PersonId");
+            Cache.DeleteStringValue("PersonId");
+            Cache.DeleteStringValue("TokenValue");
+            Cache.DeleteStringValue("Access");
+            Cache.DeleteStringValue("Role");
             return Ok("Successfully Logged out.");
         }
         // GET: api/Logins/5

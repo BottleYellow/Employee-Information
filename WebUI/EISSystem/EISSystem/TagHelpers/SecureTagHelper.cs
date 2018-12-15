@@ -1,7 +1,9 @@
 ﻿using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +14,12 @@ namespace EIS.WebApp.TagHelpers
     [HtmlTargetElement("secure")]
     public class SecureTagHelper:TagHelper
     {
-        private readonly IRepositoryWrapper repository;
-
-        public SecureTagHelper(IRepositoryWrapper _repository)
+        public RedisAgent Cache;
+        public SecureTagHelper()
         {
-            repository = _repository;
+            Cache = new RedisAgent();
         }
 
-        [HtmlAttributeName("asp-area")]
-        public string Area { get; set; }
 
         [HtmlAttributeName("asp-controller")]
         public string Controller { get; set; }
@@ -33,35 +32,15 @@ namespace EIS.WebApp.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
-            var user = ViewContext.HttpContext.User;
 
-            if (!user.Identity.IsAuthenticated)
+            var access = $"/{Controller}/{Action}";
+            string data = Cache.GetStringValue("Access");
+            var accessList = JsonConvert.DeserializeObject<List<string>>(data);
+            if (accessList.Contains(access))
             {
-                output.SuppressOutput();
                 return;
             }
-
-            //var roles = await (
-            //    from usr in _dbContext.Users
-            //    join userRole in _dbContext.UserRoles on usr.Id equals userRole.UserId
-            //    join role in _dbContext.Roles on userRole.RoleId equals role.Id
-            //    where usr.UserName == user.Identity.Name
-            //    select role
-            //).ToListAsync();
-
-            //var actionId = $"{Area}:{Controller}:{Action}";
-
-            //foreach (var role in roles)
-            //{
-            //    if (role.Access == null)
-            //        continue;
-
-            //    var accessList = JsonConvert.DeserializeObject<IEnumerable<MvcControllerInfo>>(role.Access);
-            //    if (accessList.SelectMany(c => c.Actions).Any(a => a.Id == actionId))
-            //        return;
-            //}
-
-            //output.SuppressOutput();
+            output.SuppressOutput();
         }
     }
 }

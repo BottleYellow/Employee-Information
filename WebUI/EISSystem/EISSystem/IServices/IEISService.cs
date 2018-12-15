@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace EIS.WebApp.IServices
 {
-    public interface IEISService
+    public interface IEISService<T>
     {
         HttpClient GetService();
         HttpResponseMessage GetResponse(string url);
+        HttpResponseMessage PostResponse(string url,T entity);
+        HttpResponseMessage PutResponse(string url, T entity);
 
-        HttpResponseMessage PostResponse(string url,HttpContent content);
+        HttpResponseMessage DeleteResponse(string url);
     }
 }
