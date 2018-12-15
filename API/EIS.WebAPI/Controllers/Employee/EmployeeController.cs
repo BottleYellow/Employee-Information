@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -49,6 +50,7 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
             if (!ModelState.IsValid)
@@ -61,6 +63,7 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
         {
             if (!ModelState.IsValid)

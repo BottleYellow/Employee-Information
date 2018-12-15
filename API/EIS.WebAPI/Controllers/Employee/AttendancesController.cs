@@ -2,6 +2,7 @@
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
@@ -20,7 +21,8 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Attendance> GetAttendances()
         {
-            return _repository.Attendance.FindAll();
+            
+            return _repository.Attendances.FindAll();
         }
 
         // GET: api/Attendances/5
@@ -32,8 +34,8 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Attendance = _repository.Attendance.FindByCondition(x => x.Id==id);
-
+            
+            var Attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == id);
             if (Attendance == null)
             {
                 return NotFound();
@@ -46,21 +48,32 @@ namespace EIS.WebAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult PutAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
+            attendance = _repository.Attendances.FindByCondition2(x => x.PersonId == id && x.DateIn.Date==DateTime.Now.Date);
+            //attendance.CreatedDate = DateTime.Now;
+            attendance.UpdatedDate = DateTime.Now;
+            attendance.DateOut = DateTime.Now;
+            attendance.TimeOut = DateTime.Now.TimeOfDay;
+            attendance.TotalHours = attendance.TimeOut - attendance.TimeIn;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != attendance.Id)
+            if (id != attendance.PersonId)
             {
                 return BadRequest();
             }
+            if (attendance.DateIn.Date != DateTime.Now.Date)
+            {
 
-            _repository.Attendance.Update(attendance);
+            }
+            else
+            {
+                _repository.Attendances.Update(attendance);
+            }
 
             try
             {
-                _repository.Attendance.Save();
+                _repository.Attendances.Save();
             }
             catch (DbUpdateConcurrencyException)
             {             
@@ -71,15 +84,24 @@ namespace EIS.WebAPI.Controllers
         }
 
         // POST: api/Attendances
-        [HttpPost]
-        public IActionResult PostAttendance([FromBody] Attendance attendance)
+        [HttpPost("{id}")]
+        public IActionResult PostAttendance(int id, [FromBody] Attendance attendance)
         {
+            
+            attendance.PersonId = id;
+            attendance.DateIn = DateTime.Now;
+            string dt = attendance.DateIn.DayOfWeek.ToString();
+            string Timein= DateTime.Now.ToLongTimeString();
+            attendance.TimeIn = DateTime.Now.TimeOfDay;
+            attendance.CreatedDate = DateTime.Now;
+            attendance.UpdatedDate = DateTime.Now;
+            attendance.IsActive = true;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _repository.Attendance.Create(attendance);
-            _repository.Attendance.Save(); 
+            _repository.Attendances.Create(attendance);
+            _repository.Attendances.Save(); 
             return CreatedAtAction("GetAttendance", new { id = attendance.Id }, attendance);
         }
 
@@ -92,15 +114,16 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var Attendance = _repository.Attendance.FindByCondition(x => x.Id == id);
+            var Attendance = _repository.Attendances.FindByCondition(x => x.Id == id);
             if (Attendance == null)
             {
                 return NotFound();
             }
-            _repository.Attendance.Delete(Attendance);
-            _repository.Attendance.Save();
+            _repository.Attendances.Delete(Attendance);
+            _repository.Attendances.Save();
             
             return Ok(Attendance);
         }
+        
     }
 }

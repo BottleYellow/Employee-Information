@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -235,15 +235,15 @@ namespace EIS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     PersonId = table.Column<int>(nullable: false),
-                    DateIn = table.Column<DateTime>(type: "date", nullable: false),
-                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DateOut = table.Column<DateTime>(type: "date", nullable: false),
-                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: false),
-                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: false)
+                    DateIn = table.Column<DateTime>(type: "date", nullable: true),
+                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: true),
+                    DateOut = table.Column<DateTime>(type: "date", nullable: true),
+                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
+                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -265,7 +265,7 @@ namespace EIS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     PersonId = table.Column<int>(nullable: false),

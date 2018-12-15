@@ -1,5 +1,6 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore.Query.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,16 @@ namespace EIS.Repositories.Repository
                  _dbcontext.SaveChanges();
           
             }
+
+        public IEnumerable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
+        {
+            return _dbcontext.Set<T>().Where(expression);
+        }
+
+        public T FindByCondition2(Expression<Func<T, bool>> expression)
+        {
+            return _dbcontext.Set<T>().Where(expression).LastOrDefault();
+        }
     }
 }
 

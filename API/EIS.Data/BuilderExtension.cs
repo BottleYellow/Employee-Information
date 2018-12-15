@@ -65,10 +65,10 @@ namespace EIS.Data
                 #region[Attendance]
                 //For Attendance model validation
 
-                modelBuilder.Entity<Attendance>().Property(p => p.DateIn).HasColumnType("date").IsRequired();
-                modelBuilder.Entity<Attendance>().Property(p => p.TimeIn).HasColumnType("time").IsRequired();
-                modelBuilder.Entity<Attendance>().Property(p => p.DateOut).HasColumnType("date").IsRequired();
-                modelBuilder.Entity<Attendance>().Property(p => p.TimeOut).HasColumnType("time").IsRequired();
+                modelBuilder.Entity<Attendance>().Property(p => p.DateIn).HasColumnType("date");
+                modelBuilder.Entity<Attendance>().Property(p => p.TimeIn).HasColumnType("time");
+                modelBuilder.Entity<Attendance>().Property(p => p.DateOut).HasColumnType("date");
+                modelBuilder.Entity<Attendance>().Property(p => p.TimeOut).HasColumnType("time");
                 modelBuilder.Entity<Attendance>().Property(p => p.TotalHours).HasColumnType("time");
                 modelBuilder.Entity<Attendance>().Property(p => p.CreatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Attendance>().Property(p => p.UpdatedDate).HasColumnType("datetime");

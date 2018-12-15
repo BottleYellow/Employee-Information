@@ -16,7 +16,8 @@ namespace EIS.WebApp.Controllers
 {
     public class PeopleController : Controller
     {
-     
+        public static HttpResponseMessage response;
+        public static List<Person> data;
         public readonly IEISService service;
         static string imageBase64Data;
         public PeopleController(IEISService service)
@@ -26,31 +27,27 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Index()
         {
-            HttpResponseMessage response = service.GetResponse("api/employee");
-            
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            data = EmployeeData();
             Response.StatusCode = (int)response.StatusCode;
             return View(data);
-            
-           
         }
 
         //Get : People by id
         public IActionResult Profile(int id)
         {
-            HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
+            HttpContext.Session.SetString("id", Convert.ToString(id));
+            response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            if (data != null)
+            Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
+            if (data1 != null)
             {
-                imageBase64Data = Convert.ToBase64String(data.Image);
+                imageBase64Data = Convert.ToBase64String(data1.Image);
                 string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
                 ViewBag.ImageData = imageDataURL;
-                ViewBag.Name = data.FirstName + " " + data.LastName;
+                ViewBag.Name = data1.FirstName + " " + data1.LastName;
             }
             Response.StatusCode = (int)response.StatusCode;
-            return View("Profile", data);
+            return View("Profile", data1);
         }
 
         // GET: People/Create
@@ -81,28 +78,32 @@ namespace EIS.WebApp.Controllers
                     HttpClient client = service.GetService();
                     string stringData = JsonConvert.SerializeObject(person);
                     var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = client.PostAsync("api/employee", contentData).Result;
-                    ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                    return RedirectToAction(nameof(Index));
+                    response = client.PostAsync("api/employee", contentData).Result;
+                    var data1 = response.Content.ReadAsStringAsync().Result;
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        ViewBag.Message = "Record has been successfully saved.";
+                        data = EmployeeData();
+                        return View("Index", data1);
+                    }
+                    
                 }
             }
-
-            return View(person);
-
+            return View("Index");
         }
 
         // GET: People/Edit/5
         public IActionResult Edit(int id)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
+            response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
-            Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
+            Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
+            imageBase64Data = Convert.ToBase64String(data1.Image);
             string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             //HttpContext.Session.SetString("image", imageDataURL);
             ViewBag.ImageData = imageDataURL;
-            return View(data);
+            return View(data1);
         }
 
         // POST: People/Edit/5
@@ -129,9 +130,15 @@ namespace EIS.WebApp.Controllers
                 try
                 {
                     HttpClient client = service.GetService();
-                    HttpResponseMessage response = client.PutAsJsonAsync("api/employee/" + id + "", person).Result;
-                    ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                    return RedirectToAction(nameof(Index));
+                    response = client.PutAsJsonAsync("api/employee/" + id + "", person).Result;
+                    //ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        ViewBag.Message = "Record has been successfully saved.";
+                        data = EmployeeData();
+                        return View("Index", data);
+                    }
+                    //return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -160,13 +167,13 @@ namespace EIS.WebApp.Controllers
         public IActionResult Delete(int id)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
+            response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
-            Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
+            Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
+            imageBase64Data = Convert.ToBase64String(data1.Image);
             string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             ViewBag.ImageData = imageDataURL;
-            return View(data);
+            return PartialView("DeletePartial",data1);
         }
 
         // POST: People/Delete/5
@@ -175,8 +182,21 @@ namespace EIS.WebApp.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.DeleteAsync("api/employee/Delete/" + id + "").Result;
-            return RedirectToAction(nameof(Index));
+            response = client.DeleteAsync("api/employee/" + id + "").Result;
+            if (response.IsSuccessStatusCode == true)
+            {
+                ViewBag.Message = "Record has been successfully deleted.";
+                data = EmployeeData();
+                return View("Index",data);
+            }
+            return View();
+        }
+        public List<Person> EmployeeData()
+        {
+            response = service.GetResponse("api/employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            return data;
         }
     }
 }

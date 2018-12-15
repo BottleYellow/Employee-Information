@@ -12,5 +12,7 @@ namespace EIS.Repositories.IRepository
         void Update(T entity);
         void Delete(T entity);
         void Save();
+        IEnumerable<T> FindAllByCondition(Expression<Func<T, bool>> expression);
+        T FindByCondition2(Expression<Func<T, bool>> expression);
     }
 }

@@ -4,4 +4,31 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\netcoreapp2.1\EIS.Entities.deps.json" />
+    <Content Include="obj\Debug\netcoreapp2.1\EIS.Entities.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\project.assets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\netcoreapp2.1\EIS.Entities.dll" />
+    <None Include="bin\Debug\netcoreapp2.1\EIS.Entities.pdb" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.assets.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.csprojAssemblyReference.cache" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.dll" />
+    <None Include="obj\Debug\netcoreapp2.1\EIS.Entities.pdb" />
+    <None Include="obj\EIS.Entities.csproj.nuget.cache" />
+    <None Include="obj\EIS.Entities.csproj.nuget.g.props" />
+    <None Include="obj\EIS.Entities.csproj.nuget.g.targets" />
+  </ItemGroup>
+
 </Project>

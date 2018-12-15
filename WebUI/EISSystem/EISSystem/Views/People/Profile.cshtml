@@ -24,11 +24,11 @@
         }
     </style>
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         function preventBack() { window.history.forward(); }
         setTimeout("preventBack()", 0);
         window.onunload = function () { null };
-    </script>
+    </script>*@
 </head>
 <body>
     <div class="container-fluid">
@@ -38,7 +38,7 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img src="@ViewBag.ImageData" style="" alt="AdminBSB - Profile Image" />
+                            <img src="@ViewBag.ImageData" style="" alt="AdminBSB - Profile Image" class="img img-circle"/>
                         </div>
                         <div class="content-area">
                             <h3>@ViewBag.Name</h3>
@@ -100,7 +100,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-2">Email Address : </label>
+                                                <label class="control-label col-md-2">Email : </label>
                                                 <div class="col-md-10">
                                                     <label class="control-label">@Html.DisplayFor(model => model.EmailAddress)</label>
                                                     
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-2">Date Of Birth : </label>
+                                                <label class="control-label col-md-2">DOB : </label>
                                                 <div class="col-md-10">
                                                     <label class="control-label">@Html.DisplayFor(model => model.DateOfBirth)</label>
                                                 </div>
