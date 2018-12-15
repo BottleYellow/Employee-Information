@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>dfc2b65c-0bf8-40e8-a52b-d4e67eeb8c7a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,16 +10,15 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
-    <PackageReference Include="SweetAlert" Version="1.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
+
 
   <ItemGroup>
     <Reference Include="EIS.Data">
@@ -36,6 +36,25 @@
     <Reference Include="EIS.WebAPI">
       <HintPath>..\..\..\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="Views\People\CreateEmergencyAddress.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\People\CreateCurrentAddress.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\People\EditEmergencyAddress.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\People\EditCurrentAddress.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\People\EditPermanentAddress.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

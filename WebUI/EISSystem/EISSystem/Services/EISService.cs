@@ -12,13 +12,21 @@ using System.Threading.Tasks;
 
 namespace EIS.WebApp.Services
 {
-    public class EISService : ControllerBase,IEISService
+    public class EISService<T> : IEISService<T> where T: class
     {
         IDistributedCache distributedCache;
         public EISService(IDistributedCache distributedCache)
         {
             this.distributedCache = distributedCache;
         }
+
+        public HttpResponseMessage DeleteResponse(string url)
+        {
+            HttpClient client = GetService();
+            HttpResponseMessage response = client.DeleteAsync(url).Result;
+            return response;
+        }
+
         public HttpResponseMessage GetResponse(string url)
         {
             HttpClient client = GetService();
@@ -28,17 +36,11 @@ namespace EIS.WebApp.Services
 
         public HttpClient GetService()
         {
-
             HttpClient client = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:54830")
-            };
-            
+            };        
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            string ActionName = distributedCache.GetString("Action");
-            string ControllerName = distributedCache.GetString("Controller");
-            client.DefaultRequestHeaders.Add("Action", ActionName);
-            client.DefaultRequestHeaders.Add("Controller", ControllerName);
             client.DefaultRequestHeaders.Accept.Add(contentType);
             return client;
         }
@@ -47,6 +49,27 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, content).Result;
+            return response;
+        }
+
+        public HttpResponseMessage PostResponse(string url, T entity)
+        {
+            HttpClient client = GetService();
+            HttpResponseMessage response = client.PostAsJsonAsync(url, entity).Result;
+            return response;
+        }
+
+        public HttpResponseMessage PutResponse(string url, HttpContent content)
+        {
+            HttpClient client = GetService();
+            HttpResponseMessage response = client.PutAsJsonAsync(url, content).Result;
+            return response;
+        }
+
+        public HttpResponseMessage PutResponse(string url, T entity)
+        {
+            HttpClient client = GetService();
+            HttpResponseMessage response = client.PutAsJsonAsync(url, entity).Result;
             return response;
         }
     }

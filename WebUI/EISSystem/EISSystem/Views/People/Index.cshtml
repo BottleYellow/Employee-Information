@@ -1,124 +1,139 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
 @{
-    //ViewData["Title"] = "Index";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+//ViewData["Title"] = "Index";
+//Layout = "~/Views/Shared/_Layout.cshtml";
+//Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="block-header">
+            <h1>Admin Dashboard</h1>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.IdCard)
+                                        </th>
 
-<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-<style>
- 
-</style>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Image)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstName)
+                                        </th>
 
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.LastName)
+                                        </th>
 
-<div class="container-fluid">
-    <div class="block-header">
-        <h1>Admin Dashboard</h1>
-    </div>
-    <div class="row clearfix">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="card">
-                <div class="body">
-                    <table id="example" class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IdCard)
-                                </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.MobileNumber)
+                                        </th>
 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Image)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FirstName)
-                                </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.EmailAddress)
+                                        </th>
 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.LastName)
-                                </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Designation)
+                                        </th>
 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.MobileNumber)
-                                </th>
+                                        <th>
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IdCard)
+                                            </td>
 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.EmailAddress)
-                                </th>
+                                            <td>
+                                                <img alt="" src="data:image/png;base64, @Convert.ToBase64String(item.Image,0,item.Image.Length)" style="height:100px;width:100px;border-radius:10%;" />
+                                                @*@Html.DisplayFor(modelItem => item.Image)*@
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FirstName)
+                                            </td>
 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Designation)
-                                </th>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LastName)
+                                            </td>
 
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IdCard)
-                                    </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MobileNumber)
+                                            </td>
 
-                                    <td>
-                                        <img alt="" src="data:image/png;base64, @Convert.ToBase64String(item.Image,0,item.Image.Length)" style="height:100px;width:100px;border-radius:10%;" />
-                                        @*@Html.DisplayFor(modelItem => item.Image)*@
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FirstName)
-                                    </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmailAddress)
+                                            </td>
 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastName)
-                                    </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Designation)
+                                            </td>
 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.MobileNumber)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmailAddress)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Designation)
-                                    </td>
-
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <p>
-                        <a asp-action="Create">Create New</a>
-                    </p>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
+                                                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                                        <li><a asp-action="Profile" asp-controller="People" asp-route-id="@item.Id">Details</a></li>
+                                                        <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>
+                            <a asp-action="Create">Create New</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>
 
-                <script>
-                    $(document).ready(function () {
-                        var table = $('#example').DataTable({
-                            rowReorder: {
-                                selector: 'td:nth-child(2)'
-                            },
-                            responsive: true
-                        });
-                    });
-                </script>
-                <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-                <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-                
-                <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
-                <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#example').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        });
+    });
+</script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
 
 

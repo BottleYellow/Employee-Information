@@ -33,7 +33,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var current = _repository.CurrentAddress.FindByCondition(addr=>addr.Id==id);
+            var current = _repository.CurrentAddress.FindByCondition(addr=>addr.PersonId==id);
 
             if (current == null)
             {
@@ -44,19 +44,14 @@ namespace EIS.WebAPI.Controllers
         }
 
         // PUT: api/Currents/5
-        [HttpPut("{id}")]
-        public IActionResult PutCurrent([FromRoute] int id, [FromBody] Current current)
+        [HttpPut]
+        public IActionResult PutCurrent([FromBody] Current current)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != current.Id)
-            {
-                return BadRequest();
-            }
-
+            
             _repository.CurrentAddress.Update(current);
            
             try
@@ -110,7 +105,7 @@ namespace EIS.WebAPI.Controllers
             other.Person = current.Person;
             other.PhoneNumber = current.PhoneNumber;
             other.PinCode = current.PinCode;
-            other.IsActive = current.IsActive;
+            other.IsActive = false;
             other.CreatedDate = current.CreatedDate;
             other.UpdatedDate = DateTime.Now;
             _repository.OtherAddress.Create(other);
