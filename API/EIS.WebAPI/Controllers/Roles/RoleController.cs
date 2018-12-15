@@ -11,7 +11,7 @@ using EIS.WebAPI.Filters;
 
 namespace EIS.WebAPI.Controllers.Roles
 {
-    [TypeFilter(typeof(Authorization))]
+    //[TypeFilter(typeof(Authorization))]
     [Route("api/role")]
     [ApiController]
     public class RoleController : Controller

@@ -17,11 +17,14 @@ namespace EIS.WebApp.Controllers
 {
     public class PeopleController : Controller
     {
+
         #region Declarations
         public readonly IEISService<Person> service;
         public readonly IEISService<Permanent> perService;
         public readonly IEISService<Current> currentService;
         public readonly IEISService<Emergency> emergencyService;
+        public static HttpResponseMessage response;
+        public static List<Person> data;
         static string imageBase64Data;
         #endregion
 
@@ -38,9 +41,7 @@ namespace EIS.WebApp.Controllers
         #region Employee
         public IActionResult Index()
         {
-            HttpResponseMessage response = service.GetResponse("api/employee");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Person> data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            data = EmployeeData();
             Response.StatusCode = (int)response.StatusCode;
 
             return View(data);
@@ -48,7 +49,8 @@ namespace EIS.WebApp.Controllers
 
         public IActionResult Profile(int id)
         {
-            HttpResponseMessage response = service.GetResponse("api/employee/" + id + "");
+            HttpContext.Session.SetString("id", Convert.ToString(id));
+            response = service.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             string permanent = perService.GetResponse("api/PermanentAddress/" + id + "").Content.ReadAsStringAsync().Result;
             string current = currentService.GetResponse("api/CurrentAddress/" + id + "").Content.ReadAsStringAsync().Result;
@@ -96,11 +98,16 @@ namespace EIS.WebApp.Controllers
                 if (ModelState.IsValid)
                 {
                     HttpResponseMessage response = service.PostResponse("api/employee", person);
-                    ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                    return RedirectToAction(nameof(Index));
+                    var data1 = response.Content.ReadAsStringAsync().Result;
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        ViewBag.Message = "Record has been successfully saved.";
+                        return View("Index", data1);
+                    }
+                    
                 }
             }
-            return View(person);
+            return View("Index");
         }
         public IActionResult Edit(int id)
         {
@@ -162,13 +169,13 @@ namespace EIS.WebApp.Controllers
         public IActionResult Delete(int id)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.GetAsync("api/employee/" + id + "").Result;
+            response = client.GetAsync("api/employee/" + id + "").Result;
             string stringData = response.Content.ReadAsStringAsync().Result;
-            Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data.Image);
+            Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
+            imageBase64Data = Convert.ToBase64String(data1.Image);
             string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             ViewBag.ImageData = imageDataURL;
-            return View(data);
+            return PartialView("DeletePartial",data1);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -176,8 +183,21 @@ namespace EIS.WebApp.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             HttpClient client = service.GetService();
-            HttpResponseMessage response = client.DeleteAsync("api/employee/Delete/" + id + "").Result;
-            return RedirectToAction(nameof(Index));
+            response = client.DeleteAsync("api/employee/" + id + "").Result;
+            if (response.IsSuccessStatusCode == true)
+            {
+                ViewBag.Message = "Record has been successfully deleted.";
+                data = EmployeeData();
+                return View("Index",data);
+            }
+            return View();
+        }
+        public List<Person> EmployeeData()
+        {
+            response = service.GetResponse("api/employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            return data;
         }
 
         #endregion
