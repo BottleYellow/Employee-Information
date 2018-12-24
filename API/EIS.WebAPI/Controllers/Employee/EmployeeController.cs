@@ -2,9 +2,11 @@
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

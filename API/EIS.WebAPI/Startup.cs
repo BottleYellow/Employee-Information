@@ -54,6 +54,13 @@ namespace EIS.WebAPI
             {
                 options.Filters.Add(typeof(Authorization));
             });
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -85,6 +92,7 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
+            app.UseCors("MyPolicy");
             //app.UseMiddleware<CustomAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();

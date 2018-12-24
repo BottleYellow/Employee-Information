@@ -2944,11 +2944,7 @@
       ]
     },
     "System.Dynamic.Runtime/4.0.11": {
-<<<<<<< HEAD
-      "sha512": "db34f6LHYM0U0JpE+sOmjar27BnqTVkbLJhgfwMpTdgTigG/Hna3m2MYVwnFzGGKnEJk2UXFuoVTr8WUbU91/A==",
-=======
       "sha512": "/qzgHCq7/puBtsVxbBrVOq+EMfa4UZKti8QcZ4ibFgKdCUX4pJk5Z0asXb55L6F64ysuBHyd/1zfb19hsuDilQ==",
->>>>>>> 9091b314e1b893c63afc599bdd49000165359fc9
       "type": "package",
       "path": "system.dynamic.runtime/4.0.11",
       "files": [
@@ -3404,11 +3400,7 @@
       ]
     },
     "System.Linq.Queryable/4.0.1": {
-<<<<<<< HEAD
-      "sha512": "Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
-=======
       "sha512": "ctoCWiuCSfrngqIoq0h2FxMWh9Zm1UNd8MUJ+e+K73ecSAz6Ndn33CsjCJdrYVB7Hq3TAVOTO68cgvKZkd8aUQ==",
->>>>>>> 9091b314e1b893c63afc599bdd49000165359fc9
       "type": "package",
       "path": "system.linq.queryable/4.0.1",
       "files": [

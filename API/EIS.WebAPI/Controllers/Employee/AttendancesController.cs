@@ -1,12 +1,16 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EIS.WebAPI.Controllers
 {
+    [EnableCors("MyPolicy")]
     [Route("api/Attendances")]
     [ApiController]
     public class AttendancesController : Controller
@@ -21,27 +25,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Attendance> GetAttendances()
         {
-            
             return _repository.Attendances.FindAll();
-        }
-
-        // GET: api/Attendances/5
-        [HttpGet("{id}")]
-        public IActionResult GetAttendance([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            
-            var Attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == id );
-            if (Attendance == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(Attendance);
         }
 
         // PUT: api/Attendances/5
@@ -124,6 +108,20 @@ namespace EIS.WebAPI.Controllers
             
             return Ok(Attendance);
         }
-        
+
+        [Route("GetAllAttendanceMonthly/{id}/{month}/{year}")]
+        [HttpGet]
+        public IEnumerable<Attendance> GetAllAttendanceMonthly([FromRoute] int id, [FromRoute] int year, [FromRoute] int month)
+        {
+             return _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year==year && x.DateIn.Month==month);
+        }
+        [Route("GetAllAttendanceYearly/{id}/{year}") ]
+        [HttpGet()]
+        public IEnumerable<Attendance> GetAllAttendanceYearly( int id, [FromRoute] int year)
+        {
+            var result = _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year == year);
+            return result;
+        }
+
     }
 }
