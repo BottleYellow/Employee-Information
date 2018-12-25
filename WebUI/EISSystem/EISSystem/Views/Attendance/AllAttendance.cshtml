@@ -2,12 +2,26 @@
 <html>
 <head>
     <title>Dashboard</title>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
-    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
+    @*for pdf*@
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .card{
+            background-color:gainsboro
+        }
+        #select {
+            background-color: lightgray;
+        }
+        input {
+            background-color: lightgray;
+            font-size: large
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -16,10 +30,10 @@
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card" style="height:100px">
+                <div class="card">
                     <div class="body">
-                        <div class="row col-md-12">
-                            <div class="control-group col-md-4">
+                        @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
+                            <div>
                                 <label>Select Type Of Reports</label>
                                 <select id="select" class="form-control" style="width:200px">
                                     <option value="select">Select Option</option>
@@ -27,70 +41,40 @@
                                     <option value="month" id="month">Month</option>
                                     <option value="month">Week</option>
                                 </select>
+                                <br/>
+                                <input class="form-control" type="text" id="inputyear" style="width:200px;display:none;" placeholder="select year" />
+                                <input class="form-control" type="text" id="inputmonth" style="width:200px;display:none;" placeholder="select month" />
                             </div>
-                            <div class="col-md-4">
-                                <span id="yearspan" hidden="hidden">
-                                    <br />  <input class="form-control" type="text" id="inputyear" style="width:200px" placeholder="select year" />
-                                </span>
-                                <span id="monthspan" hidden="hidden">
-                                    <br /> <input class="form-control" type="text" id="inputmonth" style="width:200px" placeholder="select month" />
-                                </span>
+                        <div>
+                            <div>
+                                <h4><span id="report"></span></h4>
                             </div>
-                            <div class="col-md-4">
-                                
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="reports" hidden="hidden">
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="body">
                             <div id="tbl">
 
                             </div>
                         </div>
-
                     </div>
+                    <div style="height:40px"></div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>
 
-
+@*for datetimepicker*@
 <script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="~/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <script src="~/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.fr.js"></script>
-<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 
-@*<script>
-        $(document).ready(function () {
-            var table = $('#example').DataTable({
-                rowReorder: {
-                    selector: 'td:nth-child(2)'
-                },
-                responsive: true
-            });
-        });
-    </script>*@
 <script type="text/javascript">
     $('#select').on('change', function () {
-        $('#yearspan').hide();
-        $('#monthspan').hide();
+        $('#inputyear').hide();
+        $('#inputmonth').hide();
         var v = $('#select').val();
         if (v == 'year') {
-            $('#yearspan').show();
-            $('#monthspan').hide();
+            $('#inputyear').show();
+            $('#inputmonth').hide();
             var dateNow = new Date();
             $('#inputyear').datetimepicker({
                 format: "yyyy",
@@ -100,14 +84,12 @@
                 viewSelect: 'decade',
                 autoclose: true
             });
-            date = $('#inputyear').val();
-
         }
         else if (v == 'month') {
-            $('#monthspan').show();
-            $('#yearspan').hide();
+            $('#inputmonth').show();
+            $('#inputyear').hide();
             $('#inputmonth').datetimepicker({
-                format: "MM/yyyy",
+                format: "mm/yyyy",
                 startView: "year",
                 minView: "year",
                 autoclose: true
@@ -117,28 +99,57 @@
 </script>
 <script language="javascript">
     $('#inputyear').on('change', function () {
+        document.getElementById("report").innerHTML = "Attendance Report - Yearly";
         var v = $('#inputyear').val();
         $.ajax({
             type: 'GET',
             url: '@Url.Content("/Attendance/GetAllAttendanceYearly")',
-            data: {"date":new Date(v),"type":"year"},
+            data: {"date":v,"type":"year"},
             success: function (data) {
                 document.getElementById("tbl").innerHTML = data;
-                $('#reports').show();
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            title: 'Attendance Report - Yearly'
+                        }
+                    ],
+                    responsive: true
+                });
             }
         });
-
     });
 
     $('#inputmonth').on('change', function () {
+        document.getElementById("report").innerHTML = "Attendance Report - Monthly";
         var v = $('#inputmonth').val();
         $.ajax({
             type: 'GET',
             url: '@Url.Content("/Attendance/GetAllAttendanceYearly")',
-            data: { "date": new Date(v), "type": "year"},
+            data: { "date":v, "type": "month"},
             success: function (data) {
                 document.getElementById("tbl").innerHTML = data;
-                $('#reports').show();
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            title: 'Attendance Report - Monthly'
+                        }
+                    ],
+                    responsive: true
+                });
             }
         });
     });
@@ -156,14 +167,21 @@
         });
     });
 </script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js  "></script>
-<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(document).ready(function () {
-            $('#example').DataTable();
-        });
-    });
-</script>
+@*for pdf*@
+
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+
+
+
+
+
+
+
+

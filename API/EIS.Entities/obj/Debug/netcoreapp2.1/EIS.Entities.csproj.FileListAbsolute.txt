@@ -1,7 +1,6 @@
 E:\Training Project\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.deps.json
 E:\Training Project\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll
 E:\Training Project\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
-E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csprojAssemblyReference.cache
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CoreCompileInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfoInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs

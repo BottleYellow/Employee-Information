@@ -30,74 +30,52 @@ namespace EIS.WebApp.Controllers
             return View("AllAttendance");
         }
         [HttpGet]
-        //public IActionResult AllAttendance()
-        //{
-        //    EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-        //    return View("AllAttendance", employeeAttendance);
-        //}
-        //[HttpGet]
-        //public IActionResult GetAllAttendanceYearly(DateTime date, string type)
-        //{
-        //    HttpResponseMessage respemp = service.GetResponse("api/Employee");
-        //    string People = respemp.Content.ReadAsStringAsync().Result;
-        //    List<Person> people = JsonConvert.DeserializeObject<List<Person>>(People);
-
-        //    foreach (var p in people)
-        //    {
-        //        HttpResponseMessage respattendance = service.GetResponse("api/Attendances/" + p.Id + "");
-        //        string Attendance = respattendance.Content.ReadAsStringAsync().Result;
-        //        List<Attendance> attendances = JsonConvert.DeserializeObject<List<Attendance>>(Attendance);
-        //        ICollection<Attendance> attendance = new Collection<Attendance>();
-        //        foreach (var a in attendances)
-        //        {
-        //            if (type == "year")
-        //            {
-        //                if (a.CreatedDate.Year == date.Year)
-        //                {
-        //                    attendance.Add(a);
-        //                }
-        //            }
-        //            else if (type == "month")
-        //            {
-        //                if (a.CreatedDate.Month == date.Month && a.CreatedDate.Year == date.Year)
-        //                {
-        //                    attendance.Add(a);
-        //                }
-        //            }
-
-        //            //if(val[0]==null)
-        //            //{
-        //            //    if (a.CreatedDate.Year == Convert.ToInt32(val[1]))
-        //            //    {
-        //            //        attendance.Add(a);
-        //            //    }
-        //            //}
-        //            //else
-        //            //{
-        //            //    if (a.CreatedDate.Month== Convert.ToInt32(val[0]) && a.CreatedDate.Year == Convert.ToInt32(val[1]))
-        //            //    {
-        //            //        attendance.Add(a);
-        //            //    }
-        //            //}
-
-        //        }
-        //        p.Attendance = attendance;
-        //    }
-
-        //    EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-        //    employeeAttendance.Persons = people.ToList();
-        //    return PartialView(employeeAttendance);
-        //}
-
-        [HttpGet]
-        public IActionResult GetAllAttendance()
+        public IActionResult AllAttendance()
         {
-            HttpResponseMessage response = service.GetResponse("api/attendances");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
-            Response.StatusCode = (int)response.StatusCode;
-            return View("AllAttendance", data);
+            EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+            return View("AllAttendance", employeeAttendance);
         }
+        [HttpGet]
+        public IActionResult GetAllAttendanceYearly(string date,string type)
+        {
+            HttpResponseMessage respemp = service.GetResponse("api/Employee");
+            string People = respemp.Content.ReadAsStringAsync().Result;
+            List<Person> people = JsonConvert.DeserializeObject<List<Person>>(People);
+
+            string[] monthyear = new string[2];
+            monthyear = date.Split('/');
+            foreach(var p in people)
+            {
+                if (type=="year")
+                {
+                    HttpResponseMessage respattendance = service.GetResponse("api/Attendances/GetAllAttendanceYearly/" + p.Id + "/" + monthyear[0]);
+                    string Attendance = respattendance.Content.ReadAsStringAsync().Result;
+                    List<Attendance> attendances = JsonConvert.DeserializeObject<List<Attendance>>(Attendance);
+                    p.Attendance = attendances;
+                }
+                else
+                {
+                    HttpResponseMessage respattendance = service.GetResponse("api/Attendances/GetAllAttendanceMonthly/" + p.Id + "/" + monthyear[0] + "/" + monthyear[1]);
+                    string Attendance = respattendance.Content.ReadAsStringAsync().Result;
+                    List<Attendance> attendances = JsonConvert.DeserializeObject<List<Attendance>>(Attendance);
+                    p.Attendance = attendances;
+                }
+            }
+
+            EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+            employeeAttendance.Persons = people.ToList();
+            return PartialView(employeeAttendance);
+        }
+
+        //[HttpGet]
+        //public IActionResult GetAllAttendance()
+        //{
+        //    HttpResponseMessage response = service.GetResponse("api/attendances");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
+        //    Response.StatusCode = (int)response.StatusCode;
+        //    return View("AllAttendance",data);
+        //}
 
         [HttpGet]
         public IActionResult Create()
@@ -113,7 +91,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Create(Attendance attendance)
         {
             int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
-
+            
             if (ModelState.IsValid)
             {
                 HttpClient client = service.GetService();
@@ -128,15 +106,15 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(int id, Attendance attendance)
+        public IActionResult Update(int id,Attendance attendance)
         {
-            id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+            id= Convert.ToInt32(HttpContext.Session.GetString("id"));
             if (ModelState.IsValid)
             {
                 HttpClient client = service.GetService();
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PutAsJsonAsync("api/attendances/" + id + "", attendance).Result;
+                HttpResponseMessage response = client.PutAsJsonAsync("api/attendances/"+id+"",attendance).Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 TempData["success"] = "success";
                 //return RedirectToAction("index","People");
