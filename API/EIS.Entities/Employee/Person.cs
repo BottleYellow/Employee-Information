@@ -2,6 +2,8 @@
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
 using EIS.Entities.User;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,7 +39,10 @@ namespace EIS.Entities.Employee
 
         #region [Relations]
         public virtual Users User { get; set; }
+
+       [JsonConverter(typeof(StringEnumConverter))]
         public virtual Gender Gender { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public virtual Designation Designation { get; set; }
         public virtual ICollection<Leaves> Leaves { get; set; }
         public virtual ICollection<Attendance> Attendance { get; set; }

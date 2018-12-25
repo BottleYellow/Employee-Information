@@ -49,3 +49,17 @@ E:\Training Project\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EI
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
 E:\Training Project\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.deps.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.runtimeconfig.dev.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csprojAssemblyReference.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CoreCompileInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfoInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.AssemblyInfo.cs
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.csproj.CopyComplete
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Data\obj\Debug\netcoreapp2.1\EIS.Data.pdb

@@ -54,7 +54,7 @@ namespace EIS.WebApp.Controllers
                     return RedirectToAction("Index", "People");
                 }
             }
-            return RedirectToAction("Index","People",new { id=Convert.ToInt32(pid)});
+            return RedirectToAction("Profile","People",new { id=Convert.ToInt32(pid)});
         }
         [HttpGet]
         public IActionResult LogOut()

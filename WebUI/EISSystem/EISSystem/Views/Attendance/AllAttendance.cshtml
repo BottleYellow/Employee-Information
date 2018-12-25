@@ -1,72 +1,169 @@
-﻿@model IEnumerable<EIS.Entities.Employee.Attendance>
-@{
-    ViewData["Title"] = "Create";
+﻿
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
-}
-<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<h3>Attendance sheet</h3>
-<hr />
-<div class="row clearfix">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="body">
-                <table id="example" class="table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Date In
-                            </th>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="block-header">
+            <h3>Attendance Sheet</h3>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card" style="height:100px">
+                    <div class="body">
+                        <div class="row col-md-12">
+                            <div class="control-group col-md-4">
+                                <label>Select Type Of Reports</label>
+                                <select id="select" class="form-control" style="width:200px">
+                                    <option value="select">Select Option</option>
+                                    <option value="year" id="year">Year</option>
+                                    <option value="month" id="month">Month</option>
+                                    <option value="month">Week</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <span id="yearspan" hidden="hidden">
+                                    <br />  <input class="form-control" type="text" id="inputyear" style="width:200px" placeholder="select year" />
+                                </span>
+                                <span id="monthspan" hidden="hidden">
+                                    <br /> <input class="form-control" type="text" id="inputmonth" style="width:200px" placeholder="select month" />
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                
+                            </div>
+                        </div>
 
-                            <th>
-                                Time In
-                            </th>
-                            <th>
-                                Date Out
-                            </th>
 
-                            <th>
-                                Time Out
-                            </th>
-
-                            <th>
-                                Total Hours
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateIn)
-                                </td>
-                                <td>
-                                    @string.Format("{0:D2}:{1:D2}:{2:D2}", item.TimeIn.Hours, item.TimeIn.Minutes, item.TimeIn.Seconds)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateOut)
-                                </td>
-
-                                <td>
-                                    @string.Format("{0:D2}:{1:D2}:{2:D2}", item.TimeOut.Hours, item.TimeOut.Minutes, item.TimeOut.Seconds)
-                                </td>
-
-                                <td>
-                                    @string.Format("{0:D2}:{1:D2}:{2:D2}", item.TotalHours.Hours, item.TotalHours.Minutes, item.TotalHours.Seconds)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-                <script>
-                    $(document).ready(function () {
-                        $('#example').DataTable();
-                    });</script>
+    <div id="reports" hidden="hidden">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="body">
+                            <div id="tbl">
 
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+<script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="~/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.fr.js"></script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+
+@*<script>
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                rowReorder: {
+                    selector: 'td:nth-child(2)'
+                },
+                responsive: true
+            });
+        });
+    </script>*@
+<script type="text/javascript">
+    $('#select').on('change', function () {
+        $('#yearspan').hide();
+        $('#monthspan').hide();
+        var v = $('#select').val();
+        if (v == 'year') {
+            $('#yearspan').show();
+            $('#monthspan').hide();
+            var dateNow = new Date();
+            $('#inputyear').datetimepicker({
+                format: "yyyy",
+                startView: 'decade',
+                defaultDate: dateNow,
+                minView: 'decade',
+                viewSelect: 'decade',
+                autoclose: true
+            });
+            date = $('#inputyear').val();
+
+        }
+        else if (v == 'month') {
+            $('#monthspan').show();
+            $('#yearspan').hide();
+            $('#inputmonth').datetimepicker({
+                format: "MM/yyyy",
+                startView: "year",
+                minView: "year",
+                autoclose: true
+            });
+        }
+    });
+</script>
+<script language="javascript">
+    $('#inputyear').on('change', function () {
+        var v = $('#inputyear').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendanceYearly")',
+            data: {"date":new Date(v),"type":"year"},
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#reports').show();
+            }
+        });
+
+    });
+
+    $('#inputmonth').on('change', function () {
+        var v = $('#inputmonth').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendanceYearly")',
+            data: { "date": new Date(v), "type": "year"},
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#reports').show();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.date-picker').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            onClose: function (dateText, inst) {
+                $(this).datetimepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            }
+        });
+    });
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js  "></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    });
+</script>

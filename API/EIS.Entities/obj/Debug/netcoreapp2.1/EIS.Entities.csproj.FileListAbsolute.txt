@@ -7,3 +7,15 @@ E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
 E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.deps.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CoreCompileInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfoInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\Newtonsoft.Json.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\bin\Debug\netcoreapp2.1\Newtonsoft.Json.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CopyComplete
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csprojAssemblyReference.cache

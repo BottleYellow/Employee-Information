@@ -1,11 +1,13 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
+using EIS.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -41,10 +43,7 @@ namespace EIS.WebApp.Controllers
         #region Employee
         public IActionResult Index()
         {
-            data = EmployeeData();
-            Response.StatusCode = (int)response.StatusCode;
-
-            return View(data);
+           return View();
         }
 
         public IActionResult Profile(int id)
@@ -76,6 +75,39 @@ namespace EIS.WebApp.Controllers
             Response.StatusCode = (int)response.StatusCode;
             return View("Profile", data);
         }
+
+        public IActionResult LoadData()
+        {
+            SortEmployee sortEmployee = new SortEmployee();
+            // Skiping number of Rows count
+            var start = Request.Form["start"].FirstOrDefault();
+            // Paging Length 10,20
+            var length = Request.Form["length"].FirstOrDefault();
+            // Sort Column Name
+           sortEmployee.SortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            // Sort Column Direction ( asc ,desc)
+            sortEmployee.SortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+            // Search Value from (Search box)
+            var search = Request.Form["search[value]"].FirstOrDefault();
+            //Paging Size (10,20,50,100)
+            sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
+            sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
+            int recordsTotal = 0;
+
+            HttpClient client = service.GetService();
+            string stringData = JsonConvert.SerializeObject(sortEmployee);
+            var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PostAsync("api/employee/Data/" + search + "", contentData).Result;
+
+            // Getting all Customer data
+            //  HttpResponseMessage response = service.GetResponse("api/employee/Data/" + sortEmployee);           
+            ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
+            recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<Person> employees = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
+            //Returning Json employees
+            return Json(new {recordsFiltered = recordsTotal,data = employees });
+        }
+
 
         public IActionResult Create()
         {
@@ -116,14 +148,14 @@ namespace EIS.WebApp.Controllers
             imageBase64Data = Convert.ToBase64String(data.Image);
             string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             ViewBag.ImageData = imageDataURL;
-            return View(data);
+            return View(data); 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,Designation,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person)
         {
-
+          
             if (id != person.Id)
             {
                 return NotFound();

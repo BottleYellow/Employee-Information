@@ -28,8 +28,8 @@ namespace EIS.Data.Context
         }
 
         #region[Tables]
-        public DbSet<Users> Users { get; set; }
-        public DbSet<Person> Person { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Person> Person { get; set; }
         public DbSet<Leaves> Leaves { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Permanent> PermanentAddresses { get; set; }

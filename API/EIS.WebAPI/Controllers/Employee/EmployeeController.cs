@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -108,6 +109,23 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.Delete(person);
             _repository.Employee.Save();
             return Ok(person);
+        }
+
+        [HttpPost]
+        [Route("Data/{search?}")]
+        [AllowAnonymous]
+        public IActionResult GetData([FromBody]SortGrid sortGrid, [FromRoute]string search = null)
+        {
+            ArrayList employeeslist;
+            if (search == null)
+            {
+                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid);
+            }
+            else
+            {
+                employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.IdCard==search|| x.FirstName.Contains(search)||x.MiddleName.Contains(search)||x.LastName.Contains(search) || x.PanCard==search || x.AadharCard==search||x.MobileNumber==search, sortGrid);
+            }
+            return Ok(employeeslist);
         }
     }
 }

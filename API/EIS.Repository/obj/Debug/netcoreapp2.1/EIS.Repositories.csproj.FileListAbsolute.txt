@@ -75,3 +75,29 @@ E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.deps.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Data.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Formatters.Json.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.EntityFrameworkCore.Relational.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.Extensions.Identity.Core.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojAssemblyReference.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CoreCompileInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfoInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfo.cs
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb

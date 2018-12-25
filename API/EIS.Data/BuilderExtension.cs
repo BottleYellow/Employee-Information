@@ -12,7 +12,7 @@ namespace EIS.Data
 
         public BuilderExtension(DbContextOptions<ApplicationDbContext> options)
         {
-            this.options = options;
+          //  this.options = options;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\Attendance\AllAttendance.cshtml" />
+    <None Include="Views\Attendance\Create.cshtml" />
+    <None Include="Views\Attendance\GetAllAttendanceYearly.cshtml" />
+    <None Include="Views\Attendance\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

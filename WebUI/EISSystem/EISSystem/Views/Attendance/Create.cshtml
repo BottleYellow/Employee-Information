@@ -113,11 +113,16 @@
 $('.btn').click(function () {
     var $this = $(this);
     $this.toggleClass('btn');
+    
     if ($this.hasClass('btn')) {
         $this.text('In');
+       
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Update", "Attendance")'
+            url: '@Url.Action("Update", "Attendance")',
+            success: function () {
+             alert('Thank you for your attendance. Exit Time '+ @DateTime.Now);
+            }
         });
     } else {
         $this.text('Out');
