@@ -1,16 +1,10 @@
-﻿using EIS.Repositories.IRepository;
-using EIS.WebApp.Services;
-using Microsoft.AspNetCore.Http;
+﻿using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace EIS.WebApp.Filters
 {

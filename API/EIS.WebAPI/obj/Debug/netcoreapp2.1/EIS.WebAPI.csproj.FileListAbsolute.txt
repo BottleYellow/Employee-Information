@@ -98,6 +98,7 @@ C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\n
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Data.pdb
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csprojAssemblyReference.cache
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CoreCompileInputs.cache
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cache
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cs
@@ -107,4 +108,3 @@ C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\n
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CopyComplete
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.dll
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.pdb
-C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csprojAssemblyReference.cache

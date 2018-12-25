@@ -56,7 +56,9 @@ E:\Training Project\Employee-Information\API\EIS.Validations\bin\Debug\netcoreap
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.deps.json
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csprojAssemblyReference.cache
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CoreCompileInputs.cache
@@ -65,5 +67,3 @@ C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\De
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.csproj.CopyComplete
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.dll
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\obj\Debug\netcoreapp2.1\EIS.Validations.pdb
-C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.dll
-C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Data.pdb

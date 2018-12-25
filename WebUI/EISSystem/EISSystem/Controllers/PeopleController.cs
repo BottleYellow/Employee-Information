@@ -43,6 +43,7 @@ namespace EIS.WebApp.Controllers
         #region Employee
         public IActionResult Index()
         {
+        
            return View();
         }
 
@@ -99,8 +100,7 @@ namespace EIS.WebApp.Controllers
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = client.PostAsync("api/employee/Data/" + search + "", contentData).Result;
 
-            // Getting all Customer data
-            //  HttpResponseMessage response = service.GetResponse("api/employee/Data/" + sortEmployee);           
+            // Getting all Employee data   
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
             recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<Person> employees = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());

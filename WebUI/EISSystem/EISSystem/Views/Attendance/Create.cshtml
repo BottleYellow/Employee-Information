@@ -193,9 +193,7 @@ $('.btn').click(function () {
         $.ajax({
             type: "POST",
             url: '@Url.Action("Update", "Attendance")',
-            success: function () {
-             alert('Thank you for your attendance. Exit Time '+ @DateTime.Now);
-            }
+            
         });
     } else {
         $this.text('Out');
