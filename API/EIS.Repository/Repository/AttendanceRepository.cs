@@ -19,9 +19,8 @@ namespace EIS.Repositories.Repository
 
         public IEnumerable<Person> GetAttendanceYearly(int year)
         {
-
-            var results = _dbContext.Person.Where(x=>x.Attendance.Any(y=>y.DateIn.Year==year)).Select(x => new Person { FirstName = x.FirstName, LastName = x.LastName, Attendance = x.Attendance, }).ToList();
-
+            
+            var results = _dbContext.Person.Where(x=>x.Attendance.All(y=>y.DateIn.Year==year)).Select(x => new Person { FirstName = x.FirstName, LastName = x.LastName, Attendance = x.Attendance, }).ToList();
             return results;
         }
         

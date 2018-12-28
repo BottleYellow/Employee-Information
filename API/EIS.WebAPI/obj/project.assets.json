@@ -9850,6 +9850,7 @@
       "type": "package",
       "path": "system.linq.dynamic.core/1.0.9",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net35/System.Linq.Dynamic.Core.dll",
         "lib/net35/System.Linq.Dynamic.Core.xml",
@@ -13025,13 +13026,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file E:\\Training Project\\Employee-Information\\API\\EIS.WebAPI\\obj\\EIS.WebAPI.csproj.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

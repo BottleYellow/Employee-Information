@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181226094616_Initial")]
-    partial class Initial
+    [Migration("20181228064752_RoleInDesignation")]
+    partial class RoleInDesignation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -285,13 +285,13 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Access");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("Access");
 
                     b.Property<DateTime>("UpdatedDate");
 
@@ -572,60 +572,6 @@ namespace EIS.Data.Migrations
                     b.ToTable("LeaveRequests","Leave");
                 });
 
-            modelBuilder.Entity("EIS.Entities.User.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Access")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Role","Account");
-                });
-
-            modelBuilder.Entity("EIS.Entities.User.UserRoles", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserRoles","Account");
-                });
-
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -744,19 +690,6 @@ namespace EIS.Data.Migrations
                     b.HasOne("EIS.Entities.Leave.LeaveMaster", "TypeOfLeave")
                         .WithMany("Requests")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EIS.Entities.User.UserRoles", b =>
-                {
-                    b.HasOne("EIS.Entities.User.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EIS.Entities.User.Users", "User")
-                        .WithOne("Role")
-                        .HasForeignKey("EIS.Entities.User.UserRoles", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

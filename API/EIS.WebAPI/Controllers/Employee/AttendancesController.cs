@@ -128,23 +128,8 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public string GetAllAttendanceYearly([FromRoute] int year)
         {
-            //var people1 = _repository.Attendances.GetAttendanceYearly(year);
-            //var peoples = _repository.Employee.FindAll();
-            //var attendances = _repository.Attendances.FindAll();
-            //foreach (var p in peoples)
-            //{
-            //    var attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == p.Id && x.DateIn.Year == year);
-            //    p.Attendance = attendance.ToList();
-            //}
-            //var per = from p in peoples
-            //          select (new Person
-            //          {
-            //              Id = p.Id,
-            //              FirstName = p.FirstName,
-            //              Attendance = (from a in attendances where a.PersonId == p.Id select a).ToList()
-            //          });
-            //ArrayList l = new ArrayList(per.ToList());
-            //return l;
+
+
             var data = _repository.Attendances.GetAttendanceYearly(year);
             var result =JsonConvert.SerializeObject(data, Formatting.Indented,
                             new JsonSerializerSettings

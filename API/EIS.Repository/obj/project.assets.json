@@ -3334,6 +3334,7 @@
       "type": "package",
       "path": "system.linq.dynamic.core/1.0.9",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net35/System.Linq.Dynamic.Core.dll",
         "lib/net35/System.Linq.Dynamic.Core.xml",

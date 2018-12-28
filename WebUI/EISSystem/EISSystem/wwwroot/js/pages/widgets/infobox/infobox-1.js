@@ -4,9 +4,9 @@
 });
 
 //Widgets count plugin
-function initCounters() {
-    $('.count-to').countTo();
-}
+//function initCounters() {
+//    $('.count-to').countTo();
+//}
 
 //Charts
 function initCharts() {
