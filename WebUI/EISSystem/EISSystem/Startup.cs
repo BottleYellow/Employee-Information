@@ -76,7 +76,14 @@ namespace EIS.WebApp
             //{
             //    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             //});
-            
+            services.AddMvc().AddJsonOptions(options => {
+                var resolver = options.SerializerSettings.ContractResolver;
+                if (resolver != null)
+                {
+                    var res = (DefaultContractResolver)resolver;
+                    res.NamingStrategy = null;
+                }
+            });
 
         }
 

@@ -1,10 +1,13 @@
 ﻿using EIS.Data.Context;
+using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore.Query.Expressions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 
 
 namespace EIS.Repositories.Repository
@@ -18,7 +21,7 @@ namespace EIS.Repositories.Repository
                 _dbcontext = dbcontext;
             }
 
-            public IEnumerable<T> FindAll()
+            public IQueryable<T> FindAll()
             {
                 return _dbcontext.Set<T>();
             }
@@ -50,7 +53,7 @@ namespace EIS.Repositories.Repository
           
             }
 
-        public IEnumerable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
+        public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
             return _dbcontext.Set<T>().Where(expression);
         }
@@ -58,6 +61,41 @@ namespace EIS.Repositories.Repository
         public T FindByCondition2(Expression<Func<T, bool>> expression)
         {
             return _dbcontext.Set<T>().Where(expression).LastOrDefault();
+        }
+
+        public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
+        {
+
+            int totalcount = 0;
+
+            ArrayList list = new ArrayList();
+            var data = FindAll();
+
+            if (!(string.IsNullOrEmpty(sortGrid.SortColumn) && string.IsNullOrEmpty(sortGrid.SortColumnDirection)))
+            {
+                data = data.OrderBy(sortGrid.SortColumn + " " + sortGrid.SortColumnDirection);
+            }
+            if (expression != null)
+            {
+                data = data.Where(expression);
+                totalcount = data.Count();
+            }
+            else
+            {
+                totalcount = data.Count();
+                if (sortGrid.PageSize == -1)
+                {
+                    sortGrid.PageSize = totalcount;
+                }              
+            }
+
+            data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+            var totaldata = data.ToList();
+
+            list.Add(totalcount);
+            list.Add(totaldata);
+
+            return list;
         }
     }
 }

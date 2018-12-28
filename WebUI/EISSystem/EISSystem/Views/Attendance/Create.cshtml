@@ -4,38 +4,110 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_FinalLayout.cshtml";
 }
+<div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
 
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select Year</h4>
+                </div>
+                <div class="modal-body">
+                    <select id="year1" class="year" style="width:200px; height:30px;"></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row col-md-12">
+                            <div class="col-md-4">Select Month : </div>
+                            <div class="col-md-4"><select id="month1" class="month" style="width:200px; height:30px;"></select></div>
+                            <br /><br />
+                            <div class="col-md-4">Select Year  : </div>
+                            <div class="col-md-4"><select id="year2" class="year" style="width:200px; height:30px;"></select></div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select Year</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row col-md-12">
+                            <div class="col-md-4">Select Week :</div>
+                            <div class="col-md-4"><select id="week" class="week" style="width:200px; height:30px;"></select></div>
+                        </div>
+                        <br /><br />
+                        <div class="row col-md-12">
+                            <div class="col-md-4">Select Month :</div>
+                            <div class="col-md-4"><select id="month2" class="month" style="width:200px; height:30px;"></select></div>
+                        </div>
+                        <br /><br />
+                        <div class="row col-md-12">
+                            <div class="col-md-4">Select Year :</div>
+                            <div class="col-md-4"><select id="year3" class="year" style="width:200px; height:30px;"></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 <html>
 <head>
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/css/attendance.css" rel="stylesheet" />
     
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <style>
-        
-    </style>
 </head>
-<body onload="addList()">
+<body>
+
+    <div class="row col-md-12">
+        <div>
+            <button type="button" class="btn btn-primary btn-lg raised form-control" style="font-size:large; height:50px">In</button>
+        </div>
+    </div>
+    
+    <br /><br /><br /><br />
     <div class="row col-md-12">
         <div class="col-md-3">
-            <button type="button" class="btn btn-primary btn-lg raised" style="width:200px;height:40px">In</button>
-            @*<button class="input1" style="font-weight:bold; font-size:large; background-color:#0080ff; color:white; border-radius:80%">In</button>*@
-        </div>
-        <div class="col-md-3">
-            <select id="year" class="year" style="width:200px; height:40px; text-align-last:center">
-                <option value="Year">Select Year</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select id="month" class="month" style="width:200px; height:40px; text-align-last:center">
-                <option value="Month">Select Month</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select id="week" class="week" style="width:200px; height:40px; text-align-last:center">
-                <option value="Week">Select Week</option>
+            <select id="select" class="select" style="width:200px; height:40px; text-align-last:center">
+                <option value="select">Select option</option>
             </select>
         </div>
     </div>
@@ -107,17 +179,21 @@
 </html>
 
 
-<script type="text/javascript"> 
-    
+<script type="text/javascript">
+
+
 // Create In and Out Attendance
 $('.btn').click(function () {
     var $this = $(this);
     $this.toggleClass('btn');
+    
     if ($this.hasClass('btn')) {
         $this.text('In');
+       
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Update", "Attendance")'
+            url: '@Url.Action("Update", "Attendance")',
+            
         });
     } else {
         $this.text('Out');
@@ -127,57 +203,83 @@ $('.btn').click(function () {
         });
     }
     });
-
+   
+   
     // For adding dropdown values
     window.onload = function addList() {
-        // for years
-        var select = document.getElementById("year");
-        for (var i = @DateTime.Now.Year+10; i>=@DateTime.Now.Year; --i) {
+        var select = document.getElementById("select");
+        var selected=["Year","Month","Week"]
+        for (var i = 2; i>=0; --i) {
             var option = document.createElement('option');
-            option.text = option.value = i;
+            option.text = option.value = selected[i];
             select.add(option, 0);
         }
 
+        //for Years
+        var year = this.document.getElementById('year1');
+        for (var i = @DateTime.Now.Year+10; i >=@DateTime.Now.Year; i--) {
+            var option = this.document.createElement('option');
+            option.text = option.value = i;
+            year.add(option, 0);
+        }
+        var year1 = this.document.getElementById('year2');
+        for (var i = @DateTime.Now.Year+10; i >=@DateTime.Now.Year; i--) {
+            var option = this.document.createElement('option');
+            option.text = option.value = i;
+            year1.add(option, 0);
+        }
+        var year2 = this.document.getElementById('year3');
+        for (var i = @DateTime.Now.Year+10; i >=@DateTime.Now.Year; i--) {
+            var option = this.document.createElement('option');
+            option.text = option.value = i;
+            year2.add(option, 0);
+        }
+
         //for months
-        var select1 = this.document.getElementById("month");
+        var month1 = this.document.getElementById("month1");
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (var i = 11; i >=0; i--) {
             var option = this.document.createElement('option');
             option.text = option.value = monthNames[i];
-            select1.add(option, 0);
+            month1.add(option, 0);
+        }
+
+        var month2 = this.document.getElementById("month2");
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        for (var i = 11; i >= 0; i--) {
+            var option = this.document.createElement('option');
+            option.text = option.value = monthNames[i];
+            month2.add(option, 0);
         }
 
         //for weeks
-        var select2 = this.document.getElementById("week");
+        var week = this.document.getElementById("week");
         var weekNames = ["Week1", "Week2", "Week3", "Week4", "Week5"];
         for (var i = 4; i >= 0; i--) {
             var option = this.document.createElement('option');
             option.text = option.value = weekNames[i];
-            select2.add(option, 0);
+            week.add(option, 0);
         }
     };
-
+   
     $(document).ready(function () {
-        var selYear = "";
-        var selMonth = "";
-        var selWeek = "";
-        $("select.year").change(function () {
-            selYear = $(this).children("option:selected").val();
-            alert("You have selected the country - " + selYear);
-        });
-
-        $("select.month").change(function () {
-            selMonth = $(this).children("option:selected").val();
-            alert("You have selected the country - " + selMonth);
-        });
-
-        $("select.week").change(function () {
-            selWeek = $(this).children("option:selected").val();
-            alert("You have selected the country - " + selWeek);
+        var selOption = "";
+        
+        $("select.select").change(function () {
+            selOption = $(this).children("option:selected").val();
+            if (selOption == 'Year') {
+                $("#myModal").modal();
+            }
+            else if (selOption == 'Month') {
+                
+                $("#myModal1").modal();
+            }
+            else if (selOption == 'Week') {
+                $("#myModal2").modal();
+            }
         });
     });
 
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
