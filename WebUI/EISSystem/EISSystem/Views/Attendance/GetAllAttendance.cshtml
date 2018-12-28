@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
-
+@using EIS.Entities.Employee
 @{
     int absentdays = 0;
     int totaldays = 0;
-    int yearval = ViewBag.yearval;
-
- 
+    int totalHours = 0;
 }
 
 <style type="text/css">
@@ -33,28 +31,19 @@
         <tbody>
             @foreach (var person in Model)
             {
-                if(person.FirstName== "vijay")
-                { 
             <tr>
                 <td>@person.FirstName @person.LastName</td>
                 <td>@person.Attendance.Count</td>
                 @{
                     if (ViewBag.val == "year")
                     {
-                        if(yearval % 4 == 0) {
-                            totaldays = 366;
-                        }
-                        else
-                        {
-                            totaldays = 365;
-                        }
+                        totaldays = 365;
                         //totaldays = DateTime.(person.Attendance.Where(x => x.PersonId == person.Id).FirstOrDefault().DateIn.Year);
                         absentdays = totaldays - person.Attendance.Count;
                     }
                     else if (ViewBag.val == "month")
                     {
-
-               
+                        totaldays = 30;
                         absentdays = totaldays - person.Attendance.Count;
                     }
                     else if (ViewBag.val == "week")
@@ -62,14 +51,16 @@
                         totaldays = 7;
                         absentdays = totaldays - person.Attendance.Count;
 
+
                     }
+                    
+                    
 
                 }
                 <td>@absentdays</td>
                 <td>@totaldays</td>
             </tr>
-                        }
-                    }
+            }
         </tbody>
     </table>
 </div>

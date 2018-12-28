@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Views\Attendance\AllAttendance.cshtml" />
-    <None Include="Views\Attendance\Create12.cshtml" />
-    <None Include="Views\Attendance\GetAllAttendanceYearly.cshtml" />
-    <None Include="Views\Attendance\Index.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -48,19 +41,7 @@
 
 
   <ItemGroup>
-    <Content Update="Views\Attendance\Create - Copy.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Attendance\GetAllAttendanceMonthlyById.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Attendance\GetAllAttendanceDailyById.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Attendance\GetAllAttendanceYearlyById.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Attendance\GetAllAttendanceYearly.cshtml">
+    <Content Update="Views\Attendance\GetAllAttendance.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\People\CreateEmergencyAddress.cshtml">

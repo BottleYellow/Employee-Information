@@ -5,7 +5,8 @@ namespace EIS.Repositories.IRepository
 {
     public interface IAttendanceRepository : IRepositorybase<Attendance>
     {
-        //IEnumerable<Attendance> GetAttendance(int id);
+        IEnumerable<Person> GetAttendanceYearly(int year);
     }
+
     
 }
