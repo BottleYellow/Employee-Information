@@ -81,5 +81,30 @@ namespace EIS.Repositories.Repository
             var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
             return token;
         }
+
+        public bool VerifyPassword(int Id, string Password)
+        {
+            var result = false;
+            Users u = FindByCondition(x => x.PersonId == Id);
+            if(u!=null)
+            {
+                if (Helper.VerifyHashedPassword(u.Password, Password) == "Success")
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        public void ChangePassword(int Id, string NewPassword)
+        {
+            Users u = FindByCondition(x => x.PersonId == Id);
+            if (u != null)
+            {
+                u.Password = Helper.Encrypt(NewPassword);
+                Update(u);
+                Save();
+            }
+        }
     }
 }

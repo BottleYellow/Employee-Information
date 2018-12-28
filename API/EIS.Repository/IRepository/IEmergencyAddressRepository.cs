@@ -8,6 +8,6 @@ namespace EIS.Repositories.IRepository
 {
    public interface IEmergencyAddressRepository : IRepositorybase<Emergency>
     {
-        IEnumerable<Emergency> FindAllByCondition(Expression<Func<Emergency, bool>> expression);
+        
     }
 }

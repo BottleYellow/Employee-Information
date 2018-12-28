@@ -8,7 +8,14 @@ namespace EIS.WebApp.Models
 {
     public class EmployeeAttendance
     {
-        public List<Person> Persons { get; set; }
+        public Person Persons { get; set; }
+        public List<Attendance> Attendances { get; set; }
+
+    }
+
+    public class EmployeeAttendanceById
+    {
+        public Person Persons { get; set; }
         public List<Attendance> Attendances { get; set; }
 
     }

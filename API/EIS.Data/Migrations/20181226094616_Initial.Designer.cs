@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181206113413_initial")]
-    partial class initial
+    [Migration("20181226094616_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -279,42 +279,25 @@ namespace EIS.Data.Migrations
                     b.ToTable("Attendance","Employee");
                 });
 
-            modelBuilder.Entity("EIS.Entities.Employee.Leaves", b =>
+            modelBuilder.Entity("EIS.Entities.Employee.Designation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<string>("LeaveTypes")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
+                    b.Property<string>("Name");
 
-                    b.Property<double>("LeavesAlloted")
-                        .HasColumnType("float");
+                    b.Property<string>("Access");
 
-                    b.Property<double>("LeavesAvailed")
-                        .HasColumnType("float");
-
-                    b.Property<int>("PersonId");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("UpdatedDate");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Leaves","Employee");
+                    b.ToTable("DesignationMaster","Employee");
                 });
 
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
@@ -335,9 +318,7 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("Designation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("DesignationId");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -383,6 +364,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("PanCard")
                         .HasColumnType("varchar(10)");
 
+                    b.Property<int>("ReportingPersonId");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -396,7 +379,197 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DesignationId");
+
                     b.ToTable("Person","Employee");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Available")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("PersonId");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<double>("TotalAlloted")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.ToTable("EmployeeLeaves","Leave");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Available")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("Days")
+                        .HasColumnType("float");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("LeaveId");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("PersonId");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("ValidTo")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeaveId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("LeaveCredit","Leave");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveMaster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("Days")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("ValidTo")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveMaster","Leave");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AppliedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("Available")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("PersonId");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("date");
+
+                    b.Property<double>("TotalRequestedDays")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TypeId");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("LeaveRequests","Leave");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.Role", b =>
@@ -445,8 +618,7 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -533,19 +705,53 @@ namespace EIS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("EIS.Entities.Employee.Leaves", b =>
+            modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
+                {
+                    b.HasOne("EIS.Entities.Employee.Designation", "Designation")
+                        .WithMany("Persons")
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
                 {
                     b.HasOne("EIS.Entities.Employee.Person", "Person")
-                        .WithMany("Leaves")
+                        .WithOne("EmployeeLeaves")
+                        .HasForeignKey("EIS.Entities.Leave.EmployeeLeaves", "PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
+                {
+                    b.HasOne("EIS.Entities.Leave.LeaveMaster", "LeaveMaster")
+                        .WithMany("Credits")
+                        .HasForeignKey("LeaveId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.Employee.Person", "Person")
+                        .WithMany("LeaveCredits")
                         .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveRequest", b =>
+                {
+                    b.HasOne("EIS.Entities.Employee.Person", "Person")
+                        .WithMany("LeaveRequests")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.Leave.LeaveMaster", "TypeOfLeave")
+                        .WithMany("Requests")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EIS.Entities.User.UserRoles", b =>
                 {
                     b.HasOne("EIS.Entities.User.Role", "Role")
-                        .WithOne("UserRole")
-                        .HasForeignKey("EIS.Entities.User.UserRoles", "RoleId")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EIS.Entities.User.Users", "User")

@@ -1,38 +1,41 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
 {
-    [Route("api/Leaves")]
+    [EnableCors("MyPolicy")]
+    [Route("api/LeaveRequest")]
     [ApiController]
-    public class LeavesController : Controller
+    public class LeaveRequestController : Controller
     {
         public readonly IRepositoryWrapper _repository;
-        public LeavesController(IRepositoryWrapper repository) 
+        public LeaveRequestController(IRepositoryWrapper repository) 
         {
             _repository = repository;
         }
 
         // GET: api/Leaves
         [HttpGet]
-        public IEnumerable<Leaves> GetLeaves()
+        public IEnumerable<LeaveRequest> GetLeaveRequests()
         {
             return _repository.Leave.FindAll();
         }
 
         // GET: api/Leaves/5
-        [HttpGet("{id}")]
-        public IActionResult GetLeave([FromRoute] int id)
+        [HttpGet("Employee/{id}")]
+        public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var leave = _repository.Leave.FindByCondition(x => x.Id == id);
+            var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
 
             if (leave == null)
             {
@@ -42,9 +45,39 @@ namespace EIS.WebAPI.Controllers
             return Ok(leave);
         }
 
+        [HttpGet("{PersonId}/{LeaveId}")]
+        public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
+
+            if (leave == 0)
+            {
+                leave = -1;
+                return Ok(leave);
+            }
+
+            return Ok(leave);
+        }
+        [Route("UpdateStatus/{RequestId}/{Status}")]
+        [HttpPost]
+        public IActionResult UpdateRequestStatus([FromRoute]int RequestId, [FromRoute]string Status)
+        {
+            if (!string.IsNullOrEmpty(Status))
+            {
+                _repository.Leave.UpdateRequestStatus(RequestId, Status);
+                return Ok();
+            }
+            return NotFound();
+        }
+
         // PUT: api/Leaves/5
         [HttpPut("{id}")]
-        public IActionResult PutLeave([FromRoute] int id, [FromBody] Leaves leave)
+        public IActionResult PutLeaveRequest([FromRoute] int id, [FromBody] LeaveRequest leave)
         {
             if (!ModelState.IsValid)
             {
@@ -71,16 +104,19 @@ namespace EIS.WebAPI.Controllers
 
         // POST: api/Leaves
         [HttpPost]
-        public IActionResult PostLeave([FromBody] Leaves leave)
+        public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            leave.EmployeeName = p.FirstName + " " + p.LastName;
             _repository.Leave.Create(leave);
             _repository.Leave.Save();
 
-            return CreatedAtAction("GetLeave", new { id = leave.Id }, leave);
+            _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
+            return Ok();
         }
 
         // DELETE: api/Leaves/5

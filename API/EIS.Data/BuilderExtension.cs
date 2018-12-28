@@ -1,6 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Leave;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ namespace EIS.Data
 
         public BuilderExtension(DbContextOptions<ApplicationDbContext> options)
         {
-            this.options = options;
+          //  this.options = options;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,7 +34,6 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.PanCard).HasColumnType("varchar(10)");
                 modelBuilder.Entity<Person>().Property(p => p.AadharCard).HasColumnType("varchar(12)");
                 modelBuilder.Entity<Person>().Property(p => p.Image).HasColumnType("varbinary(MAX)");
-                modelBuilder.Entity<Person>().Property(p => p.Designation).HasColumnType("nvarchar(50)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.FirstName).HasColumnType("nvarchar(50)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.MiddleName).HasColumnType("nvarchar(50)");
                 modelBuilder.Entity<Person>().Property(p => p.LastName).HasColumnType("nvarchar(50)").IsRequired();
@@ -51,15 +51,59 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.RowVersion).HasColumnType("rowversion").IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();
                 #endregion
 
-                #region[Leaves]
+                #region[LeaveCredit]
+                //For LeaveCredit model validation
+
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.EmployeeName).HasColumnType("varchar(150)").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.LeaveType).HasColumnType("varchar(50)").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.Days).HasColumnType("float").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.ValidTo).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.ValidFrom).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.Available).HasColumnType("float").IsRequired();
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.CreatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.UpdatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveCredit>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
+
+                #endregion
+
+                #region[LeavesRequests]
+                //For EmployeeLeave model validation
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.EmployeeName).HasColumnType("varchar(100)").IsRequired();
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.LeaveType).HasColumnType("varchar(50)").IsRequired();
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.FromDate).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.ToDate).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.TotalRequestedDays).HasColumnType("float");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.Available).HasColumnType("float");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.Reason).HasColumnType("varchar(200)");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.Status).HasColumnType("varchar(50)");
+                
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.AppliedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.CreatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.UpdatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveRequest>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
+                #endregion
+
+                #region[LeaveMaster]
                 //For EmployeeLeave model validation
 
-                modelBuilder.Entity<Leaves>().Property(p => p.LeaveTypes).HasColumnType("varchar(30)");
-                modelBuilder.Entity<Leaves>().Property(p => p.LeavesAlloted).HasColumnType("float").IsRequired();
-                modelBuilder.Entity<Leaves>().Property(p => p.LeavesAvailed).HasColumnType("float").IsRequired();
-                modelBuilder.Entity<Leaves>().Property(p => p.CreatedDate).HasColumnType("datetime");
-                modelBuilder.Entity<Leaves>().Property(p => p.UpdatedDate).HasColumnType("datetime");
-                modelBuilder.Entity<Leaves>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion(); ;
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.LeaveType).HasColumnType("varchar(50)").IsRequired();
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.Description).HasColumnType("varchar(200)");
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.ValidFrom).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.ValidTo).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.Days).HasColumnType("float").IsRequired();
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.CreatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.UpdatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<LeaveMaster>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
+                #endregion
+
+                #region[EmployeeLeaves]
+                //For EmployeeLeave model validation
+
+                modelBuilder.Entity<EmployeeLeaves>().Property(p => p.TotalAlloted).HasColumnType("float").IsRequired();
+                modelBuilder.Entity<EmployeeLeaves>().Property(p => p.Available).HasColumnType("float").IsRequired();
+                modelBuilder.Entity<EmployeeLeaves>().Property(p => p.CreatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<EmployeeLeaves>().Property(p => p.UpdatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<EmployeeLeaves>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
                 #region[Attendance]
@@ -135,30 +179,50 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.UpdatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
-
-                #region[Roles]
-                modelBuilder.Entity<Role>().Property(p => p.Id).HasColumnType("int").IsRequired();
-                modelBuilder.Entity<Role>().Property(p => p.Name).HasColumnType("nvarchar(256)").IsRequired();
-                modelBuilder.Entity<Role>().Property(p => p.Access).HasColumnType("nvarchar(max)").IsRequired();
-                #endregion
-
-                #region[User Roles]
-                modelBuilder.Entity<UserRoles>().Property(p => p.UserId).HasColumnType("int").IsRequired();
-                modelBuilder.Entity<UserRoles>().Property(p => p.RoleId).HasColumnType("int").IsRequired();
-                #endregion
-
+                
                 #region[Table Relationship]
-                //one employees has many leaves
-                modelBuilder.Entity<Leaves>()
+
+                //one leave has many credits
+                modelBuilder.Entity<LeaveCredit>()
+                  .HasOne(s => s.LeaveMaster)
+                  .WithMany(g => g.Credits)
+                  .HasForeignKey(s => s.LeaveId);
+
+                //one Leave Request has one LeaveType
+                modelBuilder.Entity<LeaveRequest>()
+                   .HasOne(s => s.TypeOfLeave)
+                   .WithMany(g => g.Requests)
+                   .HasForeignKey(s => s.TypeId);
+
+                //one employees has many leave requests
+                modelBuilder.Entity<LeaveRequest>()
                   .HasOne(s => s.Person)
-                  .WithMany(g => g.Leaves)
+                  .WithMany(g => g.LeaveRequests)
                   .HasForeignKey(s => s.PersonId);
+
+                //one employee has many Leave Credits
+                modelBuilder.Entity<LeaveCredit>()
+                  .HasOne(s => s.Person)
+                  .WithMany(g => g.LeaveCredits)
+                  .HasForeignKey(s => s.PersonId);
+
+                //one Employee has one EmployeeLeaves
+                modelBuilder.Entity<EmployeeLeaves>()
+                   .HasOne(s => s.Person)
+                   .WithOne(g => g.EmployeeLeaves)
+                   .HasForeignKey<EmployeeLeaves>(s => s.PersonId);
 
                 //one employee has many attendance
                 modelBuilder.Entity<Attendance>()
                    .HasOne(s => s.Person)
                    .WithMany(g => g.Attendance)
                    .HasForeignKey(g => g.PersonId);
+
+                //one Employee has one Designation
+                modelBuilder.Entity<Person>()
+                   .HasOne(s => s.Designation)
+                   .WithMany(g => g.Persons)
+                   .HasForeignKey(s => s.DesignationId);
 
                 //one employee has one permanent address
                 modelBuilder.Entity<Permanent>()
@@ -189,26 +253,18 @@ namespace EIS.Data
                     .WithOne(g => g.User)
                     .HasForeignKey<Users>(s => s.PersonId);
 
-                modelBuilder.Entity<UserRoles>()
-                    .HasOne(u => u.Role)
-                    .WithOne(r => r.UserRole)
-                    .HasForeignKey<UserRoles>(u => u.RoleId);
-
-                modelBuilder.Entity<UserRoles>()
-                    .HasOne(u => u.User)
-                    .WithOne(u1 => u1.Role)
-                    .HasForeignKey<UserRoles>(u => u.UserId);
-
 
 
                 #endregion
 
                 #region[Table Schema]
                 modelBuilder.Entity<Users>().ToTable("Users", "Account");
-                modelBuilder.Entity<UserRoles>().ToTable("UserRoles", "Account");
-                modelBuilder.Entity<Role>().ToTable("Role", "Account");
                 modelBuilder.Entity<Person>().ToTable("Person", "Employee");
-                modelBuilder.Entity<Leaves>().ToTable("Leaves", "Employee");
+                modelBuilder.Entity<Designation>().ToTable("DesignationMaster", "Employee");
+                modelBuilder.Entity<LeaveMaster>().ToTable("LeaveMaster", "Leave");
+                modelBuilder.Entity<LeaveCredit>().ToTable("LeaveCredit", "Leave");
+                modelBuilder.Entity<EmployeeLeaves>().ToTable("EmployeeLeaves", "Leave");
+                modelBuilder.Entity<LeaveRequest>().ToTable("LeaveRequests", "Leave");
                 modelBuilder.Entity<Attendance>().ToTable("Attendance", "Employee");
                 modelBuilder.Entity<Permanent>().ToTable("PermanentAddress", "Address");
                 modelBuilder.Entity<Current>().ToTable("CurrentAddress", "Address");

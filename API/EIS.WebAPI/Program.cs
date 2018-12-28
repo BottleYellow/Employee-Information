@@ -26,12 +26,6 @@ namespace EIS.WebAPI
                     .ReadFrom.Configuration(Configuration)
                     .CreateLogger();
 
-                //Serilog.Debugging.SelfLog.Enable(msg =>
-                //{
-                //    Debug.Print(msg);
-                //    Debugger.Break();
-                //});
-
                 try
                 {
                     Log.Information("Host starting...");

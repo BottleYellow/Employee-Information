@@ -12,10 +12,5 @@ namespace EIS.Repositories.Repository
     {
         public EmergencyAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         { }
-
-        public IEnumerable<Emergency> FindAllByCondition(Expression<Func<Emergency, bool>> expression)
-        {
-            return _dbcontext.Set<Emergency>().Where(expression);
-        }
     }
 }

@@ -15,9 +15,6 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public IEnumerable<Other> FindAllByCondition(Expression<Func<Other, bool>> expression)
-        {
-            return _dbcontext.Set<Other>().Where(expression);
-        }
+       
     }
 }

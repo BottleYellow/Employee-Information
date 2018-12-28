@@ -13,7 +13,6 @@ namespace EIS.Repositories.IRepository
         IAttendanceRepository Attendances { get; }
         ILeaveRepository Leave { get; }
         IUserRepository Users { get; }
-        IRoleRepository RoleManager { get; }
         
     }
 }

@@ -8,6 +8,6 @@ namespace EIS.Repositories.IRepository
 {
     public interface IOtherAddressRepository: IRepositorybase<Other>
     {
-        IEnumerable<Other> FindAllByCondition(Expression<Func<Other, bool>> expression);
+        
     }
 }

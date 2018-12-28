@@ -5,13 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181122132550_Initial.cs" />
-    <Compile Remove="Migrations\20181123062249_Initial.cs" />
-    <Compile Remove="Migrations\20181123073010_Initial.cs" />
-    <Compile Remove="Migrations\20181126123936_Initial2.cs" />
-    <Compile Remove="Migrations\20181127112052_Initial.cs" />
-    <Compile Remove="Migrations\20181127112332_Initial.cs" />
-    <Compile Remove="Migrations\20181130110214_Initial.cs" />
+    <Compile Remove="Migrations\20181226094100_Initial.cs" />
   </ItemGroup>
 
   <ItemGroup>

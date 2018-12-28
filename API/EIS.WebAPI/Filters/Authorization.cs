@@ -37,9 +37,6 @@ namespace EIS.WebAPI.Filters
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
-            string actionName = filterContext.HttpContext.Request.Headers["Action"].ToString();
-            string controllerName = filterContext.HttpContext.Request.Headers["Controller"].ToString();
-            //Authentication
             bool skipAuthorization = filterContext.Filters.Any(item => item is IAllowAnonymousFilter);
             if (skipAuthorization)
             {

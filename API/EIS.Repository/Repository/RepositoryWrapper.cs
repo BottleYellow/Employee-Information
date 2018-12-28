@@ -24,8 +24,6 @@ namespace EIS.Repositories.Repository
 
         private IUserRepository _user;
 
-        IRoleRepository _roleManager;
-
         
 
      public IEmployeeRepository Employee 
@@ -117,17 +115,7 @@ namespace EIS.Repositories.Repository
                 return _user;
             }
         }
-        public IRoleRepository RoleManager
-        {
-            get
-            {
-                if (_roleManager == null)
-                {
-                    _roleManager = new RoleRepository(_dbContext);
-                }
-                return _roleManager;
-            }
-        }
+        
 
         public RepositoryWrapper(ApplicationDbContext dbContext)
         {

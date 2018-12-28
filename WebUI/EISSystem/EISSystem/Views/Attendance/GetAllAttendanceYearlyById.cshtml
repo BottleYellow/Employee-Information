@@ -1,0 +1,94 @@
+﻿
+@using System.Globalization
+@{
+    int absentdays = 0;
+    int totaldays = 0;
+    var present = Model.Persons.Attendance.Count;
+    float percentvalue = 0;
+    int totaldaysinmonth=0;
+    int year=ViewBag.month;
+}
+
+<style type="text/css">
+    td {
+        width: 200px;
+        background-color: lightgray;
+        text-align: center
+    }
+
+    th {
+        font-size: medium;
+        color: white;
+        background-color: darkgrey;
+        text-align: center
+    }
+</style>
+@*<div><h4><b>Attendance Report</b></h4></div>*@
+
+<div class="table-responsive">
+    <table id="yexample" class="table table-bordered table-striped table-hover js-basic-example dataTable ">
+        <thead>
+            <tr>
+                <th> Year</th>
+                <th>Average Attendance </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@year</td>
+                @{
+                    if (Model.Persons.CreatedDate.Year % 4 == 0)
+                    {
+                        totaldays = 366;
+                        absentdays = totaldays - Model.Persons.Attendance.Count;
+                    }
+                    else
+                    {
+                        totaldays = 365;
+                        absentdays = totaldays - Model.Persons.Attendance.Count;
+                    }
+                    percentvalue = (absentdays * 100) / totaldays;
+                }
+
+                <td>@percentvalue%</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+<div class="table-responsive">
+    <table id="mexample" class="table table-bordered table-striped table-hover js-basic-example dataTable ">
+        <thead>
+            <tr>
+                <th> Month</th>
+                <th>Average Attendance </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Persons.CreatedDate.Month)  </td>
+                @{
+                    if (Model.Persons.CreatedDate.Year % 4 == 0)
+                    {
+                        totaldays = 366;
+                    }
+                    else
+                    {
+                        totaldays = 365;
+                    }
+                    totaldaysinmonth = DateTime.DaysInMonth(Model.Persons.CreatedDate.Year, Model.Persons.CreatedDate.Month);
+                    absentdays = totaldaysinmonth - Model.Persons.Attendance.Count;
+
+                    percentvalue = (25 * 100) / 31;
+
+                }
+
+                <td>@percentvalue%</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+
