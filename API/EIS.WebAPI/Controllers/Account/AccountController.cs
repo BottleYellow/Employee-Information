@@ -21,9 +21,12 @@ using EIS.WebAPI.Messanger;
 using EIS.Repositories.Helpers;
 using Microsoft.Extensions.Configuration;
 using EIS.WebAPI.RedisCache;
+using Microsoft.AspNetCore.Cors;
+using EIS.Entities.Employee;
 
 namespace EIS.WebAPI.Controllers
 {
+    [EnableCors("MyPolicy")]
     [Route("api/account")]
     [ApiController]
     public class AccountController : BaseController
@@ -51,17 +54,13 @@ namespace EIS.WebAPI.Controllers
                 string role = "";
                 if (s1 != null)
                 {
-
-                    var options = new DistributedCacheEntryOptions();
-                    options.SetAbsoluteExpiration(TimeSpan.FromDays(1));
-                    role = _repository.RoleManager.GetRole(u.Id);
-                    var data = _repository.RoleManager.FindByCondition(r => r.Name == role).Access;
+                    Person person = _repository.Employee.FindByCondition(x => x.Id == pid);
+                    role = _repository.Employee.GetDesignationById(person.DesignationId).Name;
+                    var data = _repository.Employee.GetDesignationById(person.DesignationId).Access;
                     Cache.SetStringValue("TokenValue", s1);
                     Cache.SetStringValue("PersonId", pid.ToString());
                     Cache.SetStringValue("Access", data);
                 }
-                Response.Cookies.Append("Role", role);
-                Response.Headers.Add("Role", role);
                 Cache.SetStringValue("Role", role);
                 return Ok(pid.ToString());
             }
@@ -130,8 +129,26 @@ namespace EIS.WebAPI.Controllers
 
             return Ok(login);
         }
-
-
+        
+        [HttpGet("VerifyPassword/{id}/{password}")]
+        public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
+        {
+            var result = _repository.Users.VerifyPassword(id, password);
+            if (result == true)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
+        [HttpGet("ChangePassword/{id}/{password}")]
+        public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
+        {
+            _repository.Users.ChangePassword(id, password);
+            return Ok();
+        }
 
 
         // DELETE: api/Logins/5
@@ -159,19 +176,13 @@ namespace EIS.WebAPI.Controllers
         public IActionResult ForGot_Pass(String username)
         {
             string password = CreateRandomPassword(8);
-
-            string To, UserID, Password, SMTPPort, Host;
-            UserID = configuration["appSettings:UserID"];
-            To = username;
-            Password = configuration["appSettings:Password"];
-            SMTPPort = configuration["appSettings:SMTPPort"];
-            Host = configuration["appSettings:Host"];
+            string To = username;
             string subject = "New Password";
             //var password = ;
             string body = "Hello!" +"\n"+
                 "Your new password is : " + password;
 
-            EmailManager.SendEmail(UserID, subject, body, To, UserID, Password, SMTPPort, Host);
+            new EmailManager(configuration).SendEmail(subject, body, To);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
             _repository.Users.Save();

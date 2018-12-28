@@ -145,11 +145,11 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label asp-for="Designation">Designation : </label>
-                                            <select asp-for="Designation" asp-items="@new SelectList(Enum.GetValues(typeof(Designation)))" class="form-control show-tick">
-                                                <option>-- Select Designation --</option>
+                                            <label asp-for="Designation.Name">Designation : </label>
+                                            <select asp-for="Designation.Name" class="form-control show-tick" disabled>
+                                                <option>@Model.Designation.Name</option>
                                             </select>
-                                            <span asp-validation-for="Designation" class="text-danger"></span>
+                                            <span asp-validation-for="Designation.Name" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">

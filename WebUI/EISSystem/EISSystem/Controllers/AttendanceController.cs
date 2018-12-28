@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -14,23 +15,16 @@ using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
 {
+    [DisplayName("Attendance")]
     public class AttendanceController : Controller
     {
-        public readonly IEISService service;
-        public AttendanceController(IEISService service)
+        public readonly IEISService<Attendance> service;
+        public AttendanceController(IEISService<Attendance> service)
         {
             this.service = service;
         }
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
-            HttpResponseMessage response = service.GetResponse("api/attendances/" + id + "");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
-            return View(data);
-        }
-
+        
+        [DisplayName("All Attendance Records")]
         [HttpGet]
         public IActionResult GetAllAttendance()
         {
@@ -40,7 +34,7 @@ namespace EIS.WebApp.Controllers
             Response.StatusCode = (int)response.StatusCode;
             return View("AllAttendance",data);
         }
-
+        [DisplayName("Create New Attendance")]
         [HttpGet]
         public IActionResult Create()
         {

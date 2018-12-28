@@ -1,7 +1,16 @@
 ﻿﻿@using EIS.WebApp.Services;
+@using Newtonsoft.Json;
 @{
-    RedisAgent Cache = new RedisAgent(); 
-}
+    RedisAgent Cache = new RedisAgent();
+    var ac = Cache.GetStringValue("Access");
+    List<string> links = new List<string>();
+    string cur = null;
+    List<Navigation> Access = new List<Navigation>();
+    if (ac != null) {
+        Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
+    }
+
+}   
 <!DOCTYPE html>
 
 <html>
@@ -20,23 +29,21 @@
     <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
     <!-- Animation Css -->
     <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
-    <!-- Morris Chart Css-->
-    <link href="~/plugins/morrisjs/morris.css" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="~/css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/css/themes/all-themes.css" rel="stylesheet" />
-
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Bootstrap DatePicker Css -->
+    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
     <!-- Jquery Core Js -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
-
-    @*<script type="text/javascript">
-        function preventBack() { window.history.forward(); }
-        setTimeout("preventBack()", 0);
-        window.onunload = function () { null };
-    </script>*@
 </head>
 <body class="theme-blue">
+    <div id="modal-placeholder1" class="modal fade" role="dialog" data-url="@Url.Action("ChangePassword","Account")"></div>
+    @*BootStrap Model*@
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -92,7 +99,7 @@
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
-            <div class="user-info" style="background:url('../images/emp-img-background.jpg')">
+            <div class="user-info">
                 <div class="image">
                     <img src="~/images/user.png" width="48" height="48" alt="User" />
                 </div>
@@ -103,7 +110,8 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="/People/Profile?id=@Convert.ToInt32(@Cache.GetStringValue("PersonId"))"><i class="material-icons">person</i>Profile</a></li>
+                            <li><a href="/People/Profile?PersonId=@Cache.GetStringValue("PersonId")"><i class="material-icons">person</i>Profile</a></li>
+                            <li><a id="linkModal"><i class="material-icons">security</i>Change Password </a></li>
                             <li><a href="/Account/logout"><i class="material-icons">input</i>Sign Out</a></li>
                         </ul>
                     </div>
@@ -114,55 +122,92 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <secure asp-controller="People" asp-action="Index">
+                    <DynamicMenu></DynamicMenu>
+                    @*@foreach (var Menu in Access)
+                        {
+                            <li>
+                                @if (Menu.ParentMenuId == 0)
+                                {
+
+                                    <a class="menu-toggle">
+                                        <span>@Menu.MenuName</span>
+                                    </a>
+                                    <ul class="ml-menu">
+                                        @foreach (var Menu2 in Access)
+                                        {
+                                            if(Menu2.ParentMenuId==Menu.MenuId)
+                                            {
+                                                 <li>
+                                                     <a href="@Menu2.MenuURL">@Menu2.MenuName</a>
+                                                 </li>
+                                            }
+
+                                        }
+                                    </ul>
+
+                                }
+                            </li>
+                         }*@
+
+                    @*<secure asp-controller="People" asp-action="Index">
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">supervisor_account</i>
+                                    <span>Employees</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="/People/Index">All Employees</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Leave/EmployeeLeaveRequests">Leaves Requests</a>
+                                    </li>
+                                    <li>
+                                        <a href="pages/ui/badges.html">Attendance</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </secure>
+                        <secure asp-controller="Role" asp-action="Index">
+                            <li>
+                                <a href="/Role/Index">
+                                    <i class="material-icons">accessibility</i>
+                                    <span>Roles</span>
+                                </a>
+                            </li>
+                        </secure>
                         <li>
                             <a href="javascript:void(0);" class="menu-toggle">
-                                <i class="material-icons">supervisor_account</i>
-                                <span>Employees</span>
+                                <i class="material-icons">subject</i>
+                                <span>Leaves</span>
                             </a>
                             <ul class="ml-menu">
-                                <li>
-                                    <a href="/People/Index">All Employees</a>
-                                </li>
-                                <li>
-                                    <a href="pages/ui/animations.html">Leaves Requests</a>
-                                </li>
-                                <li>
-                                    <a href="pages/ui/badges.html">Attendance</a>
-                                </li>
+                                <secure asp-controller="Leave" asp-action="LeaveCredits">
+                                    <li>
+                                        <a href="/Leave/LeaveCredits">Leave Credits</a>
+                                    </li>
+                                </secure>
+                                <secure asp-controller="Leave" asp-action="LeavePolicies">
+                                    <li>
+                                        <a href="/Leave/LeavePolicies">Policies</a>
+                                    </li>
+                                </secure>
 
+                                <li>
+                                    <a href="/Leave/RequestLeave">Request for Leave</a>
+                                </li>
+                                <li>
+                                    <a href="/Leave/ShowMyLeaves?pid=@Cache.GetStringValue("PersonId")">Show My Leaves</a>
+                                </li>
                             </ul>
                         </li>
-                    </secure>
-                    <secure asp-controller="Role" asp-action="Index">
                         <li>
-                            <a href="/Role/Index">
-                                <i class="material-icons">accessibility</i>
-                                <span>Roles</span>
+                            <a href="/Attendance/Create">
+                                <i class="material-icons">fingerprint</i>
+                                <span>Attendance</span>
                             </a>
-                        </li>
-                    </secure>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">subject</i>
-                            <span>Leaves</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a href="/Admin/AllEmployees">Show My Leaves</a>
-                            </li>
-                            <li>
-                                <a href="/Leaves/RequestForLeave">Request for Leave</a>
-                            </li>
-
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/Attendance/Create">
-                            <i class="material-icons">fingerprint</i>
-                            <span>Attendance</span>
-                        </a>
-                    </li>
+                        </li>*@
                 </ul>
             </div>
             <!-- #Menu -->
@@ -324,32 +369,27 @@
     </section>
 
     <section class="content" id="main-content">
-            @RenderBody()
+        @RenderBody()
 
     </section>
 
+    <!-- Autosize Plugin Js -->
+    <script src="~/plugins/autosize/autosize.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/plugins/momentjs/moment.js"></script>
 
+    <script src="~/js/pages/forms/basic-form-elements.js"></script>
+    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Bootstrap Datepicker Plugin Js -->
+    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <!-- Bootstrap Core Js -->
     <script src="~/plugins/bootstrap/js/bootstrap.js"></script>
     <!-- Slimscroll Plugin Js -->
     <script src="~/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="~/plugins/node-waves/waves.js"></script>
-    <!-- Jquery CountTo Plugin Js -->
-    <script src="~/plugins/jquery-countto/jquery.countTo.js"></script>
-    <!-- Morris Plugin Js -->
-    <script src="~/plugins/raphael/raphael.min.js"></script>
-    <script src="~/plugins/morrisjs/morris.js"></script>
-    <!-- ChartJs -->
-    <script src="~/plugins/chartjs/Chart.bundle.js"></script>
-    <!-- Flot Charts Plugin Js -->
-    <script src="~/plugins/flot-charts/jquery.flot.js"></script>
-    <script src="~/plugins/flot-charts/jquery.flot.resize.js"></script>
-    <script src="~/plugins/flot-charts/jquery.flot.pie.js"></script>
-    <script src="~/plugins/flot-charts/jquery.flot.categories.js"></script>
-    <script src="~/plugins/flot-charts/jquery.flot.time.js"></script>
-    <!-- Sparkline Chart Plugin Js -->
-    <script src="~/plugins/jquery-sparkline/jquery.sparkline.js"></script>
     <!-- Custom Js -->
     <script src="~/js/admin.js"></script>
     <script src="~/js/pages/index.js"></script>
@@ -363,6 +403,14 @@
 </html>
 
 <script type="text/javascript">
+    $("#linkModal").click(function () {
+        var url = $("#modal-placeholder1").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder1").html(data);
+            $("#modal-placeholder1").modal('show');
+        });
+
+    });
     $('#logout').click(function () {
         var url = "/Account/logout";
         $.post(url, function () {

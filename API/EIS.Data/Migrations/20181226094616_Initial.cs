@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,9 @@ namespace EIS.Data.Migrations
 
             migrationBuilder.EnsureSchema(
                 name: "Employee");
+
+            migrationBuilder.EnsureSchema(
+                name: "Leave");
 
             migrationBuilder.EnsureSchema(
                 name: "Account");
@@ -33,6 +36,46 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DesignationMaster",
+                schema: "Employee",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Access = table.Column<string>(nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignationMaster", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveMaster",
+                schema: "Leave",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LeaveType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ValidFrom = table.Column<DateTime>(type: "date", nullable: false),
+                    ValidTo = table.Column<DateTime>(type: "date", nullable: false),
+                    Days = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveMaster", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,12 +103,20 @@ namespace EIS.Data.Migrations
                     EmailAddress = table.Column<string>(type: "nvarchar(150)", nullable: false),
                     Salary = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Gender = table.Column<string>(type: "varchar(15)", nullable: false),
-                    Designation = table.Column<string>(type: "nvarchar(50)", nullable: false)
+                    DesignationId = table.Column<int>(nullable: false),
+                    ReportingPersonId = table.Column<int>(nullable: false),
+                    Gender = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Person", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Person_DesignationMaster_DesignationId",
+                        column: x => x.DesignationId,
+                        principalSchema: "Employee",
+                        principalTable: "DesignationMaster",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,15 +286,15 @@ namespace EIS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     PersonId = table.Column<int>(nullable: false),
-                    DateIn = table.Column<DateTime>(type: "date", nullable: true),
-                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: true),
-                    DateOut = table.Column<DateTime>(type: "date", nullable: true),
-                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
-                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: true)
+                    DateIn = table.Column<DateTime>(type: "date", nullable: false),
+                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
+                    DateOut = table.Column<DateTime>(type: "date", nullable: false),
+                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,29 +309,109 @@ namespace EIS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Leaves",
-                schema: "Employee",
+                name: "EmployeeLeaves",
+                schema: "Leave",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    LeavesAlloted = table.Column<double>(type: "float", nullable: false),
-                    LeavesAvailed = table.Column<double>(type: "float", nullable: false),
-                    LeaveTypes = table.Column<string>(type: "varchar(30)", nullable: false)
+                    TotalAlloted = table.Column<double>(type: "float", nullable: false),
+                    Available = table.Column<double>(type: "float", nullable: false),
+                    PersonId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Leaves", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeLeaves", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Leaves_Person_PersonId",
+                        name: "FK_EmployeeLeaves_Person_PersonId",
                         column: x => x.PersonId,
                         principalSchema: "Employee",
                         principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveCredit",
+                schema: "Leave",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    EmployeeName = table.Column<string>(type: "varchar(150)", nullable: false),
+                    LeaveType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "date", nullable: false),
+                    ValidTo = table.Column<DateTime>(type: "date", nullable: false),
+                    Days = table.Column<double>(type: "float", nullable: false),
+                    Available = table.Column<double>(type: "float", nullable: false),
+                    PersonId = table.Column<int>(nullable: false),
+                    LeaveId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveCredit", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LeaveCredit_LeaveMaster_LeaveId",
+                        column: x => x.LeaveId,
+                        principalSchema: "Leave",
+                        principalTable: "LeaveMaster",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LeaveCredit_Person_PersonId",
+                        column: x => x.PersonId,
+                        principalSchema: "Employee",
+                        principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveRequests",
+                schema: "Leave",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    EmployeeName = table.Column<string>(type: "varchar(100)", nullable: false),
+                    LeaveType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    FromDate = table.Column<DateTime>(type: "date", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "date", nullable: false),
+                    TotalRequestedDays = table.Column<double>(type: "float", nullable: false),
+                    Available = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Reason = table.Column<string>(type: "varchar(200)", nullable: true),
+                    AppliedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    TypeId = table.Column<int>(nullable: false),
+                    PersonId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LeaveRequests_Person_PersonId",
+                        column: x => x.PersonId,
+                        principalSchema: "Employee",
+                        principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LeaveRequests_LeaveMaster_TypeId",
+                        column: x => x.TypeId,
+                        principalSchema: "Leave",
+                        principalTable: "LeaveMaster",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -321,8 +452,7 @@ namespace EIS.Data.Migrations
                 name: "IX_UserRoles_RoleId",
                 schema: "Account",
                 table: "UserRoles",
-                column: "RoleId",
-                unique: true);
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_UserId",
@@ -371,10 +501,41 @@ namespace EIS.Data.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Leaves_PersonId",
+                name: "IX_Person_DesignationId",
                 schema: "Employee",
-                table: "Leaves",
+                table: "Person",
+                column: "DesignationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeLeaves_PersonId",
+                schema: "Leave",
+                table: "EmployeeLeaves",
+                column: "PersonId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveCredit_LeaveId",
+                schema: "Leave",
+                table: "LeaveCredit",
+                column: "LeaveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveCredit_PersonId",
+                schema: "Leave",
+                table: "LeaveCredit",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveRequests_PersonId",
+                schema: "Leave",
+                table: "LeaveRequests",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveRequests_TypeId",
+                schema: "Leave",
+                table: "LeaveRequests",
+                column: "TypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -404,8 +565,16 @@ namespace EIS.Data.Migrations
                 schema: "Employee");
 
             migrationBuilder.DropTable(
-                name: "Leaves",
-                schema: "Employee");
+                name: "EmployeeLeaves",
+                schema: "Leave");
+
+            migrationBuilder.DropTable(
+                name: "LeaveCredit",
+                schema: "Leave");
+
+            migrationBuilder.DropTable(
+                name: "LeaveRequests",
+                schema: "Leave");
 
             migrationBuilder.DropTable(
                 name: "Role",
@@ -416,7 +585,15 @@ namespace EIS.Data.Migrations
                 schema: "Account");
 
             migrationBuilder.DropTable(
+                name: "LeaveMaster",
+                schema: "Leave");
+
+            migrationBuilder.DropTable(
                 name: "Person",
+                schema: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "DesignationMaster",
                 schema: "Employee");
         }
     }

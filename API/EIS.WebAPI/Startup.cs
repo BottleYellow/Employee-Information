@@ -8,7 +8,6 @@ using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 
-using EIS.WebAPI.Data;
 using EIS.WebAPI.Filters;
 using EIS.WebAPI.RedisCache;
 using FluentValidation.AspNetCore;
@@ -45,6 +44,12 @@ namespace EIS.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
@@ -74,6 +79,7 @@ namespace EIS.WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
         {
+            app.UseCors("MyPolicy");
             loggerFactory.AddConsole();
             loggerFactory.AddDebug(LogLevel.Information);
 

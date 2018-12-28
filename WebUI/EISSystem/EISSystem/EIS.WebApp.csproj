@@ -41,6 +41,9 @@
 
 
   <ItemGroup>
+    <Content Update="Views\People\AddDesignation.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\People\CreateEmergencyAddress.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

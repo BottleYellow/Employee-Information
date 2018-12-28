@@ -1,7 +1,9 @@
 ﻿using EIS.Repositories.IRepository;
+using EIS.WebApp.Models;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -26,30 +28,22 @@ namespace EIS.WebApp.Filters
             string actionName = context.RouteData.Values["action"].ToString();
             string controllerName = context.RouteData.Values["controller"].ToString();
             string access = "/" + controllerName + "/" + actionName;
-            string data = Cache.GetStringValue("Access");
+          
+            var data = Cache.GetStringValue("Access");
             if (data != null)
             {
-                var Data = JsonConvert.DeserializeObject<List<string>>(data);
-                CultureInfo culture = new CultureInfo("en-US");
-                if (!Data.Contains(access))
-                {
+                List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
+                var check = Access.Find(x => x.URL == access);
+                if (check==null)
                     context.Result = new RedirectResult("/Account/AccessDenied");
-                }
             }
-            //else if (!("/Account/Login","/Account/ForgotPassword").ToString().Contains(access))
-            //{
-            //    context.Result = new RedirectToActionResult("Login", "Account", routeValues: null);
-            //}
             if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
                 context.Result = new RedirectToActionResult("Login", "Account", routeValues:null);
            
         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            string actionName = context.RouteData.Values["action"].ToString();
-            string controllerName = context.RouteData.Values["controller"].ToString();
-            Cache.SetStringValue("Action", actionName);
-            Cache.SetStringValue("Controller", controllerName);
+
         }
 
     }

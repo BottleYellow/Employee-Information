@@ -1,0 +1,186 @@
+﻿@using EIS.Entities.Enums;
+@model EIS.Entities.Leave.LeaveRequest;
+@using EIS.WebApp.Services;
+@{
+    RedisAgent Cache = new RedisAgent();
+}
+<html>
+<head>
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Bootstrap DatePicker Css -->
+    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="block-header">
+            <h1>Request For Leave</h1>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <form id="cp" method="post">
+                            @if (ViewBag.ListOfPolicy != null)
+                            {
+                            <div class="form-group" id="LType">
+                            <label asp-for="LeaveType">Leave Type : </label>
+                            <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                                <option>-- Select Leave Type --</option>
+                            </select>
+                            <span asp-validation-for="LeaveType" class="text-danger"></span>
+                            </div>
+                            }
+
+                            <label>Dates Requested : </label>
+                            <div class="form-group">
+                                <div class="input-daterange input-group" id="bs_datepicker_range_container">
+                                    <div class="form-line">
+                                        <input asp-for="FromDate" id="date1" type="text" class="form-control" placeholder="Date From" onchange="FunDate1();" disabled>
+                                    </div>
+                                    <span class="input-group-addon">To</span>
+                                    <div class="form-line">
+                                        <input asp-for="ToDate" id="date2" type="text" class="form-control" placeholder="Date To" onchange="FunDate2();" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Reason For Requested Leave :</label>
+                                <div class="form-line">
+                                    <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..." disabled></textarea>
+                                </div>
+                                <span asp-validation-for="Reason" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" asp-for="LeaveType" id="tp" />
+                            <input type="hidden" asp-for="TotalRequestedDays" id="trd" />
+                            <input type="hidden" asp-for="Available" id="av" />
+                            <input type="hidden" asp-for="TypeId" id="typeid" />
+                            <input type="hidden" asp-for="PersonId" id="psid" />
+                            <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/plugins/bootbox/bootbox.min.js"></script>
+    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Autosize Plugin Js -->
+    <script src="~/plugins/autosize/autosize.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/plugins/momentjs/moment.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Bootstrap Datepicker Plugin Js -->
+    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/pages/forms/basic-form-elements.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
+
+<script>
+    var availableLeaves;
+    $(document).ready(function () {
+        @if (ViewBag.ListOfPolicy==null)
+        {
+            @:bootbox.alert({
+                @:message: "Leave Types are Not Added.You can not request for Leave."
+/**/
+            @:});
+        }
+    });
+    $('#btnSubmit').click(function () {
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var d = form.serialize();
+            var url1 = "/Leave/RequestLeave";
+            $.ajax({
+                url: url1,
+                type: 'POST',
+                data: d,
+                success: function (data) {
+                    bootbox.alert({
+                        message: "Request Submitted Successfully!",
+                        callback: function () {
+                            window.location.reload();
+                        }
+                    });
+                },
+                error: function (data) {
+                    alert(data.responseText);
+
+                }
+            });
+        }
+        return false;
+    });
+    function myFunction() {
+        $("#msg").remove();
+        var x = document.getElementById("type").value;
+        if (x == "-- Select Leave Type --") {
+            $("#date1").prop("disabled", true);
+            $("#date2").prop("disabled", true);
+            $("#reason").prop("disabled", true);
+            $("#btnSubmit").prop("disabled", true);
+        }
+        var pid = @Cache.GetStringValue("PersonId");
+        $.getJSON("http://localhost:54830/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+            availableLeaves = data;
+            if (data == 0) {
+                $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
+            }
+            else if (data == -1) {
+                bootbox.alert({
+                    message: "Leaves are not credited in your account."
+                });
+            }
+            else {
+                var t = $("#type option:selected").text();
+                $("#tp").val(t);
+                $("#psid").val(pid);
+                $("#typeid").val(x);
+                $("#LType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
+                $("#date1").removeAttr('disabled');
+                $("#date2").removeAttr('disabled');
+                $("#reason").removeAttr('disabled');
+            }
+
+        });
+
+    }
+    function FunDate1() {
+        var x = document.getElementById("date1").value;
+        var d = new Date();
+        if (new Date(x) <= d) {
+            bootbox.alert({
+                message: "Please select valid date."
+            });
+            $("#date1").val('');
+            $("#date2").val('');
+        }
+    }
+    function FunDate2() {
+        var d1 = document.getElementById("date1").value;
+        var d2 = document.getElementById("date2").value;
+        var diff = new Date(new Date(d2) - new Date(d1));
+        var days = diff / 1000 / 60 / 60 / 24 + 1;
+        if (parseInt(days) > parseInt(availableLeaves)) {
+            bootbox.alert({
+                message: "You can request leave for only " + availableLeaves + " days."
+            });
+            $("#btnSubmit").prop("disabled", true);
+        }
+        else {
+            $("#trd").val(days);
+            $("#av").val(availableLeaves);
+            $("#btnSubmit").removeAttr('disabled');
+        }
+    }
+</script>
+
+
+

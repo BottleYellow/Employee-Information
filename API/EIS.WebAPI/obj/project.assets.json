@@ -5714,7 +5714,7 @@
       ]
     },
     "Microsoft.AspNetCore.Razor.Design/2.1.1": {
-      "sha512": "f8PKGcxiezL1RVqmnmrazj24Mj4KCTSXqwdotl7Lc+82h8iLV7ItxEIShTJakG7M9iw0ZuCocM0J/IhYesdQrg==",
+      "sha512": "BOK5fckW9v7xWjpEI6bPGwkjw10OPVASZcAa8HoWJo/0Mmg4Azddj92v8noU+YgvD/6zNZ9o/RiRXXKxk5rYwQ==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.design/2.1.1",
       "files": [
@@ -8417,7 +8417,7 @@
       ]
     },
     "System.Collections.NonGeneric/4.3.0": {
-      "sha512": "VtICL2/qMAQDccxDlFht4eCaJW7Auov20jcuDIY/6ipCX+A0/cB9Tq8f/8HEtT3XG2cfO/ej6nVJtv/5AB4qFA==",
+      "sha512": "prtjIEMhGUnQq6RnPEYLpFt8AtLbp9yq2zxOSrY7KJJZrw25Fi97IzBqY7iqssbM61Ek5b8f3MG/sG1N2sN5KA==",
       "type": "package",
       "path": "system.collections.nongeneric/4.3.0",
       "files": [
@@ -8454,7 +8454,7 @@
       ]
     },
     "System.Collections.Specialized/4.3.0": {
-      "sha512": "9N66WEY6sN/50M6keqGmt9vkZsl2vM2MCyjSAZ4KeaSCkFsFMqWYq1wcpMb+f9EYMT2R/5OqO6mBRRYeVowwkw==",
+      "sha512": "Epx8PoVZR0iuOnJJDzp7pWvdfMMOAvpUo95pC4ScH2mJuXkKA2Y4aR3cG9qt2klHgSons1WFh4kcGW7cSXvrxg==",
       "type": "package",
       "path": "system.collections.specialized/4.3.0",
       "files": [
@@ -8636,7 +8636,7 @@
       ]
     },
     "System.ComponentModel.Primitives/4.3.0": {
-      "sha512": "AWBSDx/LgwC5CkAbTBYp4KitjFUWxWzqduQ/zNb+Hs9XiX3tO8mB1H4FxEabMxH33Gm7kZnm3I8X9b6JnS7yYA==",
+      "sha512": "j8GUkCpM8V4d4vhLIIoBLGey2Z5bCkMVNjEZseyAlm4n5arcsJOeI3zkUP+zvZgzsbLTYh4lYeP/ZD/gdIAPrw==",
       "type": "package",
       "path": "system.componentmodel.primitives/4.3.0",
       "files": [
@@ -8878,7 +8878,7 @@
       ]
     },
     "System.Diagnostics.Contracts/4.3.0": {
-      "sha512": "wdxqaqiM/saFas6mN+7fZvhs8XP2E2nu4FQDmvzoufp3C0cpUKlkUQnXWFoVFdSElLa1QHQzw3TknLYsn7TJDg==",
+      "sha512": "eelRRbnm+OloiQvp9CXS0ixjNQldjjkHO4iIkR5XH2VIP8sUB/SIpa1TdUW6/+HDcQ+MlhP3pNa1u5SbzYuWGA==",
       "type": "package",
       "path": "system.diagnostics.contracts/4.3.0",
       "files": [
@@ -9099,7 +9099,7 @@
       ]
     },
     "System.Diagnostics.StackTrace/4.3.0": {
-      "sha512": "PIxIdnnYG7MGE0qHsrtVEanccxR2wWe12wImT1YpQvoP48bbOknmWUXu8m1hXpn39GDT3zhvG7W11SoBjyiN0A==",
+      "sha512": "BiHg0vgtd35/DM9jvtaC1eKRpWZxr0gcQd643ABG7GnvSlf5pOkY2uyd42mMOJoOmKvnpNj0F4tuoS1pacTwYw==",
       "type": "package",
       "path": "system.diagnostics.stacktrace/4.3.0",
       "files": [
@@ -9601,7 +9601,7 @@
       ]
     },
     "System.IO.Compression/4.3.0": {
-      "sha512": "8Y0+o6Zl52THAGgup79nVlK54evxDDvbg8BGC9Qs3pcMs6kwiE1F939I4AgclT96aZuARGE9jKRy1xioIq8jlA==",
+      "sha512": "YHndyoiV90iu4iKG115ibkhrG+S3jBm8Ap9OwoUAzO5oPDAWcr0SFwQFm0HjM8WkEZWo0zvLTyLmbvTkW1bXgg==",
       "type": "package",
       "path": "system.io.compression/4.3.0",
       "files": [
@@ -9916,7 +9916,7 @@
       ]
     },
     "System.Linq.Parallel/4.3.0": {
-      "sha512": "Hyux1V/GRCm4Xw6V7ebPtCDht6FsW+8ckZBh/bXUDxdOPkbRcp162TAFPIcecAZ4OC0tKJUkxlh6aEnxUrlnzw==",
+      "sha512": "td7x21K8LalpjTWCzW/nQboQIFbq9i0r+PCyBBCdLWWnm4NBcdN18vpz/G9hCpUaCIfRL+ZxJNVTywlNlB1aLQ==",
       "type": "package",
       "path": "system.linq.parallel/4.3.0",
       "files": [
@@ -11198,7 +11198,7 @@
       ]
     },
     "System.Runtime.Serialization.Primitives/4.3.0": {
-      "sha512": "HUKyM4+WMjCsgHny9QYkIqz3/lB0I/HNe8X3QlxoBmVWBU3AArmFUae/tPj+QWlsNrw1+C7duF4AQbH21VnoKg==",
+      "sha512": "Wz+0KOukJGAlXjtKr+5Xpuxf8+c8739RI1C+A2BoQZT+wMCCoMDDdO8/4IRHfaVINqL78GO8dW8G2lW/e45Mcw==",
       "type": "package",
       "path": "system.runtime.serialization.primitives/4.3.0",
       "files": [
@@ -12888,30 +12888,33 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Aadyam\\.nuget\\packages\\": {},
+    "C:\\Users\\aadyamconsultant\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "E:\\Training Project\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "projectUniqueName": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
       "projectName": "EIS.WebAPI",
-      "projectPath": "E:\\Training Project\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
-      "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "E:\\Training Project\\Employee-Information\\API\\EIS.WebAPI\\obj\\",
+      "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\aadyamconsultant\\.nuget\\packages\\",
+      "outputPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Aadyam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\aadyamconsultant\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\aadyamconsultant\\Downloads": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

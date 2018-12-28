@@ -26,7 +26,6 @@ E:\aadyam\Employee Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Re
 E:\aadyam\Employee Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
 E:\aadyam\Employee Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
 E:\aadyam\Employee Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb
-F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojResolveAssemblyReference.cache
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CoreCompileInputs.cache
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfoInputs.cache
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfo.cs
@@ -75,3 +74,6 @@ E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.EntityFrameworkCore.Relational.dll
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\Microsoft.EntityFrameworkCore.Relational.xml
+F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojResolveAssemblyReference.cache

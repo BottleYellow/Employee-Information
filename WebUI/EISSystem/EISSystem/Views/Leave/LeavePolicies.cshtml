@@ -1,0 +1,159 @@
+﻿@model IEnumerable<EIS.Entities.Leave.LeaveMaster>
+@{
+    if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                /*toastr.options.timeOut = 5000;*/ // 5s
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-right",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.success("@ViewBag.Message");
+            });
+        </script>
+        ViewBag.Message = null;
+    }
+}
+
+
+
+@*<link href="../../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">*@
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+
+<html>
+<head>
+    <title>Leave Policies</title>
+
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPolicy")"></div>
+    @*BootStrap Model*@
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2 style="font-size:25px;">
+                Leave Policies
+            </h2>
+
+            <button id="btnModal" name="btnModal" type="button" class="btn btn-primary" >
+                Add New
+            </button>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.LeaveType)
+                                        </th>
+
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Days)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ValidFrom)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ValidTo)
+                                        </th>
+                                        <th>
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LeaveType)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Days)
+                                            </td>
+                                            <td>
+                                                @item.ValidFrom.ToString("dd/MM/yyyy").ToString()
+                                            </td>
+
+                                            <td>
+                                                @item.ValidTo.ToString("dd/MM/yyyy").ToString()
+                                            </td>
+
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
+                                                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
+                                                        <li><a asp-action="Profile" asp-controller="People" asp-route-id="@item.Id">Details</a></li>
+                                                        <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+<script>
+    $(document).ready(function () {
+        var table = $('#example').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        });
+    });
+    $("#btnModal").click(function () {
+        var url = $("#modal-placeholder").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder").html(data);
+            $("#modal-placeholder").modal('show');
+        });
+
+    });
+   
+
+</script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
+
+

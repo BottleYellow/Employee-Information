@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Leave;
 using EIS.Entities.User;
 
 using EIS.Repositories.IRepository;
@@ -55,7 +56,8 @@ namespace EIS.WebApp
             #region[Validations]
             services.AddTransient<IValidator<Person>, PersonValidator>();
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
-            services.AddTransient<IValidator<Leaves>, LeavesValidator>();
+            services.AddTransient<IValidator<LeaveRequest>, LeaveRequestValidator>();
+            services.AddTransient<IValidator<LeaveMaster>, LeaveMasterValidator>();
             services.AddTransient<IValidator<Permanent>, PermanentAddressValidator>();
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();

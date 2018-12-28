@@ -13,9 +13,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EIS.WebApp.Controllers
 {
+    [DisplayName("Account Management")]
     public class AccountController : Controller
     {
         RedisAgent Cache;
@@ -28,6 +31,7 @@ namespace EIS.WebApp.Controllers
             this.distributedCache = distributedCache;
             Cache = new RedisAgent();
         }
+        
         [HttpGet]
         public IActionResult Login()
         {
@@ -54,15 +58,16 @@ namespace EIS.WebApp.Controllers
                     return RedirectToAction("Index", "People");
                 }
             }
-            return RedirectToAction("Index","People",new { id=Convert.ToInt32(pid)});
+            return RedirectToAction("Profile","People",new { PersonId=Convert.ToInt32(pid)});
         }
+        [DisplayName("Logout")]
         [HttpGet]
         public IActionResult LogOut()
         {
             HttpResponseMessage response = service.PostResponse("api/account/logout",null);
             return View("Login");
         }
-
+        [DisplayName("Forgot Password")]
         [HttpGet]
         public IActionResult ForgotPassword()
         {
@@ -84,6 +89,13 @@ namespace EIS.WebApp.Controllers
             }
             return View("Login");
         }
+        [DisplayName("Change Password")]
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return PartialView();
+        }
+        [DisplayName("Access Denied Page")]
         [HttpGet]
         public IActionResult AccessDenied()
         {
