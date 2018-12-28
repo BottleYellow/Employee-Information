@@ -84,3 +84,24 @@ F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\bin\
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorTargetAssemblyInfo.cache
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csprojAssemblyReference.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CoreCompileInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorAssemblyInfo.cs
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.AssemblyInfoInputs.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.AssemblyInfo.cs
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.deps.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.runtimeconfig.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.runtimeconfig.dev.json
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Data.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Repositories.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Data.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.RazorTargetAssemblyInfo.cache
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.csproj.CopyComplete
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.dll
+C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.WebAPI\obj\Debug\netcoreapp2.1\EIS.WebAPI.pdb
