@@ -53,7 +53,7 @@ namespace EIS.WebApp.Services
                 foreach (var descriptor in actionDescriptors.GroupBy(a => a.ActionName).Select(g => g.First()))
                 {
                     var methodInfo = descriptor.MethodInfo;
-                    //if (IsProtectedAction(controllerTypeInfo, methodInfo))
+                    if (IsAllowAnonymous(controllerTypeInfo, methodInfo))
                         actions.Add(new MvcActionInfo
                         {
                             ControllerId = currentController.Id,
@@ -71,18 +71,11 @@ namespace EIS.WebApp.Services
 
             return _mvcControllers;
         }
-        private static bool IsProtectedAction(MemberInfo controllerTypeInfo, MemberInfo actionMethodInfo)
+        private static bool IsAllowAnonymous(MemberInfo controllerTypeInfo, MemberInfo actionMethodInfo)
         {
             if (actionMethodInfo.GetCustomAttribute<AllowAnonymousAttribute>(true) != null)
                 return false;
-
-            if (controllerTypeInfo.GetCustomAttribute<AuthorizeAttribute>(true) != null)
-                return true;
-
-            if (actionMethodInfo.GetCustomAttribute<AuthorizeAttribute>(true) != null)
-                return true;
-
-            return false;
+            return true;
         }
     }
 }

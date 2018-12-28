@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EIS.Entities.Enums
 {
-    public enum Designation
+    public enum DesignationEnums
     {
         Trainee_Engineer,
         Software_Engineer,

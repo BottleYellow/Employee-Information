@@ -1,11 +1,12 @@
 ﻿using EIS.Entities.Employee;
-using EIS.Entities.Generic;
+using EIS.Entities.User;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
+using EIS.WebAPI.Messanger;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,10 +22,12 @@ namespace EIS.WebAPI.Controllers
 
         public readonly IDistributedCache distributedCache;
         public readonly IRepositoryWrapper _repository;
-        public EmployeeController(IRepositoryWrapper repository,IDistributedCache distributedCache)
+        public readonly IConfiguration configuration;
+        public EmployeeController(IRepositoryWrapper repository,IDistributedCache distributedCache, IConfiguration configuration)
         {
             _repository= repository  ;
             this.distributedCache = distributedCache;
+            this.configuration = configuration;
         }
 
         [HttpGet]
@@ -64,7 +67,23 @@ namespace EIS.WebAPI.Controllers
             }
             _repository.Employee.Create(person);
             _repository.Employee.Save();
-            return CreatedAtAction("GetAllEmployee", new { id = person.Id }, person);
+            Users u = new Users
+            {
+                UserName = person.EmailAddress,
+                Password = person.FirstName + person.DateOfBirth.Day,
+                PersonId=person.Id
+            };
+            _repository.Users.CreateUser(u);
+            _repository.Users.Save();
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            //var password = ;
+            string body = "Hello! Mr."+person.FirstName+" "+person.LastName+"\n" +
+                "Your have been successfully registered with employee system. : \n" +
+                "User Name: "+person.EmailAddress+"\n"+
+                "Password: " + person.FirstName + person.DateOfBirth.Day;
+            new EmailManager(configuration).SendEmail(subject, body, To);
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -111,22 +130,57 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.Save();
             return Ok(person);
         }
-
-        [HttpPost]
-        [Route("Data/{search?}")]
-        [AllowAnonymous]
-        public IActionResult GetData([FromBody]SortGrid sortGrid, [FromRoute]string search = null)
+        [Route("Designations")]
+        [HttpGet]
+        public IEnumerable<Designation> GetDesignations()
         {
-            ArrayList employeeslist;
-            if (search == null)
+            return _repository.Employee.GetDesignations();
+        }
+        [Route("Designations/{did}")]
+        [HttpGet]
+        public Designation GetDesignationById([FromRoute]int did)
+        {
+            return _repository.Employee.GetDesignationById(did);
+        }
+        [Route("DesignationName/{did}")]
+        [HttpGet]
+        public IActionResult GetDesignationNameById([FromRoute]int did)
+        {
+            var d = _repository.Employee.GetDesignationById(did);
+            return Ok(d.Name);
+        }
+        [Route("AddDesignation")]
+        [HttpPost]
+        public IActionResult CreateDesignation([FromBody]Designation designation)
+        {
+            var DesignationExists=_repository.Employee.DesignationExists(designation.Name);
+            if (DesignationExists)
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid);
+                return BadRequest("Designation already Exists");
             }
-            else
+            _repository.Employee.AddDesignation(designation);
+            _repository.Employee.Save();
+            return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
+        }
+        [Route("UpdateDesignation")]
+        public IActionResult UpdateDesignationData([FromBody]Designation designation)
+        {
+            if (!ModelState.IsValid)
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.IdCard==search|| x.FirstName.Contains(search)||x.MiddleName.Contains(search)||x.LastName.Contains(search) || x.PanCard==search || x.AadharCard==search||x.MobileNumber==search, sortGrid);
+                return BadRequest(ModelState);
             }
-            return Ok(employeeslist);
+            _repository.Employee.UpdateDesignation(designation);
+            try
+            {
+                _repository.Employee.Save();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                throw;
+            }
+
+            return NoContent();
         }
     }
 }

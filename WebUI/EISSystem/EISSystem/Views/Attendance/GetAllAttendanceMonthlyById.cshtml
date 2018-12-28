@@ -134,11 +134,9 @@
 
 
                         <td>
-                            if(@Model.Attendance.Where(x => x.DateIn == date).First()=null)
-                            {
+
                             @Model.Attendance.Where(x => x.DateIn == date).Select(x => x.TimeIn).FirstOrDefault()
-                            }else
-                            <text>Hello</text>
+
                         </td>
 
                         <td> @Model.Attendance.Where(x => x.DateIn == date).Select(x => x.TimeOut).FirstOrDefault()</td>

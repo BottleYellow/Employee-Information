@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using EIS.Entities.Leave;
 
 namespace EIS.Data.Context
 {
@@ -28,16 +29,18 @@ namespace EIS.Data.Context
         }
 
         #region[Tables]
-        public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Person> Person { get; set; }
-        public DbSet<Leaves> Leaves { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<LeaveMaster> LeaveMaster { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public DbSet<LeaveCredit> LeaveCredit { get; set; }
+        public DbSet<EmployeeLeaves> EmployeeLeaves { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Permanent> PermanentAddresses { get; set; }
         public DbSet<Current> CurrentAddresses { get; set; }
         public DbSet<Emergency> EmergencyAddresses { get; set; }
         public DbSet<Other> OtherAddresses { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<Designation> DesignationMaster { get; set; }
         
         #endregion
     }

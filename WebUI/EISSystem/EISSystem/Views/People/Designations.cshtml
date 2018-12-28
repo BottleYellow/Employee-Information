@@ -1,39 +1,72 @@
-﻿@model IEnumerable<EIS.Entities.User.Role>
+﻿@model IEnumerable<EIS.Entities.Employee.Designation>
 @{
-    //ViewData["Title"] = "Index";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
-    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                /*toastr.options.timeOut = 5000;*/ // 5s
+                toastr.options = {
+                    "debug": false,
+                    "positionClass": "toast-top-right",
+                    "onclick": null,
+                    "fadeIn": 300,
+                    "fadeOut": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000
+                }
+                toastr.success("@ViewBag.Message");
+            });
+        </script>
+        ViewBag.Message = null;
+    }
 }
+
+
+
+@*<link href="../../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">*@
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+
 <html>
 <head>
-    <title>Roles</title>
+    <title>Manage Designations</title>
+
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
+    
+    @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
-            <h1>Roles List</h1>
+            <h1>
+                Designations
+                <a class="btn btn-primary waves-effect" asp-controller="People" asp-action="AddDesignation"><span><i class="glyphicon glyphicon-plus"></i><text style="font-size:16px;"> Add New</text></span></a>
+            </h1>         
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <p>
-                            <a class="btn btn-primary waves-effect" asp-controller="Role" asp-action="Create"><span><i class="glyphicon glyphicon-plus"></i><text style="font-size:16px;">Create New</text></span></a>
-                        </p>
                         <div class="table-responsive">
                             <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>
-                                            Name
+                                            Id
                                         </th>
-
+                                        <th>
+                                            Designation Name
+                                        </th>
                                         <th>
                                             Actions
                                         </th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,16 +74,22 @@
                                     {
                                         <tr>
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.Name)
                                             </td>
+                               
+
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
                                                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
                                                     </button>
-                                                    <ul class="dropdown-menu pull-left">
-                                                        <li><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></li>
-
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a asp-action="EditDesignation" asp-route-id="@item.Id">Edit</a></li>
+                                                        
                                                         <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
                                                     </ul>
                                                 </div>
@@ -60,6 +99,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -67,7 +107,7 @@
     </div>
 </body>
 </html>
-     
+
 
 
 <script>
@@ -79,9 +119,17 @@
             responsive: true
         });
     });
-</script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
 
+
+</script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
+
+

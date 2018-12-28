@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
+using EIS.Entities.Leave;
 using EIS.Entities.User;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -34,7 +35,8 @@ namespace EIS.Entities.Employee
         public string EmailAddress { get; set; }
         public float Salary { get; set; }
         public string Description { get; set; }
-        
+        public int DesignationId { get; set; }
+        public int ReportingPersonId { get; set; }
         #endregion
 
         #region [Relations]
@@ -44,8 +46,10 @@ namespace EIS.Entities.Employee
         public virtual Gender Gender { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public virtual Designation Designation { get; set; }
-        public virtual ICollection<Leaves> Leaves { get; set; }
+        public virtual ICollection<LeaveRequest> LeaveRequests { get; set; }
+        public virtual EmployeeLeaves EmployeeLeaves { get; set; }
         public virtual ICollection<Attendance> Attendance { get; set; }
+        public virtual ICollection<LeaveCredit> LeaveCredits { get; set; }
         public virtual Permanent PermanentAddress { get; set; }
         public virtual Current CurrentAddress { get; set; }
         public virtual ICollection<Emergency> EmergencyAddress { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -9,19 +10,31 @@ using System.Threading.Tasks;
 namespace EIS.WebAPI.Messanger
 {
     public class EmailManager
-    { 
-        public static void SendEmail(string From, string Subject, string Body, string To, string UserID, string Password, string SMTPPort, string Host)
+    {
+        public readonly IConfiguration configuration;
+        public EmailManager(IConfiguration configuration)
         {
-            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+            this.configuration = configuration;
+        }
+        public void SendEmail(string Subject, string Body, string To)
+        {
+            string  UserID, Password, SMTPPort, Host;
+            UserID = configuration["appSettings:UserID"];
+            Password = configuration["appSettings:Password"];
+            SMTPPort = configuration["appSettings:SMTPPort"];
+            Host = configuration["appSettings:Host"];
+            MailMessage mail = new System.Net.Mail.MailMessage();
             mail.To.Add(To);
-            mail.From = new MailAddress(From);
+            mail.From = new MailAddress(UserID);
             mail.Subject = Subject;
             mail.Body = Body;
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = Host;
-            smtp.Port = Convert.ToInt16(SMTPPort);
-            smtp.Credentials = new NetworkCredential(UserID, Password);
-            smtp.EnableSsl = true;
+            SmtpClient smtp = new SmtpClient
+            {
+                Host = Host,
+                Port = Convert.ToInt16(SMTPPort),
+                Credentials = new NetworkCredential(UserID, Password),
+                EnableSsl = true
+            };
             smtp.Send(mail);
         }
     }
