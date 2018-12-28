@@ -1,13 +1,19 @@
-﻿<html>
+﻿@model IEnumerable<EIS.Entities.Employee.Attendance>
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_FinalLayout.cshtml";
+}
 <head>
     <title>Dashboard</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
     @*for pdf*@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="container-fluid">
@@ -62,17 +68,7 @@
         </div>
     </div>
 </body>
-</html>
 
-@*for datetimepicker*@
-<script src="~/plugins/momentjs/moment.js"></script>
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>*@
-<script src="~/lib/bootstrap/dist/js/bootstrap1.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script type="text/javascript">
     $('#select').on('change', function () {
 
@@ -104,7 +100,6 @@
         }
     });
 </script>
-
 <script language="javascript">
     $('#inputyear').on('dp.change', function () {
         var value = $("#inputyear").val();
@@ -197,6 +192,15 @@
     })
 </script>
 
+@*for datetimepicker*@
+<script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="~/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.fr.js"></script>
+
+<script type="text/javascript">
+
+</script>
+
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
@@ -207,4 +211,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+
+
+
+
+
+
+
 

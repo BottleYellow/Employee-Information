@@ -1,0 +1,159 @@
+﻿@model EIS.Entities.Employee.Person
+@{
+    int absentdays = 0;
+    int totaldays = 0;
+    int yearval = ViewBag.yearval;
+    TimeSpan timeSpan;
+    if (ViewBag.val == "year")
+    {
+        if (yearval % 4 == 0)
+        {
+            totaldays = 366;
+        }
+        else
+        {
+            totaldays = 365;
+        }
+        //totaldays = DateTime.(Model.Attendance.Where(x => x.ModelId == Model.Id).FirstOrDefault().DateIn.Year);
+        absentdays = totaldays - Model.Attendance.Count;
+    }
+    else if (ViewBag.val == "month")
+    {
+
+
+        absentdays = totaldays - Model.Attendance.Count;
+    }
+    else if (ViewBag.val == "week")
+    {
+        totaldays = 7;
+        absentdays = totaldays - Model.Attendance.Count;
+
+    }
+    TimeSpan averagetimein = new TimeSpan(Convert.ToInt64(Model.Attendance.Average(x => x.TimeIn.Ticks)));
+    DateTime timein = DateTime.Today.Add(averagetimein);
+    string displayTimeIn = timein.ToString("hh:mm tt");
+
+    TimeSpan averagetimeout = new TimeSpan(Convert.ToInt64(Model.Attendance.Average(x => x.TimeOut.Ticks)));
+    DateTime timeout = DateTime.Today.Add(averagetimeout);
+    string displayTimeOut = timeout.ToString("hh:mm tt");
+
+    DateTime averageHours = DateTime.Today.Add(averagetimeout-averagetimein);
+    string displayAverageHours = timeout.ToString("hh:mm");
+
+    string hours = Math.Round(timeout.Subtract(timein).TotalHours,2).ToString();
+}
+
+<style type="text/css">
+    td {
+        width: 200px;
+        text-align: center
+    }
+
+    th {
+        font-size: medium;
+        text-align: center
+    }
+    div .panel-primary{
+        text-align:center
+    }
+
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Average Hrs</div>
+                <div class="panel-body">@hours<span>Hrs</span></div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Average TImeIn</div>
+                <div class="panel-body">@displayTimeIn</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Average TImeOut</div>
+                <div class="panel-body">@displayTimeOut</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Present Days</div>
+                <div class="panel-body">@Model.Attendance.Count</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Absent Days</div>
+                <div class="panel-body">@absentdays</div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Total Days</div>
+                <div class="panel-body">@totaldays</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table id="example" class="table table-responsive table-striped table-hover" >
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>TimeIn</th>
+                <th>Time Out</th>
+            
+            </tr>
+
+        </thead>
+        <tbody>
+
+
+
+            @{
+
+                var targetdate = new DateTime(yearval, 1, 1);
+                
+
+                var enddate = targetdate.AddYears(1);
+                for (DateTime date = targetdate; date < enddate; date = date.AddDays(1))
+                {
+                    <tr>
+                        <td>
+                            @date.ToShortDateString()
+                        </td>
+
+
+    
+
+
+                        <td>
+                            if(@Model.Attendance.Where(x => x.DateIn == date).First()=null)
+                            {
+                            @Model.Attendance.Where(x => x.DateIn == date).Select(x => x.TimeIn).FirstOrDefault()
+                            }else
+                            <text>Hello</text>
+                        </td>
+
+                        <td> @Model.Attendance.Where(x => x.DateIn == date).Select(x => x.TimeOut).FirstOrDefault()</td>
+
+                    </tr>
+
+                }
+
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>
+
+

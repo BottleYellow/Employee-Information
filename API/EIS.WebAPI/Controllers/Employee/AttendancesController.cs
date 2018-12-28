@@ -16,7 +16,7 @@ namespace EIS.WebAPI.Controllers
     public class AttendancesController : Controller
     {
         public readonly IRepositoryWrapper _repository;
-        public AttendancesController(IRepositoryWrapper repository) 
+        public AttendancesController(IRepositoryWrapper repository)
         {
             _repository = repository;
         }
@@ -26,6 +26,13 @@ namespace EIS.WebAPI.Controllers
         public IEnumerable<Attendance> GetAttendances()
         {
             return _repository.Attendances.FindAll();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetAttendanceById([FromRoute]int id)
+        {
+           var attendance= _repository.Attendances.FindAllByCondition(x=>x.PersonId==id);
+            return Ok(attendance);
         }
 
         // PUT: api/Attendances/5
@@ -115,9 +122,10 @@ namespace EIS.WebAPI.Controllers
         {
              return _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year==year && x.DateIn.Month==month);
         }
-        [Route("GetAllAttendanceYearly/{id}/{year}") ]
+
+        [Route("GetAllAttendanceYearly/{id}/{year}")]
         [HttpGet()]
-        public IEnumerable<Attendance> GetAllAttendanceYearly( int id, [FromRoute] int year)
+        public IEnumerable<Attendance> GetAllAttendanceYearly([FromRoute] int id, [FromRoute] int year)
         {
             var result = _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year == year);
             return result;

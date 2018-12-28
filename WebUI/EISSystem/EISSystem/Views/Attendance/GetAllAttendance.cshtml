@@ -1,0 +1,78 @@
+﻿@model IEnumerable<EIS.Entities.Employee.Person>
+
+@{
+    int absentdays = 0;
+    int totaldays = 0;
+    int yearval = ViewBag.yearval;
+
+ 
+}
+
+<style type="text/css">
+    td{
+        width:200px;
+        text-align:center
+    }
+    th{
+        font-size:medium;
+        text-align:center
+    }
+</style>
+@*<div><h4><b>Attendance Report</b></h4></div>*@
+
+<div class="table-responsive">
+    <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable ">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Present Days</th>
+                <th>Absent Days</th>
+                <th>Total Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in Model)
+            {
+                if(person.FirstName== "vijay")
+                { 
+            <tr>
+                <td>@person.FirstName @person.LastName</td>
+                <td>@person.Attendance.Count</td>
+                @{
+                    if (ViewBag.val == "year")
+                    {
+                        if(yearval % 4 == 0) {
+                            totaldays = 366;
+                        }
+                        else
+                        {
+                            totaldays = 365;
+                        }
+                        //totaldays = DateTime.(person.Attendance.Where(x => x.PersonId == person.Id).FirstOrDefault().DateIn.Year);
+                        absentdays = totaldays - person.Attendance.Count;
+                    }
+                    else if (ViewBag.val == "month")
+                    {
+
+               
+                        absentdays = totaldays - person.Attendance.Count;
+                    }
+                    else if (ViewBag.val == "week")
+                    {
+                        totaldays = 7;
+                        absentdays = totaldays - person.Attendance.Count;
+
+                    }
+
+                }
+                <td>@absentdays</td>
+                <td>@totaldays</td>
+            </tr>
+                        }
+                    }
+        </tbody>
+    </table>
+</div>
+
+
+
