@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -109,17 +112,54 @@ namespace EIS.WebAPI.Controllers
             return Ok(Attendance);
         }
 
-        [Route("GetAllAttendanceMonthly/{id}/{month}/{year}")]
+        [Route("GetAllAttendanceMonthly/{month}/{year}")]
         [HttpGet]
-        public IEnumerable<Attendance> GetAllAttendanceMonthly([FromRoute] int id, [FromRoute] int year, [FromRoute] int month)
+        public IEnumerable<Person> GetAllAttendanceMonthly([FromRoute] int year, [FromRoute] int month)
         {
-             return _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year==year && x.DateIn.Month==month);
+            var peoples = _repository.Employee.FindAll();
+            foreach(var p in peoples)
+            {
+                var attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == p.Id && x.DateIn.Year == year && x.DateIn.Month == month).ToList();
+                p.Attendance = attendance;
+            }
+            return peoples;
         }
-        [Route("GetAllAttendanceYearly/{id}/{year}") ]
-        [HttpGet()]
-        public IEnumerable<Attendance> GetAllAttendanceYearly( int id, [FromRoute] int year)
+        [Route("GetAllAttendanceYearly/{year}") ]
+        [HttpGet]
+        public string GetAllAttendanceYearly([FromRoute] int year)
         {
-            var result = _repository.Attendances.FindAllByCondition(x => x.PersonId == id && x.DateIn.Year == year);
+            //var people1 = _repository.Attendances.GetAttendanceYearly(year);
+            //var peoples = _repository.Employee.FindAll();
+            //var attendances = _repository.Attendances.FindAll();
+            //foreach (var p in peoples)
+            //{
+            //    var attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == p.Id && x.DateIn.Year == year);
+            //    p.Attendance = attendance.ToList();
+            //}
+            //var per = from p in peoples
+            //          select (new Person
+            //          {
+            //              Id = p.Id,
+            //              FirstName = p.FirstName,
+            //              Attendance = (from a in attendances where a.PersonId == p.Id select a).ToList()
+            //          });
+            //ArrayList l = new ArrayList(per.ToList());
+            //return l;
+            var data = _repository.Attendances.GetAttendanceYearly(year);
+            var result =JsonConvert.SerializeObject(data, Formatting.Indented,
+                            new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            });
+            
+            return result;
+        }
+
+        [Route("GetAllAttendanceWeekly/{id}/{startOfWeek}/{endOfWeek}")]
+        [HttpGet]
+        public IEnumerable<Attendance> GetAllAttendanceWeekly(int id, [FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
+        {
+            var result = _repository.Attendances.FindAllByCondition(x => x.PersonId == id && (x.DateIn.Date >= startOfWeek.Date && x.DateIn.Date <= endOfWeek.Date));
             return result;
         }
 

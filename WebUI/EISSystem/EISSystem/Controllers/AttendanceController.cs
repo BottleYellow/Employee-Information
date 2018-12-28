@@ -36,46 +36,30 @@ namespace EIS.WebApp.Controllers
             return View("AllAttendance", employeeAttendance);
         }
         [HttpGet]
-        public IActionResult GetAllAttendanceYearly(string date,string type)
+        public IActionResult GetAllAttendance(string date,string type)
         {
-            HttpResponseMessage respemp = service.GetResponse("api/Employee");
-            string People = respemp.Content.ReadAsStringAsync().Result;
-            List<Person> people = JsonConvert.DeserializeObject<List<Person>>(People);
-
-            string[] monthyear = new string[2];
-            monthyear = date.Split('/');
-            foreach(var p in people)
+            HttpResponseMessage respattendance;
+            string[] monthyear = new string[3];
+            string[] week = new string[2];
+            string attendance="";
+            List<Person> person = new List<Person>();
+            if(date.Contains('-'))
             {
-                if (type=="year")
-                {
-                    HttpResponseMessage respattendance = service.GetResponse("api/Attendances/GetAllAttendanceYearly/" + p.Id + "/" + monthyear[0]);
-                    string Attendance = respattendance.Content.ReadAsStringAsync().Result;
-                    List<Attendance> attendances = JsonConvert.DeserializeObject<List<Attendance>>(Attendance);
-                    p.Attendance = attendances;
-                }
-                else
-                {
-                    HttpResponseMessage respattendance = service.GetResponse("api/Attendances/GetAllAttendanceMonthly/" + p.Id + "/" + monthyear[0] + "/" + monthyear[1]);
-                    string Attendance = respattendance.Content.ReadAsStringAsync().Result;
-                    List<Attendance> attendances = JsonConvert.DeserializeObject<List<Attendance>>(Attendance);
-                    p.Attendance = attendances;
-                }
+                week = date.Split('-'); 
             }
-
-            EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-            employeeAttendance.Persons = people.ToList();
-            return PartialView(employeeAttendance);
+            else 
+            {
+                monthyear = date.Split('/');
+            }
+            if (type == "year")
+            { 
+                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceYearly/" + monthyear[0]);
+                attendance = respattendance.Content.ReadAsStringAsync().Result;
+            }
+            var peoples = JsonConvert.DeserializeObject(attendance);
+            person = JsonConvert.DeserializeObject<List<Person>>(peoples.ToString());
+            return PartialView(person);
         }
-
-        //[HttpGet]
-        //public IActionResult GetAllAttendance()
-        //{
-        //    HttpResponseMessage response = service.GetResponse("api/attendances");
-        //    string stringData = response.Content.ReadAsStringAsync().Result;
-        //    List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
-        //    Response.StatusCode = (int)response.StatusCode;
-        //    return View("AllAttendance",data);
-        //}
 
         [HttpGet]
         public IActionResult Create()
@@ -100,6 +84,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 TempData["success"] = "success";
+                
                 //return RedirectToAction("index","People");
             }
             return RedirectToAction("Index", "People");

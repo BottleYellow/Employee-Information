@@ -49,7 +49,6 @@ F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.deps.json
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll
 F:\C Partition\Documents\Tejas Training\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.pdb
-E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojAssemblyReference.cache
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CoreCompileInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfoInputs.cache
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.AssemblyInfo.cs
@@ -75,3 +74,4 @@ E:\Training Project\Employee-Information\API\EIS.Repository\bin\Debug\netcoreapp
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csproj.CopyComplete
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.dll
 E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.pdb
+E:\Training Project\Employee-Information\API\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repositories.csprojAssemblyReference.cache

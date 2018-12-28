@@ -41,7 +41,7 @@
 
 
   <ItemGroup>
-    <Content Update="Views\Attendance\GetAllAttendanceYearly.cshtml">
+    <Content Update="Views\Attendance\GetAllAttendance.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\People\CreateEmergencyAddress.cshtml">

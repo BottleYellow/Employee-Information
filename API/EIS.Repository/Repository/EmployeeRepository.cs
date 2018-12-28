@@ -5,11 +5,9 @@ using EIS.Repositories.IRepository;
 
 namespace EIS.Repositories.Repository
 {
-    public class EmployeeRepository :RepositoryBase<Person>,IEmployeeRepository
+    public class EmployeeRepository : RepositoryBase<Person>, IEmployeeRepository
     {
         public EmployeeRepository(ApplicationDbContext dbContext) : base(dbContext)
-        {
-
-        }
+        { }
     }
 }
