@@ -18,10 +18,10 @@ namespace EIS.Repositories.Repository
 {
     public class UserRepository : RepositoryBase<Users>, IUserRepository
     {
-        ApplicationDbContext dbContext;
+        ApplicationDbContext _dbContext;
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public void CreateUser(Users user)
@@ -39,7 +39,7 @@ namespace EIS.Repositories.Repository
 
         public Users FindByUserName(string Username)
         {
-            var user = dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();
+            var user = _dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();
             return user;
         }
        
@@ -50,7 +50,7 @@ namespace EIS.Repositories.Repository
             Users u = FindByUserName(user.UserName);
             if (u != null)
             {
-                string hp = dbContext.Users.Where(u1 => u1.UserName == u.UserName).Select(u1 => u1.Password).FirstOrDefault();
+                string hp = _dbContext.Users.Where(u1 => u1.UserName == u.UserName).Select(u1 => u1.Password).FirstOrDefault();
                 if (Helper.VerifyHashedPassword(hp, user.Password) == "Success")
                 {
                     result = "success";

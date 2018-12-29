@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EIS.Entities.User;
+﻿using EIS.Entities.User;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,7 +29,6 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-
 
             if (!ModelState.IsValid)
             {
