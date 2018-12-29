@@ -30,15 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="EIS.Data">
-      <HintPath>..\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.Entities">
-      <HintPath>..\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.Repositories">
-      <HintPath>..\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\EIS.Data\EIS.Data.csproj" />
+    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
+    <ProjectReference Include="..\EIS.Repository\EIS.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.caching.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>

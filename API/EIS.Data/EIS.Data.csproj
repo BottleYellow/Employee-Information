@@ -17,9 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="EIS.Entities">
-      <HintPath>..\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
   </ItemGroup>
 
 </Project>
