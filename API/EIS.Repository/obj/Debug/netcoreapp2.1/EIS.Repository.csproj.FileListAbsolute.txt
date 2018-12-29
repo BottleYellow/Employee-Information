@@ -1,4 +1,0 @@
-E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repository.csprojAssemblyReference.cache
-E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repository.csproj.CoreCompileInputs.cache
-E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repository.AssemblyInfoInputs.cache
-E:\aadyam\Employee Information\API\EmployeeInformationSystem\EIS.Repository\obj\Debug\netcoreapp2.1\EIS.Repository.AssemblyInfo.cs
