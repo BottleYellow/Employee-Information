@@ -1,0 +1,215 @@
+﻿
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    @*for pdf*@
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="block-header">
+            <h3>Attendance Sheet</h3>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
+                        <div>
+                            <div class="row col-md-12">
+                                <div class="col-md-4">
+                                    <label>Select Type Of Reports</label>
+                                    <select id="select" style="width:200px">
+                                        <option value="select">Select Option</option>
+                                        <option value="year" id="year">Year</option>
+                                        <option value="month" id="month">Month</option>
+                                        <option value="week" id="week">Week</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="inputyeardiv" hidden="hidden">
+                                        <label>Select Year</label><br />
+                                        <input class="form-control" type="text" id="inputyear" style="width:200px;border:groove;" placeholder="select year" />
+                                    </div>
+                                    <div id="inputmonthdiv" hidden="hidden">
+                                        <label>Select Month</label><br />
+                                        <input class="form-control" type="text" id="inputmonth" style="width:200px;border:groove;" placeholder="select month" />
+                                    </div>
+                                    <div id="inputweekdiv" hidden="hidden">
+                                        <label>Select Week</label><br />
+                                        <input class="form-control" type="text" id="inputweek" style="width:200px;border:groove;" placeholder="select week" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <h4><span id="report"></span></h4>
+                            </div>
+                            <div id="tbl">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height:40px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@*for datetimepicker*@
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap1.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
+<script type="text/javascript">
+    $('#select').on('change', function () {
+
+        var v = $('#select').val();
+        if (v == 'year') {
+            $('#inputyeardiv').show();
+            $('#inputmonthdiv').hide();
+            $('#inputweekdiv').hide();
+            $('#inputyear').datetimepicker({
+                format: "YYYY"
+            });
+        }
+        else if (v == 'month') {
+            $('#inputmonthdiv').show();
+            $('#inputyeardiv').hide();
+            $('#inputweekdiv').hide();
+            $('#inputmonth').datetimepicker({
+                format: "MM/YYYY"
+            });
+        }
+        else if (v == 'week') {
+            $('#inputmonthdiv').hide();
+            $('#inputyeardiv').hide();
+            $('#inputweekdiv').show();
+            //Initialize the datePicker(I have taken format as mm-dd-yyyy, you can     //have your owh)
+            $("#inputweek").datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        }
+    });
+</script>
+
+@*<script language="javascript">
+    $('#inputyear').on('dp.change', function () {
+        var value = $("#inputyear").val();
+        $("#inputyear").val(value);
+        document.getElementById("report").innerHTML = "Attendance Report - Yearly";
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendance")',
+            data: {"date":value,"type":"year"},
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            title: 'Attendance Report - Yearly'
+                        }
+                    ],
+                    responsive: true
+                });
+            }
+        });
+    });
+    
+
+    $('#inputmonth').on('dp.change', function () {
+        document.getElementById("report").innerHTML = "Attendance Report - Monthly";
+        var v = $('#inputmonth').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendance")',
+            data: { "date":v, "type": "month"},
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            title: 'Attendance Report - Monthly'
+                        }
+                    ],
+                    responsive: true
+                });
+            }
+        });
+    });
+
+    $('#inputweek').on('dp.change', function (e) {
+        document.getElementById("report").innerHTML = "Attendance Report - Weekly";
+        var value = $("#inputweek").val();
+        alert(value);
+        var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
+        var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+        $("#inputweek").val(firstDate + " - " + lastDate);
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendance")',
+            data: { "date": firstDate + "-" + lastDate, "type": "week"},
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            title: 'Attendance Report - Weekly'
+                        }
+                    ],
+                    responsive: true
+                });
+            }
+        });
+    })
+</script>*@
+
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+@*for pdf*@
+
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+

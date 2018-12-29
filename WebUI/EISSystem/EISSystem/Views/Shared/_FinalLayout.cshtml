@@ -1,0 +1,428 @@
+﻿﻿@using EIS.WebApp.Services;
+@using Newtonsoft.Json;
+@{
+    RedisAgent Cache = new RedisAgent();
+    var ac = Cache.GetStringValue("Access");
+    List<string> links = new List<string>();
+    string cur = null;
+    List<Navigation> Access = new List<Navigation>();
+    if (ac != null) {
+        Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
+    }
+
+}   
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Favicon-->
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="~/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Waves Effect Css -->
+    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="~/css/themes/all-themes.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Bootstrap DatePicker Css -->
+    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <!-- Jquery Core Js -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+</head>
+<body class="theme-blue">
+    <div id="modal-placeholder1" class="modal fade" role="dialog" data-url="@Url.Action("ChangePassword","Account")"></div>
+    @*BootStrap Model*@
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-blue">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="/Admin/Index">Employee System</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Call Search -->
+                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
+                    <!-- #END# Call Search -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="~/images/user.png" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="idno">10001</div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tejas Warankar</div>
+                    <div class="email">tej@gmail.com</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="/People/Profile?PersonId=@Cache.GetStringValue("PersonId")"><i class="material-icons">person</i>Profile</a></li>
+                            <li><a id="linkModal"><i class="material-icons">security</i>Change Password </a></li>
+                            <li><a href="/Account/logout"><i class="material-icons">input</i>Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <DynamicMenu></DynamicMenu>
+                    @*@foreach (var Menu in Access)
+                        {
+                            <li>
+                                @if (Menu.ParentMenuId == 0)
+                                {
+
+                                    <a class="menu-toggle">
+                                        <span>@Menu.MenuName</span>
+                                    </a>
+                                    <ul class="ml-menu">
+                                        @foreach (var Menu2 in Access)
+                                        {
+                                            if(Menu2.ParentMenuId==Menu.MenuId)
+                                            {
+                                                 <li>
+                                                     <a href="@Menu2.MenuURL">@Menu2.MenuName</a>
+                                                 </li>
+                                            }
+
+                                        }
+                                    </ul>
+
+                                }
+                            </li>
+                         }*@
+
+                    @*<secure asp-controller="People" asp-action="Index">
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">supervisor_account</i>
+                                    <span>Employees</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="/People/Index">All Employees</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Leave/EmployeeLeaveRequests">Leaves Requests</a>
+                                    </li>
+                                    <li>
+                                        <a href="pages/ui/badges.html">Attendance</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </secure>
+                        <secure asp-controller="Role" asp-action="Index">
+                            <li>
+                                <a href="/Role/Index">
+                                    <i class="material-icons">accessibility</i>
+                                    <span>Roles</span>
+                                </a>
+                            </li>
+                        </secure>
+                        <li>
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">subject</i>
+                                <span>Leaves</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <secure asp-controller="Leave" asp-action="LeaveCredits">
+                                    <li>
+                                        <a href="/Leave/LeaveCredits">Leave Credits</a>
+                                    </li>
+                                </secure>
+                                <secure asp-controller="Leave" asp-action="LeavePolicies">
+                                    <li>
+                                        <a href="/Leave/LeavePolicies">Policies</a>
+                                    </li>
+                                </secure>
+
+                                <li>
+                                    <a href="/Leave/RequestLeave">Request for Leave</a>
+                                </li>
+                                <li>
+                                    <a href="/Leave/ShowMyLeaves?pid=@Cache.GetStringValue("PersonId")">Show My Leaves</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Attendance/Create">
+                                <i class="material-icons">fingerprint</i>
+                                <span>Attendance</span>
+                            </a>
+                        </li>*@
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="copyright">
+                    &copy; 2018 - 2019 <a href="javascript:void(0);">Employee System</a>.
+                </div>
+                <div class="version">
+                    <b>Version: </b> 1.0.5
+                </div>
+            </div>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+        <aside id="rightsidebar" class="right-sidebar">
+            <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                <li role="presentation" class="active"><a href="#skins" data-toggle="tab">SKINS</a></li>
+                <li role="presentation"><a href="#settings" data-toggle="tab">SETTINGS</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active in active" id="skins">
+                    <ul class="demo-choose-skin">
+                        <li data-theme="red" class="active">
+                            <div class="red"></div>
+                            <span>Red</span>
+                        </li>
+                        <li data-theme="pink">
+                            <div class="pink"></div>
+                            <span>Pink</span>
+                        </li>
+                        <li data-theme="purple">
+                            <div class="purple"></div>
+                            <span>Purple</span>
+                        </li>
+                        <li data-theme="deep-purple">
+                            <div class="deep-purple"></div>
+                            <span>Deep Purple</span>
+                        </li>
+                        <li data-theme="indigo">
+                            <div class="indigo"></div>
+                            <span>Indigo</span>
+                        </li>
+                        <li data-theme="blue">
+                            <div class="blue"></div>
+                            <span>Blue</span>
+                        </li>
+                        <li data-theme="light-blue">
+                            <div class="light-blue"></div>
+                            <span>Light Blue</span>
+                        </li>
+                        <li data-theme="cyan">
+                            <div class="cyan"></div>
+                            <span>Cyan</span>
+                        </li>
+                        <li data-theme="teal">
+                            <div class="teal"></div>
+                            <span>Teal</span>
+                        </li>
+                        <li data-theme="green">
+                            <div class="green"></div>
+                            <span>Green</span>
+                        </li>
+                        <li data-theme="light-green">
+                            <div class="light-green"></div>
+                            <span>Light Green</span>
+                        </li>
+                        <li data-theme="lime">
+                            <div class="lime"></div>
+                            <span>Lime</span>
+                        </li>
+                        <li data-theme="yellow">
+                            <div class="yellow"></div>
+                            <span>Yellow</span>
+                        </li>
+                        <li data-theme="amber">
+                            <div class="amber"></div>
+                            <span>Amber</span>
+                        </li>
+                        <li data-theme="orange">
+                            <div class="orange"></div>
+                            <span>Orange</span>
+                        </li>
+                        <li data-theme="deep-orange">
+                            <div class="deep-orange"></div>
+                            <span>Deep Orange</span>
+                        </li>
+                        <li data-theme="brown">
+                            <div class="brown"></div>
+                            <span>Brown</span>
+                        </li>
+                        <li data-theme="grey">
+                            <div class="grey"></div>
+                            <span>Grey</span>
+                        </li>
+                        <li data-theme="blue-grey">
+                            <div class="blue-grey"></div>
+                            <span>Blue Grey</span>
+                        </li>
+                        <li data-theme="black">
+                            <div class="black"></div>
+                            <span>Black</span>
+                        </li>
+                    </ul>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="settings">
+                    <div class="demo-settings">
+                        <p>GENERAL SETTINGS</p>
+                        <ul class="setting-list">
+                            <li>
+                                <span>Report Panel Usage</span>
+                                <div class="switch">
+                                    <label><input type="checkbox" checked><span class="lever"></span></label>
+                                </div>
+                            </li>
+                            <li>
+                                <span>Email Redirect</span>
+                                <div class="switch">
+                                    <label><input type="checkbox"><span class="lever"></span></label>
+                                </div>
+                            </li>
+                        </ul>
+                        <p>SYSTEM SETTINGS</p>
+                        <ul class="setting-list">
+                            <li>
+                                <span>Notifications</span>
+                                <div class="switch">
+                                    <label><input type="checkbox" checked><span class="lever"></span></label>
+                                </div>
+                            </li>
+                            <li>
+                                <span>Auto Updates</span>
+                                <div class="switch">
+                                    <label><input type="checkbox" checked><span class="lever"></span></label>
+                                </div>
+                            </li>
+                        </ul>
+                        <p>ACCOUNT SETTINGS</p>
+                        <ul class="setting-list">
+                            <li>
+                                <span>Offline</span>
+                                <div class="switch">
+                                    <label><input type="checkbox"><span class="lever"></span></label>
+                                </div>
+                            </li>
+                            <li>
+                                <span>Location Permission</span>
+                                <div class="switch">
+                                    <label><input type="checkbox" checked><span class="lever"></span></label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content" id="main-content">
+        @RenderBody()
+
+    </section>
+
+    <!-- Autosize Plugin Js -->
+    <script src="~/plugins/autosize/autosize.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="~/plugins/momentjs/moment.js"></script>
+
+    <script src="~/js/pages/forms/basic-form-elements.js"></script>
+    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Bootstrap Datepicker Plugin Js -->
+    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="~/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script src="~/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/plugins/node-waves/waves.js"></script>
+    <!-- Custom Js -->
+    <script src="~/js/admin.js"></script>
+    <script src="~/js/pages/index.js"></script>
+    <!-- Demo Js -->
+    <script src="~/js/demo.js"></script>
+    <script>
+
+    </script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    $("#linkModal").click(function () {
+        var url = $("#modal-placeholder1").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder1").html(data);
+            $("#modal-placeholder1").modal('show');
+        });
+
+    });
+    $('#logout').click(function () {
+        var url = "/Account/logout";
+        $.post(url, function () {
+            window.location.href = "/Account/login";
+        });
+    })  
+$(document).ready(function(){
+  $('#emplink').click(function(){
+    var dest = $(this).attr('href');
+    $('.content').load(dest+'#main-content') // Hide all content divs
+    // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
+  return false;
+});
+});
+</script>
