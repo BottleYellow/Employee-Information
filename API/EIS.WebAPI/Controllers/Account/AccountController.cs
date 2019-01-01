@@ -1,28 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using EIS.Entities.Employee;
 using EIS.Entities.User;
-using EIS.Repositories.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Web;
-using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
-using System.Text;
-using System;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using EIS.WebAPI.Filters;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net;
-using Microsoft.Extensions.Caching.Distributed;
-
-using EIS.WebAPI.Messanger;
 using EIS.Repositories.Helpers;
-using Microsoft.Extensions.Configuration;
+using EIS.Repositories.IRepository;
+using EIS.WebAPI.Messanger;
 using EIS.WebAPI.RedisCache;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using EIS.Entities.Employee;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EIS.WebAPI.Controllers
 {

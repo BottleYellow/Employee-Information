@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace EIS.WebAPI.Messanger
+namespace EIS.WebAPI.Utilities
 {
     public class EmailManager
     {

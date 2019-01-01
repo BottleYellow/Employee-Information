@@ -12,7 +12,6 @@ namespace EIS.WebAPI.RedisCache
         public RedisAgent()
         {
             var connection = RedisConnector.GetConnection();
-
             _database = connection.GetDatabase();
         }
 
