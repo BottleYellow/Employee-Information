@@ -39,26 +39,41 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetAllAttendance(string date,string type)
         {
             HttpResponseMessage respattendance;
-            string[] monthyear = new string[3];
+            string[] monthYear = new string[3];
             string[] week = new string[2];
             string attendance="";
-            List<Person> person = new List<Person>();
+            List<Person> attendances = new List<Person>();
             if(date.Contains('-'))
             {
                 week = date.Split('-'); 
             }
             else 
             {
-                monthyear = date.Split('/');
+                monthYear = date.Split('/');
             }
             if (type == "year")
-            { 
-                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceYearly/" + monthyear[0]);
+            {
+                ViewBag.type = type;
+                ViewBag.year = Convert.ToInt32(monthYear[0]);
+                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceYearly/" + monthYear[0]);
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
-            var peoples = JsonConvert.DeserializeObject(attendance);
-            person = JsonConvert.DeserializeObject<List<Person>>(peoples.ToString());
-            return PartialView(person);
+            else if (type == "month")
+            {
+                ViewBag.type = type;
+                ViewBag.month = Convert.ToInt32(monthYear[0]);
+                ViewBag.year = Convert.ToInt32(monthYear[1]);
+                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceMonthly/" + monthYear[0]+ "/" + monthYear[1]);
+                attendance = respattendance.Content.ReadAsStringAsync().Result;
+            }
+            else if (type == "week")
+            {
+                ViewBag.type = type;
+                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceWeekly/" + Convert.ToDateTime(week[0]) + "/" + Convert.ToDateTime(week[1]));
+                attendance = respattendance.Content.ReadAsStringAsync().Result;
+            }
+            attendances = JsonConvert.DeserializeObject<List<Person>>(attendance);
+            return PartialView(attendances);
         }
 
         [HttpGet]

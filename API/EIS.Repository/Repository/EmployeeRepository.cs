@@ -15,12 +15,12 @@ namespace EIS.Repositories.Repository
 
         public void AddDesignation(Designation designation)
         {
-            _dbcontext.DesignationMaster.Add(designation);
+            _dbContext.DesignationMaster.Add(designation);
         }
 
         public bool DesignationExists(string DesignationName)
         {
-            var role = _dbcontext.DesignationMaster.Where(x => x.Name == DesignationName).FirstOrDefault();
+            var role = _dbContext.DesignationMaster.Where(x => x.Name == DesignationName).FirstOrDefault();
             if (role != null)
             {
                 return true;
@@ -33,17 +33,17 @@ namespace EIS.Repositories.Repository
 
         public Designation GetDesignationById(int id)
         {
-            return _dbcontext.DesignationMaster.Where(x => x.Id == id).FirstOrDefault();
+            return _dbContext.DesignationMaster.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public IEnumerable<Designation> GetDesignations()
         {
-            return _dbcontext.DesignationMaster;
+            return _dbContext.DesignationMaster;
         }
 
         public void UpdateDesignation(Designation designation)
         {
-            _dbcontext.DesignationMaster.Update(designation);
+            _dbContext.DesignationMaster.Update(designation);
         }
     }
 }

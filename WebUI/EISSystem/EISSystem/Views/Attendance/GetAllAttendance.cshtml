@@ -1,8 +1,39 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
 @{
-    int absentdays = 0;
-    int totaldays = 0;
-    int totalHours = 0;
+    int presentDays = 0;
+    int absentDays = 0;
+    int totalDays = 0;
+    int year = 0;
+    int month = 0;
+    if(ViewBag.year!=null)
+    {
+        year = ViewBag.year;
+    }
+    if(ViewBag.month!=null)
+    {
+        month = ViewBag.month;
+    }
+
+    if (ViewBag.type == "year")
+    {
+        if (year % 4 == 0)
+        {
+            totalDays = 366;
+        }
+        else
+        {
+            totalDays = 365;
+        }
+    }
+    else if (ViewBag.type == "month")
+    {
+        totalDays = DateTime.DaysInMonth(year,month);
+    }
+    else if (ViewBag.type == "week")
+    {       
+        totalDays = 7;
+    }
+
 }
 
 <style type="text/css">
@@ -28,33 +59,19 @@
             </tr>
         </thead>
         <tbody>
+            
             @foreach (var person in Model)
             {
             <tr>
-                <td>@person.FirstName @person.LastName</td>
-                <td>@person.Attendance.Count</td>
-                @{
-                    if (ViewBag.val == "year")
-                    {
-                        totaldays = 365;
-                        //totaldays = DateTime.(person.Attendance.Where(x => x.PersonId == person.Id).FirstOrDefault().DateIn.Year);
-                        absentdays = totaldays - person.Attendance.Count;
-                    }
-                    else if (ViewBag.val == "month")
-                    {
-                        totaldays = 30;
-                        absentdays = totaldays - person.Attendance.Count;
-                    }
-                    else if (ViewBag.val == "week")
-                    {
-                        totaldays = 7;
-                        absentdays = totaldays - person.Attendance.Count;
+                <td>@person.FirstName</td>
 
-
-                    }
+                @{ 
+                    presentDays = person.Attendance.Count();
+                    absentDays = totalDays - presentDays;
                 }
-                <td>@absentdays</td>
-                <td>@totaldays</td>
+                <td>@presentDays</td>
+                <td>@absentDays</td>
+                <td>@totalDays</td>
             </tr>
             }
         </tbody>
