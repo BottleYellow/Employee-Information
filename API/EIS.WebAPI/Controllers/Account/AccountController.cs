@@ -2,8 +2,8 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Messanger;
 using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -42,8 +42,8 @@ namespace EIS.WebAPI.Controllers
                 if (s1 != null)
                 {
                     Person person = _repository.Employee.FindByCondition(x => x.Id == pid);
-                    role = _repository.Employee.GetDesignationById(person.DesignationId).Name;
-                    var data = _repository.Employee.GetDesignationById(person.DesignationId).Access;
+                    role = _repository.Employee.GetDesignationById(person.RoleId).Name;
+                    var data = _repository.Employee.GetDesignationById(person.RoleId).Access;
                     Cache.SetStringValue("TokenValue", s1);
                     Cache.SetStringValue("PersonId", pid.ToString());
                     Cache.SetStringValue("Access", data);

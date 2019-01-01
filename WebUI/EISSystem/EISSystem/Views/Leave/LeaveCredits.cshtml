@@ -63,7 +63,7 @@
                                     {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            @item.Person.FirstName @item.Person.LastName
                                         </td>
 
                                         <td>
@@ -77,7 +77,7 @@
                                             @item.ValidTo.ToString("dd/MM/yyyy").ToString()
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Days)
+                                            @Html.DisplayFor(modelItem => item.AllotedDays)
                                         </td>
 
                                         <td>

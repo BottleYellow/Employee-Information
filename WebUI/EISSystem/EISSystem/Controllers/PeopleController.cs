@@ -28,27 +28,27 @@ namespace EIS.WebApp.Controllers
         public readonly IEISService<Permanent> perService;
         public readonly IEISService<Current> currentService;
         public readonly IEISService<Emergency> emergencyService;
-        public readonly IEISService<Designation> designationService;
+        public readonly IEISService<Role> roleService;
         private readonly IControllerService _controllerService;
         public static HttpResponseMessage response;
         public static List<Person> data;
-        public static List<Designation> DesignationsList;
+        public static List<Role> rolesList;
         static string imageBase64Data;
         #endregion
 
         #region Controller
         [DisplayName("Employee Management")]
-        public PeopleController(IControllerService _controllerService,IEISService<Person> service, IEISService<Permanent> perService, IEISService<Current> currentService, IEISService<Emergency> emergencyService, IEISService<Designation> designationService)
+        public PeopleController(IControllerService _controllerService,IEISService<Person> service, IEISService<Permanent> perService, IEISService<Current> currentService, IEISService<Emergency> emergencyService, IEISService<Role> roleService)
         {
             this._controllerService = _controllerService;
             this.service = service;
             this.perService = perService;
             this.currentService = currentService;
             this.emergencyService = emergencyService;
-            this.designationService = designationService;
-            HttpResponseMessage response = designationService.GetResponse("api/Employee/Designations");
+            this.roleService = roleService;
+            HttpResponseMessage response = roleService.GetResponse("api/Employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            DesignationsList = JsonConvert.DeserializeObject<List<Designation>>(stringData);
+            rolesList = JsonConvert.DeserializeObject<List<Role>>(stringData);
         }
         #endregion
 
@@ -93,7 +93,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Create Employee")]
         public IActionResult Create()
         {
-            ViewBag.Designations = DesignationsList;
+            ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                     select new Person { Id=p.Id,FirstName = p.FirstName+" "+p.LastName };
             ViewBag.Persons = data;
@@ -103,7 +103,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,DesignationId,Id")]Person person, IList<IFormFile> file)
         {
-            ViewBag.Designations = DesignationsList;
+            ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data;
@@ -224,14 +224,14 @@ namespace EIS.WebApp.Controllers
 
             HttpResponseMessage response2 = service.GetResponse("api/employee/Designations");
             string stringData1 = response2.Content.ReadAsStringAsync().Result;
-            var data2 = JsonConvert.DeserializeObject<List<Designation>>(stringData1);
+            var data2 = JsonConvert.DeserializeObject<List<Role>>(stringData1);
 
             foreach (var p in data)
             {
                 foreach (var d in data2)
                 {
-                    if (p.DesignationId == d.Id)
-                        p.Designation = d;
+                    if (p.RoleId == d.Id)
+                        p.Role = d;
                 }
             }
             return data;
@@ -239,13 +239,13 @@ namespace EIS.WebApp.Controllers
 
         #endregion
 
-        #region Designations
+        #region Roles
         [DisplayName("Manage Designations")]
         public IActionResult Designations()
         {
             response = service.GetResponse("api/employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Designation> data = JsonConvert.DeserializeObject<List<Designation>>(stringData);
+            List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             return View(data);
         }
 
@@ -254,7 +254,7 @@ namespace EIS.WebApp.Controllers
         {
             response = service.GetResponse("api/employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Designation> data = JsonConvert.DeserializeObject<List<Designation>>(stringData);
+            List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             ViewBag.Designations = data;
             ViewData["Controllers"] = _controllerService.GetControllers();
             return View();
@@ -268,7 +268,7 @@ namespace EIS.WebApp.Controllers
                 ViewData["Controllers"] = _controllerService.GetControllers();
                 return View(viewModel);
             }
-            var designation = new Designation
+            var role = new Role
             {
                 Name = viewModel.Name,
                 CreatedDate = DateTime.Now,
@@ -310,9 +310,9 @@ namespace EIS.WebApp.Controllers
 
                 var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
                 //role.Access = JsonConvert.SerializeObject(access);
-                designation.Access = JsonConvert.SerializeObject(UserAccess);
+                role.Access = JsonConvert.SerializeObject(UserAccess);
             }
-            HttpResponseMessage response = designationService.PostResponse("api/Employee/AddDesignation", designation);
+            HttpResponseMessage response = roleService.PostResponse("api/Employee/AddDesignation", role);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
@@ -331,15 +331,15 @@ namespace EIS.WebApp.Controllers
             ViewData["Controllers"] = _controllerService.GetControllers();
             HttpResponseMessage response = service.GetResponse("api/Employee/Designations/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            Designation data = JsonConvert.DeserializeObject<Designation>(stringData);
-            var access = JsonConvert.DeserializeObject<List<Navigation>>(data.Access);
+            Role role = JsonConvert.DeserializeObject<Role>(stringData);
+            var access = JsonConvert.DeserializeObject<List<Navigation>>(role.Access);
             var accessList = from p in access
                              select p.URL;
             ViewData["Access"] = accessList.ToList();
             ViewData["RID"] = id;
             var viewModel = new RoleViewModel
             {
-                Name = data.Name
+                Name = role.Name
             };
             return View(viewModel);
         }
@@ -354,9 +354,9 @@ namespace EIS.WebApp.Controllers
                 return View(viewModel);
             }
             string stringData = service.GetResponse("api/Employee/Designations/" + id + "").Content.ReadAsStringAsync().Result;
-            Designation designation = JsonConvert.DeserializeObject<Designation>(stringData);
-            designation.Name = viewModel.Name;
-            designation.UpdatedDate = DateTime.Now.Date;
+            Role role = JsonConvert.DeserializeObject<Role>(stringData);
+            role.Name = viewModel.Name;
+            role.UpdatedDate = DateTime.Now.Date;
             List<string> access = new List<string>();
             List<Navigation> UserAccess = new List<Navigation>();
             if (viewModel.SelectedControllers != null && viewModel.SelectedControllers.Any())
@@ -392,15 +392,15 @@ namespace EIS.WebApp.Controllers
 
                 var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
                 //role.Access = JsonConvert.SerializeObject(access);
-                designation.Access = JsonConvert.SerializeObject(UserAccess);
+                role.Access = JsonConvert.SerializeObject(UserAccess);
             }
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = designationService.PutResponse("api/Employee/UpdateDesignation", designation);
+                HttpResponseMessage response = roleService.PutResponse("api/Employee/UpdateDesignation", role);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Designations", "People");
             }
-            return View(designation);
+            return View(role);
         }
         #endregion
 

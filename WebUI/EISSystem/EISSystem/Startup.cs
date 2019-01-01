@@ -57,7 +57,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Person>, PersonValidator>();
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
             services.AddTransient<IValidator<LeaveRequest>, LeaveRequestValidator>();
-            services.AddTransient<IValidator<LeaveMaster>, LeaveMasterValidator>();
+            services.AddTransient<IValidator<LeaveRules>, LeaveRulesValidator>();
             services.AddTransient<IValidator<Permanent>, PermanentAddressValidator>();
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();
@@ -113,7 +113,7 @@ namespace EIS.WebApp
 
             if (id != null)
             {
-                string role= new RedisAgent().GetStringValue("Role");
+                string role = new RedisAgent().GetStringValue("Role");
                 if (role == "Admin")
                 {
                     controller = "People";
@@ -126,6 +126,12 @@ namespace EIS.WebApp
                     action = "Profile";
                     Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
                 }
+            }
+            else
+            {
+                controller = "Account";
+                action = "Login";
+                Template = "{controller=" + controller + "}/{action=" + action + "}";
             }
             app.UseMvc(routes =>
             {

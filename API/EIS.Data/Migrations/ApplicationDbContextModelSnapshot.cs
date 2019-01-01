@@ -15,7 +15,7 @@ namespace EIS.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -277,27 +277,6 @@ namespace EIS.Data.Migrations
                     b.ToTable("Attendance","Employee");
                 });
 
-            modelBuilder.Entity("EIS.Entities.Employee.Designation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Access");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("Name");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DesignationMaster","Employee");
-                });
-
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -315,8 +294,6 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
-
-                    b.Property<int>("DesignationId");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -364,6 +341,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("ReportingPersonId");
 
+                    b.Property<int>("RoleId");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -377,9 +356,30 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignationId");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Person","Employee");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Employee.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Access");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles","Employee");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
@@ -387,6 +387,9 @@ namespace EIS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("AllotedDays")
+                        .HasColumnType("float");
 
                     b.Property<double>("Available")
                         .HasColumnType("float");
@@ -396,6 +399,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<string>("LeaveType");
+
                     b.Property<int>("PersonId");
 
                     b.Property<byte[]>("RowVersion")
@@ -403,8 +408,9 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<double>("TotalAlloted")
-                        .HasColumnType("float");
+                    b.Property<int>("TypeId");
+
+                    b.Property<int?>("TypeOfLeaveId");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -413,6 +419,8 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("PersonId")
                         .IsUnique();
+
+                    b.HasIndex("TypeOfLeaveId");
 
                     b.ToTable("EmployeeLeaves","Leave");
                 });
@@ -423,18 +431,14 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<double>("AllotedDays")
+                        .HasColumnType("float");
+
                     b.Property<double>("Available")
                         .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
-
-                    b.Property<double>("Days")
-                        .HasColumnType("float");
-
-                    b.Property<string>("EmployeeName")
-                        .IsRequired()
-                        .HasColumnType("varchar(150)");
 
                     b.Property<bool>("IsActive");
 
@@ -469,46 +473,6 @@ namespace EIS.Data.Migrations
                     b.ToTable("LeaveCredit","Leave");
                 });
 
-            modelBuilder.Entity("EIS.Entities.Leave.LeaveMaster", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<double>("Days")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("LeaveType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("ValidTo")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LeaveMaster","Leave");
-                });
-
             modelBuilder.Entity("EIS.Entities.Leave.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -517,6 +481,9 @@ namespace EIS.Data.Migrations
 
                     b.Property<DateTime>("AppliedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<double>("ApprovedDays")
+                        .HasColumnType("float");
 
                     b.Property<double>("Available")
                         .HasColumnType("float");
@@ -542,6 +509,9 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<double>("RequestedDays")
+                        .HasColumnType("float");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -552,9 +522,6 @@ namespace EIS.Data.Migrations
 
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("date");
-
-                    b.Property<double>("TotalRequestedDays")
-                        .HasColumnType("float");
 
                     b.Property<int>("TypeId");
 
@@ -568,6 +535,46 @@ namespace EIS.Data.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("LeaveRequests","Leave");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveRules", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("ValidTo")
+                        .HasColumnType("date");
+
+                    b.Property<double>("Validity")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveRules","Leave");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
@@ -651,9 +658,9 @@ namespace EIS.Data.Migrations
 
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
                 {
-                    b.HasOne("EIS.Entities.Employee.Designation", "Designation")
+                    b.HasOne("EIS.Entities.Employee.Role", "Role")
                         .WithMany("Persons")
-                        .HasForeignKey("DesignationId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -663,11 +670,15 @@ namespace EIS.Data.Migrations
                         .WithOne("EmployeeLeaves")
                         .HasForeignKey("EIS.Entities.Leave.EmployeeLeaves", "PersonId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.Leave.LeaveRules", "TypeOfLeave")
+                        .WithMany()
+                        .HasForeignKey("TypeOfLeaveId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
                 {
-                    b.HasOne("EIS.Entities.Leave.LeaveMaster", "LeaveMaster")
+                    b.HasOne("EIS.Entities.Leave.LeaveRules", "LeaveRules")
                         .WithMany("Credits")
                         .HasForeignKey("LeaveId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -685,7 +696,7 @@ namespace EIS.Data.Migrations
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("EIS.Entities.Leave.LeaveMaster", "TypeOfLeave")
+                    b.HasOne("EIS.Entities.Leave.LeaveRules", "TypeOfLeave")
                         .WithMany("Requests")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);

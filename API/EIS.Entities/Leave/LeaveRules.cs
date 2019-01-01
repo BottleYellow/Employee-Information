@@ -6,13 +6,13 @@ using System.Text;
 
 namespace EIS.Entities.Leave
 {
-    public class LeaveMaster:BaseEntity<int>
+    public class LeaveRules:BaseEntity<int>
     {
         public string LeaveType { get; set; }
         public string Description { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
-        public int Days { get; set; }
+        public int Validity { get; set; }
         public virtual ICollection<LeaveRequest> Requests { get; set; }
         public virtual ICollection<LeaveCredit> Credits { get; set; }
     }

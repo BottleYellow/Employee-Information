@@ -2,7 +2,7 @@
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
-using EIS.WebAPI.Messanger;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -132,13 +132,13 @@ namespace EIS.WebAPI.Controllers
         }
         [Route("Designations")]
         [HttpGet]
-        public IEnumerable<Designation> GetDesignations()
+        public IEnumerable<Role> GetDesignations()
         {
             return _repository.Employee.GetDesignations();
         }
         [Route("Designations/{did}")]
         [HttpGet]
-        public Designation GetDesignationById([FromRoute]int did)
+        public Role GetDesignationById([FromRoute]int did)
         {
             return _repository.Employee.GetDesignationById(did);
         }
@@ -151,7 +151,7 @@ namespace EIS.WebAPI.Controllers
         }
         [Route("AddDesignation")]
         [HttpPost]
-        public IActionResult CreateDesignation([FromBody]Designation designation)
+        public IActionResult CreateDesignation([FromBody]Role designation)
         {
             var DesignationExists=_repository.Employee.DesignationExists(designation.Name);
             if (DesignationExists)
@@ -163,7 +163,7 @@ namespace EIS.WebAPI.Controllers
             return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
         }
         [Route("UpdateDesignation")]
-        public IActionResult UpdateDesignationData([FromBody]Designation designation)
+        public IActionResult UpdateDesignationData([FromBody]Role designation)
         {
             if (!ModelState.IsValid)
             {

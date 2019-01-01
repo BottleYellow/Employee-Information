@@ -26,13 +26,13 @@
       <HintPath>..\..\..\API\EIS.Data\bin\Debug\netcoreapp2.1\EIS.Data.dll</HintPath>
     </Reference>
     <Reference Include="EIS.Entities">
-      <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
+      <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.2\EIS.Entities.dll</HintPath>
     </Reference>
     <Reference Include="EIS.Repositories">
       <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll</HintPath>
     </Reference>
     <Reference Include="EIS.Validations">
-      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll</HintPath>
+      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
     </Reference>
     <Reference Include="EIS.WebAPI">
       <HintPath>..\..\..\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll</HintPath>

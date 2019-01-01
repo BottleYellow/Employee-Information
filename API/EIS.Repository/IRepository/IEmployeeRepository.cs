@@ -7,10 +7,10 @@ namespace EIS.Repositories.IRepository
 {
     public interface IEmployeeRepository : IRepositorybase<Person>
     {
-        IEnumerable<Designation> GetDesignations();
-        Designation GetDesignationById(int id);
-        void AddDesignation(Designation designation);
+        IEnumerable<Role> GetDesignations();
+        Role GetDesignationById(int id);
+        void AddDesignation(Role designation);
         bool DesignationExists(string DesignationName);
-        void UpdateDesignation(Designation designation);
+        void UpdateDesignation(Role designation);
     }
 }

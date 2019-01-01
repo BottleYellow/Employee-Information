@@ -13,14 +13,14 @@ namespace EIS.Repositories.Repository
 
         }
 
-        public void AddDesignation(Designation designation)
+        public void AddDesignation(Role designation)
         {
-            _dbcontext.DesignationMaster.Add(designation);
+            _dbcontext.Roles.Add(designation);
         }
 
         public bool DesignationExists(string DesignationName)
         {
-            var role = _dbcontext.DesignationMaster.Where(x => x.Name == DesignationName).FirstOrDefault();
+            var role = _dbcontext.Roles.Where(x => x.Name == DesignationName).FirstOrDefault();
             if (role != null)
             {
                 return true;
@@ -31,19 +31,19 @@ namespace EIS.Repositories.Repository
             }
         }
 
-        public Designation GetDesignationById(int id)
+        public Role GetDesignationById(int id)
         {
-            return _dbcontext.DesignationMaster.Where(x => x.Id == id).FirstOrDefault();
+            return _dbcontext.Roles.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public IEnumerable<Designation> GetDesignations()
+        public IEnumerable<Role> GetDesignations()
         {
-            return _dbcontext.DesignationMaster;
+            return _dbcontext.Roles;
         }
 
-        public void UpdateDesignation(Designation designation)
+        public void UpdateDesignation(Role designation)
         {
-            _dbcontext.DesignationMaster.Update(designation);
+            _dbcontext.Roles.Update(designation);
         }
     }
 }

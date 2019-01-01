@@ -20,21 +20,21 @@ namespace EIS.WebApp.Controllers
         #region Declarations
         HttpResponseMessage response;
         RedisAgent Cache = new RedisAgent();
-        List<LeaveMaster> data;
+        List<LeaveRules> data;
         private IEISService<LeaveRequest> LeaveRequestService;
-        private IEISService<LeaveMaster> LeaveMasterService;
+        private IEISService<LeaveRules> LeaveMasterService;
         private IEISService<LeaveCredit> LeaveCreditService;
         #endregion
         
         #region Controller
-        public LeaveController(IEISService<LeaveRequest> LeaveRequestService, IEISService<LeaveMaster> LeavePolicyService,IEISService<LeaveCredit> LeaveCreditService)
+        public LeaveController(IEISService<LeaveRequest> LeaveRequestService, IEISService<LeaveRules> LeavePolicyService,IEISService<LeaveCredit> LeaveCreditService)
         {
             this.LeaveRequestService = LeaveRequestService;
             this.LeaveMasterService = LeavePolicyService;
             this.LeaveCreditService = LeaveCreditService;
             response = LeaveMasterService.GetResponse("api/LeavePolicy");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveMaster>>(stringData);
+            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
         }
         #endregion
 
@@ -89,7 +89,7 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-        #region Leave Master
+        #region Leave Type
         [DisplayName("leave Policies")]
         public IActionResult LeavePolicies()
         {
@@ -97,12 +97,12 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult AddPolicy()
         {
-            var model = new LeaveMaster();
+            var model = new LeaveRules();
             return PartialView("AddPolicy", model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPolicy(LeaveMaster Leave)
+        public IActionResult AddPolicy(LeaveRules Leave)
         {
             Leave.CreatedDate = DateTime.Now.Date;
             Leave.UpdatedDate = DateTime.Now.Date;
@@ -113,10 +113,10 @@ namespace EIS.WebApp.Controllers
                 Leave.IsActive = true;
                 HttpResponseMessage response = LeaveMasterService.PostResponse("api/LeavePolicy", Leave);
                 string stringData = response.Content.ReadAsStringAsync().Result;
-                LeaveMaster LeaveMaster = JsonConvert.DeserializeObject<LeaveMaster>(stringData);
+                LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    HttpResponseMessage response2 = LeaveMasterService.PostResponse("api/LeaveCredit/AddCredits", LeaveMaster);
+                    HttpResponseMessage response2 = LeaveMasterService.PostResponse("api/LeaveCredit/AddCredits", LeaveRules);
                     if (response2.IsSuccessStatusCode == true)
                     {
                         return View();

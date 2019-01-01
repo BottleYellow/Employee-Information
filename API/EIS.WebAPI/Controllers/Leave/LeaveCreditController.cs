@@ -22,7 +22,8 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveCredit> Get()
         {
-            return _repository.Leave.GetCredits();
+            var credits= _repository.Leave.GetCredits();
+            return credits;
         }
 
         // GET api/<controller>/5
@@ -33,7 +34,7 @@ namespace EIS.WebAPI.Controllers.Leave
         }
         [Route("AddCredits")]
         [HttpPost]
-        public IActionResult PostLeaveCredits([FromBody] LeaveMaster Leave)
+        public IActionResult PostLeaveCredits([FromBody] LeaveRules Leave)
         {
             if (!ModelState.IsValid)
             {

@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -77,6 +78,7 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
+            app.UseWebApiExceptionHandler();
             //app.UseMiddleware<CustomAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();

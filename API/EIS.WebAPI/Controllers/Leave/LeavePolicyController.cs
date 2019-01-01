@@ -15,18 +15,18 @@ namespace EIS.WebAPI.Controllers.Leave
             _repository = repository;
         }
         [HttpGet]
-        public IEnumerable<LeaveMaster> GetLeavePolicies()
+        public IEnumerable<LeaveRules> GetLeavePolicies()
         {
-            return _repository.Leave.GetAllPolicies();
+            return _repository.Leave.GetAllLeaveRules();
         }
         [HttpPost]
-        public IActionResult PostLeavePolicy([FromBody] LeaveMaster policy)
+        public IActionResult PostLeavePolicy([FromBody] LeaveRules policy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.CreateLeaveType(policy);
+            _repository.Leave.CreateLeaveRule(policy);
             _repository.Leave.Save();
 
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
