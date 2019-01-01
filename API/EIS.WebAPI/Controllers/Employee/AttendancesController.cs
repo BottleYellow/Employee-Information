@@ -114,38 +114,25 @@ namespace EIS.WebAPI.Controllers
 
         [Route("GetAllAttendanceMonthly/{month}/{year}")]
         [HttpGet]
-        public IEnumerable<Person> GetAllAttendanceMonthly([FromRoute] int year, [FromRoute] int month)
+        public IEnumerable<Person> GetAllAttendanceMonthly([FromRoute] int month, [FromRoute] int year)
         {
-            var peoples = _repository.Employee.FindAll();
-            foreach(var p in peoples)
-            {
-                var attendance = _repository.Attendances.FindAllByCondition(x => x.PersonId == p.Id && x.DateIn.Year == year && x.DateIn.Month == month).ToList();
-                p.Attendance = attendance;
-            }
-            return peoples;
+            var data = _repository.Attendances.GetAttendanceMonthly(month,year);
+            return data;
         }
         [Route("GetAllAttendanceYearly/{year}") ]
         [HttpGet]
-        public string GetAllAttendanceYearly([FromRoute] int year)
+        public IEnumerable<Person> GetAllAttendanceYearly([FromRoute] int year)
         {
-
-
-            var data = _repository.Attendances.GetAttendanceYearly(year);
-            var result =JsonConvert.SerializeObject(data, Formatting.Indented,
-                            new JsonSerializerSettings
-                            {
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                            });
-            
-            return result;
+            var data = _repository.Attendances.GetAttendanceYearly(year);          
+            return data;
         }
 
-        [Route("GetAllAttendanceWeekly/{id}/{startOfWeek}/{endOfWeek}")]
+        [Route("GetAllAttendanceWeekly/{startOfWeek}/{endOfWeek}")]
         [HttpGet]
-        public IEnumerable<Attendance> GetAllAttendanceWeekly(int id, [FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
+        public IEnumerable<Person> GetAllAttendanceWeekly([FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
         {
-            var result = _repository.Attendances.FindAllByCondition(x => x.PersonId == id && (x.DateIn.Date >= startOfWeek.Date && x.DateIn.Date <= endOfWeek.Date));
-            return result;
+            var data = _repository.Attendances.GetAttendanceWeekly(startOfWeek, endOfWeek);
+            return data;
         }
 
     }

@@ -15,12 +15,12 @@ namespace EIS.Repositories.Repository
 
         public void AddDesignation(Role designation)
         {
-            _dbcontext.Roles.Add(designation);
+            _dbContext.Roles.Add(designation);
         }
 
         public bool DesignationExists(string DesignationName)
         {
-            var role = _dbcontext.Roles.Where(x => x.Name == DesignationName).FirstOrDefault();
+            var role = _dbContext.Roles.Where(x => x.Name == DesignationName).FirstOrDefault();
             if (role != null)
             {
                 return true;
@@ -33,17 +33,17 @@ namespace EIS.Repositories.Repository
 
         public Role GetDesignationById(int id)
         {
-            return _dbcontext.Roles.Where(x => x.Id == id).FirstOrDefault();
+            return _dbContext.Roles.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public IEnumerable<Role> GetDesignations()
         {
-            return _dbcontext.Roles;
+            return _dbContext.Roles;
         }
 
         public void UpdateDesignation(Role designation)
         {
-            _dbcontext.Roles.Update(designation);
+            _dbContext.Roles.Update(designation);
         }
     }
 }

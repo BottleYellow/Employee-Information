@@ -14,53 +14,53 @@ namespace EIS.Repositories.Repository
 {
     public abstract class RepositoryBase<T> : IRepositorybase<T> where T : class
     {
-            protected ApplicationDbContext _dbcontext { get; set; }
+            protected ApplicationDbContext _dbContext { get; set; }
 
-            public RepositoryBase(ApplicationDbContext dbcontext)
+            public RepositoryBase(ApplicationDbContext dbContext)
             {
-                _dbcontext = dbcontext;
+                _dbContext = dbContext;
             }
 
             public IQueryable<T> FindAll()
             {
-                return _dbcontext.Set<T>();
+                return _dbContext.Set<T>();
             }
 
             public T FindByCondition(Expression<Func<T, bool>> expression)
             {
-                return _dbcontext.Set<T>().Where(expression).FirstOrDefault();
+                return _dbContext.Set<T>().Where(expression).FirstOrDefault();
             }
 
             public void Create(T entity)
             {
-                  _dbcontext.Set<T>().Add(entity);
+                  _dbContext.Set<T>().Add(entity);
             }
 
             public void Update(T entity)
             {
-                _dbcontext.Set<T>().Update(entity);
+                _dbContext.Set<T>().Update(entity);
                 
             }
 
             public void Delete(T entity)
             {
-                 _dbcontext.Set<T>().Remove(entity);
+                 _dbContext.Set<T>().Remove(entity);
             }
 
             public void Save()
             {
-                 _dbcontext.SaveChanges();
+                 _dbContext.SaveChanges();
           
             }
 
         public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
-            return _dbcontext.Set<T>().Where(expression);
+            return _dbContext.Set<T>().Where(expression);
         }
 
         public T FindByCondition2(Expression<Func<T, bool>> expression)
         {
-            return _dbcontext.Set<T>().Where(expression).LastOrDefault();
+            return _dbContext.Set<T>().Where(expression).LastOrDefault();
         }
 
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)

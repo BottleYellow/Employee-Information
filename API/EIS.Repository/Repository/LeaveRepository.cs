@@ -18,13 +18,13 @@ namespace EIS.Repositories.Repository
 
         public void AddCredit(LeaveCredit Credit)
         {
-            _dbcontext.LeaveCredit.Add(Credit);
+            _dbContext.LeaveCredit.Add(Credit);
         }
 
         public void AddCredits(LeaveRules Leave)
         {
             int id = Leave.Id;
-            List<Person> List = _dbcontext.Person.ToList();
+            List<Person> List = _dbContext.Person.ToList();
             foreach (var item in List)
             {
                 LeaveCredit Credit = new LeaveCredit
@@ -47,7 +47,7 @@ namespace EIS.Repositories.Repository
 
         public void CreateLeaveRule(LeaveRules LeaveType)
         {
-            _dbcontext.LeaveRules.Add(LeaveType);
+            _dbContext.LeaveRules.Add(LeaveType);
         }
 
         public void DeleteLeaveRule(LeaveRules LeaveType)
@@ -57,23 +57,23 @@ namespace EIS.Repositories.Repository
 
         public void EditLeaveRule(LeaveRules LeaveType)
         {
-            _dbcontext.LeaveRules.Update(LeaveType);
+            _dbContext.LeaveRules.Update(LeaveType);
         }
 
         public IEnumerable<LeaveRules> GetAllLeaveRules()
         {
-            return _dbcontext.LeaveRules;
+            return _dbContext.LeaveRules;
         }
 
         public float GetAvailableLeaves(int PersonId, int LeaveId)
         {
-            float n = _dbcontext.LeaveCredit.Where(x => x.PersonId == PersonId && x.LeaveId == LeaveId).Select(x => x.Available).FirstOrDefault();
+            float n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.LeaveId == LeaveId).Select(x => x.Available).FirstOrDefault();
             return n;
         }
 
         public IEnumerable<LeaveCredit> GetCredits()
         {
-            return _dbcontext.LeaveCredit.Include(l=>l.Person).ToList();
+            return _dbContext.LeaveCredit;
         }
 
         public void UpdateRequestStatus(int RequestId, string Status)
@@ -90,7 +90,7 @@ namespace EIS.Repositories.Repository
                 leaveRequest.Status = "Rejected";
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                 Save();
-                LeaveCredit leaveCredit = _dbcontext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                LeaveCredit leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                 leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
                 Save();
             }
@@ -101,7 +101,7 @@ namespace EIS.Repositories.Repository
                     leaveRequest.Status = "Pending";
                     leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
                     Save();
-                    LeaveCredit leaveCredit = _dbcontext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    LeaveCredit leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                     leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
                     Save();
                 }
