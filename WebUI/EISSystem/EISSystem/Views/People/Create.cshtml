@@ -136,11 +136,11 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label asp-for="DesignationId">Designation : </label>
-                                            <select id="did" asp-for="DesignationId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
+                                            <label asp-for="RoleId">Designation : </label>
+                                            <select id="did" asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
                                                 <option>-- Select Designation --</option>
                                             </select>
-                                            <span asp-validation-for="DesignationId" class="text-danger"></span>
+                                            <span asp-validation-for="RoleId" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">

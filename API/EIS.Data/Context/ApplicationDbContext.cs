@@ -31,7 +31,7 @@ namespace EIS.Data.Context
         #region[Tables]
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }
-        public DbSet<LeaveMaster> LeaveMaster { get; set; }
+        public DbSet<LeaveRules> LeaveRules { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<LeaveCredit> LeaveCredit { get; set; }
         public DbSet<EmployeeLeaves> EmployeeLeaves { get; set; }
@@ -40,7 +40,7 @@ namespace EIS.Data.Context
         public DbSet<Current> CurrentAddresses { get; set; }
         public DbSet<Emergency> EmergencyAddresses { get; set; }
         public DbSet<Other> OtherAddresses { get; set; }
-        public DbSet<Designation> DesignationMaster { get; set; }
+        public DbSet<Role> Roles { get; set; }
         
         #endregion
     }

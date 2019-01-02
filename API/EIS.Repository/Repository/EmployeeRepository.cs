@@ -13,14 +13,35 @@ namespace EIS.Repositories.Repository
 
         }
 
+<<<<<<< HEAD
+        public void AddDesignationAndSave(Designation designation)
+        {
+            AddDesignation(designation);
+            Save();
+        }
+
+        public void UpdateDesignationAndSave(Designation designation)
+        {
+            UpdateDesignation(designation);
+            Save();
+        }
         public void AddDesignation(Designation designation)
         {
-            _dbcontext.DesignationMaster.Add(designation);
+            _dbContext.DesignationMaster.Add(designation);
+=======
+        public void AddDesignation(Role designation)
+        {
+            _dbContext.Roles.Add(designation);
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         }
 
         public bool DesignationExists(string DesignationName)
         {
-            var role = _dbcontext.DesignationMaster.Where(x => x.Name == DesignationName).FirstOrDefault();
+<<<<<<< HEAD
+            var role = _dbContext.DesignationMaster.Where(x => x.Name == DesignationName).FirstOrDefault();           
+=======
+            var role = _dbContext.Roles.Where(x => x.Name == DesignationName).FirstOrDefault();
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             if (role != null)
             {
                 return true;
@@ -29,21 +50,34 @@ namespace EIS.Repositories.Repository
             {
                 return false;
             }
+           
         }
 
-        public Designation GetDesignationById(int id)
+        public Role GetDesignationById(int id)
         {
-            return _dbcontext.DesignationMaster.Where(x => x.Id == id).FirstOrDefault();
+<<<<<<< HEAD
+            return _dbContext.DesignationMaster.Where(x => x.Id == id).FirstOrDefault();
+=======
+            return _dbContext.Roles.Where(x => x.Id == id).FirstOrDefault();
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         }
 
-        public IEnumerable<Designation> GetDesignations()
+        public IEnumerable<Role> GetDesignations()
         {
-            return _dbcontext.DesignationMaster;
+<<<<<<< HEAD
+            return _dbContext.DesignationMaster;
+=======
+            return _dbContext.Roles;
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         }
 
-        public void UpdateDesignation(Designation designation)
+        public void UpdateDesignation(Role designation)
         {
-            _dbcontext.DesignationMaster.Update(designation);
+<<<<<<< HEAD
+            _dbContext.DesignationMaster.Update(designation);
+=======
+            _dbContext.Roles.Update(designation);
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         }
     }
 }

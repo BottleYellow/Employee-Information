@@ -18,12 +18,9 @@ namespace EIS.Repositories.Repository
 {
     public class UserRepository : RepositoryBase<Users>, IUserRepository
     {
-        ApplicationDbContext dbContext;
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
-
         public void CreateUser(Users user)
         {
             var password = Helper.Encrypt(user.Password);
@@ -36,28 +33,34 @@ namespace EIS.Repositories.Repository
             user.UpdatedDate = DateTime.Now;
             Create(user);
         }
+<<<<<<< HEAD
 
+        public void CreateUserAndSave(Users user)
+        {
+            CreateUser(user);
+            Save();
+        }
+
+=======
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         public Users FindByUserName(string Username)
         {
-            var user = dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();
+            var user = _dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();
             return user;
         }
-       
-
         public string ValidateUser(Users user)
         {
             string result = "Failed";
             Users u = FindByUserName(user.UserName);
             if (u != null)
             {
-                string hp = dbContext.Users.Where(u1 => u1.UserName == u.UserName).Select(u1 => u1.Password).FirstOrDefault();
+                string hp = _dbContext.Users.Where(u1 => u1.UserName == u.UserName).Select(u1 => u1.Password).FirstOrDefault();
                 if (Helper.VerifyHashedPassword(hp, user.Password) == "Success")
                 {
                     result = "success";
                 }
             }
-            return result;
-            
+            return result;     
         }
 
         public JwtSecurityToken GenerateToken(int UserId)

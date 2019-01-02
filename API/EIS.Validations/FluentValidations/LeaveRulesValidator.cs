@@ -6,13 +6,13 @@ using System.Text;
 
 namespace EIS.Validations.FluentValidations
 {
-    public class LeaveMasterValidator : AbstractValidator<LeaveMaster>
+    public class LeaveRulesValidator : AbstractValidator<LeaveRules>
     {
-        public LeaveMasterValidator()
+        public LeaveRulesValidator()
         {
             RuleFor(x => x.LeaveType).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.Description).NotNull();
-            RuleFor(x => x.Days).Must(GreaterThanZero).NotNull();
+            RuleFor(x => x.Validity).Must(GreaterThanZero).NotNull();
             RuleFor(x => x.ValidFrom).NotNull().WithMessage("Please enter valid date");
         }
         public bool GreaterThanZero(int n)

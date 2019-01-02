@@ -8,7 +8,7 @@ namespace EIS.WebApp.Filters
 {
     public static class ExceptionHandlerExtension
     {
-        public static IApplicationBuilder UseWebApiExceptionHandler(this IApplicationBuilder app)
+        public static IApplicationBuilder UseWebAppExceptionHandler(this IApplicationBuilder app)
         {
             var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 
@@ -30,7 +30,7 @@ namespace EIS.WebApp.Filters
                     }
 
                     context.Response.StatusCode = 500;
-                    await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
+                    await context.Response.WriteAsync("An unexpected fault happened. Try again later.");               
 
                 });
             };

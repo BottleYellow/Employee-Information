@@ -1,8 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
@@ -16,8 +14,7 @@ namespace EIS.WebAPI.Controllers
         {
             _repository = repository;
         }
-
-        // GET: api/Currents
+        
         [HttpGet("{id}")]
         public IEnumerable<Other> GetOtherAddresseses(int id)
         {

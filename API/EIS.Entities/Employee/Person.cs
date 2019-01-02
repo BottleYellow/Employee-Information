@@ -3,6 +3,8 @@ using EIS.Entities.Enums;
 using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Entities.User;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,15 +35,16 @@ namespace EIS.Entities.Employee
         public string EmailAddress { get; set; }
         public float Salary { get; set; }
         public string Description { get; set; }
-        public int DesignationId { get; set; }
+        public int RoleId { get; set; }
         public int ReportingPersonId { get; set; }
         #endregion
 
         #region [Relations]
         public virtual Users User { get; set; }
-        
+
+       [JsonConverter(typeof(StringEnumConverter))]
         public virtual Gender Gender { get; set; }
-        public virtual Designation Designation { get; set; }
+        public virtual Role Role { get; set; }
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; }
         public virtual EmployeeLeaves EmployeeLeaves { get; set; }
         public virtual ICollection<Attendance> Attendance { get; set; }

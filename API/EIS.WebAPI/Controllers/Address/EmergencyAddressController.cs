@@ -48,18 +48,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.EmergencyAddress.Update(emergency);
-           
-            try
-            {          
-                _repository.Employee.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-               
-            }
-
-            return NoContent();
+            _repository.EmergencyAddress.UpdateAndSave(emergency);
+            return Ok(emergency);
         }
 
         // POST: api/Emergency
@@ -71,9 +61,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            _repository.EmergencyAddress.Create(emergency);
-            _repository.EmergencyAddress.Save();
-
+            _repository.EmergencyAddress.CreateAndSave(emergency);
             return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
         }
 
@@ -81,11 +69,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Emergency = _repository.EmergencyAddress.FindByCondition(addr => addr.Id == id);
             if (Emergency == null)
             {
@@ -106,10 +89,8 @@ namespace EIS.WebAPI.Controllers
                 CreatedDate = Emergency.CreatedDate,
                 UpdatedDate = DateTime.Now
             };
-            _repository.OtherAddress.Create(other);
-            _repository.OtherAddress.Save();
-            _repository.EmergencyAddress.Delete(Emergency);
-            _repository.EmergencyAddress.Save();
+            _repository.OtherAddress.CreateAndSave(other);
+            _repository.EmergencyAddress.DeleteAndSave(Emergency);
             return Ok(Emergency);
         }
     }

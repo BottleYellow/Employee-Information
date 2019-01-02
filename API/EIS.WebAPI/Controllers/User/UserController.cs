@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+<<<<<<< HEAD
+﻿using System.Collections.Generic;
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
+=======
+﻿using EIS.Entities.User;
+using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
 
 namespace EIS.WebAPI.Controllers.User
 {
@@ -17,59 +20,40 @@ namespace EIS.WebAPI.Controllers.User
     [Route("api/user")]
     public class UserController : BaseController
     {
-
         public UserController(IRepositoryWrapper repository) : base(repository)
         {
 
         }
-        
         [HttpGet]
         public IEnumerable<Users> Get()
         {
             return _repository.Users.FindAll();
         }
-
-        // GET api/<controller>/5
+        
         [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var user = _repository.Users.FindByCondition(e => e.Id == id);
-
             if (user == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return Ok(user);
-            }
-
+            return Ok(user);
         }
-
-        // POST api/<controller>
+        
         [AllowAnonymous]
         [HttpPost]
         [Route("create")]
         public void Post([FromBody]Users user)
        {
-            _repository.Users.CreateUser(user);
-            _repository.Users.Save();
+            _repository.Users.CreateUserAndSave(user);
         }
 
-        // PUT api/<controller>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-
-        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -1,37 +1,38 @@
 ﻿using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EIS.WebAPI.Controllers.Leave
 {
     [Route("api/LeavePolicy")]
     [ApiController]
-    public class LeavePolicyController : Controller
+    public class LeavePolicyController : BaseController
     {
-        public readonly IRepositoryWrapper _repository;
-        public LeavePolicyController(IRepositoryWrapper repository)
+        public LeavePolicyController(IRepositoryWrapper repository): base(repository)
         {
-            _repository = repository;
+
         }
+
         [HttpGet]
-        public IEnumerable<LeaveMaster> GetLeavePolicies()
+        public IEnumerable<LeaveRules> GetLeavePolicies()
         {
-            return _repository.Leave.GetAllPolicies();
+            return _repository.Leave.GetAllLeaveRules();
         }
         [HttpPost]
-        public IActionResult PostLeavePolicy([FromBody] LeaveMaster policy)
+        public IActionResult PostLeavePolicy([FromBody] LeaveRules policy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.CreateLeaveType(policy);
+<<<<<<< HEAD
+            _repository.Leave.CreateLeaveTypeAndSave(policy);
+=======
+            _repository.Leave.CreateLeaveRule(policy);
             _repository.Leave.Save();
 
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }
     }

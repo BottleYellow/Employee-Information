@@ -78,8 +78,9 @@ namespace EIS.Repositories.Helpers
                 }
                 return decryptedBytes;
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return null;
             }
         }

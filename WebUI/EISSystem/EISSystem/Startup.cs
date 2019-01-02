@@ -2,7 +2,6 @@
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Entities.User;
-
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
@@ -57,7 +56,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Person>, PersonValidator>();
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
             services.AddTransient<IValidator<LeaveRequest>, LeaveRequestValidator>();
-            services.AddTransient<IValidator<LeaveMaster>, LeaveMasterValidator>();
+            services.AddTransient<IValidator<LeaveRules>, LeaveRulesValidator>();
             services.AddTransient<IValidator<Permanent>, PermanentAddressValidator>();
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();
@@ -69,6 +68,7 @@ namespace EIS.WebApp
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<RedisAgent>();
             services.AddSession();
+            services.AddTransient<IServiceWrapper, ServiceWrapper>();
             services.AddTransient(typeof(IEISService<>), typeof(EISService<>));
             services.AddSingleton<IControllerService, ControllerService>();
             ////Authorization
@@ -84,7 +84,10 @@ namespace EIS.WebApp
                     res.NamingStrategy = null;
                 }
             });
-
+            services.AddMvc()
+              .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,11 +104,13 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            // app.ConfigureExceptionHandler(logger);
             
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseWebAppExceptionHandler();
             string controller = "Account";
             string action = "Login";
             string Template = "{controller=" + controller + "}/{action=" + action + "}";
@@ -113,7 +118,7 @@ namespace EIS.WebApp
 
             if (id != null)
             {
-                string role= new RedisAgent().GetStringValue("Role");
+                string role = new RedisAgent().GetStringValue("Role");
                 if (role == "Admin")
                 {
                     controller = "People";
@@ -126,6 +131,12 @@ namespace EIS.WebApp
                     action = "Profile";
                     Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
                 }
+            }
+            else
+            {
+                controller = "Account";
+                action = "Login";
+                Template = "{controller=" + controller + "}/{action=" + action + "}";
             }
             app.UseMvc(routes =>
             {

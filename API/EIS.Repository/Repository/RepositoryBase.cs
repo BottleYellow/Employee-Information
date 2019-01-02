@@ -14,53 +14,65 @@ namespace EIS.Repositories.Repository
 {
     public abstract class RepositoryBase<T> : IRepositorybase<T> where T : class
     {
-            protected ApplicationDbContext _dbcontext { get; set; }
+<<<<<<< HEAD
+            public ApplicationDbContext _dbContext { get; set; }
+=======
+            protected ApplicationDbContext _dbContext { get; set; }
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
 
-            public RepositoryBase(ApplicationDbContext dbcontext)
+            public RepositoryBase(ApplicationDbContext dbContext)
             {
-                _dbcontext = dbcontext;
+<<<<<<< HEAD
+                _dbContext = dbcontext;
+=======
+                _dbContext = dbContext;
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             }
 
             public IQueryable<T> FindAll()
             {
-                return _dbcontext.Set<T>();
+                return _dbContext.Set<T>();
             }
 
             public T FindByCondition(Expression<Func<T, bool>> expression)
             {
-                return _dbcontext.Set<T>().Where(expression).FirstOrDefault();
+                return _dbContext.Set<T>().Where(expression).FirstOrDefault();
             }
 
             public void Create(T entity)
             {
-                  _dbcontext.Set<T>().Add(entity);
+                  _dbContext.Set<T>().Add(entity);
             }
 
             public void Update(T entity)
             {
-                _dbcontext.Set<T>().Update(entity);
+                _dbContext.Set<T>().Update(entity);
                 
             }
 
             public void Delete(T entity)
             {
-                 _dbcontext.Set<T>().Remove(entity);
+                 _dbContext.Set<T>().Remove(entity);
+<<<<<<< HEAD
+
+=======
+>>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             }
 
             public void Save()
             {
-                 _dbcontext.SaveChanges();
+                 _dbContext.SaveChanges();
           
             }
 
         public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
-            return _dbcontext.Set<T>().Where(expression);
+            return _dbContext.Set<T>().Where(expression);
         }
 
         public T FindByCondition2(Expression<Func<T, bool>> expression)
         {
-            return _dbcontext.Set<T>().Where(expression).LastOrDefault();
+            return _dbContext.Set<T>().Where(expression).LastOrDefault();
         }
 
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
@@ -96,6 +108,23 @@ namespace EIS.Repositories.Repository
             list.Add(totaldata);
 
             return list;
+        }
+
+        public void CreateAndSave(T entity)
+        {
+            Create(entity);
+            Save();
+        }
+
+        public void UpdateAndSave(T entity)
+        {
+            Update(entity);
+            Save();
+        }
+        public void DeleteAndSave(T entity)
+        {
+            Delete(entity);
+            Save();
         }
     }
 }

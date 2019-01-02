@@ -14,10 +14,8 @@ namespace EIS.WebApp.Services
 {
     public class EISService<T> : IEISService<T> where T: class
     {
-        IDistributedCache distributedCache;
-        public EISService(IDistributedCache distributedCache)
+        public EISService()
         {
-            this.distributedCache = distributedCache;
         }
 
         public HttpResponseMessage DeleteResponse(string url)
@@ -30,7 +28,9 @@ namespace EIS.WebApp.Services
         public HttpResponseMessage GetResponse(string url)
         {
             HttpClient client = GetService();
-            HttpResponseMessage response = client.GetAsync(url).Result;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
+            response = client.GetAsync(url).Result;
             return response;
         }
 

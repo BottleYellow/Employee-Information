@@ -13,7 +13,8 @@ namespace EIS.Entities.Leave
         public string LeaveType { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public float TotalRequestedDays { get; set; }
+        public float RequestedDays { get; set; }
+        public float ApprovedDays { get; set; }
         public float Available { get; set; }
         public string Status { get; set; }
         public string Reason { get; set; }
@@ -21,6 +22,6 @@ namespace EIS.Entities.Leave
         public int TypeId { get; set; }
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
-        public LeaveMaster TypeOfLeave { get; set; }
+        public LeaveRules TypeOfLeave { get; set; }
     }
 }

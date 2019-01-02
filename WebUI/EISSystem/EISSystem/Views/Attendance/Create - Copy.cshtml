@@ -101,7 +101,7 @@
     });
 </script>
 <script language="javascript">
-    $('#inputyear').on('dp.change', function () {
+    $('#inputyear').on('change', function () {
         var value = $("#inputyear").val();
         $("#inputyear").val(value);
         document.getElementById("report").innerHTML = "Attendance Report - Yearly";
@@ -131,7 +131,7 @@
     });
 
 
-    $('#inputmonth').on('dp.change', function () {
+    $('#inputmonth').on('change', function () {
         document.getElementById("report").innerHTML = "Attendance Report - Monthly";
         var v = $('#inputmonth').val();
         $.ajax({
@@ -159,7 +159,7 @@
         });
     });
 
-    $('#inputweek').on('dp.change', function (e) {
+    $('#inputweek').on('change', function (e) {
         document.getElementById("report").innerHTML = "Attendance Report - Weekly";
         var value = $("#inputweek").val();
         alert(value);
