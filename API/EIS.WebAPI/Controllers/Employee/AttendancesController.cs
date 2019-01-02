@@ -3,13 +3,8 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -96,11 +91,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAttendance([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Attendance = _repository.Attendances.FindByCondition(x => x.Id == id);
             if (Attendance == null)
             {

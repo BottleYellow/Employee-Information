@@ -2,15 +2,10 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Management;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 

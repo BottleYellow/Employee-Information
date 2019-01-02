@@ -28,12 +28,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetPermanent([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.PersonId==id);
+             var Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.PersonId==id);
 
             if (Permanent == null)
             {
@@ -84,11 +79,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletePermanent([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var permanent = _repository.PermanentAddress.FindByCondition(addr => addr.Id == id);
             if (permanent == null)
             {

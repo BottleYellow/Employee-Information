@@ -1,5 +1,3 @@
-using System;
-
 namespace EIS.WebApp.Models
 {
     public class ErrorViewModel

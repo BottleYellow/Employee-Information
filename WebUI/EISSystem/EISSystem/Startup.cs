@@ -1,8 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
-using EIS.Entities.User;
-
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
@@ -11,20 +9,12 @@ using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace EIS.WebApp
 {

@@ -1,13 +1,9 @@
-﻿using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+﻿using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EIS.WebApp.TagHelpers
 {

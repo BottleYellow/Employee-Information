@@ -2,15 +2,13 @@
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
-using EIS.WebAPI.Messanger;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -40,10 +38,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var employee = _repository.Employee.FindByCondition(e => e.Id == id);
 
             if (employee == null)
@@ -117,10 +111,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             Person person = _repository.Employee.FindByCondition(x => x.Id == id);
             if (person == null)
             {

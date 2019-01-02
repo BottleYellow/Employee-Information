@@ -1,13 +1,11 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
-using Microsoft.EntityFrameworkCore.Query.Expressions;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 
 namespace EIS.Repositories.Repository

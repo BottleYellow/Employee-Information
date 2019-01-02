@@ -1,7 +1,4 @@
-﻿
-
-
-namespace EIS.Repositories.IRepository
+﻿namespace EIS.Repositories.IRepository
 {
     public interface IRepositoryWrapper
     {

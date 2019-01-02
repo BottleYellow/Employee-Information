@@ -30,10 +30,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("Employee/{id}")]
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
 
@@ -48,10 +44,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
 
@@ -123,10 +115,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var leave = _repository.Leave.FindByCondition(x => x.Id == id);
             if (leave == null)

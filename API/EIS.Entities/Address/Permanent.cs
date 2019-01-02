@@ -1,8 +1,5 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Generic;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EIS.Entities.Address
 {

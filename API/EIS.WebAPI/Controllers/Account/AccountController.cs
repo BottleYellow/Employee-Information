@@ -2,8 +2,8 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Messanger;
 using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -102,11 +102,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var login = _repository.Users.FindByCondition(x => x.Id == id);
 
             if (login == null)
@@ -142,10 +137,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLogin([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var login = _repository.Users.FindByCondition(x => x.Id == id);
             if (login == null)

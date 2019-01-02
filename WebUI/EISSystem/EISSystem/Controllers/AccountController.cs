@@ -1,20 +1,12 @@
-﻿using EIS.Entities.Employee;
-using EIS.Entities.User;
-using EIS.Repositories.IRepository;
+﻿using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Microsoft.AspNetCore.Authorization;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
 {

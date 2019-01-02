@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EIS.Entities.Generic
+﻿namespace EIS.Entities.Generic
 {
     public class SortGrid
     {
