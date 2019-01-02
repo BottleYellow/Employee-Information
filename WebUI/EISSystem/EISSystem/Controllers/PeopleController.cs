@@ -45,11 +45,8 @@ namespace EIS.WebApp.Controllers
         #region Employee
         [DisplayName("List Of Employees")]
         public IActionResult Index()
-        {
-            data = EmployeeData();
-            Response.StatusCode = (int)response.StatusCode;
-          
-            return View(data);
+        {          
+            return View();
         }
         public IActionResult LoadData()
         {

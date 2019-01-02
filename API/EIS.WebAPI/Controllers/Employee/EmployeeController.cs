@@ -126,7 +126,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest("Designation already Exists");
             }
-            _repository.Employee.AddDesignation(designation);
+            _repository.Employee.AddDesignationAndSave(designation);
             return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
         }
         [Route("UpdateDesignation")]
@@ -136,7 +136,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Employee.UpdateDesignation(designation);            
+            _repository.Employee.UpdateDesignationAndSave(designation);            
             return NoContent();
         }
 
