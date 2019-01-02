@@ -73,7 +73,19 @@ namespace EIS.Repositories.Repository
 
         public IEnumerable<LeaveCredit> GetCredits()
         {
-            return _dbContext.LeaveCredit;
+            var results = _dbContext.LeaveCredit
+                .Select(l => new
+                {
+                    l,
+                    person = l.Person
+                })
+                .ToList();
+            foreach (var x in results)
+            {
+                x.l.Person = x.person;
+            }
+            var result = results.Select(x => x.l).ToList();
+            return result;
         }
 
         public void UpdateRequestStatus(int RequestId, string Status)

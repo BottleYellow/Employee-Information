@@ -69,6 +69,7 @@ namespace EIS.WebApp
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<RedisAgent>();
             services.AddSession();
+            services.AddTransient<IServiceWrapper, ServiceWrapper>();
             services.AddTransient(typeof(IEISService<>), typeof(EISService<>));
             services.AddSingleton<IControllerService, ControllerService>();
             ////Authorization
@@ -84,7 +85,10 @@ namespace EIS.WebApp
                     res.NamingStrategy = null;
                 }
             });
-
+            services.AddMvc()
+              .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

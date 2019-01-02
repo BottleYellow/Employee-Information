@@ -81,11 +81,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Emergency = _repository.EmergencyAddress.FindByCondition(addr => addr.Id == id);
             if (Emergency == null)
             {

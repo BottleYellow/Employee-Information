@@ -29,11 +29,6 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var user = _repository.Users.FindByCondition(e => e.Id == id);
 
             if (user == null)

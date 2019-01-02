@@ -18,10 +18,8 @@ namespace EIS.Repositories.Repository
 {
     public class UserRepository : RepositoryBase<Users>, IUserRepository
     {
-        ApplicationDbContext _dbContext;
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public void CreateUser(Users user)
@@ -36,14 +34,11 @@ namespace EIS.Repositories.Repository
             user.UpdatedDate = DateTime.Now;
             Create(user);
         }
-
         public Users FindByUserName(string Username)
         {
             var user = _dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();
             return user;
         }
-       
-
         public string ValidateUser(Users user)
         {
             string result = "Failed";
@@ -56,8 +51,7 @@ namespace EIS.Repositories.Repository
                     result = "success";
                 }
             }
-            return result;
-            
+            return result;     
         }
 
         public JwtSecurityToken GenerateToken(int UserId)

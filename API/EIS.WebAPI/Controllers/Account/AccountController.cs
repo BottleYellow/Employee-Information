@@ -58,36 +58,6 @@ namespace EIS.WebAPI.Controllers
             }
 
         }
-        #region comment
-        //[HttpPost("token")]
-        //public IActionResult Token()
-        //{
-        //    var header = Request.Headers["Authorization"];
-        //    if (header.ToString().StartsWith("Basic"))
-        //    {
-        //        var credValue = header.ToString().Substring("Basic ".Length).Trim();
-        //        var usernameAndPassenc = Encoding.UTF8.GetString(Convert.FromBase64String(credValue));
-        //        var usernameAndPass = usernameAndPassenc.Split(":");
-        //        if (usernameAndPass[0] == "Admin" && usernameAndPass[1] == "pass")
-        //        {
-        //            var claimsdata = new[] { new Claim(ClaimTypes.Name, "username"), new Claim(ClaimTypes.Role, "Admin") };
-        //            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"));
-        //            var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-        //            var token = new JwtSecurityToken(
-        //                issuer: "mysite.com",
-        //                audience: "mysite.com",
-        //                expires: DateTime.Now.AddMinutes(1),
-        //                claims: claimsdata,
-        //                signingCredentials: signInCred
-        //                );
-        //            var tokenstring = new JwtSecurityTokenHandler().WriteToken(token);
-        //            return Ok(tokenstring);
-        //        }
-        //    }
-        //    return BadRequest("wrong request");
-        //}
-        #endregion
-
         [HttpPost]
         [Route("logout")]
         public IActionResult Logout()
@@ -102,11 +72,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var login = _repository.Users.FindByCondition(x => x.Id == id);
 
             if (login == null)
@@ -142,11 +107,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLogin([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var login = _repository.Users.FindByCondition(x => x.Id == id);
             if (login == null)
             {

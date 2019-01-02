@@ -14,10 +14,8 @@ namespace EIS.WebApp.Services
 {
     public class EISService<T> : IEISService<T> where T: class
     {
-        IDistributedCache distributedCache;
-        public EISService(IDistributedCache distributedCache)
+        public EISService()
         {
-            this.distributedCache = distributedCache;
         }
 
         public HttpResponseMessage DeleteResponse(string url)

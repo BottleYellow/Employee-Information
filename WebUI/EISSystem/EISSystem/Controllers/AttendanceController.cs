@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Dynamic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EIS.WebApp.Controllers
 {
@@ -24,7 +18,6 @@ namespace EIS.WebApp.Controllers
         {
             this.service = service;
         }
-        // GET: /<controller>/
         public IActionResult Index()
         {
             return View("AllAttendance");
@@ -90,7 +83,6 @@ namespace EIS.WebApp.Controllers
         public IActionResult Create(Attendance attendance)
         {
             int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
-            
             if (ModelState.IsValid)
             {
                 HttpClient client = service.GetService();
@@ -99,8 +91,6 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 TempData["success"] = "success";
-                
-                //return RedirectToAction("index","People");
             }
             return RedirectToAction("Index", "People");
         }

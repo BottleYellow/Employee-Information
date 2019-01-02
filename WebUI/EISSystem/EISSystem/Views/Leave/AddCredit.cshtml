@@ -1,0 +1,95 @@
+﻿@using EIS.Entities.Leave
+@model LeaveCredit
+<!-- Modal -->
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="addCreditLabel">Add Leave Credit</h4>
+        </div>
+        <div class="modal-body">
+            <form name="cp" id="cp" asp-action="AddCredit" asp-controller="Leave" method="post">
+
+                <input type="hidden" asp-for="Id" value="0" />
+                <div class="form-group">
+                    <label asp-for="PersonId">Leave Type</label>
+                    <select asp-for="PersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                        <option>-- Select --</option>
+                    </select>
+                    <span asp-validation-for="PersonId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LeaveType">Leave Type</label>
+                    <select id="type" asp-for="LeaveId" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                        <option>-- Select Leave Type --</option>
+                    </select>
+                    <span asp-validation-for="LeaveType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Days to be alloted</label>
+                    <div class="form-line">
+                        <input asp-for="AllotedDays" class="form-control" />
+                    </div>
+                    <span asp-validation-for="AllotedDays" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Valid From</label>
+                    <div class="form-line">
+                        <input type="date" value="01/01/2018" asp-for="ValidFrom" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ValidFrom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Valid To</label>
+                    <div class="form-line">
+                        <input type="date" value="01/01/2018" asp-for="ValidTo" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ValidTo" class="text-danger"></span>
+                </div>
+                <input id="tp" type="hidden" asp-for="LeaveType" />
+                <div class="modal-footer">
+                    <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Add Credit</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/js/admin.js"></script>
+
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $('#btnSubmit').click(function () {
+        var t = $("#type option:selected").text();
+        $("#tp").val(t);
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var d = form.serialize();
+                var url1 = "/Leave/AddCredit";
+                $.ajax({
+                    url: url1,
+                    type: 'POST',
+                    data: d,
+                    success: function (data) {
+                        bootbox.alert({
+                            message: "Leave Credited Successfully!",
+                            callback: function () {
+                                window.parent.location.reload();
+                            }
+                        });                    
+                    },
+                    error: function (data) {
+                        alert(data);
+
+                    }
+                });
+            }
+            return false;
+    });
+</script>

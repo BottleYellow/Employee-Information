@@ -28,11 +28,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCurrent([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var current = _repository.CurrentAddress.FindByCondition(addr=>addr.PersonId==id);
 
             if (current == null)
@@ -85,11 +80,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrent([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var current = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
             if (current == null)
             {

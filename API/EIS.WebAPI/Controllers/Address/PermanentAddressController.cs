@@ -28,11 +28,6 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetPermanent([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.PersonId==id);
 
             if (Permanent == null)

@@ -45,10 +45,6 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (id != attendance.PersonId)
-            {
-                return BadRequest();
-            }
             if (attendance.DateIn.Date != DateTime.Now.Date)
             {
 
@@ -96,11 +92,6 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAttendance([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var Attendance = _repository.Attendances.FindByCondition(x => x.Id == id);
             if (Attendance == null)
             {
