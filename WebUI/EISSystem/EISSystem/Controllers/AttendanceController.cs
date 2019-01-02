@@ -59,7 +59,6 @@ namespace EIS.WebApp.Controllers
                 ViewBag.month = Convert.ToInt32(monthYear[0]);
                 ViewBag.year = Convert.ToInt32(monthYear[1]);
                 respattendance = service.GetResponse("api/Attendances/GetAllAttendanceMonthly/" + monthYear[0]+ "/" + monthYear[1]);
-<<<<<<< HEAD
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
             else if (type == "week")
@@ -103,14 +102,11 @@ namespace EIS.WebApp.Controllers
                 ViewBag.month = Convert.ToInt32(monthYear[0]);
                 ViewBag.year = Convert.ToInt32(monthYear[1]);
                 respattendance = service.GetResponse("api/Attendances/GetAttendanceById/"+pId+"/" + monthYear[1] + "/" + monthYear[0]);
-=======
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
             else if (type == "week")
             {
                 ViewBag.type = type;
-<<<<<<< HEAD
                 DateTime startDate = Convert.ToDateTime(week[0]);
                 DateTime endDate = Convert.ToDateTime(week[1]);
                 ViewBag.startDate= startDate;
@@ -118,12 +114,6 @@ namespace EIS.WebApp.Controllers
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
             attendances = JsonConvert.DeserializeObject<List<Attendance>>(attendance);
-=======
-                respattendance = service.GetResponse("api/Attendances/GetAllAttendanceWeekly/" + Convert.ToDateTime(week[0]) + "/" + Convert.ToDateTime(week[1]));
-                attendance = respattendance.Content.ReadAsStringAsync().Result;
-            }
-            attendances = JsonConvert.DeserializeObject<List<Person>>(attendance);
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             return PartialView(attendances);
         }
 
@@ -140,24 +130,14 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult Create(Attendance attendance)
         {
-<<<<<<< HEAD
             int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-=======
-            int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             if (ModelState.IsValid)
             {
                 HttpClient client = service.GetService();
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-<<<<<<< HEAD
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;                
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);                
-=======
-                HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;
-                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                TempData["success"] = "success";
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             }
             return RedirectToAction("Index", "People");
         }

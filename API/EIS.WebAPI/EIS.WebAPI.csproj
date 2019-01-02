@@ -18,13 +18,6 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.101" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-<<<<<<< HEAD
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.1.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
-=======
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />

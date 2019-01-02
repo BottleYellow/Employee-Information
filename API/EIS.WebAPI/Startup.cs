@@ -82,14 +82,11 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             app.UseWebApiExceptionHandler();
-<<<<<<< HEAD
-=======
             //app.UseMiddleware<CustomAuthenticationMiddleware>();
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
-            //app.UseMiddleware<CustomAuthenticationMiddleware>();
+
             //SeedDatabase.Initialize(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider).Wait();
         }
     }

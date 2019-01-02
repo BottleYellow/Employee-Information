@@ -11,26 +11,32 @@ namespace EIS.WebAPI.Controllers
     [EnableCors("MyPolicy")]
     [Route("api/LeaveRequest")]
     [ApiController]
-    public class LeaveRequestController : BaseController
+    public class LeaveRequestController : Controller
     {
-        public LeaveRequestController(IRepositoryWrapper repository):base(repository)
+        public readonly IRepositoryWrapper _repository;
+        public LeaveRequestController(IRepositoryWrapper repository) 
         {
+            _repository = repository;
         }
 
+        // GET: api/Leaves
         [HttpGet]
         public IEnumerable<LeaveRequest> GetLeaveRequests()
         {
             return _repository.Leave.FindAll();
         }
 
+        // GET: api/Leaves/5
         [HttpGet("Employee/{id}")]
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
             var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
+
             if (leave == null)
             {
                 return NotFound();
             }
+
             return Ok(leave);
         }
 
@@ -38,14 +44,15 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
             var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
+
             if (leave == 0)
             {
                 leave = -1;
                 return Ok(leave);
             }
+
             return Ok(leave);
         }
-
         [Route("UpdateStatus/{RequestId}/{Status}")]
         [HttpPost]
         public IActionResult UpdateRequestStatus([FromRoute]int RequestId, [FromRoute]string Status)
@@ -57,7 +64,8 @@ namespace EIS.WebAPI.Controllers
             }
             return NotFound();
         }
-    
+
+        // PUT: api/Leaves/5
         [HttpPut("{id}")]
         public IActionResult PutLeaveRequest([FromRoute] int id, [FromBody] LeaveRequest leave)
         {
@@ -65,10 +73,6 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-<<<<<<< HEAD
-            _repository.Leave.UpdateAndSave(leave);
-            return Ok(leave);
-=======
             _repository.Leave.Update(leave);
 
             try
@@ -81,9 +85,9 @@ namespace EIS.WebAPI.Controllers
             }
 
             return NoContent();
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         }
-        
+
+        // POST: api/Leaves
         [HttpPost]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
@@ -93,11 +97,14 @@ namespace EIS.WebAPI.Controllers
             }
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
-            _repository.Leave.CreateAndSave(leave);
+            _repository.Leave.Create(leave);
+            _repository.Leave.Save();
+
             _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();
         }
 
+        // DELETE: api/Leaves/5
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
@@ -106,7 +113,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Leave.DeleteAndSave(leave);
+            _repository.Leave.Delete(leave);
+            _repository.Leave.Save();
             return Ok(leave);
         }
     }

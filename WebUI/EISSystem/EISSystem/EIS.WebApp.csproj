@@ -7,8 +7,6 @@
 
   <ItemGroup>
     <None Include="Views\Attendance\AllAttendance.cshtml" />
-    <None Include="Views\Attendance\Create12.cshtml" />
-    <None Include="Views\Attendance\GetAllAttendanceYearly.cshtml" />
     <None Include="Views\Attendance\Index.cshtml" />
   </ItemGroup>
 
@@ -48,9 +46,6 @@
 
 
   <ItemGroup>
-    <Content Update="Views\Attendance\Create - Copy.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Attendance\GetAllAttendanceMonthlyById.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

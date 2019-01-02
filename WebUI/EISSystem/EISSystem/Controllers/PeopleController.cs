@@ -2,7 +2,6 @@
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
-using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ using System.Net.Http;
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Employee Management")]
-    public class PeopleController : BaseController<Person>
+    public class PeopleController : Controller
     {
 
         #region Declarations
@@ -29,16 +28,11 @@ namespace EIS.WebApp.Controllers
         public static List<Person> data;
         public static List<Role> rolesList;
         static string imageBase64Data;
-        RedisAgent Cache = new RedisAgent();
         #endregion
 
         #region Controller
         [DisplayName("Employee Management")]
-<<<<<<< HEAD
-        public PeopleController(IControllerService _controllerService,IEISService<Person> service, IEISService<Permanent> perService, IEISService<Current> currentService, IEISService<Emergency> emergencyService, IEISService<Designation> designationService):base(service)
-=======
         public PeopleController(IControllerService _controllerService,IServiceWrapper services)
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         {
             this._controllerService = _controllerService;
             _services = services;
@@ -51,24 +45,16 @@ namespace EIS.WebApp.Controllers
         #region Employee
         [DisplayName("List Of Employees")]
         public IActionResult Index()
-        {          
-            return View();
+        {
+            data = EmployeeData();
+            Response.StatusCode = (int)response.StatusCode;
+          
+            return View(data);
         }
 
-        [HttpPost]
-        public IActionResult LoadData()
+        public IActionResult Profile(int PersonId)
         {
-            return base.LoadData("api/employee/Data");
-        }
-
-            public IActionResult Profile(int PersonId)
-        {
-<<<<<<< HEAD
-            PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            response = service.GetResponse("api/employee/" + PersonId + "");
-=======
             response = _services.Employee.GetResponse("api/employee/" + PersonId + "");
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             string stringData = response.Content.ReadAsStringAsync().Result;
             string permanent = _services.PermanentAddress.GetResponse("api/PermanentAddress/" + PersonId + "").Content.ReadAsStringAsync().Result;
             string current = _services.CurrentAddress.GetResponse("api/CurrentAddress/" + PersonId + "").Content.ReadAsStringAsync().Result;

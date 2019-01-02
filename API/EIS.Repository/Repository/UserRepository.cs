@@ -21,6 +21,7 @@ namespace EIS.Repositories.Repository
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
+
         public void CreateUser(Users user)
         {
             var password = Helper.Encrypt(user.Password);
@@ -33,16 +34,6 @@ namespace EIS.Repositories.Repository
             user.UpdatedDate = DateTime.Now;
             Create(user);
         }
-<<<<<<< HEAD
-
-        public void CreateUserAndSave(Users user)
-        {
-            CreateUser(user);
-            Save();
-        }
-
-=======
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         public Users FindByUserName(string Username)
         {
             var user = _dbContext.Users.Where(u => u.UserName == Username).FirstOrDefault();

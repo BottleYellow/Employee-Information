@@ -7,13 +7,13 @@ namespace EIS.WebAPI.Controllers.Leave
 {
     [Route("api/LeavePolicy")]
     [ApiController]
-    public class LeavePolicyController : BaseController
+    public class LeavePolicyController : Controller
     {
-        public LeavePolicyController(IRepositoryWrapper repository): base(repository)
+        public readonly IRepositoryWrapper _repository;
+        public LeavePolicyController(IRepositoryWrapper repository)
         {
-
+            _repository = repository;
         }
-
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
         {
@@ -26,13 +26,9 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-<<<<<<< HEAD
-            _repository.Leave.CreateLeaveTypeAndSave(policy);
-=======
             _repository.Leave.CreateLeaveRule(policy);
             _repository.Leave.Save();
 
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }
     }

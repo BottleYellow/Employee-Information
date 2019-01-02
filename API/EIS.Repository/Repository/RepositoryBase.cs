@@ -14,19 +14,11 @@ namespace EIS.Repositories.Repository
 {
     public abstract class RepositoryBase<T> : IRepositorybase<T> where T : class
     {
-<<<<<<< HEAD
-            public ApplicationDbContext _dbContext { get; set; }
-=======
             protected ApplicationDbContext _dbContext { get; set; }
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
 
             public RepositoryBase(ApplicationDbContext dbContext)
             {
-<<<<<<< HEAD
-                _dbContext = dbcontext;
-=======
                 _dbContext = dbContext;
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             }
 
             public IQueryable<T> FindAll()
@@ -53,10 +45,6 @@ namespace EIS.Repositories.Repository
             public void Delete(T entity)
             {
                  _dbContext.Set<T>().Remove(entity);
-<<<<<<< HEAD
-
-=======
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
             }
 
             public void Save()
@@ -108,23 +96,6 @@ namespace EIS.Repositories.Repository
             list.Add(totaldata);
 
             return list;
-        }
-
-        public void CreateAndSave(T entity)
-        {
-            Create(entity);
-            Save();
-        }
-
-        public void UpdateAndSave(T entity)
-        {
-            Update(entity);
-            Save();
-        }
-        public void DeleteAndSave(T entity)
-        {
-            Delete(entity);
-            Save();
         }
     }
 }

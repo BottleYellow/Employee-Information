@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-﻿using EIS.Entities.User;
-using EIS.Repositories.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using EIS.WebAPI.Messanger;
-using EIS.Repositories.Helpers;
-using Microsoft.Extensions.Configuration;
-using EIS.WebAPI.RedisCache;
-using Microsoft.AspNetCore.Cors;
-using EIS.Entities.Employee;
-=======
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
@@ -24,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IdentityModel.Tokens.Jwt;
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
 
 namespace EIS.WebAPI.Controllers
 {
@@ -41,19 +26,18 @@ namespace EIS.WebAPI.Controllers
             Cache = new RedisAgent();
         }
 
-        #region Account Management
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
         public IActionResult Login(Users user)
         {
-            string checkUserStatus = _repository.Users.ValidateUser(user);
-            if (checkUserStatus == "success")
+            string s = _repository.Users.ValidateUser(user);
+            if (s == "success")
             {
-                Users newUser = _repository.Users.FindByUserName(user.UserName);
-                JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
+                Users u = _repository.Users.FindByUserName(user.UserName);
+                JwtSecurityToken token = _repository.Users.GenerateToken(u.Id);
                 string s1 = new JwtSecurityTokenHandler().WriteToken(token);
-                int pid = newUser.PersonId;
+                int pid = u.PersonId;
                 string role = "";
                 if (s1 != null)
                 {
@@ -67,16 +51,13 @@ namespace EIS.WebAPI.Controllers
                 Cache.SetStringValue("Role", role);
                 return Ok(pid.ToString());
             }
+
             else
             {
                 return NotFound("");
             }
 
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         [HttpPost]
         [Route("logout")]
         public IActionResult Logout()
@@ -87,23 +68,32 @@ namespace EIS.WebAPI.Controllers
             Cache.DeleteStringValue("Role");
             return Ok("Successfully Logged out.");
         }
-<<<<<<< HEAD
-=======
         // GET: api/Logins/5
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
         {
             var login = _repository.Users.FindByCondition(x => x.Id == id);
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
 
+            if (login == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(login);
+        }
+        
         [HttpGet("VerifyPassword/{id}/{password}")]
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
         {
             var result = _repository.Users.VerifyPassword(id, password);
-            var boolResult = false;
             if (result == true)
-                boolResult = true;
-            return Ok(boolResult);
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
         }
         [HttpGet("ChangePassword/{id}/{password}")]
         public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
@@ -112,8 +102,6 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
-<<<<<<< HEAD
-=======
 
         // DELETE: api/Logins/5
         [HttpDelete("{id}")]
@@ -129,7 +117,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
 
->>>>>>> eab0133b5e8f6e86eb09bb18611280e9b8dcee1c
         [HttpPost]
         [Route("forgot/{username}")]
         [AllowAnonymous]
@@ -138,17 +125,17 @@ namespace EIS.WebAPI.Controllers
             string password = CreateRandomPassword(8);
             string To = username;
             string subject = "New Password";
-            string body = "Hello!" + "\n" +
+            //var password = ;
+            string body = "Hello!" +"\n"+
                 "Your new password is : " + password;
+
             new EmailManager(configuration).SendEmail(subject, body, To);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
-            _repository.Users.UpdateAndSave(user);
+            _repository.Users.Save();
             return Ok();
         }
-        #endregion
 
-        #region Methods
         public static string CreateRandomPassword(int PasswordLength)
         {
             string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
@@ -161,6 +148,5 @@ namespace EIS.WebAPI.Controllers
             }
             return new string(chars);
         }
-        #endregion
     }
 }

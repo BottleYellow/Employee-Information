@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace EIS.WebAPI.Controllers.Leave
 {
     [Route("api/LeaveCredit")]
@@ -19,6 +25,13 @@ namespace EIS.WebAPI.Controllers.Leave
             var credits= _repository.Leave.GetCredits();
             return credits;
         }
+
+        // GET api/<controller>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
         [Route("AddCredits")]
         [HttpPost]
         public IActionResult PostLeaveCredits([FromBody] LeaveRules Leave)
@@ -27,8 +40,8 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCreditsAndSave(Leave);
-
+            _repository.Leave.AddCredits(Leave);
+            _repository.Leave.Save();
 
             return Ok();
         }
@@ -39,7 +52,8 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCreditAndSave(Credit);
+            _repository.Leave.AddCredit(Credit);
+            _repository.Leave.Save();
 
             return Ok();
         }
