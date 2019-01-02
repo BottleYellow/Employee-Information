@@ -48,6 +48,7 @@ namespace EIS.Repositories.Repository
         public void CreateLeaveRule(LeaveRules LeaveType)
         {
             _dbContext.LeaveRules.Add(LeaveType);
+            Save();
         }
 
         public void DeleteLeaveRule(LeaveRules LeaveType)

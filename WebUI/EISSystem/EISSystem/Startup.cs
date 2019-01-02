@@ -2,8 +2,6 @@
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Entities.User;
-using EIS.Repositories.IRepository;
-using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
@@ -64,8 +62,6 @@ namespace EIS.WebApp
             #endregion
 
             
-            //for generic repository
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<RedisAgent>();
             services.AddSession();
             services.AddTransient<IServiceWrapper, ServiceWrapper>();

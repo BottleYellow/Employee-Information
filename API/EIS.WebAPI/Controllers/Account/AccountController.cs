@@ -112,8 +112,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Users.Delete(login);
-            _repository.Users.Save();
+            _repository.Users.DeleteAndSave(login);
+            
             return Ok(login);
         }
 
@@ -132,7 +132,7 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(configuration).SendEmail(subject, body, To);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
-            _repository.Users.Save();
+
             return Ok();
         }
 

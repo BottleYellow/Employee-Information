@@ -27,7 +27,6 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             _repository.Leave.CreateLeaveRule(policy);
-            _repository.Leave.Save();
 
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }

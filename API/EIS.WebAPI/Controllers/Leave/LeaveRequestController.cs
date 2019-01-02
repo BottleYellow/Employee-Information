@@ -73,16 +73,9 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.Update(leave);
+            _repository.Leave.UpdateAndSave(leave);
 
-            try
-            {
-                _repository.Leave.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;               
-            }
+            
 
             return NoContent();
         }
@@ -97,8 +90,7 @@ namespace EIS.WebAPI.Controllers
             }
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
-            _repository.Leave.Create(leave);
-            _repository.Leave.Save();
+            _repository.Leave.CreateAndSave(leave);
 
             _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();
@@ -113,8 +105,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Leave.Delete(leave);
-            _repository.Leave.Save();
+            _repository.Leave.DeleteAndSave(leave);
             return Ok(leave);
         }
     }

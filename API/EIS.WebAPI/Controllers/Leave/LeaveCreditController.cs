@@ -41,7 +41,6 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             _repository.Leave.AddCredits(Leave);
-            _repository.Leave.Save();
 
             return Ok();
         }
@@ -53,7 +52,6 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             _repository.Leave.AddCredit(Credit);
-            _repository.Leave.Save();
 
             return Ok();
         }

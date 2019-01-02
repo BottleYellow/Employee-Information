@@ -18,7 +18,7 @@ using System.Net.Http;
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Employee Management")]
-    public class PeopleController : Controller
+    public class PeopleController : BaseController<Person>
     {
 
         #region Declarations
@@ -32,7 +32,7 @@ namespace EIS.WebApp.Controllers
 
         #region Controller
         [DisplayName("Employee Management")]
-        public PeopleController(IControllerService _controllerService,IServiceWrapper services)
+        public PeopleController(IEISService<Person> service,IControllerService _controllerService,IServiceWrapper services):base(service)
         {
             this._controllerService = _controllerService;
             _services = services;
@@ -51,7 +51,10 @@ namespace EIS.WebApp.Controllers
           
             return View(data);
         }
-
+        public IActionResult LoadData()
+        {
+            return base.LoadData("api/employee/data");
+        }
         public IActionResult Profile(int PersonId)
         {
             response = _services.Employee.GetResponse("api/employee/" + PersonId + "");

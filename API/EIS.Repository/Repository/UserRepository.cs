@@ -21,7 +21,6 @@ namespace EIS.Repositories.Repository
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
-
         public void CreateUser(Users user)
         {
             var password = Helper.Encrypt(user.Password);
@@ -99,6 +98,11 @@ namespace EIS.Repositories.Repository
                 Update(u);
                 Save();
             }
+        }
+
+        public void CreateUserAndSave(Users users)
+        {
+            throw new NotImplementedException();
         }
     }
 }

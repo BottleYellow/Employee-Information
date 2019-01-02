@@ -97,6 +97,21 @@ namespace EIS.Repositories.Repository
 
             return list;
         }
+
+        public void CreateAndSave(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateAndSave(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAndSave(T entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

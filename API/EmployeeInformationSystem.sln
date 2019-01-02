@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28010.2003
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Data", "EIS.Data\EIS.Data.csproj", "{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Repositories", "EIS.Repository\EIS.Repositories.csproj", "{EB0CFA76-8ACC-4215-A5C2-9CECAFA9F7AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.WebAPI", "EIS.WebAPI\EIS.WebAPI.csproj", "{B8A79932-DC8B-4313-887B-8FA4C9A8FEE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Validations", "EIS.Validations\EIS.Validations.csproj", "{55E35069-49A3-4133-9887-BFC72F41DD4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B8A79932-DC8B-4313-887B-8FA4C9A8FEE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8A79932-DC8B-4313-887B-8FA4C9A8FEE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8A79932-DC8B-4313-887B-8FA4C9A8FEE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E35069-49A3-4133-9887-BFC72F41DD4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E35069-49A3-4133-9887-BFC72F41DD4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E35069-49A3-4133-9887-BFC72F41DD4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E35069-49A3-4133-9887-BFC72F41DD4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

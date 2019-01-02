@@ -1,4 +1,4 @@
-﻿using EIS.Repositories.IRepository;
+﻿
 using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

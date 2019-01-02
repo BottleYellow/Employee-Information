@@ -51,18 +51,8 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                _repository.Attendances.Update(attendance);
+                _repository.Attendances.UpdateAndSave(attendance);
             }
-
-            try
-            {
-                _repository.Attendances.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {             
-                    throw;
-            }
-
             return NoContent();
         }
 
@@ -83,8 +73,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Attendances.Create(attendance);
-            _repository.Attendances.Save(); 
+            _repository.Attendances.CreateAndSave(attendance);
             return CreatedAtAction("GetAttendance", new { id = attendance.Id }, attendance);
         }
 
@@ -97,8 +86,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Attendances.Delete(Attendance);
-            _repository.Attendances.Save();
+            _repository.Attendances.DeleteAndSave(Attendance);
             
             return Ok(Attendance);
         }

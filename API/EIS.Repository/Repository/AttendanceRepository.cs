@@ -31,7 +31,7 @@ namespace EIS.Repositories.Repository
             var result = results.Select(x => x.p).ToList();
             return result;
         }
-
+       
         public IEnumerable<Person> GetAttendanceMonthly(int month, int year)
         {
             var results = _dbContext.Person

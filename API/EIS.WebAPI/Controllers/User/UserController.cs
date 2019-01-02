@@ -48,8 +48,7 @@ namespace EIS.WebAPI.Controllers.User
         [Route("create")]
         public void Post([FromBody]Users user)
        {
-            _repository.Users.CreateUser(user);
-            _repository.Users.Save();
+            _repository.Users.CreateUserAndSave(user);
         }
 
         // PUT api/<controller>/5
