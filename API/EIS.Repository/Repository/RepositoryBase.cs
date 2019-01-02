@@ -1,10 +1,8 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
-using Microsoft.EntityFrameworkCore.Query.Expressions;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
@@ -100,17 +98,20 @@ namespace EIS.Repositories.Repository
 
         public void CreateAndSave(T entity)
         {
-            throw new NotImplementedException();
+            Create(entity);
+            Save();
         }
 
         public void UpdateAndSave(T entity)
         {
-            throw new NotImplementedException();
+            Update(entity);
+            Save();
         }
 
         public void DeleteAndSave(T entity)
         {
-            throw new NotImplementedException();
+            Delete(entity);
+            Save();
         }
     }
 }

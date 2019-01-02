@@ -1,6 +1,5 @@
 ﻿using EIS.Data.Context;
 using EIS.Repositories.IRepository;
-using Microsoft.Extensions.Options;
 
 namespace EIS.Repositories.Repository
 {

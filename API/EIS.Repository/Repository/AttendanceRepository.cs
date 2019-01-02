@@ -1,9 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

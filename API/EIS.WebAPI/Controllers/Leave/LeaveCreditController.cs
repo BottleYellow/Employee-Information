@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +37,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCredits(Leave);
+            _repository.Leave.AddCreditsAndSave(Leave);
 
             return Ok();
         }
@@ -51,7 +48,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCredit(Credit);
+            _repository.Leave.AddCreditAndSave(Credit);
 
             return Ok();
         }

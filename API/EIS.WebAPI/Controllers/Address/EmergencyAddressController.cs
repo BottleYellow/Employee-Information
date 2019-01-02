@@ -1,7 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -18,14 +17,12 @@ namespace EIS.WebAPI.Controllers
             _repository = repository;
         }
 
-        // GET: api/Emergencys
         [HttpGet]
         public IEnumerable<Emergency> GetEmergencyAddresses()
         {
             return _repository.EmergencyAddress.FindAll();
         }
 
-        // GET: api/Emergencys/5
         [HttpGet("Get/{id}")]
         public Emergency GetEmergencyById([FromRoute] int id)
         {
@@ -40,7 +37,6 @@ namespace EIS.WebAPI.Controllers
             return EmergencyAddresses;
         }
 
-        // PUT: api/Emergencys/5
         [HttpPut]
         public IActionResult PutEmergency([FromBody] Emergency emergency)
         {
@@ -52,7 +48,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(emergency);
         }
 
-        // POST: api/Emergency
         [HttpPost]
         public IActionResult PostEmergency([FromBody] Emergency emergency)
         {
@@ -65,7 +60,6 @@ namespace EIS.WebAPI.Controllers
             return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
         }
 
-        // DELETE: api/Emergencys/5
         [HttpDelete("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {

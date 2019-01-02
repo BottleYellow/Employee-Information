@@ -31,7 +31,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
             var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
-
             if (leave == null)
             {
                 return NotFound();
@@ -44,13 +43,11 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
             var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
-
             if (leave == 0)
             {
                 leave = -1;
                 return Ok(leave);
             }
-
             return Ok(leave);
         }
         [Route("UpdateStatus/{RequestId}/{Status}")]
@@ -74,9 +71,6 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Leave.UpdateAndSave(leave);
-
-            
-
             return NoContent();
         }
 
@@ -91,7 +85,6 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             _repository.Leave.CreateAndSave(leave);
-
             _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();
         }

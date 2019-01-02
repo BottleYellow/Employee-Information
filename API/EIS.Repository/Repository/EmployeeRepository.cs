@@ -12,10 +12,10 @@ namespace EIS.Repositories.Repository
         {
 
         }
-
-        public void AddDesignation(Role designation)
+        public void AddDesignationAndSave(Role designation)
         {
             _dbContext.Roles.Add(designation);
+            Save();
         }
 
         public bool DesignationExists(string DesignationName)
@@ -41,9 +41,10 @@ namespace EIS.Repositories.Repository
             return _dbContext.Roles;
         }
 
-        public void UpdateDesignation(Role designation)
+        public void UpdateDesignationAndSave(Role designation)
         {
             _dbContext.Roles.Update(designation);
+            Save();
         }
     }
 }

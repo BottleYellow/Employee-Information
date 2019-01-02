@@ -16,14 +16,12 @@ namespace EIS.WebAPI.Controllers
             _repository = repository;
         }
 
-        // GET: api/Currents
         [HttpGet]
         public IEnumerable<Current> GetCurrentAddresses()
         {
             return _repository.CurrentAddress.FindAll();
         }
 
-        // GET: api/Currents/5
         [HttpGet("{id}")]
         public IActionResult GetCurrent([FromRoute] int id)
         {
@@ -33,7 +31,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(current);
         }
 
-        // PUT: api/Currents/5
         [HttpPut]
         public IActionResult PutCurrent([FromBody] Current current)
         {
@@ -45,7 +42,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(current);
         }
 
-        // POST: api/Currents
         [HttpPost]
         public IActionResult PostCurrent([FromBody] Current current)
         {
@@ -57,7 +53,6 @@ namespace EIS.WebAPI.Controllers
             return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
         }
 
-        // DELETE: api/Currents/5
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrent([FromRoute] int id)
         {

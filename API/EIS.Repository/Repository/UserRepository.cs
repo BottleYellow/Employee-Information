@@ -2,15 +2,10 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Management;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -89,7 +84,7 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public void ChangePassword(int Id, string NewPassword)
+        public void ChangePasswordAndSave(int Id, string NewPassword)
         {
             Users u = FindByCondition(x => x.PersonId == Id);
             if (u != null)
@@ -102,7 +97,8 @@ namespace EIS.Repositories.Repository
 
         public void CreateUserAndSave(Users users)
         {
-            throw new NotImplementedException();
+            CreateUser(users);
+            Save();
         }
     }
 }
