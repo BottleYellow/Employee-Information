@@ -46,11 +46,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            data = EmployeeData();
-            Response.StatusCode = (int)response.StatusCode;
-          
             return View(data);
         }
+        [HttpPost]
         public IActionResult LoadData()
         {
             return base.LoadData("api/employee/data");

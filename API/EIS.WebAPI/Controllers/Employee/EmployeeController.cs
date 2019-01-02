@@ -136,7 +136,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Employee.UpdateDesignation(designation);            
+            _repository.Employee.UpdateDesignation(designation);   
+            
             return NoContent();
         }
 

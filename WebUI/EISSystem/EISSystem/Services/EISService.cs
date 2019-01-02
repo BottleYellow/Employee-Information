@@ -14,6 +14,7 @@ namespace EIS.WebApp.Services
 {
     public class EISService<T> : IEISService<T> where T: class
     {
+        RedisAgent Cache = new RedisAgent();
         public EISService()
         {
         }
@@ -31,6 +32,7 @@ namespace EIS.WebApp.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
             response = client.GetAsync(url).Result;
+            
             return response;
         }
 
@@ -39,8 +41,9 @@ namespace EIS.WebApp.Services
             HttpClient client = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:54830")
-            };        
+            };           
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Add("Token", Cache.GetStringValue("TokenValue"));
             client.DefaultRequestHeaders.Accept.Add(contentType);
             return client;
         }
