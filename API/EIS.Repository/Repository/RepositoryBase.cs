@@ -56,11 +56,6 @@ namespace EIS.Repositories.Repository
             return _dbContext.Set<T>().Where(expression);
         }
 
-        public T FindByCondition2(Expression<Func<T, bool>> expression)
-        {
-            return _dbContext.Set<T>().Where(expression).LastOrDefault();
-        }
-
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
         {
 

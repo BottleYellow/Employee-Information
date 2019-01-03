@@ -31,6 +31,7 @@ namespace EIS.WebApp.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
             response = client.GetAsync(url).Result;
+            
             return response;
         }
 

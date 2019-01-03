@@ -28,7 +28,6 @@ namespace EIS.WebApp.Filters
             string actionName = context.RouteData.Values["action"].ToString();
             string controllerName = context.RouteData.Values["controller"].ToString();
             string access = "/" + controllerName + "/" + actionName;
-          
             var data = Cache.GetStringValue("Access");
             if (data != null)
             {

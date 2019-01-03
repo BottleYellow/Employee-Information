@@ -48,10 +48,12 @@ namespace EIS.WebApp.Controllers
         {          
             return View();
         }
+        [HttpPost]
         public IActionResult LoadData()
-        {
+       {
             return base.LoadData("api/employee/data");
         }
+
         public IActionResult Profile(int PersonId)
         {
             response = _services.Employee.GetResponse("api/employee/" + PersonId + "");

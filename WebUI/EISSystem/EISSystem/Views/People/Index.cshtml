@@ -53,7 +53,6 @@
                             <tr>
                                 <th>IdCard</th>
                                 <th>FirstName</th>
-
                                 <th>Image</th>
                                 <th> Gender</th>
                                 <th>DateOfBirth</th>
@@ -64,7 +63,6 @@
                                 <th>JoinDate</th>
                                 <th>LeavingDate</th>
                                 <th>Salary</th>
-                                <th>Designation</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -133,7 +131,6 @@
                 { "data": "JoinDate", "name": "JoinDate", "autoWidth": true },
                 { "data": "LeavingDate", "name": "LeavingDate", "autoWidth": true },
                 { "data": "Salary", "name": "Salary", "autoWidth": true },
-                { "data": "Designation", "name": "Designation", "autoWidth": true },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Edit?id=' + row.Id + '">Edit</a></li><li><a href="/People/Delete?id=' + row.Id + '">Delete</a></li></ul></div>';
