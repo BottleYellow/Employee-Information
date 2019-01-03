@@ -1,6 +1,8 @@
-﻿using EIS.WebApp.IServices;
+﻿using EIS.WebApp.Filters;
+using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -32,7 +34,9 @@ namespace EIS.WebApp.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
             response = client.GetAsync(url).Result;
-            
+            RedirectToActionResult r = new RedirectToActionResult("AccessDenied", "Account", null);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                r.UrlHelper.ActionContext.HttpContext.Response.Redirect("/Account/AccessDenied");
             return response;
         }
 
@@ -59,6 +63,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, entity).Result;
+            
             return response;
         }
 
@@ -66,6 +71,9 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PutAsJsonAsync(url, content).Result;
+            RedirectToActionResult r = new RedirectToActionResult("AccessDenied", "Account", null);
+            if(response.StatusCode==HttpStatusCode.Unauthorized)
+                r.ExecuteResult(new ActionContext());
             return response;
         }
 

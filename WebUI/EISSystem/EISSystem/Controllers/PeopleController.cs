@@ -46,7 +46,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            return View(data);
+            return View();
         }
         [HttpPost]
         public IActionResult LoadData()

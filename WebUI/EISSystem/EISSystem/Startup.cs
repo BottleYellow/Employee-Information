@@ -101,7 +101,6 @@ namespace EIS.WebApp
                 app.UseHsts();
             }
             // app.ConfigureExceptionHandler(logger);
-            
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace EIS.WebAPI.Controllers
             _repository= repository  ;
             _configuration = configuration;
         }
-
+        [DisplayName("List Of Employees")]
         [HttpGet]
         public IActionResult GetAllEmployee()
         {        
