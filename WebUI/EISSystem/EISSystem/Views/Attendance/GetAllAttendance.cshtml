@@ -63,7 +63,7 @@
             @foreach (var person in Model)
             {
             <tr>
-                <td>@person.FirstName</td>
+                <td>@person.FirstName @person.LastName</td>
 
                 @{ 
                     presentDays = person.Attendance.Count();

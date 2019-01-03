@@ -1,11 +1,9 @@
-﻿using EIS.Entities.Employee;
-using EIS.Entities.Leave;
-using System.Collections;
+﻿using EIS.Entities.Leave;
 using System.Collections.Generic;
 
 namespace EIS.Repositories.IRepository
 {
-   public interface ILeaveRepository : IRepositorybase<LeaveRequest>
+    public interface ILeaveRepository : IRepositorybase<LeaveRequest>
    {
         IEnumerable<LeaveRules> GetAllLeaveRules();
         void CreateLeaveRuleAndSave(LeaveRules LeaveRule);

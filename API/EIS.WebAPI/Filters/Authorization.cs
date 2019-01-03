@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Primitives;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EIS.WebAPI.Filters
@@ -30,8 +32,13 @@ namespace EIS.WebAPI.Filters
             }
             try
             {
-                string token = Cache.GetStringValue("TokenValue");
-                if (token == null)
+                string token = filterContext.HttpContext.Request.Headers["Token"].ToString();
+                //if (filterContext.HttpContext.Request.Headers.TryGetValue("Custom", out string headerValues))
+                //{
+                //    string token = headerValues.First();
+                //}
+                //string token = Cache.GetStringValue("TokenValue");
+                if (string.IsNullOrEmpty(token))
                 {
                     // unauthorized!
                     filterContext.Result = new UnauthorizedResult();

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using EIS.Entities.Employee;
+﻿using EIS.Entities.Employee;
 using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net.Http;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EIS.WebApp.Controllers
 {
-    
+
     [DisplayName("User Management")]
     public class UserController : Controller
     {

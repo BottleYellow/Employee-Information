@@ -1,19 +1,14 @@
 ﻿using EIS.WebApp.IServices;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace EIS.WebApp.Services
 {
     public class EISService<T> : IEISService<T> where T: class
     {
+        RedisAgent Cache = new RedisAgent();
         public EISService()
         {
         }
@@ -40,8 +35,9 @@ namespace EIS.WebApp.Services
             HttpClient client = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:54830")
-            };        
+            };           
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            client.DefaultRequestHeaders.Add("Token", Cache.GetStringValue("TokenValue"));
             client.DefaultRequestHeaders.Accept.Add(contentType);
             return client;
         }

@@ -45,8 +45,8 @@ namespace EIS.WebApp.Controllers
         #region Employee
         [DisplayName("List Of Employees")]
         public IActionResult Index()
-        {          
-            return View();
+        {
+            return View(data);
         }
         [HttpPost]
         public IActionResult LoadData()
