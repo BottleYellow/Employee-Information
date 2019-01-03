@@ -1,9 +1,6 @@
-﻿using EIS.Entities.Enums;
-using EIS.Entities.Generic;
+﻿using EIS.Entities.Generic;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace EIS.Entities.Employee
 {

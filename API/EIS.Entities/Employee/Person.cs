@@ -6,7 +6,6 @@ using EIS.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace EIS.Entities.Employee
 {

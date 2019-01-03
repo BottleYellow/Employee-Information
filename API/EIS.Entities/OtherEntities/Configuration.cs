@@ -1,7 +1,5 @@
 ﻿using EIS.Entities.Generic;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EIS.Entities.OtherEntities
 {
@@ -10,6 +8,6 @@ namespace EIS.Entities.OtherEntities
         public string Code { get; set; }
         public string Value { get; set; }
         public DateTime ValidFrom { get; set; }
-        public DateTime ValidTo { get; set; }
+        public DateTime ValidUpTo { get; set; }
     }
 }

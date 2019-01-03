@@ -4,8 +4,8 @@ using EIS.Repositories.IRepository;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 
 namespace EIS.Repositories.Repository
@@ -54,11 +54,6 @@ namespace EIS.Repositories.Repository
         public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
             return _dbContext.Set<T>().Where(expression);
-        }
-
-        public T FindByCondition2(Expression<Func<T, bool>> expression)
-        {
-            return _dbContext.Set<T>().Where(expression).LastOrDefault();
         }
 
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
