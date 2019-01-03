@@ -5,10 +5,10 @@ namespace EIS.Repositories.IRepository
 {
     public interface IEmployeeRepository : IRepositorybase<Person>
     {
-        IEnumerable<Designation> GetDesignations();
-        Designation GetDesignationById(int id);
-        void AddDesignation(Designation designation);
+        IEnumerable<Role> GetDesignations();
+        Role GetDesignationById(int id);
+        void AddDesignationAndSave(Role designation);
         bool DesignationExists(string DesignationName);
-        void UpdateDesignation(Designation designation);
+        void UpdateDesignationAndSave(Role designation);
     }
 }

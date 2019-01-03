@@ -20,8 +20,8 @@ namespace EIS.WebApp.TagHelpers
             if (ac != null)
                 Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
             
-            String[] ParentMenus = new String[5]{"Attendance","Role Management","Leave Management","User Management","" };
-            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","Request for leave","List of Roles", "Create New Attendance", "List Of Users","Manage Designations"};
+            String[] ParentMenus = new String[5]{ "Attendance Management", "Role Management","Leave Management","User Management","" };
+            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","Request for leave","List of Roles", "Create New Attendance", "List Of Users","Manage Roles", "Create Attendance" };
             if (Cache.GetStringValue("Role") == "Admin")
                 ParentMenus.SetValue("Employee Management", 4);
                 

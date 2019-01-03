@@ -2,25 +2,21 @@
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.ComponentModel;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Account Management")]
     public class AccountController : Controller
     {
-        RedisAgent Cache;
-        static string imageBase64Data;
         public readonly IEISService<Users> service;
-        public readonly IDistributedCache distributedCache;
-        public AccountController(IEISService<Users> service,IDistributedCache distributedCache)
+        RedisAgent Cache;
+        public AccountController(IEISService<Users> service)
         {
             this.service = service;
-            this.distributedCache = distributedCache;
             Cache = new RedisAgent();
         }
         
@@ -33,8 +29,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Login(Users user)
         {
             string pid = "";
-            HttpResponseMessage response = service.PostResponse("api/account/login", user);
-            
+            HttpResponseMessage response = service.PostResponse("api/account/login", user); 
             if (response.IsSuccessStatusCode == false)
             {
                 ViewBag.Message = "<p style='color: red'>Please check username or password</p>";

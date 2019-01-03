@@ -1,9 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,7 +29,7 @@ namespace EIS.Repositories.Repository
             var result = results.Select(x => x.p).ToList();
             return result;
         }
-
+       
         public IEnumerable<Person> GetAttendanceMonthly(int month, int year)
         {
             var results = _dbContext.Person

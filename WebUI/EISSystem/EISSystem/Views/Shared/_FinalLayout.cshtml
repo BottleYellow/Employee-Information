@@ -87,6 +87,8 @@
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
+                    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+                    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
                 </ul>
@@ -403,26 +405,49 @@
 </html>
 
 <script type="text/javascript">
-    $("#linkModal").click(function () {
-        var url = $("#modal-placeholder1").data('url');
-        $.get(url, function (data) {
-            $("#modal-placeholder1").html(data);
-            $("#modal-placeholder1").modal('show');
+    $(document).ready(function () {
+        $('#clockIn').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Attendance/Create',
+                success: function (data) {
+                    var d = new Date();
+                    document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
+                    $('#clockIn').attr('disabled', 'disabled');
+                }
+            })
+        });
+        $('#clockOut').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Attendance/Update',
+                success: function () {
+                    var e = new Date();
+                    document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
+                }
+            });
         });
 
-    });
-    $('#logout').click(function () {
-        var url = "/Account/logout";
-        $.post(url, function () {
-            window.location.href = "/Account/login";
+        $("#linkModal").click(function () {
+            var url = $("#modal-placeholder1").data('url');
+            $.get(url, function (data) {
+                $("#modal-placeholder1").html(data);
+                $("#modal-placeholder1").modal('show');
+            });
+
         });
-    })  
-$(document).ready(function(){
-  $('#emplink').click(function(){
-    var dest = $(this).attr('href');
-    $('.content').load(dest+'#main-content') // Hide all content divs
-    // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
-  return false;
-});
-});
+        $('#logout').click(function () {
+            var url = "/Account/logout";
+            $.post(url, function () {
+                window.location.href = "/Account/login";
+            });
+        });  
+
+        $('#emplink').click(function(){
+            var dest = $(this).attr('href');
+            $('.content').load(dest+'#main-content') // Hide all content divs
+            // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
+            return false;
+        });
+    });
 </script>

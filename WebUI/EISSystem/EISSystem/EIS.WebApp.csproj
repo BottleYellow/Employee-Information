@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\Attendance\AllAttendance.cshtml" />
+    <None Include="Views\Attendance\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -29,10 +34,10 @@
       <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll</HintPath>
     </Reference>
     <Reference Include="EIS.Repositories">
-      <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.1\EIS.Repositories.dll</HintPath>
+      <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.2\EIS.Repositories.dll</HintPath>
     </Reference>
     <Reference Include="EIS.Validations">
-      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.1\EIS.Validations.dll</HintPath>
+      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
     </Reference>
     <Reference Include="EIS.WebAPI">
       <HintPath>..\..\..\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll</HintPath>
@@ -41,7 +46,22 @@
 
 
   <ItemGroup>
-    <Content Update="Views\Attendance\GetAllAttendance.cshtml">
+    <Content Update="Views\Attendance\GetAllAttendanceMonthlyById.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Attendance\GetAllAttendanceDailyById.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Attendance\GetAllAttendanceYearlyById - Copy %282%29.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Attendance\GetAllAttendanceMonthlyById.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Attendance\GetAttendanceById.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Attendance\GetAllAttendanceYearly.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\People\CreateEmergencyAddress.cshtml">

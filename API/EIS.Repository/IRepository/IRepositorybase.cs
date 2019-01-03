@@ -10,10 +10,9 @@ namespace EIS.Repositories.IRepository
     {
         IQueryable<T> FindAll();
         T FindByCondition(Expression<Func<T, bool>> expression);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        void Save();
+        void CreateAndSave(T entity);
+        void UpdateAndSave(T entity);
+        void DeleteAndSave(T entity);
         IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression);
         T FindByCondition2(Expression<Func<T, bool>> expression);
         ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid);

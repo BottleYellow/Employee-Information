@@ -1,20 +1,27 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
-using EIS.Repositories.IRepository;
-using EIS.Repositories.Repository;
+using EIS.Entities.User;
 using EIS.Validations.FluentValidations;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace EIS.WebApp
 {
@@ -47,7 +54,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Person>, PersonValidator>();
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
             services.AddTransient<IValidator<LeaveRequest>, LeaveRequestValidator>();
-            services.AddTransient<IValidator<LeaveMaster>, LeaveMasterValidator>();
+            services.AddTransient<IValidator<LeaveRules>, LeaveRulesValidator>();
             services.AddTransient<IValidator<Permanent>, PermanentAddressValidator>();
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();
@@ -55,10 +62,9 @@ namespace EIS.WebApp
             #endregion
 
             
-            //for generic repository
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<RedisAgent>();
             services.AddSession();
+            services.AddTransient<IServiceWrapper, ServiceWrapper>();
             services.AddTransient(typeof(IEISService<>), typeof(EISService<>));
             services.AddSingleton<IControllerService, ControllerService>();
             ////Authorization
@@ -74,7 +80,10 @@ namespace EIS.WebApp
                     res.NamingStrategy = null;
                 }
             });
-
+            services.AddMvc()
+              .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +100,7 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            // app.ConfigureExceptionHandler(logger);
             
             app.UseAuthentication();
             app.UseSession();
@@ -103,7 +113,7 @@ namespace EIS.WebApp
 
             if (id != null)
             {
-                string role= new RedisAgent().GetStringValue("Role");
+                string role = new RedisAgent().GetStringValue("Role");
                 if (role == "Admin")
                 {
                     controller = "People";
@@ -116,6 +126,12 @@ namespace EIS.WebApp
                     action = "Profile";
                     Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
                 }
+            }
+            else
+            {
+                controller = "Account";
+                action = "Login";
+                Template = "{controller=" + controller + "}/{action=" + action + "}";
             }
             app.UseMvc(routes =>
             {

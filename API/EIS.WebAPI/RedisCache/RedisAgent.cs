@@ -23,11 +23,16 @@ namespace EIS.WebAPI.RedisCache
         public void SetStringValue(string key, string value)
         {
             _database.StringSet(key, value);
+            _database.KeyExpire(key, DateTime.Now.AddDays(1));
         }
 
         public void DeleteStringValue(string key)
         {
             _database.KeyDelete(key);
+        }
+        public void SetList(List<string> list)
+        {
+            
         }
     }
 }

@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EIS.WebAPI.ExceptionHandle
 {
@@ -32,8 +29,9 @@ namespace EIS.WebAPI.ExceptionHandle
                         logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
                     }
 
-                    context.Response.StatusCode = 500;
-                    await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
+                    var code=context.Response.StatusCode;
+
+                    await context.Response.WriteAsync("An unexpected fault happened. Status Code "+code+" occurred");
 
                 });
             };

@@ -8,8 +8,6 @@ namespace EIS.Repositories.Repository
     {
         public OtherAddressRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-        }
-
-       
+        }      
     }
 }

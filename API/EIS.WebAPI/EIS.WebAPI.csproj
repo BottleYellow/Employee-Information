@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="EIS.Validations">
+      <HintPath>..\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.caching.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>

@@ -25,40 +25,38 @@
                 <div class="card">
                     <div class="body">
                         @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
-                        <div>
-                            <div class="row col-md-12">
-                                <div class="col-md-4">
-                                    <label>Select Type Of Reports</label>
-                                    <select id="select" style="width:200px;">
-                                        <option value="select">Select Option</option>
-                                        <option value="year" id="year">Year</option>
-                                        <option value="month" id="month">Month</option>
-                                        <option value="week" id="week">Week</option>
-                                    </select>
+                        <div class="row col-md-12">
+                            <div class="col-md-4">
+                                <label>Select Type Of Reports</label>
+                                <select id="select" style="width:200px;">
+                                    <option value="select">Select Option</option>
+                                    <option value="year" id="year">Year</option>
+                                    <option value="month" id="month">Month</option>
+                                    <option value="week" id="week">Week</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="inputyeardiv" hidden="hidden">
+                                    <label>Select Year</label><br />
+                                    <input class="form-control" type="text" id="inputyear" style="width:200px;border:groove;" placeholder="select year" />
                                 </div>
-                                <div class="col-md-4">
-                                    <div id="inputyeardiv" hidden="hidden">
-                                        <label>Select Year</label><br />
-                                        <input class="form-control" type="text" id="inputyear" style="width:200px;border:groove;" placeholder="select year" />
-                                    </div>
-                                    <div id="inputmonthdiv">
-                                        <label>Select Month</label><br />
-                                        <input class="form-control" type="text" id="inputmonth" style="width:200px;border:groove;" placeholder="select month" />
-                                    </div>
-                                    <div id="inputweekdiv" hidden="hidden">
-                                        <label>Select Week</label><br />
-                                        <input class="form-control" type="text" id="inputweek" style="width:200px;border:groove;" placeholder="select week" />
-                                    </div>
+                                <div id="inputmonthdiv">
+                                    <label>Select Month</label><br />
+                                    <input class="form-control" type="text" id="inputmonth" style="width:200px;border:groove;" placeholder="select month" />
                                 </div>
-                                <div class="col-md-4">
-                                    <br />
-                                    <input type="button" id="generateReport" value="Generate" style="font-weight:bold; width:200px; height:35px;"/>
+                                <div id="inputweekdiv" hidden="hidden">
+                                    <label>Select Week</label><br />
+                                    <input class="form-control" type="text" id="inputweek" style="width:200px;border:groove;" placeholder="select week" />
                                 </div>
+                            </div>
+                            <div class="col-md-4">
+                                <br />
+                                <input type="button" id="generateReport" value="Generate" style="font-weight:bold; width:200px; height:35px;" />
                             </div>
                         </div>
                         <div>
                             <div>
-                                <h4><span id="report"></span></h4>
+                                <h4 id="report"></h4>
                             </div>
                             <div id="tbl">
 
@@ -83,8 +81,15 @@
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script type="text/javascript">
+    $(document).ready(function () {
+        var currentDate = new Date();
+        var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
+        var y = new Date().getFullYear();
+        $('#inputmonth').val(m + '/' + y);
+        document.getElementById("report").innerHTML = "Attendance Report - Monthly";
+        generateReport(m + '/' + y, 'month');
+    })
     $('#select').on('change', function () {
-
         var v = $('#select').val();
         if (v == 'year') {
             $('#inputyeardiv').show();
@@ -93,39 +98,6 @@
             $('#inputyear').datetimepicker({
                 format: "YYYY"
             });
-
-            $('#generateReport').on('click', function () {
-                var value = $("#inputyear").val();
-                $("#inputyear").val(value);
-                document.getElementById("report").innerHTML = "Attendance Report - Yearly";
-                $.ajax({
-                    type: 'GET',
-                    url: '@Url.Content("/Attendance/GetAllAttendance")',
-                    data: {"date":value,"type":"year"},
-                    success: function (data) {
-                        document.getElementById("tbl").innerHTML = data;
-                        $('#example').DataTable({
-                            rowReorder: {
-                                selector: 'td:nth-child(2)'
-                            },
-                            dom: 'Bfrtip',
-                            buttons: [
-                            {
-                                extend: 'pdfHtml5',
-                                title: 'data',
-                                title: 'Employee Report',
-                                text: 'Export',
-                                titleAttr: 'Export to Pdf',
-                                orientation: 'landscape',
-                                pageSize: 'LEGAL',
-                                title: 'Attendance Report - Yearly'
-                            }],
-                            responsive: true
-                        });
-                     }
-                });
-            });
-
         }
         else if (v == 'month') {
             $('#inputmonthdiv').show();
@@ -134,85 +106,72 @@
             $('#inputmonth').datetimepicker({
                 format: "MM/YYYY"
             });
-
-            $('#generateReport').on('click', function () {
-                var value = $("#inputmonth").val();
-                $("#inputmonth").val(value);
-                document.getElementById("report").innerHTML = "Attendance Report - Monthly";
-                $.ajax({
-                    type: 'GET',
-                    url: '@Url.Content("/Attendance/GetAllAttendance")',
-                    data: {"date":value,"type":"month"},
-                    success: function (data) {
-                        document.getElementById("tbl").innerHTML = data;
-                        $('#example').DataTable({
-                            rowReorder: {
-                                selector: 'td:nth-child(2)'
-                            },
-                            dom: 'Bfrtip',
-                            buttons: [
-                                {
-                                    extend: 'pdfHtml5',
-                                    title: 'Attendance Report',
-                                    text: 'Export',
-                                    titleAttr: 'Export to Pdf',
-                                    orientation: 'landscape',
-                                    pageSize: 'LEGAL'
-                                }
-                            ],
-                            responsive: true
-                        });
-                    }
-                });
-            });
         }
         else if (v == 'week') {
             $('#inputmonthdiv').hide();
             $('#inputyeardiv').hide();
             $('#inputweekdiv').show();
-            //Initialize the datePicker(I have taken format as mm-dd-yyyy, you can     //have your owh)
             $("#inputweek").datetimepicker({
                 format: 'DD/MM/YYYY'
             });
-
-            $('#inputweek').on('dp.change', function (e) {
-                var value = $("#inputweek").val();
-                var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-                var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
-                $("#inputweek").val(firstDate + " - " + lastDate);
-
-                $('#generateReport').on('click', function (e) {
-                    document.getElementById("report").innerHTML = "Attendance Report - Weekly";
-
-                    $.ajax({
-                        type: 'GET',
-                        url: '@Url.Content("/Attendance/GetAllAttendance")',
-                        data: { "date": firstDate + "-" + lastDate, "type": "week" },
-                        success: function (data) {
-                            document.getElementById("tbl").innerHTML = data;
-                            $('#example').DataTable({
-                                rowReorder: {
-                                    selector: 'td:nth-child(2)'
-                                },
-                                dom: 'Bfrtip',
-                                buttons: [
-                                    {
-                                        extend: 'pdfHtml5',
-                                        title: 'Attendance Report',
-                                        text: 'Export',
-                                        titleAttr: 'Export to Pdf',
-                                        orientation: 'landscape',
-                                        pageSize: 'LEGAL'
-                                    }
-                                ],
-                                responsive: true
-                            });
-                        }
-                    });
-                });
-            });
-            }
+        }
     });
+    $('#inputweek').on('dp.change', function (e) {
+        var value = $("#inputweek").val();
+        var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
+        var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+        $("#inputweek").val(firstDate + " - " + lastDate);
+    });
+    $('#generateReport').on('click', function () {
+        var v = $('#select').val();
+        if (v == 'year') {
+            var value = $("#inputyear").val();
+            $("#inputyear").val(value);
+            document.getElementById("report").innerHTML = "Attendance Report - Yearly";
+            generateReport(value, 'year');
+        }
+        else if (v == 'month') {
+            var value = $("#inputmonth").val();
+            $("#inputmonth").val(value);
+            document.getElementById("report").innerHTML = "Attendance Report - Monthly";
+            generateReport(value, 'month');
+         }
+        else if (v == 'week') {
+            var value = $("#inputweek").val();
+            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
+            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+            $("#inputweek").val(firstDate + " - " + lastDate);
+            document.getElementById("report").innerHTML = "Attendance Report - Weekly";
+            generateReport(firstDate + " - " + lastDate, 'week');
+        }
+    });
+    function generateReport(value,type){
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/Attendance/GetAllAttendance")',
+            data: { "date": value, "type": type },
+            success: function (data) {
+                document.getElementById("tbl").innerHTML = data;
+                $('#example').DataTable({
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'data',
+                        title: 'Employee Report',
+                        text: 'Export',
+                        titleAttr: 'Export to Pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }],
+                    responsive: true
+                });
+                }
+        });
+     }
 </script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

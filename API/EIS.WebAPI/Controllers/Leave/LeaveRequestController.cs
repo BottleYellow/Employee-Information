@@ -30,9 +30,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("Employee/{id}")]
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
-
             var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
-
             if (leave == null)
             {
                 return NotFound();
@@ -44,15 +42,12 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
-
             var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
-
             if (leave == 0)
             {
                 leave = -1;
                 return Ok(leave);
             }
-
             return Ok(leave);
         }
         [Route("UpdateStatus/{RequestId}/{Status}")]
@@ -75,22 +70,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != leave.Id)
-            {
-                return BadRequest();
-            }
-            _repository.Leave.Update(leave);
-
-            try
-            {
-                _repository.Leave.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;               
-            }
-
+            _repository.Leave.UpdateAndSave(leave);
             return NoContent();
         }
 
@@ -104,9 +84,7 @@ namespace EIS.WebAPI.Controllers
             }
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
-            _repository.Leave.Create(leave);
-            _repository.Leave.Save();
-
+            _repository.Leave.CreateAndSave(leave);
             _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();
         }
@@ -115,14 +93,12 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-
             var leave = _repository.Leave.FindByCondition(x => x.Id == id);
             if (leave == null)
             {
                 return NotFound();
             }
-            _repository.Leave.Delete(leave);
-            _repository.Leave.Save();
+            _repository.Leave.DeleteAndSave(leave);
             return Ok(leave);
         }
     }

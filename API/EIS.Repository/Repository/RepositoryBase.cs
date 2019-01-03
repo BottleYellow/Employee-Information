@@ -95,6 +95,24 @@ namespace EIS.Repositories.Repository
 
             return list;
         }
+
+        public void CreateAndSave(T entity)
+        {
+            Create(entity);
+            Save();
+        }
+
+        public void UpdateAndSave(T entity)
+        {
+            Update(entity);
+            Save();
+        }
+
+        public void DeleteAndSave(T entity)
+        {
+            Delete(entity);
+            Save();
+        }
     }
 }
 

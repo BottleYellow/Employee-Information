@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +19,8 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveCredit> Get()
         {
-            return _repository.Leave.GetCredits();
+            var credits= _repository.Leave.GetCredits();
+            return credits;
         }
 
         // GET api/<controller>/5
@@ -33,14 +31,13 @@ namespace EIS.WebAPI.Controllers.Leave
         }
         [Route("AddCredits")]
         [HttpPost]
-        public IActionResult PostLeaveCredits([FromBody] LeaveMaster Leave)
+        public IActionResult PostLeaveCredits([FromBody] LeaveRules Leave)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCredits(Leave);
-            _repository.Leave.Save();
+            _repository.Leave.AddCreditsAndSave(Leave);
 
             return Ok();
         }
@@ -51,8 +48,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.AddCredit(Credit);
-            _repository.Leave.Save();
+            _repository.Leave.AddCreditAndSave(Credit);
 
             return Ok();
         }

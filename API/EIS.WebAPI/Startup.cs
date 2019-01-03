@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +60,10 @@ namespace EIS.WebAPI
                 };
                
             });
-
+            services.AddMvc()
+              .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +81,7 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
+            app.UseWebApiExceptionHandler();
             //app.UseMiddleware<CustomAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();
