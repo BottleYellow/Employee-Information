@@ -27,5 +27,13 @@ namespace EIS.WebApp.Services
         {
             _database.KeyDelete(key);
         }
+        public HashEntry[] GetList(string key)
+        {
+            return _database.HashGetAll(key);
+        }
+        public string GetValuefromList(string lkey, string vkey)
+        {
+            return _database.HashGet(lkey, vkey);
+        }
     }
 }

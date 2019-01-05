@@ -1,4 +1,4 @@
-﻿@using EIS.WebApp.Services;
+﻿﻿@using EIS.WebApp.Services;
 @using Newtonsoft.Json;
 @{
     RedisAgent Cache = new RedisAgent();
@@ -6,11 +6,12 @@
     List<string> links = new List<string>();
     string cur = null;
     List<Navigation> Access = new List<Navigation>();
-    if (ac != null) {
+    if (ac != null)
+    {
         Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
     }
 
-}   
+}
 <!DOCTYPE html>
 
 <html>
@@ -87,8 +88,8 @@
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
-                    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
+                    @RenderSection("Attendance", required:false)
+
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
                 </ul>
@@ -125,91 +126,6 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <DynamicMenu></DynamicMenu>
-                    @*@foreach (var Menu in Access)
-                        {
-                            <li>
-                                @if (Menu.ParentMenuId == 0)
-                                {
-
-                                    <a class="menu-toggle">
-                                        <span>@Menu.MenuName</span>
-                                    </a>
-                                    <ul class="ml-menu">
-                                        @foreach (var Menu2 in Access)
-                                        {
-                                            if(Menu2.ParentMenuId==Menu.MenuId)
-                                            {
-                                                 <li>
-                                                     <a href="@Menu2.MenuURL">@Menu2.MenuName</a>
-                                                 </li>
-                                            }
-
-                                        }
-                                    </ul>
-
-                                }
-                            </li>
-                         }*@
-
-                    @*<secure asp-controller="People" asp-action="Index">
-                            <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <i class="material-icons">supervisor_account</i>
-                                    <span>Employees</span>
-                                </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="/People/Index">All Employees</a>
-                                    </li>
-                                    <li>
-                                        <a href="/Leave/EmployeeLeaveRequests">Leaves Requests</a>
-                                    </li>
-                                    <li>
-                                        <a href="pages/ui/badges.html">Attendance</a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                        </secure>
-                        <secure asp-controller="Role" asp-action="Index">
-                            <li>
-                                <a href="/Role/Index">
-                                    <i class="material-icons">accessibility</i>
-                                    <span>Roles</span>
-                                </a>
-                            </li>
-                        </secure>
-                        <li>
-                            <a href="javascript:void(0);" class="menu-toggle">
-                                <i class="material-icons">subject</i>
-                                <span>Leaves</span>
-                            </a>
-                            <ul class="ml-menu">
-                                <secure asp-controller="Leave" asp-action="LeaveCredits">
-                                    <li>
-                                        <a href="/Leave/LeaveCredits">Leave Credits</a>
-                                    </li>
-                                </secure>
-                                <secure asp-controller="Leave" asp-action="LeavePolicies">
-                                    <li>
-                                        <a href="/Leave/LeavePolicies">Policies</a>
-                                    </li>
-                                </secure>
-
-                                <li>
-                                    <a href="/Leave/RequestLeave">Request for Leave</a>
-                                </li>
-                                <li>
-                                    <a href="/Leave/ShowMyLeaves?pid=@Cache.GetStringValue("PersonId")">Show My Leaves</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="/Attendance/Create">
-                                <i class="material-icons">fingerprint</i>
-                                <span>Attendance</span>
-                            </a>
-                        </li>*@
                 </ul>
             </div>
             <!-- #Menu -->
@@ -372,7 +288,6 @@
 
     <section class="content" id="main-content">
         @RenderBody()
-
     </section>
 
     <!-- Autosize Plugin Js -->
@@ -406,27 +321,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#clockIn').click(function () {
-            $.ajax({
-                type: 'GET',
-                url: '/Attendance/AttendanceInOut',
-                success: function (data) {
-                    var d = new Date();
-                    document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
-                    $('#clockIn').attr('disabled', 'disabled');
-                }
-            })
-        });
-        $('#clockOut').click(function () {
-            $.ajax({
-                type: 'POST',
-                url: '/Attendance/AttendanceInOut',
-                success: function () {
-                    var e = new Date();
-                    document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
-                }
-            });
-        });
 
         $("#linkModal").click(function () {
             var url = $("#modal-placeholder1").data('url');
@@ -441,11 +335,11 @@
             $.post(url, function () {
                 window.location.href = "/Account/login";
             });
-        });  
+        });
 
-        $('#emplink').click(function(){
+        $('#emplink').click(function () {
             var dest = $(this).attr('href');
-            $('.content').load(dest+'#main-content') // Hide all content divs
+            $('.content').load(dest + '#main-content') // Hide all content divs
             // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
             return false;
         });

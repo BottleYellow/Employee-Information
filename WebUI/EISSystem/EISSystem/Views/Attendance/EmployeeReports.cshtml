@@ -1,4 +1,6 @@
-﻿<html>
+﻿@using EIS.Entities.Employee;
+@model Attendance;
+<html>
 <head>
     <title>Dashboard</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -25,6 +27,9 @@
                     <div class="body">
                         @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
                         <div>
+                            <input id="InTime" type="hidden" asp-for="TimeIn" value="@Model.TimeIn.ToString(@"hh\:mm\:ss")" />
+                            <input id="OutTime" type="hidden" asp-for="TimeOut" value="@Model.TimeOut.ToString(@"hh\:mm\:ss")" />
+                            
                             <div class="row col-md-12">
                                 <div class="col-md-4">
                                     <label>Select Type Of Reports</label>
@@ -71,18 +76,50 @@
     </div>
 </body>
 </html>
-
+@section Attendance
+{
+    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
+}
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap1.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script type="text/javascript">
-
+    $(document).ready(function () {
+        var TimeIn = document.getElementById('InTime').value;
+        var TimeOut = document.getElementById('OutTime').value;
+        if (TimeIn != '00:00:00') {
+            document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
+            $('#clockIn').attr('disabled', 'disabled');
+        }
+        if (TimeOut != '00:00:00') {
+            document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+        }
+    })
+    $('#clockIn').click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Attendance/Create',
+            success: function (data) {
+                var d = new Date();
+                document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
+                $('#clockIn').attr('disabled', 'disabled');
+            }
+        })
+    });
+    $('#clockOut').click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Attendance/Update',
+            success: function () {
+                var e = new Date();
+                document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
+            }
+        });
+    });
     $('#select').on('change', function () {
         var v = $('#select').val();
         if (v == 'year') {

@@ -30,7 +30,6 @@ namespace EIS.WebApp.Filters
                     }
 
                     var code = context.Response.StatusCode;
-
                     await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
 
                 });

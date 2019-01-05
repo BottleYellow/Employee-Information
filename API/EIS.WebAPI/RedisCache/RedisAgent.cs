@@ -30,9 +30,16 @@ namespace EIS.WebAPI.RedisCache
         {
             _database.KeyDelete(key);
         }
-        public void SetList(List<string> list)
+        public void SetList(int UserId,List<string> list)
         {
-            
+            HashEntry[] entry = new HashEntry[] 
+            {
+                new HashEntry("PersonId",list[0]),
+                new HashEntry("TokenValue",list[1]),
+                new HashEntry("Role",list[2]),
+                new HashEntry("Access",list[3])
+            };
+            _database.HashSet("user:"+UserId, entry);
         }
     }
 }

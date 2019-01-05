@@ -78,7 +78,7 @@ namespace EIS.WebApp.Controllers
 
             }
 
-            return View("AddPolicy", request);
+            return View("RequestLeave", request);
         }
         #endregion
 
@@ -115,7 +115,7 @@ namespace EIS.WebApp.Controllers
                     }
                 }
             }
-            return View("AddPolicy", Leave);
+            return PartialView("AddPolicy", Leave);
 
         }
 

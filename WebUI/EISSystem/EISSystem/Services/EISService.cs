@@ -1,9 +1,12 @@
 ﻿using EIS.WebApp.IServices;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Web;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace EIS.WebApp.Services
 {
@@ -27,7 +30,7 @@ namespace EIS.WebApp.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
             response = client.GetAsync(url).Result;
-            
+            CheckResponse(response);
             return response;
         }
 
@@ -47,6 +50,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, content).Result;
+            CheckResponse(response);
             return response;
         }
 
@@ -54,6 +58,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, entity).Result;
+            CheckResponse(response);
             return response;
         }
 
@@ -61,6 +66,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PutAsJsonAsync(url, content).Result;
+            CheckResponse(response);
             return response;
         }
 
@@ -68,7 +74,15 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PutAsJsonAsync(url, entity).Result;
+            CheckResponse(response);
             return response;
+        }
+        public void CheckResponse(HttpResponseMessage responseMessage)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
     }
 }

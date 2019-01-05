@@ -25,6 +25,12 @@ namespace EIS.WebAPI.Controllers
         {
             return _repository.Attendances.FindAll();
         }
+        [HttpGet("{Id}")]
+        public Attendance GetAttendancesById([FromRoute]int id)
+        {
+            return _repository.Attendances.FindByCondition(x => x.PersonId == id);
+        }
+
 
         [DisplayName("Create Attendance")]
         [HttpPut("{id}")]

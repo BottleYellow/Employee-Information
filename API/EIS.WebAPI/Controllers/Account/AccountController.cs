@@ -6,8 +6,10 @@ using EIS.WebAPI.RedisCache;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,10 +22,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        public RedisAgent Cache;
-        public readonly IConfiguration configuration;
-        public AccountController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
+        private RedisAgent Cache;
+        private IHttpContextAccessor _accessor;
+        private readonly IConfiguration configuration;
+        public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
+            _accessor = accessor;
             this.configuration = configuration;
             Cache = new RedisAgent();
         }
@@ -37,6 +41,8 @@ namespace EIS.WebAPI.Controllers
             string status = _repository.Users.ValidateUser(user);
             if (status == "success")
             {
+                var b = Request.Headers[HeaderNames.UserAgent].ToString();
+                var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
                 Users newUser = _repository.Users.FindByUserName(user.UserName);
                 JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
                 string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
