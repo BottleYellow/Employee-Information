@@ -61,7 +61,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
             #endregion
 
-            
+
             services.AddScoped<RedisAgent>();
             services.AddSession();
             services.AddTransient<IServiceWrapper, ServiceWrapper>();
@@ -103,6 +103,7 @@ namespace EIS.WebApp
             // app.ConfigureExceptionHandler(logger);
             
             app.UseAuthentication();
+            app.UseWebAppExceptionHandler();
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -124,7 +125,7 @@ namespace EIS.WebApp
                 {
                     controller = "People";
                     action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
+                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + id + "}";
                 }
             }
             else

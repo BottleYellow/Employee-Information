@@ -4,6 +4,9 @@
     int totalDays = 0;
     int year = 0;
     int month = 0;
+    string displayTimeIn = "";
+    string displayTimeOut = "-";
+    string hours = "-";
     DateTime startDate = new DateTime();
 
 
@@ -47,20 +50,32 @@
         endDate = targetDate.AddDays(7);
         totalDays = 7;
     }
-    absentDays = totalDays - Model.Count();
 
-    TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeIn.Ticks)));
-    DateTime timeIn = DateTime.Today.Add(averageTimeIn);
-    string displayTimeIn = timeIn.ToString("hh:mm tt");
+    if(Model.Count()==0)
+    {
+        displayTimeIn = "0";
+        displayTimeOut = "0";
+        hours = "0";
+        absentDays = 0;
+    }
+    else
+    {
+        absentDays = totalDays - Model.Count();
+        TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeIn.Ticks)));
+        DateTime timeIn = DateTime.Today.Add(averageTimeIn);
+        displayTimeIn = timeIn.ToString("hh:mm tt");
 
-    TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeOut.Ticks)));
-    DateTime timeOut = DateTime.Today.Add(averageTimeOut);
-    string displayTimeOut = timeOut.ToString("hh:mm tt");
+        TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeOut.Ticks)));
+        DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+        displayTimeOut = timeOut.ToString("hh:mm tt");
 
-    DateTime averageHours = DateTime.Today.Add(averageTimeOut - averageTimeIn);
-    string displayAverageHours = timeOut.ToString("hh:mm");
+        DateTime averageHours = DateTime.Today.Add(averageTimeOut - averageTimeIn);
+        string displayAverageHours = timeOut.ToString("hh:mm");
 
-    string hours = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2).ToString();
+        hours = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2).ToString();
+    }
+
+
 }
 
 <style type="text/css">
@@ -147,6 +162,7 @@
 
                         @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                         {
+
                             @if (date < DateTime.Now.Date)
                             {
                                 <td><text>Nil</text></td>
@@ -161,8 +177,10 @@
                             }
 
                         }
+
                         else
                         {
+                           
                             <td> @attendance.TimeIn</td>
                             <td> @attendance.TimeOut</td>
                             <td><text style="background-color:green; color:white; padding:5px">Present</text></td>

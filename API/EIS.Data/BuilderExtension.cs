@@ -11,9 +11,9 @@ namespace EIS.Data
     {
         private readonly DbContextOptions<ApplicationDbContext> options;
 
-        public BuilderExtension(DbContextOptions<ApplicationDbContext> options)
+        public BuilderExtension(DbContextOptions<ApplicationDbContext> _options)
         {
-            this.options = options;
+            options = _options;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -185,7 +185,7 @@ namespace EIS.Data
 
                 //one leave has many credits
                 modelBuilder.Entity<LeaveCredit>()
-                  .HasOne(s => s.LeaveMaster)
+                  .HasOne(s => s.LeaveRule)
                   .WithMany(g => g.Credits)
                   .HasForeignKey(s => s.LeaveId);
 

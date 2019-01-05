@@ -20,9 +20,9 @@ namespace EIS.WebAPI.Controllers
     {
         public RedisAgent Cache;
         public readonly IConfiguration configuration;
-        public AccountController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
+        public AccountController(IRepositoryWrapper repository, IConfiguration _configuration) : base(repository)
         {
-            this.configuration = configuration;
+            configuration = _configuration;
             Cache = new RedisAgent();
         }
 
@@ -78,14 +78,14 @@ namespace EIS.WebAPI.Controllers
             }
             return Ok(login);
         }
-        
+        [AllowAnonymous]
         [HttpGet("VerifyPassword/{id}/{password}")]
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
         {
             bool result=_repository.Users.VerifyPassword(id, password);
          return Ok(result);
         }
-
+        [AllowAnonymous]
         [HttpGet("ChangePassword/{id}/{password}")]
         public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
         {

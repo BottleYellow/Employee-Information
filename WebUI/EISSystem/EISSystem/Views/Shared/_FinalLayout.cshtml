@@ -33,13 +33,13 @@
     <link href="~/css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/css/themes/all-themes.css" rel="stylesheet" />
-    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
     <!-- Bootstrap DatePicker Css -->
     <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
     <!-- Jquery Core Js -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
+
 </head>
 <body class="theme-blue">
     <div id="modal-placeholder1" class="modal fade" role="dialog" data-url="@Url.Action("ChangePassword","Account")"></div>
@@ -81,7 +81,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="/Admin/Index">Employee System</a>
+                <h3 style="color:white">Employee System</h3>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -381,7 +381,6 @@
     <script src="~/plugins/momentjs/moment.js"></script>
 
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
-    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
     <!-- Bootstrap Datepicker Plugin Js -->
@@ -408,8 +407,8 @@
     $(document).ready(function () {
         $('#clockIn').click(function () {
             $.ajax({
-                type: 'POST',
-                url: '/Attendance/Create',
+                type: 'GET',
+                url: '/Attendance/AttendanceInOut',
                 success: function (data) {
                     var d = new Date();
                     document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
@@ -420,7 +419,7 @@
         $('#clockOut').click(function () {
             $.ajax({
                 type: 'POST',
-                url: '/Attendance/Update',
+                url: '/Attendance/AttendanceInOut',
                 success: function () {
                     var e = new Date();
                     document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();

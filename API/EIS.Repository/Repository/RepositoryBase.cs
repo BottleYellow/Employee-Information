@@ -46,7 +46,7 @@ namespace EIS.Repositories.Repository
             }
 
             public void Save()
-            {
+            { 
                  _dbContext.SaveChanges();
           
             }
@@ -87,7 +87,7 @@ namespace EIS.Repositories.Repository
                 }              
             }
 
-            data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+            //data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
             var totaldata = data.ToList();
 
             list.Add(totalcount);
@@ -115,5 +115,4 @@ namespace EIS.Repositories.Repository
         }
     }
 }
-
 

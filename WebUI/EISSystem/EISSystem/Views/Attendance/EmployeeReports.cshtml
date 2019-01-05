@@ -12,6 +12,17 @@
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
+        #generateReport {
+
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        #select {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
     </style>
 </head>
 <body>
@@ -26,33 +37,39 @@
                         @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
                         <div>
                             <div class="row col-md-12">
-                                <div class="col-md-4">
-                                    <label>Select Type Of Reports</label>
-                                    <select id="select" style="width:200px;">
-                                        <option value="select">Select Option</option>
-                                        <option value="year" id="year">Year</option>
-                                        <option value="month" id="month">Month</option>
-                                        <option value="week" id="week">Week</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <div id="inputyeardiv" hidden="hidden">
-                                        <label>Select Year</label><br />
-                                        <input class="form-control" type="text" id="inputyear" style="width:200px;border:groove;" placeholder="select year" />
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Select Type Of Reports</label>
+                                            <select class="form-control" id="select" style="width:200px;">
+                                                <option value="select">Select Option</option>
+                                                <option value="year" id="year">Year</option>
+                                                <option value="month" id="month">Month</option>
+                                                <option value="week" id="week">Week</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="inputyeardiv" hidden="hidden">
+                                                <label>Select Year</label><br />
+                                                <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
+                                            </div>
+                                            <div id="inputmonthdiv">
+                                                <label>Select Month</label><br />
+                                                <input class="form-control" type="text" id="inputmonth" style="width:200px;" placeholder="select month" />
+                                            </div>
+                                            <div id="inputweekdiv" hidden="hidden">
+                                                <label>Select Week</label><br />
+                                                <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <br />
+                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                        </div>
                                     </div>
-                                    <div id="inputmonthdiv">
-                                        <label>Select Month</label><br />
-                                        <input class="form-control" type="text" id="inputmonth" style="width:200px;border:groove;" placeholder="select month" />
-                                    </div>
-                                    <div id="inputweekdiv" hidden="hidden">
-                                        <label>Select Week</label><br />
-                                        <input class="form-control" type="text" id="inputweek" style="width:200px;border:groove;" placeholder="select week" />
-                                    </div>
+                                    
                                 </div>
-                                <div class="col-md-4">
-                                    <br />
-                                    <input type="button" id="generateReport" value="Generate" style="font-weight:bold; width:200px; height:35px;" />
-                                </div>
+                                <div class="col-md-3"></div>
                             </div>
                         </div>
                         <div>
@@ -81,7 +98,13 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap1.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
+<style>
+    .dataTables_wrapper .myexport .dt-buttons {
+        float: right;
+    }
+</style>
 <script type="text/javascript">
+
     $('#select').on('change', function () {
         var v = $('#select').val();
         if (v == 'year') {
@@ -140,8 +163,8 @@
     });
     function generateReport(value,type){
         $.ajax({
-            type: 'GET',
-            url: '@Url.Content("/Attendance/GetAttendanceById")',
+            type: 'POST',
+            url: '@Url.Content("/Attendance/EmployeeReports")',
             data: { "date": value, "type": type },
             success: function (data) {
                 document.getElementById("tbl").innerHTML = data;
@@ -149,7 +172,23 @@
                     rowReorder: {
                         selector: 'td:nth-child(2)'
                     },
-                    dom: 'Bfrtip',
+                    'columnDefs': [     
+                        {                           
+                            'searchable': false,
+                            'targets': [0, 1, 2]                            
+                        }
+                    ],
+                    "aoColumns": [
+                        { "sType": "date" }, 
+                          { "sType": "time" },
+                    null,
+                    null
+                    ],
+                    "aoColumnDefs": [
+                        { "aTargets": [0], "bSortable": true },
+                        { "aTargets": ['_all'], "bSortable": false }
+                    ], 
+                    sDom: '<"myexport"B>ifrtlp',
                     buttons: [
                     {
                         extend: 'pdfHtml5',
@@ -176,3 +215,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>

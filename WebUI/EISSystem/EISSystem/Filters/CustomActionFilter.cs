@@ -25,11 +25,6 @@ namespace EIS.WebApp.Filters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
-           
-        }
-        public void OnActionExecuting(ActionExecutingContext context)
-        {
             string actionName = context.RouteData.Values["action"].ToString();
             string controllerName = context.RouteData.Values["controller"].ToString();
             string access = "/" + controllerName + "/" + actionName;
@@ -44,6 +39,11 @@ namespace EIS.WebApp.Filters
             }
             if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
                 context.Result = new RedirectToActionResult("Login", "Account", routeValues: null);
+
+        }
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            
         }
 
     }

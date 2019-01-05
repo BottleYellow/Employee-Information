@@ -1,9 +1,9 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace EIS.WebAPI.Controllers
@@ -38,7 +38,7 @@ namespace EIS.WebAPI.Controllers
 
             return Ok(leave);
         }
-
+        [AllowAnonymous]
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
@@ -50,6 +50,7 @@ namespace EIS.WebAPI.Controllers
             }
             return Ok(leave);
         }
+        [AllowAnonymous]
         [Route("UpdateStatus/{RequestId}/{Status}")]
         [HttpPost]
         public IActionResult UpdateRequestStatus([FromRoute]int RequestId, [FromRoute]string Status)

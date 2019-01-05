@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.Validations.FluentValidations;
 using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using FluentValidation.AspNetCore;
@@ -38,7 +39,7 @@ namespace EIS.WebAPI
                        .AllowAnyHeader();
             }));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<PersonValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
