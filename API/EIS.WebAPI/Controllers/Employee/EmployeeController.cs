@@ -10,9 +10,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
+    [DisplayName("Employee Management")]
     [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
@@ -20,18 +22,23 @@ namespace EIS.WebAPI.Controllers
     {
         public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
+        private readonly IControllerService _controllerService;
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration, IControllerService controllerService)
         {
             _repository= repository  ;
             _configuration = configuration;
+            _controllerService = controllerService;
         }
-
+        
         [HttpGet]
-        public IActionResult GetAllEmployee()
-        {        
+        [DisplayName("List Of Employees")]
+        public IActionResult Index()
+        {
             var employees = _repository.Employee.FindAll();
             return Ok(employees);
         }
+
+        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
@@ -46,6 +53,7 @@ namespace EIS.WebAPI.Controllers
             }
         }
 
+        [DisplayName("Create Employee")]
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
@@ -72,6 +80,7 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
+        [DisplayName("Update Employee")]
         [HttpPut("{id}")]
         [AllowAnonymous]
         public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
@@ -84,6 +93,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(person);
         }
 
+        [DisplayName("Delete Employee")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
         {
@@ -95,6 +105,8 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.DeleteAndSave(person);
             return Ok(person);
         }
+
+        [DisplayName("Manage Roles")]
         [Route("Designations")]
         [HttpGet]
         public IEnumerable<Role> GetDesignations()
@@ -102,6 +114,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Employee.GetDesignations();
         }
 
+        [AllowAnonymous]
         [Route("Designations/{did}")]
         [HttpGet]
         public Role GetDesignationById([FromRoute]int did)
@@ -109,6 +122,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Employee.GetDesignationById(did);
         }
 
+        [AllowAnonymous]
         [Route("DesignationName/{did}")]
         [HttpGet]
         public IActionResult GetDesignationNameById([FromRoute]int did)
@@ -117,6 +131,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(d.Name);
         }
 
+        [DisplayName("Add Role")]
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
@@ -129,6 +144,8 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.AddDesignationAndSave(designation);
             return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
         }
+
+        [DisplayName("Update Role")]
         [Route("UpdateDesignation")]
         public IActionResult UpdateDesignationData([FromBody]Role designation)
         {
@@ -140,6 +157,7 @@ namespace EIS.WebAPI.Controllers
             return NoContent();
         }
 
+        [DisplayName("LoadData")]
         [HttpPost]
         [Route("Data/{search?}")]
         [AllowAnonymous]

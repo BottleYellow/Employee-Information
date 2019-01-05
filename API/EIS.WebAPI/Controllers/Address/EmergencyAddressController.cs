@@ -3,6 +3,7 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -29,7 +30,7 @@ namespace EIS.WebAPI.Controllers
             var EmergencyAddress = _repository.EmergencyAddress.FindByCondition(e=>e.Id==id);
             return EmergencyAddress;
         }
-
+        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IEnumerable<Emergency> GetEmergencyByPersonId([FromRoute] int id)
         {
@@ -37,6 +38,7 @@ namespace EIS.WebAPI.Controllers
             return EmergencyAddresses;
         }
 
+        [DisplayName("Update Emergency Address")]
         [HttpPut]
         public IActionResult PutEmergency([FromBody] Emergency emergency)
         {
@@ -48,6 +50,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(emergency);
         }
 
+        [DisplayName("Add Emergency Address")]
         [HttpPost]
         public IActionResult PostEmergency([FromBody] Emergency emergency)
         {
@@ -60,6 +63,7 @@ namespace EIS.WebAPI.Controllers
             return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
         }
 
+        [DisplayName("Delete Emergency Address")]
         [HttpDelete("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {

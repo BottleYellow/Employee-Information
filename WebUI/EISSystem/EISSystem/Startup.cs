@@ -105,6 +105,7 @@ namespace EIS.WebApp
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
+            app.UseWebAppExceptionHandler();
             app.UseStaticFiles();
             string controller = "Account";
             string action = "Login";

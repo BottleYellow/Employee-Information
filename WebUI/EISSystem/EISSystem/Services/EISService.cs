@@ -1,6 +1,7 @@
 ﻿using EIS.WebApp.IServices;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 

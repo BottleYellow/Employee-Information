@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Text;
 using EIS.Entities.Employee;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
 {
+    [DisplayName("Attendance Management")]
     public class AttendanceController : Controller
     {
         RedisAgent Cache = new RedisAgent();
@@ -20,18 +22,16 @@ namespace EIS.WebApp.Controllers
         {
             this.service = service;
         }
-        public IActionResult Index()
-        {
-            return View("AllAttendance");
-        }
+
         [HttpGet]
+        [DisplayName("Attendance Reports")]
         public IActionResult AllAttendance()
         {
             EmployeeAttendance employeeAttendance = new EmployeeAttendance();
             return View("AllAttendance", employeeAttendance);
         }
-        [HttpGet]
-        public IActionResult GetAllAttendance(string date,string type)
+        [HttpPost]
+        public IActionResult AllAttendance(string date,string type)
         {
             HttpResponseMessage respattendance;
             string[] monthYear = new string[3];
@@ -70,10 +70,21 @@ namespace EIS.WebApp.Controllers
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
             attendances = JsonConvert.DeserializeObject<List<Person>>(attendance);
-            return PartialView(attendances);
+            return PartialView("GetAllAttendance", attendances);
         }
 
-        public IActionResult GetAttendanceById(string date, string type)
+        [DisplayName("My Attendance History")]
+        [HttpGet]
+        public IActionResult EmployeeReports()
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+            HttpResponseMessage response = service.GetResponse("api/attendances/" + id + "");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
+            return View(data);
+        }
+        [HttpPost]
+        public IActionResult EmployeeReports(string date, string type)
         {
             int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage respattendance;
@@ -114,22 +125,14 @@ namespace EIS.WebApp.Controllers
                 attendance = respattendance.Content.ReadAsStringAsync().Result;
             }
             attendances = JsonConvert.DeserializeObject<List<Attendance>>(attendance);
-            return PartialView(attendances);
+            return PartialView("GetAttendanceById",attendances);
         }
 
+        [DisplayName("Create Attendance")]
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult AttendanceInOut()
         {
-            int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
-            HttpResponseMessage response = service.GetResponse("api/attendances/" + id + "");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
-            return View(data);
-        }
-
-        [HttpPost]
-        public IActionResult Create(Attendance attendance)
-        {
+            var attendance = new Attendance();
             int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
@@ -139,11 +142,11 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;                
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);                
             }
-            return RedirectToAction("Index", "People");
+            return View("AllAttendance");
         }
-
+        
         [HttpPost]
-        public IActionResult Update(int id,Attendance attendance)
+        public IActionResult AttendanceInOut(int id,Attendance attendance)
         {
             id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
@@ -153,10 +156,8 @@ namespace EIS.WebApp.Controllers
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = client.PutAsJsonAsync("api/attendances/"+id+"",attendance).Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                TempData["success"] = "success";
-                //return RedirectToAction("index","People");
             }
-            return RedirectToAction("Index", "People");
+            return View("AllAttendance");
         }
     }
 }

@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace EIS.WebAPI.Controllers
 {
+    [DisplayName("Account Management")]
     [EnableCors("MyPolicy")]
     [Route("api/account")]
     [ApiController]
@@ -26,6 +28,7 @@ namespace EIS.WebAPI.Controllers
             Cache = new RedisAgent();
         }
 
+        [DisplayName("Login")]
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
@@ -57,6 +60,8 @@ namespace EIS.WebAPI.Controllers
             }
 
         }
+
+        [DisplayName("Logout")]
         [HttpPost]
         [Route("logout")]
         public IActionResult Logout()
@@ -67,6 +72,7 @@ namespace EIS.WebAPI.Controllers
             Cache.DeleteStringValue("Role");
             return Ok("Successfully Logged out.");
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
@@ -79,6 +85,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
         
+        [AllowAnonymous]
         [HttpGet("VerifyPassword/{id}/{password}")]
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
         {
@@ -86,6 +93,8 @@ namespace EIS.WebAPI.Controllers
          return Ok(result);
         }
 
+        [DisplayName("Change Password")]
+        [AllowAnonymous]
         [HttpGet("ChangePassword/{id}/{password}")]
         public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
         {
@@ -93,8 +102,7 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
-
-        // DELETE: api/Logins/5
+        
         [HttpDelete("{id}")]
         public IActionResult DeleteLogin([FromRoute] int id)
         {
@@ -107,6 +115,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
 
+        [DisplayName("Forgot Password")]
         [HttpPost]
         [Route("forgot/{username}")]
         [AllowAnonymous]

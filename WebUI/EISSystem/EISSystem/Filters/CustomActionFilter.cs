@@ -1,18 +1,11 @@
 ﻿
 using EIS.WebApp.Models;
 using EIS.WebApp.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace EIS.WebApp.Filters
 {
@@ -36,8 +29,6 @@ namespace EIS.WebApp.Filters
                 if (check==null)
                     context.Result = new RedirectResult("/Account/AccessDenied");
             }
-            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
-                context.Result = new RedirectToActionResult("Login", "Account", routeValues:null);
            
         }
         public void OnActionExecuting(ActionExecutingContext context)

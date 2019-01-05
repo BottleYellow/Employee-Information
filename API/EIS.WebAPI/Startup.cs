@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.Validations.FluentValidations;
 using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using FluentValidation.AspNetCore;
@@ -38,13 +39,16 @@ namespace EIS.WebAPI
                        .AllowAnyHeader();
             }));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AttendanceValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
+            services.AddSingleton<IControllerService, ControllerService>();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(Authorization));
+                options.Filters.Add(typeof(CustomFilter));
+                options.Filters.Add(typeof(MyExceptionFilter));
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -70,9 +74,6 @@ namespace EIS.WebAPI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
         {
             app.UseCors("MyPolicy");
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug(LogLevel.Information);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,8 +82,8 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
+            
             app.UseWebApiExceptionHandler();
-            //app.UseMiddleware<CustomAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();

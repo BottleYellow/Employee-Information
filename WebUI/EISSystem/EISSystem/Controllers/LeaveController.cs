@@ -58,6 +58,7 @@ namespace EIS.WebApp.Controllers
                 ViewBag.ListOfPolicy = data;
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult RequestLeave(LeaveRequest request)
@@ -87,6 +88,7 @@ namespace EIS.WebApp.Controllers
         {
             return View(data);
         }
+        [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
         {
             var model = new LeaveRules();
@@ -128,6 +130,7 @@ namespace EIS.WebApp.Controllers
             List<LeaveCredit> Credits = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData);
             return View(Credits);
         }
+
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()
         {
@@ -139,6 +142,7 @@ namespace EIS.WebApp.Controllers
             var model = new LeaveCredit();
             return PartialView("AddCredit", model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddCredit(LeaveCredit Credit)

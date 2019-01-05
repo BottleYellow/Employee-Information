@@ -82,6 +82,7 @@
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script type="text/javascript">
+
     $('#select').on('change', function () {
         var v = $('#select').val();
         if (v == 'year') {
@@ -149,6 +150,22 @@
                     rowReorder: {
                         selector: 'td:nth-child(2)'
                     },
+                    'columnDefs': [
+                        {
+                            'searchable': false,
+                            'targets': [0, 1, 2]
+                        }
+                    ],
+                    "aoColumns": [
+                        { "sType": "date" },
+                        null,
+                    null,
+                    null
+                    ],
+                    "aoColumnDefs": [
+                        { "aTargets": [0], "bSortable": true },
+                        { "aTargets": ['_all'], "bSortable": false }
+                    ],
                     dom: 'Bfrtip',
                     buttons: [
                     {
@@ -160,6 +177,29 @@
                         orientation: 'landscape',
                         pageSize: 'LEGAL'
                     }],
+    "columns": [
+                { "data": "Date", "name": "Date", "autoWidth": true },
+                {
+                    "data": "TimeIn", "name": "TimeIn", "autoWidth": true
+                },
+
+        {
+            "data": "TimeOut", "name": "TimeOut", "autoWidth": true},
+        {
+            "data": "Status", "name": "Status", "autoWidth": true}
+
+                
+            ],
+                    "initComplete": function () {
+                        var $searchInput = $('div.dataTables_filter input');
+                        $searchInput.unbind();
+                        $searchInput.bind('keyup', function (e) {
+                            if (this.value.length >= 3 || this.value.length == 0) {
+                                dTable.search(this.value).draw();
+                            }
+                        });
+                    },
+
                     responsive: true
                 });
                 }
@@ -176,3 +216,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
+    [DisplayName("Attendance Management")]
     [EnableCors("MyPolicy")]
     [Route("api/Attendances")]
     [ApiController]
@@ -24,6 +26,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Attendances.FindAll();
         }
 
+        [DisplayName("Create Attendance")]
         [HttpPut("{id}")]
         public IActionResult PutAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
@@ -40,6 +43,7 @@ namespace EIS.WebAPI.Controllers
             return NoContent();
         }
 
+        [DisplayName("Create Attendance")]
         [HttpPost("{id}")]
         public IActionResult PostAttendance(int id, [FromBody] Attendance attendance)
         {
@@ -67,6 +71,8 @@ namespace EIS.WebAPI.Controllers
             return Ok(Attendance);
         }
 
+
+        [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceMonthly/{month}/{year}")]
         [HttpGet]
         public IEnumerable<Person> GetAllAttendanceMonthly([FromRoute] int month, [FromRoute] int year)
@@ -75,6 +81,8 @@ namespace EIS.WebAPI.Controllers
             return data;
         }
 
+
+        [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceYearly/{year}")]
         [HttpGet]
         public IEnumerable<Person> GetAllAttendanceYearly([FromRoute] int year)
@@ -83,6 +91,8 @@ namespace EIS.WebAPI.Controllers
             return data;
         }
 
+
+        [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceWeekly/{startOfWeek}/{endOfWeek}")]
         [HttpGet]
         public IEnumerable<Person> GetAllAttendanceWeekly([FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
@@ -91,6 +101,7 @@ namespace EIS.WebAPI.Controllers
             return data;
         }
 
+        [DisplayName("My Attendance History")]
         [HttpGet("GetAttendanceById/{id}/{year}/{month?}")]
         public IActionResult GetAttendanceById([FromRoute] int year, [FromRoute]int id, [FromRoute]int? month)
         {
@@ -102,6 +113,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(attendance);
         }
 
+        [DisplayName("My Attendance History")]
         [HttpGet("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
         public IActionResult GetWeeklyAttendanceById([FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
         {

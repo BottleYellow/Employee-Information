@@ -3,6 +3,7 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace EIS.WebAPI.Controllers
         {
             return _repository.CurrentAddress.FindAll();
         }
-
+        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetCurrent([FromRoute] int id)
         {
@@ -30,7 +31,7 @@ namespace EIS.WebAPI.Controllers
                 return NotFound();
             return Ok(current);
         }
-
+        [DisplayName("Update Current Address")]
         [HttpPut]
         public IActionResult PutCurrent([FromBody] Current current)
         {
@@ -41,7 +42,7 @@ namespace EIS.WebAPI.Controllers
             _repository.CurrentAddress.UpdateAndSave(current);          
             return Ok(current);
         }
-
+        [DisplayName("Add Current Address")]
         [HttpPost]
         public IActionResult PostCurrent([FromBody] Current current)
         {
@@ -52,7 +53,7 @@ namespace EIS.WebAPI.Controllers
             _repository.CurrentAddress.CreateAndSave(current);
             return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
         }
-
+        [DisplayName("Delete Current Address")]
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrent([FromRoute] int id)
         {
