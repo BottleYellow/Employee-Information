@@ -46,7 +46,7 @@ namespace EIS.Repositories.Repository
             }
 
             public void Save()
-            { 
+            {
                  _dbContext.SaveChanges();
           
             }
@@ -54,11 +54,6 @@ namespace EIS.Repositories.Repository
         public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
             return _dbContext.Set<T>().Where(expression);
-        }
-
-        public T FindByCondition2(Expression<Func<T, bool>> expression)
-        {
-            return _dbContext.Set<T>().Where(expression).LastOrDefault();
         }
 
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
@@ -87,7 +82,7 @@ namespace EIS.Repositories.Repository
                 }              
             }
 
-            //data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+           // data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
             var totaldata = data.ToList();
 
             list.Add(totalcount);
@@ -115,4 +110,5 @@ namespace EIS.Repositories.Repository
         }
     }
 }
+
 

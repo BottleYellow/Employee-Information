@@ -3,9 +3,11 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers.User
 {
+    [DisplayName("User Management")]
     [ApiController]
     [Route("api/user")]
     public class UserController : BaseController
@@ -14,14 +16,13 @@ namespace EIS.WebAPI.Controllers.User
         {
 
         }
-
+        [DisplayName("List Of Users")]
         [HttpGet]
         public IEnumerable<Users> Get()
         {
             return _repository.Users.FindAll();
         }
 
-        // GET api/<controller>/5
         [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)

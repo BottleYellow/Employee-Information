@@ -3,9 +3,11 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
+   
     [Route("api/PermanentAddress")]
     [ApiController]
     public class PermanentAddressController : Controller
@@ -21,7 +23,7 @@ namespace EIS.WebAPI.Controllers
         {
             return _repository.PermanentAddress.FindAll();
         }
-        
+        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetPermanent([FromRoute] int id)
         {
@@ -30,7 +32,8 @@ namespace EIS.WebAPI.Controllers
                 return NotFound();
             return Ok(Permanent);
         }
-        
+
+        [DisplayName("Update Permanent Address")]
         [HttpPut]
         public IActionResult PutPermanent([FromBody] Permanent permanent)
         {
@@ -41,7 +44,8 @@ namespace EIS.WebAPI.Controllers
             _repository.PermanentAddress.UpdateAndSave(permanent);
             return Ok(permanent);
         }
-        
+
+        [DisplayName("Add Permanent Address")]
         [HttpPost]
         public IActionResult PostPermanent([FromBody] Permanent permanent)
         {
@@ -52,7 +56,8 @@ namespace EIS.WebAPI.Controllers
             _repository.PermanentAddress.CreateAndSave(permanent);
             return CreatedAtAction("GetPermanent", new { id = permanent.Id }, permanent);
         }
-        
+
+        [DisplayName("Delete Permanent Address")]
         [HttpDelete("{id}")]
         public IActionResult DeletePermanent([FromRoute] int id)
         {

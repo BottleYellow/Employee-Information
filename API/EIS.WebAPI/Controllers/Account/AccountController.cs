@@ -6,26 +6,33 @@ using EIS.WebAPI.RedisCache;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System;
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace EIS.WebAPI.Controllers
 {
+    [DisplayName("Account Management")]
     [EnableCors("MyPolicy")]
     [Route("api/account")]
     [ApiController]
     public class AccountController : BaseController
     {
-        public RedisAgent Cache;
-        public readonly IConfiguration configuration;
-        public AccountController(IRepositoryWrapper repository, IConfiguration _configuration) : base(repository)
+        private RedisAgent Cache;
+        private IHttpContextAccessor _accessor;
+        private readonly IConfiguration configuration;
+        public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
-            configuration = _configuration;
+            _accessor = accessor;
+            this.configuration = configuration;
             Cache = new RedisAgent();
         }
 
+        [DisplayName("Login")]
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
@@ -34,6 +41,8 @@ namespace EIS.WebAPI.Controllers
             string status = _repository.Users.ValidateUser(user);
             if (status == "success")
             {
+                var b = Request.Headers[HeaderNames.UserAgent].ToString();
+                var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
                 Users newUser = _repository.Users.FindByUserName(user.UserName);
                 JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
                 string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
@@ -57,6 +66,8 @@ namespace EIS.WebAPI.Controllers
             }
 
         }
+
+        [DisplayName("Logout")]
         [HttpPost]
         [Route("logout")]
         public IActionResult Logout()
@@ -68,6 +79,7 @@ namespace EIS.WebAPI.Controllers
             return Ok("Successfully Logged out.");
         }
 
+
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
         {
@@ -78,6 +90,7 @@ namespace EIS.WebAPI.Controllers
             }
             return Ok(login);
         }
+        
         [AllowAnonymous]
         [HttpGet("VerifyPassword/{id}/{password}")]
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
@@ -85,6 +98,8 @@ namespace EIS.WebAPI.Controllers
             bool result=_repository.Users.VerifyPassword(id, password);
          return Ok(result);
         }
+
+        [DisplayName("Change Password")]
         [AllowAnonymous]
         [HttpGet("ChangePassword/{id}/{password}")]
         public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
@@ -93,8 +108,7 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
-
-        // DELETE: api/Logins/5
+        
         [HttpDelete("{id}")]
         public IActionResult DeleteLogin([FromRoute] int id)
         {
@@ -107,6 +121,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(login);
         }
 
+        [DisplayName("Forgot Password")]
         [HttpPost]
         [Route("forgot/{username}")]
         [AllowAnonymous]

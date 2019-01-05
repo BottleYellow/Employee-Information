@@ -12,14 +12,14 @@ namespace EIS.WebApp.Controllers
     [DisplayName("Account Management")]
     public class AccountController : Controller
     {
-        public readonly IEISService<Users> service;
+        public readonly IEISService<Users> _service;
         RedisAgent Cache;
         public AccountController(IEISService<Users> service)
         {
-            this.service = service;
+            _service = service;
             Cache = new RedisAgent();
         }
-        
+        [DisplayName("Login")]
         [HttpGet]
         public IActionResult Login()
         {
@@ -29,7 +29,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Login(Users user)
         {
             string pid = "";
-            HttpResponseMessage response = service.PostResponse("api/account/login", user); 
+            HttpResponseMessage response = _service.PostResponse("api/account/login", user); 
             if (response.IsSuccessStatusCode == false)
             {
                 ViewBag.Message = "<p style='color: red'>Please check username or password</p>";
@@ -47,11 +47,12 @@ namespace EIS.WebApp.Controllers
             }
             return RedirectToAction("Profile","People",new { PersonId=Convert.ToInt32(pid)});
         }
+
         [DisplayName("Logout")]
         [HttpGet]
         public IActionResult LogOut()
         {
-            HttpResponseMessage response = service.PostResponse("api/account/logout",null);
+            HttpResponseMessage response = _service.PostResponse("api/account/logout",null);
             return View("Login");
         }
         [DisplayName("Forgot Password")]
@@ -64,7 +65,7 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(string username)
         { 
-            HttpClient client = service.GetService();
+            HttpClient client = _service.GetService();
             HttpResponseMessage response = client.PostAsJsonAsync("api/account/forgot/"+username+"",username).Result;
             if(response.IsSuccessStatusCode==true)
             { 

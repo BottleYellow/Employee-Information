@@ -47,9 +47,12 @@ namespace EIS.WebApp
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(CustomActionFilter));
+                options.Filters.Add(typeof(ErrorHandlingFilter));
             });
-            services.AddMvc().AddFluentValidation();
-
+            //services.AddMvc().AddFluentValidation();
+            services.AddMvc()
+            .AddFluentValidation(fvc =>
+                fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
             #region[Validations]
             services.AddTransient<IValidator<Person>, PersonValidator>();
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
@@ -61,7 +64,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
             #endregion
 
-
+            services.AddDistributedMemoryCache();
             services.AddScoped<RedisAgent>();
             services.AddSession();
             services.AddTransient<IServiceWrapper, ServiceWrapper>();
@@ -89,8 +92,6 @@ namespace EIS.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //AppDependencyResolver.Init(app.ApplicationServices);
-            //var Cache = (IDistributedCache)AppDependencyResolver.Current.GetService(typeof(IDistributedCache));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -100,12 +101,12 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            //app.UseWebAppExceptionHandler();
             // app.ConfigureExceptionHandler(logger);
-            
             app.UseAuthentication();
-            app.UseWebAppExceptionHandler();
             app.UseSession();
             app.UseHttpsRedirection();
+            app.UseWebAppExceptionHandler();
             app.UseStaticFiles();
             string controller = "Account";
             string action = "Login";
@@ -125,7 +126,7 @@ namespace EIS.WebApp
                 {
                     controller = "People";
                     action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + id + "}";
+                    Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
                 }
             }
             else

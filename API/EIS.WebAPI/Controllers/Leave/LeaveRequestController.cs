@@ -4,7 +4,9 @@ using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -19,14 +21,14 @@ namespace EIS.WebAPI.Controllers
             _repository = repository;
         }
 
-        // GET: api/Leaves
+        [DisplayName("View all requests")]
         [HttpGet]
         public IEnumerable<LeaveRequest> GetLeaveRequests()
         {
             return _repository.Leave.FindAll();
         }
 
-        // GET: api/Leaves/5
+        [DisplayName("Show my leaves")]
         [HttpGet("Employee/{id}")]
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
@@ -38,6 +40,7 @@ namespace EIS.WebAPI.Controllers
 
             return Ok(leave);
         }
+
         [AllowAnonymous]
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
@@ -50,6 +53,7 @@ namespace EIS.WebAPI.Controllers
             }
             return Ok(leave);
         }
+
         [AllowAnonymous]
         [Route("UpdateStatus/{RequestId}/{Status}")]
         [HttpPost]
@@ -75,7 +79,7 @@ namespace EIS.WebAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Leaves
+        [DisplayName("Request for leave")]
         [HttpPost]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {

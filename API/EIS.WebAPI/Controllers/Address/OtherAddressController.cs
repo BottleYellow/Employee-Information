@@ -2,6 +2,7 @@
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -14,7 +15,7 @@ namespace EIS.WebAPI.Controllers
         {
             _repository = repository;
         }
-        
+        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IEnumerable<Other> GetOtherAddresseses(int id)
         {
