@@ -28,7 +28,7 @@ namespace EIS.WebAPI.ExceptionHandle
                         var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
                         logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
                     }
-
+                    
                     var code=context.Response.StatusCode;
 
                     await context.Response.WriteAsync("An unexpected fault happened. Status Code "+code+" occurred");

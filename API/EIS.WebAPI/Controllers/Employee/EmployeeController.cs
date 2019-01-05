@@ -29,7 +29,7 @@ namespace EIS.WebAPI.Controllers
         [DisplayName("List Of Employees")]
         [HttpGet]
         public IActionResult GetAllEmployee()
-        {        
+        {
             var employees = _repository.Employee.FindAll();
             return Ok(employees);
         }

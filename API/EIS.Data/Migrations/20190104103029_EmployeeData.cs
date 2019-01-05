@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class EmployeeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -45,6 +46,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -67,6 +69,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "date", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
@@ -108,6 +111,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -138,6 +142,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -169,6 +174,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -204,6 +210,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -236,6 +243,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -267,6 +275,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -297,6 +306,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -334,6 +344,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -372,6 +383,7 @@ namespace EIS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),

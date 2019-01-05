@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
+using EIS.Validations.FluentValidations;
 using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using FluentValidation.AspNetCore;
@@ -9,9 +10,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -38,10 +41,11 @@ namespace EIS.WebAPI
                        .AllowAnyHeader();
             }));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Person>());
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LeaveRulesValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
+            services.AddHttpContextAccessor();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(Authorization));

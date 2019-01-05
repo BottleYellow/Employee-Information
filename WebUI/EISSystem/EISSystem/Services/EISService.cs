@@ -1,16 +1,12 @@
-﻿using EIS.WebApp.Filters;
-using EIS.WebApp.IServices;
+﻿using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Web;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace EIS.WebApp.Services
 {
@@ -34,9 +30,7 @@ namespace EIS.WebApp.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
             response = client.GetAsync(url).Result;
-            RedirectToActionResult r = new RedirectToActionResult("AccessDenied", "Account", null);
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-                r.UrlHelper.ActionContext.HttpContext.Response.Redirect("/Account/AccessDenied");
+            CheckResponse(response);
             return response;
         }
 
@@ -56,6 +50,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, content).Result;
+            CheckResponse(response);
             return response;
         }
 
@@ -63,7 +58,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PostAsJsonAsync(url, entity).Result;
-            
+            CheckResponse(response);
             return response;
         }
 
@@ -71,9 +66,7 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PutAsJsonAsync(url, content).Result;
-            RedirectToActionResult r = new RedirectToActionResult("AccessDenied", "Account", null);
-            if(response.StatusCode==HttpStatusCode.Unauthorized)
-                r.ExecuteResult(new ActionContext());
+            CheckResponse(response);
             return response;
         }
 
@@ -81,7 +74,15 @@ namespace EIS.WebApp.Services
         {
             HttpClient client = GetService();
             HttpResponseMessage response = client.PutAsJsonAsync(url, entity).Result;
+            CheckResponse(response);
             return response;
+        }
+        public void CheckResponse(HttpResponseMessage responseMessage)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
     }
 }
