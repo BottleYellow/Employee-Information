@@ -14,6 +14,6 @@ namespace EIS.Entities.Leave
         public int PersonId { get; set; }
         public int LeaveId { get; set; }
         public virtual Person Person { get; set; }
-        public virtual LeaveRules LeaveMaster{ get; set; }
+        public virtual LeaveRules LeaveRule{ get; set; }
     }
 }

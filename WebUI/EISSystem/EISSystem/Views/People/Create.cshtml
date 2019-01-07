@@ -10,8 +10,8 @@
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 </header>
 <div class="container-fluid">
-    <div class="block-header">
-        <h2>Create Employee</h2>
+    <div>
+        <h3><b>Create Employee</b></h3>
     </div>
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -22,25 +22,7 @@
                         <input type="hidden" asp-for="Id" value="0" />
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="IdCard">Id Card No. : </label>
-                                            <div class="form-line">
-                                                <input asp-for="IdCard" class="form-control" />
-                                            </div>
-                                            <span asp-validation-for="IdCard" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-xs-12">
-
-                                    </div>
-                                    <div class="col-md-4 col-xs-12">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
+                                <div style="height:50px"></div>
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
@@ -105,7 +87,7 @@
                                         <div class="form-group">
                                             <label asp-for="Image">Choose Image : </label>
                                             <div class="form-line">
-                                                <input asp-for="Image" formenctype="multipart/form-data" type="file" class="form-control" name="file" id="file" />
+                                                <input asp-for="Image" formenctype="multipart/form-data" type="file" class="form-control" name="file" id="file"/>
 
                                             </div>
                                             <span asp-validation-for="Image" class="text-danger"></span>
@@ -156,12 +138,7 @@
 
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label asp-for="Salary">Salary : </label>
-                                            <div class="form-line">
-                                                <input asp-for="Salary" class="form-control" />
-
-                                            </div>
-                                            <span asp-validation-for="Salary" class="text-danger"></span>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -180,12 +157,12 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label asp-for="LeavingDate">Leaving Date : </label>
+                                            <label asp-for="Salary">Salary : </label>
                                             <div class="form-line">
-                                                <input asp-for="LeavingDate" class="form-control" />
+                                                <input asp-for="Salary" class="form-control" />
 
                                             </div>
-                                            <span asp-validation-for="LeavingDate" class="text-danger"></span>
+                                            <span asp-validation-for="Salary" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -265,4 +242,5 @@
         alert(x);
     }
 </script>
+
 

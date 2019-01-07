@@ -2,7 +2,6 @@
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
-using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ namespace EIS.WebApp.Controllers
     [DisplayName("Employee Management")]
     public class PeopleController : BaseController<Person>
     {
-        RedisAgent cache;
+
         #region Declarations
         public readonly IServiceWrapper _services;
         private readonly IControllerService _controllerService;
@@ -32,10 +31,10 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Controller
-        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services) : base(service)
+        [DisplayName("Employee Management")]
+        public PeopleController(IEISService<Person> service, IControllerService _controllerService, IServiceWrapper services) : base(service)
         {
-            cache = new RedisAgent();
-            _controllerService = controllerService;
+            this._controllerService = _controllerService;
             _services = services;
             HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -47,20 +46,15 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            return View();
+            return View(data);
         }
-
-        [DisplayName("LoadData")]
         [HttpPost]
         public IActionResult LoadData()
         {
             return base.LoadData("api/employee/data");
         }
-
-        [DisplayName("Profile view")]
         public IActionResult Profile(int PersonId)
         {
-            PersonId = Convert.ToInt32(cache.GetStringValue("PersonId"));
             response = _services.Employee.GetResponse("api/employee/" + PersonId + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             string permanent = _services.PermanentAddress.GetResponse("api/PermanentAddress/" + PersonId + "").Content.ReadAsStringAsync().Result;
@@ -87,37 +81,39 @@ namespace EIS.WebApp.Controllers
             Response.StatusCode = (int)response.StatusCode;
             return View("Profile", data);
         }
-
         [DisplayName("Create Employee")]
         public IActionResult Create()
         {
+
             ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data;
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,DesignationId,Id")]Person person, IList<IFormFile> file)
+        public IActionResult Create([Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IList<IFormFile> file)
         {
+
             ViewBag.Designations = rolesList;
-            var data = from p in EmployeeData()
-                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
-            ViewBag.Persons = data;
-            person.CreatedDate = DateTime.Now.Date;
-            IFormFile uploadedImage = file.FirstOrDefault();
-            if (uploadedImage == null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
+            if (ModelState.IsValid)
             {
-                MemoryStream ms = new MemoryStream();
-                uploadedImage.OpenReadStream().CopyTo(ms);
+                var data = from p in EmployeeData()
+                           select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
 
-                Image image = Image.FromStream(ms);
-                person.Image = ms.ToArray();
-
-                if (ModelState.IsValid)
+                ViewBag.Persons = data;
+                person.CreatedDate = DateTime.Now.Date;
+                IFormFile uploadedImage = file.FirstOrDefault();
+                if (uploadedImage != null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
                 {
+                    MemoryStream ms = new MemoryStream();
+                    uploadedImage.OpenReadStream().CopyTo(ms);
+
+                    Image image = Image.FromStream(ms);
+                    person.Image = ms.ToArray();
+
+
                     HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person);
                     var data1 = response.Content.ReadAsStringAsync().Result;
                     if (response.IsSuccessStatusCode == true)
@@ -143,7 +139,7 @@ namespace EIS.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,Designation,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person)
+        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,RoleId,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person)
         {
 
             if (id != person.Id)
@@ -187,7 +183,6 @@ namespace EIS.WebApp.Controllers
 
             return View(person);
         }
-
         [DisplayName("Delete Employee")]
         public IActionResult Delete(int id)
         {
@@ -214,7 +209,6 @@ namespace EIS.WebApp.Controllers
             }
             return View();
         }
-
         [AllowAnonymous]
         public List<Person> EmployeeData()
         {
@@ -325,8 +319,7 @@ namespace EIS.WebApp.Controllers
             ViewData["Controllers"] = _controllerService.GetControllers();
             return RedirectToAction("Designations", "People");
         }
-
-    
+        [DisplayName("Update Role")]
         public ActionResult EditRole(int id)
         {
             ViewData["Controllers"] = _controllerService.GetControllers();
@@ -344,7 +337,6 @@ namespace EIS.WebApp.Controllers
             };
             return View(viewModel);
         }
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditRole(int id, RoleViewModel viewModel)
@@ -421,9 +413,9 @@ namespace EIS.WebApp.Controllers
             {
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse("api/PermanentAddress", permanent);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                return RedirectToAction("Profile", "People", new { id = pid });
+                return RedirectToAction("Profile", "People", new { PersonId = pid });
             }
-            return View();          
+            return View();
         }
         [DisplayName("Update Permanent Address")]
         [HttpPost]
@@ -437,7 +429,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.PermanentAddress.PutResponse("api/PermanentAddress", permanent);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { id = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = pid });
         }
         [DisplayName("Delete Permanent Address")]
         public IActionResult DeletePermanentAddress(int perid)
@@ -464,7 +456,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse("api/CurrentAddress", current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { id = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = pid });
         }
         [DisplayName("Update Current Address")]
         [HttpPost]
@@ -478,7 +470,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.CurrentAddress.PutResponse("api/CurrentAddress", current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { id = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = pid });
         }
         [DisplayName("Delete Current Address")]
         public IActionResult DeleteCurrentAddress(int cid)
@@ -505,19 +497,18 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse("api/EmergencyAddress", emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { id = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = pid });
         }
         [DisplayName("Update Emergency Address")]
         [HttpGet]
         public IActionResult EditEmergencyAddress(int eid)
         {
-            HttpResponseMessage response = _services.EmergencyAddress.GetResponse("api/EmergencyAddress/Get/"+eid+"");
+            HttpResponseMessage response = _services.EmergencyAddress.GetResponse("api/EmergencyAddress/Get/" + eid + "");
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             string emergency = response.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Emergency>(emergency);
             return PartialView("EditEmergencyAddress", data);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditEmergencyAddress(int pid, Emergency emergency)
@@ -529,9 +520,8 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.EmergencyAddress.PutResponse("api/EmergencyAddress", emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { id = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = pid });
         }
-
         [DisplayName("Delete Emergency Address")]
         public IActionResult DeleteEmergencyAddress(int eid)
         {

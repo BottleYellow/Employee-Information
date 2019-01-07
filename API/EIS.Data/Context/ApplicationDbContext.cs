@@ -1,11 +1,11 @@
 ﻿using EIS.Entities.Address;
-using EIS.Entities.User;
 using EIS.Entities.Employee;
+using EIS.Entities.Leave;
+using EIS.Entities.OtherEntities;
+using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.IO;
-using EIS.Entities.Leave;
 
 namespace EIS.Data.Context
 {
@@ -41,7 +41,7 @@ namespace EIS.Data.Context
         public DbSet<Emergency> EmergencyAddresses { get; set; }
         public DbSet<Other> OtherAddresses { get; set; }
         public DbSet<Role> Roles { get; set; }
-        
+        public DbSet<Configuration> configurations { get; set; }
         #endregion
     }
 }

@@ -106,6 +106,23 @@ namespace EIS.WebAPI.Controllers
             var data = _repository.Attendances.GetAttendanceWeekly(startOfWeek, endOfWeek);
             return data;
         }
+        //[HttpGet("GetAttendanceById/{id}/{year}/{month?}")]
+        //public IActionResult GetAttendanceById([FromRoute] int year, [FromRoute]int id, [FromRoute]int? month)
+        //{
+        //    IEnumerable<Attendance> attendance;
+        //    if (month == null)
+        //        attendance = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
+        //    else
+        //        attendance = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
+        //    return Ok(attendance);
+        //}
+
+        //[HttpGet("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
+        //public IActionResult GetWeeklyAttendanceById([FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        //{
+        //    var data = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+        //    return Ok(data);
+        //}
 
         [DisplayName("My Attendance History")]
         [HttpGet("GetAttendanceById/{id}/{year}/{month?}")]

@@ -142,7 +142,7 @@
             <tr>
                 <th>Date</th>
                 <th>TimeIn</th>
-                <th>TimeOut</th>
+                <th>Time Out</th>
                 <th>Status</th>
 
             </tr>
@@ -162,6 +162,7 @@
 
                         @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                         {
+
                             @if (date < DateTime.Now.Date)
                             {
                                 <td><text>Nil</text></td>
@@ -176,8 +177,10 @@
                             }
 
                         }
+
                         else
                         {
+                           
                             <td> @attendance.TimeIn</td>
                             <td> @attendance.TimeOut</td>
                             <td><text style="background-color:green; color:white; padding:5px">Present</text></td>

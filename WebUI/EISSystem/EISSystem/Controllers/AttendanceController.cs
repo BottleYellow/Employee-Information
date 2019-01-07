@@ -22,7 +22,6 @@ namespace EIS.WebApp.Controllers
         {
             this.service = service;
         }
-
         [HttpGet]
         [DisplayName("Attendance Reports")]
         public IActionResult AllAttendance()
@@ -72,7 +71,6 @@ namespace EIS.WebApp.Controllers
             attendances = JsonConvert.DeserializeObject<List<Person>>(attendance);
             return PartialView("GetAllAttendance", attendances);
         }
-
         [DisplayName("My Attendance History")]
         [HttpGet]
         public IActionResult EmployeeReports()
