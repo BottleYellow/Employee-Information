@@ -32,16 +32,19 @@ namespace EIS.WebAPI.Filters
             }
 
             var access = Cache.GetStringValue("Access");
-            if (displayName != null && access != null)
+            if (displayName != "Logout")
             {
-                if (!access.Contains(displayName))
+                if (displayName != null && access != null)
+                {
+                    if (!access.Contains(displayName))
+                    {
+                        context.Result = new UnauthorizedResult();
+                    }
+                }
+                else
                 {
                     context.Result = new UnauthorizedResult();
                 }
-            }
-            else
-            {
-                context.Result = new UnauthorizedResult();
             }
         }      
     }

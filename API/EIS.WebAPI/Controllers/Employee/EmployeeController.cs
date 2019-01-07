@@ -114,7 +114,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Employee.GetDesignations();
         }
 
-        [AllowAnonymous]
+        [DisplayName("Manage Roles")]
         [Route("Designations/{did}")]
         [HttpGet]
         public Role GetDesignationById([FromRoute]int did)
@@ -122,7 +122,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Employee.GetDesignationById(did);
         }
 
-        [AllowAnonymous]
+        [DisplayName("Manage Roles")]
         [Route("DesignationName/{did}")]
         [HttpGet]
         public IActionResult GetDesignationNameById([FromRoute]int did)
