@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190104063955_EmployeeData")]
+    [Migration("20190107034800_EmployeeData")]
     partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -125,6 +127,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -176,6 +180,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -225,6 +231,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -259,6 +267,8 @@ namespace EIS.Data.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<TimeSpan>("TimeIn")
                         .HasColumnType("time");
@@ -353,6 +363,8 @@ namespace EIS.Data.Migrations
                     b.Property<double>("Salary")
                         .HasColumnType("float");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("date");
 
@@ -376,6 +388,8 @@ namespace EIS.Data.Migrations
                     b.Property<bool>("IsActive");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime>("UpdatedDate");
 
@@ -409,6 +423,8 @@ namespace EIS.Data.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<int>("TypeId");
 
@@ -456,6 +472,8 @@ namespace EIS.Data.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -522,6 +540,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("date");
 
@@ -562,6 +582,8 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<int>("TenantId");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -590,6 +612,8 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<DateTime>("UpdatedDate");
 
@@ -626,6 +650,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("PhoneConfirmed");
+
+                    b.Property<int>("TenantId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
