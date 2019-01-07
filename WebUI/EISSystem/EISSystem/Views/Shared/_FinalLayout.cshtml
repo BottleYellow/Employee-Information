@@ -6,12 +6,11 @@
     List<string> links = new List<string>();
     string cur = null;
     List<Navigation> Access = new List<Navigation>();
-    if (ac != null)
-    {
+    if (ac != null) {
         Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
     }
 
-}
+}   
 <!DOCTYPE html>
 
 <html>
@@ -34,13 +33,13 @@
     <link href="~/css/style.css" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="~/css/themes/all-themes.css" rel="stylesheet" />
-    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
     <!-- Bootstrap DatePicker Css -->
     <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
     <!-- Jquery Core Js -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
+
 </head>
 <body class="theme-blue">
     <div id="modal-placeholder1" class="modal fade" role="dialog" data-url="@Url.Action("ChangePassword","Account")"></div>
@@ -82,14 +81,14 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="/Admin/Index">Employee System</a>
+                <h3 style="color:white">Employee System</h3>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                    @RenderSection("Attendance", required:false)
-
+                    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+                    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
                 </ul>
@@ -126,6 +125,91 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <DynamicMenu></DynamicMenu>
+                    @*@foreach (var Menu in Access)
+                        {
+                            <li>
+                                @if (Menu.ParentMenuId == 0)
+                                {
+
+                                    <a class="menu-toggle">
+                                        <span>@Menu.MenuName</span>
+                                    </a>
+                                    <ul class="ml-menu">
+                                        @foreach (var Menu2 in Access)
+                                        {
+                                            if(Menu2.ParentMenuId==Menu.MenuId)
+                                            {
+                                                 <li>
+                                                     <a href="@Menu2.MenuURL">@Menu2.MenuName</a>
+                                                 </li>
+                                            }
+
+                                        }
+                                    </ul>
+
+                                }
+                            </li>
+                         }*@
+
+                    @*<secure asp-controller="People" asp-action="Index">
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <i class="material-icons">supervisor_account</i>
+                                    <span>Employees</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="/People/Index">All Employees</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Leave/EmployeeLeaveRequests">Leaves Requests</a>
+                                    </li>
+                                    <li>
+                                        <a href="pages/ui/badges.html">Attendance</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        </secure>
+                        <secure asp-controller="Role" asp-action="Index">
+                            <li>
+                                <a href="/Role/Index">
+                                    <i class="material-icons">accessibility</i>
+                                    <span>Roles</span>
+                                </a>
+                            </li>
+                        </secure>
+                        <li>
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">subject</i>
+                                <span>Leaves</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <secure asp-controller="Leave" asp-action="LeaveCredits">
+                                    <li>
+                                        <a href="/Leave/LeaveCredits">Leave Credits</a>
+                                    </li>
+                                </secure>
+                                <secure asp-controller="Leave" asp-action="LeavePolicies">
+                                    <li>
+                                        <a href="/Leave/LeavePolicies">Policies</a>
+                                    </li>
+                                </secure>
+
+                                <li>
+                                    <a href="/Leave/RequestLeave">Request for Leave</a>
+                                </li>
+                                <li>
+                                    <a href="/Leave/ShowMyLeaves?pid=@Cache.GetStringValue("PersonId")">Show My Leaves</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/Attendance/Create">
+                                <i class="material-icons">fingerprint</i>
+                                <span>Attendance</span>
+                            </a>
+                        </li>*@
                 </ul>
             </div>
             <!-- #Menu -->
@@ -288,6 +372,7 @@
 
     <section class="content" id="main-content">
         @RenderBody()
+
     </section>
 
     <!-- Autosize Plugin Js -->
@@ -296,7 +381,6 @@
     <script src="~/plugins/momentjs/moment.js"></script>
 
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
-    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
     <!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
     <!-- Bootstrap Datepicker Plugin Js -->
@@ -321,6 +405,27 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#clockIn').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Attendance/AttendanceInOut',
+                success: function (data) {
+                    var d = new Date();
+                    document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
+                    $('#clockIn').attr('disabled', 'disabled');
+                }
+            })
+        });
+        $('#clockOut').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Attendance/AttendanceInOut',
+                success: function () {
+                    var e = new Date();
+                    document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
+                }
+            });
+        });
 
         $("#linkModal").click(function () {
             var url = $("#modal-placeholder1").data('url');
@@ -335,11 +440,11 @@
             $.post(url, function () {
                 window.location.href = "/Account/login";
             });
-        });
+        });  
 
-        $('#emplink').click(function () {
+        $('#emplink').click(function(){
             var dest = $(this).attr('href');
-            $('.content').load(dest + '#main-content') // Hide all content divs
+            $('.content').load(dest+'#main-content') // Hide all content divs
             // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
             return false;
         });

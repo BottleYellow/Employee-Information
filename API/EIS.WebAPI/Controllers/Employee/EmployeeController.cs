@@ -6,15 +6,12 @@ using EIS.WebAPI.Filters;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
 {
-    [DisplayName("Employee Management")]
     [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
@@ -22,23 +19,18 @@ namespace EIS.WebAPI.Controllers
     {
         public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
-        private readonly IControllerService _controllerService;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration, IControllerService controllerService)
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
         {
             _repository= repository  ;
             _configuration = configuration;
-            _controllerService = controllerService;
         }
-        
+
         [HttpGet]
-        [DisplayName("List Of Employees")]
-        public IActionResult Index()
-        {
+        public IActionResult GetAllEmployee()
+        {        
             var employees = _repository.Employee.FindAll();
             return Ok(employees);
         }
-
-        [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
@@ -52,16 +44,23 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
-
-        [DisplayName("Create Employee")]
+        [Route("GenNewIdCardNo")]
+        [HttpGet]
+        public int CreateNewIdCardNo()
+        {
+            var n = _repository.Employee.GenerateNewIdCardNo();
+            return n;
+        }
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
+            person.IdCard = _repository.Employee.GenerateNewIdCardNo().ToString();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+           
             _repository.Employee.CreateAndSave(person);
             Users u = new Users
             {
@@ -69,18 +68,18 @@ namespace EIS.WebAPI.Controllers
                 Password = person.FirstName + person.DateOfBirth.Day,
                 PersonId=person.Id
             };
-            _repository.Users.CreateAndSave(u);
+            _repository.Users.CreateUserAndSave(u);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
-            string body = "Hello! Mr."+person.FirstName+" "+person.LastName+"\n" +
+            string body = "Hello! Mr." + person.FirstName + " " + person.LastName + "\n" +
                 "Your have been successfully registered with employee system. : \n" +
-                "User Name: "+person.EmailAddress+"\n"+
+                "Id Card Number: " + person.IdCard + "\n" +
+                "User Name: " + person.EmailAddress + "\n" +
                 "Password: " + person.FirstName + person.DateOfBirth.Day;
             new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok();
         }
 
-        [DisplayName("Update Employee")]
         [HttpPut("{id}")]
         [AllowAnonymous]
         public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
@@ -93,7 +92,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(person);
         }
 
-        [DisplayName("Delete Employee")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
         {
@@ -105,8 +103,6 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.DeleteAndSave(person);
             return Ok(person);
         }
-
-        [DisplayName("Manage Roles")]
         [Route("Designations")]
         [HttpGet]
         public IEnumerable<Role> GetDesignations()
@@ -131,7 +127,6 @@ namespace EIS.WebAPI.Controllers
             return Ok(d.Name);
         }
 
-        [DisplayName("Add Role")]
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
@@ -144,8 +139,6 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.AddDesignationAndSave(designation);
             return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
         }
-
-        [DisplayName("Update Role")]
         [Route("UpdateDesignation")]
         public IActionResult UpdateDesignationData([FromBody]Role designation)
         {
@@ -157,7 +150,6 @@ namespace EIS.WebAPI.Controllers
             return NoContent();
         }
 
-        [DisplayName("LoadData")]
         [HttpPost]
         [Route("Data/{search?}")]
         [AllowAnonymous]

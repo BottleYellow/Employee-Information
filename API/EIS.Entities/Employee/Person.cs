@@ -40,7 +40,6 @@ namespace EIS.Entities.Employee
 
         #region [Relations]
         public virtual Users User { get; set; }
-
         [JsonConverter(typeof(StringEnumConverter))]
         public virtual Gender Gender { get; set; }
         public virtual Role Role { get; set; }

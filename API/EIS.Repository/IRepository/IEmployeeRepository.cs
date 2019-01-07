@@ -5,6 +5,7 @@ namespace EIS.Repositories.IRepository
 {
     public interface IEmployeeRepository : IRepositorybase<Person>
     {
+        int GenerateNewIdCardNo();
         IEnumerable<Role> GetDesignations();
         Role GetDesignationById(int id);
         void AddDesignationAndSave(Role designation);

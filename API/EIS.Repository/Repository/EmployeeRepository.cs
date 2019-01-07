@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
@@ -29,6 +30,12 @@ namespace EIS.Repositories.Repository
             {
                 return false;
             }
+        }
+
+        public int GenerateNewIdCardNo()
+        {
+            var MaxId = _dbContext.Person.Max(x => x.IdCard);
+            return Convert.ToInt32(MaxId) + 1;
         }
 
         public Role GetDesignationById(int id)

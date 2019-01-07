@@ -1,8 +1,5 @@
 ﻿using EIS.Entities.Employee;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EIS.Validations.FluentValidations
 {
@@ -10,7 +7,6 @@ namespace EIS.Validations.FluentValidations
     {
         public PersonValidator()
         {
-            RuleFor(x => x.IdCard).MaximumLength(15).NotNull();
             RuleFor(x => x.PanCard).Length(10);
             RuleFor(x => x.AadharCard).Length(12).Matches("^[0-9]*$");
             RuleFor(x => x.Image);
