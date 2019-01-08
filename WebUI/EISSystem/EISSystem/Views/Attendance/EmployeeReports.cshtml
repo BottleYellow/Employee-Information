@@ -1,4 +1,6 @@
-﻿<html>
+﻿@using EIS.Entities.Employee
+@model Attendance
+<html>
 <head>
     <title>Dashboard</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -12,10 +14,11 @@
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
-        #generateReport {
 
+        #generateReport {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
+
         #select {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
@@ -34,6 +37,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
+                        <input id="InTime" type="hidden" asp-for="TimeIn" value="@Model.TimeIn.ToString(@"hh\:mm\:ss")"/>
+                        <input id="OutTime" type="hidden" asp-for="TimeOut" value="@Model.TimeOut.ToString(@"hh\:mm\:ss")" />
                         @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
                         <div>
                             <div class="row col-md-12">
@@ -67,7 +72,7 @@
                                             <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="col-md-3"></div>
                             </div>
@@ -88,7 +93,11 @@
     </div>
 </body>
 </html>
-
+@section Attendance
+    {
+    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
+}
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
@@ -103,8 +112,40 @@
         float: right;
     }
 </style>
-<script type="text/javascript">
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        var TimeIn = document.getElementById('InTime').value;
+        var TimeOut = document.getElementById('OutTime').value;
+        if (TimeIn != '00:00:00') {
+            document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
+            $('#clockIn').attr('disabled', 'disabled');
+        }
+        if (TimeOut != '00:00:00') {
+            document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+        }
+    })
+    $('#clockIn').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/Attendance/AttendanceInOut',
+            success: function (data) {
+                var d = new Date();
+                document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
+                $('#clockIn').attr('disabled', 'disabled');
+            }
+        })
+    });
+    $('#clockOut').click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Attendance/AttendanceInOut',
+            success: function () {
+                var e = new Date();
+                document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
+            }
+        });
+    });
     $('#select').on('change', function () {
         var v = $('#select').val();
         if (v == 'year') {
@@ -172,14 +213,14 @@
                     rowReorder: {
                         selector: 'td:nth-child(2)'
                     },
-                    'columnDefs': [     
-                        {                           
+                    'columnDefs': [
+                        {
                             'searchable': false,
-                            'targets': [0, 1, 2]                            
+                            'targets': [0, 1, 2]
                         }
                     ],
                     "aoColumns": [
-                        { "sType": "date" }, 
+                        { "sType": "date" },
                           { "sType": "time" },
                     null,
                     null
@@ -187,7 +228,7 @@
                     "aoColumnDefs": [
                         { "aTargets": [0], "bSortable": true },
                         { "aTargets": ['_all'], "bSortable": false }
-                    ], 
+                    ],
                     sDom: '<"myexport"B>ifrtlp',
                     buttons: [
                     {
@@ -211,9 +252,9 @@
 @*for pdf*@
 
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+                        <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>

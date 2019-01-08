@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EIS.WebAPI.Controllers.Leave
@@ -11,9 +13,12 @@ namespace EIS.WebAPI.Controllers.Leave
     [ApiController]
     public class LeaveCreditController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public LeaveCreditController(IRepositoryWrapper repository)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
 
@@ -41,6 +46,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
+            Leave.TenantId = TenantId;
             _repository.Leave.AddCreditsAndSave(Leave);
 
             return Ok();
@@ -54,6 +60,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
+            Credit.TenantId = TenantId;
             _repository.Leave.AddCreditAndSave(Credit);
 
             return Ok();

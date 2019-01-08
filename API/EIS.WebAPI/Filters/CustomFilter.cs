@@ -18,34 +18,34 @@ namespace EIS.WebAPI.Filters
             string controllerName = context.RouteData.Values["controller"].ToString();
             var data = _controllerService.GetControllers();
             string displayName = null;
-            foreach (var c in data)
-            {
-                string cc = c.Name;
-                foreach (var a in c.Actions)
-                {
-                    string ca = a.Name;
-                    if (cc == controllerName && ca == actionName)
-                    {
-                        displayName = a.DisplayName;
-                    }
-                }
-            }
+            //foreach (var c in data)
+            //{
+            //    string cc = c.Name;
+            //    foreach (var a in c.Actions)
+            //    {
+            //        string ca = a.Name;
+            //        if (cc == controllerName && ca == actionName)
+            //        {
+            //            displayName = a.DisplayName;
+            //        }
+            //    }
+            //}
 
-            var access = Cache.GetStringValue("Access");
-            if (displayName != "Logout")
-            {
-                if (displayName != null && access != null)
-                {
-                    if (!access.Contains(displayName))
-                    {
-                        context.Result = new UnauthorizedResult();
-                    }
-                }
-                else
-                {
-                    context.Result = new UnauthorizedResult();
-                }
-            }
+            //var access = Cache.GetStringValue("Access");
+            //if (displayName != "Logout")
+            //{
+            //    if (displayName != null && access != null)
+            //    {
+            //        if (!access.Contains(displayName))
+            //        {
+            //            context.Result = new UnauthorizedResult();
+            //        }
+            //    }
+            //    else
+            //    {
+            //        context.Result = new UnauthorizedResult();
+            //    }
+            //}
         }      
     }
 }

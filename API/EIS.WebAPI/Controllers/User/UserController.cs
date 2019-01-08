@@ -1,7 +1,9 @@
 ﻿using EIS.Entities.User;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -12,9 +14,11 @@ namespace EIS.WebAPI.Controllers.User
     [Route("api/user")]
     public class UserController : BaseController
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public UserController(IRepositoryWrapper repository) : base(repository)
         {
-
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
         }
         [DisplayName("List Of Users")]
         [HttpGet]
@@ -40,6 +44,7 @@ namespace EIS.WebAPI.Controllers.User
         [Route("create")]
         public void Post([FromBody]Users user)
         {
+            user.TenantId = TenantId;
             _repository.Users.CreateUserAndSave(user);
         }
 

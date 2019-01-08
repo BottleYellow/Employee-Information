@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190105094546_TenantIdadded")]
-    partial class TenantIdadded
+    [Migration("20190108112738_DatabaseData")]
+    partial class DatabaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -370,7 +370,24 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AadharCard")
+                        .IsUnique()
+                        .HasFilter("[AadharCard] IS NOT NULL");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique();
+
+                    b.HasIndex("MobileNumber")
+                        .IsUnique();
+
+                    b.HasIndex("PanCard")
+                        .IsUnique()
+                        .HasFilter("[PanCard] IS NOT NULL");
+
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId", "IdCard")
+                        .IsUnique();
 
                     b.ToTable("Person","Employee");
                 });
@@ -394,6 +411,10 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("UpdatedDate");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Roles","Employee");
                 });
@@ -601,6 +622,33 @@ namespace EIS.Data.Migrations
                     b.ToTable("LeaveRules","Leave");
                 });
 
+            modelBuilder.Entity("EIS.Entities.OtherEntities.Configuration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("TenantId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<DateTime>("ValidFrom");
+
+                    b.Property<DateTime>("ValidUpTo");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("configurations");
+                });
+
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -637,6 +685,9 @@ namespace EIS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "UserName")
                         .IsUnique();
 
                     b.ToTable("Users","Account");
@@ -704,7 +755,7 @@ namespace EIS.Data.Migrations
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
                 {
-                    b.HasOne("EIS.Entities.Leave.LeaveRules", "LeaveMaster")
+                    b.HasOne("EIS.Entities.Leave.LeaveRules", "LeaveRule")
                         .WithMany("Credits")
                         .HasForeignKey("LeaveId")
                         .OnDelete(DeleteBehavior.Cascade);

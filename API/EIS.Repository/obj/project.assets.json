@@ -2608,7 +2608,7 @@
       },
       "EIS.Data/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v2.2",
+        "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "EIS.Entities": "1.0.0",
           "Microsoft.EntityFrameworkCore": "2.2.0",

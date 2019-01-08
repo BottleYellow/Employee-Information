@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmployeeData : Migration
+    public partial class DatabaseData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -448,6 +448,13 @@ namespace EIS.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_TenantId_UserName",
+                schema: "Account",
+                table: "Users",
+                columns: new[] { "TenantId", "UserName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CurrentAddress_PersonId",
                 schema: "Address",
                 table: "CurrentAddress",
@@ -480,10 +487,55 @@ namespace EIS.Data.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Person_AadharCard",
+                schema: "Employee",
+                table: "Person",
+                column: "AadharCard",
+                unique: true,
+                filter: "[AadharCard] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_EmailAddress",
+                schema: "Employee",
+                table: "Person",
+                column: "EmailAddress",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_MobileNumber",
+                schema: "Employee",
+                table: "Person",
+                column: "MobileNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_PanCard",
+                schema: "Employee",
+                table: "Person",
+                column: "PanCard",
+                unique: true,
+                filter: "[PanCard] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Person_RoleId",
                 schema: "Employee",
                 table: "Person",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_TenantId_IdCard",
+                schema: "Employee",
+                table: "Person",
+                columns: new[] { "TenantId", "IdCard" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_TenantId_Name",
+                schema: "Employee",
+                table: "Roles",
+                columns: new[] { "TenantId", "Name" },
+                unique: true,
+                filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeLeaves_PersonId",

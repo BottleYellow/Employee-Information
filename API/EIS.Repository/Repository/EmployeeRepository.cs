@@ -19,9 +19,9 @@ namespace EIS.Repositories.Repository
             Save();
         }
 
-        public bool DesignationExists(string DesignationName)
+        public bool DesignationExists(string DesignationName,int TenantId)
         {
-            var role = _dbContext.Roles.Where(x => x.Name == DesignationName).FirstOrDefault();
+            var role = _dbContext.Roles.Where(x => x.Name == DesignationName && x.TenantId==TenantId).FirstOrDefault();
             if (role != null)
             {
                 return true;
@@ -32,9 +32,9 @@ namespace EIS.Repositories.Repository
             }
         }
 
-        public int GenerateNewIdCardNo()
+        public int GenerateNewIdCardNo(int TenantId)
         {
-            var MaxId = _dbContext.Person.Max(x => x.IdCard);
+            var MaxId = _dbContext.Person.Where(x=>x.TenantId==TenantId).Max(x => x.IdCard);
             return Convert.ToInt32(MaxId) + 1;
         }
 
@@ -43,9 +43,9 @@ namespace EIS.Repositories.Repository
             return _dbContext.Roles.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public IEnumerable<Role> GetDesignations()
+        public IEnumerable<Role> GetDesignations(int TenantId)
         {
-            return _dbContext.Roles;
+            return _dbContext.Roles.Where(x => x.TenantId == TenantId);
         }
 
         public void UpdateDesignationAndSave(Role designation)

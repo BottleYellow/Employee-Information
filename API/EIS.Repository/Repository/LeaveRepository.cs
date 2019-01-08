@@ -29,6 +29,7 @@ namespace EIS.Repositories.Repository
             {
                 LeaveCredit Credit = new LeaveCredit
                 {
+                    TenantId = item.TenantId,
                     PersonId = item.Id,
                     LeaveType = Leave.LeaveType,
                     AllotedDays = Leave.Validity,

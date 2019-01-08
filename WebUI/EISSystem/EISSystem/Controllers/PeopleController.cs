@@ -97,12 +97,13 @@ namespace EIS.WebApp.Controllers
         {
 
             ViewBag.Designations = rolesList;
+            var data = from p in EmployeeData()
+                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+
+            ViewBag.Persons = data;
             if (ModelState.IsValid)
             {
-                var data = from p in EmployeeData()
-                           select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
-
-                ViewBag.Persons = data;
+                
                 person.CreatedDate = DateTime.Now.Date;
                 IFormFile uploadedImage = file.FirstOrDefault();
                 if (uploadedImage != null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
@@ -129,6 +130,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Employee")]
         public IActionResult Edit(int id)
         {
+            ViewBag.Designations = rolesList;
             string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);
             imageBase64Data = Convert.ToBase64String(data.Image);

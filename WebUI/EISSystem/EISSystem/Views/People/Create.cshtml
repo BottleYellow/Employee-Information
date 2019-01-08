@@ -19,7 +19,6 @@
                 <div class="body">
                     <form asp-action="Create" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" value="0" />
                         <div class="container">
                             <div class="row">
                                 <div style="height:50px"></div>
@@ -147,7 +146,7 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label asp-for="JoinDate">Joining Data : </label>
+                                            <label asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
                                                 <input asp-for="JoinDate" class="form-control" />
 
@@ -236,11 +235,5 @@
     </div>
 </div>
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script>
-    function myFunction() {
-        var x = document.getElementById("did").value;
-        alert(x);
-    }
-</script>
 
 

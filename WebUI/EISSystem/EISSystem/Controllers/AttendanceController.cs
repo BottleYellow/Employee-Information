@@ -75,10 +75,10 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult EmployeeReports()
         {
-            int id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = service.GetResponse("api/attendances/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Attendance> data = JsonConvert.DeserializeObject<List<Attendance>>(stringData);
+            Attendance data = JsonConvert.DeserializeObject<Attendance>(stringData);
             return View(data);
         }
         [HttpPost]
