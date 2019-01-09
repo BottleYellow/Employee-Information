@@ -56,13 +56,13 @@ namespace EIS.Repositories.Repository
             return _dbContext.Set<T>().Where(expression);
         }
 
-        public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid)
+        public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, Expression<Func<T, bool>> expression2)
         {
 
             int totalcount = 0;
 
             ArrayList list = new ArrayList();
-            var data = FindAll();
+            var data = FindAllByCondition(expression2);
 
             if (!(string.IsNullOrEmpty(sortGrid.SortColumn) && string.IsNullOrEmpty(sortGrid.SortColumnDirection)))
             {
@@ -82,7 +82,7 @@ namespace EIS.Repositories.Repository
                 }              
             }
 
-           // data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+            //data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);
             var totaldata = data.ToList();
 
             list.Add(totalcount);

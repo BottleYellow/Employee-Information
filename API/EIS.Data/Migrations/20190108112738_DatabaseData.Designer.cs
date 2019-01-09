@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190107034800_EmployeeData")]
-    partial class EmployeeData
+    [Migration("20190108112738_DatabaseData")]
+    partial class DatabaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -370,7 +370,24 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AadharCard")
+                        .IsUnique()
+                        .HasFilter("[AadharCard] IS NOT NULL");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique();
+
+                    b.HasIndex("MobileNumber")
+                        .IsUnique();
+
+                    b.HasIndex("PanCard")
+                        .IsUnique()
+                        .HasFilter("[PanCard] IS NOT NULL");
+
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId", "IdCard")
+                        .IsUnique();
 
                     b.ToTable("Person","Employee");
                 });
@@ -394,6 +411,10 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("UpdatedDate");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Roles","Employee");
                 });
@@ -664,6 +685,9 @@ namespace EIS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "UserName")
                         .IsUnique();
 
                     b.ToTable("Users","Account");

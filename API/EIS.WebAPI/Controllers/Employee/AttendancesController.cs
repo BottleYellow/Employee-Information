@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,9 +15,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AttendancesController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public AttendancesController(IRepositoryWrapper repository)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
 
@@ -57,6 +61,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+            attendance.TenantId = TenantId;
             attendance.PersonId = id;
             attendance.DateIn = DateTime.Now;
             string dt = attendance.DateIn.DayOfWeek.ToString();

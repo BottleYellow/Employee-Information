@@ -1,12 +1,15 @@
 ﻿using EIS.Entities.Leave;
+using EIS.Repositories.IRepository;
 using FluentValidation;
 
 namespace EIS.Validations.FluentValidations
 {
     public class LeaveRulesValidator : AbstractValidator<LeaveRules>
     {
-        public LeaveRulesValidator()
+        private readonly IRepositoryWrapper _repositoryWrapper;
+        public LeaveRulesValidator(IRepositoryWrapper repositoryWrapper)
         {
+            _repositoryWrapper = repositoryWrapper;
             RuleFor(x => x.LeaveType).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.Description).NotNull();
             RuleFor(x => x.Validity).Must(GreaterThanZero).NotNull();

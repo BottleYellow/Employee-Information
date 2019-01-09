@@ -180,7 +180,33 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.UpdatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
-                
+
+                #region Constraints
+               
+                modelBuilder.Entity<Person>()
+                    .HasIndex(p => p.PanCard)
+                    .IsUnique();
+                modelBuilder.Entity<Person>()
+                    .HasIndex(p => p.AadharCard)
+                    .IsUnique();
+                modelBuilder.Entity<Person>()
+                    .HasIndex(p => p.MobileNumber)
+                    .IsUnique();
+                modelBuilder.Entity<Person>()
+                    .HasIndex(p => p.EmailAddress)
+                    .IsUnique();
+                modelBuilder.Entity<Person>()
+                   .HasIndex(p => new { p.TenantId, p.IdCard })
+                   .IsUnique();
+                modelBuilder.Entity<Role>()
+                     .HasIndex(r => new { r.TenantId, r.Name })
+                     .IsUnique();
+                modelBuilder.Entity<Users>()
+                    .HasIndex(p => new { p.TenantId, p.UserName })
+                    .IsUnique();
+
+                #endregion
+
                 #region[Table Relationship]
 
                 //one leave has many credits

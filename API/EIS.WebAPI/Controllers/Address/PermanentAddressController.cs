@@ -1,20 +1,23 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace EIS.WebAPI.Controllers
-{
-   
+{ 
     [Route("api/PermanentAddress")]
     [ApiController]
     public class PermanentAddressController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public PermanentAddressController(IRepositoryWrapper repository)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
         
@@ -53,6 +56,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+            permanent.TenantId = TenantId;
             _repository.PermanentAddress.CreateAndSave(permanent);
             return CreatedAtAction("GetPermanent", new { id = permanent.Id }, permanent);
         }
@@ -68,6 +72,7 @@ namespace EIS.WebAPI.Controllers
             }
             Other other = new Other
             {
+                TenantId=TenantId,
                 AddressType = "Permanent Address",
                 PersonId = permanent.PersonId,
                 Address = permanent.Address,

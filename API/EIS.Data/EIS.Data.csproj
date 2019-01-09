@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Migrations\20190103051531_EmployeeDb.cs" />
     <Compile Remove="Migrations\20190104063757_EmployeeData.cs" />
+    <Compile Remove="Migrations\20190108044057_EmployeeData.cs" />
+    <Compile Remove="Migrations\20190108044317_Database.cs" />
+    <Compile Remove="Migrations\20190108044947_DatabaseData.cs" />
+    <Compile Remove="Migrations\20190108084959_Demo.cs" />
   </ItemGroup>
 
   <ItemGroup>

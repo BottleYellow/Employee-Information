@@ -1,6 +1,8 @@
 ﻿using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -10,9 +12,12 @@ namespace EIS.WebAPI.Controllers.Leave
     [ApiController]
     public class LeavePolicyController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public LeavePolicyController(IRepositoryWrapper repository)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
 
@@ -31,6 +36,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 return BadRequest(ModelState);
             }
+            policy.TenantId = TenantId;
             _repository.Leave.CreateLeaveRuleAndSave(policy);
 
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);

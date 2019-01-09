@@ -12,4 +12,10 @@
     <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="EIS.Repositories">
+      <HintPath>..\EIS.Repository\bin\Debug\netcoreapp2.2\EIS.Repositories.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
