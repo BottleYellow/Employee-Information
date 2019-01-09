@@ -84,7 +84,16 @@
         float: right;
     }
 </style>
-
+<script>
+    $('#select').on('change', function () {
+        var v = $('#select').val();
+        alert(v);
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Content("/People/Index")',
+        })
+    })
+</script>
 <script>
     var setting = null;
     $(document).ready(function () {
