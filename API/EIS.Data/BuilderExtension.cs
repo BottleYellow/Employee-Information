@@ -33,7 +33,7 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.IdCard).HasColumnType("varchar(15)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.PanCard).HasColumnType("varchar(10)");
                 modelBuilder.Entity<Person>().Property(p => p.AadharCard).HasColumnType("varchar(12)");
-                modelBuilder.Entity<Person>().Property(p => p.Image).HasColumnType("varbinary(MAX)");
+                modelBuilder.Entity<Person>().Property(p => p.Image).HasColumnType("varchar(100)");
                 modelBuilder.Entity<Person>().Property(p => p.FirstName).HasColumnType("nvarchar(50)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.MiddleName).HasColumnType("nvarchar(50)");
                 modelBuilder.Entity<Person>().Property(p => p.LastName).HasColumnType("nvarchar(50)").IsRequired();

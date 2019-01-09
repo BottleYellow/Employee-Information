@@ -15,7 +15,7 @@ namespace EIS.Entities.Employee
         public string IdCard { get; set; }
         public string PanCard { get; set; }
         public string AadharCard { get; set; }
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }

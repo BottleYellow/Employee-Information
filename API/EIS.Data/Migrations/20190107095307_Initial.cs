@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmployeeData : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -97,7 +97,7 @@ namespace EIS.Data.Migrations
                     IdCard = table.Column<string>(type: "varchar(15)", nullable: false),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
-                    Image = table.Column<byte[]>(type: "varbinary(MAX)", nullable: true),
+                    Image = table.Column<string>(type: "varchar(100)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),

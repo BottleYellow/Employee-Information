@@ -2,12 +2,57 @@
 @using Microsoft.Net.Http;
 @using EIS.Entities.Enums;
 
-@*@{
-        ViewData["Title"] = "Edit";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }*@
-@{
-    EIS.Entities.Employee.Person person = new EIS.Entities.Employee.Person(); }
+<style>
+    #Imagediv {
+        position: relative;     
+    }
+    #employeeImage {
+        opacity: 1;
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+
+    .middle {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .form-group:hover .image {
+        opacity: 0.3;
+    }
+
+    .form-group:hover .middle {
+        opacity: 1;
+    }
+    .text {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 15px;
+    }
+    #my-file {
+        visibility: hidden;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#employeeImage").hover("Edit this Image");
+        $("#employeeImage").on("click", function () {
+
+        })
+        $('#my-button').click(function () {
+            $('#my-file').click();
+        });
+    });
+</script>
 
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -29,8 +74,14 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <img src="@ViewBag.ImageData" style="height:70px; width:70px;" class="img-circle" />
+                                        <div class="form-group" id="Imagediv">                                                                                       
+                                           <img id="employeeImage" src="@ViewBag.ImageData" style="height:70px; width:70px;" class="img-circle" />
+                                           <div class="middle">
+                                            
+                                               <input type="button" class="text" id="my-button" value="Edit Image" />
+                                               <input type="file" name="my_file" accept="image/*" id="my-file" onchange="ValidateFileUpload()">
+
+                                           </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -245,6 +296,48 @@
         </div>
     </div>
 </div>
+
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script>
+    function ValidateFileUpload() {
+        var fuData = document.getElementById('my-file');
+        var FileUploadPath = fuData.value;
+        var status = false;
+        if (FileUploadPath == '') {
+            alert("Please upload an image");
+
+        }
+        else {
+            var fileLength = fuData.files[0].size;
+
+            var Extension = FileUploadPath.substring(
+                FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+            //The file uploaded is an image
+            if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
+                if (fileLength < 6000)
+                {
+                  var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#employeeImage').attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(fuData.files[0]);
+                    }
+                else {
+                    alert("File must be below 6 kb");
+                }
+
+            }
+            else
+        {
+                alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");
+            }
+        }
+        if (!status) {
+
+        }
+    }
+</script>
 
 

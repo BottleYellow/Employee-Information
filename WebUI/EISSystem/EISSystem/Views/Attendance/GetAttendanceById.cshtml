@@ -151,41 +151,41 @@
             @{
                 @for (DateTime date = targetDate; date < endDate; date = date.AddDays(1))
                 {
-                    <tr>
-                        <td>
-                            @date.ToShortDateString()
-                        </td>
+            <tr>
+                <td>
+                    @date.ToShortDateString()
+                </td>
 
-                        @{
-                            var attendance = Model.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
-                        }
+                @{
+                    var attendance = Model.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
+                }
 
-                        @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
-                        {
+                @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+                {
 
-                            @if (date < DateTime.Now.Date)
-                            {
-                                <td><text>Nil</text></td>
-                                <td><text>Nil</text></td>
-                                <td><text style="background-color:red; color:white; padding:5px">Absent</text></td>
-                            }
-                            else
-                            {
-                                <td><text>-</text></td>
-                                <td><text>-</text></td>
-                                <td><text>-</text></td>
-                            }
+                    @if (date < DateTime.Now.Date)
+                    {
+                        <td><text>Nil</text></td>
+                        <td><text>Nil</text></td>
+                        <td><text style="background-color:red; color:white; padding:5px">Absent</text></td>
+                    }
+                    else
+                    {
+                        <td><text>-</text></td>
+                        <td><text>-</text></td>
+                        <td><text>-</text></td>
+                    }
 
-                        }
+                }
 
-                        else
-                        {
-                           
-                            <td> @attendance.TimeIn</td>
-                            <td> @attendance.TimeOut</td>
-                            <td><text style="background-color:green; color:white; padding:5px">Present</text></td>
-                        }
-                    </tr>
+                else
+                {
+         
+                    <td> @attendance.TimeIn.Hours:@attendance.TimeIn.Minutes:@attendance.TimeIn.Seconds</td>
+                    <td> @attendance.TimeOut</td>
+                    <td><text style="background-color:green; color:white; padding:5px">Present</text></td>
+                }
+            </tr>
                  }
             }
         </tbody>

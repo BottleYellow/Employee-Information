@@ -3,6 +3,7 @@ using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace EIS.WebApp.Controllers
     [DisplayName("Employee Management")]
     public class PeopleController : BaseController<Person>
     {
-
+        private readonly IHostingEnvironment _environment;
         #region Declarations
         public readonly IServiceWrapper _services;
         private readonly IControllerService _controllerService;
@@ -32,9 +33,10 @@ namespace EIS.WebApp.Controllers
 
         #region Controller
         [DisplayName("Employee Management")]
-        public PeopleController(IEISService<Person> service, IControllerService _controllerService, IServiceWrapper services) : base(service)
+        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services, IHostingEnvironment environment) : base(service)
         {
-            this._controllerService = _controllerService;
+            _environment = environment;
+            _controllerService = controllerService;
             _services = services;
             HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -66,13 +68,9 @@ namespace EIS.WebApp.Controllers
             data.CurrentAddress = JsonConvert.DeserializeObject<Current>(current);
             data.EmergencyAddress = JsonConvert.DeserializeObject<List<Emergency>>(emergency);
             data.OtherAddress = JsonConvert.DeserializeObject<List<Other>>(other);
-            if (data != null)
-            {
-                imageBase64Data = Convert.ToBase64String(data.Image);
-                string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-                ViewBag.ImageData = imageDataURL;
-                ViewBag.Name = data.FirstName + " " + data.LastName;
-            }
+            ViewBag.ImagePath = data.Image;
+            ViewBag.Name = data.FirstName + " " + data.LastName;
+
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = PersonId };
             var cur = new Current() { PersonId = PersonId };
@@ -84,7 +82,6 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Create Employee")]
         public IActionResult Create()
         {
-
             ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
@@ -93,65 +90,108 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IList<IFormFile> file)
+        public IActionResult Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
-
             ViewBag.Designations = rolesList;
-            if (ModelState.IsValid)
-            {
-                var data = from p in EmployeeData()
-                           select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
 
-                ViewBag.Persons = data;
-                person.CreatedDate = DateTime.Now.Date;
-                IFormFile uploadedImage = file.FirstOrDefault();
-                if (uploadedImage != null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
+            var data = from p in EmployeeData()
+                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+            ViewBag.Persons = data;
+            if(ModelState.IsValid)
+            { 
+            HttpResponseMessage responseIdCard = _services.Employee.GetResponse("api/employee/GenNewIdCardNo");
+                var dataIdCard = responseIdCard.Content.ReadAsStringAsync().Result;
+                int IdCardNo = JsonConvert.DeserializeObject<int>(dataIdCard);
+                if (file != null && file.Length > 0)
                 {
-                    MemoryStream ms = new MemoryStream();
-                    uploadedImage.OpenReadStream().CopyTo(ms);
-
-                    Image image = Image.FromStream(ms);
-                    person.Image = ms.ToArray();
-
-
-                    HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person);
-                    var data1 = response.Content.ReadAsStringAsync().Result;
-                    if (response.IsSuccessStatusCode == true)
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
                     {
-                        ViewBag.Message = "Record has been successfully saved.";
-                        return View("Index", EmployeeData());
-                    }
+                        var rootPath = _environment.WebRootPath;
+                        var filePath = "\\EmployeeImages\\" + IdCardNo + "\\Image\\";
+                        if (!Directory.Exists(rootPath + "//EmployeeImages//"))
+                        {
+                            Directory.CreateDirectory(rootPath + "\\EmployeeImages\\");
+                        }
+                        if (!Directory.Exists(rootPath + filePath))
+                        {
+                            Directory.CreateDirectory(rootPath + filePath);
+                        }
 
+                        var upload = rootPath + filePath;
+                        var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName), FileMode.Create))
+                        {
+                            file.CopyToAsync(fileStream);
+                            person.Image = filePath + fileName;
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Image", "Please select Image of type JPG and BMP and size must be below 10 kb");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Image", "Please select Image");
+                }
+                
+
+                person.CreatedDate = DateTime.Now.Date;
+                HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person);
+                var data1 = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode == true)
+                {
+                    ViewBag.Message = "Record has been successfully saved.";
+                    return View("Index", EmployeeData());
                 }
             }
-            return View();
+            return View(person);
         }
+
         [DisplayName("Update Employee")]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int id, IFormFile file)
         {
             string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);
-            imageBase64Data = Convert.ToBase64String(data.Image);
-            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            ViewBag.ImageData = imageDataURL;
+
+            string urlPath = "";
+            string fileName = "";
+            var rootPath = _environment.WebRootPath;
+            var filePath = "/EmployeeImages/" + data.IdCard + "/Image/";
+            var upload = Path.Combine(rootPath, filePath);
+
+            if (Directory.Exists(rootPath + filePath))
+            {
+                string[] strfiles = Directory.GetFiles(rootPath + "//EmployeeImages//" + data.IdCard.ToString() + "\\Image\\", "*.*");
+                if (strfiles.Length > 0)
+                {
+                    fileName = Path.GetFileName(strfiles[0]);
+                }
+                urlPath = filePath + fileName;
+            }
+            if (!string.IsNullOrEmpty(urlPath))
+            {
+                ViewBag.ImageData = urlPath;
+                ViewBag.Name = data.FirstName + " " + data.LastName;
+            }
+            else
+            { 
+                ViewBag.ImageData = "/Images/default.jpg";
+            }
             return View(data);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,RoleId,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person)
+        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,RoleId,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person, IFormFile file)
         {
-
             if (id != person.Id)
             {
                 return NotFound();
             }
 
-            byte[] imageBytes = Convert.FromBase64String(imageBase64Data);
-            MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-            ms.Write(imageBytes, 0, imageBytes.Length);
-            Image image = Image.FromStream(ms, true);
-            person.Image = ms.ToArray();
             person.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
@@ -189,7 +229,8 @@ namespace EIS.WebApp.Controllers
             response = _services.Employee.GetResponse("api/employee/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
-            imageBase64Data = Convert.ToBase64String(data1.Image);
+            //imageBase64Data = Convert.ToBase64String(data1.Image);
+
             string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
             ViewBag.ImageData = imageDataURL;
             return PartialView("DeletePartial", data1);

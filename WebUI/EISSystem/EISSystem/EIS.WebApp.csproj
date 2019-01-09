@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />
@@ -37,9 +38,6 @@
     </Reference>
     <Reference Include="EIS.Validations">
       <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.WebAPI">
-      <HintPath>..\..\..\API\EIS.WebAPI\bin\Debug\netcoreapp2.1\EIS.WebAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
 

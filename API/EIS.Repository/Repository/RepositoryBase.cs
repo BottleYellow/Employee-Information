@@ -82,7 +82,7 @@ namespace EIS.Repositories.Repository
                 }              
             }
 
-           // data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+            data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
             var totaldata = data.ToList();
 
             list.Add(totalcount);
