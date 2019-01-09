@@ -1,14 +1,20 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Enums;
 using EIS.Entities.Generic;
 using EIS.Entities.User;
+using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
+using EIS.WebAPI.RedisCache;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -17,18 +23,21 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class EmployeeController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
         public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
         {
-            _repository= repository  ;
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            _repository = repository  ;
             _configuration = configuration;
         }
 
         [HttpGet]
         public IActionResult GetAllEmployee()
         {        
-            var employees = _repository.Employee.FindAll();
+            var employees = _repository.Employee.FindAll().Where(x=>x.TenantId==TenantId);
             return Ok(employees);
         }
         [HttpGet("{id}")]
@@ -48,34 +57,36 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public int CreateNewIdCardNo()
         {
-            var n = _repository.Employee.GenerateNewIdCardNo();
+            var n = _repository.Employee.GenerateNewIdCardNo(TenantId);
             return n;
         }
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
-            person.IdCard = _repository.Employee.GenerateNewIdCardNo().ToString();
+            person.IdCard = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-           
+            person.TenantId = TenantId;
             _repository.Employee.CreateAndSave(person);
             Users u = new Users
             {
+                TenantId = TenantId,
                 UserName = person.EmailAddress,
-                Password = person.FirstName + person.DateOfBirth.Day,
+                Password = EmailManager.CreateRandomPassword(8),
                 PersonId=person.Id
             };
+            string pw = u.Password;
             _repository.Users.CreateUserAndSave(u);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
-            string body = "Hello! Mr." + person.FirstName + " " + person.LastName + "\n" +
+            string body = "Hello "+GetTitle(person.Gender)+" "+person.FirstName + " " + person.LastName + "\n" +
                 "Your have been successfully registered with employee system. : \n" +
                 "Id Card Number: " + person.IdCard + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
-                "Password: " + person.FirstName + person.DateOfBirth.Day;
+                "Password: " + pw;
             new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok();
         }
@@ -100,16 +111,18 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Employee.DeleteAndSave(person);
+            person.IsActive = false;
+            _repository.Employee.UpdateAndSave(person);
             return Ok(person);
         }
         [Route("Designations")]
         [HttpGet]
         public IEnumerable<Role> GetDesignations()
         {
-            return _repository.Employee.GetDesignations();
+            return _repository.Employee.GetDesignations(TenantId);
         }
 
+        [DisplayName("Manage Roles")]
         [Route("Designations/{did}")]
         [HttpGet]
         public Role GetDesignationById([FromRoute]int did)
@@ -117,6 +130,7 @@ namespace EIS.WebAPI.Controllers
             return _repository.Employee.GetDesignationById(did);
         }
 
+        [DisplayName("Manage Roles")]
         [Route("DesignationName/{did}")]
         [HttpGet]
         public IActionResult GetDesignationNameById([FromRoute]int did)
@@ -129,11 +143,12 @@ namespace EIS.WebAPI.Controllers
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
         {
-            var DesignationExists=_repository.Employee.DesignationExists(designation.Name);
+            var DesignationExists=_repository.Employee.DesignationExists(designation.Name,TenantId);
             if (DesignationExists)
             {
                 return BadRequest("Designation already Exists");
             }
+            designation.TenantId = TenantId;
             _repository.Employee.AddDesignationAndSave(designation);
             return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
         }
@@ -156,13 +171,20 @@ namespace EIS.WebAPI.Controllers
             ArrayList employeeslist;
             if (search == null)
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid);
+                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,x=>x.TenantId==TenantId);
             }
             else
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid);
+                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, x => x.TenantId == TenantId);
             }
             return Ok(employeeslist);
+        }
+        public string GetTitle(Gender gender)
+        {
+            string Title="";
+            if (gender == Gender.Male) Title = "Mr.";
+            else if (gender == Gender.Female) Title = "Ms.";
+            return Title;
         }
     }
 }

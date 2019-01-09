@@ -56,7 +56,15 @@
 
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    
+    <style type="text/css">
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: relative;
+            /*margin-left: 8px;*/
+            /*top: 7px;*/
+        }
+    </style>
 </header>
 <div class="container-fluid">
     <div class="block-header">
@@ -70,6 +78,7 @@
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="RowVersion" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="IdCard" value="@Model.IdCard" />
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
@@ -95,29 +104,10 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="IdCard">Id Card No. : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="IdCard" class="form-control" />
-                                            </div>
-                                            <span asp-validation-for="IdCard" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="FirstName">First Name : </label>
-                                            <div class="form-line">
-                                                <input asp-for="FirstName" class="form-control" />
+                                                <input asp-for="FirstName" class="form-control"/>
                                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -132,8 +122,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="LastName">Last Name : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
                                                 <input asp-for="LastName" class="form-control" />
                                                 <span asp-validation-for="LastName" class="text-danger"></span>
@@ -145,8 +135,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="MobileNumber">Mobile Number : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="MobileNumber">Mobile Number : </label>
                                             <div class="form-line">
                                                 <input asp-for="MobileNumber" class="form-control" />
                                                 <span asp-validation-for="MobileNumber" class="text-danger"></span>
@@ -154,8 +144,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="EmailAddress">Email Address : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="EmailAddress">Email Address : </label>
                                             <div class="form-line">
                                                 <input asp-for="EmailAddress" type="email" class="form-control" />
                                                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
@@ -170,8 +160,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="DateOfBirth">Date Of Birth : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
                                                 <input asp-for="DateOfBirth" class="form-control" />
                                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
@@ -179,8 +169,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="Gender">Gender : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="Gender">Gender : </label>
                                             <select asp-for="Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick">
                                                 <option value="">-- Select Gender --</option>
                                             </select>
@@ -196,34 +186,17 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="Role.Name">Designation : </label>
-                                            <select asp-for="Role.Name" class="form-control show-tick" disabled>
-                                                <option>@Model.Role.Name</option>
+                                        <div class="form-group required">
+                                            <input id="RID" name="RID" type="hidden" asp-for="RoleId" />
+                                            <label class="control-label" asp-for="Role.Name">Designation : </label>
+                                            <select asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
                                             </select>
                                             <span asp-validation-for="Role.Name" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="Salary">Salary : </label>
-                                            <div class="form-line">
-                                                <input asp-for="Salary" class="form-control" />
-                                                <span asp-validation-for="Salary" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="JoinDate">Joining Data : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
                                                 <input asp-for="JoinDate" class="form-control" />
                                                 <span asp-validation-for="JoinDate" class="text-danger"></span>
@@ -231,24 +204,23 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="LeavingDate">Leaving Date : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="Salary">Salary : </label>
                                             <div class="form-line">
-                                                <input asp-for="LeavingDate" class="form-control" />
-                                                <span asp-validation-for="LeavingDate" class="text-danger"></span>
+                                                <input asp-for="Salary" class="form-control" />
+                                                <span asp-validation-for="Salary" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
 
-                                    </div>
                                 </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="PanCard">Pan Card No. : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
                                                 <span asp-validation-for="PanCard" class="text-danger"></span>
@@ -256,8 +228,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="AadharCard">Aadhar No. : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="AadharCard">Aadhar No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="AadharCard" class="form-control" />
                                                 <span asp-validation-for="AadharCard" class="text-danger"></span>

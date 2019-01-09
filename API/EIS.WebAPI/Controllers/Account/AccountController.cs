@@ -56,6 +56,7 @@ namespace EIS.WebAPI.Controllers
                     Cache.SetStringValue("TokenValue", tokenValue);
                     Cache.SetStringValue("PersonId", pid.ToString());
                     Cache.SetStringValue("Access", data);
+                    Cache.SetStringValue("TenantId", person.TenantId.ToString());
                 }
                 Cache.SetStringValue("Role", role);
                 return Ok(pid.ToString());
@@ -127,7 +128,7 @@ namespace EIS.WebAPI.Controllers
         [AllowAnonymous]
         public IActionResult ForGot_Pass(string username)
         {
-            string password = CreateRandomPassword(8);
+            string password = EmailManager.CreateRandomPassword(8);
             string To = username;
             string subject = "New Password";
             string body = "Hello!" +"\n"+
@@ -136,20 +137,10 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(configuration).SendEmail(subject, body, To);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
+            _repository.Users.UpdateAndSave(user);
             return Ok();
         }
 
-        public static string CreateRandomPassword(int PasswordLength)
-        {
-            string _allowedChars = "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
-            Random randNum = new Random();
-            char[] chars = new char[PasswordLength];
-            int allowedCharCount = _allowedChars.Length;
-            for (int i = 0; i < PasswordLength; i++)
-            {
-                chars[i] = _allowedChars[(int)((_allowedChars.Length) * randNum.NextDouble())];
-            }
-            return new string(chars);
-        }
+        
     }
 }

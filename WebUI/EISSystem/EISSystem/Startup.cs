@@ -1,6 +1,8 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
+using EIS.Repositories.IRepository;
+using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
@@ -55,6 +57,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
             #endregion
 
+            services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDistributedMemoryCache();
             services.AddScoped<RedisAgent>();
             services.AddSession();
@@ -97,7 +100,7 @@ namespace EIS.WebApp
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
-            app.UseWebAppExceptionHandler();
+            //app.UseWebAppExceptionHandler();
             app.UseStaticFiles();
             string controller = "Account";
             string action = "Login";
@@ -117,7 +120,7 @@ namespace EIS.WebApp
                 {
                     controller = "People";
                     action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
+                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + id + "}";
                 }
             }
             else

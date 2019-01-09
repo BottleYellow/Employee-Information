@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,8 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class LeaveRequestController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public LeaveRequestController(IRepositoryWrapper repository) 
         {
@@ -89,6 +92,7 @@ namespace EIS.WebAPI.Controllers
             }
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
+            leave.TenantId = TenantId;
             _repository.Leave.CreateAndSave(leave);
             _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();

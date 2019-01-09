@@ -27,9 +27,7 @@ namespace EIS.WebApp.Services
         public HttpResponseMessage GetResponse(string url)
         {
             HttpClient client = GetService();
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            HttpResponseMessage response = new HttpResponseMessage() { Version = HttpVersion.Version10 };
-            response = client.GetAsync(url).Result;
+            HttpResponseMessage response = client.GetAsync(url).Result;
             CheckResponse(response);
             return response;
         }

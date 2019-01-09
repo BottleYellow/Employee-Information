@@ -5,11 +5,11 @@ namespace EIS.Repositories.IRepository
 {
     public interface IEmployeeRepository : IRepositorybase<Person>
     {
-        int GenerateNewIdCardNo();
-        IEnumerable<Role> GetDesignations();
+        int GenerateNewIdCardNo(int TenantId);
+        IEnumerable<Role> GetDesignations(int TenantId);
         Role GetDesignationById(int id);
         void AddDesignationAndSave(Role designation);
-        bool DesignationExists(string DesignationName);
+        bool DesignationExists(string DesignationName,int TenantId);
         void UpdateDesignationAndSave(Role designation);
     }
 }

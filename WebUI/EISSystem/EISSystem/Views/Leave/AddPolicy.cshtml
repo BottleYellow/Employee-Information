@@ -1,7 +1,15 @@
 ﻿@using EIS.Entities.Leave
 @model LeaveRules
 <!-- Modal -->
-
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+        /*margin-left: 8px;*/
+        /*top: 7px;*/
+    }
+</style>
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -11,15 +19,15 @@
             <form name="cp" id="cp" asp-action="AddPolicy" asp-controller="Leave" method="post">
 
                 <input type="hidden" asp-for="Id" value="0" />
-                <div class="form-group">
-                    <label asp-for="LeaveType">Leave Type</label>
+                <div class="form-group required">
+                    <label class="control-label" asp-for="LeaveType">Leave Type</label>
                     <div class="form-line">
                         <input asp-for="LeaveType" class="form-control" />
                     </div>
                     <span asp-validation-for="LeaveType" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Description"></label>
+                <div class="form-group required">
+                    <label class="control-label" asp-for="Description"></label>
                     <div class="form-line">
                         <input asp-for="Description" class="form-control" />
                     </div>
@@ -34,15 +42,15 @@
 
                     <span asp-validation-for="Validity" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label>Valid From</label>
+                <div class="form-group required">
+                    <label class="control-label">Valid From</label>
                     <div class="form-line">
                         <input type="date" value="01/01/2018" asp-for="ValidFrom" class="form-control" />
                     </div>
                     <span asp-validation-for="ValidFrom" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label>Valid To</label>
+                <div class="form-group required">
+                    <label class="control-label">Valid To</label>
                     <div class="form-line">
                         <input type="date" value="01/01/2018" asp-for="ValidTo" class="form-control" />
                     </div>

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190107095307_Initial")]
-    partial class Initial
+    [Migration("20190108112738_DatabaseData")]
+    partial class DatabaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -323,8 +323,8 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(15)");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("varchar(100)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(MAX)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -370,7 +370,24 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AadharCard")
+                        .IsUnique()
+                        .HasFilter("[AadharCard] IS NOT NULL");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique();
+
+                    b.HasIndex("MobileNumber")
+                        .IsUnique();
+
+                    b.HasIndex("PanCard")
+                        .IsUnique()
+                        .HasFilter("[PanCard] IS NOT NULL");
+
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId", "IdCard")
+                        .IsUnique();
 
                     b.ToTable("Person","Employee");
                 });
@@ -394,6 +411,10 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("UpdatedDate");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Roles","Employee");
                 });
@@ -664,6 +685,9 @@ namespace EIS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "UserName")
                         .IsUnique();
 
                     b.ToTable("Users","Account");

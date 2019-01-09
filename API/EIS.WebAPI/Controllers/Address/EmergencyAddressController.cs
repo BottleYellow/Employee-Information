@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class EmergencyAddressController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
         public EmergencyAddressController(IRepositoryWrapper repository) 
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
 
@@ -58,7 +62,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            emergency.TenantId = TenantId;
             _repository.EmergencyAddress.CreateAndSave(emergency);
             return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
         }
@@ -74,6 +78,7 @@ namespace EIS.WebAPI.Controllers
             }
             Other other = new Other
             {
+                TenantId = TenantId,
                 AddressType = "Emergency Address",
                 PersonId = Emergency.PersonId,
                 Address = Emergency.Address,

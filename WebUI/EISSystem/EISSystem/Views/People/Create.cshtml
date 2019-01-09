@@ -9,6 +9,15 @@
 }
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <style type="text/css">
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: relative;
+            /*margin-left: 8px;*/
+            /*top: 7px;*/
+        }
+    </style>
 </header>
 <div class="container-fluid">
     <div>
@@ -20,14 +29,13 @@
                 <div class="body">
                     <form asp-action="Create" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" value="0" />
                         <div class="container">
                             <div class="row">
                                 <div style="height:50px"></div>
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="FirstName">First Name : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
                                                 <input asp-for="FirstName" class="form-control" />
                                             </div>
@@ -45,8 +53,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="LastName">Last Name : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
                                                 <input asp-for="LastName" class="form-control" />
 
@@ -59,8 +67,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="MobileNumber">Mobile Number : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="MobileNumber">Mobile Number : </label>
                                             <div class="form-line">
                                                 <input asp-for="MobileNumber" class="form-control" />
                                             </div>
@@ -68,8 +76,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="EmailAddress">Email Address : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="EmailAddress">Email Address : </label>
                                             <div class="form-line">
                                                 <input asp-for="EmailAddress" type="email" class="form-control" />
 
@@ -85,8 +93,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label>Choose Image : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="Image">Choose Image : </label>
                                             <div class="form-line">
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
 
@@ -95,8 +103,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="DateOfBirth">Date Of Birth : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
                                                 <input asp-for="DateOfBirth" class="form-control" />
 
@@ -105,8 +113,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="Gender">Gender : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="Gender">Gender : </label>
                                             <select asp-for="Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick">
                                                 <option value="">-- Select Gender --</option>
                                             </select>
@@ -118,8 +126,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="RoleId">Designation : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="RoleId">Designation : </label>
                                             <select id="did" asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
                                                 <option>-- Select Designation --</option>
                                             </select>
@@ -127,8 +135,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="ReportingPersonId">Reporting Person : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
                                             <div class="form-line">
                                                 <select asp-for="ReportingPersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
                                                     <option>-- Select --</option>
@@ -147,8 +155,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="JoinDate">Joining Data : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
                                                 <input asp-for="JoinDate" class="form-control" />
 
@@ -157,8 +165,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="Salary">Salary : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="Salary">Salary : </label>
                                             <div class="form-line">
                                                 <input asp-for="Salary" class="form-control" />
 
@@ -174,8 +182,8 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="PanCard">Pan Card No. : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
 
@@ -184,8 +192,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label asp-for="AadharCard">Aadhar No. : </label>
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="AadharCard">Aadhar No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="AadharCard" class="form-control" />
 

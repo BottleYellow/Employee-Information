@@ -3205,7 +3205,6 @@
       "type": "package",
       "path": "microsoft.extensions.dependencyinjection/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net461/Microsoft.Extensions.DependencyInjection.dll",
         "lib/net461/Microsoft.Extensions.DependencyInjection.xml",
