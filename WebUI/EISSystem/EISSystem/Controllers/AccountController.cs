@@ -32,7 +32,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.PostResponse("api/account/login", user); 
             if (response.IsSuccessStatusCode == false)
             {
-                ViewBag.Message = "<p style='color: red'>Please check username or password</p>";
+                ViewBag.CheckCreadentials = "<p style='color: red'>Please check username or password</p>";
                 return View("Login");
             }
             else
@@ -69,13 +69,13 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = client.PostAsJsonAsync("api/account/forgot/"+username+"",username).Result;
             if(response.IsSuccessStatusCode==true)
             { 
-                ViewBag.Message = "success";
+                ViewBag.Message = "Success! Password has been changed Successfully. Please check your email.";
             }
             else
             {
-                ViewBag.Message = "error";
+                ViewBag.Message = "Something went wrong!";
             }
-            return View("Login");
+            return View();
         }
         [DisplayName("Change Password")]
         [HttpGet]

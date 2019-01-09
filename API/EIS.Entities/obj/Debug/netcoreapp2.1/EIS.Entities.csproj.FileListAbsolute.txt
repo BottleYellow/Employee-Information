@@ -35,4 +35,11 @@ C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb
 C:\Users\Aadyam\Documents\GitHub\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csprojAssemblyReference.cache
-E:\Training Project\Employee-Information\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csprojAssemblyReference.cache
+E:\aadyam\EMS\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.deps.json
+E:\aadyam\EMS\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\aadyam\EMS\API\EIS.Entities\bin\Debug\netcoreapp2.1\EIS.Entities.pdb
+E:\aadyam\EMS\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.csproj.CoreCompileInputs.cache
+E:\aadyam\EMS\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfoInputs.cache
+E:\aadyam\EMS\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.AssemblyInfo.cs
+E:\aadyam\EMS\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.dll
+E:\aadyam\EMS\API\EIS.Entities\obj\Debug\netcoreapp2.1\EIS.Entities.pdb

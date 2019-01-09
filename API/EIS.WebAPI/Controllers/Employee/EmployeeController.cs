@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Generic;
 using EIS.Entities.User;
+using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
 using EIS.WebAPI.Utilities;
@@ -29,6 +30,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllEmployee()
         {        
             var employees = _repository.Employee.FindAll();
+            
             return Ok(employees);
         }
         [HttpGet("{id}")]
@@ -65,9 +67,10 @@ namespace EIS.WebAPI.Controllers
             Users u = new Users
             {
                 UserName = person.EmailAddress,
-                Password = person.FirstName + person.DateOfBirth.Day,
+                Password = EmailManager.CreateRandomPassword(8),
                 PersonId=person.Id
             };
+            string pw = u.Password;
             _repository.Users.CreateUserAndSave(u);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
@@ -75,7 +78,7 @@ namespace EIS.WebAPI.Controllers
                 "Your have been successfully registered with employee system. : \n" +
                 "Id Card Number: " + person.IdCard + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
-                "Password: " + person.FirstName + person.DateOfBirth.Day;
+                "Password: " + pw;
             new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok();
         }
@@ -100,7 +103,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Employee.DeleteAndSave(person);
+            person.IsActive = false;
+            _repository.Employee.UpdateAndSave(person);
             return Ok(person);
         }
         [Route("Designations")]

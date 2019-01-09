@@ -5,6 +5,15 @@
 }
 <header>
     <link href="~/lib/jquery-bonsai/jquery.bonsai.css" rel="stylesheet" />
+    <style type="text/css">
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: relative;
+            /*margin-left: 8px;*/
+            /*top: 7px;*/
+        }
+    </style>
 </header>
 <div class="container-fluid">
     <div class="block-header">
@@ -15,15 +24,15 @@
             <div class="card">
                 <div class="body">
                     <form asp-controller="People" asp-action="AddRole" method="post">
-                        <div class="form-group">
-                            <label asp-for="Name">Designation Name : </label>
+                        <div class="form-group required">
+                            <label class="control-label" asp-for="Name">Designation Name : </label>
                             <div class="form-line">
                                 <input asp-for="Name" type="text" class="form-control" />
                             </div>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label>Access List : </label>
+                        <div class="form-group required">
+                            <label class="control-label">Access List : </label>
                             <div class="form-group">
                                 <ol id="tree">
                                     @foreach (var controller in controllers)

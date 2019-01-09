@@ -2,15 +2,18 @@
 <html>
 <head>
     <title>Leave Requests</title>
-    
+
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-<style>
-    select{
-        border:solid;
-    }
-</style>
+  
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+    <style>
+
+        select {
+            border: solid;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -96,7 +99,7 @@
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
                                                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
                                                     </button>
-                                                    <ul class="dropdown-menu pull-right">
+                                                    <ul class="dropdown-menu">
                                                         @if (item.Status == "Pending")
                                                         {
                                                             <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Approve</a></li>

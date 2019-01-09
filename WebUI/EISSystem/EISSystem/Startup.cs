@@ -106,7 +106,6 @@ namespace EIS.WebApp
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
-            app.UseWebAppExceptionHandler();
             app.UseStaticFiles();
             string controller = "Account";
             string action = "Login";
@@ -126,7 +125,7 @@ namespace EIS.WebApp
                 {
                     controller = "People";
                     action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{id=" + id + "}";
+                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + id + "}";
                 }
             }
             else

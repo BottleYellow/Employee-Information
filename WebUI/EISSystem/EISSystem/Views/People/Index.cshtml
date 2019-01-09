@@ -27,14 +27,25 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-6">
-                <h1>Admin Dashboard</h1>
+                <h3>Admin Dashboard</h3>
             </div>
-            <div class="col-md-6 align-right">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-2 align-right">
                 <p>
                     <a class="btn btn-primary waves-effect" asp-controller="People" asp-action="Create" id="create"><span><i class="glyphicon glyphicon-plus" style="font-size:13px;"></i><text style="font-size:16px;">Create</text></span></a>
                 </p>
+            
+                    <select class="form-control" id="select" style="width:165px;">
+                        <option id="active" value="active">Active</option>
+                        <option id="inActive" value="inActive">InActive</option>
+                    </select>
+               
             </div>
+            
         </div>
+        
  </div>
 
     <div class="row clearfix">
@@ -73,6 +84,7 @@
         float: right;
     }
 </style>
+
 <script>
     var setting = null;
     $(document).ready(function () {
@@ -82,6 +94,7 @@
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
             buttons: [
+         
                 {
                     extend: 'pdfHtml5',
                     title: 'Employee Report',
@@ -90,7 +103,7 @@
                     orientation: 'landscape',
                     pageSize: 'LEGAL'
                 }
-            ],
+          ],
             lengthMenu: [
                 [5, 10, 25, -1],
                 ['5', '10', '25', 'All']

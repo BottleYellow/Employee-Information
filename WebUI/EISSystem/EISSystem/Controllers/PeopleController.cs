@@ -97,12 +97,12 @@ namespace EIS.WebApp.Controllers
         {
 
             ViewBag.Designations = rolesList;
+            var data = from p in EmployeeData()
+                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+
+            ViewBag.Persons = data;
             if (ModelState.IsValid)
             {
-                var data = from p in EmployeeData()
-                           select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
-
-                ViewBag.Persons = data;
                 person.CreatedDate = DateTime.Now.Date;
                 IFormFile uploadedImage = file.FirstOrDefault();
                 if (uploadedImage != null || uploadedImage.ContentType.ToLower().StartsWith("image/"))

@@ -21,16 +21,13 @@
     }
 }
 
-
-
 @*<link href="../../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">*@
+        
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
 
 <html>
 <head>
@@ -48,8 +45,7 @@
             <h2 style="font-size:25px;">
                 Leave Policies
             </h2>
-
-            <button id="btnModal" name="btnModal" type="button" class="btn btn-primary" >
+            <button id="btnModal" name="btnModal" type="button" class="btn btn-primary">
                 Add New
             </button>
         </div>
@@ -64,7 +60,6 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.LeaveType)
                                         </th>
-
                                         <th>
                                             @Html.DisplayNameFor(model => model.Validity)
                                         </th>
@@ -86,24 +81,21 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.LeaveType)
                                             </td>
-
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Validity)
                                             </td>
                                             <td>
                                                 @item.ValidFrom.ToString("dd/MM/yyyy").ToString()
                                             </td>
-
                                             <td>
                                                 @item.ValidTo.ToString("dd/MM/yyyy").ToString()
                                             </td>
-
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
                                                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
                                                     </button>
-                                                    <ul class="dropdown-menu pull-right">
+                                                    <ul class="dropdown-menu">
                                                         <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
                                                     </ul>
                                                 </div>
@@ -113,7 +105,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -121,8 +112,6 @@
     </div>
 </body>
 </html>
-
-
 
 <script>
     $(document).ready(function () {
@@ -141,17 +130,13 @@
         });
 
     });
-   
+
 
 </script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-
 <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-
-
-
 
 
