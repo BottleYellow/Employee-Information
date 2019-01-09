@@ -321,8 +321,8 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(15)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(MAX)");
+                    b.Property<string>("Image")
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
