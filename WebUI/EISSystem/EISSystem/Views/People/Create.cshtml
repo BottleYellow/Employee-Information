@@ -2,8 +2,9 @@
 @model EIS.Entities.Employee.Person
 
 @{
-//ViewData["Title"] = "Create";
-//Layout = "_AdminLayout";
+
+    //ViewData["Title"] = "Create";
+    //Layout = "_AdminLayout";
 
 }
 <header>
@@ -95,10 +96,10 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="Image">Choose Image : </label>
                                             <div class="form-line">
-                                                <input asp-for="Image" formenctype="multipart/form-data" type="file" class="form-control" name="file" id="file"/>
+                                                <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
 
                                             </div>
-                                            <span asp-validation-for="Image" class="text-danger"></span>
+                                            <span  class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -146,7 +147,7 @@
 
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -230,13 +231,13 @@
                                         <div class="form-group">
                                             <button type="submit" asp-action="Index" class="btn btn-primary">Back</button>
                                             <button type="submit" class="btn btn-primary">Save</button>
-                                        </div>                                       
+                                        </div>
                                     </div>
-                                </div>    
+                                </div>
                             </div>
-                            
+
                         </div>
-                        
+
                     </form>
                 </div>
             </div>
@@ -244,5 +245,47 @@
     </div>
 </div>
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<SCRIPT type="text/javascript">
 
+
+    function ValidateFileUpload() {
+        var fuData = document.getElementById('imageFile');
+        var FileUploadPath = fuData.value;
+        var status = false;
+        if (FileUploadPath == '')
+        {
+            alert("Please upload an image");
+
+        }
+        else
+        {
+            var fileLength = fuData.files[0].size;
+
+            var Extension = FileUploadPath.substring(
+                FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+            //The file uploaded is an image
+            if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
+            {
+                if (fileLength < 6000)
+                {
+                    status = true;
+                }                  
+                else
+                {
+                        alert("File must be below 6 kb");
+                }
+
+            }
+            else
+            {
+                alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");
+            }
+        }
+        if (!status) {
+   
+        }
+      
+    }
+</SCRIPT>
 
