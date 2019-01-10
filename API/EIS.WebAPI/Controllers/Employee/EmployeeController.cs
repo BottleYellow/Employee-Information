@@ -36,7 +36,9 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet]
         public IActionResult GetAllEmployee()
-        {        
+        {
+
+            throw new Exception();
             var employees = _repository.Employee.FindAll().Where(x=>x.TenantId==TenantId);
             return Ok(employees);
         }
@@ -92,9 +94,9 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [AllowAnonymous]
         public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
         {
+            var p = _repository.Employee.FindByCondition(x => x.Id == id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

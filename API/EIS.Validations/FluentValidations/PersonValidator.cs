@@ -9,6 +9,7 @@ namespace EIS.Validations.FluentValidations
     public class PersonValidator : AbstractValidator<Person>
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
+
         public PersonValidator(IRepositoryWrapper repositoryWrapper)
         {
             _repositoryWrapper = repositoryWrapper;
@@ -22,60 +23,56 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.MobileNumber).Length(10, 15).Matches("^[0-9]*$").NotNull().Must(UniqueMobileNumber).WithMessage("Mobile Number already exists"); ;
             RuleFor(x => x.DateOfBirth).NotNull();
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
-            RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.AadharCard).NotNull().Must(UniqueAadhar).WithMessage("Aadhar No already exists");
             RuleFor(x => x.PanCard).NotNull().WithMessage("Please enter PAN Card Number").Must(UniquePan).WithMessage("Pan Card No already exists");
         }
-        public bool UniqueEmail(string email)
+        public bool UniqueEmail(Person obj,string email)
         {
-            var persons = _repositoryWrapper.Employee.FindAll();
-            var person = persons.Where(x => x.EmailAddress == email).FirstOrDefault();
+            var person = _repositoryWrapper.Employee.FindByCondition(x => x.EmailAddress == email);
+                if (person == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return person.Id == obj.Id;
+                }  
+        }
+        public bool UniqueMobileNumber(Person obj,string mobile)
+        {
+            var person = _repositoryWrapper.Employee.FindByCondition(x=>x.MobileNumber==mobile);
             if (person == null)
             {
                 return true;
             }
             else
             {
-                return false;
+                return person.Id == obj.Id;
             }
         }
-        public bool UniqueMobileNumber(string mobile)
+        public bool UniqueAadhar(Person obj,string aadhar)
         {
-            var persons = _repositoryWrapper.Employee.FindAll();
-            var person = persons.Where(x => x.MobileNumber == mobile).FirstOrDefault();
+            var person = _repositoryWrapper.Employee.FindByCondition(x=>x.AadharCard==aadhar);
             if (person == null)
             {
                 return true;
             }
             else
             {
-                return false;
+                return person.Id == obj.Id;
             }
         }
-        public bool UniqueAadhar(string aadhar)
+        public bool UniquePan(Person obj,string pan)
         {
-            var persons = _repositoryWrapper.Employee.FindAll();
-            var person = persons.Where(x => x.AadharCard == aadhar).FirstOrDefault();
+            var person = _repositoryWrapper.Employee.FindByCondition(x=>x.PanCard==pan);
+            
             if (person == null)
             {
                 return true;
             }
             else
             {
-                return false;
-            }
-        }
-        public bool UniquePan(string pan)
-        {
-            var persons = _repositoryWrapper.Employee.FindAll();
-            var person = persons.Where(x => x.PanCard == pan).FirstOrDefault();
-            if (person == null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
+                return person.Id == obj.Id;
             }
         }
     }

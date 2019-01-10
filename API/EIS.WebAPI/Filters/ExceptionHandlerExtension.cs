@@ -19,7 +19,7 @@ namespace EIS.WebAPI.ExceptionHandle
                 ReasonPhrase = "An unhandled exception was thrown by Customer Web API controller."
             };
             context.ExceptionHandled = true;
-           int code = 500;
+            int code = 500;
 
 
             context.HttpContext.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");

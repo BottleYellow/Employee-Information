@@ -322,7 +322,7 @@ namespace EIS.Data.Migrations
                         .HasColumnType("varchar(15)");
 
                     b.Property<string>("Image")
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()

@@ -67,6 +67,7 @@
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="RowVersion" />
+                        <input type="hidden" asp-for="TenantId" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="IdCard" value="@Model.IdCard" />
                         <div class="container">
@@ -98,9 +99,9 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="FirstName" class="form-control"/>
-                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                                <input asp-for="FirstName" class="form-control" />
                                             </div>
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -108,8 +109,8 @@
                                             <label asp-for="MiddleName">Middle Name : </label>
                                             <div class="form-line">
                                                 <input asp-for="MiddleName" class="form-control" />
-                                                <span asp-validation-for="MiddleName" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="MiddleName" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -117,8 +118,8 @@
                                             <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
                                                 <input asp-for="LastName" class="form-control" />
-                                                <span asp-validation-for="LastName" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -130,8 +131,8 @@
                                             <label class="control-label" asp-for="MobileNumber">Mobile Number : </label>
                                             <div class="form-line">
                                                 <input asp-for="MobileNumber" class="form-control" />
-                                                <span asp-validation-for="MobileNumber" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="MobileNumber" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -139,8 +140,8 @@
                                             <label class="control-label" asp-for="EmailAddress">Email Address : </label>
                                             <div class="form-line">
                                                 <input asp-for="EmailAddress" type="email" class="form-control" />
-                                                <span asp-validation-for="EmailAddress" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="EmailAddress" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -155,8 +156,8 @@
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
                                                 <input asp-for="DateOfBirth" class="form-control" />
-                                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -173,32 +174,35 @@
                                     </div>
                                 </div>
                             </div>
-                        @*<input type="hidden" asp-for="RoleId" value="@Model.Role.Id" />*@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="RoleId">Role ID : </label>
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="RoleId">Designation : </label>
+                                            <select  asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations, "Id", "Name"))" class="form-control show-tick"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
                                             <div class="form-line">
-                                                <input asp-for="RoleId" class="form-control" />
-                                                <span asp-validation-for="RoleId" class="text-danger"></span>
+                                                <select asp-for="ReportingPersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                                                    <option value="0">-- Select --</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        @*<div class="form-group required">
-            <input id="RID" name="RID" type="hidden" asp-for="RoleId" />
-            <label class="control-label" asp-for="Role.Name">Designation : </label>
-            <select asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
-            </select>
-            <span asp-validation-for="Role.Name" class="text-danger"></span>
-        </div>*@
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
                                                 <input asp-for="JoinDate" class="form-control" />
-                                                <span asp-validation-for="JoinDate" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="JoinDate" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -206,14 +210,12 @@
                                             <label class="control-label" asp-for="Salary">Salary : </label>
                                             <div class="form-line">
                                                 <input asp-for="Salary" class="form-control" />
-                                                <span asp-validation-for="Salary" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="Salary" class="text-danger"></span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                            
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -221,8 +223,8 @@
                                             <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
-                                                <span asp-validation-for="PanCard" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="PanCard" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -230,8 +232,8 @@
                                             <label class="control-label" asp-for="AadharCard">Aadhar No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="AadharCard" class="form-control" />
-                                                <span asp-validation-for="AadharCard" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="AadharCard" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -246,12 +248,12 @@
                                             <label asp-for="Description">Description : </label>
                                             <div class="form-line">
                                                 <textarea asp-for="Description" rows="4" class="form-control no-resize" placeholder="About You..."></textarea>
-                                                <span asp-validation-for="Description" class="text-danger"></span>
                                             </div>
+                                            <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        
+
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
 
