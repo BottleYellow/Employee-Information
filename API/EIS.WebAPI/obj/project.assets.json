@@ -6860,7 +6860,6 @@
       "type": "package",
       "path": "microsoft.extensions.dependencyinjection.abstractions/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
@@ -7822,7 +7821,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.xml",
@@ -7835,7 +7833,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.contracts/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.xml",
@@ -7848,7 +7845,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.core/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.xml",
@@ -7861,7 +7857,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.design/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net461/dotnet-aspnet-codegenerator-design.exe",
         "lib/net461/dotnet-aspnet-codegenerator-design.xml",
@@ -7884,7 +7879,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "Templates/DbContext/NewLocalDbContext.cshtml",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll",
@@ -7898,7 +7892,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.templating/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.xml",
@@ -7911,7 +7904,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegeneration.utils/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.xml",
@@ -7924,7 +7916,6 @@
       "type": "package",
       "path": "microsoft.visualstudio.web.codegenerators.mvc/2.2.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "Generators/ParameterDefinitions/area.json",
         "Generators/ParameterDefinitions/controller.json",
@@ -8456,7 +8447,6 @@
       "type": "package",
       "path": "pipelines.sockets.unofficial/1.0.7",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net461/Pipelines.Sockets.Unofficial.dll",
         "lib/net461/Pipelines.Sockets.Unofficial.xml",
@@ -8764,7 +8754,6 @@
       "type": "package",
       "path": "serilog/2.6.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.dll",
         "lib/net45/Serilog.xml",
@@ -8783,7 +8772,6 @@
       "type": "package",
       "path": "serilog.aspnetcore/2.1.1",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Serilog.AspNetCore.dll",
         "lib/netstandard2.0/Serilog.AspNetCore.xml",
@@ -8796,7 +8784,6 @@
       "type": "package",
       "path": "serilog.extensions.logging/2.0.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.Extensions.Logging.dll",
         "lib/net45/Serilog.Extensions.Logging.xml",
@@ -8817,7 +8804,6 @@
       "type": "package",
       "path": "serilog.settings.configuration/3.0.1",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net451/Serilog.Settings.Configuration.dll",
         "lib/net451/Serilog.Settings.Configuration.xml",
@@ -8834,7 +8820,6 @@
       "type": "package",
       "path": "serilog.sinks.mssqlserver/5.1.2",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.Sinks.MSSqlServer.dll",
         "lib/net45/Serilog.Sinks.MSSqlServer.xml",
@@ -8851,7 +8836,6 @@
       "type": "package",
       "path": "serilog.sinks.periodicbatching/2.1.1",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.Sinks.PeriodicBatching.dll",
         "lib/net45/Serilog.Sinks.PeriodicBatching.xml",
@@ -8868,7 +8852,6 @@
       "type": "package",
       "path": "stackexchange.redis/2.0.519",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net461/StackExchange.Redis.dll",
         "lib/net461/StackExchange.Redis.xml",
@@ -8968,7 +8951,6 @@
       "type": "package",
       "path": "system.codedom/4.5.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -9312,7 +9294,6 @@
       "type": "package",
       "path": "system.composition/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "system.composition.1.0.31.nupkg.sha512",
@@ -9324,7 +9305,6 @@
       "type": "package",
       "path": "system.composition.attributedmodel/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/System.Composition.AttributedModel.dll",
@@ -9338,7 +9318,6 @@
       "type": "package",
       "path": "system.composition.convention/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/System.Composition.Convention.dll",
@@ -9352,7 +9331,6 @@
       "type": "package",
       "path": "system.composition.hosting/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/System.Composition.Hosting.dll",
@@ -9366,7 +9344,6 @@
       "type": "package",
       "path": "system.composition.runtime/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/System.Composition.Runtime.dll",
@@ -9380,7 +9357,6 @@
       "type": "package",
       "path": "system.composition.typedparts/1.0.31",
       "files": [
-        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/System.Composition.TypedParts.dll",
@@ -9394,7 +9370,6 @@
       "type": "package",
       "path": "system.configuration.configurationmanager/4.5.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -9720,7 +9695,6 @@
       "type": "package",
       "path": "system.diagnostics.performancecounter/4.5.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -10516,7 +10490,6 @@
       "type": "package",
       "path": "system.linq.dynamic.core/1.0.9",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net35/System.Linq.Dynamic.Core.dll",
         "lib/net35/System.Linq.Dynamic.Core.xml",
@@ -10738,7 +10711,6 @@
       "type": "package",
       "path": "system.management/4.5.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -12428,7 +12400,6 @@
       "type": "package",
       "path": "system.security.cryptography.protecteddata/4.5.0",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",

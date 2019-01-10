@@ -153,6 +153,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Employee")]
         public IActionResult Edit(int id, IFormFile file)
         {
+            ViewBag.Designations = rolesList;
+
+            var data1 = from p in EmployeeData()
+                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+            ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);
 
@@ -185,19 +190,19 @@ namespace EIS.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,RoleId,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person, IFormFile file)
+        public IActionResult Edit(int id, Person person, IFormFile file)
         {
-            if (id != person.Id)
-            {
-                return NotFound();
-            }
-
+            ViewBag.Designations = rolesList;
+            var data1 = from p in EmployeeData()
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+            ViewBag.Persons = data1;
             person.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    HttpResponseMessage response = _services.Employee.PutResponse("api/employee/" + id + "", person);
+                    person.IsActive = true;
+                    HttpResponseMessage response = _services.Employee.PutResponse("api/Employee/" + id + "", person);
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }

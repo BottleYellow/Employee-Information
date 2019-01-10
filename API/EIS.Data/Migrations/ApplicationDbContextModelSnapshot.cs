@@ -322,7 +322,7 @@ namespace EIS.Data.Migrations
                         .HasColumnType("varchar(15)");
 
                     b.Property<string>("Image")
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -620,6 +620,33 @@ namespace EIS.Data.Migrations
                     b.ToTable("LeaveRules","Leave");
                 });
 
+            modelBuilder.Entity("EIS.Entities.OtherEntities.Configuration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("TenantId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<DateTime>("ValidFrom");
+
+                    b.Property<DateTime>("ValidUpTo");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("configurations");
+                });
+
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -726,7 +753,7 @@ namespace EIS.Data.Migrations
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
                 {
-                    b.HasOne("EIS.Entities.Leave.LeaveRules", "LeaveMaster")
+                    b.HasOne("EIS.Entities.Leave.LeaveRules", "LeaveRule")
                         .WithMany("Credits")
                         .HasForeignKey("LeaveId")
                         .OnDelete(DeleteBehavior.Cascade);

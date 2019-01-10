@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Text;
 
@@ -82,8 +83,8 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
-            
-            app.UseWebApiExceptionHandler();
+            loggerFactory.AddSerilog();
+            //app.UseWebApiExceptionHandler();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();

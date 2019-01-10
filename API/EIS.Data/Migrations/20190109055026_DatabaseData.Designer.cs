@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190108112738_DatabaseData")]
+    [Migration("20190109055026_DatabaseData")]
     partial class DatabaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -323,8 +323,8 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(15)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(MAX)");
+                    b.Property<string>("Image")
+                        .HasColumnType("varchar(max)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
