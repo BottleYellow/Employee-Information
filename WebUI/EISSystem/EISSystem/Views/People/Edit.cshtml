@@ -182,14 +182,13 @@
                                     </div>
                                 </div>
                             </div>
-                        <input type="hidden" asp-for="RoleId" value="@Model.Role.Id" />
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
                                             <input id="RID" name="RID" type="hidden" asp-for="RoleId" />
                                             <label class="control-label" asp-for="Role.Name">Designation : </label>
-                                            <select asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
+                                            <select id="roles" name="roles" asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
                                             </select>
                                             <span asp-validation-for="Role.Name" class="text-danger"></span>
                                         </div>
@@ -271,6 +270,10 @@
 
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script>
+    $("#roles").on("change", function () {
+        var x = this.value;
+        $("#RID").val = x;
+    })
     function ValidateFileUpload() {
         var fuData = document.getElementById('my-file');
         var FileUploadPath = fuData.value;

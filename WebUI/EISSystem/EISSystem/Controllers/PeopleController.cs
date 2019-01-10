@@ -48,12 +48,12 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            return View(data);
+            return View();
         }
         [HttpPost]
-        public IActionResult LoadData()
+        public IActionResult LoadData(bool type)
         {
-            return base.LoadData("api/employee/data");
+            return base.LoadData("api/employee/data", type);
         }
         public IActionResult Profile(int PersonId)
         {
@@ -153,6 +153,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Employee")]
         public IActionResult Edit(int id, IFormFile file)
         {
+            ViewBag.Designations = rolesList;
+
+            var data1 = from p in EmployeeData()
+                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+            ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);
 
@@ -271,7 +276,17 @@ namespace EIS.WebApp.Controllers
             }
             return data;
         }
-
+        public IActionResult ActivateEmployee(int id)
+        {
+            response = _services.Employee.GetResponse("api/employee/" + id + "");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Person person = JsonConvert.DeserializeObject<Person>(stringData);
+            person.IsActive = true;
+            person.Image = "fds";
+            response = _services.Employee.PutResponse("api/employee/" + id + "", person);
+            string stringData1= response.Content.ReadAsStringAsync().Result;
+            return View("Index");
+        }
         #endregion
 
         #region Roles

@@ -36,8 +36,8 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet]
         public IActionResult GetAllEmployee()
-        {        
-            var employees = _repository.Employee.FindAll().Where(x=>x.TenantId==TenantId);
+        {
+            var employees = _repository.Employee.FindAll().Where(x => x.TenantId == TenantId && x.IsActive == true);
             return Ok(employees);
         }
         [HttpGet("{id}")]
