@@ -94,7 +94,7 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
-                                            <label class="control-label" asp-for="Image">Choose Image : </label>
+                                            <label class="control-label">Choose Image : </label>
                                             <div class="form-line">
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
 
@@ -267,23 +267,23 @@
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
             {
-                if (fileLength < 6000)
+                if (fileLength < 60000)
                 {
                     status = true;
                 }                  
                 else
                 {
-                        alert("File must be below 6 kb");
+                    alert("File must be below 60 kb");             
                 }
 
             }
             else
             {
-                alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");
+                alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");            
             }
         }
         if (!status) {
-   
+            fuData.value = null;
         }
       
     }

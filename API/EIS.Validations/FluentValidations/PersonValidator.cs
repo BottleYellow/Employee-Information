@@ -24,7 +24,7 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.AadharCard).NotNull().Must(UniqueAadhar).WithMessage("Aadhar No already exists");
-            RuleFor(x => x.PanCard).NotNull().WithMessage("Please enter Pan Card Number").Must(UniquePan).WithMessage("Pan Card No already exists");
+            RuleFor(x => x.PanCard).NotNull().WithMessage("Please enter PAN Card Number").Must(UniquePan).WithMessage("Pan Card No already exists");
         }
         public bool UniqueEmail(string email)
         {

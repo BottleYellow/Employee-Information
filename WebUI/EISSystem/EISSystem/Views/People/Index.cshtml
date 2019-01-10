@@ -68,6 +68,7 @@
                                 <th>Join Date</th>
                                 <th>Leaving Date</th>
                                 <th>Salary</th>
+                                <th>Active Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -128,8 +129,8 @@
                 },
 
                 {
-                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data) {
-                        return '<img src="'+ data + '" style="height:30px; weight:30px">';
+                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
+                        return '<img src="\\EmployeeData\\' + row.TenantId+ row.IdCard + '\\Image\\'+data+'" style="height:30px; weight:30px">';
                     }
                 },
                 { "data": "Gender", "name": "Gender", "autoWidth": true },
@@ -156,6 +157,7 @@
                     }
                 },
                 { "data": "Salary", "name": "Salary", "autoWidth": true },
+                { "data": "IsActive", "name": "IsActive", "autoWidth": true },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Edit?id=' + row.Id + '">Edit</a></li><li><a href="/People/Delete?id=' + row.Id + '">Delete</a></li></ul></div>';

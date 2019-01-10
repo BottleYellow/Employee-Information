@@ -2485,7 +2485,7 @@
       },
       "EIS.Entities/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v2.1",
+        "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
           "Newtonsoft.Json": "12.0.1"
         },

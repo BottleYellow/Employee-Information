@@ -33,26 +33,16 @@
     .form-group:hover .middle {
         opacity: 1;
     }
-    .text {
+    #my-button {
         background-color: #4CAF50;
         color: white;
         font-size: 15px;
     }
     #my-file {
-        visibility: hidden;
+   visibility:hidden;
     }
 </style>
-<script>
-    $(document).ready(function () {
-        $("#employeeImage").hover("Edit this Image");
-        $("#employeeImage").on("click", function () {
 
-        })
-        $('#my-button').click(function () {
-            $('#my-file').click();
-        });
-    });
-</script>
 
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -83,14 +73,15 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group" id="Imagediv">                                                                                       
-                                           <img id="employeeImage" src="@ViewBag.ImageData" style="height:70px; width:70px;" class="img-circle" />
-                                           <div class="middle">
-                                            
-                                               <input type="button" class="text" id="my-button" value="Edit Image" />
-                                               <input type="file" name="my_file" accept="image/*" id="my-file" onchange="ValidateFileUpload()">
+                                        <div class="form-group required" id="Imagediv">
+                                            <img id="employeeImage" src="/EmployeeData/@Model.TenantId@Model.IdCard/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
+                                          
+                                            <div class="middle">
+                                                <input type="button" class="text" id="my-button" value="Edit Image" />
+                                                <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="my-file" onchange="return ValidateFileUpload()" />
 
-                                           </div>
+                                            </div>
+                                            <span class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -182,17 +173,24 @@
                                     </div>
                                 </div>
                             </div>
-                        <input type="hidden" asp-for="RoleId" value="@Model.Role.Id" />
+                        @*<input type="hidden" asp-for="RoleId" value="@Model.Role.Id" />*@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
-                                            <input id="RID" name="RID" type="hidden" asp-for="RoleId" />
-                                            <label class="control-label" asp-for="Role.Name">Designation : </label>
-                                            <select asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
-                                            </select>
-                                            <span asp-validation-for="Role.Name" class="text-danger"></span>
+                                            <label class="control-label" asp-for="RoleId">Role ID : </label>
+                                            <div class="form-line">
+                                                <input asp-for="RoleId" class="form-control" />
+                                                <span asp-validation-for="RoleId" class="text-danger"></span>
+                                            </div>
                                         </div>
+                                        @*<div class="form-group required">
+            <input id="RID" name="RID" type="hidden" asp-for="RoleId" />
+            <label class="control-label" asp-for="Role.Name">Designation : </label>
+            <select asp-for="Role.Name" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
+            </select>
+            <span asp-validation-for="Role.Name" class="text-danger"></span>
+        </div>*@
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
@@ -261,6 +259,7 @@
                                 </div>
                             </div>
                         </div><br /><br />
+                        <button type="submit" asp-action="Index" class="btn btn-primary">Back</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -271,6 +270,12 @@
 
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script>
+    $(document).ready(function () {
+        $('#my-button').click(function () {
+            $('#my-file').click();
+        });
+    });
+
     function ValidateFileUpload() {
         var fuData = document.getElementById('my-file');
         var FileUploadPath = fuData.value;
@@ -287,17 +292,18 @@
 
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
-                if (fileLength < 6000)
-                {
+                if (fileLength < 60000)
+                {                    
                   var reader = new FileReader();
                         reader.onload = function (e) {
                             $('#employeeImage').attr('src', e.target.result);
                         }
 
-                        reader.readAsDataURL(fuData.files[0]);
-                    }
+                    reader.readAsDataURL(fuData.files[0]);
+                    status = true;
+                }
                 else {
-                    alert("File must be below 6 kb");
+                    alert("File must be below 60 kb");
                 }
 
             }
@@ -307,9 +313,10 @@
             }
         }
         if (!status) {
-
+            fuData.value = null;
         }
     }
 </script>
 
 
+ 
