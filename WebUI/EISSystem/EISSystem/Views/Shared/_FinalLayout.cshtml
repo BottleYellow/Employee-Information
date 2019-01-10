@@ -1,5 +1,5 @@
-﻿﻿@using EIS.WebApp.Services;
-@using Newtonsoft.Json;
+﻿﻿@using EIS.WebApp.Services
+@using Newtonsoft.Json
 @{
     RedisAgent Cache = new RedisAgent();
     var ac = Cache.GetStringValue("Access");
@@ -12,7 +12,6 @@
 
 }   
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="UTF-8">
@@ -87,9 +86,9 @@
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                 @RenderSection("Attendance", required:false)
-                <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                <!-- #END# Call Search -->
+                    @RenderSection("Attendance", required: false)
+                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
+                    <!-- #END# Call Search -->
                 </ul>
             </div>
         </div>
@@ -122,93 +121,7 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
-                    <li class="header">MAIN NAVIGATION</li>
                     <DynamicMenu></DynamicMenu>
-                    @*@foreach (var Menu in Access)
-                        {
-                            <li>
-                                @if (Menu.ParentMenuId == 0)
-                                {
-
-                                    <a class="menu-toggle">
-                                        <span>@Menu.MenuName</span>
-                                    </a>
-                                    <ul class="ml-menu">
-                                        @foreach (var Menu2 in Access)
-                                        {
-                                            if(Menu2.ParentMenuId==Menu.MenuId)
-                                            {
-                                                 <li>
-                                                     <a href="@Menu2.MenuURL">@Menu2.MenuName</a>
-                                                 </li>
-                                            }
-
-                                        }
-                                    </ul>
-
-                                }
-                            </li>
-                         }*@
-
-                    @*<secure asp-controller="People" asp-action="Index">
-                            <li>
-                                <a href="javascript:void(0);" class="menu-toggle">
-                                    <i class="material-icons">supervisor_account</i>
-                                    <span>Employees</span>
-                                </a>
-                                <ul class="ml-menu">
-                                    <li>
-                                        <a href="/People/Index">All Employees</a>
-                                    </li>
-                                    <li>
-                                        <a href="/Leave/EmployeeLeaveRequests">Leaves Requests</a>
-                                    </li>
-                                    <li>
-                                        <a href="pages/ui/badges.html">Attendance</a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                        </secure>
-                        <secure asp-controller="Role" asp-action="Index">
-                            <li>
-                                <a href="/Role/Index">
-                                    <i class="material-icons">accessibility</i>
-                                    <span>Roles</span>
-                                </a>
-                            </li>
-                        </secure>
-                        <li>
-                            <a href="javascript:void(0);" class="menu-toggle">
-                                <i class="material-icons">subject</i>
-                                <span>Leaves</span>
-                            </a>
-                            <ul class="ml-menu">
-                                <secure asp-controller="Leave" asp-action="LeaveCredits">
-                                    <li>
-                                        <a href="/Leave/LeaveCredits">Leave Credits</a>
-                                    </li>
-                                </secure>
-                                <secure asp-controller="Leave" asp-action="LeavePolicies">
-                                    <li>
-                                        <a href="/Leave/LeavePolicies">Policies</a>
-                                    </li>
-                                </secure>
-
-                                <li>
-                                    <a href="/Leave/RequestLeave">Request for Leave</a>
-                                </li>
-                                <li>
-                                    <a href="/Leave/ShowMyLeaves?pid=@Cache.GetStringValue("PersonId")">Show My Leaves</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="/Attendance/Create">
-                                <i class="material-icons">fingerprint</i>
-                                <span>Attendance</span>
-                            </a>
-                        </li>*@
                 </ul>
             </div>
             <!-- #Menu -->
@@ -392,6 +305,7 @@
     <script src="~/plugins/node-waves/waves.js"></script>
     <!-- Custom Js -->
     <script src="~/js/admin.js"></script>
+    <script src="~/js/pages/ui/modals.js"></script>
     <script src="~/js/pages/index.js"></script>
     <!-- Demo Js -->
     <script src="~/js/demo.js"></script>
@@ -403,17 +317,15 @@
 </html>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        
-
-        $("#linkModal").click(function () {
-            var url = $("#modal-placeholder1").data('url');
-            $.get(url, function (data) {
-                $("#modal-placeholder1").html(data);
-                $("#modal-placeholder1").modal('show');
-            });
-
+    $("#linkModal").click(function () {
+        var url = $("#modal-placeholder1").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder1").html(data);
+            $("#modal-placeholder1").modal('show');
         });
+
+    });
+    $(document).ready(function () {
         $('#logout').click(function () {
             var url = "/Account/logout";
             $.post(url, function () {

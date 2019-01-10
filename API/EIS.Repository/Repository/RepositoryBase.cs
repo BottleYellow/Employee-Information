@@ -1,6 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace EIS.Repositories.Repository
 
             public T FindByCondition(Expression<Func<T, bool>> expression)
             {
-                return _dbContext.Set<T>().Where(expression).FirstOrDefault();
+                return _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
             }
 
             public void Create(T entity)

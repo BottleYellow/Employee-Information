@@ -25,7 +25,8 @@ namespace EIS.WebAPI
                 {
                     Log.Information("Host starting...");
 
-                    BuildWebHost(args).Run();
+
+                BuildWebHost(args).Run();
                 }
                 catch (Exception ex)
                 {

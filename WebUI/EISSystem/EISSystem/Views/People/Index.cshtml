@@ -150,8 +150,8 @@
                 },
 
                 {
-                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data) {
-                        return '<img src="'+ data + '" style="height:30px; weight:30px">';
+                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
+                        return '<img src="\\EmployeeData\\' + row.TenantId+ row.IdCard + '\\Image\\'+data+'" style="height:30px; weight:30px">';
                     }
                 },
                 { "data": "Gender", "name": "Gender", "autoWidth": true },
@@ -178,6 +178,7 @@
                     }
                 },
                 { "data": "Salary", "name": "Salary", "autoWidth": true },
+                { "data": "IsActive", "name": "IsActive", "autoWidth": true },
                 {
                     "data": "IsActive", "name": "IsActive", "autoWidth": true
                 },

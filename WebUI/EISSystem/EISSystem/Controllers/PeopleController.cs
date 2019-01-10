@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
+using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ namespace EIS.WebApp.Controllers
     [DisplayName("Employee Management")]
     public class PeopleController : BaseController<Person>
     {
+        RedisAgent cache;
         private readonly IHostingEnvironment _environment;
         #region Declarations
         public readonly IServiceWrapper _services;
@@ -28,13 +30,14 @@ namespace EIS.WebApp.Controllers
         public static HttpResponseMessage response;
         public static List<Person> data;
         public static List<Role> rolesList;
-        static string imageBase64Data;
-        #endregion
+
+        #endregion 
 
         #region Controller
         [DisplayName("Employee Management")]
-        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services, IHostingEnvironment environment) : base(service)
+        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services, IHostingEnvironment environment, RedisAgent redisAgent) : base(service)
         {
+            cache = redisAgent;
             _environment = environment;
             _controllerService = controllerService;
             _services = services;
@@ -92,38 +95,39 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
+            var tId = cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
             var data = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data;
-            if(ModelState.IsValid)
-            { 
-            HttpResponseMessage responseIdCard = _services.Employee.GetResponse("api/employee/GenNewIdCardNo");
+            if (ModelState.IsValid)
+            {
+                HttpResponseMessage responseIdCard = _services.Employee.GetResponse("api/employee/GenNewIdCardNo");
                 var dataIdCard = responseIdCard.Content.ReadAsStringAsync().Result;
+
                 int IdCardNo = JsonConvert.DeserializeObject<int>(dataIdCard);
+                var rootPath = _environment.WebRootPath;
+                var filePath = "//EmployeeData//" + tId+  IdCardNo + "//Image//";
+                if (!Directory.Exists(rootPath + "//EmployeeData//"))
+                {
+                    Directory.CreateDirectory(rootPath + "//EmployeeData//");
+                }
+                if (!Directory.Exists(rootPath + filePath))
+                {
+                    Directory.CreateDirectory(rootPath + filePath);
+                }
+                var uploadPath = rootPath + filePath;
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName);
                     if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
-                    {
-                        var rootPath = _environment.WebRootPath;
-                        var filePath = "\\EmployeeImages\\" + IdCardNo + "\\Image\\";
-                        if (!Directory.Exists(rootPath + "//EmployeeImages//"))
-                        {
-                            Directory.CreateDirectory(rootPath + "\\EmployeeImages\\");
-                        }
-                        if (!Directory.Exists(rootPath + filePath))
-                        {
-                            Directory.CreateDirectory(rootPath + filePath);
-                        }
-
-                        var upload = rootPath + filePath;
+                    {                                          
                         var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-                        using (var fileStream = new FileStream(Path.Combine(upload, fileName), FileMode.Create))
+                        using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
-                            file.CopyToAsync(fileStream);
-                            person.Image = filePath + fileName;
+                            file.CopyToAsync(fileStream);                            
+                            person.Image = fileName;
                         }
                     }
                     else
@@ -133,9 +137,14 @@ namespace EIS.WebApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("Image", "Please select Image");
+                    System.IO.File.Copy(rootPath+"//EmployeeData\\DefaultImage\\Default.png",uploadPath+"Default.png");
+                    person.Image = "Default.png";
+
                 }
-                
+                if(string.IsNullOrEmpty(person.MiddleName))
+                {
+                    person.MiddleName = "";
+                }
 
                 person.CreatedDate = DateTime.Now.Date;
                 HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person);
@@ -151,7 +160,7 @@ namespace EIS.WebApp.Controllers
         }
 
         [DisplayName("Update Employee")]
-        public IActionResult Edit(int id, IFormFile file)
+        public IActionResult Edit(int id)
         {
             ViewBag.Designations = rolesList;
 
@@ -159,52 +168,52 @@ namespace EIS.WebApp.Controllers
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
-            Person data = EmployeeData().Find(x => x.Id == id);
-
-            string urlPath = "";
-            string fileName = "";
-            var rootPath = _environment.WebRootPath;
-            var filePath = "/EmployeeImages/" + data.IdCard + "/Image/";
-            var upload = Path.Combine(rootPath, filePath);
-
-            if (Directory.Exists(rootPath + filePath))
-            {
-                string[] strfiles = Directory.GetFiles(rootPath + "//EmployeeImages//" + data.IdCard.ToString() + "\\Image\\", "*.*");
-                if (strfiles.Length > 0)
-                {
-                    fileName = Path.GetFileName(strfiles[0]);
-                }
-                urlPath = filePath + fileName;
-            }
-            if (!string.IsNullOrEmpty(urlPath))
-            {
-                ViewBag.ImageData = urlPath;
-                ViewBag.Name = data.FirstName + " " + data.LastName;
-            }
-            else
-            { 
-                ViewBag.ImageData = "/Images/default.jpg";
-            }
+            Person data = EmployeeData().Find(x => x.Id == id);         
             return View(data);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("IdCard,PanCard,AadharCard,Image,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,RoleId,Id,CreatedDate,UpdatedDate,IsActive,RowVersion")] Person person, IFormFile file)
+        public IActionResult Edit(int id, Person person, IFormFile file)
         {
+            var tId = cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
                 return NotFound();
             }
-
+            ViewBag.Designations = rolesList;
+            var data1 = from p in EmployeeData()
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+            ViewBag.Persons = data1;
             person.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var rootPath = _environment.WebRootPath;
+                    var filePath = "//EmployeeData//" + tId + person.IdCard + "//Image//";
+                    var uploadPath = rootPath + filePath;
+                    if (file != null && file.Length > 0)
+                    {
+                        var fileExtension = Path.GetExtension(file.FileName);
+                        if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
+                        {                        
+                            string[] files = Directory.GetFiles(rootPath + filePath);
+                            System.IO.File.Delete(files[0]);                          
+                            var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                            using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
+                            {
+                                file.CopyToAsync(fileStream);
+                                person.Image = fileName;
+                            }
+                        }
+                    }
+                    if (string.IsNullOrEmpty(person.MiddleName))
+                    {
+                        person.MiddleName = "";
+                    }
                     HttpResponseMessage response = _services.Employee.PutResponse("api/employee/" + id + "", person);
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -225,9 +234,9 @@ namespace EIS.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
             return View(person);
         }
+
         [DisplayName("Delete Employee")]
         public IActionResult Delete(int id)
         {
@@ -236,8 +245,8 @@ namespace EIS.WebApp.Controllers
             Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
             //imageBase64Data = Convert.ToBase64String(data1.Image);
 
-            string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            ViewBag.ImageData = imageDataURL;
+            //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+            //ViewBag.ImageData = imageDataURL;
             return PartialView("DeletePartial", data1);
         }
 
