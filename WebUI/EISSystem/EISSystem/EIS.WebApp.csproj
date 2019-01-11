@@ -78,9 +78,4 @@
     </Content>
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="wwwroot\EmployeeImages\DefaultImage\" />
-  </ItemGroup>
-
 </Project>

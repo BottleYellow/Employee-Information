@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using EIS.WebApp.Services;
@@ -137,7 +138,7 @@ namespace EIS.WebApp.Controllers
                 }
                 else
                 {
-                    System.IO.File.Copy(rootPath+"//EmployeeData\\DefaultImage\\Default.png",uploadPath+"Default.png");
+                    System.IO.File.Copy(rootPath+"//EmployeeData//DefaultImage//Default.png",uploadPath+"Default.png");
                     person.Image = "Default.png";
 
                 }
@@ -249,9 +250,7 @@ namespace EIS.WebApp.Controllers
             //ViewBag.ImageData = imageDataURL;
             return PartialView("DeletePartial", data1);
         }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        
         public IActionResult DeleteConfirmed(int id)
         {
             HttpClient client = _services.Employee.GetService();
@@ -260,9 +259,11 @@ namespace EIS.WebApp.Controllers
             {
                 ViewBag.Message = "Record has been successfully deleted.";
                 data = EmployeeData();
-                return View("Index", data);
+                return RedirectToAction("Index","People");
+                //return View("Index", data);
             }
-            return View();
+            return View("Index", data);
+
         }
         [AllowAnonymous]
         public List<Person> EmployeeData()
@@ -288,12 +289,12 @@ namespace EIS.WebApp.Controllers
         public IActionResult ActivateEmployee(int id)
         {
             response = _services.Employee.GetResponse("api/employee/" + id + "");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            Person person = JsonConvert.DeserializeObject<Person>(stringData);
+            string stringEmployeeData = response.Content.ReadAsStringAsync().Result;
+            Person person = JsonConvert.DeserializeObject<Person>(stringEmployeeData);
             person.IsActive = true;
-            person.Image = "fds";
+            person.User.IsActive = true;
             response = _services.Employee.PutResponse("api/employee/" + id + "", person);
-            string stringData1= response.Content.ReadAsStringAsync().Result;
+            ViewBag.Message = "Information activated successfully!";
             return View("Index");
         }
         #endregion

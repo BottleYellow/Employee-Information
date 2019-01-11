@@ -37,7 +37,7 @@ namespace EIS.Repositories.Repository
         {
             string result = "Failed";
             Users u = FindByUserName(user.UserName);
-            if (u != null)
+            if (u != null && u.IsActive==true)
             {
                 string hp = _dbContext.Users.Where(u1 => u1.UserName == u.UserName).Select(u1 => u1.Password).FirstOrDefault();
                 if (Helper.VerifyHashedPassword(hp, user.Password) == "Success")

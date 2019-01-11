@@ -31,7 +31,7 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-            var user = _repository.Users.FindByCondition(e => e.Id == id);
+            var user = _repository.Users.FindByCondition(e => e.PersonId == id);
             if (user == null)
             {
                 return NotFound();
@@ -47,10 +47,17 @@ namespace EIS.WebAPI.Controllers.User
             user.TenantId = TenantId;
             _repository.Users.CreateUserAndSave(user);
         }
-
+        [AllowAnonymous]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult UpdateUser(int id, [FromBody]Users user)
         {
+           
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _repository.Users.UpdateAndSave(user);
+            return Ok(user);
         }
 
         [HttpDelete("{id}")]

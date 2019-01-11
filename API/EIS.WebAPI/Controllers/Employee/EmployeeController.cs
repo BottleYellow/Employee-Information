@@ -44,6 +44,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetById([FromRoute]int id)
         {
             var employee = _repository.Employee.FindByCondition(e => e.Id == id);
+            employee.User = _repository.Users.FindByCondition(u => u.PersonId == id);
             if (employee == null)
             {
                 return NotFound();
@@ -100,6 +101,12 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Employee.UpdateAndSave(person);
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                "Your Information have been successfully activated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n";
+            new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok(person);
         }
 
@@ -107,12 +114,15 @@ namespace EIS.WebAPI.Controllers
         public IActionResult Delete([FromRoute]int id)
         {
             Person person = _repository.Employee.FindByCondition(x => x.Id == id);
+            Users users = _repository.Users.FindByCondition(x => x.PersonId == id); 
             if (person == null)
             {
                 return NotFound();
             }
             person.IsActive = false;
+            users.IsActive = false;
             _repository.Employee.UpdateAndSave(person);
+            _repository.Users.UpdateAndSave(users);
             return Ok(person);
         }
         [Route("Designations")]
