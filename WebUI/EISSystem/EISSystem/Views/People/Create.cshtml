@@ -245,6 +245,7 @@
     </div>
 </div>
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <SCRIPT type="text/javascript">
 
 
@@ -254,7 +255,7 @@
         var status = false;
         if (FileUploadPath == '')
         {
-            alert("Please upload an image");
+            bootbax.alert("<h4>Please upload an image.</h4>");
 
         }
         else
@@ -267,19 +268,19 @@
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
             {
-                if (fileLength < 500000)
+                if (fileLength < 60000)
                 {
                     status = true;
                 }                  
                 else
                 {
-                    alert("File must be below 500 kb");             
+                    bootbox.alert("<h4>File must be below 60 kb.</h4>");             
                 }
 
             }
             else
             {
-                alert("Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. ");            
+                bootbox.alert("<h4>Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.</h4>");            
             }
         }
         if (!status) {

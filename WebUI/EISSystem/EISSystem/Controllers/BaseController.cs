@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EIS.Entities.Employee;
@@ -20,7 +21,7 @@ namespace EIS.WebApp.Controllers
         {
             this.pservice = pservice;
         }
-        public IActionResult LoadData(string Url)
+        public IActionResult LoadData(string Url, bool type)
         {
             SortEmployee sortEmployee = new SortEmployee();
             // Skiping number of Rows count
@@ -46,7 +47,17 @@ namespace EIS.WebApp.Controllers
 
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
             recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<T> employees = JsonConvert.DeserializeObject<IList<T>>(arrayData[1].ToString());
+            IList<T> employees1 = JsonConvert.DeserializeObject<IList<T>>(arrayData[1].ToString());
+            IList<T> employees = new List<T>();
+            foreach (var e in employees1)
+            {
+                PropertyInfo prop = e.GetType().GetProperty("IsActive");
+                bool obj =Convert.ToBoolean(prop.GetValue(e));
+                if (obj == type)
+                {
+                    employees.Add(e);
+                }
+            }
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
         }
     }
