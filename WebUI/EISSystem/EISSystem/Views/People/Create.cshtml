@@ -267,13 +267,13 @@
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
             {
-                if (fileLength < 60000)
+                if (fileLength < 500000)
                 {
                     status = true;
                 }                  
                 else
                 {
-                    alert("File must be below 60 kb");             
+                    alert("File must be below 500 kb");             
                 }
 
             }

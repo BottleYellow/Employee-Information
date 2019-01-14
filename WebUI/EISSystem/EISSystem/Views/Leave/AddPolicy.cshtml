@@ -10,7 +10,7 @@
         /*top: 7px;*/
     }
 </style>
-<div class="modal-dialog" role="document">
+<div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" id="addPolicyLabel">Add Policy</h4>
@@ -92,7 +92,7 @@
                         });                    
                     },
                     error: function (data) {
-                        alert(data.responseText);
+                        $("#md").replaceWith(data.responseText);
                     }
                 });
             }

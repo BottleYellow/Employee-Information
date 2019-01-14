@@ -7,7 +7,12 @@
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
 
     <style>
-
+        .disabledLink {
+            color: currentColor;
+            cursor:not-allowed;
+            opacity: 0.5;
+            text-decoration: none;
+        }
         select {
             border: solid;
         }
@@ -16,17 +21,13 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <h2 style="font-size:25px;">
-                My Leave Requests
-                <a class="btn btn-primary waves-effect" asp-controller="Leave" asp-action="RequestLeave"><text style="font-size:16px;">New Leave Request</text></a>
-            </h2>
-
+            <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="table-responsive">
+                        <div>
                             <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
@@ -77,12 +78,12 @@
                                                 <span class="text-success">@Html.DisplayFor(modelItem => item.Available)</span>
                                             </td>
                                             <td>
-                                                @if (item.Status == "Pending")
-                                                {<span style="font-size:12px;" class="label label-warning">@item.Status</span>}
-                                            else if (item.Status == "Rejected")
-                                            {<span style="font-size:12px;" class="label label-danger">@item.Status</span> }
-                                        else
-                                        { <span style="font-size:12px;" class="label label-success">@item.Status</span>}
+                                                @if (item.Status == "Approved")
+                                                {<span style="font-size:12px;" class="label label-success">@item.Status</span>}
+                                                else if (item.Status == "Rejected" || item.Status == "Cancelled")
+                                                {<span style="font-size:12px;" class="label label-danger">@item.Status</span> }
+                                                else
+                                                { <span style="font-size:12px;" class="label label-warning">@item.Status</span>}
 
                                             </td>
                                             <td>
@@ -94,7 +95,19 @@
                                                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Cancel Request</a></li>
+                                                        @*@if (item.Status == "Rejected" || item.Status == "Pending")
+                                                        {
+                                                        <li><a asp-action="EditLeaveRequest" asp-route-id="@item.Id">Edit</a></li>
+                                                        }*@
+                                                        @if (item.Status == "Rejected" || item.Status == "Cancelled")
+                                                        {
+                                                            <li><a class="disabledLink" onclick="javascript: UpdateStatus(@item.Id,'Cancel')">Cancel Request</a></li>
+                                                         }
+                                                        else
+                                                        {
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Cancel')">Cancel Request</a></li>
+                                                         }
+                                                        
                                                     </ul>
                                                 </div>
                                             </td>

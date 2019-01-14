@@ -735,30 +735,33 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Aadyam\\.nuget\\packages\\": {},
+    "C:\\Users\\aadyamconsultant\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
+      "projectUniqueName": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
       "projectName": "EIS.Entities",
-      "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
-      "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Entities\\obj\\",
+      "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
+      "packagesPath": "C:\\Users\\aadyamconsultant\\.nuget\\packages\\",
+      "outputPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Entities\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Aadyam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\aadyamconsultant\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\aadyamconsultant\\Downloads": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

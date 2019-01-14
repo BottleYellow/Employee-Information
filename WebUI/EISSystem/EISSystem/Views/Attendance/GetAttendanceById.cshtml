@@ -72,7 +72,8 @@
         DateTime averageHours = DateTime.Today.Add(averageTimeOut - averageTimeIn);
         string displayAverageHours = timeOut.ToString("hh:mm");
 
-        hours = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2).ToString();
+        var hour1 = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
+          hours=(hour1*0.6).ToString();
     }
 
 

@@ -10,6 +10,7 @@ namespace EIS.WebApp.TagHelpers
 {
     // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
     [HtmlTargetElement("DynamicMenu")]
+    //[HtmlTargetElement("HeaderWithButton")]
     public class MenuTagHelper : TagHelper
     {
         public static RedisAgent Cache = new RedisAgent();

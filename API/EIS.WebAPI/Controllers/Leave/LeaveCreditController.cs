@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.RedisCache;
@@ -26,7 +27,7 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveCredit> Get()
         {
-            var credits= _repository.Leave.GetCredits();
+            var credits= _repository.Leave.GetCredits().Where(x=>x.TenantId==TenantId);
             return credits;
         }
 

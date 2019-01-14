@@ -18,13 +18,7 @@
     @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
-            <h2 style="font-size:25px;">
-                Leave Credits
-                <button id="btnModal" name="btnModal" type="button" class="btn btn-primary">
-                    Add New
-                </button>
-            </h2>
-            
+            <HeaderWithButton btn-id="btnModal" header-name="Leave Credits" btn-text="Add Credit" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -117,6 +111,7 @@
         });
     });
     $("#btnModal").click(function () {
+        
         var url = $("#modal-placeholder").data('url');
         $.get(url, function (data) {
             $("#modal-placeholder").html(data);

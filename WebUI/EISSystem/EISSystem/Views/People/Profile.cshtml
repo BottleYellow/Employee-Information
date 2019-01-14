@@ -54,6 +54,7 @@
                             <div class="profile"><label class="profilelable">Gender :</label> @Html.DisplayFor(model => model.Gender)</div>
                             <div class="profile"><label class="profilelable">Aadhar no. :</label> @Html.DisplayFor(model => model.AadharCard)</div>
                             <div class="profile"><label class="profilelable">Pan no. :</label> @Html.DisplayFor(model => model.PanCard)</div>
+                            <div class="profile"><a href="/People/Edit?id=@Model.Id">Edit Profile</a></div>
                         </div>
                     </div>
 
@@ -65,12 +66,12 @@
                     <div class="body">
                         <div>
                             <ul class="nav nav-tabs responsive" role="tablist">
-                                <li role="presentation"><a href="#padd" aria-controls="settings" role="tab" data-toggle="tab">Permanent Address</a></li>
+                                <li role="presentation" class="active"><a href="#padd" aria-controls="settings" role="tab" data-toggle="tab">Permanent Address</a></li>
                                 <li role="presentation"><a href="#cadd" aria-controls="settings" role="tab" data-toggle="tab">Current Addresses</a></li>
                                 <li role="presentation"><a href="#eadd" aria-controls="settings" role="tab" data-toggle="tab">Emergency Addresses</a></li>
                             </ul>
                             <div class="tab-content responsive">
-                                <div role="tabpanel" class="tab-pane fade in" id="padd">
+                                <div role="tabpanel" class="tab-pane fade in active" id="padd">
 
                                     <div class="panel-body">
                                         <div style="display:none;" class="panel panel-body" id="createpaddpanel">

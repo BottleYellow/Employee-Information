@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers.Leave
 {
@@ -25,7 +26,7 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
         {
-            return _repository.Leave.GetAllLeaveRules();
+            return _repository.Leave.GetAllLeaveRules().Where(x=>x.TenantId==TenantId);
         }
 
         [DisplayName("Add Leave Rule")]

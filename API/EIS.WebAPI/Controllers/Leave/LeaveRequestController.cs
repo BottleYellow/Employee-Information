@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -19,8 +21,9 @@ namespace EIS.WebAPI.Controllers
         RedisAgent Cache = new RedisAgent();
         int TenantId = 0;
         public readonly IRepositoryWrapper _repository;
-        public LeaveRequestController(IRepositoryWrapper repository) 
+        public LeaveRequestController(IRepositoryWrapper repository)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             _repository = repository;
         }
 
@@ -28,7 +31,14 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<LeaveRequest> GetLeaveRequests()
         {
-            return _repository.Leave.FindAll();
+            return _repository.Leave.FindAll().Where(x => x.TenantId == TenantId);
+        }
+
+        [DisplayName("View request")]
+        [HttpGet("{id}")]
+        public LeaveRequest GetLeaveRequestById([FromRoute] int id)
+        {
+            return _repository.Leave.FindByCondition(x => x.Id == id);
         }
 
         [DisplayName("Show my leaves")]
@@ -79,6 +89,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Leave.UpdateAndSave(leave);
+            _repository.Leave.UpdateRequestStatus(leave.Id, null);
             return NoContent();
         }
 

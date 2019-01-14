@@ -121,7 +121,7 @@ namespace EIS.WebApp.Controllers
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName);
-                    if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
+                    if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 500000)
                     {                                          
                         var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
@@ -132,7 +132,7 @@ namespace EIS.WebApp.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("Image", "Please select Image of type JPG and BMP and size must be below 10 kb");
+                        ModelState.AddModelError("Image", "Please select Image of type JPG and BMP and size must be below 500 kb");
                     }
                 }
                 else
@@ -153,7 +153,7 @@ namespace EIS.WebApp.Controllers
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                    return View("Index", EmployeeData());
+                    return RedirectToAction("Index");
                 }
             }
             return View(person);
@@ -196,7 +196,7 @@ namespace EIS.WebApp.Controllers
                     if (file != null && file.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(file.FileName);
-                        if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
+                        if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 500000)
                         {                        
                             string[] files = Directory.GetFiles(rootPath + filePath);
                             System.IO.File.Delete(files[0]);                          
