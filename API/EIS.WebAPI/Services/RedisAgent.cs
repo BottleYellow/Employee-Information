@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EIS.WebAPI.RedisCache
+namespace EIS.WebAPI.Services
 {
     public class RedisAgent
     {

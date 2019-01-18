@@ -10,6 +10,7 @@ namespace EIS.WebApp.TagHelpers
 {
     // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
     [HtmlTargetElement("DynamicMenu")]
+    //[HtmlTargetElement("HeaderWithButton")]
     public class MenuTagHelper : TagHelper
     {
         public static RedisAgent Cache = new RedisAgent();
@@ -20,11 +21,11 @@ namespace EIS.WebApp.TagHelpers
             if (ac != null)
                 Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
             
-            String[] ParentMenus = new String[5]{ "Attendance Management", "Role Management","Leave Management","User Management","" };
-            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","List of Roles", "Create New Attendance", "List Of Users","Manage Roles", "Attendance Reports","My Attendance History" };
+            String[] ParentMenus = new String[5]{ "Attendance Management", "Role Management","Leave Management","User Management", "" };
+            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","List of Roles", "Create New Attendance", "List Of Users","Manage Roles", "Attendance Reports","My Attendance History","Show Employees Requests" };
             if (Cache.GetStringValue("Role") == "Admin")
                 ParentMenus.SetValue("Employee Management", 4);
-                
+
             foreach (var menu in Access)
             {
                 if (ParentMenus.Contains(menu.Name))

@@ -46,17 +46,10 @@
     <div class="container-fluid">
         <div class="block-header">
             <div class="row">
-                <div class="col-md-4">
-                    <h1>Roles</h1>
-                </div>
-                <div class="col-md-8 align-right">
-                    <a class="btn btn-primary waves-effect" asp-controller="People" asp-action="AddRole"><span><i class="glyphicon glyphicon-plus" style="font-size:13px;"></i><text style="font-size:16px;"> Add New</text></span></a>
+                <div class="col-md-12">
+                    <HeaderWithButton header-name="Roles" btn-href="location.href='/People/AddRole'" btn-text="Add New" icon-name="add"></HeaderWithButton>
                 </div>
             </div>
-            <h1>
-                
-                
-            </h1>         
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -93,7 +86,7 @@
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
-                                                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
+                                                        <i class="material-icons" aria-haspopup="true" aria-expanded="true">build</i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a asp-action="EditRole" asp-route-id="@item.Id">Edit</a></li>

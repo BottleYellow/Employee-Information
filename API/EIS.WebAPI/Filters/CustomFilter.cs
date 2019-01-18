@@ -1,4 +1,4 @@
-﻿using EIS.WebAPI.RedisCache;
+﻿using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

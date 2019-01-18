@@ -1,78 +1,76 @@
 ﻿using EIS.Entities.Employee;
-using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
     [EnableCors("MyPolicy")]
     [Route("api/LeaveRequest")]
     [ApiController]
-    public class LeaveRequestController : BaseController
+    public class LeaveRequestController : Controller
     {
-        public LeaveRequestController(IRepositoryWrapper repository): base(repository)
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
+        public readonly IRepositoryWrapper _repository;
+        private readonly IConfiguration configuration;
+        public LeaveRequestController(IRepositoryWrapper repository, IConfiguration configuration)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            _repository = repository;
+            this.configuration = configuration;
         }
 
         [DisplayName("View all requests")]
-        [HttpPost]
-        public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
+        [HttpGet]
+        public IEnumerable<LeaveRequest> GetLeaveRequests()
         {
-            ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.FindAll();
-
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
-            }
-            else
-            {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
-            }
-            return Ok(data);
-
+            return _repository.Leave.FindAll().Where(x => x.TenantId == TenantId);
+        }
+        [Route("RequestsUnderMe")]
+        [DisplayName("Leave Requests of employees under me")]
+        [HttpGet]
+        public IEnumerable<LeaveRequest> GetLeaveRequestsUnderMe()
+        {
+            var PersonId = Cache.GetStringValue("PersonId");
+            return _repository.Leave.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
         }
 
+        [DisplayName("View request")]
+        [HttpGet("{id}")]
+        public LeaveRequest GetLeaveRequestById([FromRoute] int id)
+        {
+            return _repository.Leave.FindByCondition(x => x.Id == id);
+        }
 
         [DisplayName("Show my leaves")]
-        [HttpPost]
-        [Route("Employee/{id}")]
-        public IActionResult GetLeaveRequestsByEmployee([FromBody]SortGrid sortGrid,[FromRoute] int id)
-        {           
-            ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
-            if (leaveData == null)
+        [HttpGet("Employee/{id}")]
+        public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
+        {
+            var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
+            if (leave == null)
             {
                 return NotFound();
             }
 
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
-            }
-            else
-            {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
-            }
-            return Ok(data);
- 
+            return Ok(leave);
         }
 
         [AllowAnonymous]
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
-            var leave = _repository.LeaveCredit.GetAvailableLeaves(PersonId, LeaveId);
+            var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
             if (leave == 0)
             {
                 leave = -1;
@@ -88,7 +86,8 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status);
+                _repository.Leave.UpdateRequestStatus(RequestId, Status);
+                SendMail(RequestId, Status);
                 return Ok();
             }
             return NotFound();
@@ -102,13 +101,13 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.LeaveRequest.UpdateAndSave(leave);
+            _repository.Leave.UpdateAndSave(leave);
+            _repository.Leave.UpdateRequestStatus(leave.Id, null);
             return NoContent();
         }
 
         [DisplayName("Request for leave")]
         [HttpPost]
-        [Route("PostLeave")]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
             if (!ModelState.IsValid)
@@ -118,8 +117,9 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
-            _repository.LeaveRequest.CreateAndSave(leave);
-            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
+            _repository.Leave.CreateAndSave(leave);
+            _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
+            SendMail(leave.Id, "Pending");
             return Ok();
         }
 
@@ -127,13 +127,54 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
+            var leave = _repository.Leave.FindByCondition(x => x.Id == id);
             if (leave == null)
             {
                 return NotFound();
             }
-            _repository.LeaveRequest.DeleteAndSave(leave);
+            _repository.Leave.DeleteAndSave(leave);
             return Ok(leave);
+        }
+
+        public void SendMail(int RequestId,string status)
+        {
+            var leave = _repository.Leave.FindByCondition(x => x.Id == RequestId);
+            var person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            string To = person.EmailAddress;
+            string subject = "EMS Leave Request";
+            string body = "Hello " + person.FirstName + "\n";
+            if (status == "Pending")
+            {
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
+            }
+            else if (status == "Reject")
+            {
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been rejected";
+            }
+            else if (status == "Approve")
+            {
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been approved.\n Remaining available leaves are " + leave.Available.ToString() + " days";
+            }
+            else if (status == "Cancel")
+            {
+                if (leave.Status == "Pending")
+                {
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been cancelled";
+                }
+                else
+                {
+                    body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days is submitted successfully.";
+                }
+            }
+            else if (status == "Approve Cancel")
+            {
+                body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been approved.";
+            }
+            else if (status == "Reject Cancel")
+            {
+                body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
+            }
+            new EmailManager(configuration).SendEmail(subject, body, To);
         }
     }
 }

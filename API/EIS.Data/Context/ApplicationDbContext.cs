@@ -42,6 +42,8 @@ namespace EIS.Data.Context
         public DbSet<Other> OtherAddresses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Configuration> configurations { get; set; }
+        public DbSet<Demo> Demo { get; set; }
+
         #endregion
     }
 }

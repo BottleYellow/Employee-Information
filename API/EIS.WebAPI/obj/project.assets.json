@@ -3269,6 +3269,19 @@
           "lib/netstandard2.0/StackExchange.Redis.dll": {}
         }
       },
+      "StackExchange.Redis.DataTypesCore/0.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2",
+          "StackExchange.Redis": "2.0.513"
+        },
+        "compile": {
+          "lib/netcoreapp2.1/StackExchange.Redis.DataTypesCore.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/StackExchange.Redis.DataTypesCore.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -5987,7 +6000,6 @@
       "sha512": "ex8MZwgoyqHim1L6/65FnfjdSMtSKSuSU3DVoiCADZACc05T7f8uRB7SnDIP5LPQKLUBLilfNkd1p14RLyfdQA==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.design/2.2.0",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -6370,7 +6382,6 @@
       "sha512": "HS3iRWZKcUw/8eZ/08GXKY2Bn7xNzQPzf8gRPHGSowX7u7XXu9i9YEaBeBNKUXWfI7qjvT2zXtLUvbN0hds8vg==",
       "type": "package",
       "path": "microsoft.codeanalysis.analyzers/1.1.0",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         "ThirdPartyNotices.rtf",
@@ -6642,7 +6653,6 @@
       "sha512": "wn1ULjQbFadRosiNJE4B65iR5eYL3FkMezH4Tyv8EmdmN5XfCTzIgkk1mQJ1Zcb61Kb3qyZMeGidanwR7h/gug==",
       "type": "package",
       "path": "microsoft.entityframeworkcore.tools/2.2.0",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -8890,6 +8900,17 @@
         "lib/netstandard2.0/StackExchange.Redis.xml",
         "stackexchange.redis.2.0.519.nupkg.sha512",
         "stackexchange.redis.nuspec"
+      ]
+    },
+    "StackExchange.Redis.DataTypesCore/0.0.1": {
+      "sha512": "etH0LyksgRUoUxTG7gC9UbbxDAVufrL6RLCh45vGx7jtW9yKR0doPLOa3EuPTp9ZZU7Ne82G2F8GgSTY3nxdYg==",
+      "type": "package",
+      "path": "stackexchange.redis.datatypescore/0.0.1",
+      "files": [
+        ".signature.p7s",
+        "lib/netcoreapp2.1/StackExchange.Redis.DataTypesCore.dll",
+        "stackexchange.redis.datatypescore.0.0.1.nupkg.sha512",
+        "stackexchange.redis.datatypescore.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -13685,6 +13706,7 @@
       "Serilog.Settings.Configuration >= 3.0.1",
       "Serilog.Sinks.MSSqlServer >= 5.1.2",
       "StackExchange.Redis >= 2.0.519",
+      "StackExchange.Redis.DataTypesCore >= 0.0.1",
       "System.Linq.Dynamic.Core >= 1.0.9"
     ]
   },
@@ -13777,6 +13799,10 @@
           "StackExchange.Redis": {
             "target": "Package",
             "version": "[2.0.519, )"
+          },
+          "StackExchange.Redis.DataTypesCore": {
+            "target": "Package",
+            "version": "[0.0.1, )"
           },
           "System.Linq.Dynamic.Core": {
             "target": "Package",

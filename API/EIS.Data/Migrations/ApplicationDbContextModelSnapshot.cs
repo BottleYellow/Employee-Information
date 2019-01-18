@@ -287,6 +287,21 @@ namespace EIS.Data.Migrations
                     b.ToTable("Attendance","Employee");
                 });
 
+            modelBuilder.Entity("EIS.Entities.Employee.Demo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("nvarchar(400)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Demo");
+                });
+
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
                 {
                     b.Property<int>("Id")

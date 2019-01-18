@@ -2,6 +2,7 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Services;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -20,12 +22,14 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
+        private RedisAgent Cache;
         private IHttpContextAccessor _accessor;
         private readonly IConfiguration configuration;
         public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _accessor = accessor;
             this.configuration = configuration;
+            Cache = new RedisAgent();
         }
 
         [DisplayName("Login")]
@@ -34,35 +38,35 @@ namespace EIS.WebAPI.Controllers
         [Route("login")]
         public IActionResult Login(Users user)
         {
-            if (!(string.IsNullOrEmpty(user.UserName) ||string.IsNullOrEmpty(user.Password)))
-        { 
-            string status = _repository.Users.ValidateUser(user);
-            if (status == "success")
+            if (!(string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password)))
             {
-                var b = Request.Headers[HeaderNames.UserAgent].ToString();
-                var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
-                Users newUser = _repository.Users.FindByUserName(user.UserName);
-                JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
-                string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-                int pid = newUser.PersonId;
-                string role = "";
-                if (tokenValue != null)
+
+                string status = _repository.Users.ValidateUser(user);
+                if (status == "success")
                 {
-                    Person person = _repository.Employee.FindByCondition(x => x.Id == pid);
-                    role = _repository.Employee.GetDesignationById(person.RoleId).Name;
-                    var data = _repository.Employee.GetDesignationById(person.RoleId).Access;
-                    Cache.SetStringValue("TokenValue", tokenValue);
-                    Cache.SetStringValue("PersonId", pid.ToString());
-                    Cache.SetStringValue("Access", data);
-                    Cache.SetStringValue("TenantId", person.TenantId.ToString());
+                    var b = Request.Headers[HeaderNames.UserAgent].ToString();
+                    var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
+                    Users newUser = _repository.Users.FindByUserName(user.UserName);
+                    JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
+                    string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+                    int pid = newUser.PersonId;
+                    string role = "";
+                    Person person = new Person();
+                    if (tokenValue != null)
+                    {
+                        person = _repository.Employee.FindByCondition(x => x.Id == pid);
+                        role = _repository.Employee.GetDesignationById(person.RoleId).Name;
+                        var data = _repository.Employee.GetDesignationById(person.RoleId).Access;
+                        Cache.SetStringValue("TokenValue", tokenValue);
+                        Cache.SetStringValue("PersonId", pid.ToString());
+                        Cache.SetStringValue("Access", data);
+                        Cache.SetStringValue("TenantId", person.TenantId.ToString());
+                    }
+                    Cache.SetStringValue("Role", role);
+                    return Ok(person);
                 }
-                Cache.SetStringValue("Role", role);
-                return Ok(pid.ToString());
             }
-        }
-            {
-                return NotFound("");
-            }
+            return NotFound("");
 
         }
 

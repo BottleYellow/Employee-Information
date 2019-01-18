@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using EIS.Entities.Generic;
+using System.Linq;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EIS.WebAPI.Controllers.Leave
@@ -13,31 +12,24 @@ namespace EIS.WebAPI.Controllers.Leave
 
     [Route("api/LeaveCredit")]
     [ApiController]
-    public class LeaveCreditController : BaseController
+    public class LeaveCreditController : Controller
     {
-        public LeaveCreditController(IRepositoryWrapper repository): base(repository)
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
+        public readonly IRepositoryWrapper _repository;
+        public LeaveCreditController(IRepositoryWrapper repository)
         {
-
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            _repository = repository;
         }
 
         [DisplayName("leave Credits")]
-        [HttpPost]            
-            public ActionResult Get([FromBody]SortGrid sortGrid)
-            {
-                ArrayList data = new ArrayList();
-            var credits = _repository.LeaveCredit.GetCredits();
-
-                if (string.IsNullOrEmpty(sortGrid.Search))
-                {
-
-                    data = _repository.LeaveCredit.GetDataByGridCondition(null, sortGrid, credits);
-                }
-                else
-                {
-                    data = _repository.LeaveCredit.GetDataByGridCondition(x => x.LeaveType == sortGrid.Search, sortGrid, credits);
-                }
-                return Ok(data);
-            }
+        [HttpGet]
+        public IEnumerable<LeaveCredit> Get()
+        {
+            var credits= _repository.Leave.GetCredits().Where(x=>x.TenantId==TenantId);
+            return credits;
+        }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
@@ -56,13 +48,13 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             Leave.TenantId = TenantId;
-            _repository.LeaveCredit.AddCreditsAndSave(Leave);
+            _repository.Leave.AddCreditsAndSave(Leave);
 
             return Ok();
         }
 
         [DisplayName("Add Leave Credit")]
-        [HttpPost("PostLeaveCredit")]
+        [HttpPost]
         public IActionResult PostLeaveCredit([FromBody] LeaveCredit Credit)
         {
             if (!ModelState.IsValid)
@@ -70,7 +62,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             Credit.TenantId = TenantId;
-            _repository.LeaveCredit.AddCreditAndSave(Credit);
+            _repository.Leave.AddCreditAndSave(Credit);
 
             return Ok();
         }

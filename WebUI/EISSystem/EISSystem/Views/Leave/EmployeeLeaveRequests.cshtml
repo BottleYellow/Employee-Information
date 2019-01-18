@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
 <html>
 <head>
-    <title>My Leaves</title>
+    <title>Leave Requests</title>
+
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+  
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
     <style>
+
         select {
             border: solid;
         }
@@ -18,16 +18,13 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <h2 style="font-size:25px;">
-                Leave Requests
-            </h2>
-
+            <HeaderWithButton header-name="Leave Requests"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="table-responsive">
+                        <div>
                             <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
@@ -61,66 +58,71 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                @*<tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.EmployeeName)
-                                                </td>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                            </td>
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.LeaveType)
-                                                </td>
-                                                <td>
-                                                    @item.FromDate.ToString("dd/MM/yyyy").ToString()
-                                                </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LeaveType)
+                                            </td>
+                                            <td>
+                                                @item.FromDate.ToString("dd/MM/yyyy").ToString()
+                                            </td>
 
-                                                <td>
-                                                    @item.ToDate.ToString("dd/MM/yyyy").ToString()
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.RequestedDays)
-                                                </td>
-                                                <td>
-                                                    <span class="text-success">@Html.DisplayFor(modelItem => item.Available)</span>
-                                                </td>
-                                                <td>
-                                                    @if (item.Status == "Pending") { <span style="font-size:12px;" class="label label-warning">@item.Status</span>}
-                                                    else if (item.Status == "Rejected") {<span style="font-size:12px;" class="label label-danger">@item.Status</span> }
-                                                    else { <span style="font-size:12px;" class="label label-success">@item.Status</span>}
-
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Reason)
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
-                                                            <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            @if (item.Status == "Pending")
-                                                            {
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Approve</a></li>
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Reject')">Reject</a></li>
-                                                            }
-                                                            else if (item.Status == "Approved")
-                                                            {
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Pending')">Mark Pending</a></li>
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Reject')">Reject</a></li>
-                                                            }
-                                                            else
-                                                            {
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Approve</a></li>
-                                                                <li><a onclick="javascript: UpdateStatus(@item.Id,'Pending')">Mark Pending</a></li>
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>*@
+                                            <td>
+                                                @item.ToDate.ToString("dd/MM/yyyy").ToString()
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RequestedDays)
+                                            </td>
+                                            <td>
+                                                <span class="text-success">@Html.DisplayFor(modelItem => item.Available)</span>
+                                            </td>
+                                            <td>
+                                                @if (item.Status.StartsWith("Approved")) { <span style="font-size:12px;" class="label label-success">@item.Status</span>}
+                                                else if (item.Status == "Rejected" || item.Status == "Cancelled") {<span style="font-size:12px;" class="label label-danger">@item.Status</span> }
+                                                else { <span style="font-size:12px;" class="label label-warning">@item.Status</span>}
+                                                
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Reason)
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
+                                                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        @if (item.Status == "Pending")
+                                                        {
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Approve</a></li>
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Reject')">Reject</a></li>
+                                                        }
+                                                        else if (item.Status == "Approved")
+                                                        {
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Pending')">Mark Pending</a></li>
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Reject')">Reject</a></li>
+                                                        }
+                                                        else if (item.Status == "Requested For Cancel")
+                                                        { 
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve Cancel')">Approve Cancel</a></li>
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Reject Cancel')">Reject Cancel</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Approve')">Approve</a></li>
+                                                            <li><a onclick="javascript: UpdateStatus(@item.Id,'Pending')">Mark Pending</a></li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
                         </div>
 
@@ -136,161 +138,42 @@
 
 <script>
     $(document).ready(function () {
-        var dTable = $('#example').DataTable({
-            destroy: true,
-            "processing": true, // for show progress bar
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Employee Report',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL'
-                }
-            ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
-            sDom: '<"myexport"B>ifrtlp',
-            lengthMenu: [
-                [5, 10, 25, -1],
-                ['5', '10', '25', 'All']
-            ],
-            ajax: {
-                "url": "/Leave/EmployeeLeaveRequests",
-                "type": "POST",
-                "datatype": "json"
+        var table = $('#example').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
             },
-            "columns": [
-                {
-                    "data": "EmployeeName", "autoWidth": true, render: function (data) {
+            responsive: true
+        });
+    });
 
-                        return data;
-                    }
-                },
-                {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+    function UpdateStatus(RequestId, Status) {
+        var url1 = "http://localhost:54830/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            data: {},
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (data) {
+                alert(data.responseText);
 
-                        return data;
-                    }
-                },
-                {
-                    "data": "FromDate", "autoWidth": true, render: function (data) {
-
-                        return data;
-                    }
-                },
-                {
-                    "data": "ToDate", "autoWidth": true, render: function (data) {
-
-                        return data;
-                    }
-                },
-                {
-                    "data": "RequestedDays", "autoWidth": true, render: function (data) {
-
-                        return data;
-                    }
-                },
-                {
-                    "data": "Available", "autoWidth": true, render: function (data) {
-
-                        return data;
-                    }
-                },
-                {
-                    "data": "Status", "autoWidth": true, render: function (data) {
-                        if (data == "Pending") {
-                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Rejected") {
-                            return '<span style="font-size:12px;" class="label label-danger">' + data + '</span>';
-                        } else {
-                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
-                        }
-                    }
-                },
-                {
-                    "data": "Reason", "autoWidth": true, render: function (data) {
-
-                        return data;
-                    }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Pending") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus('+row.id+',Approve)">Approve</a></li><li><a onclick="javascript: UpdateStatus('+row.id+',Reject)">Reject</a></li></ul></div>';
-                        }
-else if (row.Status == "Approved") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.id + ',Pending)">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.id + ',Reject)">Reject</a></li></ul></div>';
-
-}
-else {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.id + ',Approve)">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.id + ',Pending)">Mark Pending</a></li></ul></div>';
-
-}
-}
-}
-],
-"initComplete": function () {
-var $searchInput = $('div.dataTables_filter input');
-$searchInput.unbind();
-$searchInput.bind('keyup', function (e) {
-if (this.value.length >= 3 || this.value.length == 0) {
-dTable.search(this.value).draw();
-}
-});
-}
-});
-
-$("#btnModal").click(function () {
-var url = $("#modal-placeholder").data('url');
-$.get(url, function (data) {
-$("#modal-placeholder").html(data);
-$("#modal-placeholder").modal('show');
-});
-
-});
-
-});
-
-function UpdateStatus(RequestId, Status) {
-var url1 = "http://localhost:54830/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
-$.ajax({
-url: url1,
-type: 'POST',
-data: {},
-success: function (data) {
-window.location.reload();
-},
-error: function (data) {
-alert(data.responseText);
-
-}
-});
-}
+            }
+        });
+    }
 
 
 </script>
 
 
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
+
 
 

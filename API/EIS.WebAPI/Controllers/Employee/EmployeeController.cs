@@ -5,7 +5,7 @@ using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,37 +21,44 @@ namespace EIS.WebAPI.Controllers
     [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
-    public class EmployeeController : BaseController
+    public class EmployeeController : Controller
     {
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
+        public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration): base(repository)
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
         {
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            _repository = repository  ;
             _configuration = configuration;
         }
 
-        [HttpPost]
-        [Route("GetAllEmployee")]
-        public IActionResult GetAllEmployee([FromBody]SortGrid sortGrid)
-        {          
-         
-            ArrayList data = new ArrayList();
-            var employees = _repository.Employee.FindAll().Where(x => x.TenantId == TenantId);
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, employees);
-            }
-            else
-            {
-                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, employees);
-            }
-            return Ok(data);
+        [HttpGet]
+        public IActionResult GetAllEmployee()
+        {
+            var employees = _repository.Employee.FindAll().Where(x => x.TenantId == TenantId && x.IsActive == true);
+            return Ok(employees);
         }
-
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
             var employee = _repository.Employee.FindByCondition(e => e.Id == id);
+            employee.User = _repository.Users.FindByCondition(u => u.PersonId == id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(employee);
+            }
+        }
+        [Route("Profile/{id}")]
+        [HttpGet]
+        public IActionResult GetProfile([FromRoute]int id)
+        {
+            var employee = _repository.Employee.GetProfile(id);
             if (employee == null)
             {
                 return NotFound();
@@ -68,6 +75,16 @@ namespace EIS.WebAPI.Controllers
             var n = _repository.Employee.GenerateNewIdCardNo(TenantId);
             return n;
         }
+        [Route("cr")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult CreateTemp([FromBody]Demo demo)
+        {
+            _repository.Employee.AddTempData(demo);
+            return Ok();
+
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
@@ -100,14 +117,20 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
         {
-            var p = _repository.Employee.FindByCondition(x => x.Id == id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             _repository.Employee.UpdateAndSave(person);
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                "Your Information have been successfully activated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n";
+            new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok(person);
         }
 
@@ -115,12 +138,15 @@ namespace EIS.WebAPI.Controllers
         public IActionResult Delete([FromRoute]int id)
         {
             Person person = _repository.Employee.FindByCondition(x => x.Id == id);
+            Users users = _repository.Users.FindByCondition(x => x.PersonId == id); 
             if (person == null)
             {
                 return NotFound();
             }
             person.IsActive = false;
+            users.IsActive = false;
             _repository.Employee.UpdateAndSave(person);
+            _repository.Users.UpdateAndSave(users);
             return Ok(person);
         }
         [Route("Designations")]
@@ -172,22 +198,20 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Data")]
+        [Route("Data/{search?}")]
         [AllowAnonymous]
-        public IActionResult GetData([FromBody]SortGrid sortGrid)
+        public IActionResult GetData([FromBody]SortGrid sortGrid, [FromRoute]string search = null)
         {
-            ArrayList data = new ArrayList();
-            var employeeData = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId);
-            if (string.IsNullOrEmpty(sortGrid.Search))
+            ArrayList employeeslist;
+            if (search == null)
             {
-                
-                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, employeeData);
+                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,x=>x.TenantId==TenantId);
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search || x.FirstName.Contains(sortGrid.Search) || x.MiddleName.Contains(sortGrid.Search) || x.LastName.Contains(sortGrid.Search) || x.PanCard == sortGrid.Search || x.AadharCard == sortGrid.Search || x.MobileNumber == sortGrid.Search, sortGrid, employeeData);
+                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, x => x.TenantId == TenantId);
             }
-            return Ok(data);
+            return Ok(employeeslist);
         }
         public string GetTitle(Gender gender)
         {

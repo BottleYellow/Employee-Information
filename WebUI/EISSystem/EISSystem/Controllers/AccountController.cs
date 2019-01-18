@@ -6,16 +6,21 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using EIS.Entities.Employee;
 
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Account Management")]
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public readonly IEISService<Users> _service;
         RedisAgent Cache;
-        public AccountController(IEISService<Users> service)
+        public AccountController(IEISService<Users> service, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _service = service;
             Cache = new RedisAgent();
         }
@@ -37,14 +42,21 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                var person = JsonConvert.DeserializeObject<Person>(stringData);
                 Task<string> tokenResult = response.Content.ReadAsAsync<string>();
-                pid = tokenResult.Result.ToString();
+                //pid = tokenResult.Result.ToString();
+                pid = person.Id.ToString();
+                Response.Cookies.Append("IdCard", person.IdCard);
+                Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
+                Response.Cookies.Append("EmailId", person.EmailAddress);
                 string role = Cache.GetStringValue("Role");
                 if (role == "Admin")
                 {
                     return RedirectToAction("Index", "People");
                 }
             }
+            
             return RedirectToAction("Profile","People",new { PersonId=Convert.ToInt32(pid)});
         }
 

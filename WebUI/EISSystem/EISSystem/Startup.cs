@@ -4,6 +4,7 @@ using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
+using EIS.WebApp.Extensions;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -11,10 +12,12 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using System.Net;
 
 namespace EIS.WebApp
 {
@@ -86,6 +89,7 @@ namespace EIS.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //app.UseRewriter(new RewriteOptions().Add(new RedirectWwwRule()));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,8 +112,9 @@ namespace EIS.WebApp
 
             if (id != null)
             {
+                string access = new RedisAgent().GetStringValue("Access");
                 string role = new RedisAgent().GetStringValue("Role");
-                if (role == "Admin")
+                if (access.Contains("/People/Index"))
                 {
                     controller = "People";
                     action = "Index";

@@ -1,5 +1,6 @@
-﻿ using EIS.Entities.Address;
+﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,15 @@ namespace EIS.WebAPI.Controllers
 
     [Route("api/EmergencyAddress")]
     [ApiController]
-    public class EmergencyAddressController : BaseController
+    public class EmergencyAddressController : Controller
     {
-
-        public EmergencyAddressController(IRepositoryWrapper repository) : base(repository)
+        RedisAgent Cache = new RedisAgent();
+        int TenantId = 0;
+        public readonly IRepositoryWrapper _repository;
+        public EmergencyAddressController(IRepositoryWrapper repository) 
         {
-
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            _repository = repository;
         }
 
         [HttpGet]

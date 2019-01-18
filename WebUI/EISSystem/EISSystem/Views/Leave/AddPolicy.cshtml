@@ -10,10 +10,11 @@
         /*top: 7px;*/
     }
 </style>
-<div class="modal-dialog" role="document">
+<div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title" id="addPolicyLabel">Add Policy</h4>
+            <HeaderWithButton class="modal-title" header-name="Add Policy"></HeaderWithButton>
+            @*<h4 class="modal-title" id="addPolicyLabel">Add Policy</h4>*@
         </div>
         <div class="modal-body">
             <form name="cp" id="cp" asp-action="AddPolicy" asp-controller="Leave" method="post">
@@ -92,7 +93,7 @@
                         });                    
                     },
                     error: function (data) {
-                        alert(data.responseText);
+                        $("#md").replaceWith(data.responseText);
                     }
                 });
             }

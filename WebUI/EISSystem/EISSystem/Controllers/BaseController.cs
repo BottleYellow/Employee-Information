@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EIS.Entities.Employee;
@@ -20,7 +21,7 @@ namespace EIS.WebApp.Controllers
         {
             this.pservice = pservice;
         }
-        public ArrayList LoadData<T1>(string Url)
+        public IActionResult LoadData(string Url, bool type)
         {
             SortEmployee sortEmployee = new SortEmployee();
             // Skiping number of Rows count
@@ -36,24 +37,28 @@ namespace EIS.WebApp.Controllers
             //Paging Size (10,20,50,100)
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
-            //int recordsTotal = 0;
-            sortEmployee.Search = search;
+            int recordsTotal = 0;
+
             HttpClient client = pservice.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-             
+            Url = Url +"/"+ search;
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
 
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
-            return arrayData;
-            //recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            //IList<T1> data = JsonConvert.DeserializeObject<IList<T1>>(arrayData[1].ToString());
-            //ViewModel<T1> viewModel = new ViewModel<T1>();
-            //viewModel.TotalCount = recordsTotal;
-            //viewModel.collection = data;
-            //return viewModel;
-
-            //return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
+            recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<T> employees1 = JsonConvert.DeserializeObject<IList<T>>(arrayData[1].ToString());
+            IList<T> employees = new List<T>();
+            foreach (var e in employees1)
+            {
+                PropertyInfo prop = e.GetType().GetProperty("IsActive");
+                bool obj =Convert.ToBoolean(prop.GetValue(e));
+                if (obj == type)
+                {
+                    employees.Add(e);
+                }
+            }
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
         }
     }
 }

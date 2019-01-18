@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Http;
+using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -51,6 +53,15 @@ namespace EIS.WebApp.Controllers
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+        }
+
+        [DisplayName("Show Employees Requests")]
+        public IActionResult LeaveRequestsUnderMe()
+        {
+            response = _services.LeaveRules.GetResponse("api/LeaveRequest/RequestsUnderMe");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
+            return View(Requests);
         }
 
         [DisplayName("Show my leaves")]
@@ -110,6 +121,33 @@ namespace EIS.WebApp.Controllers
             var date1 = FromDate.ToShortTimeString();
             return View(date1);
         }
+        [DisplayName("Edit Leave Request")]
+        public IActionResult EditLeaveRequest(int id)
+        {
+            ViewBag.ListOfPolicy = data;
+            string stringData = _services.LeaveRequest.GetResponse("api/LeaveRequest/" + id + "").Content.ReadAsStringAsync().Result;
+            LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
+            return View(leave);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditLeaveRequest(int id,LeaveRequest request)
+        {
+            request.UpdatedDate = DateTime.Now.Date;
+            if (ModelState.IsValid)
+            {
+                request.IsActive = true;
+                HttpResponseMessage response = _services.LeaveRequest.PutResponse("api/LeaveRequest/"+id, request);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    return View();
+                }
+
+            }
+
+            return View("RequestLeave", request);
+        }
         #endregion
 
         #region Leave Type
@@ -159,6 +197,7 @@ namespace EIS.WebApp.Controllers
                     }
                 }
             }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("AddPolicy", Leave);
 
         }
@@ -193,7 +232,10 @@ namespace EIS.WebApp.Controllers
                 ViewBag.ListOfPolicy = null;
             else
                 ViewBag.ListOfPolicy = data;
-            ViewBag.Persons = PeopleController.data;
+            HttpResponseMessage response = _services.Employee.GetResponse("api/employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Person> data1 = JsonConvert.DeserializeObject<List<Person>>(stringData);
+            ViewBag.Persons = data1;
             var model = new LeaveCredit();
             return PartialView("AddCredit", model);
         }

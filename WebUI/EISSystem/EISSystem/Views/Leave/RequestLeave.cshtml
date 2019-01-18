@@ -7,15 +7,15 @@
 <html>
 <head>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    <!-- Bootstrap Material Datetime Picker Css -->
+    @*<!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
     <!-- Bootstrap DatePicker Css -->
-    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />*@
 </head>
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <h1>Request For Leave</h1>
+            <HeaderWithButton header-name="Request For Leave"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -24,24 +24,30 @@
                         <form id="cp" method="post">
                             @if (ViewBag.ListOfPolicy != null)
                             {
-                            <div class="form-group" id="LType">
+                        <div class="form-group" id="LType">
                             <label asp-for="LeaveType">Leave Type : </label>
                             <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
                                 <option>-- Select Leave Type --</option>
                             </select>
                             <span asp-validation-for="LeaveType" class="text-danger"></span>
-                            </div>
+                        </div>
                             }
 
                             <label>Dates Requested : </label>
-                            <div class="form-group">
-                                <div class="input-daterange input-group" id="bs_datepicker_range_container">
-                                    <div class="form-line">
-                                        <input asp-for="FromDate" id="date1" type="text" class="form-control" placeholder="Date From" onchange="FunDate1();" disabled>
+                            <div class="row clearfix">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <div style="width:125px;" class="form-line">
+                                            <input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control" disabled>
+                                        </div>
                                     </div>
-                                    <span class="input-group-addon">To</span>
-                                    <div class="form-line">
-                                        <input asp-for="ToDate" id="date2" type="text" class="form-control" placeholder="Date To" onchange="FunDate2();" disabled>
+                                </div>
+                                <span class="col-sm-1"><label>To</label></span>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <div style="width:125px;" class="form-line">
+                                            <input id="date2" asp-for="ToDate" type="date" onchange="FunDate2();" class="form-control" disabled>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -70,10 +76,10 @@
     <script src="~/plugins/autosize/autosize.js"></script>
     <!-- Moment Plugin Js -->
     <script src="~/plugins/momentjs/moment.js"></script>
-    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    @*<!-- Bootstrap Material Datetime Picker Plugin Js -->
     <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
     <!-- Bootstrap Datepicker Plugin Js -->
-    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>*@
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
 
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -120,6 +126,13 @@
         }
         return false;
     });
+    function getLeave() {
+        var name = $("#Name").val();
+        var age = $("#Age").val();
+
+        // poor man's validation
+        return (name == "") ? null : { Name: name, Age: age };
+    }
     function myFunction() {
         $("#msg").remove();
         var x = document.getElementById("type").value;
@@ -157,6 +170,8 @@
     function FunDate1() {
         var x = document.getElementById("date1").value;
         var d = new Date();
+        $("#date2").val('');
+        $("#btnSubmit").prop("disabled", true);
         if (new Date(x) <= d) {
             bootbox.alert({
                 message: "Please select valid date."
@@ -170,7 +185,15 @@
         var d2 = document.getElementById("date2").value;
         var diff = new Date(new Date(d2) - new Date(d1));
         var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (parseInt(days) > parseInt(availableLeaves)) {
+        if (new Date(d1) > new Date(d2))
+        {
+            bootbox.alert({
+                message: "Please select valid date"
+            });
+            $("#date2").val('');
+            $("#btnSubmit").prop("disabled", true);
+        }
+        else if (parseInt(days) > parseInt(availableLeaves)) {
             bootbox.alert({
                 message: "You can request leave for only " + availableLeaves + " days."
             });
@@ -181,6 +204,9 @@
             $("#av").val(availableLeaves);
             $("#btnSubmit").removeAttr('disabled');
         }
+    }
+    function calculate() {
+
     }
 </script>
 
