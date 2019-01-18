@@ -6,6 +6,7 @@ namespace EIS.Entities.Employee
 {
     public class Attendance : BaseEntity<int>
     {
+        #region[Attendance]
         public int PersonId { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateIn { get; set; }
@@ -16,6 +17,7 @@ namespace EIS.Entities.Employee
         [DataType(DataType.Time)]
         public TimeSpan TimeOut { get; set; }
         public TimeSpan TotalHours { get; set; }
+        #endregion
         public virtual Person Person { get; set; }
     }
 }

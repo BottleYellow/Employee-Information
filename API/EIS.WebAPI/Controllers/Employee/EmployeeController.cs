@@ -21,27 +21,33 @@ namespace EIS.WebAPI.Controllers
     [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
-    public class EmployeeController : Controller
+    public class EmployeeController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration): base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository  ;
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public IActionResult GetAllEmployee()
-        {
+        [HttpPost]
+        [Route("GetAllEmployee")]
+        public IActionResult GetAllEmployee([FromBody]SortGrid sortGrid)
+        {          
+         
+            ArrayList data = new ArrayList();
+            var employees = _repository.Employee.FindAll().Where(x => x.TenantId == TenantId);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
 
-            throw new Exception();
-            var employees = _repository.Employee.FindAll().Where(x=>x.TenantId==TenantId);
-            return Ok(employees);
+                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, employees);
+            }
+            else
+            {
+                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, employees);
+            }
+            return Ok(data);
         }
+
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
@@ -166,20 +172,22 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Data/{search?}")]
+        [Route("Data")]
         [AllowAnonymous]
-        public IActionResult GetData([FromBody]SortGrid sortGrid, [FromRoute]string search = null)
+        public IActionResult GetData([FromBody]SortGrid sortGrid)
         {
-            ArrayList employeeslist;
-            if (search == null)
+            ArrayList data = new ArrayList();
+            var employeeData = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId);
+            if (string.IsNullOrEmpty(sortGrid.Search))
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,x=>x.TenantId==TenantId);
+                
+                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, employeeData);
             }
             else
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, x => x.TenantId == TenantId);
+                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search || x.FirstName.Contains(sortGrid.Search) || x.MiddleName.Contains(sortGrid.Search) || x.LastName.Contains(sortGrid.Search) || x.PanCard == sortGrid.Search || x.AadharCard == sortGrid.Search || x.MobileNumber == sortGrid.Search, sortGrid, employeeData);
             }
-            return Ok(employeeslist);
+            return Ok(data);
         }
         public string GetTitle(Gender gender)
         {

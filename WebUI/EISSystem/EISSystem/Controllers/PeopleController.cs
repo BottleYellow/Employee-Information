@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -51,12 +52,19 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            return View(data);
+            return View();
         }
+
         [HttpPost]
+        [ActionName("Index")]
         public IActionResult LoadData()
         {
-            return base.LoadData("api/employee/data");
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<Person>("api/employee/data");
+
+           int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());           
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
         public IActionResult Profile(int PersonId)
         {
@@ -153,7 +161,7 @@ namespace EIS.WebApp.Controllers
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                    return View("Index", EmployeeData());
+                    return RedirectToAction(nameof(Index));
                 }
             }
             return View(person);
@@ -199,7 +207,7 @@ namespace EIS.WebApp.Controllers
                         if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 10000)
                         {                        
                             string[] files = Directory.GetFiles(rootPath + filePath);
-                            System.IO.File.Delete(files[0]);                          
+                            System.IO.File.Delete(files[0]);
                             var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                             {

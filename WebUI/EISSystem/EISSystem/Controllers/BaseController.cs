@@ -20,7 +20,7 @@ namespace EIS.WebApp.Controllers
         {
             this.pservice = pservice;
         }
-        public IActionResult LoadData(string Url)
+        public ArrayList LoadData<T1>(string Url)
         {
             SortEmployee sortEmployee = new SortEmployee();
             // Skiping number of Rows count
@@ -36,18 +36,24 @@ namespace EIS.WebApp.Controllers
             //Paging Size (10,20,50,100)
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
-            int recordsTotal = 0;
-
+            //int recordsTotal = 0;
+            sortEmployee.Search = search;
             HttpClient client = pservice.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-            Url = Url +"/"+ search;
+             
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
 
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
-            recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<T> employees = JsonConvert.DeserializeObject<IList<T>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
+            return arrayData;
+            //recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            //IList<T1> data = JsonConvert.DeserializeObject<IList<T1>>(arrayData[1].ToString());
+            //ViewModel<T1> viewModel = new ViewModel<T1>();
+            //viewModel.TotalCount = recordsTotal;
+            //viewModel.collection = data;
+            //return viewModel;
+
+            //return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
         }
     }
 }

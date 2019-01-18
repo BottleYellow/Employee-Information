@@ -5,7 +5,6 @@
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
-
     <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
     <style type="text/css">
     </style>
@@ -36,23 +35,23 @@
                 <p>
                     <a class="btn btn-primary waves-effect" asp-controller="People" asp-action="Create" id="create"><span><i class="glyphicon glyphicon-plus" style="font-size:13px;"></i><text style="font-size:16px;">Create</text></span></a>
                 </p>
-            
-                    <select class="form-control" id="select" style="width:165px;">
-                        <option id="active" value="active">Active</option>
-                        <option id="inActive" value="inActive">InActive</option>
-                    </select>
-               
+
+                <select class="form-control" id="select" style="width:165px;">
+                    <option id="active" value="active">Active</option>
+                    <option id="inActive" value="inActive">InActive</option>
+                </select>
+
             </div>
-            
+
         </div>
-        
- </div>
+
+    </div>
 
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="body">
-                    
+
                     <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
@@ -96,15 +95,23 @@
     })
 </script>
 <script>
-    var setting = null;
+    var editor; // use a global for the submit and return data rendering in the examples
+
     $(document).ready(function () {
+
+        $('#example').on('click', 'a.inactive', function (e) {
+            e.preventDefault();
+            alert("dfd");
+            });
+
+
         var dTable = $('#example').DataTable({
             sDom: '<"myexport"B>ifrtlp',
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
             buttons: [
-         
+
                 {
                     extend: 'pdfHtml5',
                     title: 'Employee Report',
@@ -113,13 +120,18 @@
                     orientation: 'landscape',
                     pageSize: 'LEGAL'
                 }
-          ],
+            ],
+            "aoColumnDefs": [
+                { "aTargets": [1], "bSortable": true },
+                { "aTargets": [11], "bSortable": true },
+                { "aTargets": ['_all'], "bSortable": false }
+            ],
             lengthMenu: [
                 [5, 10, 25, -1],
                 ['5', '10', '25', 'All']
             ],
             ajax: {
-                "url": "/People/LoadData",
+                "url": "/People/Index",
                 "type": "POST",
                 "datatype": "json"
             },
@@ -139,7 +151,7 @@
 
                 {
                     "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
-                        return '<img src="\\EmployeeData\\' + row.TenantId+ row.IdCard + '\\Image\\'+data+'" style="height:30px; weight:30px">';
+                        return '<img src="\\EmployeeData\\' + row.TenantId + row.IdCard + '\\Image\\' + data + '" style="height:30px; weight:30px">';
                     }
                 },
                 { "data": "Gender", "name": "Gender", "autoWidth": true },
@@ -169,7 +181,7 @@
                 { "data": "IsActive", "name": "IsActive", "autoWidth": true },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
-                        return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Edit?id=' + row.Id + '">Edit</a></li><li><a href="/People/Delete?id=' + row.Id + '">Delete</a></li></ul></div>';
+                        return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Edit?id=' + row.Id + '">Edit</a></li><li><a class="inactive" href="/People/Delete?id=' + row.Id + '">Delete</a></li></ul></div>';
                     }
                 }
             ],

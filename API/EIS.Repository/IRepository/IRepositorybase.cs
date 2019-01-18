@@ -1,4 +1,5 @@
-﻿using EIS.Entities.Generic;
+﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using System;
 using System.Collections;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace EIS.Repositories.IRepository
         void UpdateAndSave(T entity);
         void DeleteAndSave(T entity);
         IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression);
-        ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, Expression<Func<T, bool>> expression2);
+        ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, IQueryable<T> data);
     }
 }

@@ -10,15 +10,10 @@ namespace EIS.WebAPI.Controllers
 { 
     [Route("api/PermanentAddress")]
     [ApiController]
-    public class PermanentAddressController : Controller
+    public class PermanentAddressController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public PermanentAddressController(IRepositoryWrapper repository)
+        public PermanentAddressController(IRepositoryWrapper repository): base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
         }
         
         [HttpGet]

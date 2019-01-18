@@ -1,5 +1,7 @@
-﻿namespace EIS.Entities.Generic
+﻿
+namespace EIS.Entities.Generic
 {
+
     public class SortGrid
     {
         public string SortColumn { get; set; }
@@ -8,4 +10,5 @@
         public int PageSize { get; set; }
         public string Search { get; set; }
     }
+    
 }

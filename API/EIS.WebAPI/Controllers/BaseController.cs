@@ -1,14 +1,20 @@
 ﻿using EIS.Repositories.IRepository;
+using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EIS.WebAPI.Controllers
 {
     public class BaseController : ControllerBase
     {
-        public readonly IRepositoryWrapper _repository;
+        protected RedisAgent Cache;
+        internal int TenantId = 0;
+        protected readonly IRepositoryWrapper _repository;
         public BaseController(IRepositoryWrapper repository)
         {
             _repository = repository;
+            Cache = new RedisAgent();
+            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
         }
     }
 }

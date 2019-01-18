@@ -49,7 +49,7 @@ namespace EIS.WebAPI
             {
                 options.Filters.Add(typeof(Authorization));
                 options.Filters.Add(typeof(CustomFilter));
-                options.Filters.Add(typeof(MyExceptionFilter));
+                //options.Filters.Add(typeof(MyExceptionFilter));
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -84,7 +84,7 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             loggerFactory.AddSerilog();
-            //app.UseWebApiExceptionHandler();
+            app.UseWebApiExceptionHandler();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();

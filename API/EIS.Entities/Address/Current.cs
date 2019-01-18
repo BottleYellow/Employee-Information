@@ -5,6 +5,7 @@ namespace EIS.Entities.Address
 {
     public class Current:BaseEntity<int>
     {
+        #region[CurrentAddress]
         public int PersonId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
@@ -12,6 +13,7 @@ namespace EIS.Entities.Address
         public string Country { get; set; }
         public string PinCode { get; set; }
         public string PhoneNumber { get; set; }
+        #endregion
         public virtual Person Person { get; set; }
     }
 }

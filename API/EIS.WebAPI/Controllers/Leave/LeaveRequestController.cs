@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.RedisCache;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -14,41 +16,63 @@ namespace EIS.WebAPI.Controllers
     [EnableCors("MyPolicy")]
     [Route("api/LeaveRequest")]
     [ApiController]
-    public class LeaveRequestController : Controller
+    public class LeaveRequestController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public LeaveRequestController(IRepositoryWrapper repository) 
+        public LeaveRequestController(IRepositoryWrapper repository): base(repository)
         {
-            _repository = repository;
         }
 
         [DisplayName("View all requests")]
-        [HttpGet]
-        public IEnumerable<LeaveRequest> GetLeaveRequests()
+        [HttpPost]
+        public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
         {
-            return _repository.Leave.FindAll();
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.FindAll();
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+            }
+            return Ok(data);
+
         }
 
+
         [DisplayName("Show my leaves")]
-        [HttpGet("Employee/{id}")]
-        public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
-        {
-            var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
-            if (leave == null)
+        [HttpPost]
+        [Route("Employee/{id}")]
+        public IActionResult GetLeaveRequestsByEmployee([FromBody]SortGrid sortGrid,[FromRoute] int id)
+        {           
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
+            if (leaveData == null)
             {
                 return NotFound();
             }
 
-            return Ok(leave);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+            }
+            return Ok(data);
+ 
         }
 
         [AllowAnonymous]
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
-            var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
+            var leave = _repository.LeaveCredit.GetAvailableLeaves(PersonId, LeaveId);
             if (leave == 0)
             {
                 leave = -1;
@@ -64,7 +88,7 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                _repository.Leave.UpdateRequestStatus(RequestId, Status);
+                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status);
                 return Ok();
             }
             return NotFound();
@@ -78,12 +102,13 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.UpdateAndSave(leave);
+            _repository.LeaveRequest.UpdateAndSave(leave);
             return NoContent();
         }
 
         [DisplayName("Request for leave")]
         [HttpPost]
+        [Route("PostLeave")]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
             if (!ModelState.IsValid)
@@ -93,8 +118,8 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
-            _repository.Leave.CreateAndSave(leave);
-            _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
+            _repository.LeaveRequest.CreateAndSave(leave);
+            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             return Ok();
         }
 
@@ -102,12 +127,12 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-            var leave = _repository.Leave.FindByCondition(x => x.Id == id);
+            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
             if (leave == null)
             {
                 return NotFound();
             }
-            _repository.Leave.DeleteAndSave(leave);
+            _repository.LeaveRequest.DeleteAndSave(leave);
             return Ok(leave);
         }
     }

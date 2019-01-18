@@ -1,6 +1,5 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,15 +9,11 @@ namespace EIS.WebAPI.Controllers
 {
     [Route("api/CurrentAddress")]
     [ApiController]
-    public class CurrentAddressController : Controller
+    public class CurrentAddressController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public CurrentAddressController(IRepositoryWrapper repository)
+        public CurrentAddressController(IRepositoryWrapper repository): base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
+
         }
 
         [HttpGet]
@@ -35,6 +30,7 @@ namespace EIS.WebAPI.Controllers
                 return NotFound();
             return Ok(current);
         }
+
         [DisplayName("Update Current Address")]
         [HttpPut]
         public IActionResult PutCurrent([FromBody] Current current)
@@ -46,6 +42,7 @@ namespace EIS.WebAPI.Controllers
             _repository.CurrentAddress.UpdateAndSave(current);          
             return Ok(current);
         }
+
         [DisplayName("Add Current Address")]
         [HttpPost]
         public IActionResult PostCurrent([FromBody] Current current)
@@ -58,6 +55,7 @@ namespace EIS.WebAPI.Controllers
             _repository.CurrentAddress.CreateAndSave(current);
             return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
         }
+
         [DisplayName("Delete Current Address")]
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrent([FromRoute] int id)

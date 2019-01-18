@@ -25,22 +25,22 @@ namespace EIS.WebApp.Filters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            string actionName = context.RouteData.Values["action"].ToString();
-            string controllerName = context.RouteData.Values["controller"].ToString();
-            string access = "/" + controllerName + "/" + actionName;
+            //string actionName = context.RouteData.Values["action"].ToString();
+            //string controllerName = context.RouteData.Values["controller"].ToString();
+            //string access = "/" + controllerName + "/" + actionName;
 
-            var data = Cache.GetStringValue("Access");
-            if (data != null)
-            {
-                List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
-                var check = Access.Find(x => x.URL == access);
-                if (check == null)
-                    context.Result = new RedirectResult("/Account/AccessDenied");
-            }
-            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
-                context.Result = new RedirectToActionResult("Login", "Account", routeValues: null);
+            //var data = Cache.GetStringValue("Access");
+            //if (data != null)
+            //{
+            //    List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
+            //    var check = Access.Find(x => x.URL == access);
+            //    if (check == null)
+            //        context.Result = new RedirectResult("/Account/AccessDenied");
+            //}
+            //if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+            //    context.Result = new RedirectToActionResult("Login", "Account", routeValues: null);
 
-        }
+         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
             

@@ -10,12 +10,12 @@ namespace EIS.WebAPI.Controllers
 {
     [Route("api/OtherAddress")]
     [ApiController]
-    public class OtherAddressController : Controller
+    public class OtherAddressController : BaseController
     {
-        public readonly IRepositoryWrapper _repository;
-        public OtherAddressController(IRepositoryWrapper repository)
+
+        public OtherAddressController(IRepositoryWrapper repository): base(repository)
         {
-            _repository = repository;
+
         }
         [DisplayName("Profile view")]
         [HttpGet("{id}")]

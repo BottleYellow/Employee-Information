@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Http;
@@ -11,7 +12,7 @@ using Newtonsoft.Json;
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Leave Management")]
-    public class LeaveController : Controller
+    public class LeaveController : BaseController<EmployeeLeaves>
     {
         #region Declarations
         HttpResponseMessage response;
@@ -21,7 +22,7 @@ namespace EIS.WebApp.Controllers
         #endregion
         
         #region Controller
-        public LeaveController(IServiceWrapper services)
+        public LeaveController(IServiceWrapper services, IEISService<EmployeeLeaves> service) :base(service)
         {
             _services = services;
             response = _services.LeaveRules.GetResponse("api/LeavePolicy");
@@ -34,21 +35,48 @@ namespace EIS.WebApp.Controllers
         [DisplayName("View all requests")]
         public IActionResult EmployeeLeaveRequests()
         {
-            response = _services.LeaveRules.GetResponse("api/LeaveRequest");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
-            return View(Requests);
+            return View();
+        }
+
+        [ActionName("EmployeeLeaveRequests")]
+        [HttpPost]
+        public IActionResult GetEmployeeLeaveRequests()
+        {
+            //response = _services.LeaveRules.GetResponse("api/LeaveRequest");
+            //string stringData = response.Content.ReadAsStringAsync().Result;
+            //List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
+            //return View(Requests);
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<LeaveRequest>("api/LeaveRequest");
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
 
         [DisplayName("Show my leaves")]
         public IActionResult ShowMyLeaves()
         {
-            int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            response = _services.LeaveRules.GetResponse("api/LeaveRequest/Employee/" + pid + "");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
-            return View(Requests);
+            return View();
         }
+
+        [DisplayName("Show my leaves")]
+        [HttpPost]
+        [ActionName("ShowMyLeaves")]
+        public IActionResult GetMyLeaves()
+        {
+            int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            //response = _services.LeaveRules.GetResponse("api/LeaveRequest/Employee/" + pid + "");
+            //string stringData = response.Content.ReadAsStringAsync().Result;
+            //List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
+            //return View(Requests);
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/Employee/" + pid + "");
+
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+        }
+
         [DisplayName("Request for leave")]
         public IActionResult RequestLeave()
         {
@@ -61,24 +89,26 @@ namespace EIS.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult RequestLeave(LeaveRequest request)
+        public IActionResult RequestLeave(DateTime FromDate)
         {
-            request.CreatedDate = DateTime.Now.Date;
-            request.UpdatedDate = DateTime.Now.Date;
-            request.AppliedDate = DateTime.Now.Date;
-            if (ModelState.IsValid)
-            {
-                request.IsActive = true;
-                request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse("api/LeaveRequest", request);
-                if (response.IsSuccessStatusCode == true)
-                {                 
-                    return View();
-                }
+            //request.CreatedDate = DateTime.Now.Date;
+            //request.UpdatedDate = DateTime.Now.Date;
+            //request.AppliedDate = DateTime.Now.Date;
+            //if (ModelState.IsValid)
+            //{
+            //    request.IsActive = true;
+            //    request.Id = 0;
+            //    HttpResponseMessage response = _services.LeaveRequest.PostResponse("api/LeaveRequest", request);
+            //    if (response.IsSuccessStatusCode == true)
+            //    {                 
+            //        return View();
+            //    }
 
-            }
+            //}
 
-            return View("RequestLeave", request);
+            //return View("RequestLeave", request);
+            var date1 = FromDate.ToShortTimeString();
+            return View(date1);
         }
         #endregion
 
@@ -86,8 +116,22 @@ namespace EIS.WebApp.Controllers
         [DisplayName("leave Policies")]
         public IActionResult LeavePolicies()
         {
-            return View(data);
+            return View();
         }
+
+        [HttpPost]
+        [ActionName("LeavePolicies")]
+        public IActionResult GetLeavePolicy()
+        {
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<LeaveRules>("api/LeavePolicy");
+
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<LeaveRules> data = JsonConvert.DeserializeObject<IList<LeaveRules>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+        }
+
+
         [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
         {
@@ -125,11 +169,22 @@ namespace EIS.WebApp.Controllers
         [DisplayName("leave Credits")]
         public IActionResult LeaveCredits()
         {
-            response = _services.LeaveCredit.GetResponse("api/LeaveCredit");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<LeaveCredit> Credits = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData);
-            return View(Credits);
+            return View();
         }
+
+        [ActionName("LeaveCredits")]
+        [HttpPost]
+        public IActionResult GetLeaveCredits()
+        {
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<LeaveRules>("api/LeaveCredit");
+
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<LeaveCredit> data = JsonConvert.DeserializeObject<IList<LeaveCredit>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+        }
+
+
 
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()

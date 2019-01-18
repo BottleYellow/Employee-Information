@@ -1,9 +1,11 @@
 ﻿using EIS.Data.Context;
+using EIS.Entities.Employee;
 using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -57,16 +59,14 @@ namespace EIS.Repositories.Repository
             return _dbContext.Set<T>().Where(expression);
         }
 
-        public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, Expression<Func<T, bool>> expression2)
+        public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, IQueryable<T> data)
         {
-
             int totalcount = 0;
+            ArrayList arrayList= new ArrayList();
 
-            ArrayList list = new ArrayList();
-            var data = FindAllByCondition(expression2);
-
-            if (!(string.IsNullOrEmpty(sortGrid.SortColumn) && string.IsNullOrEmpty(sortGrid.SortColumnDirection)))
-            {
+            if (string.IsNullOrEmpty(sortGrid.SortColumn) || string.IsNullOrEmpty(sortGrid.SortColumnDirection))
+            { }
+            else { 
                 data = data.OrderBy(sortGrid.SortColumn + " " + sortGrid.SortColumnDirection);
             }
             if (expression != null)
@@ -83,13 +83,12 @@ namespace EIS.Repositories.Repository
                 }              
             }
 
-            //data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
+            data = data.Skip(sortGrid.Skip).Take(sortGrid.PageSize);          
             var totaldata = data.ToList();
+            arrayList.Add(totalcount);
+            arrayList.Add(totaldata);
 
-            list.Add(totalcount);
-            list.Add(totaldata);
-
-            return list;
+            return arrayList;
         }
 
         public void CreateAndSave(T entity)

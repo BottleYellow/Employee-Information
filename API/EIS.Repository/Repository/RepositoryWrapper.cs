@@ -19,7 +19,11 @@ namespace EIS.Repositories.Repository
 
         private IAttendanceRepository _attendance;
 
-        private ILeaveRepository _leave;
+        private ILeaveRequestRepository _leaveRequest;
+
+        private ILeaveRulesRepository _leaveRules;
+
+        private ILeaveCreditRepository _leaveCredit;
 
         private IUserRepository _user;
 
@@ -92,15 +96,37 @@ namespace EIS.Repositories.Repository
                 return _attendance;
             }
         }
-        public ILeaveRepository Leave
+        public ILeaveRequestRepository LeaveRequest
         {
             get
             {
-                if (_leave == null)
+                if (_leaveRequest == null)
                 {
-                    _leave = new LeaveRepository(_dbContext);
+                    _leaveRequest = new LeaveRequestRepository(_dbContext);
                 }
-                return _leave;
+                return _leaveRequest;
+            }
+        }
+        public ILeaveRulesRepository LeaveRules
+        {
+            get
+            {
+                if (_leaveRules == null)
+                {
+                    _leaveRules = new LeaveRulesRepository(_dbContext);
+                }
+                return _leaveRules;
+            }
+        }
+        public ILeaveCreditRepository LeaveCredit
+        {
+            get
+            {
+                if (_leaveCredit == null)
+                {
+                    _leaveCredit = new LeaveCreditRepository(_dbContext);
+                }
+                return _leaveCredit;
             }
         }
         public IUserRepository Users

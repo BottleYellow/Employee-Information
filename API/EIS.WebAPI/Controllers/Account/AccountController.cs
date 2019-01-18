@@ -2,7 +2,6 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -22,14 +20,12 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        private RedisAgent Cache;
         private IHttpContextAccessor _accessor;
         private readonly IConfiguration configuration;
         public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _accessor = accessor;
             this.configuration = configuration;
-            Cache = new RedisAgent();
         }
 
         [DisplayName("Login")]
@@ -38,6 +34,8 @@ namespace EIS.WebAPI.Controllers
         [Route("login")]
         public IActionResult Login(Users user)
         {
+            if (!(string.IsNullOrEmpty(user.UserName) ||string.IsNullOrEmpty(user.Password)))
+        { 
             string status = _repository.Users.ValidateUser(user);
             if (status == "success")
             {
@@ -61,7 +59,7 @@ namespace EIS.WebAPI.Controllers
                 Cache.SetStringValue("Role", role);
                 return Ok(pid.ToString());
             }
-            else
+        }
             {
                 return NotFound("");
             }

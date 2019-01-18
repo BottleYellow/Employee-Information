@@ -5,6 +5,7 @@ namespace EIS.Entities.Address
 {
     public class Emergency:BaseEntity<int>
     {
+        #region[EmergencyAddress]
         public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,6 +17,7 @@ namespace EIS.Entities.Address
         public string Relation { get; set; }
         public string MobileNumber { get; set; }
         public string PhoneNumber { get; set; }
+        #endregion
         public virtual Person Person { get; set; }
     }
 }

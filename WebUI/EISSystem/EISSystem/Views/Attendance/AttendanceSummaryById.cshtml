@@ -1,5 +1,88 @@
-﻿@model IEnumerable<EIS.Entities.Employee.Attendance>
+﻿@model IEnumerable<EIS.Entities.Employee.Person>
+@{
+    int absentDays = 0;
+    int presentDays = 0;
+    if (ViewBag.Present != null)
+    {
+        presentDays = ViewBag.Present;
+    }
 
+    int totalDays = 0;
+    int year = 0;
+    int month = 0;
+    string displayTimeIn = "";
+    string displayTimeOut = "-";
+    string hours = "-";
+    DateTime startDate = new DateTime();
+
+
+    if (ViewBag.year != null)
+    {
+        year = ViewBag.year;
+    }
+
+    if (ViewBag.startDate != null)
+    {
+        startDate = ViewBag.startDate;
+    }
+    if (ViewBag.month != null)
+    {
+        month = ViewBag.month;
+    }
+    DateTime targetDate = new DateTime();
+    DateTime endDate = new DateTime();
+
+    if (ViewBag.type == "year")
+    {
+
+        targetDate = new DateTime(year, 1, 1);
+        endDate = targetDate.AddYears(1);
+        if (DateTime.IsLeapYear(year))
+        { totalDays = 366; }
+        else
+        { totalDays = 365; }
+
+    }
+    else if (ViewBag.type == "month")
+    {
+        targetDate = new DateTime(year, month, 1);
+        endDate = targetDate.AddMonths(1);
+        totalDays = DateTime.DaysInMonth(year, month);
+
+    }
+    else if (ViewBag.type == "week")
+    {
+        targetDate = startDate;
+        endDate = targetDate.AddDays(7);
+        totalDays = 7;
+    }
+
+    //if (Model.Count() == 0)
+    //{
+    //    displayTimeIn = "0";
+    //    displayTimeOut = "0";
+    //    hours = "0";
+    //    absentDays = 0;
+    //}
+    //else
+    //{
+    //    absentDays = totalDays - Model.Count();
+    //    TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeIn.Ticks)));
+    //    DateTime timeIn = DateTime.Today.Add(averageTimeIn);
+    //    displayTimeIn = timeIn.ToString("hh:mm tt");
+
+    //    TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeOut.Ticks)));
+    //    DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+    //    displayTimeOut = timeOut.ToString("hh:mm tt");
+
+    //    DateTime averageHours = DateTime.Today.Add(averageTimeOut - averageTimeIn);
+    //    string displayAverageHours = timeOut.ToString("hh:mm");
+
+    //    hours = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2).ToString();
+    //}
+
+
+}
 <style type="text/css">
     td {
         width: 200px;
@@ -62,7 +145,13 @@
                             <div class="row col-md-12">
                                 <div class="col-md-9">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <label>Select Type Of Reports</label>
+                                            <select class="form-control" id="selectEmployee"  asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
+                                                <option>-- Select --</option>
+                                            </select>                                           
+                                        </div>
+                                        <div class="col-md-3">
                                             <label>Select Type Of Reports</label>
                                             <select class="form-control" id="select" style="width:200px;">
                                                 <option value="month" id="month">Month</option>
@@ -70,7 +159,7 @@
                                                 <option value="week" id="week">Week</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
                                                 <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
@@ -84,7 +173,7 @@
                                                 <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <br />
                                             <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
@@ -100,38 +189,38 @@
                             </div>
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average Hrs</div>
-                                            <div id="averageHours" class="panel-body"></div>
+                                            <div id="averageHours" class="panel-body">5<span>Hrs</span></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeIn</div>
                                             <div id="averageTimeIn" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
                                             <div id="averageTimeOut" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Present Days</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Absent Days</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                        <div class="panel panel-primary">      
+                                    <div class="col-md-2 col-sm-2">
+                                        <div class="panel panel-primary">
                                             <div class="panel-heading">Total Days</div>
                                             <div id="totalDays" class="panel-body"></div>
                                         </div>
@@ -148,49 +237,7 @@
                                             <th>Status</th>
 
                                         </tr>
-                                    </thead>
-                                    @*<tbody>
-                                            @{
-                                                @for (DateTime date = targetDate; date < endDate; date = date.AddDays(1))
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @date.ToShortDateString()
-                                                        </td>
-
-                                                        @{
-                                                            var attendance = Model.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
-                                                        }
-
-                                                        @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
-                                                        {
-
-                                                            @if (date < DateTime.Now.Date)
-                                                            {
-                                                                <td><text>Nil</text></td>
-                                                                <td><text>Nil</text></td>
-                                                                <td><text style="background-color:red; color:white; padding:5px">Absent</text></td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td><text>-</text></td>
-                                                                <td><text>-</text></td>
-                                                                <td><text>-</text></td>
-                                                            }
-
-                                                        }
-
-                                                        else
-                                                        {
-
-                                                            <td> @attendance.TimeIn.Hours:@attendance.TimeIn.Minutes:@attendance.TimeIn.Seconds</td>
-                                                            <td> @attendance.TimeOut</td>
-                                                            <td><text style="background-color:green; color:white; padding:5px">Present</text></td>
-                                                        }
-                                                    </tr>
-                                                }
-                                            }
-                                        </tbody>*@
+                                    </thead>                          
                                 </table>
                             </div>
 
@@ -230,18 +277,18 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        var id = null;
+        $('select[id="selectEmployee"]').find('option[value='+1+']').attr("selected", true);
         var totalDays = 0;
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
         $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month');
+        generateReport(m + '/' + y, 'month',id);
 
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
-                $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
                 $('#inputweekdiv').hide();
@@ -258,7 +305,6 @@
                 });
             }
             else if (v == 'week') {
-                $("#inputweek").val("30/12/2018-05/01/2019");
                 $('#inputmonthdiv').hide();
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').show();
@@ -274,6 +320,7 @@
             $("#inputweek").val(firstDate + " - " + lastDate);
         });
         $('#generateReport').on('click', function () {
+            var id = $('#selectEmployee').val();
             var v = $('#select').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
@@ -284,7 +331,7 @@
                 else {
                     totalDays = 365;
                 }
-                generateReport(value, 'year');
+                generateReport(value, 'year',id);
             }
 
             else if (v == 'month') {
@@ -294,25 +341,25 @@
                 var y = monthYear[1];
                 var m = monthYear[0];
                 totalDays = new Date(y, m, 0).getDate()
-                generateReport(value, 'month');
+                generateReport(value, 'month',id);
             }
             else if (v == 'week') {
                 var value = $("#inputweek").val();
                 var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
                 var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week');
+                generateReport(firstDate + " - " + lastDate, 'week',id);
                 totalDays = 7;
             }
         });
 
-        function generateReport(value, type) {
+        function generateReport(value, type,id) {
             $.ajax({
                 type: 'POST',
-                url: "/Attendance/AttendanceSummary",
-                data: { "date": value, "type": type },
+                url: "/Attendance/AttendanceSummaryById",
+                data: { "date": value, "type": type ,"id":id},
                 success: function (data) {
-                    document.getElementById("averageHours").innerHTML = data.AverageTime+" Hrs";
+                    document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
                     document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
                 document.getElementById("presentDays").innerHTML = data.PresentDays;
@@ -342,7 +389,7 @@
                         'targets': [0, 1, 2]
                     }
                 ],
-                
+
                 "aoColumnDefs": [
                     { "aTargets": [0], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
@@ -353,28 +400,27 @@
                     ['5', '10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/EmployeeReports",
+                    "url": "/Attendance/EmployeeReportsById",
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type },
+                    "data": { "date": value, "type": type ,"id": id},
                 },
                 "columns": [
                     {
                         "data": "DateIn", "name": "DateIn", "autoWidth": true, render: function (data, type, row) {
-                            data = moment(data).format('DD MMM YYYY');
                             return data;
                         }
                     },
                     {
-                        "data": "TimeIn", "autoWidth": true, render: function (data,type,row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; } 
+                        "data": "TimeIn", "autoWidth": true, render: function (data, type, row) {
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
                             return data;
                         }
                     },
                     {
                         "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; } 
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
                             return data;
                         }
@@ -384,8 +430,9 @@
                             if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
                             } else {
-                                var date = new Date();
-                                if (row.DateIn < date) {
+                                var dateIn = moment(row.DateIn).format('L');
+                                var date = moment(new Date()).format('L') ;
+                                if (dateIn < date) {
                                     return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
                                 } else {
                                     return '-';
@@ -413,3 +460,5 @@
         }
     });
 </script>
+
+

@@ -6,6 +6,7 @@ using EIS.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EIS.Entities.Employee
 {
@@ -51,5 +52,16 @@ namespace EIS.Entities.Employee
         public virtual ICollection<Emergency> EmergencyAddress { get; set; }
         public virtual ICollection<Other> OtherAddress { get; set; }
         #endregion
+        [NotMapped]
+        public string FullName {
+            get
+            {
+                if(string.IsNullOrEmpty(MiddleName))
+                {
+                    return FirstName + " " + LastName;
+                }
+                return FirstName+" " + MiddleName+" " + LastName;
+            }
+        }
     }
 }

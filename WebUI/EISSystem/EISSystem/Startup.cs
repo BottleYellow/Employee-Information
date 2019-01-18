@@ -30,10 +30,10 @@ namespace EIS.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
           
-            services.AddDbContext<EIS.Data.Context.ApplicationDbContext>(config =>
-            {
-                config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+            //services.AddDbContext<EIS.Data.Context.ApplicationDbContext>(config =>
+            //{
+            //    config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //});
 
             
             services.AddMvc();
@@ -95,8 +95,7 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            //app.UseWebAppExceptionHandler();
-            // app.ConfigureExceptionHandler(logger);
+
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();

@@ -1,8 +1,10 @@
-﻿using EIS.Entities.Leave;
+﻿using EIS.Entities.Generic;
+using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.RedisCache;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -10,25 +12,32 @@ namespace EIS.WebAPI.Controllers.Leave
 {
     [Route("api/LeavePolicy")]
     [ApiController]
-    public class LeavePolicyController : Controller
+    public class LeavePolicyController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public LeavePolicyController(IRepositoryWrapper repository)
+        public LeavePolicyController(IRepositoryWrapper repository): base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
         }
 
         [DisplayName("leave Policies")]
-        [HttpGet]
-        public IEnumerable<LeaveRules> GetLeavePolicies()
+        [HttpPost]
+        public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
         {
-            return _repository.Leave.GetAllLeaveRules();
+                ArrayList data = new ArrayList();
+            var employeeData = _repository.LeaveRules.GetAllLeaveRules();
+            if (string.IsNullOrEmpty(sortGrid.Search))
+                {
+
+                    data = _repository.LeaveRules.GetDataByGridCondition(null, sortGrid, employeeData);
+                }
+                else
+                {
+                    data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType== sortGrid.Search, sortGrid, employeeData);
+                }
+                return Ok(data);
         }
 
         [DisplayName("Add Leave Rule")]
+        [Route("Leave")]
         [HttpPost]
         public IActionResult PostLeavePolicy([FromBody] LeaveRules policy)
         {
@@ -37,7 +46,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             policy.TenantId = TenantId;
-            _repository.Leave.CreateLeaveRuleAndSave(policy);
+            _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
 
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }

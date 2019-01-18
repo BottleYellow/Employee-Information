@@ -96,7 +96,9 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
+            var d = {
+                'FromDate': @DateTime.Now;
+            };
             var url1 = "/Leave/RequestLeave";
             $.ajax({
                 url: url1,

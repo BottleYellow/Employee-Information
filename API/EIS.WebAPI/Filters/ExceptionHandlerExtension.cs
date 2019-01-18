@@ -1,60 +1,81 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
-using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace EIS.WebAPI.ExceptionHandle
 {
-    public class MyExceptionFilter : ExceptionFilterAttribute
+
+    public static class ExceptionMiddlewareExtensions
     {
-        public override void OnException(ExceptionContext context)
+        public static void UseWebApiExceptionHandler(this IApplicationBuilder app)
         {
-            HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.InternalServerError)
-            {
-                Content = new StringContent("An unhandled exception was thrown by Customer Web API controller."),
-                ReasonPhrase = "An unhandled exception was thrown by Customer Web API controller."
-            };
-            context.ExceptionHandled = true;
-            int code = 500;
-
-
-            context.HttpContext.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
+            app.UseMiddleware<ExceptionMiddleware>();
         }
     }
-
-    public static class ExceptionHandlerExtension
+    public class ExceptionMiddleware
     {
-        public static IApplicationBuilder UseWebApiExceptionHandler(this IApplicationBuilder app)
-        {
-            var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
+        private readonly RequestDelegate _next;
+        private readonly ILoggerFactory _logger;
 
-            return app.UseExceptionHandler(HandleApiException(loggerFactory));
+        public ExceptionMiddleware(RequestDelegate next, ILoggerFactory logger)
+        {
+            _logger = logger;
+            _next = next;
         }
 
-        public static Action<IApplicationBuilder> HandleApiException(ILoggerFactory loggerFactory)
+        public async Task InvokeAsync(HttpContext httpContext)
         {
-            return appBuilder =>
+            try
             {
-                appBuilder.Run(async context =>
-                {
-                    var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                await _next(httpContext);
+            }
+            catch (Exception ex)
+            {
+                var logger = _logger.CreateLogger("Serilog Global exception logger");
+                logger.LogError(500,ex, ex.Message);
+                await HandleExceptionAsync(httpContext, ex);
+            }
+        }
 
-                    if (exceptionHandlerFeature != null)
-                    {
-                        var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
-                        logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
-                    }
-                    
-                    var code=context.Response.StatusCode;
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            HttpStatusCode status = HttpStatusCode.InternalServerError;
+            string message;
+            int code;
 
-                    await context.Response.WriteAsync("An unexpected fault happened. Status Code "+code+" occurred");
+            var exceptionType = exception.GetType();
+            if (exceptionType == typeof(UnauthorizedAccessException))
+            {
+                message = "Unauthorized Access";
+                status = HttpStatusCode.Unauthorized;
+                code = 404;
+            }
+            else if (exceptionType == typeof(NotImplementedException))
+            {
+                message = "A server error occurred.";
+                status = HttpStatusCode.NotImplemented;
+                code = 404;
+            }
+            else if (exceptionType == typeof(DivideByZeroException))
+            {
+                message = "Cannot divide by zero";
+                status = HttpStatusCode.EarlyHints;
+                code = 404;
+            }
 
-                });
-            };
+            else
+            {
+                message = exception.Message;
+                status = HttpStatusCode.NotFound;
+                code = 500;
+            }
+
+            context.Response.ContentType = "application/json";
+
+            return context.Response.WriteAsync("An unexpected fault happened. Status Code: " +code+" occurred<br/> Status:- "+ status + " occurred. Message :" + message);
         }
     }
 }

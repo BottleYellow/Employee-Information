@@ -9,7 +9,9 @@ namespace EIS.Repositories.IRepository
         IEmergencyAddressRepository EmergencyAddress { get; }
         IOtherAddressRepository OtherAddress { get; }
         IAttendanceRepository Attendances { get; }
-        ILeaveRepository Leave { get; }
+        ILeaveRequestRepository LeaveRequest { get; }
+        ILeaveRulesRepository LeaveRules { get; }
+        ILeaveCreditRepository LeaveCredit { get; }
         IUserRepository Users { get; }
         
     }

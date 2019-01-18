@@ -13,12 +13,10 @@ namespace EIS.WebAPI.Controllers.User
     [ApiController]
     [Route("api/user")]
     public class UserController : BaseController
-    {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
+    { 
         public UserController(IRepositoryWrapper repository) : base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+
         }
         [DisplayName("List Of Users")]
         [HttpGet]

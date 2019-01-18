@@ -1,14 +1,15 @@
 ﻿using EIS.Entities.Employee;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EIS.Repositories.IRepository
 {
     public interface IAttendanceRepository : IRepositorybase<Attendance>
     {
-        IEnumerable<Person> GetAttendanceYearly(int year);
-        IEnumerable<Person> GetAttendanceMonthly(int month,int year);
-        IEnumerable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek);
+        IQueryable<Person> GetAttendanceYearly(int year);
+        IQueryable<Person> GetAttendanceMonthly(int month,int year);
+        IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek);
     }
 
     
