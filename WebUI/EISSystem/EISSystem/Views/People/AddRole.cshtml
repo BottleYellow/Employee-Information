@@ -17,7 +17,7 @@
 </header>
 <div class="container-fluid">
     <div class="block-header">
-        <h1>Add Designation</h1>
+        <HeaderWithButton header-name="Add Role"></HeaderWithButton>
     </div>
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -25,7 +25,7 @@
                 <div class="body">
                     <form asp-controller="People" asp-action="AddRole" method="post">
                         <div class="form-group required">
-                            <label class="control-label" asp-for="Name">Designation Name : </label>
+                            <label class="control-label" asp-for="Name">Role Name : </label>
                             <div class="form-line">
                                 <input asp-for="Name" type="text" class="form-control" />
                             </div>

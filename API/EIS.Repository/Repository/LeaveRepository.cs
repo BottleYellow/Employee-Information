@@ -91,6 +91,15 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
+        public IEnumerable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
+        {
+            var results = from Requests in _dbContext.LeaveRequests
+                          join Person in _dbContext.Person on Requests.PersonId equals Person.Id
+                          where Person.ReportingPersonId == PersonId && Requests.TenantId == TenantId
+                          select Requests;
+            return results;
+        }
+
         public void UpdateRequestStatus(int RequestId, string Status)
         {
             LeaveRequest leaveRequest = _dbContext.LeaveRequests.SingleOrDefault(x => x.Id == RequestId);

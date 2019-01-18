@@ -47,12 +47,7 @@
                                 <th>Date Of Birth</th>
                                 <th>Mobile Number</th>
                                 <th>Email Address</th>
-                                <th>Aadhar Card</th>
-                                <th>PAN Card</th>
-                                <th>Join Date</th>
-                                <th>Leaving Date</th>
-                                <th>Salary</th>
-                                <th>Active Status</th>
+                                <th>Joining Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -171,11 +166,18 @@
                     },
 
                     {
-                        "data": "Image", "name": "Image", "autoWidth": true, "render": function (data) {
-                            return '<img src="' + data + '" style="height:30px; weight:30px">';
+                        "data": "Image", "name": "Image", "autoWidth": true, "render": function (data,type,row) {
+                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.IdCard + '\\Image\\' + data + '" style="height:40px; weight:40px">';
                         }
                     },
-                    { "data": "Gender", "name": "Gender", "autoWidth": true },
+                    {
+                        "data": "Gender", "name": "Gender", "autoWidth": true ,"render": function (data) {
+                            if (data == "0") {
+                                return "Male";
+                            } else { return "Female"; }
+                            
+                        }
+                    },
                     {
                         "data": "DateOfBirth", "name": "DateOfBirth", "autoWidth": true, "render": function (data) {
                             data = moment(data).format('DD MMM YYYY');
@@ -184,8 +186,6 @@
                     },
                     { "data": "MobileNumber", "name": "MobileNumber", "autoWidth": true },
                     { "data": "EmailAddress", "name": "EmailAddress", "autoWidth": true },
-                    { "data": "AadharCard", "name": "AadharCard", "autoWidth": true },
-                    { "data": "PanCard", "name": "PanCard", "autoWidth": true },
                     {
                         "data": "JoinDate", "name": "JoinDate", "autoWidth": true, "render": function (data) {
                             data = moment(data).format('DD MMM YYYY');
@@ -193,20 +193,10 @@
                         }
                     },
                     {
-                        "data": "LeavingDate", "name": "LeavingDate", "autoWidth": true, "render": function (data) {
-                            data = moment(data).format('DD MMM YYYY');
-                            return data;
-                        }
-                    },
-                    { "data": "Salary", "name": "Salary", "autoWidth": true },
-                    {
-                        "data": "IsActive", "name": "IsActive", "autoWidth": true
-                    },
-                    {
                         data: null, "autoWidth": true, render: function (data, type, row) {
                             var value = row.IsActive;
                             if (value == true) {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Edit?id=' + row.Id + '">Edit</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile/' + row.Id + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                             } else {
                                 return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.Id +'>Activate</a></li></ul></div>';
 

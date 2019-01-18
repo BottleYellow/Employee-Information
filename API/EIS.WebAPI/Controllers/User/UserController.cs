@@ -1,6 +1,6 @@
 ﻿using EIS.Entities.User;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

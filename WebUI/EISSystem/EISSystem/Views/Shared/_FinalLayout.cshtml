@@ -1,16 +1,22 @@
 ﻿﻿@using EIS.WebApp.Services
 @using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
 @{
     RedisAgent Cache = new RedisAgent();
     var ac = Cache.GetStringValue("Access");
     List<string> links = new List<string>();
     string cur = null;
     List<Navigation> Access = new List<Navigation>();
-    if (ac != null) {
+    if (ac != null)
+    {
         Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
     }
+    string idcard = null, name = null, email = null;
+    Context.Request.Cookies.TryGetValue("IdCard", out idcard);
+    Context.Request.Cookies.TryGetValue("Name", out name);
+    Context.Request.Cookies.TryGetValue("EmailId", out email);
 
-}   
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,9 +110,9 @@
                     <img src="~/images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="idno">10001</div>
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tejas Warankar</div>
-                    <div class="email">tej@gmail.com</div>
+                    <div class="idno">@idcard</div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@name</div>
+                    <div class="email">@email</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -331,11 +337,11 @@
             $.post(url, function () {
                 window.location.href = "/Account/login";
             });
-        });  
+        });
 
-        $('#emplink').click(function(){
+        $('#emplink').click(function () {
             var dest = $(this).attr('href');
-            $('.content').load(dest+'#main-content') // Hide all content divs
+            $('.content').load(dest + '#main-content') // Hide all content divs
             // You can do all of this using addClass / removeClass and use CSS transition (smoother, cleaner);
             return false;
         });

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace EIS.Repositories.IRepository
 {
     public interface ILeaveRepository : IRepositorybase<LeaveRequest>
-   {
+    {
+        IEnumerable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
         IEnumerable<LeaveRules> GetAllLeaveRules();
         void CreateLeaveRuleAndSave(LeaveRules LeaveRule);
         void EditLeaveRuleAndSave(LeaveRules LeaveRule);

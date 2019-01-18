@@ -42,6 +42,15 @@ namespace EIS.WebApp.Controllers
             return View(Requests);
         }
 
+        [DisplayName("Show Employees Requests")]
+        public IActionResult LeaveRequestsUnderMe()
+        {
+            response = _services.LeaveRules.GetResponse("api/LeaveRequest/RequestsUnderMe");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
+            return View(Requests);
+        }
+
         [DisplayName("Show my leaves")]
         public IActionResult ShowMyLeaves()
         {

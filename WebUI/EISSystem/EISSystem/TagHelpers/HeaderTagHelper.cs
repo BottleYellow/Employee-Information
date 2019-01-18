@@ -47,7 +47,10 @@ namespace EIS.WebApp.TagHelpers
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.AppendHtml(HeaderName);
             output.Attributes.Add("style", "font-size:30px;margin:0;display:inline-block;");
-            output.PostElement.AppendHtml("<button style='float:right;' id='" + BtnId+ "' class='btn btn-primary waves-effect' onclick=" + BtnHref + "><i class='material-icons'>" + IconName+"</i><span style='font-size:15px;'>" + BtnText + "</span></button>");
+            if (BtnText != null)
+            {
+                output.PostElement.AppendHtml("<button style='float:right;' id='" + BtnId + "' class='btn btn-primary waves-effect' onclick=" + BtnHref + "><i class='material-icons'>" + IconName + "</i><span style='font-size:15px;'>" + BtnText + "</span></button>");
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;

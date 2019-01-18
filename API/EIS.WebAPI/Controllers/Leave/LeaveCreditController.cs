@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EIS.WebAPI.Controllers.Leave

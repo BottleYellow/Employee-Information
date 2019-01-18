@@ -4,6 +4,7 @@ using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace EIS.Repositories.Repository
 {
@@ -17,6 +18,11 @@ namespace EIS.Repositories.Repository
         {
             _dbContext.Roles.Add(designation);
             Save();
+        }
+
+        public void AddTempData(Demo demo)
+        {
+            _dbContext.Demo.Add(demo);
         }
 
         public bool DesignationExists(string DesignationName,int TenantId)
@@ -46,6 +52,11 @@ namespace EIS.Repositories.Repository
         public IEnumerable<Role> GetDesignations(int TenantId)
         {
             return _dbContext.Roles.Where(x => x.TenantId == TenantId);
+        }
+
+        public Person GetProfile(int Id)
+        {
+            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Where(x => x.Id == Id).FirstOrDefault();
         }
 
         public void UpdateDesignationAndSave(Role designation)

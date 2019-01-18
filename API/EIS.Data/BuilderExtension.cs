@@ -181,8 +181,11 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
+                modelBuilder.Entity<Demo>().Property(p => p.Id).HasColumnType("int").IsRequired();
+                modelBuilder.Entity<Demo>().Property(p => p.Firstname).HasColumnType("nvarchar(400)");
+
                 #region Constraints
-               
+
                 modelBuilder.Entity<Person>()
                     .HasIndex(p => p.PanCard)
                     .IsUnique();

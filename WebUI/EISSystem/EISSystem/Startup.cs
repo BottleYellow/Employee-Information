@@ -113,8 +113,9 @@ namespace EIS.WebApp
 
             if (id != null)
             {
+                string access = new RedisAgent().GetStringValue("Access");
                 string role = new RedisAgent().GetStringValue("Role");
-                if (role == "Admin")
+                if (access.Contains("/People/Index"))
                 {
                     controller = "People";
                     action = "Index";

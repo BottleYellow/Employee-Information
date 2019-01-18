@@ -5,7 +5,7 @@ using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +54,20 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
+        [Route("Profile/{id}")]
+        [HttpGet]
+        public IActionResult GetProfile([FromRoute]int id)
+        {
+            var employee = _repository.Employee.GetProfile(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(employee);
+            }
+        }
         [Route("GenNewIdCardNo")]
         [HttpGet]
         public int CreateNewIdCardNo()
@@ -61,6 +75,16 @@ namespace EIS.WebAPI.Controllers
             var n = _repository.Employee.GenerateNewIdCardNo(TenantId);
             return n;
         }
+        [Route("cr")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult CreateTemp([FromBody]Demo demo)
+        {
+            _repository.Employee.AddTempData(demo);
+            return Ok();
+
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)

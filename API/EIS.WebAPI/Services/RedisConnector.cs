@@ -2,7 +2,7 @@
 using StackExchange.Redis;
 using System;
 
-namespace EIS.WebAPI.RedisCache
+namespace EIS.WebAPI.Services
 {
     public class RedisConnector
     {
