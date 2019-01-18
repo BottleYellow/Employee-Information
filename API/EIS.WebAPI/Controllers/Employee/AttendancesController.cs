@@ -1,11 +1,15 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Models;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -82,55 +86,307 @@ namespace EIS.WebAPI.Controllers
             return Ok(Attendance);
         }
 
-
         [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceMonthly/{month}/{year}")]
-        [HttpGet]
-        public IEnumerable<Person> GetAllAttendanceMonthly([FromRoute] int month, [FromRoute] int year)
+        [HttpPost]
+        public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
         {
-            var data = _repository.Attendances.GetAttendanceMonthly(month, year);
-            return data;
-        }
+            ArrayList data = new ArrayList();
+            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
 
+                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
+            }
+            else
+            {
+                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+            }
+            return Ok(data);
+        }
 
         [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceYearly/{year}")]
-        [HttpGet]
-        public IEnumerable<Person> GetAllAttendanceYearly([FromRoute] int year)
+        [HttpPost]
+        public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
         {
-            var data = _repository.Attendances.GetAttendanceYearly(year);
-            return data;
+            ArrayList data = new ArrayList();
+            var attendanceData = _repository.Attendances.GetAttendanceYearly(year);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
+            }
+            else
+            {
+                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+            }
+            return Ok(data);
         }
 
 
         [DisplayName("Attendance Reports")]
         [Route("GetAllAttendanceWeekly/{startOfWeek}/{endOfWeek}")]
-        [HttpGet]
-        public IEnumerable<Person> GetAllAttendanceWeekly([FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
+        [HttpPost]
+        public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
         {
-            var data = _repository.Attendances.GetAttendanceWeekly(startOfWeek, endOfWeek);
-            return data;
-        }
-     
+            ArrayList data = new ArrayList();
+            var attendanceData = _repository.Attendances.GetAttendanceWeekly(startOfWeek, endOfWeek);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
 
-        [DisplayName("My Attendance History")]
-        [HttpGet("GetAttendanceById/{id}/{year}/{month?}")]
-        public IActionResult GetAttendanceById([FromRoute] int year, [FromRoute]int id, [FromRoute]int? month)
-        {
-            IEnumerable<Attendance> attendance;
-            if (month == null)
-                attendance = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
+                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
+            }
             else
-                attendance = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
-            return Ok(attendance);
+            {
+                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+            }
+            return Ok(data);
+        }
+
+
+        [DisplayName("My Attendance History")]
+        [Route("GetYearlyAttendanceById/{id}/{year}")]
+        [HttpPost]
+        public IActionResult GetYearlyAttendanceById([FromBody]SortGrid sortGrid,[FromRoute] int year, [FromRoute]int id)
+        {
+            ArrayList data = new ArrayList();
+            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
+            DateTime targetDate = new DateTime(year, 1, 1);
+            DateTime endDate = targetDate.AddYears(1);            
+
+            IList<Attendance> attendancelist = new List<Attendance>();
+            for (DateTime date = targetDate; date < endDate; date = date.AddDays(1))
+            {
+                Attendance newlist = new Attendance();
+                newlist.DateIn = date;
+                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
+                if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+                {
+                    if (date < DateTime.Now.Date)
+                    {
+
+                        newlist.TimeIn = new TimeSpan();
+                        newlist.TimeOut = new TimeSpan();
+                        newlist.IsActive = false;
+                    }
+                }
+                else
+                {
+                    newlist.TimeIn = attendance.TimeIn;
+                    newlist.TimeOut = attendance.TimeOut;
+                    newlist.IsActive = true;
+                }
+                attendancelist.Add(newlist);
+            }
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+                data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+            }
+            else
+            {
+                data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+            }
+            data.Add(attendanceData.Count());
+            return Ok(data);
         }
 
         [DisplayName("My Attendance History")]
-        [HttpGet("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
-        public IActionResult GetWeeklyAttendanceById([FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        [Route("GetMonthlyAttendanceById/{id}/{year}/{month}")]
+        [HttpPost]
+        public IActionResult GetMonthlyAttendanceById([FromBody]SortGrid sortGrid,[FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
         {
-            var data = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+        ArrayList data = new ArrayList();
+        IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
+        DateTime targetDate = new DateTime(year, month, 1);
+        DateTime endDate = targetDate.AddMonths(1);
+        IList<Attendance> attendancelist = new List<Attendance>();
+        for(DateTime date = targetDate; date < endDate; date = date.AddDays(1))
+        {
+            Attendance newlist = new Attendance();
+            newlist.DateIn = date;
+            var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
+            if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+            {
+                if (date < DateTime.Now.Date)
+                {
+
+                    newlist.TimeIn = new TimeSpan();
+                    newlist.TimeOut = new TimeSpan();
+                    newlist.IsActive = false;
+                }
+            }
+            else
+            {
+                newlist.TimeIn = attendance.TimeIn;
+                newlist.TimeOut = attendance.TimeOut;
+                newlist.IsActive = true;
+            }
+            attendancelist.Add(newlist);
+        }
+
+        if (string.IsNullOrEmpty(sortGrid.Search))
+        {
+            data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+        }
+        else
+        {
+            data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+        }
+        data.Add(attendanceData.Count());
+        return Ok(data);
+    }
+
+        [DisplayName("My Attendance History")]
+        [Route("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
+        [HttpPost]
+        public IActionResult GetWeeklyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        {
+            ArrayList data = new ArrayList();
+            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+
+            IList<Attendance> attendancelist = new List<Attendance>();
+            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            {
+                Attendance newlist = new Attendance();
+                newlist.DateIn = date;
+                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
+                if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+                {
+                    if (date < DateTime.Now.Date)
+                    {
+
+                        newlist.TimeIn = new TimeSpan();
+                        newlist.TimeOut = new TimeSpan();
+                        newlist.IsActive = false;
+                    }
+                }
+                else
+                {
+                    newlist.TimeIn = attendance.TimeIn;
+                    newlist.TimeOut = attendance.TimeOut;
+                    newlist.IsActive = true;
+                }
+                attendancelist.Add(newlist);
+            }
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+                data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+            }
+            else
+            {
+                data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+            }
+
+            data.Add(attendanceData.Count());
             return Ok(data);
+
+        }
+
+        [DisplayName("My Attendance Summary")]
+        [Route("GetYearlyAttendanceSummaryById/{id}/{year}")]
+        [HttpGet]
+        public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id, [FromRoute]int? month)
+        {
+            AttendanceReport attendanceReport = new AttendanceReport();
+            IQueryable<Attendance> attendanceData;
+                attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
+                if (DateTime.IsLeapYear(year))
+                {
+                    attendanceReport.TotalDays = 366;
+                }
+                else
+                {
+                    attendanceReport.TotalDays = 365;
+                }           
+            attendanceReport.PresentDays = attendanceData.Count();
+            attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
+            if (attendanceReport.PresentDays == 0)
+            {
+                attendanceReport.TimeIn = "-";
+                attendanceReport.TimeOut = "-";
+                attendanceReport.AverageTime = "-";
+            }
+            else
+            {
+                TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
+                DateTime timeIn = DateTime.Today.Add(averageTimeIn);
+                attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
+
+                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.Ticks)));
+                DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+                attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
+
+                var hour = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
+                attendanceReport.AverageTime = (hour * 0.6).ToString("hh:mm");
+            }
+            return Ok(attendanceReport);
+        }
+
+        [DisplayName("My Attendance Summary")]
+        [Route("GetMonthlyAttendanceSummaryById/{id}/{year}/{month}")]
+        [HttpGet]
+        public IActionResult GetMonthlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
+        {
+            AttendanceReport attendanceReport = new AttendanceReport();
+            IQueryable<Attendance> attendanceData;
+                attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
+                attendanceReport.TotalDays = DateTime.DaysInMonth(year, month);
+            attendanceReport.PresentDays = attendanceData.Count();
+            attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
+            if (attendanceReport.PresentDays == 0)
+            {
+                attendanceReport.TimeIn = "-";
+                attendanceReport.TimeOut = "-";
+                attendanceReport.AverageTime = "-";
+            }
+            else
+            {
+                TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
+                DateTime timeIn = DateTime.Today.Add(averageTimeIn);
+                attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
+
+                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.Ticks)));
+                DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+                attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
+
+                var hour = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
+                attendanceReport.AverageTime = (hour * 0.6).ToString();
+            }
+            return Ok(attendanceReport);
+        }
+
+        [DisplayName("My Attendance Summary")]
+        [Route("GetWeeklyAttendanceSummaryById/{id}/{startDate}/{endDate}")]
+        [HttpGet]
+        public IActionResult GetWeeklySummaryAttendanceById([FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        {
+            AttendanceReport attendanceReport = new AttendanceReport();
+            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+            attendanceReport.TotalDays = 7;
+            attendanceReport.PresentDays = attendanceData.Count();
+            attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
+            if (attendanceReport.PresentDays == 0)
+            {
+                attendanceReport.TimeIn = "-";
+                attendanceReport.TimeOut = "-";
+                attendanceReport.AverageTime = "-";
+            }
+            else
+            {
+                TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
+                DateTime timeIn = DateTime.Today.Add(averageTimeIn);
+                attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
+
+                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.Ticks)));
+                DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+                attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
+
+                var hour = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
+                attendanceReport.AverageTime = (hour * 0.6).ToString();
+            }
+            return Ok(attendanceReport);
+
         }
     }
 }

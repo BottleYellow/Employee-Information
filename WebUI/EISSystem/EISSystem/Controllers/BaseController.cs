@@ -21,7 +21,7 @@ namespace EIS.WebApp.Controllers
         {
             this.pservice = pservice;
         }
-        public IActionResult LoadData(string Url, bool type)
+        public ArrayList LoadData<T1>(string Url)
         {
             SortEmployee sortEmployee = new SortEmployee();
             // Skiping number of Rows count
@@ -37,8 +37,6 @@ namespace EIS.WebApp.Controllers
             //Paging Size (10,20,50,100)
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
-            int recordsTotal = 0;
-
             HttpClient client = pservice.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
@@ -46,19 +44,8 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
 
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
-            recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<T> employees1 = JsonConvert.DeserializeObject<IList<T>>(arrayData[1].ToString());
-            IList<T> employees = new List<T>();
-            foreach (var e in employees1)
-            {
-                PropertyInfo prop = e.GetType().GetProperty("IsActive");
-                bool obj =Convert.ToBoolean(prop.GetValue(e));
-                if (obj == type)
-                {
-                    employees.Add(e);
-                }
-            }
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
+            return arrayData;
+            
         }
     }
 }

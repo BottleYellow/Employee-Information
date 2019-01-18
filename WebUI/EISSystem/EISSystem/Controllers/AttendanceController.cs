@@ -109,11 +109,11 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = "api/Attendances/GetAttendanceById/" + pId + "/" + monthYear[0];
+                url = "api/Attendances/GetYearlyAttendanceById/" + pId + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = "api/Attendances/GetAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
+                url = "api/Attendances/GetMOnthlyAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")
@@ -151,11 +151,11 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = "api/Attendances/GetAttendanceSummaryById/" + id + "/" + monthYear[0];
+                url = "api/Attendances/GetYearlyAttendanceSummaryById/" + id + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = "api/Attendances/GetAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
+                url = "api/Attendances/GetMonthlyAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")
@@ -209,11 +209,11 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = "api/Attendances/GetAttendanceById/" + id + "/" + monthYear[0];
+                url = "api/Attendances/GetYearlyAttendanceById/" + id + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = "api/Attendances/GetAttendanceById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
+                url = "api/Attendances/GetMonthlyAttendanceById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")
@@ -253,11 +253,11 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = "api/Attendances/GetAttendanceSummaryById/" + id + "/" + monthYear[0];
+                url = "api/Attendances/GetYearlyAttendanceSummaryById/" + id + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = "api/Attendances/GetAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
+                url = "api/Attendances/GetMonthlyAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")

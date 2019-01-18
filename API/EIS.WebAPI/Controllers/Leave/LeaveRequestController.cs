@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -31,46 +33,76 @@ namespace EIS.WebAPI.Controllers
             this.configuration = configuration;
         }
 
+
+
         [DisplayName("View all requests")]
-        [HttpGet]
-        public IEnumerable<LeaveRequest> GetLeaveRequests()
+        [Route("GetLeaveRequests")]
+        [HttpPost]
+        public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
         {
-            return _repository.Leave.FindAll().Where(x => x.TenantId == TenantId);
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId); ;
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+            }
+            return Ok(data);
+
         }
+
         [Route("RequestsUnderMe")]
         [DisplayName("Leave Requests of employees under me")]
         [HttpGet]
         public IEnumerable<LeaveRequest> GetLeaveRequestsUnderMe()
         {
             var PersonId = Cache.GetStringValue("PersonId");
-            return _repository.Leave.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
+            return _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
         }
 
         [DisplayName("View request")]
         [HttpGet("{id}")]
         public LeaveRequest GetLeaveRequestById([FromRoute] int id)
         {
-            return _repository.Leave.FindByCondition(x => x.Id == id);
+            return _repository.LeaveRequest.FindByCondition(x => x.Id == id);
         }
 
         [DisplayName("Show my leaves")]
-        [HttpGet("Employee/{id}")]
-        public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
+        [HttpPost]
+        [Route("Employee/{id}")]
+        public IActionResult GetLeaveRequestsByEmployee([FromBody]SortGrid sortGrid, [FromRoute] int id)
         {
-            var leave = _repository.Leave.FindAllByCondition(x => x.PersonId == id);
-            if (leave == null)
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
+            if (leaveData == null)
             {
                 return NotFound();
             }
 
-            return Ok(leave);
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+            }
+            return Ok(data);
+
         }
+
 
         [AllowAnonymous]
         [HttpGet("{PersonId}/{LeaveId}")]
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
-            var leave = _repository.Leave.GetAvailableLeaves(PersonId, LeaveId);
+            var leave = _repository.LeaveCredit.GetAvailableLeaves(PersonId, LeaveId);
             if (leave == 0)
             {
                 leave = -1;
@@ -86,7 +118,7 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                _repository.Leave.UpdateRequestStatus(RequestId, Status);
+                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status);
                 SendMail(RequestId, Status);
                 return Ok();
             }
@@ -101,8 +133,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Leave.UpdateAndSave(leave);
-            _repository.Leave.UpdateRequestStatus(leave.Id, null);
+            _repository.LeaveRequest.UpdateAndSave(leave);
+            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null);
             return NoContent();
         }
 
@@ -117,8 +149,8 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
-            _repository.Leave.CreateAndSave(leave);
-            _repository.Leave.UpdateRequestStatus(leave.Id, "Pending");
+            _repository.LeaveRequest.CreateAndSave(leave);
+            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             SendMail(leave.Id, "Pending");
             return Ok();
         }
@@ -127,18 +159,18 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-            var leave = _repository.Leave.FindByCondition(x => x.Id == id);
+            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
             if (leave == null)
             {
                 return NotFound();
             }
-            _repository.Leave.DeleteAndSave(leave);
+            _repository.LeaveRequest.DeleteAndSave(leave);
             return Ok(leave);
         }
 
         public void SendMail(int RequestId,string status)
         {
-            var leave = _repository.Leave.FindByCondition(x => x.Id == RequestId);
+            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
             var person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             string To = person.EmailAddress;
             string subject = "EMS Leave Request";

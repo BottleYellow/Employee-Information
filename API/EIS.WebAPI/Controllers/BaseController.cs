@@ -1,5 +1,5 @@
 ﻿using EIS.Repositories.IRepository;
-using EIS.WebAPI.RedisCache;
+using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

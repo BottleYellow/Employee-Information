@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
@@ -24,11 +26,23 @@ namespace EIS.WebAPI.Controllers.Leave
         }
 
         [DisplayName("leave Credits")]
-        [HttpGet]
-        public IEnumerable<LeaveCredit> Get()
+        [HttpPost]
+        [Route("GetLeaveCredits")]
+        public ActionResult Get([FromBody]SortGrid sortGrid)
         {
-            var credits= _repository.Leave.GetCredits().Where(x=>x.TenantId==TenantId);
-            return credits;
+            ArrayList data = new ArrayList();
+            var credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId);
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveCredit.GetDataByGridCondition(null, sortGrid, credits);
+            }
+            else
+            {
+                data = _repository.LeaveCredit.GetDataByGridCondition(x => x.LeaveType == sortGrid.Search, sortGrid, credits);
+            }
+            return Ok(data);
         }
 
         // GET api/<controller>/5
@@ -48,7 +62,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             Leave.TenantId = TenantId;
-            _repository.Leave.AddCreditsAndSave(Leave);
+            _repository.LeaveCredit.AddCreditsAndSave(Leave);
 
             return Ok();
         }
@@ -62,7 +76,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             Credit.TenantId = TenantId;
-            _repository.Leave.AddCreditAndSave(Credit);
+            _repository.LeaveCredit.AddCreditAndSave(Credit);
 
             return Ok();
         }

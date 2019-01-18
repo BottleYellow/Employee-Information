@@ -1,88 +1,5 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
-@{
-    int absentDays = 0;
-    int presentDays = 0;
-    if (ViewBag.Present != null)
-    {
-        presentDays = ViewBag.Present;
-    }
 
-    int totalDays = 0;
-    int year = 0;
-    int month = 0;
-    string displayTimeIn = "";
-    string displayTimeOut = "-";
-    string hours = "-";
-    DateTime startDate = new DateTime();
-
-
-    if (ViewBag.year != null)
-    {
-        year = ViewBag.year;
-    }
-
-    if (ViewBag.startDate != null)
-    {
-        startDate = ViewBag.startDate;
-    }
-    if (ViewBag.month != null)
-    {
-        month = ViewBag.month;
-    }
-    DateTime targetDate = new DateTime();
-    DateTime endDate = new DateTime();
-
-    if (ViewBag.type == "year")
-    {
-
-        targetDate = new DateTime(year, 1, 1);
-        endDate = targetDate.AddYears(1);
-        if (DateTime.IsLeapYear(year))
-        { totalDays = 366; }
-        else
-        { totalDays = 365; }
-
-    }
-    else if (ViewBag.type == "month")
-    {
-        targetDate = new DateTime(year, month, 1);
-        endDate = targetDate.AddMonths(1);
-        totalDays = DateTime.DaysInMonth(year, month);
-
-    }
-    else if (ViewBag.type == "week")
-    {
-        targetDate = startDate;
-        endDate = targetDate.AddDays(7);
-        totalDays = 7;
-    }
-
-    //if (Model.Count() == 0)
-    //{
-    //    displayTimeIn = "0";
-    //    displayTimeOut = "0";
-    //    hours = "0";
-    //    absentDays = 0;
-    //}
-    //else
-    //{
-    //    absentDays = totalDays - Model.Count();
-    //    TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeIn.Ticks)));
-    //    DateTime timeIn = DateTime.Today.Add(averageTimeIn);
-    //    displayTimeIn = timeIn.ToString("hh:mm tt");
-
-    //    TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(Model.Average(x => x.TimeOut.Ticks)));
-    //    DateTime timeOut = DateTime.Today.Add(averageTimeOut);
-    //    displayTimeOut = timeOut.ToString("hh:mm tt");
-
-    //    DateTime averageHours = DateTime.Today.Add(averageTimeOut - averageTimeIn);
-    //    string displayAverageHours = timeOut.ToString("hh:mm");
-
-    //    hours = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2).ToString();
-    //}
-
-
-}
 <style type="text/css">
     td {
         width: 200px;
@@ -110,7 +27,7 @@
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
 
-    #select {
+    #select, #selectEmployee {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
 
@@ -146,7 +63,7 @@
                                 <div class="col-md-9">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label>Select Type Of Reports</label>
+                                            <label>Select Employee</label>
                                             <select class="form-control" id="selectEmployee"  asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
                                                 <option>-- Select --</option>
                                             </select>                                           
@@ -283,12 +200,16 @@
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
+        $('#inputmonth').datetimepicker({
+            format: "MM/YYYY"
+        });
         $('#inputmonth').val(m + '/' + y);
         generateReport(m + '/' + y, 'month',id);
 
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
+                $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
                 $('#inputweekdiv').hide();
@@ -305,6 +226,7 @@
                 });
             }
             else if (v == 'week') {
+                $("#inputweek").val("30/12/2018-05/01/2019");
                 $('#inputmonthdiv').hide();
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').show();
@@ -408,6 +330,7 @@
                 "columns": [
                     {
                         "data": "DateIn", "name": "DateIn", "autoWidth": true, render: function (data, type, row) {
+                            data = moment(data).format('DD MMM YYYY');
                             return data;
                         }
                     },
@@ -441,12 +364,6 @@
                         }
                     }
                 ],
-                //"aoColumns": [
-                //    { "sType": "date" },
-                //    null,
-                //    null,
-                //    null
-                //],
                 "initComplete": function () {
                     var $searchInput = $('div.dataTables_filter input');
                     $searchInput.unbind();

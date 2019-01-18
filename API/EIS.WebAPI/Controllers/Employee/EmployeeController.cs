@@ -203,13 +203,14 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetData([FromBody]SortGrid sortGrid, [FromRoute]string search = null)
         {
             ArrayList employeeslist;
+            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId);
             if (search == null)
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,x=>x.TenantId==TenantId);
+                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
             }
             else
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, x => x.TenantId == TenantId);
+                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, list);
             }
             return Ok(employeeslist);
         }

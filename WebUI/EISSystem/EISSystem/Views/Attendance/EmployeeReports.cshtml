@@ -149,48 +149,6 @@
 
                                         </tr>
                                     </thead>
-                                    @*<tbody>
-                                            @{
-                                                @for (DateTime date = targetDate; date < endDate; date = date.AddDays(1))
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @date.ToShortDateString()
-                                                        </td>
-
-                                                        @{
-                                                            var attendance = Model.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut }).FirstOrDefault();
-                                                        }
-
-                                                        @if (attendance == null || attendance.TimeIn == attendance.TimeOut)
-                                                        {
-
-                                                            @if (date < DateTime.Now.Date)
-                                                            {
-                                                                <td><text>Nil</text></td>
-                                                                <td><text>Nil</text></td>
-                                                                <td><text style="background-color:red; color:white; padding:5px">Absent</text></td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td><text>-</text></td>
-                                                                <td><text>-</text></td>
-                                                                <td><text>-</text></td>
-                                                            }
-
-                                                        }
-
-                                                        else
-                                                        {
-
-                                                            <td> @attendance.TimeIn.Hours:@attendance.TimeIn.Minutes:@attendance.TimeIn.Seconds</td>
-                                                            <td> @attendance.TimeOut</td>
-                                                            <td><text style="background-color:green; color:white; padding:5px">Present</text></td>
-                                                        }
-                                                    </tr>
-                                                }
-                                            }
-                                        </tbody>*@
                                 </table>
                             </div>
 
@@ -235,6 +193,9 @@
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
+        $('#inputmonth').datetimepicker({
+            format: "MM/YYYY"
+        });
         $('#inputmonth').val(m + '/' + y);
         generateReport(m + '/' + y, 'month');
 
@@ -312,7 +273,7 @@
                 url: "/Attendance/AttendanceSummary",
                 data: { "date": value, "type": type },
                 success: function (data) {
-                    document.getElementById("averageHours").innerHTML = data.AverageTime+" Hrs";
+                    document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
                     document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
                 document.getElementById("presentDays").innerHTML = data.PresentDays;

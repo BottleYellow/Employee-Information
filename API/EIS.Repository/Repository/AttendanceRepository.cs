@@ -38,14 +38,14 @@ namespace EIS.Repositories.Repository
                 .Select(p => new
                 {
                     p,
-                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month).ToList()
-                });
+                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
+                }).ToList();
             foreach (var x in results)
             {
-                x.p.Attendance = x.Attendances;
+                x.p.Attendance = x.Attendances.ToList();
             }
-            var result = results.Select(x => x.p).AsQueryable();
-            return result;
+            var result = results.Select(x => x.p).ToList();
+            return result.AsQueryable();
         }
 
         public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek)

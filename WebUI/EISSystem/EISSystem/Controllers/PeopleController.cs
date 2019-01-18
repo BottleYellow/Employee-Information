@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
@@ -58,7 +60,22 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult LoadData(bool type)
         {
-            return base.LoadData("api/employee/data", type);
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<Person>("api/employee/data");
+
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
+            IList<Person> employees = new List<Person>();
+                foreach (var e in data)
+                {
+                    PropertyInfo prop = e.GetType().GetProperty("IsActive");
+                    bool obj = Convert.ToBoolean(prop.GetValue(e));
+                    if (obj == type)
+                    {
+                        employees.Add(e);
+                    }
+                }        
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
         }
         public IActionResult Profile(int PersonId)
         {
@@ -117,7 +134,7 @@ namespace EIS.WebApp.Controllers
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName);
-                    if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 500000)
+                    if ((fileExtension.ToLower() == ".png" || fileExtension.ToLower() == ".jpg") && file.Length <= 500000)
                     {                                          
                         var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))

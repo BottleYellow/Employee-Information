@@ -1,8 +1,10 @@
-﻿using EIS.Entities.Leave;
+﻿using EIS.Entities.Generic;
+using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,11 +24,25 @@ namespace EIS.WebAPI.Controllers.Leave
             _repository = repository;
         }
 
+      
+
         [DisplayName("leave Policies")]
-        [HttpGet]
-        public IEnumerable<LeaveRules> GetLeavePolicies()
+        [Route("GetLeavePolicies")]
+        [HttpPost]
+        public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
         {
-            return _repository.Leave.GetAllLeaveRules().Where(x=>x.TenantId==TenantId);
+            ArrayList data = new ArrayList();
+            var employeeData = _repository.LeaveRules.GetAllLeaveRules();
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRules.GetDataByGridCondition(null, sortGrid, employeeData);
+            }
+            else
+            {
+                data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType == sortGrid.Search, sortGrid, employeeData);
+            }
+            return Ok(data);
         }
 
         [DisplayName("Add Leave Rule")]
@@ -38,7 +54,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 return BadRequest(ModelState);
             }
             policy.TenantId = TenantId;
-            _repository.Leave.CreateLeaveRuleAndSave(policy);
+            _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
 
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }

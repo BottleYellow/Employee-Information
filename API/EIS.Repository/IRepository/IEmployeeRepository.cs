@@ -1,4 +1,7 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Generic;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace EIS.Repositories.IRepository
@@ -13,6 +16,5 @@ namespace EIS.Repositories.IRepository
         void UpdateDesignationAndSave(Role designation);
         void AddTempData(Demo demo);
         Person GetProfile(int Id);
-       
     }
 }

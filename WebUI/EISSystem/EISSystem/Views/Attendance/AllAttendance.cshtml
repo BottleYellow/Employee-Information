@@ -1,5 +1,4 @@
-﻿
-<html>
+﻿@model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>Dashboard</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -13,22 +12,38 @@
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
-        #generateReport {
 
+        #generateReport {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
+
         #select {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
-        #inputyear,#inputmonth,#inputweek{
+
+        #inputyear, #inputmonth, #inputweek {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        td {
+            width: 200px;
+            text-align: center
+        }
+
+        th {
+            font-size: medium;
+            text-align: center
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="Attendance Reports"></HeaderWithButton>
+            <h3>Attendance Sheet</h3>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -42,7 +57,7 @@
                                         <label>Select Type Of Reports</label>
                                         <select class="form-control" id="select" style="width:200px;">
                                             <option value="year" id="year">Year</option>
-                                            <option value="month" selected id="month">Month</option>
+                                            <option selected value="month" id="month">Month</option>
                                             <option value="week" id="week">Week</option>
                                         </select>
                                     </div>
@@ -69,14 +84,25 @@
                             <div class="col-md-3">
 
                             </div>
-                            
+
                         </div>
                         <div>
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
                             <div id="tbl">
-
+                                <div class="table-responsive">
+                                    <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable ">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Present Days</th>
+                                                <th>Absent Days</th>
+                                                <th>Total Days</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,117 +112,159 @@
         </div>
     </div>
 </body>
-</html>
-<style>
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-</style>
+
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
-
 <script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var currentDate = new Date();
-        var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
-        var y = new Date().getFullYear();
-        $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month');
-    })
-
-    $('#select').on('change', function () {
-        var v = $('#select').val();
-        if (v == 'year') {
-            $('#inputyeardiv').show();
-            $('#inputmonthdiv').hide();
-            $('#inputweekdiv').hide();
-            $('#inputyear').datetimepicker({
-                format: "YYYY"
-            });
-        }
-        else if (v == 'month') {
-            $('#inputmonthdiv').show();
-            $('#inputyeardiv').hide();
-            $('#inputweekdiv').hide();
-            $('#inputmonth').datetimepicker({
-                format: "MM/YYYY"
-            });
-        }
-        else if (v == 'week') {
-            $('#inputmonthdiv').hide();
-            $('#inputyeardiv').hide();
-            $('#inputweekdiv').show();
-            $("#inputweek").datetimepicker({
-                format: 'DD/MM/YYYY'
-            });
-        }
-    });
-    $('#inputweek').on('dp.change', function (e) {
-        var value = $("#inputweek").val();
-        var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-        var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
-        $("#inputweek").val(firstDate + " - " + lastDate);
-    });
-    $('#generateReport').on('click', function () {
-        var v = $('#select').val();
-        if (v == 'year') {
-            var value = $("#inputyear").val();
-            $("#inputyear").val(value);
-            generateReport(value, 'year');
-        }
-        else if (v == 'month') {
-            var value = $("#inputmonth").val();
-            $("#inputmonth").val(value);
-            generateReport(value, 'month');
-         }
-        else if (v == 'week') {
-            var value = $("#inputweek").val();
-            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
-            $("#inputweek").val(firstDate + " - " + lastDate);
-            generateReport(firstDate + " - " + lastDate, 'week');
-        }
-    });
-    function generateReport(value,type){
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Content("/Attendance/AllAttendance")',
-            data: { "date": value, "type": type },
-            success: function (data) {
-                document.getElementById("tbl").innerHTML = data;
-                $('#example').DataTable({
-                    rowReorder: {
-                        selector: 'td:nth-child(2)'
-                    },
-                    sDom: '<"myexport"B>ifrtlp',
-                    buttons: [
-                    {
-                        extend: 'pdfHtml5',
-                        title: 'data',
-                        title: 'Employee Report',
-                        text: 'Export',
-                        titleAttr: 'Export to Pdf',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
-                        }],                  
-                    responsive: true
-                });
-                }
-        });
-     }
-</script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-
 @*for pdf*@
-
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var totalDays = 0;
+        var currentDate = new Date();
+        var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
+        $('#inputmonth').datetimepicker({
+            format: "MM/YYYY"
+        });
+        var y = new Date().getFullYear();
+        totalDays = new Date(y, m, 0).getDate()
+        $('#inputmonth').val(m + '/' + y);
+        generateReport(m + '/' + y, 'month');
+        $('#select').on('change', function () {
+            var v = $('#select').val();
+            if (v == 'year') {
+                $('#inputyear').val(y);
+                $('#inputyeardiv').show();
+                $('#inputmonthdiv').hide();
+                $('#inputweekdiv').hide();
+                $('#inputyear').datetimepicker({
+                    format: "YYYY"
+                });
+            }
+            else if (v == 'month') {
+                $('#inputmonthdiv').show();
+                $('#inputyeardiv').hide();
+                $('#inputweekdiv').hide();
+                $('#inputmonth').datetimepicker({
+                    format: "MM/YYYY"
+                });
+            }
+            else if (v == 'week') {
+                $("#inputweek").val("30/12/2018-05/01/2019");
+                $('#inputmonthdiv').hide();
+                $('#inputyeardiv').hide();
+                $('#inputweekdiv').show();
+                $("#inputweek").datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+            }
+        });
+        $('#inputweek').on('dp.change', function (e) {
+            var value = $("#inputweek").val();
+            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
+            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+            $("#inputweek").val(firstDate + " - " + lastDate);
+        });
+        $('#generateReport').on('click', function () {
+            var v = $('#select').val();
+            if (v == 'year') {
+                var value = $("#inputyear").val();
+                $("#inputyear").val(value);
+                if (value % 4 == 0) {
+                    totalDays = 366;
+                }
+                else {
+                    totalDays = 365;
+                }
+                generateReport(value, 'year');
+            }
+            else if (v == 'month') {
+                var value = $("#inputmonth").val();
+                $("#inputmonth").val(value);
+                var monthYear = value.split('/');
+                var y = monthYear[1];
+                var m = monthYear[0];
+                totalDays = new Date(y, m, 0).getDate()
+                generateReport(value, 'month');
+            }
+            else if (v == 'week') {
+                var value = $("#inputweek").val();
+                var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
+                var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+                $("#inputweek").val(firstDate + " - " + lastDate);
+                generateReport(firstDate + " - " + lastDate, 'week');
+                totalDays = 7;
+            }
+        });
+        function generateReport(value, type) {
+            var dTable = $('#example').DataTable({
+                destroy: true,
+                sDom: '<"myexport"B>ifrtlp',
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                buttons: [
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Employee Report',
+                        text: 'Export',
+                        titleAttr: 'Export to Pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }
+                ],
+                lengthMenu: [
+                    [5, 10, 25, -1],
+                    ['5', '10', '25', 'All']
+                ],
+                ajax: {
+                    "url": "/Attendance/AllAttendance",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": { "date": value, "type": type },
+                },
+                "columns": [
+                    {
+                        "data": null, "name": "TenantId", "autoWidth": true, render: function (row) {
+                            return row.FirstName + " " + row.MiddleName + " " + row.LastName;
+                        }
+                    },
+                    {
+                        "data": "Attendance", "name": "Attendance", "autoWidth": true, render: function (data) {
+                            return data.length;
+                        }
+                    },
+                    {
+                        "data": "Attendance", "name": "Attendance", "autoWidth": true, render: function (data) {
+                            return totalDays - data.length;
+                        }
+                    },
+                    {
+                        data: null, "autoWidth": true, render: function () {
+                            return totalDays;
+                        }
+                    }
+                ],
+                "initComplete": function () {
+                    var $searchInput = $('div.dataTables_filter input');
+                    $searchInput.unbind();
+                    $searchInput.bind('keyup', function (e) {
+                        if (this.value.length >= 3 || this.value.length == 0) {
+                            dTable.search(this.value).draw();
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
 

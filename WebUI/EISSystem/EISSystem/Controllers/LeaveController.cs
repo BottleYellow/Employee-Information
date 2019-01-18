@@ -49,7 +49,7 @@ namespace EIS.WebApp.Controllers
             //List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
             //return View(Requests);
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRequest>("api/LeaveRequest");
+            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/GetLeaveRequests");
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
@@ -162,13 +162,12 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeavePolicy()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRules>("api/LeavePolicy");
+            arrayData = LoadData<LeaveRules>("api/LeavePolicy/GetLeavePolicies");
 
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveRules> data = JsonConvert.DeserializeObject<IList<LeaveRules>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
-
 
         [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
@@ -216,7 +215,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRules>("api/LeaveCredit");
+            arrayData = LoadData<LeaveRules>("api/LeaveCredit/GetLeaveCredits");
 
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveCredit> data = JsonConvert.DeserializeObject<IList<LeaveCredit>>(arrayData[1].ToString());

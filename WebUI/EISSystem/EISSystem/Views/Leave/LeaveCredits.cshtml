@@ -53,7 +53,7 @@
                                         Actions
                                     </th>
                                 </tr>
-                            </thead>                           
+                            </thead>
                         </table>
 
                     </div>
@@ -89,7 +89,6 @@
                     'targets': [0, 1, 2]
                 }
             ],
-
             "aoColumnDefs": [
                 { "aTargets": [0], "bSortable": true },
                 { "aTargets": ['_all'], "bSortable": false }
@@ -107,37 +106,33 @@
             "columns": [
                 {
                     "data": null, "autoWidth": true, render: function (row) {
-
                         return row.Person.FirstName;
                     }
                 },
                 {
                     "data": "LeaveType", "autoWidth": true, render: function (data) {
-
                         return data;
                     }
                 },
                 {
                     "data": "ValidFrom", "autoWidth": true, render: function (data) {
-
+                        data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
                     "data": "ValidTo", "autoWidth": true, render: function (data) {
-
+                        data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
                     "data": "AllotedDays", "autoWidth": true, render: function (data) {
-
                         return data;
                     }
                 },
                 {
                     "data": "Available", "autoWidth": true, render: function (data) {
-
                         return data;
                     }
                 },
@@ -163,16 +158,13 @@
                 });
             }
         });
-
         $("#btnModal").click(function () {
             var url = $("#modal-placeholder").data('url');
             $.get(url, function (data) {
                 $("#modal-placeholder").html(data);
                 $("#modal-placeholder").modal('show');
             });
-
         });
-
     });
 </script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -183,8 +175,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-
 
 
 
