@@ -18,7 +18,6 @@ namespace EIS.WebApp.Controllers
     {
         #region Declarations
         HttpResponseMessage response;
-        RedisAgent Cache = new RedisAgent();
         List<LeaveRules> data;
         private IServiceWrapper _services;
         #endregion
@@ -91,6 +90,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Request for leave")]
         public IActionResult RequestLeave()
         {
+            response = _services.LeaveRules.GetResponse("api/LeavePolicy");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
             if (data.Count == 0)
                 ViewBag.ListOfPolicy = null;
             else

@@ -13,19 +13,12 @@ namespace EIS.WebAPI.Controllers.Leave
 {
     [Route("api/LeavePolicy")]
     [ApiController]
-    public class LeavePolicyController : Controller
+    public class LeavePolicyController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public LeavePolicyController(IRepositoryWrapper repository)
+        public LeavePolicyController(IRepositoryWrapper repository):base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
         }
-
-      
-
+     
         [DisplayName("leave Policies")]
         [Route("GetLeavePolicies")]
         [HttpPost]

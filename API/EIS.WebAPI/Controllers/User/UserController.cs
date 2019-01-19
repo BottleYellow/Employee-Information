@@ -18,6 +18,7 @@ namespace EIS.WebAPI.Controllers.User
         {
 
         }
+
         [DisplayName("List Of Users")]
         [HttpGet]
         public IEnumerable<Users> Get()

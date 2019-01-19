@@ -13,16 +13,14 @@ using EIS.Entities.Employee;
 namespace EIS.WebApp.Controllers
 {
     [DisplayName("Account Management")]
-    public class AccountController : Controller
+    public class AccountController : BaseController<Users>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public readonly IEISService<Users> _service;
-        RedisAgent Cache;
-        public AccountController(IEISService<Users> service, IHttpContextAccessor httpContextAccessor)
+    
+        public AccountController(IEISService<Users> service, IHttpContextAccessor httpContextAccessor):base(service)
         {
             _httpContextAccessor = httpContextAccessor;
-            _service = service;
-            Cache = new RedisAgent();
+          
         }
         [DisplayName("Login")]
         [HttpGet]

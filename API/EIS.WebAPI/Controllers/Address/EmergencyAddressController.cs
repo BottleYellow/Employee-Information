@@ -11,15 +11,10 @@ namespace EIS.WebAPI.Controllers
 
     [Route("api/EmergencyAddress")]
     [ApiController]
-    public class EmergencyAddressController : Controller
+    public class EmergencyAddressController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public EmergencyAddressController(IRepositoryWrapper repository) 
+        public EmergencyAddressController(IRepositoryWrapper repository) :base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
         }
 
         [HttpGet]

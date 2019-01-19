@@ -1,5 +1,5 @@
 ﻿
-namespace EIS.WebAPI.Models
+namespace EIS.Entities.Models
 {
     public class AttendanceReport
     {

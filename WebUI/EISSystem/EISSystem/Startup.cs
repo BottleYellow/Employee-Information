@@ -4,7 +4,6 @@ using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
 using EIS.Validations.FluentValidations;
-using EIS.WebApp.Extensions;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -103,7 +102,7 @@ namespace EIS.WebApp
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
-            //app.UseWebAppExceptionHandler();
+            app.UseWebAppExceptionHandler();
             app.UseStaticFiles();
             string controller = "Account";
             string action = "Login";

@@ -41,7 +41,7 @@ namespace EIS.WebApp.Filters
             //if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             //    context.Result = new RedirectToActionResult("Login", "Account", routeValues: null);
 
-         }
+        }
         public void OnActionExecuting(ActionExecutingContext context)
         {
            

@@ -14,15 +14,11 @@ namespace EIS.WebAPI.Controllers.Leave
 
     [Route("api/LeaveCredit")]
     [ApiController]
-    public class LeaveCreditController : Controller
+    public class LeaveCreditController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public LeaveCreditController(IRepositoryWrapper repository)
+        public LeaveCreditController(IRepositoryWrapper repository):base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
+
         }
 
         [DisplayName("leave Credits")]

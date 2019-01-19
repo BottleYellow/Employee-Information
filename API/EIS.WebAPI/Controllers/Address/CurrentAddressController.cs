@@ -1,6 +1,5 @@
 ﻿using EIS.Entities.Address;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,15 +9,10 @@ namespace EIS.WebAPI.Controllers
 {
     [Route("api/CurrentAddress")]
     [ApiController]
-    public class CurrentAddressController : Controller
+    public class CurrentAddressController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        public CurrentAddressController(IRepositoryWrapper repository)
+        public CurrentAddressController(IRepositoryWrapper repository): base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
         }
 
         [HttpGet]

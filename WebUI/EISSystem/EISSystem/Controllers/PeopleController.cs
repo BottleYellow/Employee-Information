@@ -26,7 +26,6 @@ namespace EIS.WebApp.Controllers
     [DisplayName("Employee Management")]
     public class PeopleController : BaseController<Person>
     {
-        RedisAgent cache;
         private readonly IHostingEnvironment _environment;
         #region Declarations
         public readonly IServiceWrapper _services;
@@ -39,9 +38,8 @@ namespace EIS.WebApp.Controllers
 
         #region Controller
         [DisplayName("Employee Management")]
-        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services, IHostingEnvironment environment, RedisAgent redisAgent) : base(service)
+        public PeopleController(IEISService<Person> service, IControllerService controllerService, IServiceWrapper services, IHostingEnvironment environment) : base(service)
         {
-            cache = redisAgent;
             _environment = environment;
             _controllerService = controllerService;
             _services = services;
@@ -107,7 +105,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
-            var tId = cache.GetStringValue("TenantId");
+            var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
             var data = from p in EmployeeData()
@@ -136,7 +134,7 @@ namespace EIS.WebApp.Controllers
                     var fileExtension = Path.GetExtension(file.FileName);
                     if ((fileExtension.ToLower() == ".png" || fileExtension.ToLower() == ".jpg") && file.Length <= 500000)
                     {                                          
-                        var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                        var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
                             file.CopyToAsync(fileStream);                            
@@ -189,7 +187,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
-            var tId = cache.GetStringValue("TenantId");
+            var tId = Cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
                 return NotFound();
@@ -209,10 +207,10 @@ namespace EIS.WebApp.Controllers
                     if (file != null && file.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(file.FileName);
-                        if (fileExtension == ".png" || fileExtension == ".jpg" && file.Length <= 500000)
+                        if ((fileExtension.ToLower() == ".png" || fileExtension.ToLower() == ".jpg") && file.Length <= 500000)
                         {                        
-                            string[] files = Directory.GetFiles(rootPath + filePath);
-                            System.IO.File.Delete(files[0]);                          
+                            string[] files = Directory.GetFiles(rootPath + filePath);                            
+                            System.IO.File.Delete(files[0]);                            
                             var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                             {

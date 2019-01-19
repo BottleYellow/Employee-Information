@@ -2,7 +2,6 @@
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Services;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -22,20 +20,17 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        private RedisAgent Cache;
         private IHttpContextAccessor _accessor;
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
         public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _accessor = accessor;
-            this.configuration = configuration;
-            Cache = new RedisAgent();
+            _configuration = configuration;
         }
 
         [DisplayName("Login")]
-        [HttpPost]
         [AllowAnonymous]
-        [Route("login")]
+        [HttpPost("login")]
         public IActionResult Login(Users user)
         {
             if (!(string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password)))
@@ -125,8 +120,7 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("Forgot Password")]
-        [HttpPost]
-        [Route("forgot/{username}")]
+        [HttpPost("forgot/{username}")]
         [AllowAnonymous]
         public IActionResult ForGot_Pass(string username)
         {
@@ -136,7 +130,7 @@ namespace EIS.WebAPI.Controllers
             string body = "Hello!" +"\n"+
                 "Your new password is : " + password;
 
-            new EmailManager(configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);

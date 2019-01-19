@@ -20,20 +20,14 @@ namespace EIS.WebAPI.Controllers
     [EnableCors("MyPolicy")]
     [Route("api/LeaveRequest")]
     [ApiController]
-    public class LeaveRequestController : Controller
+    public class LeaveRequestController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
-        private readonly IConfiguration configuration;
-        public LeaveRequestController(IRepositoryWrapper repository, IConfiguration configuration)
+
+        private readonly IConfiguration _configuration;
+        public LeaveRequestController(IRepositoryWrapper repository, IConfiguration configuration):base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository;
-            this.configuration = configuration;
+            _configuration = configuration;
         }
-
-
 
         [DisplayName("View all requests")]
         [Route("GetLeaveRequests")]
@@ -206,7 +200,7 @@ namespace EIS.WebAPI.Controllers
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
             }
-            new EmailManager(configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To);
         }
     }
 }

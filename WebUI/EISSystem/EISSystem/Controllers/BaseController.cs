@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EIS.Entities.Employee;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
+using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -16,10 +17,12 @@ namespace EIS.WebApp.Controllers
 {
     public class BaseController<T> : Controller
     {
-        public IEISService<T> pservice;
-        public BaseController(IEISService<T> pservice)
+        public IEISService<T> _service;
+        public RedisAgent Cache;
+        public BaseController(IEISService<T> service)
         {
-            this.pservice = pservice;
+           _service = service;
+            Cache = new RedisAgent();
         }
         public ArrayList LoadData<T1>(string Url)
         {
@@ -37,7 +40,7 @@ namespace EIS.WebApp.Controllers
             //Paging Size (10,20,50,100)
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
-            HttpClient client = pservice.GetService();
+            HttpClient client = _service.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
             Url = Url +"/"+ search;

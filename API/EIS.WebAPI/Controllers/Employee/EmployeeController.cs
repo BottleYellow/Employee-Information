@@ -21,16 +21,11 @@ namespace EIS.WebAPI.Controllers
     [TypeFilter(typeof(Authorization))]
     [Route("api/Employee")]
     [ApiController]
-    public class EmployeeController : Controller
+    public class EmployeeController : BaseController
     {
-        RedisAgent Cache = new RedisAgent();
-        int TenantId = 0;
-        public readonly IRepositoryWrapper _repository;
         public readonly IConfiguration _configuration;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration)
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration):base(repository)
         {
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
-            _repository = repository  ;
             _configuration = configuration;
         }
 

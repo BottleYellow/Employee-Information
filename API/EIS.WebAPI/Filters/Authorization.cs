@@ -29,7 +29,6 @@ namespace EIS.WebAPI.Filters
 
                 if (token != Access)
                 {
-                    // unauthorized!
                     filterContext.Result = new UnauthorizedResult();
                 }
                 
