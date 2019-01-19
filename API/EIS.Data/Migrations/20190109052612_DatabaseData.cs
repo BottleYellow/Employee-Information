@@ -94,7 +94,7 @@ namespace EIS.Data.Migrations
                     UpdatedDate = table.Column<DateTime>(type: "date", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    IdCard = table.Column<string>(type: "varchar(15)", nullable: false),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
                     Image = table.Column<string>(type: "varchar(max)", nullable: true),
@@ -523,10 +523,10 @@ namespace EIS.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_TenantId_IdCard",
+                name: "IX_Person_TenantId_EmployeeCode",
                 schema: "Employee",
                 table: "Person",
-                columns: new[] { "TenantId", "IdCard" },
+                columns: new[] { "TenantId", "EmployeeCode" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

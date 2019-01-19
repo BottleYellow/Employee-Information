@@ -319,9 +319,9 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(15)");
 
-                    b.Property<string>("IdCard")
+                    b.Property<string>("EmployeeCode")
                         .IsRequired()
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(max)");
@@ -386,7 +386,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("TenantId", "IdCard")
+                    b.HasIndex("TenantId", "EmployeeCode")
                         .IsUnique();
 
                     b.ToTable("Person","Employee");

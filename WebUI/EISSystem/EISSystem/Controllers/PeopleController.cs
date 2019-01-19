@@ -82,7 +82,9 @@ namespace EIS.WebApp.Controllers
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
              ViewBag.Name = data.FirstName + " " + data.LastName;
-
+            Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
+            ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
+            ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = PersonId };
             var cur = new Current() { PersonId = PersonId };
@@ -103,7 +105,7 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
+        public async Task<IActionResult> Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
             var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
@@ -137,7 +139,7 @@ namespace EIS.WebApp.Controllers
                         var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
-                            file.CopyToAsync(fileStream);                            
+                            await file.CopyToAsync(fileStream);                            
                             person.Image = fileName;
                         }
                     }
@@ -202,7 +204,7 @@ namespace EIS.WebApp.Controllers
                 try
                 {
                     var rootPath = _environment.WebRootPath;
-                    var filePath = "//EmployeeData//" + tId + person.IdCard + "//Image//";
+                    var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {

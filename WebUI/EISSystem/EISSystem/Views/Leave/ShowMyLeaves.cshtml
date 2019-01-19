@@ -11,6 +11,12 @@
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <style>
+        .disabledLink {
+            color: currentColor;
+            cursor: not-allowed;
+            opacity: 0.5;
+            text-decoration: none;
+        }
         select {
             border: solid;
         }
@@ -20,11 +26,7 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <h2 style="font-size:25px;">
-                My Leave Requests
-                <a class="btn btn-primary waves-effect" asp-controller="Leave" asp-action="RequestLeave"><text style="font-size:16px;">New Leave Request</text></a>
-            </h2>
-
+            <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -199,7 +201,13 @@
                 },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
-                        return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',Approve)">Cancel Request</a></ul></div>';
+                        if (row.Status == "Rejected" || row.Status == "Cancelled") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink" onclick="javascript: UpdateStatus(' + row.Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
+                        }
+                        else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
+                        }
+
                     }
                 }
             ],

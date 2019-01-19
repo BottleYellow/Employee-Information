@@ -8,168 +8,54 @@ namespace EIS.Repositories.Helpers
     public static class Helper
     {
         #region [Encrypt Or Decrypt]
-
-        public static byte[] AES_Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
+        public static string Encrypt(string clearText)
         {
-            byte[] encryptedBytes = null;
-
-            // Set your salt here, change it to meet your flavor:
-            byte[] saltBytes = passwordBytes;
-            // Example:
-            //saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-            using (MemoryStream ms = new MemoryStream())
+            string EncryptionKey = "MAKV2SPBNI99212";
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
             {
-                using (RijndaelManaged AES = new RijndaelManaged())
-                {
-                    AES.KeySize = 256;
-                    AES.BlockSize = 128;
-
-                    var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
-                    AES.Key = key.GetBytes(AES.KeySize / 8);
-                    AES.IV = key.GetBytes(AES.BlockSize / 8);
-
-                    AES.Mode = CipherMode.CBC;
-
-                    using (CryptoStream cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
-                        cs.Close();
-                    }
-                    encryptedBytes = ms.ToArray();
-                }
-            }
-
-            return encryptedBytes;
-        }
-        public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
-        {
-            try
-            {
-                byte[] decryptedBytes = null;
-                // Set your salt here to meet your flavor:
-                byte[] saltBytes = passwordBytes;
-                // Example:
-                //saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
-
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    using (RijndaelManaged AES = new RijndaelManaged())
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-                        AES.KeySize = 256;
-                        AES.BlockSize = 128;
-
-                        var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
-                        AES.Key = key.GetBytes(AES.KeySize / 8);
-                        AES.IV = key.GetBytes(AES.BlockSize / 8);
-
-                        //AES.Mode = CipherMode.CBC;
-
-                        using (CryptoStream cs = new CryptoStream(ms, AES.CreateDecryptor(), CryptoStreamMode.Write))
-                        {
-                            cs.Write(bytesToBeDecrypted, 0, bytesToBeDecrypted.Length);
-                            //If(cs.Length = ""
-                            cs.Close();
-                        }
-                        decryptedBytes = ms.ToArray();
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
                     }
+                    clearText = Convert.ToBase64String(ms.ToArray());
                 }
-                return decryptedBytes;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return null;
-            }
+            return clearText;
         }
-        public static string Encrypt(string pwd)
+
+        public static string Decrypt(string cipherText)
         {
-            byte[] originalBytes = Encoding.UTF8.GetBytes(pwd);
-            byte[] encryptedBytes = null;
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(pwd);
-
-            // Hash the password with SHA256
-            passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
-
-            // Getting the salt size
-            int saltSize = GetSaltSize(passwordBytes);
-            // Generating salt bytes
-            byte[] saltBytes = GetRandomBytes(saltSize);
-
-            // Appending salt bytes to original bytes
-            byte[] bytesToBeEncrypted = new byte[saltBytes.Length + originalBytes.Length];
-            for (int i = 0; i < saltBytes.Length; i++)
+            string EncryptionKey = "MAKV2SPBNI99212";
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
             {
-                bytesToBeEncrypted[i] = saltBytes[i];
-            }
-            for (int i = 0; i < originalBytes.Length; i++)
-            {
-                bytesToBeEncrypted[i + saltBytes.Length] = originalBytes[i];
-            }
-
-            encryptedBytes = AES_Encrypt(bytesToBeEncrypted, passwordBytes);
-
-            return Convert.ToBase64String(encryptedBytes);
-        }
-        public static string Decrypt(string decryptedText, string pwd)
-        {
-            byte[] bytesToBeDecrypted = Convert.FromBase64String(decryptedText);
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(pwd);
-
-            // Hash the password with SHA256
-            passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
-
-            byte[] decryptedBytes = AES_Decrypt(bytesToBeDecrypted, passwordBytes);
-
-            if (decryptedBytes != null)
-            {
-                // Getting the size of salt
-                int saltSize = GetSaltSize(passwordBytes);
-
-                // Removing salt bytes, retrieving original bytes
-                byte[] originalBytes = new byte[decryptedBytes.Length - saltSize];
-                for (int i = saltSize; i < decryptedBytes.Length; i++)
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    originalBytes[i - saltSize] = decryptedBytes[i];
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
                 }
-                return Encoding.UTF8.GetString(originalBytes);
             }
-            else
-            {
-                return null;
-            }
+            return cipherText;
         }
-        private static int GetSaltSize(byte[] passwordBytes)
-        {
-            var key = new Rfc2898DeriveBytes(passwordBytes, passwordBytes, 1000);
-            byte[] ba = key.GetBytes(2);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < ba.Length; i++)
-            {
-                sb.Append(Convert.ToInt32(ba[i]).ToString());
-            }
-            int saltSize = 0;
-            string s = sb.ToString();
-            foreach (char c in s)
-            {
-                int intc = Convert.ToInt32(c.ToString());
-                saltSize = saltSize + intc;
-            }
-
-            return saltSize;
-        }
-        public static byte[] GetRandomBytes(int length)
-        {
-            byte[] ba = new byte[length];
-            RNGCryptoServiceProvider.Create().GetBytes(ba);
-            return ba;
-        }
-
         #endregion
         public static string VerifyHashedPassword(string passwordHash, string password)
         {
             string result = "Failed";
-            String ep = Decrypt(passwordHash, password);
+            String ep = Decrypt(passwordHash);
             if (ep == password)
             {
                 result = "Success";

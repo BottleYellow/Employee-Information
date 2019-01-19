@@ -155,13 +155,13 @@
                     },
                 ],
                 "columns": [
-                    { "data": "IdCard", "name": "IdCard", "autoWidth": true },
+                    { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
                     {
                         "data": "FirstName", "name": "FirstName", "autoWidth": true
                     },
                     {
                         "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
-                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.IdCard + '\\Image\\' + data + '" style="height:40px; weight:40px">';
+                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.EmployeeCode+ '\\Image\\' + data + '" style="height:40px; weight:40px">';
                         }
                     },
                     {

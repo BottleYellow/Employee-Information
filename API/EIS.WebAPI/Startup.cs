@@ -40,6 +40,7 @@ namespace EIS.WebAPI
                        .AllowAnyHeader();
             }));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AttendanceValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

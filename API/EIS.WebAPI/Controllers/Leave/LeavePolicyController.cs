@@ -18,7 +18,14 @@ namespace EIS.WebAPI.Controllers.Leave
         public LeavePolicyController(IRepositoryWrapper repository):base(repository)
         {
         }
-     
+
+        [DisplayName("leave Policies")]
+        [HttpGet]
+        public IEnumerable<LeaveRules> GetLeavePolicies()
+        {
+            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId);
+        }
+
         [DisplayName("leave Policies")]
         [Route("GetLeavePolicies")]
         [HttpPost]

@@ -25,27 +25,60 @@ namespace EIS.Repositories.Repository
 
         public void UpdateRequestStatus(int RequestId, string Status)
         {
+            var leaveCredit = new LeaveCredit();
             LeaveRequest leaveRequest = FindByCondition(l => l.Id == RequestId);
             if (Status == "Approve")
             {
-                leaveRequest.Status = "Approved";                
+                leaveRequest.Status = "Approved";
+
             }
             else if (Status == "Reject")
             {
                 leaveRequest.Status = "Rejected";
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
-                LeaveCredit leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                 leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
             }
-            else if(Status=="Pending")
+            else if (Status == "Pending")
             {
                 if (leaveRequest.Status == null || leaveRequest.Status == "Rejected")
                 {
                     leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
-                    LeaveCredit leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                     leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
                 }
                 leaveRequest.Status = "Pending";
+            }
+            else if (Status == "Cancel")
+            {
+                if (leaveRequest.Status == "Pending")
+                {
+                    leaveRequest.Status = "Cancelled";
+                    leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                }
+                else if (leaveRequest.Status == "Approved")
+                {
+                    leaveRequest.Status = "Requested For Cancel";
+                }
+            }
+            else if (Status == "Accept Cancel")
+            {
+                leaveRequest.Status = "Cancelled";
+                leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
+                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+            }
+            else if (Status == "Reject Cancel")
+            {
+                leaveRequest.Status = "Approved(Rejected Cancel Request)";
+            }
+            else if (Status == null)
+            {
+                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                leaveCredit.Available = leaveRequest.Available - leaveRequest.RequestedDays;
+                leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
             }
             Save();
         }

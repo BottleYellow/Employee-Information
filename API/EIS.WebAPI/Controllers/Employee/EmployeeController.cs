@@ -70,21 +70,12 @@ namespace EIS.WebAPI.Controllers
             var n = _repository.Employee.GenerateNewIdCardNo(TenantId);
             return n;
         }
-        [Route("cr")]
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult CreateTemp([FromBody]Demo demo)
-        {
-            _repository.Employee.AddTempData(demo);
-            return Ok();
-
-        }
 
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
-            person.IdCard = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
+            person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -104,7 +95,7 @@ namespace EIS.WebAPI.Controllers
             string subject = "Employee Registration";
             string body = "Hello "+GetTitle(person.Gender)+" "+person.FirstName + " " + person.LastName + "\n" +
                 "Your have been successfully registered with employee system. : \n" +
-                "Id Card Number: " + person.IdCard + "\n" +
+                "Your Code Number: " + person.EmployeeCode + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
                 "Password: " + pw;
             new EmailManager(_configuration).SendEmail(subject, body, To);
@@ -205,7 +196,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.IdCard == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, list);
+                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == search || x.FirstName.Contains(search) || x.MiddleName.Contains(search) || x.LastName.Contains(search) || x.PanCard == search || x.AadharCard == search || x.MobileNumber == search, sortGrid, list);
             }
             return Ok(employeeslist);
         }
