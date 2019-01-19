@@ -102,9 +102,7 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = {
-                'FromDate': @DateTime.Now;
-            };
+            var d = form.serialize();
             var url1 = "/Leave/RequestLeave";
             $.ajax({
                 url: url1,
@@ -126,13 +124,6 @@
         }
         return false;
     });
-    function getLeave() {
-        var name = $("#Name").val();
-        var age = $("#Age").val();
-
-        // poor man's validation
-        return (name == "") ? null : { Name: name, Age: age };
-    }
     function myFunction() {
         $("#msg").remove();
         var x = document.getElementById("type").value;

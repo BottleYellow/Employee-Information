@@ -55,7 +55,7 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
-                DateTime startDate = Convert.ToDateTime(week[0]);
+                DateTime startDate =Convert.ToDateTime(week[0]);
                 DateTime endDate = Convert.ToDateTime(week[1]);
                 url = "api/Attendances/GetAllAttendanceWeekly/" + startDate + "/" + endDate;
             }

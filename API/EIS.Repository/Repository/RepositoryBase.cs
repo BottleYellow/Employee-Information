@@ -29,7 +29,7 @@ namespace EIS.Repositories.Repository
 
             public T FindByCondition(Expression<Func<T, bool>> expression)
             {
-                return _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
+                return _dbContext.Set<T>().Where(expression).FirstOrDefault();
             }
 
             public void Create(T entity)

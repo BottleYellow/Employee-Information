@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
 <html>
 <head>
-    <title>My Leaves</title>
+    <title>Leave Requests</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <style>
         select {
@@ -18,17 +19,14 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <h2 style="font-size:25px;">
-                Leave Requests
-            </h2>
-
+            <HeaderWithButton header-name="Leave Requests"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="table-responsive">
-                            <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                        <div>
+                            <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>
@@ -203,12 +201,12 @@
                 },
                 {
                     "data": "Status", "autoWidth": true, render: function (data) {
-                        if (data == "Pending") {
-                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Rejected") {
+                        if (data == "Approved") {
+                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
+                        } else if (data == "Rejected" || data == "Cancelled") {
                             return '<span style="font-size:12px;" class="label label-danger">' + data + '</span>';
                         } else {
-                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
+                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
                         }
                     }
                 },
@@ -220,13 +218,16 @@
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         if (row.Status == "Pending") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.id + ',Approve)">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.id + ',Reject)">Reject</a></li></ul></div>';
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
                         }
                         else if (row.Status == "Approved") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.id + ',Pending)">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.id + ',Reject)">Reject</a></li></ul></div>';
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
+                        }
+                        else if (row.Status == "Requested For Cancel") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
                         }
                         else {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.id + ',Approve)">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.id + ',Pending)">Mark Pending</a></li></ul></div>';
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
                         }
                     }
                 }
@@ -274,3 +275,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>

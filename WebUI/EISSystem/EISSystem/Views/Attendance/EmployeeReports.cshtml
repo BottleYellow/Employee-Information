@@ -36,7 +36,7 @@
     }
 </style>
 <head>
-    <title>Dashboard</title>
+    <title>Attendance History</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -54,10 +54,6 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        @*<input id="InTime" type="hidden" asp-for="TimeIn" value="@Model.TimeIn.ToString(@"hh\:mm\:ss")" />
-                            <input id="OutTime" type="hidden" asp-for="TimeOut" value="@Model.TimeOut.ToString(@"hh\:mm\:ss")" />*@
-
-                        @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
                         <div>
                             <div class="row col-md-12">
                                 <div class="col-md-9">
@@ -161,11 +157,7 @@
     </div>
 </body>
 
-@section Attendance
-    {
-    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
-    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
-}
+
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>

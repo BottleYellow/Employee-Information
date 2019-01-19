@@ -84,7 +84,9 @@ namespace EIS.WebApp.Controllers
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
              ViewBag.Name = data.FirstName + " " + data.LastName;
-
+            Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
+            ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
+            ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = PersonId };
             var cur = new Current() { PersonId = PersonId };

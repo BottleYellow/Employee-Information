@@ -30,7 +30,7 @@ namespace EIS.Data
                 #region[Person]
                 //For Employee model validation
 
-                modelBuilder.Entity<Person>().Property(p => p.IdCard).HasColumnType("varchar(15)").IsRequired();
+                modelBuilder.Entity<Person>().Property(p => p.EmployeeCode).HasColumnType("nvarchar(30)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.PanCard).HasColumnType("varchar(10)");
                 modelBuilder.Entity<Person>().Property(p => p.AadharCard).HasColumnType("varchar(12)");
                 modelBuilder.Entity<Person>().Property(p => p.Image).HasColumnType("varchar(max)");
@@ -181,9 +181,6 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
-                modelBuilder.Entity<Demo>().Property(p => p.Id).HasColumnType("int").IsRequired();
-                modelBuilder.Entity<Demo>().Property(p => p.Firstname).HasColumnType("nvarchar(400)");
-
                 #region Constraints
 
                 modelBuilder.Entity<Person>()
@@ -199,7 +196,7 @@ namespace EIS.Data
                     .HasIndex(p => p.EmailAddress)
                     .IsUnique();
                 modelBuilder.Entity<Person>()
-                   .HasIndex(p => new { p.TenantId, p.IdCard })
+                   .HasIndex(p => new { p.TenantId, p.EmployeeCode })
                    .IsUnique();
                 modelBuilder.Entity<Role>()
                      .HasIndex(r => new { r.TenantId, r.Name })

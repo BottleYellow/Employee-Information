@@ -25,7 +25,10 @@ namespace EIS.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(connectionString,options =>
+            {
+                options.UseRowNumberForPaging();
+            });
         }
 
         #region[Tables]
@@ -42,7 +45,6 @@ namespace EIS.Data.Context
         public DbSet<Other> OtherAddresses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Configuration> configurations { get; set; }
-        public DbSet<Demo> Demo { get; set; }
 
         #endregion
     }

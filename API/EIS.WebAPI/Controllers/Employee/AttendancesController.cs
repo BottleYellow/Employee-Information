@@ -100,7 +100,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
             }
             return Ok(data);
         }
@@ -119,7 +119,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
             }
             return Ok(data);
         }
@@ -139,7 +139,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.IdCard == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
             }
             return Ok(data);
         }

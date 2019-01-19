@@ -20,11 +20,6 @@ namespace EIS.Repositories.Repository
             Save();
         }
 
-        public void AddTempData(Demo demo)
-        {
-            _dbContext.Demo.Add(demo);
-        }
-
         public bool DesignationExists(string DesignationName,int TenantId)
         {
             var role = _dbContext.Roles.Where(x => x.Name == DesignationName && x.TenantId==TenantId).FirstOrDefault();
@@ -40,7 +35,7 @@ namespace EIS.Repositories.Repository
 
         public int GenerateNewIdCardNo(int TenantId)
         {
-            var MaxId = _dbContext.Person.Where(x=>x.TenantId==TenantId).Max(x => x.IdCard);
+            var MaxId = _dbContext.Person.Where(x=>x.TenantId==TenantId).Max(x => x.EmployeeCode);
             return Convert.ToInt32(MaxId) + 1;
         }
 
@@ -56,7 +51,7 @@ namespace EIS.Repositories.Repository
 
         public Person GetProfile(int Id)
         {
-            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Where(x => x.Id == Id).FirstOrDefault();
+            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.Id == Id).FirstOrDefault();
         }
 
         public void UpdateDesignationAndSave(Role designation)
