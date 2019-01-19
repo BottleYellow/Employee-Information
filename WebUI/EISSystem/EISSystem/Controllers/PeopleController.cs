@@ -206,7 +206,7 @@ namespace EIS.WebApp.Controllers
                 try
                 {
                     var rootPath = _environment.WebRootPath;
-                    var filePath = "//EmployeeData//" + tId + person.IdCard + "//Image//";
+                    var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {

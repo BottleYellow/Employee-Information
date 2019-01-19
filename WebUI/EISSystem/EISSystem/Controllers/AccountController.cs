@@ -47,7 +47,7 @@ namespace EIS.WebApp.Controllers
                 Task<string> tokenResult = response.Content.ReadAsAsync<string>();
                 //pid = tokenResult.Result.ToString();
                 pid = person.Id.ToString();
-                Response.Cookies.Append("IdCard", person.IdCard);
+                Response.Cookies.Append("IdCard", person.EmployeeCode);
                 Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
                 Response.Cookies.Append("EmailId", person.EmailAddress);
                 string role = Cache.GetStringValue("Role");

@@ -70,13 +70,13 @@
                         <input type="hidden" asp-for="TenantId" />
                         <input type="hidden" asp-for="Image" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="IdCard" value="@Model.IdCard" />
+                        <input type="hidden" asp-for="EmployeeCode" value="@Model.EmployeeCode" />
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required" id="Imagediv">
-                                            <img id="employeeImage" src="/EmployeeData/@Model.TenantId@Model.IdCard/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
+                                            <img id="employeeImage" src="/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
 
                                             <div class="middle">
                                                 <input type="button" class="text" id="my-button" value="Edit Image" />
