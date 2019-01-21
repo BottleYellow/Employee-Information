@@ -301,13 +301,9 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult ActivateEmployee(int id)
         {
-            response = _services.Employee.GetResponse("api/employee/" + id + "");
-            string stringEmployeeData = response.Content.ReadAsStringAsync().Result;
-            Person person = JsonConvert.DeserializeObject<Person>(stringEmployeeData);
-            person.IsActive = true;
-            person.User.IsActive = true;
-            response = _services.Employee.PutResponse("api/employee/" + id + "", person);
-            ViewBag.Message = "Information activated successfully!";
+            response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + id + "");
+            if(response.IsSuccessStatusCode)
+                ViewBag.Message = "Information activated successfully!";
             return View("Index");
         }
         #endregion

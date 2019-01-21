@@ -14,6 +14,16 @@ namespace EIS.Repositories.Repository
         {
 
         }
+
+        public Person ActivatePerson(int id)
+        {
+            Person person = _dbContext.Person.Include(x => x.User).Where(x => x.Id == id).FirstOrDefault();
+            person.IsActive = true;
+            person.User.IsActive = true;
+            Save();
+            return (person);
+        }
+
         public void AddDesignationAndSave(Role designation)
         {
             _dbContext.Roles.Add(designation);
