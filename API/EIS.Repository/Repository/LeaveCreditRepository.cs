@@ -24,7 +24,7 @@ namespace EIS.Repositories.Repository
         public void AddCreditsAndSave(LeaveRules Leave)
         {
             int id = Leave.Id;
-            List<Person> List = _dbContext.Person.ToList();
+            List<Person> List = _dbContext.Person.Where(x => x.TenantId == Leave.TenantId).ToList();
             foreach (var item in List)
             {
                 LeaveCredit Credit = new LeaveCredit

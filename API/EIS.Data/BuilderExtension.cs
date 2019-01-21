@@ -2,6 +2,7 @@
 using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
+using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -291,18 +292,19 @@ namespace EIS.Data
                 #endregion
 
                 #region[Table Schema]
-                modelBuilder.Entity<Users>().ToTable("Users", "Account");
-                modelBuilder.Entity<Person>().ToTable("Person", "Employee");
-                modelBuilder.Entity<Role>().ToTable("Roles", "Employee");
-                modelBuilder.Entity<LeaveRules>().ToTable("LeaveRules", "Leave");
-                modelBuilder.Entity<LeaveCredit>().ToTable("LeaveCredit", "Leave");
-                modelBuilder.Entity<EmployeeLeaves>().ToTable("EmployeeLeaves", "Leave");
-                modelBuilder.Entity<LeaveRequest>().ToTable("LeaveRequests", "Leave");
-                modelBuilder.Entity<Attendance>().ToTable("Attendance", "Employee");
-                modelBuilder.Entity<Permanent>().ToTable("PermanentAddress", "Address");
-                modelBuilder.Entity<Current>().ToTable("CurrentAddress", "Address");
-                modelBuilder.Entity<Emergency>().ToTable("EmergencyAddress", "Address");
-                modelBuilder.Entity<Other>().ToTable("OtherAddress", "Address");
+                modelBuilder.Entity<Users>().ToTable("tblUsers", "ATM");
+                modelBuilder.Entity<Person>().ToTable("tblPerson", "ATM");
+                modelBuilder.Entity<Role>().ToTable("tblRoles", "ATM");
+                modelBuilder.Entity<LeaveRules>().ToTable("tblLeaveRules", "ATM");
+                modelBuilder.Entity<LeaveCredit>().ToTable("tblLeaveCredit", "ATM");
+                modelBuilder.Entity<EmployeeLeaves>().ToTable("tblEmployeeLeaves", "ATM");
+                modelBuilder.Entity<LeaveRequest>().ToTable("tblLeaveRequests", "ATM");
+                modelBuilder.Entity<Attendance>().ToTable("tblAttendance", "ATM");
+                modelBuilder.Entity<Permanent>().ToTable("tblPermanentAddress", "ATM");
+                modelBuilder.Entity<Current>().ToTable("tblCurrentAddress", "ATM");
+                modelBuilder.Entity<Emergency>().ToTable("tblEmergencyAddress", "ATM");
+                modelBuilder.Entity<Other>().ToTable("tblOtherAddress", "ATM");
+                modelBuilder.Entity<Configuration>().ToTable("tblConfiguration", "ATM");
                 #endregion
             }
             catch (System.Exception ex)

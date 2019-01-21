@@ -9,19 +9,11 @@ namespace EIS.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Address");
-
-            migrationBuilder.EnsureSchema(
-                name: "Employee");
-
-            migrationBuilder.EnsureSchema(
-                name: "Leave");
-
-            migrationBuilder.EnsureSchema(
-                name: "Account");
+                name: "ATM");
 
             migrationBuilder.CreateTable(
-                name: "configurations",
+                name: "tblConfiguration",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -37,31 +29,12 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_configurations", x => x.Id);
+                    table.PrimaryKey("PK_tblConfiguration", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
-                schema: "Employee",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Access = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LeaveRules",
-                schema: "Leave",
+                name: "tblLeaveRules",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -79,12 +52,31 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveRules", x => x.Id);
+                    table.PrimaryKey("PK_tblLeaveRules", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Person",
-                schema: "Employee",
+                name: "tblRoles",
+                schema: "ATM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Access = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblPerson",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -114,50 +106,50 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Person", x => x.Id);
+                    table.PrimaryKey("PK_tblPerson", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Person_Roles_RoleId",
+                        name: "FK_tblPerson_tblRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Employee",
-                        principalTable: "Roles",
+                        principalSchema: "ATM",
+                        principalTable: "tblRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                schema: "Account",
+                name: "tblAttendance",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", nullable: false),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    PersonId = table.Column<int>(type: "int", nullable: false)
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    PersonId = table.Column<int>(nullable: false),
+                    DateIn = table.Column<DateTime>(type: "date", nullable: false),
+                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
+                    DateOut = table.Column<DateTime>(type: "date", nullable: false),
+                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_tblAttendance", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Person_PersonId",
+                        name: "FK_tblAttendance_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CurrentAddress",
-                schema: "Address",
+                name: "tblCurrentAddress",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -177,19 +169,19 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CurrentAddress", x => x.Id);
+                    table.PrimaryKey("PK_tblCurrentAddress", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CurrentAddress_Person_PersonId",
+                        name: "FK_tblCurrentAddress_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmergencyAddress",
-                schema: "Address",
+                name: "tblEmergencyAddress",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -213,115 +205,19 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmergencyAddress", x => x.Id);
+                    table.PrimaryKey("PK_tblEmergencyAddress", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmergencyAddress_Person_PersonId",
+                        name: "FK_tblEmergencyAddress_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OtherAddress",
-                schema: "Address",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    AddressType = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(400)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    PinCode = table.Column<string>(type: "varchar(6)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(15)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OtherAddress", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OtherAddress_Person_PersonId",
-                        column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PermanentAddress",
-                schema: "Address",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(400)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    PinCode = table.Column<string>(type: "varchar(6)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(15)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PermanentAddress", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PermanentAddress_Person_PersonId",
-                        column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Attendance",
-                schema: "Employee",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    DateIn = table.Column<DateTime>(type: "date", nullable: false),
-                    TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DateOut = table.Column<DateTime>(type: "date", nullable: false),
-                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: false),
-                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attendance_Person_PersonId",
-                        column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeeLeaves",
-                schema: "Leave",
+                name: "tblEmployeeLeaves",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -340,26 +236,26 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeLeaves", x => x.Id);
+                    table.PrimaryKey("PK_tblEmployeeLeaves", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeLeaves_Person_PersonId",
+                        name: "FK_tblEmployeeLeaves_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EmployeeLeaves_LeaveRules_TypeOfLeaveId",
+                        name: "FK_tblEmployeeLeaves_tblLeaveRules_TypeOfLeaveId",
                         column: x => x.TypeOfLeaveId,
-                        principalSchema: "Leave",
-                        principalTable: "LeaveRules",
+                        principalSchema: "ATM",
+                        principalTable: "tblLeaveRules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LeaveCredit",
-                schema: "Leave",
+                name: "tblLeaveCredit",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -379,26 +275,26 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveCredit", x => x.Id);
+                    table.PrimaryKey("PK_tblLeaveCredit", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LeaveCredit_LeaveRules_LeaveId",
+                        name: "FK_tblLeaveCredit_tblLeaveRules_LeaveId",
                         column: x => x.LeaveId,
-                        principalSchema: "Leave",
-                        principalTable: "LeaveRules",
+                        principalSchema: "ATM",
+                        principalTable: "tblLeaveRules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LeaveCredit_Person_PersonId",
+                        name: "FK_tblLeaveCredit_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LeaveRequests",
-                schema: "Leave",
+                name: "tblLeaveRequests",
+                schema: "ATM",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -423,210 +319,307 @@ namespace EIS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveRequests", x => x.Id);
+                    table.PrimaryKey("PK_tblLeaveRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LeaveRequests_Person_PersonId",
+                        name: "FK_tblLeaveRequests_tblPerson_PersonId",
                         column: x => x.PersonId,
-                        principalSchema: "Employee",
-                        principalTable: "Person",
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LeaveRequests_LeaveRules_TypeId",
+                        name: "FK_tblLeaveRequests_tblLeaveRules_TypeId",
                         column: x => x.TypeId,
-                        principalSchema: "Leave",
-                        principalTable: "LeaveRules",
+                        principalSchema: "ATM",
+                        principalTable: "tblLeaveRules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblOtherAddress",
+                schema: "ATM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    PersonId = table.Column<int>(nullable: false),
+                    AddressType = table.Column<string>(type: "nvarchar(30)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(400)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    PinCode = table.Column<string>(type: "varchar(6)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "varchar(15)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblOtherAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblOtherAddress_tblPerson_PersonId",
+                        column: x => x.PersonId,
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblPermanentAddress",
+                schema: "ATM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    PersonId = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(400)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    PinCode = table.Column<string>(type: "varchar(6)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "varchar(15)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblPermanentAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblPermanentAddress_tblPerson_PersonId",
+                        column: x => x.PersonId,
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblUsers",
+                schema: "ATM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", nullable: false),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    PersonId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblUsers_tblPerson_PersonId",
+                        column: x => x.PersonId,
+                        principalSchema: "ATM",
+                        principalTable: "tblPerson",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_PersonId",
-                schema: "Account",
-                table: "Users",
+                name: "IX_tblAttendance_PersonId",
+                schema: "ATM",
+                table: "tblAttendance",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblCurrentAddress_PersonId",
+                schema: "ATM",
+                table: "tblCurrentAddress",
                 column: "PersonId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_TenantId_UserName",
-                schema: "Account",
-                table: "Users",
-                columns: new[] { "TenantId", "UserName" },
-                unique: true);
+                name: "IX_tblEmergencyAddress_PersonId",
+                schema: "ATM",
+                table: "tblEmergencyAddress",
+                column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CurrentAddress_PersonId",
-                schema: "Address",
-                table: "CurrentAddress",
+                name: "IX_tblEmployeeLeaves_PersonId",
+                schema: "ATM",
+                table: "tblEmployeeLeaves",
                 column: "PersonId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmergencyAddress_PersonId",
-                schema: "Address",
-                table: "EmergencyAddress",
+                name: "IX_tblEmployeeLeaves_TypeOfLeaveId",
+                schema: "ATM",
+                table: "tblEmployeeLeaves",
+                column: "TypeOfLeaveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblLeaveCredit_LeaveId",
+                schema: "ATM",
+                table: "tblLeaveCredit",
+                column: "LeaveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblLeaveCredit_PersonId",
+                schema: "ATM",
+                table: "tblLeaveCredit",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OtherAddress_PersonId",
-                schema: "Address",
-                table: "OtherAddress",
+                name: "IX_tblLeaveRequests_PersonId",
+                schema: "ATM",
+                table: "tblLeaveRequests",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermanentAddress_PersonId",
-                schema: "Address",
-                table: "PermanentAddress",
+                name: "IX_tblLeaveRequests_TypeId",
+                schema: "ATM",
+                table: "tblLeaveRequests",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblOtherAddress_PersonId",
+                schema: "ATM",
+                table: "tblOtherAddress",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblPermanentAddress_PersonId",
+                schema: "ATM",
+                table: "tblPermanentAddress",
                 column: "PersonId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendance_PersonId",
-                schema: "Employee",
-                table: "Attendance",
-                column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Person_AadharCard",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_AadharCard",
+                schema: "ATM",
+                table: "tblPerson",
                 column: "AadharCard",
                 unique: true,
                 filter: "[AadharCard] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_EmailAddress",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_EmailAddress",
+                schema: "ATM",
+                table: "tblPerson",
                 column: "EmailAddress",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_MobileNumber",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_MobileNumber",
+                schema: "ATM",
+                table: "tblPerson",
                 column: "MobileNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_PanCard",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_PanCard",
+                schema: "ATM",
+                table: "tblPerson",
                 column: "PanCard",
                 unique: true,
                 filter: "[PanCard] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_RoleId",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_RoleId",
+                schema: "ATM",
+                table: "tblPerson",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_TenantId_EmployeeCode",
-                schema: "Employee",
-                table: "Person",
+                name: "IX_tblPerson_TenantId_EmployeeCode",
+                schema: "ATM",
+                table: "tblPerson",
                 columns: new[] { "TenantId", "EmployeeCode" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_TenantId_Name",
-                schema: "Employee",
-                table: "Roles",
+                name: "IX_tblRoles_TenantId_Name",
+                schema: "ATM",
+                table: "tblRoles",
                 columns: new[] { "TenantId", "Name" },
                 unique: true,
                 filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeLeaves_PersonId",
-                schema: "Leave",
-                table: "EmployeeLeaves",
+                name: "IX_tblUsers_PersonId",
+                schema: "ATM",
+                table: "tblUsers",
                 column: "PersonId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeLeaves_TypeOfLeaveId",
-                schema: "Leave",
-                table: "EmployeeLeaves",
-                column: "TypeOfLeaveId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaveCredit_LeaveId",
-                schema: "Leave",
-                table: "LeaveCredit",
-                column: "LeaveId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaveCredit_PersonId",
-                schema: "Leave",
-                table: "LeaveCredit",
-                column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequests_PersonId",
-                schema: "Leave",
-                table: "LeaveRequests",
-                column: "PersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequests_TypeId",
-                schema: "Leave",
-                table: "LeaveRequests",
-                column: "TypeId");
+                name: "IX_tblUsers_TenantId_UserName",
+                schema: "ATM",
+                table: "tblUsers",
+                columns: new[] { "TenantId", "UserName" },
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "configurations");
+                name: "tblAttendance",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "Users",
-                schema: "Account");
+                name: "tblConfiguration",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "CurrentAddress",
-                schema: "Address");
+                name: "tblCurrentAddress",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "EmergencyAddress",
-                schema: "Address");
+                name: "tblEmergencyAddress",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "OtherAddress",
-                schema: "Address");
+                name: "tblEmployeeLeaves",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "PermanentAddress",
-                schema: "Address");
+                name: "tblLeaveCredit",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "Attendance",
-                schema: "Employee");
+                name: "tblLeaveRequests",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "EmployeeLeaves",
-                schema: "Leave");
+                name: "tblOtherAddress",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "LeaveCredit",
-                schema: "Leave");
+                name: "tblPermanentAddress",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "LeaveRequests",
-                schema: "Leave");
+                name: "tblUsers",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "Person",
-                schema: "Employee");
+                name: "tblLeaveRules",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "LeaveRules",
-                schema: "Leave");
+                name: "tblPerson",
+                schema: "ATM");
 
             migrationBuilder.DropTable(
-                name: "Roles",
-                schema: "Employee");
+                name: "tblRoles",
+                schema: "ATM");
         }
     }
 }

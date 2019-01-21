@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190109052612_DatabaseData")]
+    [Migration("20190119111259_DatabaseData")]
     partial class DatabaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,7 @@ namespace EIS.Data.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("CurrentAddress","Address");
+                    b.ToTable("tblCurrentAddress","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Address.Emergency", b =>
@@ -136,7 +136,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("EmergencyAddress","Address");
+                    b.ToTable("tblEmergencyAddress","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Address.Other", b =>
@@ -189,7 +189,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("OtherAddress","Address");
+                    b.ToTable("tblOtherAddress","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Address.Permanent", b =>
@@ -241,7 +241,7 @@ namespace EIS.Data.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("PermanentAddress","Address");
+                    b.ToTable("tblPermanentAddress","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Employee.Attendance", b =>
@@ -286,7 +286,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Attendance","Employee");
+                    b.ToTable("tblAttendance","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
@@ -311,6 +311,10 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
@@ -318,10 +322,6 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("varchar(15)");
-
-                    b.Property<string>("EmployeeCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(max)");
@@ -389,7 +389,7 @@ namespace EIS.Data.Migrations
                     b.HasIndex("TenantId", "EmployeeCode")
                         .IsUnique();
 
-                    b.ToTable("Person","Employee");
+                    b.ToTable("tblPerson","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Employee.Role", b =>
@@ -416,7 +416,7 @@ namespace EIS.Data.Migrations
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
 
-                    b.ToTable("Roles","Employee");
+                    b.ToTable("tblRoles","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
@@ -461,7 +461,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("TypeOfLeaveId");
 
-                    b.ToTable("EmployeeLeaves","Leave");
+                    b.ToTable("tblEmployeeLeaves","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveCredit", b =>
@@ -511,7 +511,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("LeaveCredit","Leave");
+                    b.ToTable("tblLeaveCredit","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveRequest", b =>
@@ -577,7 +577,7 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("LeaveRequests","Leave");
+                    b.ToTable("tblLeaveRequests","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.LeaveRules", b =>
@@ -619,7 +619,7 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LeaveRules","Leave");
+                    b.ToTable("tblLeaveRules","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.OtherEntities.Configuration", b =>
@@ -646,7 +646,7 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("configurations");
+                    b.ToTable("tblConfiguration","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
@@ -690,7 +690,7 @@ namespace EIS.Data.Migrations
                     b.HasIndex("TenantId", "UserName")
                         .IsUnique();
 
-                    b.ToTable("Users","Account");
+                    b.ToTable("tblUsers","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Address.Current", b =>
