@@ -24,7 +24,7 @@ namespace EIS.WebAPI.Controllers
     public class EmployeeController : BaseController
     {
         public readonly IConfiguration _configuration;
-        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration):base(repository)
+        public EmployeeController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _configuration = configuration;
         }
@@ -75,7 +75,7 @@ namespace EIS.WebAPI.Controllers
         [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
-            person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
+            //person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -87,13 +87,13 @@ namespace EIS.WebAPI.Controllers
                 TenantId = TenantId,
                 UserName = person.EmailAddress,
                 Password = EmailManager.CreateRandomPassword(8),
-                PersonId=person.Id
+                PersonId = person.Id
             };
             string pw = u.Password;
             _repository.Users.CreateUserAndSave(u);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
-            string body = "Hello "+GetTitle(person.Gender)+" "+person.FirstName + " " + person.LastName + "\n" +
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                 "Your have been successfully registered with employee system. : \n" +
                 "Your Code Number: " + person.EmployeeCode + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
@@ -124,7 +124,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult Delete([FromRoute]int id)
         {
             Person person = _repository.Employee.FindByCondition(x => x.Id == id);
-            Users users = _repository.Users.FindByCondition(x => x.PersonId == id); 
+            Users users = _repository.Users.FindByCondition(x => x.PersonId == id);
             if (person == null)
             {
                 return NotFound();
@@ -158,7 +158,13 @@ namespace EIS.WebAPI.Controllers
             var d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
-
+        [Route("ActivatePerson/{Id}")]
+        [HttpGet]
+        public IActionResult ActivatePerson([FromRoute]int Id)
+        {
+            _repository.Employee.ActivatePerson(Id);
+            return Ok();
+        }
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
