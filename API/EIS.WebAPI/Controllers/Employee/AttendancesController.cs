@@ -123,10 +123,10 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Attendance Reports")]
         [HttpPost("GetAllAttendanceWeekly/{startOfWeek}/{endOfWeek}")]
-        public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] DateTime startOfWeek, [FromRoute] DateTime endOfWeek)
+        public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] string startOfWeek, [FromRoute] string endOfWeek)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceWeekly(startOfWeek, endOfWeek);
+            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 
@@ -187,12 +187,12 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("My Attendance History")]
         [HttpPost("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
-        public IActionResult GetWeeklyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        public IActionResult GetWeeklyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
             IList<Attendance> attendancelist = new List<Attendance>();
-            attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate.AddDays(1), attendanceData);
+            attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
@@ -239,8 +239,7 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("My Attendance Summary")]
-        [Route("GetWeeklyAttendanceSummaryById")]
-        [HttpGet("{id}/{startDate}/{endDate}")]
+        [HttpGet("GetWeeklyAttendanceSummaryById/{id}/{startDate}/{endDate}")]
         public IActionResult GetWeeklySummaryAttendanceById([FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             AttendanceReport attendanceReport = new AttendanceReport();

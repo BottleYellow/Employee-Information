@@ -192,10 +192,8 @@ namespace EIS.WebApp.Controllers
             {
 
                 DateTime startDate = Convert.ToDateTime(week[0]);
-                DateTime dateTime1 = DateTime.ParseExact(week[0], "MMddyyyy", CultureInfo.InvariantCulture);
-                DateTime dateTime2 = DateTime.ParseExact(week[1], "MMddyyyy", CultureInfo.InvariantCulture);
                 DateTime endDate = Convert.ToDateTime(week[1]);
-                url = "api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + week[0] + "/" + week[1];
+                url = "api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("dd-MM-yyyy")+ "/" + endDate.ToString("dd-MM-yyyy");
             }
             return url;
         }
@@ -222,7 +220,7 @@ namespace EIS.WebApp.Controllers
             {
                 DateTime startDate = Convert.ToDateTime(week[0]);
                 DateTime endDate = Convert.ToDateTime(week[1]);
-                url = "api/Attendances/GetAllAttendanceWeekly/" + startDate + "/" + endDate;
+                url = "api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
             }
             else
             {
@@ -259,7 +257,7 @@ namespace EIS.WebApp.Controllers
                 DateTime startDate = Convert.ToDateTime(week[0]);
                 DateTime endDate = Convert.ToDateTime(week[1]);
                 ViewBag.startDate = startDate;
-                url = "api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate + "/" + endDate;
+                url = "api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
             }
             return url;
         }
