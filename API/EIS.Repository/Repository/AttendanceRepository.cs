@@ -74,9 +74,9 @@ namespace EIS.Repositories.Repository
             attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
             if (attendanceReport.PresentDays == 0)
             {
-                attendanceReport.TimeIn = "-";
-                attendanceReport.TimeOut = "-";
-                attendanceReport.AverageTime = "-";
+                attendanceReport.TimeIn = "00:00";
+                attendanceReport.TimeOut = "00:00";
+                attendanceReport.AverageTime = "00:00";
             }
             else
             {

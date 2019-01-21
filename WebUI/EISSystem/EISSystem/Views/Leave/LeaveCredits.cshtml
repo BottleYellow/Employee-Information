@@ -9,6 +9,11 @@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+    </style>
 </head>
 <body>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddCredit")"></div>
@@ -84,13 +89,13 @@
                 }
             ],
             "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
+                { "aTargets": [1], "bSortable": true },
                 { "aTargets": ['_all'], "bSortable": false }
             ],
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
-                [5, 10, 25, -1],
-                ['5', '10', '25', 'All']
+                [10, 25, -1],
+                ['10', '25', 'All']
             ],
             ajax: {
                 "url": "/Leave/LeaveCredits",
@@ -100,7 +105,7 @@
             "columns": [
                 {
                     "data": null, "autoWidth": true, render: function (row) {
-                        return row.Person.FirstName;
+                        return row.Person.FullName;
                     }
                 },
                 {
