@@ -40,10 +40,19 @@ namespace EIS.WebApp.Controllers
             //Paging Size (10,20,50,100)
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
+            if(string.IsNullOrEmpty(search))
+            {
+                sortEmployee.Search = null;
+            }
+            else
+            {
+                sortEmployee.Search = search;
+            }
+          
             HttpClient client = _service.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
+
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-            Url = Url +"/"+ search;
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
 
             ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;

@@ -34,7 +34,7 @@ namespace EIS.WebApp.Controllers
         {
             string url = GetAllAttendanceData(date, type);
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Person>(url);
+           arrayData = LoadData<Person>(url);
 
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
@@ -54,7 +54,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("My Attendance History")]
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
-        {
+       {
             int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             string url = GetAttendanceByIdData(date, type, pId);
             ArrayList arrayData = new ArrayList();
@@ -249,7 +249,7 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "month")
             {
-                url = "api/Attendances/GetMOnthlyAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
+                url = "api/Attendances/GetMonthlyAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")

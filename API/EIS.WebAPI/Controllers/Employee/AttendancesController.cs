@@ -97,7 +97,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             }
             return Ok(data);
         }
@@ -115,7 +115,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             }
             return Ok(data);
         }
@@ -134,7 +134,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search, sortGrid, attendanceData);
+                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             }
             return Ok(data);
         }
@@ -157,7 +157,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+                data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             }
             data.Add(attendanceData.Count());
             return Ok(data);
@@ -179,7 +179,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+                data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             }
             data.Add(attendanceData.Count());
             return Ok(data);
@@ -200,7 +200,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.Attendances.GetDataByGridCondition(x => x.DateIn.ToString() == sortGrid.Search, sortGrid, attendancelist.AsQueryable());
+                data = _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             }
             data.Add(attendanceData.Count());
             return Ok(data);

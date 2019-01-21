@@ -215,16 +215,21 @@
                 buttons: [
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Report',
+                        title: 'ATTENDANCE REPORT',
                         text: 'Export',
                         titleAttr: 'Export to Pdf',
                         orientation: 'landscape',
                         pageSize: 'LEGAL'
                     }
                 ],
+                "aoColumnDefs": [
+                    { "aTargets": [0], "bSortable": true },
+                    { "aTargets": ['_all'], "bSortable": false }
+                ],
+
                 lengthMenu: [
-                    [5, 10, 25, -1],
-                    ['5', '10', '25', 'All']
+                    [10, 25, -1],
+                    ['10', '25', 'All']
                 ],
                 ajax: {
                     "url": "/Attendance/AllAttendance",
@@ -234,7 +239,7 @@
                 },
                 "columns": [
                     {
-                        "data": null, "name": "TenantId", "autoWidth": true, render: function (row) {
+                        "data": null, "name": "FirstName", "autoWidth": true, render: function (row) {
                             return row.FirstName + " " + row.MiddleName + " " + row.LastName;
                         }
                     },
