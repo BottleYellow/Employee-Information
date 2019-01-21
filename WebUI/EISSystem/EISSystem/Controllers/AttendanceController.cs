@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -116,7 +117,7 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult AttendanceSummaryById(string date, string type, int? id)
         {
-            string url = GetAttendanceByIdData(date, type, id);
+            string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             AttendanceReport attendanceReport = new AttendanceReport();
@@ -189,9 +190,12 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
+
                 DateTime startDate = Convert.ToDateTime(week[0]);
+                DateTime dateTime1 = DateTime.ParseExact(week[0], "MMddyyyy", CultureInfo.InvariantCulture);
+                DateTime dateTime2 = DateTime.ParseExact(week[1], "MMddyyyy", CultureInfo.InvariantCulture);
                 DateTime endDate = Convert.ToDateTime(week[1]);
-                url = "api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate + "/" + endDate;
+                url = "api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + week[0] + "/" + week[1];
             }
             return url;
         }

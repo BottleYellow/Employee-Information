@@ -7,6 +7,6 @@ namespace EIS.Repositories.IRepository
     public interface ILeaveRequestRepository : IRepositorybase<LeaveRequest>
     {
         void UpdateRequestStatus(int RequestId, string Status);
-        IEnumerable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
+        IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
     }
 }

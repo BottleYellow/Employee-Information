@@ -52,11 +52,23 @@ namespace EIS.WebAPI.Controllers
 
         [Route("RequestsUnderMe")]
         [DisplayName("Leave Requests of employees under me")]
-        [HttpGet]
-        public IEnumerable<LeaveRequest> GetLeaveRequestsUnderMe()
+        [HttpPost]
+        public ActionResult GetLeaveRequestsUnderMe([FromBody]SortGrid sortGrid)
         {
             var PersonId = Cache.GetStringValue("PersonId");
-            return _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+            }
+            return Ok(data);
         }
 
         [DisplayName("View request")]

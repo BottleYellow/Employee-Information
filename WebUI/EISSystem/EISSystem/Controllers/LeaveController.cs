@@ -50,10 +50,20 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Show Employees Requests")]
         public IActionResult LeaveRequestsUnderMe()
         {
-            response = _services.LeaveRules.GetResponse("api/LeaveRequest/RequestsUnderMe");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
-            return View(Requests);
+      
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("LeaveRequestsUnderMe")]
+        public IActionResult GetLeaveRequestsUnderMe()
+        {
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/RequestsUnderMe");
+
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
 
         [DisplayName("Show my leaves")]

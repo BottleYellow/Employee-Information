@@ -32,7 +32,7 @@ namespace EIS.WebAPI.Controllers.Leave
         public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            var employeeData = _repository.LeaveRules.GetAllLeaveRules();
+            var employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId);
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 

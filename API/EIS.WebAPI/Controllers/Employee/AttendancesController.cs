@@ -239,11 +239,12 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("My Attendance Summary")]
-        [HttpGet("GetWeeklyAttendanceSummaryById/{id}/{startDate}/{endDate}")]
-        public IActionResult GetWeeklySummaryAttendanceById([FromRoute]int id, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+        [Route("GetWeeklyAttendanceSummaryById")]
+        [HttpGet("{id}/{startDate}/{endDate}")]
+        public IActionResult GetWeeklySummaryAttendanceById([FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= startDate && x.DateIn.Date <= endDate && x.PersonId == id);
+            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(7, attendanceData);
             return Ok(attendanceReport);
         }

@@ -14,7 +14,7 @@ namespace EIS.Repositories.Repository
         {
 
         }
-        public IEnumerable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
+        public IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
         {
             var results = from Requests in _dbContext.LeaveRequests
                           join Person in _dbContext.Person on Requests.PersonId equals Person.Id
