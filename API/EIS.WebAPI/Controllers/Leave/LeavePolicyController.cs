@@ -40,7 +40,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             else
             {
-                data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType == sortGrid.Search, sortGrid, employeeData);
+                data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
             }
             return Ok(data);
         }

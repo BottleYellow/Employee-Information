@@ -22,9 +22,22 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.Gender).NotNull();
             RuleFor(x => x.MobileNumber).Length(10, 15).Matches("^[0-9]*$").NotNull().Must(UniqueMobileNumber).WithMessage("Mobile Number already exists"); ;
             RuleFor(x => x.DateOfBirth).NotNull();
+            RuleFor(x => x.EmployeeCode).NotNull().Must(UniqueCode).WithMessage("Employee Code already exists");
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.AadharCard).Must(UniqueAadhar).WithMessage("Aadhar No already exists");
             RuleFor(x => x.PanCard).Must(UniquePan).WithMessage("Pan Card No already exists");
+        }
+        public bool UniqueCode(Person obj, string EmployeeCode)
+        {
+            var person = _repositoryWrapper.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);
+            if (person == null)
+            {
+                return true;
+            }
+            else
+            {
+                return person.Id == obj.Id;
+            }
         }
         public bool UniqueEmail(Person obj,string email)
         {

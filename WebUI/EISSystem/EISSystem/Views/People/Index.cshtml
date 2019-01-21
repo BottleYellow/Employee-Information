@@ -24,7 +24,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create New" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>ID Card</th>
+                                <th>Employee Code</th>
                                 <th>Name</th>
                                 <th>Image</th>
                                 <th>Gender</th>
@@ -125,7 +125,7 @@
                 buttons: [
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Report',
+                        title: 'EMPLOYEE REPORT',
                         text: 'Export',
                         titleAttr: 'Export to Pdf',
                         orientation: 'landscape',
@@ -133,12 +133,13 @@
                     }
                 ],
                 "aoColumnDefs": [
+                    { "aTargets": [0], "bSortable": true },
                     { "aTargets": [1], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
                 ],
                 lengthMenu: [
-                    [5, 10, 25, -1],
-                    ['5', '10', '25', 'All']
+                    [10, 25, -1],
+                    ['10', '25', 'All']
                 ],
                 ajax: {
                     "url": "/People/LoadData",

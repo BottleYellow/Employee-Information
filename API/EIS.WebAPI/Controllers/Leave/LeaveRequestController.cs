@@ -36,7 +36,7 @@ namespace EIS.WebAPI.Controllers
         {
             ArrayList data = new ArrayList();
             var leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId); ;
-
+           
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 
@@ -44,7 +44,8 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+                string search = sortGrid.Search.ToLower();
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search)||x.Reason.ToLower().Contains(search), sortGrid, leaveData);
             }
             return Ok(data);
 
@@ -85,6 +86,7 @@ namespace EIS.WebAPI.Controllers
         {
             ArrayList data = new ArrayList();
             var leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
+        
             if (leaveData == null)
             {
                 return NotFound();
@@ -92,12 +94,12 @@ namespace EIS.WebAPI.Controllers
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
-
+               
                 data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
             }
             else
             {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
+                data = _repository.LeaveRequest.GetDataByGridCondition(x=>x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
             }
             return Ok(data);
 

@@ -105,7 +105,7 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdCard,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
+        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
             var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
@@ -116,12 +116,9 @@ namespace EIS.WebApp.Controllers
             ViewBag.Persons = data;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage responseIdCard = _services.Employee.GetResponse("api/employee/GenNewIdCardNo");
-                var dataIdCard = responseIdCard.Content.ReadAsStringAsync().Result;
-
-                int IdCardNo = JsonConvert.DeserializeObject<int>(dataIdCard);
+               
                 var rootPath = _environment.WebRootPath;
-                var filePath = "//EmployeeData//" + tId+  IdCardNo + "//Image//";
+                var filePath = "//EmployeeData//" + tId+  person.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
                 {
                     Directory.CreateDirectory(rootPath + "//EmployeeData//");
