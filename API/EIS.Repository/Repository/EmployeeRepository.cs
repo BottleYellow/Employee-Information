@@ -15,12 +15,13 @@ namespace EIS.Repositories.Repository
 
         }
 
-        public void ActivatePerson(int Id)
+        public Person ActivatePerson(int id)
         {
-            var Person = _dbContext.Person.Include(x=>x.User).Where(x=>x.Id==Id).FirstOrDefault();
-            Person.IsActive = true;
-            Person.User.IsActive = true;
+            Person person = _dbContext.Person.Include(x => x.User).Where(x => x.Id == id).FirstOrDefault();
+            person.IsActive = true;
+            person.User.IsActive = true;
             Save();
+            return (person);
         }
 
         public void AddDesignationAndSave(Role designation)
