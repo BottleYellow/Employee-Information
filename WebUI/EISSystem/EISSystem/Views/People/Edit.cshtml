@@ -178,13 +178,13 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="RoleId">Designation : </label>
                                             <select asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations, "Id", "Name"))" class="form-control show-tick"></select>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
                                             <div class="form-line">
                                                 <select asp-for="ReportingPersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
@@ -207,7 +207,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label class="control-label" asp-for="Salary">Salary : </label>
                                             <div class="form-line">
                                                 <input asp-for="Salary" class="form-control" />
@@ -220,7 +220,7 @@
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
@@ -229,7 +229,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
+                                        <div class="form-group">
                                             <label class="control-label" asp-for="AadharCard">Aadhar No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="AadharCard" class="form-control" />

@@ -163,7 +163,7 @@ namespace EIS.WebApp.Controllers
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                    return RedirectToAction("Index");
+                    return View("Index");
                 }
             }
             return View(person);

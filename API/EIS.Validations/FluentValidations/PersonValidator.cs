@@ -66,7 +66,7 @@ namespace EIS.Validations.FluentValidations
         public bool UniqueAadhar(Person obj,string aadhar)
         {
             var person = _repositoryWrapper.Employee.FindByCondition(x=>x.AadharCard==aadhar);
-            if (person == null)
+            if (person == null || string.IsNullOrEmpty(person.AadharCard))
             {
                 return true;
             }
@@ -79,7 +79,7 @@ namespace EIS.Validations.FluentValidations
         {
             var person = _repositoryWrapper.Employee.FindByCondition(x=>x.PanCard==pan);
             
-            if (person == null)
+            if (person == null || string.IsNullOrEmpty(person.PanCard))
             {
                 return true;
             }
