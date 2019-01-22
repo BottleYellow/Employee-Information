@@ -1,12 +1,6 @@
 ﻿@using EIS.Entities.Enums;
 @model EIS.Entities.Employee.Person
 
-@{
-
-    //ViewData["Title"] = "Create";
-    //Layout = "_AdminLayout";
-
-}
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <style type="text/css">
@@ -115,6 +109,7 @@
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
 
                                             </div>
+                                            <span asp-validation-for="Image" class="text-danger"></span>
                                             <span class="text-danger"></span>
                                         </div>
                                     </div>
@@ -263,8 +258,7 @@
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <SCRIPT type="text/javascript">
-
-
+  
     function ValidateFileUpload() {
         var fuData = document.getElementById('imageFile');
         var FileUploadPath = fuData.value;
@@ -284,7 +278,7 @@
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
             {
-                if (fileLength < 60000)
+                if (fileLength < 500000)
                 {
                     status = true;
                 }                  

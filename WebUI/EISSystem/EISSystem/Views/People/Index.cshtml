@@ -146,19 +146,13 @@
                     "type": "POST",
                     "datatype": "json",
                     "data": { "type": bool }
-                },
-                "columnDefs": [
-                    {
-                        "render": function (data, type, row) {
-                            return data + " " + row.MiddleName + " " + row.LastName;
-                        },
-                        "targets": 1
-                    },
-                ],
+                },                
                 "columns": [
                     { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
                     {
-                        "data": "FirstName", "name": "FirstName", "autoWidth": true
+                        "data": "FirstName", "name": "FirstName", "autoWidth": true, "render": function (data, type, row) {
+                            return row.FullName;
+                        }
                     },
                     {
                         "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
