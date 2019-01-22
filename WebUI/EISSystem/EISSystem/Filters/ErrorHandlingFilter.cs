@@ -37,8 +37,7 @@ namespace EIS.WebApp.Filters
                     logger.LogError(500, exception, exception.Message);
                 
                 var code = context.HttpContext.Response.StatusCode;
-
-                context.HttpContext.Response.WriteAsync("An unexpected fault happened. Status Code occurred");
+                context.Result = new RedirectResult("/Account/LogOut");
             }
         }
     }
