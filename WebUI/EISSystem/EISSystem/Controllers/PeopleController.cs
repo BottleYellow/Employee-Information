@@ -1,9 +1,7 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
-using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
-using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +12,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -73,7 +70,7 @@ namespace EIS.WebApp.Controllers
                         employees.Add(e);
                     }
                 }        
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = employees });
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = employees });
         }
         public IActionResult Profile(int PersonId)
         {
@@ -81,7 +78,7 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
-             ViewBag.Name = data.FirstName + " " + data.LastName;
+             ViewBag.Name = data.FullName ;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
             ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
@@ -114,6 +111,7 @@ namespace EIS.WebApp.Controllers
                        where p.Role.Name != "Employee"
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
+           
             if (ModelState.IsValid)
             {
                
@@ -130,8 +128,9 @@ namespace EIS.WebApp.Controllers
                 var uploadPath = rootPath + filePath;
                 if (file != null && file.Length > 0)
                 {
-                    var fileExtension = Path.GetExtension(file.FileName);
-                    if ((fileExtension.ToLower() == ".png" || fileExtension.ToLower() == ".jpg") && file.Length <= 500000)
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                    
+                    if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                     {                                          
                         var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
@@ -142,7 +141,7 @@ namespace EIS.WebApp.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("Image", "Please select Image of type JPG and BMP and size must be below 500 kb");
+                        ModelState.AddModelError("Image", "Please select Image of type GIF, PNG, JPG, JPEG and BMP and size must be below 500 kb");
                     }
                 }
                 else
@@ -166,6 +165,12 @@ namespace EIS.WebApp.Controllers
                     return View("Index");
                 }
             }
+            if (file != null)
+            {
+                ModelState.AddModelError("Image", "Please upload the file");
+                ViewBag.ImageExist = "Validation failed... Please Upload the file again";
+            }
+
             return View(person);
         }
 
@@ -205,9 +210,9 @@ namespace EIS.WebApp.Controllers
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {
-                        var fileExtension = Path.GetExtension(file.FileName);
-                        if ((fileExtension.ToLower() == ".png" || fileExtension.ToLower() == ".jpg") && file.Length <= 500000)
-                        {                        
+                        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                        if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
+                        {
                             string[] files = Directory.GetFiles(rootPath + filePath);                            
                             System.IO.File.Delete(files[0]);                            
                             var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
