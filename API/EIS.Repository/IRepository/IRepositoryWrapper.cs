@@ -13,6 +13,7 @@ namespace EIS.Repositories.IRepository
         ILeaveRulesRepository LeaveRules { get; }
         ILeaveCreditRepository LeaveCredit { get; }
         IUserRepository Users { get; }
-        
+        IDashboardRepository Dashboard{ get; }
+
     }
 }

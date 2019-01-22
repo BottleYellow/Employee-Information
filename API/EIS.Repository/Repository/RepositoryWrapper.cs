@@ -27,9 +27,10 @@ namespace EIS.Repositories.Repository
 
         private IUserRepository _user;
 
-        
+        private IDashboardRepository _dashboard;
 
-     public IEmployeeRepository Employee 
+
+        public IEmployeeRepository Employee 
         {
             get {
                 if (_employee == null)
@@ -140,7 +141,18 @@ namespace EIS.Repositories.Repository
                 return _user;
             }
         }
-        
+
+        public IDashboardRepository Dashboard
+        {
+            get
+            {
+                if (_dashboard == null)
+                {
+                    _dashboard = new DashboardRepository(_dbContext);
+                }
+                return _dashboard;
+            }
+        }
 
         public RepositoryWrapper(ApplicationDbContext dbContext)
         {

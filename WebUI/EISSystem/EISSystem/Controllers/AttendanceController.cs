@@ -34,10 +34,8 @@ namespace EIS.WebApp.Controllers
             string url = GetAllAttendanceData(date, type);
             ArrayList arrayData = new ArrayList();
            arrayData = LoadData<Person>(url);
-
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
-
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
         #endregion
