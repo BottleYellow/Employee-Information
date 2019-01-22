@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>All Attendance</title>
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -49,13 +50,12 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">*@
                         <div class="row col-md-12">
                             <div class="col-md-9">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Select Type Of Reports</label>
-                                        <select class="form-control" id="select" style="width:200px;">
+                                        <select class="form-control" id="select">
                                             <option value="year" id="year">Year</option>
                                             <option selected value="month" id="month">Month</option>
                                             <option value="week" id="week">Week</option>
@@ -64,49 +64,45 @@
                                     <div class="col-md-4">
                                         <div id="inputyeardiv" hidden="hidden">
                                             <label>Select Year</label><br />
-                                            <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
+                                            <input class="form-control" type="text" id="inputyear"  placeholder="select year" />
                                         </div>
                                         <div id="inputmonthdiv">
                                             <label>Select Month</label><br />
-                                            <input class="form-control" type="text" id="inputmonth" style="width:200px;" placeholder="select month" />
+                                            <input class="form-control" type="text" id="inputmonth"  placeholder="select month" />
                                         </div>
                                         <div id="inputweekdiv" hidden="hidden">
                                             <label>Select Week</label><br />
-                                            <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
+                                            <input class="form-control" type="text" id="inputweek"  placeholder="select week" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <br />
-                                        <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                        <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-xs-12">
 
                             </div>
-
                         </div>
                         <div>
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <div id="tbl">
-                                <div class="table-responsive">
-                                    <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable ">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Present Days</th>
-                                                <th>Absent Days</th>
-                                                <th>Total Days</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
+                            <div>
+                                <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Present Days</th>
+                                            <th>Absent Days</th>
+                                            <th>Total Days</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div style="height:40px"></div>
                 </div>
             </div>
         </div>
@@ -121,12 +117,18 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
 @*for pdf*@
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         var totalDays = 0;

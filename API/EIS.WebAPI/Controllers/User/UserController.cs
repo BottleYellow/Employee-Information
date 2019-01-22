@@ -23,7 +23,7 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet]
         public IEnumerable<Users> Get()
         {
-            return _repository.Users.FindAll();
+            return _repository.Users.FindAllByCondition(x=>x.TenantId==TenantId);
         }
 
         [AllowAnonymous]

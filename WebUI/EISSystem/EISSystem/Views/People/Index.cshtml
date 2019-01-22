@@ -5,7 +5,7 @@
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+
 </head>
 
 @{
@@ -147,22 +147,17 @@
                     "datatype": "json",
                     "data": { "type": bool }
                 },
-                "columnDefs": [
-                    {
-                        "render": function (data, type, row) {
-                            return data + " " + row.MiddleName + " " + row.LastName;
-                        },
-                        "targets": 1
-                    },
-                ],
+
                 "columns": [
                     { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
                     {
-                        "data": "FirstName", "name": "FirstName", "autoWidth": true
+                        "data": "FirstName", "name": "FirstName", "autoWidth": true, "render": function (data, type, row) {
+                            return row.FullName;
+                        }
                     },
                     {
                         "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
-                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.EmployeeCode+ '\\Image\\' + data + '" style="height:40px; weight:40px">';
+                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.EmployeeCode + '\\Image\\' + data + '" style="height:40px; weight:40px">';
                         }
                     },
                     {
@@ -222,7 +217,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 

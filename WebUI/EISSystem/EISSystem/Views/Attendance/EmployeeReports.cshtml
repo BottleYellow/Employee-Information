@@ -37,6 +37,7 @@
 </style>
 <head>
     <title>Attendance History</title>
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -87,7 +88,9 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-3"></div>
+                                <div class="col-md-3">
+
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -96,46 +99,46 @@
                             </div>
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average Hrs</div>
                                             <div id="averageHours" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeIn</div>
                                             <div id="averageTimeIn" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
                                             <div id="averageTimeOut" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Present Days</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Absent Days</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
-                                        <div class="panel panel-primary">      
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="panel panel-primary">
                                             <div class="panel-heading">Total Days</div>
                                             <div id="totalDays" class="panel-body"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table id="example" class="table table-responsive table-striped table-hover">
+                            <div>
+                                <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -146,11 +149,10 @@
                                         </tr>
                                     </thead>
                                 </table>
-                            </div>
+</div>
 
                         </div>
                     </div>
-                    <div style="height:40px"></div>
                 </div>
             </div>
         </div>
@@ -164,7 +166,6 @@
 <script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
-
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
@@ -173,8 +174,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
 
 <script type="text/javascript">
@@ -268,7 +272,7 @@
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
                     document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
-                document.getElementById("presentDays").innerHTML = data.PresentDays;
+                    document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalDays").innerHTML = data.TotalDays;
                 }
@@ -295,12 +299,12 @@
                         'targets': [0, 1, 2]
                     }
                 ],
-                
+
                 "aoColumnDefs": [
                     { "aTargets": [0], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
                 ],
-                sDom: '<"myexport"B>ifrtlp',
+                sDom: '<"myexport"B>irtlp',
                 lengthMenu: [
                     [5, 10, 25, -1],
                     ['5', '10', '25', 'All']
@@ -319,15 +323,15 @@
                         }
                     },
                     {
-                        "data": "TimeIn", "autoWidth": true, render: function (data,type,row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; } 
+                        "data": "TimeIn", "autoWidth": true, render: function (data, type, row) {
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
                             return data;
                         }
                     },
                     {
                         "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; } 
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
                             return data;
                         }
@@ -337,12 +341,7 @@
                             if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
                             } else {
-                                var date = new Date();
-                                if (row.DateIn < date) {
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
-                                } else {
-                                    return '-';
-                                }
+                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
                             }
                         }
                     }
