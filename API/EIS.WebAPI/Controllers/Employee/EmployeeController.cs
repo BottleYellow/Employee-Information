@@ -158,13 +158,6 @@ namespace EIS.WebAPI.Controllers
             var d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
-        [Route("ActivatePerson/{Id}")]
-        [HttpGet]
-        public IActionResult ActivatePerson([FromRoute]int Id)
-        {
-            _repository.Employee.ActivatePerson(Id);
-            return Ok();
-        }
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)

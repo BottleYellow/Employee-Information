@@ -22,7 +22,7 @@ namespace EIS.WebApp.TagHelpers
                 Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
             
             String[] ParentMenus = new String[5]{ "Attendance Management", "Role Management","Leave Management","User Management", "" };
-            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","List of Roles", "Create New Attendance", "List Of Users","Manage Roles", "Attendance Reports","My Attendance History","Show Employees Requests" };
+            String[] SubMenus = {"List Of Employees","leave Policies", "View all requests", "leave Credits","Show my leaves","List of Roles", "Create New Attendance", "List Of Users","Manage Roles", "Attendance Reports","My Attendance History","Show Employees Requests", "Employee Attendance History" };
             if (Cache.GetStringValue("Role") == "Admin")
                 ParentMenus.SetValue("Employee Management", 4);
 

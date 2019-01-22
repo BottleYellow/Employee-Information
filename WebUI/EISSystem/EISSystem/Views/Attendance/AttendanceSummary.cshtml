@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
-
+@using EIS.WebApp.Services;
+@{
+    RedisAgent Cache = new RedisAgent();
+ }
 <style type="text/css">
     td {
         width: 200px;
@@ -142,7 +145,7 @@
                                 </div>
                             </div>
                             <div>
-                                <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
+                                <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -185,8 +188,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var id = null;
-        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
+        var id =@Cache.GetStringValue("PersonId");
+        $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
         var totalDays = 0;
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
@@ -268,8 +271,8 @@
 
         function generateReport(value, type, id) {
             $.ajax({
-                type: 'POST',
-                url: "/Attendance/AttendanceSummaryById",
+                type: 'PUT',
+                url: "/Attendance/AttendanceSummary",
                 data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -313,7 +316,7 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/EmployeeReportsById",
+                    "url": "/Attendance/AttendanceSummary",
                     "type": "POST",
                     "datatype": "json",
                     "data": { "date": value, "type": type, "id": id },

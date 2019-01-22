@@ -89,7 +89,7 @@ namespace EIS.Repositories.Repository
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
 
                 var hour = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
-                attendanceReport.AverageTime = (hour * 0.6).ToString();
+                attendanceReport.AverageTime = (hour).ToString();
             }
             return attendanceReport;
         }

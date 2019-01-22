@@ -43,7 +43,7 @@ namespace EIS.WebApp.Controllers
             _environment = environment;
             _controllerService = controllerService;
             _services = services;
-            HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations");
+            HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             rolesList = JsonConvert.DeserializeObject<List<Role>>(stringData);
         }
@@ -77,7 +77,7 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Profile(int PersonId)
         {
-            response = _services.Employee.GetResponse("api/employee/Profile/" + PersonId + "");
+            response = _services.Employee.GetResponse("api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
@@ -157,7 +157,7 @@ namespace EIS.WebApp.Controllers
                 }
 
                 person.CreatedDate = DateTime.Now.Date;
-                HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person);
+                HttpResponseMessage response = _services.Employee.PostResponse("api/employee", person );
                 var data1 = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode == true)
@@ -177,7 +177,7 @@ namespace EIS.WebApp.Controllers
             var data1 = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse("api/employee/" + id + "").Content.ReadAsStringAsync().Result;
+            string stringData = _services.Employee.GetResponse("api/employee/" + id + "" ).Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);         
             return View(data);
         }
@@ -223,7 +223,7 @@ namespace EIS.WebApp.Controllers
                         person.MiddleName = "";
                     }
                     person.IsActive = true;
-                    HttpResponseMessage response = _services.Employee.PutResponse("api/employee/" + id + "", person);
+                    HttpResponseMessage response = _services.Employee.PutResponse("api/employee/" + id + "", person );
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -251,7 +251,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Employee")]
         public IActionResult Delete(int id)
         {
-            response = _services.Employee.GetResponse("api/employee/" + id + "");
+            response = _services.Employee.GetResponse("api/employee/" + id + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
             //imageBase64Data = Convert.ToBase64String(data1.Image);
@@ -278,11 +278,11 @@ namespace EIS.WebApp.Controllers
         [AllowAnonymous]
         public List<Person> EmployeeData()
         {
-            response = _services.Employee.GetResponse("api/employee");
+            response = _services.Employee.GetResponse("api/employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<Person>>(stringData);
 
-            HttpResponseMessage response2 = _services.Roles.GetResponse("api/employee/Designations");
+            HttpResponseMessage response2 = _services.Roles.GetResponse("api/employee/Designations" );
             string stringData1 = response2.Content.ReadAsStringAsync().Result;
             var data2 = JsonConvert.DeserializeObject<List<Role>>(stringData1);
 
@@ -298,7 +298,7 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult ActivateEmployee(int id)
         {
-            response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + id + "");
+            response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + id + "" );
             if(response.IsSuccessStatusCode)
                 ViewBag.Message = "Information activated successfully!";
             return View("Index");
@@ -309,7 +309,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Manage Roles")]
         public IActionResult Roles()
         {
-            response = _services.Roles.GetResponse("api/employee/Designations");
+            response = _services.Roles.GetResponse("api/employee/Designations" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             return View(data);
@@ -318,7 +318,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Role")]
         public IActionResult AddRole()
         {
-            response = _services.Roles.GetResponse("api/employee/Designations");
+            response = _services.Roles.GetResponse("api/employee/Designations" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             ViewBag.Designations = data;
@@ -378,7 +378,7 @@ namespace EIS.WebApp.Controllers
                 //role.Access = JsonConvert.SerializeObject(access);
                 role.Access = JsonConvert.SerializeObject(UserAccess);
             }
-            HttpResponseMessage response = _services.Roles.PostResponse("api/Employee/AddDesignation", role);
+            HttpResponseMessage response = _services.Roles.PostResponse("api/Employee/AddDesignation", role );
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
@@ -395,7 +395,7 @@ namespace EIS.WebApp.Controllers
         public ActionResult EditRole(int id)
         {
             ViewData["Controllers"] = _controllerService.GetControllers();
-            HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations/" + id + "");
+            HttpResponseMessage response = _services.Roles.GetResponse("api/Employee/Designations/" + id + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
             var access = JsonConvert.DeserializeObject<List<Navigation>>(role.Access);
@@ -419,7 +419,7 @@ namespace EIS.WebApp.Controllers
                 ViewData["Controllers"] = _controllerService.GetControllers();
                 return View(viewModel);
             }
-            string stringData = _services.Roles.GetResponse("api/Employee/Designations/" + id + "").Content.ReadAsStringAsync().Result;
+            string stringData = _services.Roles.GetResponse("api/Employee/Designations/" + id + "" ).Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
             role.Name = viewModel.Name;
             role.UpdatedDate = DateTime.Now.Date;
@@ -462,7 +462,9 @@ namespace EIS.WebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.Roles.PutResponse("api/Employee/UpdateDesignation", role);
+                HttpResponseMessage response = _services.Roles.PutResponse("api/Employee/UpdateDesignation", role );
+                Cache.DeleteStringValue("Access");
+                Cache.SetStringValue("Access", role.Access);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Roles", "People");
             }
@@ -483,7 +485,7 @@ namespace EIS.WebApp.Controllers
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.PermanentAddress.PostResponse("api/PermanentAddress", permanent);
+                HttpResponseMessage response = _services.PermanentAddress.PostResponse("api/PermanentAddress", permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Profile", "People", new { PersonId = pid });
             }
@@ -498,7 +500,7 @@ namespace EIS.WebApp.Controllers
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.PermanentAddress.PutResponse("api/PermanentAddress", permanent);
+                HttpResponseMessage response = _services.PermanentAddress.PutResponse("api/PermanentAddress", permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = pid });
@@ -506,7 +508,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Permanent Address")]
         public IActionResult DeletePermanentAddress(int perid)
         {
-            HttpResponseMessage response = _services.PermanentAddress.DeleteResponse("api/PermanentAddress/" + perid + "");
+            HttpResponseMessage response = _services.PermanentAddress.DeleteResponse("api/PermanentAddress/" + perid + "" );
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }
@@ -525,7 +527,7 @@ namespace EIS.WebApp.Controllers
             current.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.CurrentAddress.PostResponse("api/CurrentAddress", current);
+                HttpResponseMessage response = _services.CurrentAddress.PostResponse("api/CurrentAddress", current );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = pid });
@@ -539,7 +541,7 @@ namespace EIS.WebApp.Controllers
             current.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.CurrentAddress.PutResponse("api/CurrentAddress", current);
+                HttpResponseMessage response = _services.CurrentAddress.PutResponse("api/CurrentAddress", current );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = pid });
@@ -547,7 +549,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Current Address")]
         public IActionResult DeleteCurrentAddress(int cid)
         {
-            HttpResponseMessage response = _services.CurrentAddress.DeleteResponse("api/CurrentAddress/" + cid + "");
+            HttpResponseMessage response = _services.CurrentAddress.DeleteResponse("api/CurrentAddress/" + cid + "" );
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }
@@ -566,7 +568,7 @@ namespace EIS.WebApp.Controllers
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.EmergencyAddress.PostResponse("api/EmergencyAddress", emergency);
+                HttpResponseMessage response = _services.EmergencyAddress.PostResponse("api/EmergencyAddress", emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = pid });
@@ -575,7 +577,7 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult EditEmergencyAddress(int eid)
         {
-            HttpResponseMessage response = _services.EmergencyAddress.GetResponse("api/EmergencyAddress/Get/" + eid + "");
+            HttpResponseMessage response = _services.EmergencyAddress.GetResponse("api/EmergencyAddress/Get/" + eid + "" );
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             string emergency = response.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Emergency>(emergency);
@@ -589,7 +591,7 @@ namespace EIS.WebApp.Controllers
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.EmergencyAddress.PutResponse("api/EmergencyAddress", emergency);
+                HttpResponseMessage response = _services.EmergencyAddress.PutResponse("api/EmergencyAddress", emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = pid });
@@ -597,7 +599,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Emergency Address")]
         public IActionResult DeleteEmergencyAddress(int eid)
         {
-            HttpResponseMessage response = _services.EmergencyAddress.DeleteResponse("api/EmergencyAddress/" + eid + "");
+            HttpResponseMessage response = _services.EmergencyAddress.DeleteResponse("api/EmergencyAddress/" + eid + "" );
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }

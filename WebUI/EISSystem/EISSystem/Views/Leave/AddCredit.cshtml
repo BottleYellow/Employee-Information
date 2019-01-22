@@ -36,7 +36,7 @@
                 <div class="form-group required">
                     <label class="control-label">Days to be alloted</label>
                     <div class="form-line">
-                        <input asp-for="AllotedDays" class="form-control" />
+                        <input asp-for="AllotedDays" maxlength="2" class="form-control" />
                     </div>
                     <span asp-validation-for="AllotedDays" class="text-danger"></span>
                 </div>

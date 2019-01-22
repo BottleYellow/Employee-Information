@@ -23,6 +23,7 @@ namespace EIS.WebApp.Controllers
         {
            _service = service;
             Cache = new RedisAgent();
+            
         }
         public ArrayList LoadData<T1>(string Url)
         {
