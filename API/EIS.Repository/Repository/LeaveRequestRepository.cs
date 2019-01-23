@@ -26,7 +26,7 @@ namespace EIS.Repositories.Repository
         public void UpdateRequestStatus(int RequestId, string Status)
         {
             var leaveCredit = new LeaveCredit();
-            LeaveRequest leaveRequest = FindByCondition(l => l.Id == RequestId);
+            LeaveRequest leaveRequest = _dbContext.LeaveRequests.Where(x => x.Id == RequestId).FirstOrDefault();
             if (Status == "Approve")
             {
                 leaveRequest.Status = "Approved";

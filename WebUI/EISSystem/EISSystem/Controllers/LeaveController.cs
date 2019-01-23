@@ -93,7 +93,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Request for leave")]
         public IActionResult RequestLeave()
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy");
+            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
             if (data.Count == 0)
@@ -114,7 +114,7 @@ namespace EIS.WebApp.Controllers
             {
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse("api/LeaveRequest", request);
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse("api/LeaveRequest", request );
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -127,11 +127,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Edit Leave Request")]
         public IActionResult EditLeaveRequest(int id)
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy");
+            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             ViewBag.ListOfPolicy = data;
-            string stringData = _services.LeaveRequest.GetResponse("api/LeaveRequest/" + id + "").Content.ReadAsStringAsync().Result;
+            string stringData = _services.LeaveRequest.GetResponse("api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
             LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
             return View(leave);
         }
@@ -144,7 +144,7 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 request.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRequest.PutResponse("api/LeaveRequest/"+id, request);
+                HttpResponseMessage response = _services.LeaveRequest.PutResponse("api/LeaveRequest/"+id, request );
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -190,12 +190,12 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 Leave.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRules.PostResponse("api/LeavePolicy", Leave);
+                HttpResponseMessage response = _services.LeaveRules.PostResponse("api/LeavePolicy", Leave );
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    HttpResponseMessage response2 = _services.LeaveRules.PostResponse("api/LeaveCredit/AddCredits", LeaveRules);
+                    HttpResponseMessage response2 = _services.LeaveRules.PostResponse("api/LeaveCredit/AddCredits", LeaveRules );
                     if (response2.IsSuccessStatusCode == true)
                     {
                         return View();
@@ -233,14 +233,14 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy");
+            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             if (data.Count == 0)
                 ViewBag.ListOfPolicy = null;
             else
                 ViewBag.ListOfPolicy = data;
-            HttpResponseMessage response1 = _services.Employee.GetResponse("api/employee");
+            HttpResponseMessage response1 = _services.Employee.GetResponse("api/employee" );
             string stringData = response1.Content.ReadAsStringAsync().Result;
             List<Person> data1 = JsonConvert.DeserializeObject<List<Person>>(stringData);
             ViewBag.Persons = data1;

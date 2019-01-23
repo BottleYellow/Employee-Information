@@ -30,15 +30,16 @@ namespace EIS.WebApp.Controllers
         {
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Manager");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            var dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            var dashBoard = JsonConvert.DeserializeObject<ManagerDashboard>(stringData);
             return View(dashBoard);
         }
 
-        public IActionResult EmployeeDashboard(int PersonId)
-        { 
+        public IActionResult EmployeeDashboard()
+        {
+            int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Employee/"+PersonId+"");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            var dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            var dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
             return View(dashBoard);
         }
     }

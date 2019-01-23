@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
-
+@using EIS.WebApp.Services;
+@{
+    RedisAgent Cache = new RedisAgent();
+ }
 <style type="text/css">
     td {
         width: 200px;
@@ -37,6 +40,7 @@
 </style>
 <head>
     <title>Employee wise Reports</title>
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -60,9 +64,9 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label>Select Employee</label>
-                                            <select class="form-control" id="selectEmployee"  asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
+                                            <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
                                                 <option>-- Select --</option>
-                                            </select>                                           
+                                            </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label>Select Type Of Reports</label>
@@ -114,25 +118,25 @@
                                             <div id="averageTimeIn" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-2">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
                                             <div id="averageTimeOut" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-2">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Present Days</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-2">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Absent Days</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-2">
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Total Days</div>
                                             <div id="totalDays" class="panel-body"></div>
@@ -140,8 +144,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table id="example" class="table table-responsive table-striped table-hover">
+                            <div>
+                                <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -150,13 +154,12 @@
                                             <th>Status</th>
 
                                         </tr>
-                                    </thead>                          
+                                    </thead>
                                 </table>
                             </div>
 
                         </div>
                     </div>
-                    <div style="height:40px"></div>
                 </div>
             </div>
         </div>
@@ -169,7 +172,6 @@
 <script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
-
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
@@ -178,15 +180,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-
-
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var id = null;
-        $('select[id="selectEmployee"]').find('option[value='+1+']').attr("selected", true);
+        var id =@Cache.GetStringValue("PersonId");
+        $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
         var totalDays = 0;
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
@@ -195,7 +198,7 @@
             format: "MM/YYYY"
         });
         $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month',id);
+        generateReport(m + '/' + y, 'month', id);
 
         $('#select').on('change', function () {
             var v = $('#select').val();
@@ -244,7 +247,7 @@
                 else {
                     totalDays = 365;
                 }
-                generateReport(value, 'year',id);
+                generateReport(value, 'year', id);
             }
 
             else if (v == 'month') {
@@ -254,23 +257,23 @@
                 var y = monthYear[1];
                 var m = monthYear[0];
                 totalDays = new Date(y, m, 0).getDate()
-                generateReport(value, 'month',id);
+                generateReport(value, 'month', id);
             }
             else if (v == 'week') {
                 var value = $("#inputweek").val();
                 var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
                 var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week',id);
+                generateReport(firstDate + " - " + lastDate, 'week', id);
                 totalDays = 7;
             }
         });
 
-        function generateReport(value, type,id) {
+        function generateReport(value, type, id) {
             $.ajax({
-                type: 'POST',
-                url: "/Attendance/AttendanceSummaryById",
-                data: { "date": value, "type": type ,"id":id},
+                type: 'PUT',
+                url: "/Attendance/AttendanceSummary",
+                data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
@@ -307,16 +310,16 @@
                     { "aTargets": [0], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
                 ],
-                sDom: '<"myexport"B>ifrtlp',
+                sDom: '<"myexport"B>irtlp',
                 lengthMenu: [
                     [10, 25, -1],
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/EmployeeReportsById",
+                    "url": "/Attendance/AttendanceSummary",
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type ,"id": id},
+                    "data": { "date": value, "type": type, "id": id },
                 },
                 "columns": [
                     {
@@ -344,14 +347,9 @@
                             if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
                             } else {
-                                var dateIn = moment(row.DateIn).format('L');
-                                var date = moment(new Date()).format('L') ;
-                                if (dateIn < date) {
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
-                                } else {
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
-                                }
+                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
                             }
+
                         }
                     }
                 ],

@@ -28,7 +28,6 @@ namespace EIS.WebApp.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult AllAttendance(string date, string type)
         {
@@ -52,7 +51,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("My Attendance History")]
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
-       {
+        {
             int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             string url = GetAttendanceByIdData(date, type, pId);
             ArrayList arrayData = new ArrayList();
@@ -61,15 +60,15 @@ namespace EIS.WebApp.Controllers
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<Attendance> data = JsonConvert.DeserializeObject<IList<Attendance>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
-        }       
+        }    
 
-        [DisplayName("My Attendance History")]
+        [NonAction]
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
             int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             string url = GetAttendanceSummaryData(date, type, id);
-            HttpResponseMessage response = _service.GetResponse(url);
+            HttpResponseMessage response = _service.GetResponse(url );
             string stringData = response.Content.ReadAsStringAsync().Result;
             AttendanceReport attendanceReport = new AttendanceReport();
             attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
@@ -79,9 +78,10 @@ namespace EIS.WebApp.Controllers
 
         #region[Employee Attendance History]
         [DisplayName("Employee Attendance History")]
+        [HttpGet]
         public IActionResult AttendanceSummary()
         {
-            HttpResponseMessage response = _service.GetResponse("api/Employee");
+            HttpResponseMessage response = _service.GetResponse("api/Employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
             var employees = from e in employeesdata
@@ -93,10 +93,9 @@ namespace EIS.WebApp.Controllers
             ViewBag.Persons = employees;
             return View(employees);
         }
-
-        [DisplayName("Employee Attendance History")]
+        [ActionName("AttendanceSummary")]
         [HttpPost]
-        public IActionResult EmployeeReportsById(string date, string type, int? id)
+        public JsonResult EmployeeReportsById(string date, string type, int? id)
         {
             if (id == null)
             {
@@ -110,13 +109,12 @@ namespace EIS.WebApp.Controllers
             IList<Attendance> data = JsonConvert.DeserializeObject<IList<Attendance>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
-
-        [DisplayName("Employee Attendance History")]
-        [HttpPost]
-        public IActionResult AttendanceSummaryById(string date, string type, int? id)
+        [ActionName("AttendanceSummary")]
+        [HttpPut]
+        public JsonResult AttendanceSummaryById(string date, string type, int? id)
         {
             string url = GetAttendanceSummaryData(date, type, id);
-            HttpResponseMessage response = _service.GetResponse(url);
+            HttpResponseMessage response = _service.GetResponse(url );
             string stringData = response.Content.ReadAsStringAsync().Result;
             AttendanceReport attendanceReport = new AttendanceReport();
             attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
@@ -159,6 +157,7 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region[Method]
+        [NonAction]
         public string GetAttendanceSummaryData(string date, string type, int? id)
         {
             if (id == null)
@@ -189,13 +188,13 @@ namespace EIS.WebApp.Controllers
             else if (type == "week")
             {
 
-                DateTime startDate = Convert.ToDateTime(week[0]);
-                DateTime endDate = Convert.ToDateTime(week[1]);
+                DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
+                DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 url = "api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("dd-MM-yyyy")+ "/" + endDate.ToString("dd-MM-yyyy");
             }
             return url;
         }
-
+        [NonAction]
         public string GetAllAttendanceData(string date, string type)
         {
             string url = "";
@@ -216,8 +215,8 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
-                DateTime startDate = Convert.ToDateTime(week[0]);
-                DateTime endDate = Convert.ToDateTime(week[1]);
+                DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
+                DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 url = "api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
             }
             else
@@ -226,7 +225,7 @@ namespace EIS.WebApp.Controllers
             }
             return url;
         }
-
+        [NonAction]
         public string GetAttendanceByIdData(string date, string type, int? pId)
         {
             string url = "";
@@ -252,8 +251,8 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
-                DateTime startDate = Convert.ToDateTime(week[0]);
-                DateTime endDate = Convert.ToDateTime(week[1]);
+                DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
+                DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 ViewBag.startDate = startDate;
                 url = "api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
             }

@@ -128,6 +128,18 @@
             <!-- Menu -->
             <div class="menu">
                 <ul class="list">
+                    @if (Cache.GetStringValue("Role") == "Admin")
+                    {
+                    <li><a href="/Dashboard/AdminDashboard"><span>Dashboard</span></a></li>
+                    }
+                    else if (Cache.GetStringValue("Role") == "Manager")
+                    {
+                        <li><a href="/Dashboard/ManagerDashboard"><span>Dashboard</span></a></li>
+                    }
+                     else if (Cache.GetStringValue("Role") == "Employee")
+                    {
+                        <li><a href="/Dashboard/EmployeeDashboard"><span>Dashboard</span></a></li>
+                    }
                     <DynamicMenu></DynamicMenu>
                 </ul>
             </div>

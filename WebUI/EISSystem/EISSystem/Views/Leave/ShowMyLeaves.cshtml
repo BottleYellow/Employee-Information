@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
+@using EIS.WebApp.Services;
+@{ 
+    RedisAgent Cache = new RedisAgent();
+}
 <html>
 
 <head>
@@ -29,14 +33,22 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+            @if (Cache.GetStringValue("Role") == "Admin")
+            {
+                <HeaderWithButton header-name="My Leave Requests"></HeaderWithButton>
+             }
+            else
+            {
+                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+             }
+            
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
                         <div>
-                            <table id="example" class="table table-bordered table-striped table-hover js-basic-example dt-responsive dataTable">
+                            <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>
@@ -64,7 +76,7 @@
                                             Actions
                                         </th>
                                     </tr>
-                                </thead>                              
+                                </thead>
                             </table>
                         </div>
 

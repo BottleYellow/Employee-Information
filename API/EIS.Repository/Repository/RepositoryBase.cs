@@ -24,12 +24,12 @@ namespace EIS.Repositories.Repository
 
             public IQueryable<T> FindAll()
             {
-                return _dbContext.Set<T>();
+                return _dbContext.Set<T>().AsNoTracking();
             }
 
             public T FindByCondition(Expression<Func<T, bool>> expression)
             {
-                return _dbContext.Set<T>().Where(expression).FirstOrDefault();
+                return _dbContext.Set<T>().Where(expression).AsNoTracking().FirstOrDefault();
             }
 
             public void Create(T entity)
@@ -107,6 +107,16 @@ namespace EIS.Repositories.Repository
         {
             Delete(entity);
             Save();
+        }
+
+        public IQueryable<T> FindAllWithNoTracking()
+        {
+            return _dbContext.Set<T>().AsNoTracking();
+        }
+
+        public T FindByConditionWithNoTracking(Expression<Func<T, bool>> expression)
+        {
+            return _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
         }
     }
 }
