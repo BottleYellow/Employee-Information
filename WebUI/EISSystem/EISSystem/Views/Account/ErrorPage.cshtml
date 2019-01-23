@@ -1,0 +1,52 @@
+﻿@using EIS.WebApp.Services;
+@{
+    ViewData["Title"] = "Error";
+    Layout = null;
+    RedisAgent Cache = new RedisAgent();
+    var PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+}
+
+<html>
+<head>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div style="height:100px"></div>
+                    <div>
+                        <div class="col-md-1">
+                            <br />
+                            <img src="~/images/access.jpg" class="image" width="40" height="40" />
+                        </div>
+                        <div class="col-md-11">
+                            <div><h1><b>SORRY, SOMETHING WENT WRONG</b></h1></div>
+                            <div>
+                                <p>
+                                    An Unexpected error has Occurred.
+                                </p>
+                            </div>
+
+                            <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@PersonId">Go Back To Profile</a></div>
+                            <div><a asp-action="LogOut" asp-controller="Account" asp-route-id=3>Logout</a></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

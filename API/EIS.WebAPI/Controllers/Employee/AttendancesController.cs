@@ -27,12 +27,12 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Attendance> GetAttendances()
         {
-            return _repository.Attendances.FindAll();
+            return _repository.Attendances.FindAll().Where(x=>x.TenantId==TenantId);
         }
         [HttpGet("{Id}")]
         public Attendance GetAttendancesById([FromRoute]int id)
         {
-            return _repository.Attendances.FindByCondition(x => x.PersonId == id && x.DateIn.Date == DateTime.Now.Date);
+            return _repository.Attendances.FindByCondition(x => x.PersonId == id && x.DateIn.Date == DateTime.Now.Date && x.TenantId == TenantId);
         }
 
 
@@ -89,7 +89,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
+            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year).Where(x => x.TenantId == TenantId);
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 
@@ -107,7 +107,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceYearly(year);
+            var attendanceData = _repository.Attendances.GetAttendanceYearly(year).Where(x=>x.TenantId==TenantId);
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 
@@ -126,7 +126,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] string startOfWeek, [FromRoute] string endOfWeek)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
+            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek)).Where(x=>x.TenantId==TenantId);
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 

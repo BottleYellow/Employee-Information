@@ -87,9 +87,9 @@ namespace EIS.Repositories.Repository
                 TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.Ticks)));
                 DateTime timeOut = DateTime.Today.Add(averageTimeOut);
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
-
-                var hour = Math.Round(timeOut.Subtract(timeIn).TotalHours, 2);
-                attendanceReport.AverageTime = (hour).ToString();
+                var hour = timeOut - timeIn;
+                DateTime avgHours = DateTime.Today.Add(hour);
+                attendanceReport.AverageTime = hour.Hours.ToString()+":"+hour.Minutes.ToString();
             }
             return attendanceReport;
         }

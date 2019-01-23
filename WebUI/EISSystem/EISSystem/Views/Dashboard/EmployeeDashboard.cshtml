@@ -14,8 +14,8 @@
                     <i class="material-icons">playlist_add_check</i>
                 </div>
                 <div class="content">
-                    <div class="text">TOTAL EMPLOYEES</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="text">Present Days</div>
+                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.MonthlyPresentDays</div>
                 </div>
             </div>
         </div>
@@ -25,8 +25,8 @@
                     <i class="material-icons">help</i>
                 </div>
                 <div class="content">
-                    <div class="text">EMPLOYEE PRESENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="text">Absent Days</div>
+                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.MonthlyAbsentDays</div>
                 </div>
             </div>
         </div>
@@ -36,8 +36,8 @@
                     <i class="material-icons">forum</i>
                 </div>
                 <div class="content">
-                    <div class="text">EMPLOYEE ABSENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="text">Total Leaves Taken</div>
+                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.TotalLeavesTaken</div>
                 </div>
             </div>
         </div>
@@ -47,8 +47,8 @@
                     <i class="material-icons">person_add</i>
                 </div>
                 <div class="content">
-                    <div class="text">PENDING LEAVES</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="text">Available Leaves</div>
+                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.TotalLeavesAvailable</div>
                 </div>
             </div>
         </div>

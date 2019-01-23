@@ -182,7 +182,7 @@ namespace EIS.WebApp.Controllers
             var data1 = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse("api/employee/" + id + "" ).Content.ReadAsStringAsync().Result;
+            string stringData = _services.Employee.GetResponse("api/employee/Person/" + id + "" ).Content.ReadAsStringAsync().Result;
             Person data = EmployeeData().Find(x => x.Id == id);         
             return View(data);
         }
@@ -468,8 +468,11 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 HttpResponseMessage response = _services.Roles.PutResponse("api/Employee/UpdateDesignation", role );
-                Cache.DeleteStringValue("Access");
-                Cache.SetStringValue("Access", role.Access);
+                if (Cache.GetStringValue("Role") == role.Name)
+                {
+                    Cache.DeleteStringValue("Access");
+                    Cache.SetStringValue("Access", role.Access);
+                }
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Roles", "People");
             }
