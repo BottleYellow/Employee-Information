@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
@@ -45,6 +46,7 @@ namespace EIS.Data.Context
         public DbSet<Other> OtherAddresses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
 
         #endregion
     }

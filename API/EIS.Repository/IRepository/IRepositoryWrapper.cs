@@ -14,6 +14,7 @@ namespace EIS.Repositories.IRepository
         ILeaveCreditRepository LeaveCredit { get; }
         IUserRepository Users { get; }
         IDashboardRepository Dashboard{ get; }
+        IHolidayRepository Holidays { get; }
 
     }
 }
