@@ -101,24 +101,23 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(_configuration).SendEmail(subject, body, To);
             return Ok();
         }
-
-        //[HttpPut("{id}")]
-        //[AllowAnonymous]
-        //public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    _repository.Employee.UpdateAndSave(person);
-        //    string To = person.EmailAddress;
-        //    string subject = "Employee Registration";
-        //    string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-        //        "Your Information have been successfully activated with employee system. : \n" +
-        //        "User Name: " + person.EmailAddress + "\n";
-        //    new EmailManager(_configuration).SendEmail(subject, body, To);
-        //    return Ok(person);
-        //}
+        
+        [HttpPut("{Id}")]
+        public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _repository.Employee.UpdateAndSave(person);
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                "Your Information have been successfully activated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n";
+            new EmailManager(_configuration).SendEmail(subject, body, To);
+            return Ok(person);
+        }
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
