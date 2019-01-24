@@ -283,10 +283,11 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult DateWiseAttendance()
         {
+            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _service.GetResponse("api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata
+            var employees = from e in employeesdata.Where(x=>x.Id!=id)
                             select new Person
                             {
                                 EmployeeCode = e.EmployeeCode,
@@ -298,8 +299,9 @@ namespace EIS.WebApp.Controllers
         
         [DisplayName("DateWiseAttendance")]
         [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,int id)
-        { 
+        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
+        {
+            
             string url = url = "api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("dd-MM-yyyy") + "/" + Convert.ToDateTime(todate).ToString("dd-MM-yyyy");
             ArrayList arrayData = new ArrayList();
             arrayData = LoadData<Attendance>(url);

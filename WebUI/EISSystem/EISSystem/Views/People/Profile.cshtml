@@ -36,6 +36,10 @@
         .profilelable {
             font-size: 16px;
         }
+        /*.thrs {
+            height:100px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }*/
     </style>
 </head>
 <body id="body" name="body">
@@ -44,7 +48,7 @@
             <input id="InTime" type="hidden" value="@ViewBag.TimeIn.ToString(@"hh\:mm\:ss")" />
             <input id="OutTime" type="hidden" value="@ViewBag.TimeOut.ToString(@"hh\:mm\:ss")" />
             <input id="totalHours" type="hidden" value="@ViewBag.TotalHrs.ToString(@"hh\:mm\:ss")" />
-            <input id="estimatedTimeOut" type="hidden" value="@ViewBag.EstimatedTimeOut.ToString(@"hh\:mm\:ss")"/>
+            <input id="estimatedTimeOut" type="hidden" value="@ViewBag.EstimatedTimeOut.ToString(@"hh\:mm\:ss")" />
             <div class="col-xs-12 col-sm-3">
                 <div class="card profile-card">
                     <div class="profile-header">&nbsp;</div>
@@ -322,18 +326,19 @@
     {
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
-    <li><label style="color:white" id="eTOut">Estimated Time Out</label></li><br />
-    <li><label style="color:white" id="tWHrs">Total Working Hrs</label></li>
+    <li><span class="btn btn-primary"><label style="color:white" id="tWHrs">Total Working Hrs</label></span></li><br />
+    <li><label style="color:white" id="eTOut">Estimated Time Out</label></li>
+
 }
 <script>
 
     $(document).ready(function () {
-        
+
         var TimeIn = document.getElementById('InTime').value;
         var TimeOut = document.getElementById('OutTime').value;
         var estTimeOut = document.getElementById('estimatedTimeOut').value;
         var totalHrs = document.getElementById('totalHours').value;
-        
+
         if (TimeIn != '00:00:00') {
             document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
             $('#clockIn').attr('disabled', 'disabled');
@@ -345,7 +350,7 @@
             document.getElementById('eTOut').innerHTML = "Estimated time out :" + estTimeOut;
         }
         if (totalHrs != '00:00:00') {
-            document.getElementById('tWHrs').innerHTML = "Total hours :" + totalHrs;
+            document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
         }
 
 
@@ -388,7 +393,7 @@
             success: function (data) {
                 var d = new Date();
                 document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
-            
+
                 //var hours = d.getHours() + 9 > 12 ? d.getHours() - 12 : d.getHours();
                 //var am_pm = d.getHours() + 9 >= 12 ? "PM" : "AM";
                 //hours = hours < 10 ? "0" + hours : hours;
@@ -414,7 +419,7 @@
                 document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
                 var totalHrs = document.getElementById('totalHours').value;
                 if (totalHrs != '00:00:00') {
-                    document.getElementById('tWHrs').innerHTML = "Total hours :" + totalHrs;
+                    document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
                 }
                 window.parent.location.reload();
             }

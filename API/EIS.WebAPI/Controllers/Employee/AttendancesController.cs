@@ -196,10 +196,13 @@ namespace EIS.WebAPI.Controllers
 
         
         [HttpPost("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
-        public IActionResult GetDateWiseAttendance([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
+        public IActionResult GetDateWiseAttendance([FromBody]SortGrid sortGrid, [FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             ArrayList data = new ArrayList();
-            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
+            var sDate = Convert.ToDateTime(startDate);
+            var tDate = Convert.ToDateTime(endDate);
+            var PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
+            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
             IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceDateWise(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
