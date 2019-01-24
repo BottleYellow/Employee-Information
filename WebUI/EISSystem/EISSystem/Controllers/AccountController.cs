@@ -51,7 +51,7 @@ namespace EIS.WebApp.Controllers
                 string role = Cache.GetStringValue("Role");
                 if (role == "Admin")
                 {
-                    return RedirectToAction("Index", "People");
+                    return RedirectToAction("AdminDashboard", "Dashboard");
                 }
             }
             
@@ -96,6 +96,13 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Access Denied Page")]
         [HttpGet]
         public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [DisplayName("Error Page")]
+        [HttpGet]
+        public IActionResult ErrorPage()
         {
             return View();
         }

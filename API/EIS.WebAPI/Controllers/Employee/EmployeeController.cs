@@ -102,23 +102,6 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
-        //[HttpPut("{id}")]
-        //[AllowAnonymous]
-        //public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    _repository.Employee.UpdateAndSave(person);
-        //    string To = person.EmailAddress;
-        //    string subject = "Employee Registration";
-        //    string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-        //        "Your Information have been successfully activated with employee system. : \n" +
-        //        "User Name: " + person.EmailAddress + "\n";
-        //    new EmailManager(_configuration).SendEmail(subject, body, To);
-        //    return Ok(person);
-        //}
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
@@ -158,13 +141,7 @@ namespace EIS.WebAPI.Controllers
             var d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
-        [Route("ActivatePerson/{Id}")]
-        [HttpGet]
-        public IActionResult ActivatePerson([FromRoute]int Id)
-        {
-            _repository.Employee.ActivatePerson(Id);
-            return Ok();
-        }
+       
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
@@ -228,5 +205,22 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}")]
+        [AllowAnonymous]
+        public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _repository.Employee.UpdateAndSave(person); 
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                "Your Information have been successfully activated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n";
+            new EmailManager(_configuration).SendEmail(subject, body, To);
+            return Ok(person);
+        }
     }
 }

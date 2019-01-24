@@ -12,10 +12,10 @@ namespace EIS.WebApp.Filters
         {
             var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 
-            return app.UseExceptionHandler(HandleApiException(loggerFactory));
+            return app.UseExceptionHandler(HandleAppException(loggerFactory));
         }
 
-        public static Action<IApplicationBuilder> HandleApiException(ILoggerFactory loggerFactory)
+        public static Action<IApplicationBuilder> HandleAppException(ILoggerFactory loggerFactory)
         {
             return appBuilder =>
             {
@@ -30,7 +30,8 @@ namespace EIS.WebApp.Filters
                     }
 
                     var code = context.Response.StatusCode;
-                    await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
+                    context.Response.Redirect("/Account/ErrorPage");
+                    await context.Response.WriteAsync("An unexpected fault happened.");
 
                 });
             };

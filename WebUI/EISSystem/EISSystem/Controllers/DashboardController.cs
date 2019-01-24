@@ -34,8 +34,9 @@ namespace EIS.WebApp.Controllers
             return View(dashBoard);
         }
 
-        public IActionResult EmployeeDashboard(int PersonId)
-        { 
+        public IActionResult EmployeeDashboard()
+        {
+            int PersonId =Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Employee/"+PersonId+"");
             string stringData = response.Content.ReadAsStringAsync().Result;
             var dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);

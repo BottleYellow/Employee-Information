@@ -35,8 +35,8 @@ namespace EIS.WebApp.Filters
             {
                 List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
                 var check = Access.Find(x => x.URL == access);
-                if (check == null)
-                    context.Result = new RedirectResult("/Account/AccessDenied");
+                //if (check == null)
+                    //context.Result = new RedirectResult("/Account/AccessDenied");
             }
            
 
