@@ -50,7 +50,7 @@ namespace EIS.WebAPI.Controllers
             attendance.TimeOut = DateTime.Now.TimeOfDay;
             attendance.TotalHours = attendance.TimeOut - attendance.TimeIn;
             _repository.Attendances.UpdateAndSave(attendance);
-            return NoContent();
+            return Ok(attendance);
         }
 
         [DisplayName("Create Attendance")]
