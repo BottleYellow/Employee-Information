@@ -28,16 +28,27 @@ namespace EIS.WebAPI.Services
         {
             _database.KeyDelete(key);
         }
-        public void SetList(int UserId,List<string> list)
+        public void SetList(string EmployeeCode, List<string> list)
         {
-            HashEntry[] entry = new HashEntry[] 
+            HashEntry[] entry = new HashEntry[]
             {
                 new HashEntry("PersonId",list[0]),
                 new HashEntry("TokenValue",list[1]),
                 new HashEntry("Role",list[2]),
-                new HashEntry("Access",list[3])
+                new HashEntry("Access",list[3]),
+                new HashEntry("TenantId",list[4])
             };
-            _database.HashSet("user:"+UserId, entry);
+            _database.HashSet("user:" + EmployeeCode, entry);
+        }
+        public string GetValueFromList(string key, string field)
+        {
+            string result = null;
+            result=_database.HashGet(key, field);
+            return result;
+        }
+        public void DeleteValueFromList(string key, string field)
+        {
+            _database.HashDelete(key, field);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using EIS.Entities.Employee;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EIS.WebApp.Controllers
 {
@@ -22,6 +23,7 @@ namespace EIS.WebApp.Controllers
             _httpContextAccessor = httpContextAccessor;
           
         }
+        [AllowAnonymous]
         [DisplayName("Login")]
         [HttpGet]
         public IActionResult Login()
@@ -32,7 +34,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Login(Users user)
         {
             string pid = "";
-            HttpResponseMessage response = _service.PostResponse("api/account/login", user); 
+            HttpResponseMessage response = _service.PostResponse("api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)
             {
                 ViewBag.CheckCreadentials = "<p style='color: red'>Please check username or password</p>";
@@ -62,7 +64,7 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult LogOut()
         {
-            HttpResponseMessage response = _service.PostResponse("api/account/logout",null);
+            HttpResponseMessage response = _service.PostResponse("api/account/logout",null );
             return View("Login");
         }
         [DisplayName("Forgot Password")]

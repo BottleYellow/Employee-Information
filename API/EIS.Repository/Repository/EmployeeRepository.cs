@@ -56,7 +56,7 @@ namespace EIS.Repositories.Repository
 
         public IEnumerable<Role> GetDesignations(int TenantId)
         {
-            return _dbContext.Roles.Where(x => x.TenantId == TenantId);
+            return _dbContext.Roles.AsNoTracking().Where(x => x.TenantId == TenantId);
         }
 
         public Person GetProfile(int Id)

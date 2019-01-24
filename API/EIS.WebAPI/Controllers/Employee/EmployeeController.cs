@@ -32,7 +32,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-            var employees = _repository.Employee.FindAll().Where(x => x.TenantId == TenantId && x.IsActive == true);
+            var employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true);
             return Ok(employees);
         }
         [HttpGet("{id}")]
@@ -40,6 +40,21 @@ namespace EIS.WebAPI.Controllers
         {
             var employee = _repository.Employee.FindByCondition(e => e.Id == id);
             employee.User = _repository.Users.FindByCondition(u => u.PersonId == id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(employee);
+            }
+        }
+        [Route("Person")]
+        [HttpGet("{id}")]
+        public IActionResult GetPerson([FromRoute]int id)
+        {
+            var employee = _repository.Employee.FindByConditionWithNoTracking(e => e.Id == id);
+            employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == id);
             if (employee == null)
             {
                 return NotFound();
@@ -72,7 +87,6 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public IActionResult Create([FromBody]Person person)
         {
             //person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
@@ -102,6 +116,22 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _repository.Employee.UpdateAndSave(person);
+            string To = person.EmailAddress;
+            string subject = "Employee Registration";
+            string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                "Your Information has been successfully updated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n";
+            new EmailManager(_configuration).SendEmail(subject, body, To);
+            return Ok(person);
+        }
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id)
@@ -141,7 +171,7 @@ namespace EIS.WebAPI.Controllers
             var d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
-       
+        
         [Route("AddDesignation")]
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
@@ -191,8 +221,8 @@ namespace EIS.WebAPI.Controllers
             return Title;
         }
 
+        [Route("ActivatePerson/{Id}")]
         [HttpGet]
-        [Route("ActivatePerson/{id}")]
         public IActionResult ActivatePerson([FromRoute]int id)
         {
             Person person=_repository.Employee.ActivatePerson(id);
@@ -205,22 +235,5 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        [AllowAnonymous]
-        public IActionResult UpdateData([FromRoute]int id, [FromBody]Person person)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _repository.Employee.UpdateAndSave(person); 
-            string To = person.EmailAddress;
-            string subject = "Employee Registration";
-            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-                "Your Information have been successfully activated with employee system. : \n" +
-                "User Name: " + person.EmailAddress + "\n";
-            new EmailManager(_configuration).SendEmail(subject, body, To);
-            return Ok(person);
-        }
     }
 }

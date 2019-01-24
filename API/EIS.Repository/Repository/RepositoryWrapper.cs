@@ -29,6 +29,8 @@ namespace EIS.Repositories.Repository
 
         private IDashboardRepository _dashboard;
 
+        private IHolidayRepository _holiday;
+
 
         public IEmployeeRepository Employee 
         {
@@ -151,6 +153,17 @@ namespace EIS.Repositories.Repository
                     _dashboard = new DashboardRepository(_dbContext);
                 }
                 return _dashboard;
+            }
+        }
+        public IHolidayRepository Holidays
+        {
+            get
+            {
+                if (_holiday == null)
+                {
+                    _holiday = new HolidayRepository(_dbContext);
+                }
+                return _holiday;
             }
         }
 

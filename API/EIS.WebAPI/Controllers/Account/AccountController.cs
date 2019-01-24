@@ -94,7 +94,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
         {
             bool result=_repository.Users.VerifyPassword(id, password);
-         return Ok(result);
+            return Ok(result);
         }
 
         [DisplayName("Change Password")]

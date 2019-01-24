@@ -417,6 +417,35 @@ namespace EIS.Data.Migrations
                     b.ToTable("tblRoles","ATM");
                 });
 
+            modelBuilder.Entity("EIS.Entities.Hoildays.Holiday", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("TenantId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Vacation")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblHolidays","ATM");
+                });
+
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
                 {
                     b.Property<int>("Id")

@@ -31,7 +31,7 @@ namespace EIS.WebApp.Filters
 
                     var code = context.Response.StatusCode;
                     context.Response.Redirect("/Account/ErrorPage");
-                    await context.Response.WriteAsync("An unexpected fault happened.");
+                    await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
 
                 });
             };
