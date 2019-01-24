@@ -24,6 +24,7 @@ namespace EIS.Repositories.Repository
         {
             var employees = _dbContext.Person.Include(x=>x.Attendance).Where(x => x.TenantId == TenantId && x.IsActive == true).AsQueryable();
             var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
+            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x=>x.Role).Where(x=>x.Role.Name!="Admin").ToList();
             int pcount = 0;
             foreach(var pa in employees)
             {
@@ -40,7 +41,8 @@ namespace EIS.Repositories.Repository
                 AllEmployeesCount = employees.Count(),
                 PresentEmployees = pcount,
                 AbsentEmployees = employees.Count() - pcount,
-                PendingLeavesCount = leaves
+                PendingLeavesCount = leaves,
+                Employees=EmployeesWithAttendance
             };
             return dashboard;
         }
@@ -74,15 +76,15 @@ namespace EIS.Repositories.Repository
             int currentYear = new DateTime().Year;
             int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
             var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month==currentMonth&& x.DateIn.Year==currentYear);
-            var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Select(x => x.RequestedDays);
-
+            var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);
+            var availableLeaves = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId).Sum(x => x.Available);
 
             EmployeeDashboard dashboard = new EmployeeDashboard
             {
                 MonthlyPresentDays = attendance.Count(),
                 MonthlyAbsentDays= TotalDays - attendance.Count(),
-                TotalLeavesAvailable=9,
-                TotalLeavesTaken=6
+                TotalLeavesAvailable= Convert.ToInt32(availableLeaves),
+                TotalLeavesTaken=Convert.ToInt32(leaves)
             };
             return dashboard;
         }

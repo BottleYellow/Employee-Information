@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190121070419_Initial")]
-    partial class Initial
+    [Migration("20190123071035_HolidayTable")]
+    partial class HolidayTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -417,6 +417,35 @@ namespace EIS.Data.Migrations
                         .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("tblRoles","ATM");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Hoildays.Holiday", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("TenantId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Vacation")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblHolidays","ATM");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>

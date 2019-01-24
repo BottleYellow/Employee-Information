@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.User;
 using EIS.WebApp.IServices;
@@ -33,6 +34,8 @@ namespace EIS.WebApp.Services
         private IEISService<LeaveRequest> _leaveRequest;
 
         private IEISService<Users> _users;
+
+        private IEISService<Holiday> _holiday;
 
         public IEISService<Person> Employee
         {
@@ -162,6 +165,17 @@ namespace EIS.WebApp.Services
                     _roles = new EISService<Role>();
                 }
                 return _roles;
+            }
+        }
+        public IEISService<Holiday> Holidays
+        {
+            get
+            {
+                if (_holiday == null)
+                {
+                    _holiday = new EISService<Holiday>();
+                }
+                return _holiday;
             }
         }
     }

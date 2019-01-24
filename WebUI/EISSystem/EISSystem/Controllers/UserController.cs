@@ -46,10 +46,5 @@ namespace EIS.WebApp.Controllers
             return View(Users);
         }
 
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
     }
 }

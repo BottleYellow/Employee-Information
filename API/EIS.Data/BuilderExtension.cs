@@ -1,6 +1,7 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
@@ -182,6 +183,12 @@ namespace EIS.Data
                 modelBuilder.Entity<Other>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
+                #region [Holiday]
+                modelBuilder.Entity<Holiday>().Property(p => p.Location).HasColumnType("nvarchar(50)").IsRequired();
+                modelBuilder.Entity<Holiday>().Property(p => p.Date).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<Holiday>().Property(p => p.Vacation).HasColumnType("nvarchar(100)");
+                #endregion
+
                 #region Constraints
 
                 modelBuilder.Entity<Person>()
@@ -305,6 +312,7 @@ namespace EIS.Data
                 modelBuilder.Entity<Emergency>().ToTable("tblEmergencyAddress", "ATM");
                 modelBuilder.Entity<Other>().ToTable("tblOtherAddress", "ATM");
                 modelBuilder.Entity<Configuration>().ToTable("tblConfiguration", "ATM");
+                modelBuilder.Entity<Holiday>().ToTable("tblHolidays", "ATM");
                 #endregion
             }
             catch (System.Exception ex)

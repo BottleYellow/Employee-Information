@@ -1,0 +1,226 @@
+﻿@model IEnumerable<EIS.Entities.Employee.Person>
+<head>
+    <title>All Attendance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    @*for pdf*@
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        td {
+            width: 200px;
+            text-align: center
+        }
+
+        th {
+            font-size: medium;
+            text-align: center
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="block-header">
+            <HeaderWithButton header-name="Attendance Reports"></HeaderWithButton>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row col-md-12">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Select Employee</label>
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"EmployeeCode","FirstName"))" style="width:200px;">
+                                            <option>-- Select --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div id="inputdatediv">
+                                            <label>From Date</label><br />
+                                            <input class="form-control" type="text" id="fromdate" placeholder="select date" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div id="inputdatediv">
+                                            <label>To Date</label><br />
+                                            <input class="form-control" type="text" id="todate" placeholder="select date" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <br />
+                                        <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-12">
+
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <h4 id="report">Attendance Report</h4>
+                            </div>
+                            <div>
+                                <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Code</th>
+        <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Total Hours</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@*for datetimepicker*@
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+@*for pdf*@
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
+
+        $("#fromdate").datetimepicker({
+                    format: 'DD/MM/YYYY'
+        });
+        $("#todate").datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#generateReport').on('click', function () {
+            var id = $('#selectEmployee').val();
+            var empName = "Uday Soni"
+        var fromValue = $("#fromdate").val();
+        var toValue = $("#todate").val();
+            generateReport(fromValue, toValue, id,empName);
+            });
+
+        function generateReport(fromValue, toValue, id,empName) {
+            var dTable = $('#example').DataTable({
+                destroy: true,
+                sDom: '<"myexport"B>ifrtlp',
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                buttons: [
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'ATTENDANCE REPORT',
+                        text: 'Export',
+                        titleAttr: 'Export to Pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }
+                ],
+                "aoColumnDefs": [
+                    { "aTargets": [0], "bSortable": true },
+                    { "aTargets": ['_all'], "bSortable": false }
+                ],
+
+                lengthMenu: [
+                    [10, 25, -1],
+                    ['10', '25', 'All']
+                ],
+                ajax: {
+                    "url": "/Attendance/GetDateWiseAttendance",
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": { "fromdate": fromValue, "todate": toValue, "id": id},
+                },
+                "columns": [
+                    {
+                        "data": null,  "autoWidth": true, render: function () {
+                            return id;
+                        }
+                    },
+                    {
+                        "data": "DateIn", "name": "DateIn", "autoWidth": true, render: function () {
+                            return empName;
+                        }
+                    },
+                    {
+                        "data": "DateIn", "name": "DateIn", "autoWidth": true, render: function (data, type, row) {
+                            data = moment(data).format('DD MMM YYYY');
+                            return data;
+                        }
+                    },
+                    {
+                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
+                            if (data == true) {
+                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                            } else {
+                                var dateIn = moment(row.DateIn).format('L');
+                                var date = moment(new Date()).format('L');
+                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                            }
+                        }
+                    },                   
+                    {
+                        "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
+                            data = moment(data, "HH:mm:ss").format("mm:ss");
+                            return data;
+                        }
+                    }
+                ],
+                "initComplete": function () {
+                    var $searchInput = $('div.dataTables_filter input');
+                    $searchInput.unbind();
+                    $searchInput.bind('keyup', function (e) {
+                        if (this.value.length >= 3 || this.value.length == 0) {
+                            dTable.search(this.value).draw();
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
+

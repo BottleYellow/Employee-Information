@@ -30,6 +30,7 @@ namespace EIS.Repositories.Repository
             if (Status == "Approve")
             {
                 leaveRequest.Status = "Approved";
+                var requests = _dbContext.LeaveRequests.Where(x => x.PersonId == leaveRequest.PersonId);
 
             }
             else if (Status == "Reject")

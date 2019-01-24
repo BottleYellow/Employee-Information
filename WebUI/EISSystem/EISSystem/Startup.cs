@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.Repositories.Repository;
@@ -57,6 +58,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
+            services.AddTransient<IValidator<Holiday>, HolidayValidator>();
             #endregion
 
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();

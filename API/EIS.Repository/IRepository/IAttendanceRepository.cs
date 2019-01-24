@@ -12,7 +12,9 @@ namespace EIS.Repositories.IRepository
         IQueryable<Person> GetAttendanceMonthly(int month,int year);
         IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek);
         AttendanceReport GetAttendanceReportSummary(int TotalDays, IQueryable<Attendance> attendanceData);
-        IList<Attendance> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IQueryable<Attendance> attendanceData);
+        IEnumerable<Attendance> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IQueryable<Attendance> attendanceData);
+        IEnumerable<Attendance> GetAttendanceDateWise(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData);
+
     }
 
     
