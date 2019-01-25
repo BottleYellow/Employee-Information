@@ -40,9 +40,7 @@ namespace EIS.WebAPI.Services
         }
 
         public void EmailSentToAllEmployee()
-
         {
-
             int year = DateTime.Now.Year;
             int month = DateTime.Now.Month;
             if (month != 1)

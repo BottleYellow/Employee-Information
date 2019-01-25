@@ -326,9 +326,13 @@
                     },
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (data == true) {
+                            if (new Date(row.DateIn).getDay()==0)
+                            { 
+                                return '<span style="font-size:12px;" class="label label-success">Weekly Holiday</span>';
+                            }
+                            else if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
-                            } else {
+                            } else if (data == false) {
                                 var dateIn = moment(row.DateIn).format('L');
                                 var date = moment(new Date()).format('L');
                                 return '<span style="font-size:12px;" class="label label-danger">Absent</span>';

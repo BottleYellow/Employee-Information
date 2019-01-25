@@ -9,6 +9,7 @@ using EIS.WebAPI.Services;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
@@ -202,7 +203,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetData([FromBody]SortGrid sortGrid)
         {
             ArrayList employeeslist;
-            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId);
+            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
             if (sortGrid.Search == null)
             {
                 employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
