@@ -36,10 +36,6 @@
         .profilelable {
             font-size: 16px;
         }
-        /*.thrs {
-            height:100px;
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        }*/
     </style>
 </head>
 <body id="body" name="body">
@@ -326,9 +322,8 @@
     {
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
-    <li><span class="btn btn-primary"><label style="color:white" id="tWHrs">Total Working Hrs</label></span></li><br />
-    <li><label style="color:white" id="eTOut">Estimated Time Out</label></li>
-
+    <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
+    <div id="eTOut" style="color:white">Estimated Time Out</div>
 }
 <script>
 
@@ -347,7 +342,7 @@
             document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
         }
         if (estTimeOut != '00:00:00') {
-            document.getElementById('eTOut').innerHTML = "Estimated time out :" + estTimeOut;
+            document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
         }
         if (totalHrs != '00:00:00') {
             document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
@@ -393,17 +388,9 @@
             success: function (data) {
                 var d = new Date();
                 document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
-
-                //var hours = d.getHours() + 9 > 12 ? d.getHours() - 12 : d.getHours();
-                //var am_pm = d.getHours() + 9 >= 12 ? "PM" : "AM";
-                //hours = hours < 10 ? "0" + hours : hours;
-                //var minutes = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
-                //var seconds = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
-                //time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
-                //document.getElementById('estTimeOut').innerHTML = "Estimated Time Out </br>" + time;
                 var estTimeOut = document.getElementById('estimatedTimeOut').value;
                 if (estTimeOut != '00:00:00') {
-                    document.getElementById('eTOut').innerHTML = "Estimated time out :" + estTimeOut;
+                    document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
                 }
                 $('#clockIn').attr('disabled', 'disabled');
                 window.parent.location.reload();
