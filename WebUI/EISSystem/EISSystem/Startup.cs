@@ -110,6 +110,7 @@ namespace EIS.WebApp
             string action = "Login";
             string Template = "{controller=" + controller + "}/{action=" + action + "}";
             string id = new RedisAgent().GetStringValue("PersonId");
+            string EmployeeCode = new RedisAgent().GetStringValue("EmployeeCode");
 
             if (id != null)
             {
@@ -125,7 +126,7 @@ namespace EIS.WebApp
                 {
                     controller = "People";
                     action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + id + "}";
+                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + EmployeeCode + "}";
                 }
             }
             else

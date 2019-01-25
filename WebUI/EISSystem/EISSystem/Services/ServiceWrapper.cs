@@ -37,6 +37,8 @@ namespace EIS.WebApp.Services
 
         private IEISService<Holiday> _holiday;
 
+        private IEISService<PastLeaves> _pastLeaves;
+
         public IEISService<Person> Employee
         {
             get
@@ -176,6 +178,17 @@ namespace EIS.WebApp.Services
                     _holiday = new EISService<Holiday>();
                 }
                 return _holiday;
+            }
+        }
+        public IEISService<PastLeaves> PastLeave
+        {
+            get
+            {
+                if (_pastLeaves == null)
+                {
+                    _pastLeaves = new EISService<PastLeaves>();
+                }
+                return _pastLeaves;
             }
         }
     }

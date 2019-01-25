@@ -35,11 +35,11 @@ namespace EIS.WebAPI.Controllers
             var employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true);
             return Ok(employees);
         }
-        [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute]int id)
+        [HttpGet("{EmployeeCode}")]
+        public IActionResult GetById([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.FindByCondition(e => e.Id == id);
-            employee.User = _repository.Users.FindByCondition(u => u.PersonId == id);
+            var employee = _repository.Employee.FindByCondition(e => e.EmployeeCode == EmployeeCode);
+            employee.User = _repository.Users.FindByCondition(u => u.PersonId == employee.Id);
             if (employee == null)
             {
                 return NotFound();
@@ -50,11 +50,11 @@ namespace EIS.WebAPI.Controllers
             }
         }
         [Route("Person")]
-        [HttpGet("{id}")]
-        public IActionResult GetPerson([FromRoute]int id)
+        [HttpGet("{EmployeeCode}")]
+        public IActionResult GetPerson([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.FindByConditionWithNoTracking(e => e.Id == id);
-            employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == id);
+            var employee = _repository.Employee.FindByConditionWithNoTracking(e => e.EmployeeCode == EmployeeCode);
+            employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == employee.Id);
             if (employee == null)
             {
                 return NotFound();
@@ -64,11 +64,11 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
-        [Route("Profile/{id}")]
+        [Route("Profile/{EmployeeCode}")]
         [HttpGet]
-        public IActionResult GetProfile([FromRoute]int id)
+        public IActionResult GetProfile([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.GetProfile(id);
+            var employee = _repository.Employee.GetProfile(EmployeeCode);
             if (employee == null)
             {
                 return NotFound();
@@ -221,11 +221,11 @@ namespace EIS.WebAPI.Controllers
             return Title;
         }
 
-        [Route("ActivatePerson/{Id}")]
+        [Route("ActivatePerson/{EmployeeCode}")]
         [HttpGet]
-        public IActionResult ActivatePerson([FromRoute]int id)
+        public IActionResult ActivatePerson([FromRoute]string EmployeeCode)
         {
-            Person person=_repository.Employee.ActivatePerson(id);
+            Person person=_repository.Employee.ActivatePerson(EmployeeCode);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +

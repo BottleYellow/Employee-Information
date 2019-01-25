@@ -4,11 +4,9 @@ using System.Linq;
 
 namespace EIS.Repositories.IRepository
 {
-    public interface ILeaveRequestRepository : IRepositorybase<LeaveRequest>
+    public interface IPastLeavesRepository : IRepositorybase<PastLeaves>
     {
         IQueryable<PastLeaves> GetPastLeaves(int TenantId);
         void AddPastLeave(PastLeaves pastLeave);
-        void UpdateRequestStatus(int RequestId, string Status);
-        IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
     }
 }

@@ -60,7 +60,6 @@ namespace EIS.WebApp.Controllers
         {
             ArrayList arrayData = new ArrayList();
             arrayData = LoadData<LeaveRequest>("api/LeaveRequest/RequestsUnderMe");
-
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
@@ -71,17 +70,12 @@ namespace EIS.WebApp.Controllers
         {
             return View();
         }
-
-        [DisplayName("Show my leaves")]
+        
         [HttpPost]
         [ActionName("ShowMyLeaves")]
         public IActionResult GetMyLeaves()
         {
             int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            //response = _services.LeaveRules.GetResponse("api/LeaveRequest/Employee/" + pid + "");
-            //string stringData = response.Content.ReadAsStringAsync().Result;
-            //List<LeaveRequest> Requests = JsonConvert.DeserializeObject<List<LeaveRequest>>(stringData);
-            //return View(Requests);
             ArrayList arrayData = new ArrayList();
             arrayData = LoadData<LeaveRequest>("api/LeaveRequest/Employee/" + pid + "");
 
@@ -119,9 +113,7 @@ namespace EIS.WebApp.Controllers
                 {
                     return View();
                 }
-
             }
-
             return View("RequestLeave", request);
         }
         [DisplayName("Edit Leave Request")]
@@ -135,7 +127,6 @@ namespace EIS.WebApp.Controllers
             LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
             return View(leave);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditLeaveRequest(int id,LeaveRequest request)
@@ -149,11 +140,55 @@ namespace EIS.WebApp.Controllers
                 {
                     return View();
                 }
-
             }
-
             return View("RequestLeave", request);
         }
+        [DisplayName("Past Leaves")]
+        public IActionResult PastLeaves()
+        {
+            return View();
+        }
+
+        [ActionName("PastLeaves")]
+        [HttpPost]
+        public IActionResult GetPastLeaves()
+        {
+            ArrayList arrayData = new ArrayList();
+            arrayData = LoadData<PastLeaves>("api/LeaveRequest/PastLeaves");
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<PastLeaves> data = JsonConvert.DeserializeObject<IList<PastLeaves>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+        }
+        [DisplayName("Add Past Leave")]
+        public IActionResult AddPastLeave()
+        {
+            var model = new PastLeaves();
+            return PartialView("AddPastLeave", model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPastLeave(PastLeaves Leave)
+        {
+            Leave.CreatedDate = DateTime.Now.Date;
+            Leave.UpdatedDate = DateTime.Now.Date;
+            if (ModelState.IsValid)
+            {
+                Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
+                Leave.IsActive = true;
+                Leave.PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+                HttpResponseMessage response = _services.PastLeave.PostResponse("api/LeaveRequest/AddPastLeave", Leave);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    return View();
+                }
+            }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("AddPastLeave", Leave);
+
+        }
+
         #endregion
 
         #region Leave Type

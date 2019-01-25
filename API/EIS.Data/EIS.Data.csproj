@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20190119111024_DatabaseData.cs" />
+    <Compile Remove="Migrations\20190123071035_HolidayTable.cs" />
+    <Compile Remove="Migrations\20190124062055_PastLeaves.cs" />
+    <Compile Remove="Migrations\20190124062442_PastLeavesWithSchema.cs" />
   </ItemGroup>
 
   <ItemGroup>
