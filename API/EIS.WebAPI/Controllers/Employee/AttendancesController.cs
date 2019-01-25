@@ -178,7 +178,18 @@ namespace EIS.WebAPI.Controllers
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
-            int TotalDays = DateTime.DaysInMonth(year, month);
+
+            int TotalDays = 0;
+
+            for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++)
+            {
+                DateTime thisDay = new DateTime(year, month, i);
+                if (thisDay.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    TotalDays += 1;
+                }
+            }
+            TotalDays = TotalDays - 2;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
             return Ok(attendanceReport);
         }

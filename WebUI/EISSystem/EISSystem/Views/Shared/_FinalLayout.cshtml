@@ -44,7 +44,7 @@
     <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
     <!-- Jquery Core Js -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
-
+  
 
 </head>
 <body class="theme-blue">
@@ -71,7 +71,7 @@
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     <!-- Search Bar -->
-    <div class="search-bar">
+    @*<div class="search-bar">*@
          @*<div class="search-icon">
             <i class="material-icons">search</i>
         </div>
@@ -80,7 +80,7 @@
             <i class="material-icons">close</i>
         </div>*@
         
-    </div>
+    @*</div>*@
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
     <nav class="navbar">
@@ -89,19 +89,27 @@
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
                 <a class="navbar-brand" style="color:white"><b>Employee System</b></a>
+
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <div class="align-right">
+                    <a href="/account/logout" style="color:white;font-size:18px;font-weight:bold;border-bottom:1px solid;">sign out</a>
+                </div>
+                    <ul id="navright" class="nav navbar-nav navbar-right menu">
+
+                        @RenderSection("Attendance", required: false)
+                    </ul>
+
+                </div>
+                @*<div>
+                    
+                </div>*@
                 
             </div>
             
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    @RenderSection("Attendance", required: false)
-                    <li><a href="/account/logout" style="color:white;">sign out</a></li>
-                </ul>
-            </div>
-            <div class="align-right">
-                
-            </div>
         </div>
+        
     </nav>
     <!-- #Top Bar -->
 
@@ -110,6 +118,7 @@
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
+                <div style="height:10px;"></div>
                 <div class="image">
                     <img src="~/images/user.png" width="48" height="48" alt="User" />
                 </div>

@@ -284,6 +284,12 @@ namespace EIS.WebApp.Controllers
             }
             return data;
         }
+
+        public void DeleteConfirmed(int id)
+        {
+            HttpClient client = _services.Employee.GetService();
+            response = client.DeleteAsync("api/employee/" + id + "").Result;
+        }
         public IActionResult ActivateEmployee(string EmployeeCode)
         {
             response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + EmployeeCode + "" );

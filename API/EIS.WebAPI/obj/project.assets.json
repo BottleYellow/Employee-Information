@@ -5324,7 +5324,6 @@
       "sha512": "IzfGTNtpeGRKmDeP8NuRUAiI4tpyrLR/CWjlQo0zXx13ioZKZZERLbsnGr+0miRaEQg3l89TfPe2Nw5lKvOxog==",
       "type": "package",
       "path": "hangfire.sqlserver/1.6.21",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
