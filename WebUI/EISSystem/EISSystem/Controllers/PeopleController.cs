@@ -82,6 +82,17 @@ namespace EIS.WebApp.Controllers
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
             ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
+            ViewBag.TotalHrs = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TotalHours;
+            if (attendance == null)
+            {
+                ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
+            }
+            else
+            {
+                var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
+                ViewBag.EstimatedTimeOut = estTimeOut;
+            }
+            
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };
             var cur = new Current() { PersonId = data.Id };

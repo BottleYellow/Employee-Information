@@ -142,9 +142,11 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>
+                                            <th>Status</th>
                                             <th>Time In</th>
                                             <th>Time Out</th>
-                                            <th>Status</th>
+                                            <th>Total Hours</th>
+
 
                                         </tr>
                                     </thead>
@@ -323,8 +325,19 @@
                         }
                     },
                     {
-                        "data": "TimeIn", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
+                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
+                            if (data == true) {
+                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                            } else {
+                                var dateIn = moment(row.DateIn).format('L');
+                                var date = moment(new Date()).format('L');
+                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                            }
+                        }
+                    },
+                    {
+                        "data": "TimeIn", "autoWidth": true, render: function (data,type,row) {
+                            if (row.TimeIn == row.TimeOut) { return "-"; } 
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
                             return data;
                         }
@@ -337,14 +350,12 @@
                         }
                     },
                     {
-                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (data == true) {
-                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
-                            } else {
-                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
-                            }
+                        "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
+                            if (row.TimeIn == row.TimeOut) { return "-"; }
+                            data = moment(data, "HH:mm:ss").format("mm:ss");
+                            return data;
                         }
-                    }
+                    }      
                 ],
                 //"aoColumns": [
                 //    { "sType": "date" },

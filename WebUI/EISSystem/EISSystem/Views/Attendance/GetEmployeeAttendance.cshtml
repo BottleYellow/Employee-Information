@@ -2,7 +2,7 @@
 @using EIS.WebApp.Services;
 @{
     RedisAgent Cache = new RedisAgent();
- }
+}
 <style type="text/css">
     td {
         width: 200px;
@@ -34,7 +34,7 @@
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
 
-    #inputyear, #inputmonth, #inputweek {
+    #fromDate, #ToDate{
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
 </style>
@@ -64,35 +64,25 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label>Select Employee</label>
-                                            <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
+                                            <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))">
                                                 <option>-- Select --</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <label>Select Type Of Reports</label>
-                                            <select class="form-control" id="select" style="width:200px;">
-                                                <option value="month" id="month">Month</option>
-                                                <option value="year" id="year">Year</option>
-                                                <option value="week" id="week">Week</option>
-                                            </select>
+                                             <div>
+                                                <label>From</label><br />
+                                                <input class="form-control" type="text" id="fromDate" placeholder="From Date" />
+                                            </div>
                                         </div>
                                         <div class="col-md-3">
-                                            <div id="inputyeardiv" hidden="hidden">
-                                                <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
-                                            </div>
-                                            <div id="inputmonthdiv">
-                                                <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" style="width:200px;" placeholder="select month" />
-                                            </div>
-                                            <div id="inputweekdiv" hidden="hidden">
-                                                <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
+                                            <div>
+                                                <label>To</label><br />
+                                                <input class="form-control" type="text" id="ToDate" placeholder="To Date" />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <br />
-                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                            <input type="button" id="generateReport" value="Generate" style="width:200px; font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
                                     </div>
 
@@ -102,58 +92,14 @@
                         </div>
                         <div>
                             <div>
-                                <h4><span id="report">Attendance Report</span></h4>
-                            </div>
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-md-2 col-sm-2">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average Hrs</div>
-                                            <div id="averageHours" class="panel-body">5<span>Hrs</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-2">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average TimeIn</div>
-                                            <div id="averageTimeIn" class="panel-body"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average TimeOut</div>
-                                            <div id="averageTimeOut" class="panel-body"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Present Days</div>
-                                            <div id="presentDays" class="panel-body"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Absent Days</div>
-                                            <div id="absentDays" class="panel-body"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Total Days</div>
-                                            <div id="totalDays" class="panel-body"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
                                 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th>Employee Code</th>
+                                            <th>Name</th>
                                             <th>Date</th>
                                             <th>Status</th>
-                                            <th>Time In</th>
-                                            <th>Time Out</th>
-                                            <th>Total Hours</th>
-
+                                            <th>Total Hrs</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -189,85 +135,14 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var id =@Cache.GetStringValue("PersonId");
-        $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
-        var totalDays = 0;
-        var currentDate = new Date();
-        var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
-        var y = new Date().getFullYear();
-        $('#inputmonth').datetimepicker({
-            format: "MM/YYYY"
+        $('#fromDate').datetimepicker({
+            format: "DD/MM/YYYY"
         });
-        $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month', id);
-
-        $('#select').on('change', function () {
-            var v = $('#select').val();
-            if (v == 'year') {
-                $('#inputyear').val(y);
-                $('#inputyeardiv').show();
-                $('#inputmonthdiv').hide();
-                $('#inputweekdiv').hide();
-                $('#inputyear').datetimepicker({
-                    format: "YYYY"
-                });
-            }
-            else if (v == 'month') {
-                $('#inputmonthdiv').show();
-                $('#inputyeardiv').hide();
-                $('#inputweekdiv').hide();
-                $('#inputmonth').datetimepicker({
-                    format: "MM/YYYY"
-                });
-            }
-            else if (v == 'week') {
-                $("#inputweek").val("30/12/2018-05/01/2019");
-                $('#inputmonthdiv').hide();
-                $('#inputyeardiv').hide();
-                $('#inputweekdiv').show();
-                $("#inputweek").datetimepicker({
-                    format: 'DD/MM/YYYY'
-                });
-            }
-        });
-        $('#inputweek').on('dp.change', function (e) {
-            var value = $("#inputweek").val();
-            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
-            $("#inputweek").val(firstDate + " - " + lastDate);
+        $('#ToDate').datetimepicker({
+            format: "DD/MM/YYYY"
         });
         $('#generateReport').on('click', function () {
-            var id = $('#selectEmployee').val();
-            var v = $('#select').val();
-            if (v == 'year') {
-                var value = $("#inputyear").val();
-                $("#inputyear").val(value);
-                if (value % 4 == 0) {
-                    totalDays = 366;
-                }
-                else {
-                    totalDays = 365;
-                }
-                generateReport(value, 'year', id);
-            }
-
-            else if (v == 'month') {
-                var value = $("#inputmonth").val();
-                $("#inputmonth").val(value);
-                var monthYear = value.split('/');
-                var y = monthYear[1];
-                var m = monthYear[0];
-                totalDays = new Date(y, m, 0).getDate()
-                generateReport(value, 'month', id);
-            }
-            else if (v == 'week') {
-                var value = $("#inputweek").val();
-                var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-                var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
-                $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week', id);
-                totalDays = 7;
-            }
+            
         });
 
         function generateReport(value, type, id) {
@@ -330,17 +205,6 @@
                         }
                     },
                     {
-                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (data == true) {
-                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
-                            } else {
-                                var dateIn = moment(row.DateIn).format('L');
-                                var date = moment(new Date()).format('L');
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
-                            }
-                        }
-                    },
-                    {
                         "data": "TimeIn", "autoWidth": true, render: function (data, type, row) {
                             if (row.TimeIn == row.TimeOut) { return "-"; }
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
@@ -355,12 +219,15 @@
                         }
                     },
                     {
-                        "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("mm:ss");
-                            return data;
+                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
+                            if (data == true) {
+                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                            } else {
+                                return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                            }
+
                         }
-                    }      
+                    }
                 ],
                 "initComplete": function () {
                     var $searchInput = $('div.dataTables_filter input');

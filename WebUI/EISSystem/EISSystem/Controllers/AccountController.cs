@@ -103,6 +103,7 @@ namespace EIS.WebApp.Controllers
         {
             return View();
         }
+
         [DisplayName("Error Page")]
         [HttpGet]
         public IActionResult ErrorPage()

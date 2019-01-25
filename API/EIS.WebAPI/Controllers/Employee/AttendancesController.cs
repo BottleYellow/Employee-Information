@@ -2,8 +2,10 @@
 using EIS.Entities.Generic;
 using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +20,7 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AttendancesController : BaseController
     {
-        public AttendancesController(IRepositoryWrapper repository): base(repository)
+        public AttendancesController(IRepositoryWrapper repository) : base(repository)
         {
 
         }
@@ -50,7 +52,7 @@ namespace EIS.WebAPI.Controllers
             attendance.TimeOut = DateTime.Now.TimeOfDay;
             attendance.TotalHours = attendance.TimeOut - attendance.TimeIn;
             _repository.Attendances.UpdateAndSave(attendance);
-            return NoContent();
+            return Ok(attendance);
         }
 
         [DisplayName("Create Attendance")]
@@ -89,16 +91,8 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year).Where(x => x.TenantId == TenantId);
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
-            }
-            else
-            {
-                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
-            }
+            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
 
@@ -107,16 +101,8 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceYearly(year).Where(x=>x.TenantId==TenantId);
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
-            }
-            else
-            {
-                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
-            }
+            var attendanceData = _repository.Attendances.GetAttendanceYearly(year);
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
 
@@ -126,16 +112,8 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] string startOfWeek, [FromRoute] string endOfWeek)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek)).Where(x=>x.TenantId==TenantId);
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData);
-            }
-            else
-            {
-                data = _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
-            }
+            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
         #endregion
@@ -149,9 +127,8 @@ namespace EIS.WebAPI.Controllers
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
             DateTime startDate = new DateTime(year, 1, 1);
             DateTime endDate = startDate.AddYears(1);
-            IList<Attendance> attendancelist = new List<Attendance>();
-            attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
-            data= string.IsNullOrEmpty(sortGrid.Search)?_repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()): _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
             return Ok(data);
         }
@@ -164,8 +141,7 @@ namespace EIS.WebAPI.Controllers
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
             DateTime startDate = new DateTime(year, month, 1);
             DateTime endDate = startDate.AddMonths(1);
-            IList<Attendance> attendancelist = new List<Attendance>();
-            attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+           IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
             return Ok(data);
@@ -177,9 +153,8 @@ namespace EIS.WebAPI.Controllers
         {
             ArrayList data = new ArrayList();
             var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
-            IList<Attendance> attendancelist = new List<Attendance>();
-            attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
-            data=string.IsNullOrEmpty(sortGrid.Search)?_repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()):_repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
             return Ok(data);
         }
@@ -192,7 +167,7 @@ namespace EIS.WebAPI.Controllers
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
-            int TotalDays= (DateTime.IsLeapYear(year)) ? 366:365;            
+            int TotalDays = (DateTime.IsLeapYear(year)) ? 366 : 365;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
             return Ok(attendanceReport);
         }
@@ -218,5 +193,20 @@ namespace EIS.WebAPI.Controllers
             return Ok(attendanceReport);
         }
         #endregion
+
+        
+        [HttpPost("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
+        public IActionResult GetDateWiseAttendance([FromBody]SortGrid sortGrid, [FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
+        {
+            ArrayList data = new ArrayList();
+            var sDate = Convert.ToDateTime(startDate);
+            var tDate = Convert.ToDateTime(endDate);
+            var PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
+            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
+            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceDateWise(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
+            data.Add(attendanceData.Count());
+            return Ok(data);
+        }
     }
 }
