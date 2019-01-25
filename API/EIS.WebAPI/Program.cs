@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using EIS.WebAPI.Services;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -15,7 +16,7 @@ namespace EIS.WebAPI
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                 .Build();
 
-            public static void Main(string[] args)
+        public static void Main(string[] args)
             {
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(Configuration)
@@ -24,7 +25,6 @@ namespace EIS.WebAPI
                 try
                 {
                     Log.Information("Host starting...");
-
 
                 BuildWebHost(args).Run();
                 }

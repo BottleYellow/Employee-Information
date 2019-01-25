@@ -21,4 +21,7 @@
     <Import Project="C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.razor.design\2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props" Condition="Exists('C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.razor.design\2.2.0\build\netstandard2.0\Microsoft.AspNetCore.Razor.Design.props')" />
     <Import Project="C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.app\2.2.0\build\netcoreapp2.2\Microsoft.AspNetCore.App.props" Condition="Exists('C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.app\2.2.0\build\netcoreapp2.2\Microsoft.AspNetCore.App.props')" />
   </ImportGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgHangfire_SqlServer Condition=" '$(PkgHangfire_SqlServer)' == '' ">C:\Users\Aadyam\.nuget\packages\hangfire.sqlserver\1.6.21</PkgHangfire_SqlServer>
+  </PropertyGroup>
 </Project>

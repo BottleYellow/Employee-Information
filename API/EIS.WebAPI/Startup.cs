@@ -7,6 +7,7 @@ using EIS.WebAPI.ExceptionHandle;
 using EIS.WebAPI.Filters;
 using EIS.WebAPI.Services;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,6 @@ namespace EIS.WebAPI
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IControllerService, ControllerService>();
-
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(Authorization));
@@ -65,18 +65,25 @@ namespace EIS.WebAPI
                     ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("askjdkasdakjsdaksdasdjaksjdadfgdfgkjdda"))
                 };
-               
+
             });
             services.AddMvc()
               .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling
                         = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddHangfire(config =>
+                config.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IGenerateMonthlyAttendanceReport, GenerateMonthlyAttendanceReport>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
         {
             app.UseCors("MyPolicy");
+
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -85,6 +92,8 @@ namespace EIS.WebAPI
             {
                 app.UseHsts();
             }
+            RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
+       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.MinuteInterval(2));
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();

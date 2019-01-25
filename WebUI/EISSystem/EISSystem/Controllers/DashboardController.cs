@@ -42,5 +42,18 @@ namespace EIS.WebApp.Controllers
             var dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
             return View(dashBoard);
         }
+
+        public IActionResult FullCalander()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetCalanderEvents()
+        {
+            string abc = "sdf";
+            return View(abc);
+        }
+
     }
 }
