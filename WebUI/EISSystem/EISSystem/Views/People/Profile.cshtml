@@ -36,6 +36,10 @@
         .profilelable {
             font-size: 16px;
         }
+        /*.thrs {
+            height:100px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }*/
     </style>
 </head>
 <body id="body" name="body">
@@ -43,6 +47,8 @@
         <div class="row clearfix">
             <input id="InTime" type="hidden" value="@ViewBag.TimeIn.ToString(@"hh\:mm\:ss")" />
             <input id="OutTime" type="hidden" value="@ViewBag.TimeOut.ToString(@"hh\:mm\:ss")" />
+            <input id="totalHours" type="hidden" value="@ViewBag.TotalHrs.ToString(@"hh\:mm\:ss")" />
+            <input id="estimatedTimeOut" type="hidden" value="@ViewBag.EstimatedTimeOut.ToString(@"hh\:mm\:ss")" />
             <div class="col-xs-12 col-sm-3">
                 <div class="card profile-card">
                     <div class="profile-header">&nbsp;</div>
@@ -97,54 +103,54 @@
                                         </div>
                                         <div id="paddtable" class="body table-responsive">
                                             @if (Model.PermanentAddress.Address != null || Cache.GetStringValue("Role") == "Admin")
-                                    {
-                                        <table id="ptable" name="ptable" class="table table-bordered table-hover">
-                                            <tr>
-                                                <th>Address</th>
-                                                <th>Active Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            @if (Model.PermanentAddress.Address != null)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Model.PermanentAddress.Address, @Model.PermanentAddress.City, @Model.PermanentAddress.State, @Model.PermanentAddress.Country - @Model.PermanentAddress.PinCode
-                                            </td>
-                                            <td>
-                                                @if (Model.PermanentAddress.IsActive == true)
-                                        {
-                                            <span class="label label-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="label label-warning">Inactive</span>
-                        }
-                                            </td>
-                                            <td>
-                                                <button type="button" id="editpadd" name="editpadd" class="btn btn-primary waves-effect">
-                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                                    <span><strong>Edit</strong></span>
-                                                </button>
-                                                <button id="btndeletepermanent" type="button" class="btn btn btn-danger waves-effect">
-                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                    <span><strong>Delete</strong></span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                            }
-                                        </table>
-                            }
-                            else
-                            {
-                                <p>Permanent Address is not added. Please Create your new address.</p>
-                    }
+                                            {
+                                                <table id="ptable" name="ptable" class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th>Address</th>
+                                                        <th>Active Status</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    @if (Model.PermanentAddress.Address != null)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Model.PermanentAddress.Address, @Model.PermanentAddress.City, @Model.PermanentAddress.State, @Model.PermanentAddress.Country - @Model.PermanentAddress.PinCode
+                                                            </td>
+                                                            <td>
+                                                                @if (Model.PermanentAddress.IsActive == true)
+                                                                {
+                                                                    <span class="label label-success">Active</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="label label-warning">Inactive</span>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" id="editpadd" name="editpadd" class="btn btn-primary waves-effect">
+                                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                                    <span><strong>Edit</strong></span>
+                                                                </button>
+                                                                <button id="btndeletepermanent" type="button" class="btn btn btn-danger waves-effect">
+                                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                                    <span><strong>Delete</strong></span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <p>Permanent Address is not added. Please Create your new address.</p>
+                                            }
                                         </div>
                                         @if (Model.PermanentAddress.Address == null)
-                                {
-                                    <p>
-                                        <button type="button" id="createpadd" name="createpadd" class="btn btn-primary waves-effect">Create New</button>
-                                    </p>
-                        }
+                                        {
+                                            <p>
+                                                <button type="button" id="createpadd" name="createpadd" class="btn btn-primary waves-effect">Create New</button>
+                                            </p>
+                                        }
                                     </div>
 
                                 </div>
@@ -166,54 +172,54 @@
                                         </div>
                                         <div id="caddtable" class="body table-responsive">
                                             @if (Model.CurrentAddress.Address != null || Cache.GetStringValue("Role") == "Admin")
-                                    {
-                                        <table id="ctable" name="ctable" class="table table-bordered table-hover">
-                                            <tr>
-                                                <th>Address</th>
-                                                <th>Active Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            @if (Model.CurrentAddress.Address != null)
-                                    {
-                                        <tr>
-                                            <td>@Model.CurrentAddress.Address ,@Model.CurrentAddress.City , @Model.CurrentAddress.State , @Model.CurrentAddress.Country - @Model.CurrentAddress.PinCode </td>
-                                            <td>
-                                                @if (Model.CurrentAddress.IsActive == true)
-                                        {
-                                            <span class="label label-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="label label-warning">Inactive</span>
-                        }
-                                            </td>
-                                            <td>
-                                                <button type="button" id="editcadd" name="editcadd" class="btn btn-primary waves-effect">
-                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                                    <span><strong>Edit</strong></span>
-                                                </button>
-                                                <button id="btndeletecurrent" type="button" class="btn btn btn-danger waves-effect">
-                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                    <span><strong>Delete</strong></span>
-                                                </button>
+                                            {
+                                                <table id="ctable" name="ctable" class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th>Address</th>
+                                                        <th>Active Status</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    @if (Model.CurrentAddress.Address != null)
+                                                    {
+                                                        <tr>
+                                                            <td>@Model.CurrentAddress.Address ,@Model.CurrentAddress.City , @Model.CurrentAddress.State , @Model.CurrentAddress.Country - @Model.CurrentAddress.PinCode </td>
+                                                            <td>
+                                                                @if (Model.CurrentAddress.IsActive == true)
+                                                                {
+                                                                    <span class="label label-success">Active</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="label label-warning">Inactive</span>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" id="editcadd" name="editcadd" class="btn btn-primary waves-effect">
+                                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                                    <span><strong>Edit</strong></span>
+                                                                </button>
+                                                                <button id="btndeletecurrent" type="button" class="btn btn btn-danger waves-effect">
+                                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                                    <span><strong>Delete</strong></span>
+                                                                </button>
 
-                                            </td>
+                                                            </td>
 
-                                        </tr>
-                            }
-                                        </table>
-                            }
-                            else
-                            {
-                                <p>Current Address is not added. Please Create your new address.</p>
-                    }
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <p>Current Address is not added. Please Create your new address.</p>
+                                            }
                                         </div>
                                         @if (Model.CurrentAddress.Address == null)
-                                {
-                                    <p>
-                                        <button type="button" id="createcadd" name="createcadd" class="btn btn-primary waves-effect">Create New</button>
-                                    </p>
-                        }
+                                        {
+                                            <p>
+                                                <button type="button" id="createcadd" name="createcadd" class="btn btn-primary waves-effect">Create New</button>
+                                            </p>
+                                        }
                                     </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade in" id="eadd">
@@ -228,7 +234,7 @@
                                             <form asp-action="EditEmergencyAddress" asp-controller="People" asp-route-pid="@Model.Id" method="post">
                                                 <div id="editform">
                                                     @{
-                                                Html.RenderPartial("EditEmergencyAddress", new Emergency());
+                                                        Html.RenderPartial("EditEmergencyAddress", new Emergency());
                                                     }
                                                 </div>
 
@@ -238,65 +244,65 @@
                                         </div>
                                         <div id="eaddtable" class="body table-responsive">
                                             @if (Model.EmergencyAddress.Count > 0 || Cache.GetStringValue("Role") == "Admin")
-                                    {
-                                        <table id="etable" name="etable" class="table table-bordered table-hover">
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Address</th>
-                                                <th>Contacts</th>
-                                                <th>Active Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            @foreach (var item in Model.EmergencyAddress)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.FirstName @item.LastName
-                                            </td>
-                                            <td>
-                                                @item.Address, @item.City, @item.State, @item.Country - @item.PinCode
-                                            </td>
-                                            <td>
-                                                @item.MobileNumber, @item.PhoneNumber
-                                            </td>
-                                            <td>
-                                                @if (@item.IsActive == true)
-                                        {
-                                            <span class="label label-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="label label-warning">Inactive</span>
-                        }
-                                            </td>
-                                            <td>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <button type="button" id="@item.Id" class="btn btn-primary waves-effect emergency">
-                                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                                            <span><strong>Edit</strong></span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <button id="@item.Id" type="button" class="btn btn btn-danger waves-effect delete">
-                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                            <span><strong>Delete</strong></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                
-                                                
+                                            {
+                                                <table id="etable" name="etable" class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Address</th>
+                                                        <th>Contacts</th>
+                                                        <th>Active Status</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    @foreach (var item in Model.EmergencyAddress)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @item.FirstName @item.LastName
+                                                            </td>
+                                                            <td>
+                                                                @item.Address, @item.City, @item.State, @item.Country - @item.PinCode
+                                                            </td>
+                                                            <td>
+                                                                @item.MobileNumber, @item.PhoneNumber
+                                                            </td>
+                                                            <td>
+                                                                @if (@item.IsActive == true)
+                                                                {
+                                                                    <span class="label label-success">Active</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="label label-warning">Inactive</span>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <button type="button" id="@item.Id" class="btn btn-primary waves-effect emergency">
+                                                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                                            <span><strong>Edit</strong></span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <button id="@item.Id" type="button" class="btn btn btn-danger waves-effect delete">
+                                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                                            <span><strong>Delete</strong></span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
 
-                                            </td>
 
-                                        </tr>
-                            }
-                                        </table>
-                            }
-                            else
-                            {
-                                <p>Emergency Address is not added. Please Create your new address.</p>
-                    }
+
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <p>Emergency Address is not added. Please Create your new address.</p>
+                                            }
                                         </div>
                                         <p>
                                             <button type="button" id="createEadd" name="createEadd" class="btn btn-primary waves-effect">Create New</button>
@@ -320,12 +326,19 @@
     {
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
+    <li><span class="btn btn-primary"><label style="color:white" id="tWHrs">Total Working Hrs</label></span></li><br />
+    <li><label style="color:white" id="eTOut">Estimated Time Out</label></li>
+
 }
 <script>
 
     $(document).ready(function () {
+
         var TimeIn = document.getElementById('InTime').value;
         var TimeOut = document.getElementById('OutTime').value;
+        var estTimeOut = document.getElementById('estimatedTimeOut').value;
+        var totalHrs = document.getElementById('totalHours').value;
+
         if (TimeIn != '00:00:00') {
             document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
             $('#clockIn').attr('disabled', 'disabled');
@@ -333,6 +346,13 @@
         if (TimeOut != '00:00:00') {
             document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
         }
+        if (estTimeOut != '00:00:00') {
+            document.getElementById('eTOut').innerHTML = "Estimated time out :" + estTimeOut;
+        }
+        if (totalHrs != '00:00:00') {
+            document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+        }
+
 
         $('.collapse.in').prev('.panel-heading').addClass('active');
         $('#accordion, #bs-collapse')
@@ -373,7 +393,20 @@
             success: function (data) {
                 var d = new Date();
                 document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
+
+                //var hours = d.getHours() + 9 > 12 ? d.getHours() - 12 : d.getHours();
+                //var am_pm = d.getHours() + 9 >= 12 ? "PM" : "AM";
+                //hours = hours < 10 ? "0" + hours : hours;
+                //var minutes = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+                //var seconds = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
+                //time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
+                //document.getElementById('estTimeOut').innerHTML = "Estimated Time Out </br>" + time;
+                var estTimeOut = document.getElementById('estimatedTimeOut').value;
+                if (estTimeOut != '00:00:00') {
+                    document.getElementById('eTOut').innerHTML = "Estimated time out :" + estTimeOut;
+                }
                 $('#clockIn').attr('disabled', 'disabled');
+                window.parent.location.reload();
             }
         })
     });
@@ -384,6 +417,11 @@
             success: function () {
                 var e = new Date();
                 document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
+                var totalHrs = document.getElementById('totalHours').value;
+                if (totalHrs != '00:00:00') {
+                    document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+                }
+                window.parent.location.reload();
             }
         });
     });

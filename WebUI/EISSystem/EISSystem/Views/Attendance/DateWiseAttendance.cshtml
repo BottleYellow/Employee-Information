@@ -54,7 +54,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"EmployeeCode","FirstName"))" style="width:200px;">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))" style="width:200px;">
                                             <option>-- Select --</option>
                                         </select>
                                     </div>
@@ -89,7 +89,7 @@
                                     <thead>
                                         <tr>
                                             <th>Employee Code</th>
-        <th>Name</th>
+                                            <th>Name</th>
                                             <th>Date</th>
                                             <th>Status</th>
                                             <th>Total Hours</th>
@@ -136,7 +136,8 @@
 
         $('#generateReport').on('click', function () {
             var id = $('#selectEmployee').val();
-            var empName = "Uday Soni"
+            var empName = $('#selectEmployee').children("option:selected").text();
+            //var empName = $('#selectEmployee').text();
         var fromValue = $("#fromdate").val();
         var toValue = $("#todate").val();
             generateReport(fromValue, toValue, id,empName);
@@ -172,7 +173,7 @@
                     "url": "/Attendance/GetDateWiseAttendance",
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "fromdate": fromValue, "todate": toValue, "id": id},
+                    "data": { "fromdate": fromValue, "todate": toValue,"id":id},
                 },
                 "columns": [
                     {

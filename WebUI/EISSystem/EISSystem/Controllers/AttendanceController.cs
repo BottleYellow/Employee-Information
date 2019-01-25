@@ -137,7 +137,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);
             }
-            return View("AllAttendance");
+            return RedirectToAction("Profile","People",new { PersonId = id});
         }
 
         [HttpPost]
@@ -150,11 +150,29 @@ namespace EIS.WebApp.Controllers
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = client.PutAsJsonAsync("api/attendances/" + id + "", attendance).Result;
-                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                string result = response.Content.ReadAsStringAsync().Result;
+                Attendance attendances = JsonConvert.DeserializeObject<Attendance>(result);
+                ViewBag.TotalHrs = attendances.TotalHours;
             }
-            return View("AllAttendance");
+            return RedirectToAction("Profile", "People", new { PersonId = id });
         }
         #endregion
+
+        public IActionResult GetEmployeeAttendance()
+        {
+            HttpResponseMessage response = _service.GetResponse("api/Employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+            var employees = from e in employeesdata
+                            select new Person
+                            {
+                                Id = e.Id,
+                                FirstName = e.FirstName + " " + e.LastName
+                            };
+            ViewBag.Persons = employees;
+            return View(employees);
+        }
+
 
         #region[Method]
         [NonAction]
@@ -265,10 +283,11 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult DateWiseAttendance()
         {
+            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _service.GetResponse("api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata
+            var employees = from e in employeesdata.Where(x=>x.Id!=id)
                             select new Person
                             {
                                 EmployeeCode = e.EmployeeCode,
@@ -280,8 +299,9 @@ namespace EIS.WebApp.Controllers
         
         [DisplayName("DateWiseAttendance")]
         [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,int id)
-        { 
+        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
+        {
+            
             string url = url = "api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("dd-MM-yyyy") + "/" + Convert.ToDateTime(todate).ToString("dd-MM-yyyy");
             ArrayList arrayData = new ArrayList();
             arrayData = LoadData<Attendance>(url);
