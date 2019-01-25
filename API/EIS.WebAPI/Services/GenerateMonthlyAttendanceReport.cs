@@ -50,7 +50,7 @@ namespace EIS.WebAPI.Services
                 month = month - 1;
             }
             else
-            { 
+            {
                 year = year - 1;
                 month = 12;
             }
@@ -59,8 +59,8 @@ namespace EIS.WebAPI.Services
             var employees = _repository.Attendances.GetAttendanceMonthly(month, year);
             foreach (Person p in employees)
             {
-                
-                string logPath = @"C:\Temp\"+p.EmployeeCode+"AttendanceReport.txt";
+
+                string logPath = @"C:\Temp\" + p.EmployeeCode + "AttendanceReport.txt";
 
                 if (File.Exists(logPath))
                 {
@@ -69,18 +69,18 @@ namespace EIS.WebAPI.Services
 
                 using (StreamWriter sw = File.CreateText(logPath))
                 {
-                    
-                    sw.WriteLine("Employee Name:-"+p.FullName);
-                    sw.WriteLine("Employee Code:-"+p.EmployeeCode);
-                    sw.WriteLine("Monthly Attendance Report:-"+month+"/"+year);        
+
+                    sw.WriteLine("Employee Name:-" + p.FullName);
+                    sw.WriteLine("Employee Code:-" + p.EmployeeCode);
+                    sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);
                     DateTime startDate = new DateTime(year, month, 1);
                     DateTime endDate = startDate.AddMonths(1);
                     StringBuilder newlist = new StringBuilder();
                     newlist.AppendLine("   DATE     STATUS   TIME IN   TIME OUT   TOTAL HOURS");
                     int counter = 0;
                     for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
-                    {                   
-                        newlist.Append(date.ToShortDateString()+"   ");
+                    {
+                        newlist.Append(date.ToShortDateString() + "   ");
                         var attendance = p.Attendance.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
                         if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                         {
@@ -95,24 +95,23 @@ namespace EIS.WebAPI.Services
                         else
                         {
                             newlist.Append("Present  ");
-                            newlist.Append(attendance.TimeIn.ToString()+"   ");
-                            newlist.Append(attendance.TimeOut.ToString()+"   ");                          
-                            newlist.Append(attendance.TotalHours.ToString()+"   ");
+                            newlist.Append(attendance.TimeIn.ToString() + "   ");
+                            newlist.Append(attendance.TimeOut.ToString() + "   ");
+                            newlist.Append(attendance.TotalHours.ToString() + "   ");
                             counter++;
 
                         }
-                        newlist.AppendLine();                      
+                        newlist.AppendLine();
                     }
                     sw.WriteLine(newlist);
                     sw.WriteLine("File created: {0}", DateTime.Now.ToString());
                     sw.WriteLine("Total No of Days:-" + TotalDays);
-                    sw.WriteLine("No of Days Present:-"+counter);
-                    sw.WriteLine("No of Days Absent:-"+(TotalDays-counter));
+                    sw.WriteLine("No of Days Present:-" + counter);
+                    sw.WriteLine("No of Days Absent:-" + (TotalDays - counter));
                     sw.WriteLine("For any assistance please contact accounts department");
                     sw.Flush();
                     sw.Close();
                 }
-
 
                 string To = p.EmailAddress;
                 string subject = "Monthly Attendance Report";
@@ -132,17 +131,7 @@ namespace EIS.WebAPI.Services
             else if (gender == Gender.Female) Title = "Ms.";
             return Title;
         }
-       
-    }
 
-
-    public class StringAttendance
-    {
-        public string Date { get; set; }
-        public string Status { get; set; }
-        public string DateIn { get; set; }
-        public string Dateout { get; set; }
-        public string TotalHours { get; set; }
     }
 }
 
