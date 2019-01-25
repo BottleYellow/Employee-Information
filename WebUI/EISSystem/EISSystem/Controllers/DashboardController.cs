@@ -44,7 +44,7 @@ namespace EIS.WebApp.Controllers
             return View(dashBoard);
         }
 
-        public IActionResult FullCalander()
+        public IActionResult Calander()
         {
          
             return View();
@@ -56,8 +56,9 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse("api/Holiday");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
+
+
             return Json(data);
         }
-
     }
 }

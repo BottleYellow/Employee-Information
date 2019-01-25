@@ -62,7 +62,6 @@ namespace EIS.WebApp.Controllers
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }    
 
-        [NonAction]
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
@@ -158,20 +157,20 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-        public IActionResult GetEmployeeAttendance()
-        {
-            HttpResponseMessage response = _service.GetResponse("api/Employee");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata
-                            select new Person
-                            {
-                                Id = e.Id,
-                                FirstName = e.FirstName + " " + e.LastName
-                            };
-            ViewBag.Persons = employees;
-            return View(employees);
-        }
+        //public IActionResult GetEmployeeAttendance()
+        //{
+        //    HttpResponseMessage response = _service.GetResponse("api/Employee");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+        //    var employees = from e in employeesdata
+        //                    select new Person
+        //                    {
+        //                        Id = e.Id,
+        //                        FirstName = e.FirstName + " " + e.LastName
+        //                    };
+        //    ViewBag.Persons = employees;
+        //    return View(employees);
+        //}
 
 
         #region[Method]
@@ -279,7 +278,7 @@ namespace EIS.WebApp.Controllers
         #endregion
 
 
-        [DisplayName("DateWiseAttendance")]
+        [DisplayName("Attendance Datewise")]
         [HttpGet]
         public IActionResult DateWiseAttendance()
         {
@@ -297,7 +296,7 @@ namespace EIS.WebApp.Controllers
             return View(employees);
         }
         
-        [DisplayName("DateWiseAttendance")]
+        [ActionName("DateWiseAttendance")]
         [HttpPost]
         public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
         {
