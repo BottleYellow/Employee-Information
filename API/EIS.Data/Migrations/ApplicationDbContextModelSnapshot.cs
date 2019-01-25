@@ -670,11 +670,11 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<double>("RequestedDays")
                         .HasColumnType("float");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TenantId");
 

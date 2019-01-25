@@ -22,9 +22,9 @@ namespace EIS.Repositories.Repository
 
         public AdminDashboard GetAdminDashboard(int TenantId)
         {
-            var employees = _dbContext.Person.Include(x=>x.Attendance).Where(x => x.TenantId == TenantId && x.IsActive == true).AsQueryable();
+            var employees = _dbContext.Person.Include(x=>x.Attendance).Include(x=>x.Role).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin").AsQueryable();
             var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x=>x.Role).Where(x=>x.Role.Name!="Admin").ToList();
+            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x=>x.Role).Where(x=>x.Role.Name!="Admin" && x.IsActive==true).ToList();
             int pcount = 0;
             foreach(var pa in employees)
             {

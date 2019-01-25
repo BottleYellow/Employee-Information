@@ -68,6 +68,7 @@ namespace EIS.Repositories.Repository
             { }
             else { 
                 data = data.OrderBy(sortGrid.SortColumn + " " + sortGrid.SortColumnDirection);
+                
             }
             if (expression != null)
             {

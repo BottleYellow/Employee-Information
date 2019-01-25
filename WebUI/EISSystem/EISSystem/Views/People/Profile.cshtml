@@ -323,7 +323,7 @@
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
-    <div id="eTOut" style="color:white">Estimated Time Out</div>
+    <div id="eTOut" style="color:white;">Estimated Time Out</div>
 }
 <script>
 
@@ -386,6 +386,7 @@
             type: 'GET',
             url: '/Attendance/AttendanceInOut',
             success: function (data) {
+                $('#eTOut').show();
                 var d = new Date();
                 document.getElementById('clockIn').innerHTML = "Clock In </br>" + d.toLocaleTimeString();
                 var estTimeOut = document.getElementById('estimatedTimeOut').value;
@@ -401,13 +402,14 @@
         $.ajax({
             type: 'POST',
             url: '/Attendance/AttendanceInOut',
-            success: function () {
+            success: function (data) {
                 var e = new Date();
                 document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
                 var totalHrs = document.getElementById('totalHours').value;
                 if (totalHrs != '00:00:00') {
                     document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
                 }
+                @*var code = @Cache.GetStringValue("EmployeeCode");*@
                 window.parent.location.reload();
             }
         });

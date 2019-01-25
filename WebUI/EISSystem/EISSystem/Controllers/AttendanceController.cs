@@ -84,7 +84,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse("api/Employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata
+            var employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
                             select new Person
                             {
                                 Id = e.Id,
@@ -137,7 +137,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = client.PostAsJsonAsync("api/attendances/" + id + "", attendance).Result;
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);
             }
-            return RedirectToAction("Profile","People",new { PersonId = id});
+            return RedirectToAction("Profile","People",new { PersonId = Cache.GetStringValue("EmployeeCode") });
         }
 
         [HttpPost]
@@ -154,7 +154,7 @@ namespace EIS.WebApp.Controllers
                 Attendance attendances = JsonConvert.DeserializeObject<Attendance>(result);
                 ViewBag.TotalHrs = attendances.TotalHours;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = id });
+            return RedirectToAction("Profile", "People", new { PersonId = Cache.GetStringValue("EmployeeCode") });
         }
         #endregion
 
@@ -287,7 +287,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse("api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata.Where(x=>x.Id!=id)
+            var employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
                             select new Person
                             {
                                 EmployeeCode = e.EmployeeCode,

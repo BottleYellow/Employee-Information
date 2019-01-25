@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190124063142_Changes")]
-    partial class Changes
+    [Migration("20190125092415_EmployeeData")]
+    partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -672,11 +672,11 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<double>("RequestedDays")
                         .HasColumnType("float");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TenantId");
 
