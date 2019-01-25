@@ -62,7 +62,7 @@ namespace EIS.WebApp.Controllers
             return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }    
 
-        [NonAction]
+
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
