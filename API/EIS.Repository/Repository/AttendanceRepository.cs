@@ -70,6 +70,7 @@ namespace EIS.Repositories.Repository
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             attendanceReport.TotalDays = TotalDays;
+
             attendanceReport.PresentDays = attendanceData.Count();
             attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
             if (attendanceReport.PresentDays == 0)
@@ -104,14 +105,10 @@ namespace EIS.Repositories.Repository
                 var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut,x.TotalHours }).FirstOrDefault();
                 if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                 {
-                    if (date < DateTime.Now.Date)
-                    {
-
-                        newlist.TimeIn = new TimeSpan();
-                        newlist.TimeOut = new TimeSpan();
-                        newlist.IsActive = false;
-                        newlist.TotalHours= new TimeSpan();
-                    }
+                    newlist.TimeIn = new TimeSpan();
+                    newlist.TimeOut = new TimeSpan();
+                    newlist.IsActive = false;
+                    newlist.TotalHours= new TimeSpan();
                 }
                 else
                 {
