@@ -33,7 +33,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-            var employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true);
+            var employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
             return Ok(employees);
         }
         [HttpGet("{EmployeeCode}")]

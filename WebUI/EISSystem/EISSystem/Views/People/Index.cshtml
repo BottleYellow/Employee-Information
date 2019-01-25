@@ -24,7 +24,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create New" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>ID Card</th>
+                                <th>Employee Code</th>
                                 <th>Name</th>
                                 <th>Image</th>
                                 <th>Gender</th>
@@ -78,6 +78,7 @@
                         bootbox.alert("<h3>Record deleted successfully!</h3>", function () {
                             location.href = '/People/Index';
                         });
+
                     }
                 });
             }
@@ -88,7 +89,7 @@
         var id = $(this).attr("id");
         $.ajax({
             type: "GET",
-            url: '/People/ActivateEmployee?id=' + id,
+            url: '/People/ActivateEmployee?EmployeeCode=' + id,
             data: null,
             success: function () {
                 bootbox.alert("<h3>Record activated successfully!</h3>", function () {
@@ -97,115 +98,112 @@
             }
         });
     });
+    $('#select').on('change', function () {
+        var v = $('#select').val();
+        var bool;
+        if (v == "active") {
+            bool = true;
+            generateReport(bool);
+        }
+        else if (v == "inActive") {
+            bool = false;
+            generateReport(bool);
+        }
+    });
     $(document).ready(function () {
+
         var bool = true;
         generateReport(bool);
-        $('#select').on('change', function () {
-            var v = $('#select').val();
-            var bool;
-            if (v == "active") {
-                bool = true;
-                generateReport(bool);
-            }
-            else if (v == "inActive") {
-                bool = false;
-                generateReport(bool);
-            }
-        });
-        function generateReport(bool) {
-            debugger;
-            var dTable = $('#example').DataTable({
-                destroy: true,
-                sDom: '<"myexport"B>ifrtlp',
-                "processing": true, // for show progress bar
-                "serverSide": true, // for process server side
-                "filter": true, // this is for disable filter (search box)
-                buttons: [
-                    {
-                        extend: 'pdfHtml5',
-                        title: 'Employee Report',
-                        text: 'Export',
-                        titleAttr: 'Export to Pdf',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
-                    }
-                ],
-                "aoColumnDefs": [
-                    { "aTargets": [1], "bSortable": true },
-                    { "aTargets": ['_all'], "bSortable": false }
-                ],
-                lengthMenu: [
-                    [10, 25, -1],
-                    ['10', '25', 'All']
-                ],
-                ajax: {
-                    "url": "/People/LoadData",
-                    "type": "POST",
-                    "datatype": "json",
-                    "data": { "type": bool }
-                },
-                "columnDefs": [
-                    {
-                        "render": function (data, type, row) {
-                            return data + " " + row.MiddleName + " " + row.LastName;
-                        },
-                        "targets": 1
-                    },
-                ],
-                "columns": [
-                    { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
-                    {
-                        "data": "FirstName", "name": "FirstName", "autoWidth": true
-                    },
-                    {
-                        "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
-                            return '<img  src="\\EmployeeData\\' + row.TenantId + row.EmployeeCode+ '\\Image\\' + data + '" style="height:40px; weight:40px">';
-                        }
-                    },
-                    {
-                        "data": "Gender", "name": "Gender", "autoWidth": true, "render": function (data) {
-                            if (data == "0") {
-                                return "Male";
-                            } else { return "Female"; }
-                        }
-                    },
-                    {
-                        "data": "DateOfBirth", "name": "DateOfBirth", "autoWidth": true, "render": function (data) {
-                            data = moment(data).format('DD MMM YYYY');
-                            return data;
-                        }
-                    },
-                    { "data": "MobileNumber", "name": "MobileNumber", "autoWidth": true },
-                    { "data": "EmailAddress", "name": "EmailAddress", "autoWidth": true },
-                    {
-                        "data": "JoinDate", "name": "JoinDate", "autoWidth": true, "render": function (data) {
-                            data = moment(data).format('DD MMM YYYY');
-                            return data;
-                        }
-                    },
-                    {
-                        data: null, "autoWidth": true, render: function (data, type, row) {
-                            var value = row.IsActive;
-                            if (value == true) {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.Id + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
-                            } else {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.Id + '>Activate</a></li></ul></div>';
-                            }
-                        }
-                    }
-                ],
-                "initComplete": function () {
-                    var $searchInput = $('div.dataTables_filter input');
-                    $searchInput.unbind();
-                    $searchInput.bind('keyup', function (e) {
-                        if (this.value.length >= 3 || this.value.length == 0) {
-                            dTable.search(this.value).draw();
-                        }
-                    });
-                },
-            });
-        };
     });
+    function generateReport(bool) {
+        var dTable = $('#example').DataTable({
+            destroy: true,
+            sDom: '<"myexport"B>ifrtlp',
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    title: 'EMPLOYEE REPORT',
+                    text: 'Export',
+                    titleAttr: 'Export to Pdf',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                }
+            ],
+            "aoColumnDefs": [
+                { "aTargets": [0], "bSortable": true },
+                { "aTargets": [1], "bSortable": true },
+                { "aTargets": ['_all'], "bSortable": false }
+            ],
+            lengthMenu: [
+                [5, 10, 25, -1],
+                ['5', '10', '25', 'All']
+            ],
+            ajax: {
+                "url": "/People/LoadData",
+                "type": "POST",
+                "datatype": "json",
+                "data": { "type": bool }
+            },
+            "columns": [
+                { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
+                {
+                    "data": "FirstName", "name": "FirstName", "autoWidth": true, "render": function (data, type, row) {
+                        return row.FullName;
+                    }
+                },
+                {
+                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
+                        return '<img  src="\\EmployeeData\\' + row.TenantId + row.EmployeeCode + '\\Image\\' + data + '" style="height:40px; weight:40px">';
+                    }
+                },
+                {
+                    "data": "Gender", "name": "Gender", "autoWidth": true, "render": function (data) {
+                        if (data == "0") {
+                            return "Male";
+                        } else { return "Female"; }
+
+                    }
+                },
+                {
+                    "data": "DateOfBirth", "name": "DateOfBirth", "autoWidth": true, "render": function (data) {
+                        data = moment(data).format('DD MMM YYYY');
+                        return data;
+                    }
+                },
+                { "data": "MobileNumber", "name": "MobileNumber", "autoWidth": true },
+                { "data": "EmailAddress", "name": "EmailAddress", "autoWidth": true },
+                {
+                    "data": "JoinDate", "name": "JoinDate", "autoWidth": true, "render": function (data) {
+                        data = moment(data).format('DD MMM YYYY');
+                        return data;
+                    }
+                },
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        var value = row.IsActive;
+                        if (value == true) {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                        } else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
+                        }
+                    }
+                }
+            ],
+            "initComplete": function () {
+                var $searchInput = $('div.dataTables_filter input');
+                $searchInput.unbind();
+                $searchInput.bind('keyup', function (e) {
+                    if (this.value.length >= 3 || this.value.length == 0) {
+                        dTable.search(this.value).draw();
+                    }
+                });
+            },
+        });
+    };   
+    
 </script>
 
 

@@ -73,7 +73,7 @@ namespace EIS.WebAPI
                         = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddHangfire(config =>
                 config.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<IGenerateMonthlyAttendanceReport, GenerateMonthlyAttendanceReport>();
+            services.AddScoped<IGenerateMonthlyAttendanceReport, GenerateMonthlyAttendanceReport>();
 
         }
 
@@ -93,7 +93,7 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
-       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.MinuteInterval(30));
+       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly);
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();

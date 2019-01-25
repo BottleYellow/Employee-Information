@@ -17,7 +17,7 @@ namespace EIS.Repositories.Repository
 
         public IQueryable<Person> GetAttendanceYearly(int year)
         {
-            var results = _dbContext.Person
+            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
                 .Select(p => new
                 {
                     p,
@@ -35,7 +35,7 @@ namespace EIS.Repositories.Repository
         public IQueryable<Person> GetAttendanceMonthly(int month, int year)
         {
 
-            var results = _dbContext.Person
+            var results = _dbContext.Person.Include(x=>x.Role).Where(x=>x.Role.Name!="Admin")
                 .Select(p => new
                 {
                     p,
@@ -51,7 +51,7 @@ namespace EIS.Repositories.Repository
 
         public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek)
         {
-            var results = _dbContext.Person
+            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
               .Select(p => new
               {
                   p,
