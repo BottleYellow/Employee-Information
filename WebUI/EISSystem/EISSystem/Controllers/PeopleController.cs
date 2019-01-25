@@ -72,7 +72,7 @@ namespace EIS.WebApp.Controllers
                 }        
             return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = employees });
         }
-        public IActionResult Profile(int PersonId)
+        public IActionResult Profile(string PersonId)
         {
             response = _services.Employee.GetResponse("api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -94,8 +94,8 @@ namespace EIS.WebApp.Controllers
             }
             
             if (data.PermanentAddress == null)
-                data.PermanentAddress = new Permanent() { PersonId = PersonId };
-            var cur = new Current() { PersonId = PersonId };
+                data.PermanentAddress = new Permanent() { PersonId = data.Id };
+            var cur = new Current() { PersonId = data.Id };
             if (data.CurrentAddress == null)
                 data.CurrentAddress = cur;
             Response.StatusCode = (int)response.StatusCode;
@@ -186,15 +186,15 @@ namespace EIS.WebApp.Controllers
         }
 
         [DisplayName("Update Employee")]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string EmployeeCode)
         {
             ViewBag.Designations = rolesList;
 
             var data1 = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse("api/employee/Person/" + id + "" ).Content.ReadAsStringAsync().Result;
-            Person data = EmployeeData().Find(x => x.Id == id);         
+            string stringData = _services.Employee.GetResponse("api/employee/Person/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
+            Person data = EmployeeData().Find(x => x.EmployeeCode == EmployeeCode);         
             return View(data);
         }
 
@@ -259,37 +259,9 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                return RedirectToAction("Profile","People", new { PersonId = Convert.ToInt32(person.Id) });
+                return RedirectToAction("Profile","People", new { PersonId = person.EmployeeCode });
             }
             return View(person);
-        }
-
-        [DisplayName("Delete Employee")]
-        public IActionResult Delete(int id)
-        {
-            response = _services.Employee.GetResponse("api/employee/" + id + "" );
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            Person data1 = JsonConvert.DeserializeObject<Person>(stringData);
-            //imageBase64Data = Convert.ToBase64String(data1.Image);
-
-            //string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
-            //ViewBag.ImageData = imageDataURL;
-            return PartialView("DeletePartial", data1);
-        }
-        
-        public IActionResult DeleteConfirmed(int id)
-        {
-            HttpClient client = _services.Employee.GetService();
-            response = client.DeleteAsync("api/employee/" + id + "").Result;
-            if (response.IsSuccessStatusCode == true)
-            {
-                ViewBag.Message = "Record has been successfully deleted.";
-                data = EmployeeData();
-                return RedirectToAction("Index","People");
-                //return View("Index", data);
-            }
-            return View("Index", data);
-
         }
         [AllowAnonymous]
         public List<Person> EmployeeData()
@@ -312,9 +284,9 @@ namespace EIS.WebApp.Controllers
             }
             return data;
         }
-        public IActionResult ActivateEmployee(int id)
+        public IActionResult ActivateEmployee(string EmployeeCode)
         {
-            response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + id + "" );
+            response = _services.Employee.GetResponse("api/employee/ActivatePerson/" + EmployeeCode + "" );
             if(response.IsSuccessStatusCode)
                 ViewBag.Message = "Information activated successfully!";
             return View("Index");

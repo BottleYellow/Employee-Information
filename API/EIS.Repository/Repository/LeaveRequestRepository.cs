@@ -14,6 +14,13 @@ namespace EIS.Repositories.Repository
         {
 
         }
+
+        public void AddPastLeave(PastLeaves pastLeave)
+        {
+            _dbContext.PastLeaves.Add(pastLeave);
+            _dbContext.SaveChanges();
+        }
+
         public IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
         {
             var results = from Requests in _dbContext.LeaveRequests
@@ -21,6 +28,12 @@ namespace EIS.Repositories.Repository
                           where Person.ReportingPersonId == PersonId && Requests.TenantId == TenantId
                           select Requests;
             return results;
+        }
+
+        public IQueryable<PastLeaves> GetPastLeaves(int TenantId)
+        {
+            var result = _dbContext.PastLeaves.Where(x => x.TenantId == TenantId);
+            return result;
         }
 
         public void UpdateRequestStatus(int RequestId, string Status)

@@ -14,7 +14,7 @@ namespace EIS.Repositories.IRepository
         void AddDesignationAndSave(Role designation);
         bool DesignationExists(string DesignationName,int TenantId);
         void UpdateDesignationAndSave(Role designation);
-        Person GetProfile(int Id);
-        Person ActivatePerson(int id);
+        Person GetProfile(string EmployeeCode);
+        Person ActivatePerson(string EmployeeCode);
     }
 }

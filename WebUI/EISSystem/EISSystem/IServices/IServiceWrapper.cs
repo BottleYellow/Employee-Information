@@ -25,5 +25,6 @@ namespace EIS.WebApp.IServices
         IEISService<LeaveRequest> LeaveRequest { get; }
         IEISService<Users> Users { get; }
         IEISService<Holiday> Holidays { get; }
+        IEISService<PastLeaves> PastLeave { get; }
     }
 }
