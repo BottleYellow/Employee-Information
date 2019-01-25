@@ -34,6 +34,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Login(Users user)
         {
             string pid = "";
+            string EmployeeCode = "";
             HttpResponseMessage response = _service.PostResponse("api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)
             {
@@ -47,6 +48,7 @@ namespace EIS.WebApp.Controllers
                 Task<string> tokenResult = response.Content.ReadAsAsync<string>();
                 //pid = tokenResult.Result.ToString();
                 pid = person.Id.ToString();
+                EmployeeCode = person.EmployeeCode;
                 Response.Cookies.Append("IdCard", person.EmployeeCode);
                 Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
                 Response.Cookies.Append("EmailId", person.EmailAddress);
@@ -57,7 +59,7 @@ namespace EIS.WebApp.Controllers
                 }
             }
             
-            return RedirectToAction("Profile","People",new { PersonId=Convert.ToInt32(pid)});
+            return RedirectToAction("Profile","People",new { PersonId=EmployeeCode});
         }
 
         [DisplayName("Logout")]

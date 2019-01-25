@@ -216,5 +216,44 @@ namespace EIS.WebAPI.Controllers
             }
             new EmailManager(_configuration).SendEmail(subject, body, To);
         }
+
+        [DisplayName("PastLeaves")]
+        [Route("PastLeaves")]
+        [HttpPost]
+        public IActionResult GetPastLeaves([FromBody]SortGrid sortGrid)
+        {
+            ArrayList data = new ArrayList();
+            var leaveData = _repository.LeaveRequest.GetPastLeaves(TenantId);
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.PastLeaves.GetDataByGridCondition(null, sortGrid, leaveData);
+            }
+            else
+            {
+                string search = sortGrid.Search.ToLower();
+                data = _repository.PastLeaves.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
+            }
+            return Ok(data);
+
+        }
+        [Route("AddPastLeave")]
+        [DisplayName("Add Past Leave")]
+        [HttpPost]
+        public IActionResult AddPastLeave([FromBody] PastLeaves leave)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            leave.EmployeeName = p.FirstName + " " + p.LastName;
+            leave.TenantId = TenantId;
+            _repository.LeaveRequest.AddPastLeave(leave);
+            //_repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
+            //SendMail(leave.Id, "Pending");
+            return Ok();
+        }
     }
 }

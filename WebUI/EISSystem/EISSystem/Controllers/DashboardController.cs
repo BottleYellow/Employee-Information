@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using EIS.Entities.Dashboard;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -42,5 +43,21 @@ namespace EIS.WebApp.Controllers
             var dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
             return View(dashBoard);
         }
+
+        public IActionResult FullCalander()
+        {
+         
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetFullCalander()
+        {
+            HttpResponseMessage response = _service.GetResponse("api/Holiday");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
+            return Json(data);
+        }
+
     }
 }

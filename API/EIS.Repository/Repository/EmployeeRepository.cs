@@ -15,9 +15,9 @@ namespace EIS.Repositories.Repository
 
         }
 
-        public Person ActivatePerson(int id)
+        public Person ActivatePerson(string EmployeeCode)
         {
-            Person person = _dbContext.Person.Include(x => x.User).Where(x => x.Id == id).FirstOrDefault();
+            Person person = _dbContext.Person.Include(x => x.User).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
             person.IsActive = true;
             person.User.IsActive = true;
             Save();
@@ -59,9 +59,9 @@ namespace EIS.Repositories.Repository
             return _dbContext.Roles.AsNoTracking().Where(x => x.TenantId == TenantId);
         }
 
-        public Person GetProfile(int Id)
+        public Person GetProfile(string EmployeeCode)
         {
-            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.Id == Id).FirstOrDefault();
+            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
         }
 
         public void UpdateDesignationAndSave(Role designation)

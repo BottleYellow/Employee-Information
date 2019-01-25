@@ -30,15 +30,15 @@
                     <div class="body">
                         <form id="cp" method="post">
                             @if (ViewBag.ListOfPolicy != null)
-            {
-                <div class="form-group" id="LType">
-                    <label asp-for="LeaveType">Leave Type : </label>
-                    <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                        <option>-- Select Leave Type --</option>
-                    </select>
-                    <span asp-validation-for="LeaveType" class="text-danger"></span>
-                </div>
-}
+                            {
+                                <div class="form-group" id="LType">
+                                    <label asp-for="LeaveType">Leave Type : </label>
+                                        <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                                            <option>-- Select Leave Type --</option>
+                                        </select>
+                                        <span asp-validation-for="LeaveType" class="text-danger"></span>
+                                </div>
+                            }
 
                             <label>Dates Requested : </label>
                             <div class="row clearfix">
@@ -115,9 +115,9 @@
             $.ajax({
                 url: url1,
                 type: 'POST',
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
+                //beforeSend: function () {
+                //    $('.ajax-loader').css("visibility", "visible");
+                //},
                 data: d,
                 success: function (data) {
                     bootbox.alert({
@@ -127,9 +127,9 @@
                         }
                     });
                 },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                },
+                //complete: function () {
+                //    $('.ajax-loader').css("visibility", "hidden");
+                //},
                 error: function (data) {
                     alert(data.responseText);
                 }

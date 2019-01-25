@@ -1,0 +1,125 @@
+﻿@using EIS.Entities.Leave
+@model PastLeaves
+<!-- Modal -->
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+        /*margin-left: 8px;*/
+        /*top: 7px;*/
+    }
+</style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+<div id="md" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <HeaderWithButton class="modal-title" header-name="Add Past Leave"></HeaderWithButton>
+        </div>
+        <div class="modal-body">
+            <form id="cp" method="post">
+                <div class="form-group">
+                    <label>Dates Requested : </label>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="FromDate" value="" id="date1" placeholder="select Date"/>
+                        @*<input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control">*@
+                    </div>
+                    <span class="col-sm-1"><label>To</label></span>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="ToDate" value="" id="date2" placeholder="select Date" />
+                        @*<input id="date2" asp-for="ToDate" type="date" onchange="FunDate2();" class="form-control">*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Reason For Requested Leave :</label>
+                    <div class="form-line">
+                        <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..."></textarea>
+                    </div>
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="PersonId" id="psid" />
+                <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Submit</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
+
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/js/admin.js"></script>
+
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $("#date1").on("dp.change", function () {
+        $("#date2").val('');
+        $("#btnSubmit").prop("disabled", true);
+    })
+    $("#date2").on("dp.change", function () {
+        debugger;
+        var d1 = document.getElementById("date1").value;
+        var d2 = document.getElementById("date2").value;
+        var firstDate = moment(d1, "DD/MM/YYYY").format("MM/DD/YYYY");
+        var secondDate = moment(d2, "DD/MM/YYYY").format("MM/DD/YYYY");
+        if (new Date(firstDate) > new Date(secondDate)) {
+            bootbox.alert({
+                message: "Please select valid date"
+            });
+            $("#date2").val('');
+            $("#btnSubmit").prop("disabled", true);
+        }
+        else {
+            $("#btnSubmit").removeAttr('disabled');
+        }
+    })
+    $('#btnSubmit').click(function () {
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var d = form.serialize();
+            var url1 = "/Leave/AddPastLeave";
+            $.ajax({
+                url: url1,
+                type: 'POST',
+                data: d,
+                success: function (data) {
+                    bootbox.alert({
+                        message: "Past Leave Added Successfully!",
+                        callback: function () {
+                            window.parent.location.reload();
+                        }
+                    });
+                },
+                error: function (data) {
+                    $("#md").replaceWith(data.responseText);
+                }
+            });
+        }
+        return false;
+    });
+    $("#from").change(function () {
+        var SelectFromDate = $("#from").val();
+        var SelectToDate = $("#to").val();
+
+        var fromdate = new Date(SelectFromDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        var todate = new Date(SelectToDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+
+        if (fromdate.getDate() > todate.getDate()) {
+            $("#to").val(SelectFromDate);
+        }
+        if (SelectFromDate.length > 0) {
+            $('#to').datepicker('setStartDate', SelectFromDate);
+            //$('.to_datetime').datetimepicker('setEndDate', '2012-01-01');
+        }
+    });
+</script>

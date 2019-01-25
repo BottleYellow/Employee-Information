@@ -89,7 +89,7 @@
         var id = $(this).attr("id");
         $.ajax({
             type: "GET",
-            url: '/People/ActivateEmployee?id=' + id,
+            url: '/People/ActivateEmployee?EmployeeCode=' + id,
             data: null,
             success: function () {
                 bootbox.alert("<h3>Record activated successfully!</h3>", function () {
@@ -115,7 +115,6 @@
             }
         });
         function generateReport(bool) {
-            debugger;
             var dTable = $('#example').DataTable({
                 destroy: true,
                 sDom: '<"myexport"B>ifrtlp',
@@ -185,9 +184,9 @@
                         data: null, "autoWidth": true, render: function (data, type, row) {
                             var value = row.IsActive;
                             if (value == true) {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.Id + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                             } else {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.Id + '>Activate</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
                             }
                         }
                     }

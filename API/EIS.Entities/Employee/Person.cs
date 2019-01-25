@@ -51,6 +51,7 @@ namespace EIS.Entities.Employee
         public virtual Current CurrentAddress { get; set; }
         public virtual ICollection<Emergency> EmergencyAddress { get; set; }
         public virtual ICollection<Other> OtherAddress { get; set; }
+        public virtual ICollection<PastLeaves> PastLeaves { get; set; }
         #endregion
         [NotMapped]
         public string FullName {

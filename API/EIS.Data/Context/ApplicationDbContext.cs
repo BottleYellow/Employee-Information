@@ -21,15 +21,15 @@ namespace EIS.Data.Context
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-                connectionString = configuration.GetConnectionString("DefaultConnection");
+            connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString,options =>
-            {
-                options.UseRowNumberForPaging();
-            });
+            optionsBuilder.UseSqlServer(connectionString, options =>
+             {
+                 options.UseRowNumberForPaging();
+             });
         }
 
         #region[Tables]
@@ -47,6 +47,7 @@ namespace EIS.Data.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
+        public DbSet<PastLeaves> PastLeaves { get; set; }
 
         #endregion
     }

@@ -189,6 +189,15 @@ namespace EIS.Data
                 modelBuilder.Entity<Holiday>().Property(p => p.Vacation).HasColumnType("nvarchar(100)");
                 #endregion
 
+                #region [PastLeaves]
+                modelBuilder.Entity<PastLeaves>().Property(p => p.FromDate).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<PastLeaves>().Property(p => p.ToDate).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<PastLeaves>().Property(p => p.EmployeeName).HasColumnType("nvarchar(100)");
+                modelBuilder.Entity<PastLeaves>().Property(p => p.RequestedDays).HasColumnType("float");
+                modelBuilder.Entity<PastLeaves>().Property(p => p.Status).HasColumnType("nvarchar(50)");
+                modelBuilder.Entity<PastLeaves>().Property(p => p.Reason).HasColumnType("nvarchar(200)");
+                #endregion
+
                 #region Constraints
 
                 modelBuilder.Entity<Person>()
@@ -289,6 +298,12 @@ namespace EIS.Data
                    .WithMany(g => g.OtherAddress)
                    .HasForeignKey(s => s.PersonId);
 
+                //one employee has many past Leaves
+                modelBuilder.Entity<PastLeaves>()
+                   .HasOne(s => s.Person)
+                   .WithMany(g => g.PastLeaves)
+                   .HasForeignKey(s => s.PersonId);
+
                 modelBuilder.Entity<Users>()
                     .HasOne(s => s.Person)
                     .WithOne(g => g.User)
@@ -299,20 +314,21 @@ namespace EIS.Data
                 #endregion
 
                 #region[Table Schema]
-                modelBuilder.Entity<Users>().ToTable("tblUsers", "ATM");
-                modelBuilder.Entity<Person>().ToTable("tblPerson", "ATM");
-                modelBuilder.Entity<Role>().ToTable("tblRoles", "ATM");
-                modelBuilder.Entity<LeaveRules>().ToTable("tblLeaveRules", "ATM");
-                modelBuilder.Entity<LeaveCredit>().ToTable("tblLeaveCredit", "ATM");
-                modelBuilder.Entity<EmployeeLeaves>().ToTable("tblEmployeeLeaves", "ATM");
-                modelBuilder.Entity<LeaveRequest>().ToTable("tblLeaveRequests", "ATM");
-                modelBuilder.Entity<Attendance>().ToTable("tblAttendance", "ATM");
-                modelBuilder.Entity<Permanent>().ToTable("tblPermanentAddress", "ATM");
-                modelBuilder.Entity<Current>().ToTable("tblCurrentAddress", "ATM");
-                modelBuilder.Entity<Emergency>().ToTable("tblEmergencyAddress", "ATM");
-                modelBuilder.Entity<Other>().ToTable("tblOtherAddress", "ATM");
-                modelBuilder.Entity<Configuration>().ToTable("tblConfiguration", "ATM");
-                modelBuilder.Entity<Holiday>().ToTable("tblHolidays", "ATM");
+                modelBuilder.Entity<Users>().ToTable("tblUsers", "LMS");
+                modelBuilder.Entity<Person>().ToTable("tblPerson", "LMS");
+                modelBuilder.Entity<Role>().ToTable("tblRoles", "LMS");
+                modelBuilder.Entity<LeaveRules>().ToTable("tblLeaveRules", "LMS");
+                modelBuilder.Entity<LeaveCredit>().ToTable("tblLeaveCredit", "LMS");
+                modelBuilder.Entity<EmployeeLeaves>().ToTable("tblEmployeeLeaves", "LMS");
+                modelBuilder.Entity<LeaveRequest>().ToTable("tblLeaveRequests", "LMS");
+                modelBuilder.Entity<Attendance>().ToTable("tblAttendance", "LMS");
+                modelBuilder.Entity<Permanent>().ToTable("tblPermanentAddress", "LMS");
+                modelBuilder.Entity<Current>().ToTable("tblCurrentAddress", "LMS");
+                modelBuilder.Entity<Emergency>().ToTable("tblEmergencyAddress", "LMS");
+                modelBuilder.Entity<Other>().ToTable("tblOtherAddress", "LMS");
+                modelBuilder.Entity<Configuration>().ToTable("tblConfiguration", "LMS");
+                modelBuilder.Entity<Holiday>().ToTable("tblHolidays", "LMS");
+                modelBuilder.Entity<PastLeaves>().ToTable("tblPastLeaves", "LMS");
                 #endregion
             }
             catch (System.Exception ex)
