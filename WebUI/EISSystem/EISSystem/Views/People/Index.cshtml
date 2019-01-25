@@ -24,7 +24,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create New" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Employee Code</th>
+                                <th>ID Card</th>
                                 <th>Name</th>
                                 <th>Image</th>
                                 <th>Gender</th>
@@ -78,7 +78,6 @@
                         bootbox.alert("<h3>Record deleted successfully!</h3>", function () {
                             location.href = '/People/Index';
                         });
-
                     }
                 });
             }
@@ -89,7 +88,7 @@
         var id = $(this).attr("id");
         $.ajax({
             type: "GET",
-            url: '/People/ActivateEmployee?EmployeeCode=' + id,
+            url: '/People/ActivateEmployee?id=' + id,
             data: null,
             success: function () {
                 bootbox.alert("<h3>Record activated successfully!</h3>", function () {
@@ -99,7 +98,6 @@
         });
     });
     $(document).ready(function () {
-
         var bool = true;
         generateReport(bool);
         $('#select').on('change', function () {
@@ -115,6 +113,7 @@
             }
         });
         function generateReport(bool) {
+            debugger;
             var dTable = $('#example').DataTable({
                 destroy: true,
                 sDom: '<"myexport"B>ifrtlp',
@@ -124,7 +123,7 @@
                 buttons: [
                     {
                         extend: 'pdfHtml5',
-                        title: 'EMPLOYEE REPORT',
+                        title: 'Employee Report',
                         text: 'Export',
                         titleAttr: 'Export to Pdf',
                         orientation: 'landscape',
@@ -132,7 +131,6 @@
                     }
                 ],
                 "aoColumnDefs": [
-                    { "aTargets": [0], "bSortable": true },
                     { "aTargets": [1], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
                 ],
@@ -145,13 +143,19 @@
                     "type": "POST",
                     "datatype": "json",
                     "data": { "type": bool }
-                },                
+                },
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return data + " " + row.MiddleName + " " + row.LastName;
+                        },
+                        "targets": 1
+                    },
+                ],
                 "columns": [
                     { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
                     {
-                        "data": "FirstName", "name": "FirstName", "autoWidth": true, "render": function (data, type, row) {
-                            return row.FullName;
-                        }
+                        "data": "FirstName", "name": "FirstName", "autoWidth": true
                     },
                     {
                         "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
@@ -163,7 +167,6 @@
                             if (data == "0") {
                                 return "Male";
                             } else { return "Female"; }
-
                         }
                     },
                     {
@@ -184,9 +187,9 @@
                         data: null, "autoWidth": true, render: function (data, type, row) {
                             var value = row.IsActive;
                             if (value == true) {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.Id + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                             } else {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.Id + '>Activate</a></li></ul></div>';
                             }
                         }
                     }

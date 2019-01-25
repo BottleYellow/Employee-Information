@@ -43,7 +43,7 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="Attendance Reports"></HeaderWithButton>
+            <HeaderWithButton header-name="Datewise Attendance"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -170,7 +170,7 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/GetDateWiseAttendance",
+                    "url": "/Attendance/DateWiseAttendance",
                     "type": "POST",
                     "datatype": "json",
                     "data": { "fromdate": fromValue, "todate": toValue,"id":id},
@@ -194,7 +194,13 @@
                     },
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (data == true) {
+                            if (new Date(row.DateIn).getDay() == 0 && row.TimeIn == row.TimeOut) {
+                                return '<span style="font-size:12px;" class="label label-warning">Weekly Holiday</span>';
+                            }
+                            else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound") {
+                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn) + '</span>';
+                            }
+                            else if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
                             } else {
                                 var dateIn = moment(row.DateIn).format('L');
@@ -223,5 +229,57 @@
             });
         }
     });
+    function calculate(date) {
+        var d = new Date(date);
+        var mon = d.toLocaleString('en-us', { month: 'long' });
+        var yea = d.getFullYear();
+        var dat = 1;
+        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
+        var first = myDays[myDate.getDay()];
+        //alert(first);
+        var secnd;
+        var forth;
+        switch (first) {
+            case "Sunday":
+                secnd = yea + '-' + mon + '-' + 14;
+                forth = yea + '-' + mon + '-' + 28;
+                break;
+            case "Monday":
+                secnd = yea + '-' + mon + '-' + 13;
+                forth = yea + '-' + mon + '-' + 27;
+                break;
+            case "Tuesday":
+                secnd = yea + '-' + mon + '-' + 12;
+                forth = yea + '-' + mon + '-' + 26;
+                break;
+            case "Wednesday":
+                secnd = yea + '-' + mon + '-' + 11;
+                forth = yea + '-' + mon + '-' + 25;
+                break;
+            case "Thursday":
+                secnd = yea + '-' + mon + '-' + 10;
+                forth = yea + '-' + mon + '-' + 24;
+                break;
+            case "Friday":
+                secnd = yea + '-' + mon + '-' + 9;
+                forth = yea + '-' + mon + '-' + 23;
+                break;
+            case "Saturday":
+                secnd = yea + '-' + mon + '-' + 8;
+                forth = yea + '-' + mon + '-' + 22;
+                break;
+            default: break;
+        }
+        if (d.getDate() == new Date(secnd).getDate()) {
+            return "2nd Saturday";
+        }
+        else if (d.getDate() == new Date(forth).getDate()) {
+            return "4th Saturday";
+        }
+        else {
+            return "NotFound";
+        }
+    }
 </script>
 
