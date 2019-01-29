@@ -29,7 +29,7 @@ namespace EIS.WebApp.Filters
             var exception = context.Exception;
             if (exception is UnauthorizedAccessException)
             {
-                context.Result = new RedirectResult("/Account/AccessDenied");
+                context.Result = new RedirectResult("~/Account/AccessDenied");
             }
             else
             {             
@@ -37,7 +37,7 @@ namespace EIS.WebApp.Filters
                     logger.LogError(500, exception, exception.Message);
                 
                 var code = context.HttpContext.Response.StatusCode;
-                context.Result = new RedirectResult("/Account/ErrorPage");
+                context.Result = new RedirectResult("~/Account/ErrorPage");
             }
         }
     }

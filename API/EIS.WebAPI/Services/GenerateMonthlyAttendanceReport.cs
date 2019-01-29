@@ -54,18 +54,23 @@ namespace EIS.WebAPI.Services
             }
             int TotalDays = DateTime.DaysInMonth(year, month);
 
+            var rootPath = @"C:\Temp\";
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
             var employees = _repository.Attendances.GetAttendanceMonthly(month, year);
             foreach (Person p in employees)
             {
 
-                string logPath = @"C:\Temp\" + p.EmployeeCode + "AttendanceReport.txt";
+                string attendanceReportPath = @"C:\Temp\" + p.EmployeeCode + "AttendanceReport.txt";
 
-                if (File.Exists(logPath))
+                if (File.Exists(attendanceReportPath))
                 {
-                    File.Delete(logPath);
+                    File.Delete(attendanceReportPath);
                 }
 
-                using (StreamWriter sw = File.CreateText(logPath))
+                using (StreamWriter sw = File.CreateText(attendanceReportPath))
                 {
 
                     sw.WriteLine("Employee Name:-" + p.FullName);
@@ -113,12 +118,12 @@ namespace EIS.WebAPI.Services
 
                 string To = p.EmailAddress;
                 string subject = "Monthly Attendance Report";
-                string body = "Hello " + GetTitle(p.Gender) + " " + p.FirstName + " " + p.LastName + "\n" +
+                string body = "Hello " + GetTitle(p.Gender) + " " + p.FullName + "\n" +
                     "Monthly report is attached. : \n" +
                     "Your Code Number: " + p.EmployeeCode + "\n" +
                     "User Name: " + p.EmailAddress;
 
-                new EmailManager(_configuration).SendEmailWithAttachment(subject, body, To, logPath);
+                new EmailManager(_configuration).SendEmail(subject, body, To, attendanceReportPath);
             }
         }
 

@@ -57,7 +57,9 @@ namespace EIS.WebAPI.Controllers
                         Cache.SetStringValue("Access", data);
                         Cache.SetStringValue("TenantId", person.TenantId.ToString());
                         Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+
                     }
+                    Personid = pid.ToString();
                     Cache.SetStringValue("Role", role);
                     return Ok(person);
                 }
@@ -131,7 +133,7 @@ namespace EIS.WebAPI.Controllers
             string body = "Hello!" +"\n"+
                 "Your new password is : " + password;
 
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
             var user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);

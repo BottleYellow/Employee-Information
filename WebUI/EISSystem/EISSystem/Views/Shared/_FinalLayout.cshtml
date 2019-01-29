@@ -17,7 +17,6 @@
     Context.Request.Cookies.TryGetValue("EmailId", out email);
 
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,24 +88,29 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" style="color:white"><b>Employee System</b></a>
-
+                <a href="/People/Profile?PersonId=@idcard" class="navbar-brand" style="color:white"><b>Employee System</b></a>     
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <div class="align-right">
                     <a href='@Url.Action("Logout","Account")' style="color:white;font-size:18px;font-weight:bold;border-bottom:1px solid; text-decoration:none;">sign out</a>
                 </div>
-                    <ul id="navright" class="nav navbar-nav navbar-right menu">
-                        @RenderSection("Attendance", required: false)
-                    </ul>
+                <ul id="navright" class="nav navbar-nav navbar-right menu">
+@RenderSection("Attendance", required: false)
+                <li>
+                    <a href="/account/logout">
+                        <span style="color:white;font-size:18px;" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
+                    </a>
+                </li>
+@RenderSection("EstimatedTimeOut", required: false)
+                </ul>
 
-                </div>
+            </div>
                 @*<div>
                     
                 </div>*@
                 
-            </div>
+            </div>           
         
     </nav>
     <!-- #Top Bar -->
@@ -334,7 +338,6 @@
     <!-- Custom Js -->
     <script src="~/js/admin.js"></script>
     <script src="~/js/pages/ui/modals.js"></script>
-    <script src="~/js/pages/index.js"></script>
     <!-- Demo Js -->
     <script src="~/js/demo.js"></script>
     <script>
@@ -354,6 +357,7 @@
 
     });
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
         $('#logout').click(function () {
             var url = "/Account/logout";
             $.post(url, function () {

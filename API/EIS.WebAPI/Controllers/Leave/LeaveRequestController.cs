@@ -29,6 +29,16 @@ namespace EIS.WebAPI.Controllers
             _configuration = configuration;
         }
 
+        [Route("GetLeaveRequests1")]
+        [HttpGet]
+        public IActionResult GetLeaveRequests()
+        {
+
+            var leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId);             
+            return Ok(leaveData);
+        }
+
+
         [DisplayName("View all requests")]
         [Route("GetLeaveRequests")]
         [HttpPost]
@@ -214,7 +224,7 @@ namespace EIS.WebAPI.Controllers
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
             }
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
         }
 
         [DisplayName("PastLeaves")]
