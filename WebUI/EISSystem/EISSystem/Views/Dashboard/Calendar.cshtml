@@ -1,11 +1,27 @@
 ﻿<head>
     <link rel='stylesheet' href='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.css' />
+    <!-- qTip -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
 </head>
+<div class="container-fluid">
+    <div class="block-header">
+        <div class="row">
+            <div class="col-md-12">
+                <HeaderWithButton header-name="Calendar"></HeaderWithButton>
+            </div>
+        </div>
+    </div>
 
-<body>
-    <HeaderWithButton header-name="Calendar"></HeaderWithButton>
-    <div id="calender"></div>
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+            <div class="card">
+                <div class="body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -22,16 +38,14 @@
             </div>
         </div>
     </div>
-
-
-</body>
+</div>
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js'></script>
-<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src='https://fullcalendar.io/js/fullcalendar-3.1.0/lib/jquery.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/lib/jquery-ui.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js'></script>
-
-
-
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<!-- qTip -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
 
 
 <script>
@@ -39,32 +53,32 @@
         var events = [];
         $.ajax({
             type: "POST",
-            url: "/Dashboard/GetFullCalander",
+            url: "/Dashboard/GetFullCalendar",
             success: function (data) {
                 $.each(data, function (i, v) {
                     events.push({
-                        title: v.Vacation,
-                        description: v.Vacation,
-                        start: moment(v.Date),
-                        end: v.End != null ? moment(v.End) : null,
-                        color: v.ThemeColor,
+                        title: v.Title,
+                        description: v.Description,
+                        start: moment(v.StartDate).format('YYYY-MM-DD'),
+                        end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
+                        color: v.Color,
                         allDay: v.IsFullDay
                     });
                 })
 
-                GenerateCalender(events);
+                GenerateCalendar(events);
             },
             error: function (error) {
                 alert('failed');
             }
         })
 
-        function GenerateCalender(events) {
-            $('#calender').fullCalendar('destroy');
-            $('#calender').fullCalendar({
-                contentHeight: 400,
+        function GenerateCalendar(events) {
+            $('#calendar').fullCalendar('destroy');
+            $('#calendar').fullCalendar({
+                contentHeight: 700,
                 defaultDate: new Date(),
-                timeFormat: 'h(:mm)a',
+
                 header: {
                     left: 'prev,next today',
                     center: 'title',
@@ -73,18 +87,30 @@
                 eventLimit: true,
                 eventColor: '#378006',
                 events: events,
+                eventRender: function (event, element) {
+                    element.qtip(
+                        {
+                            content: event.description
+                        });
+                },
                 eventClick: function (calEvent, jsEvent, view) {
                     $('#myModal #eventTitle').text(calEvent.title);
                     var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm a")));
+                    $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY")));
                     if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm a")));
+                        $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY")));
                     }
                     $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
                 }
+                //eventClick: function (calEvent, jsEvent, view) {
+                //    alert('You clicked on event id: ' + calEvent.id
+                //        + "\nSpecial ID: " + calEvent.someKey
+                //        + "\nAnd the title is: " + calEvent.title);
+                //    $('#myModal #eventTitle').text(calEvent.title);
+                //}
             })
         }
     })

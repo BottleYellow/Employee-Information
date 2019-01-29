@@ -16,5 +16,7 @@ namespace EIS.WebAPI.Controllers
             Cache = new RedisAgent();
             TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
         }
+
+        public string Personid = "";
     }
 }

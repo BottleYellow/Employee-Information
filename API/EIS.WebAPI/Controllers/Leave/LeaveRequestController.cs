@@ -29,6 +29,16 @@ namespace EIS.WebAPI.Controllers
             _configuration = configuration;
         }
 
+        [Route("GetLeaveRequests1")]
+        [HttpGet]
+        public IActionResult GetLeaveRequests()
+        {
+
+            var leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId);             
+            return Ok(leaveData);
+        }
+
+
         [DisplayName("View all requests")]
         [Route("GetLeaveRequests")]
         [HttpPost]

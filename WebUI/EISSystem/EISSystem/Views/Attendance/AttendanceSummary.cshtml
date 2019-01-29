@@ -56,19 +56,19 @@
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card" style="min-height:100px">
                     <div class="body">
                         <div>
                             <div class="row col-md-12">
                                 <div class="col-md-9">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <label>Select Employee</label>
                                             <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
                                                 <option>-- Select --</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <label>Select Type Of Reports</label>
                                             <select class="form-control" id="select" style="width:200px;">
                                                 <option value="month" id="month">Month</option>
@@ -76,7 +76,7 @@
                                                 <option value="week" id="week">Week</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
                                                 <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
@@ -90,9 +90,9 @@
                                                 <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <br />
-                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;"/>
                                         </div>
                                     </div>
 
@@ -101,15 +101,16 @@
                             </div>
                         </div>
                         <div>
-                            <div>
-                                <h4><span id="report">Attendance Report</span></h4>
-                            </div>
-                            <div class="container-fluid">
+                           
+                            <div class="container-fluid" id="attendanceReport" style="display:none;">
+                                <div>
+                                    <h4><span id="report">Attendance Report</span></h4>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-2 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average Hrs</div>
-                                            <div id="averageHours" class="panel-body">5<span>Hrs</span></div>
+                                            <div id="averageHours" class="panel-body"><span></span></div>
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-sm-2">
@@ -144,7 +145,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
+                            <div id="tblExample" style="display:none;">
                                 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
@@ -199,8 +200,12 @@
             format: "MM/YYYY"
         });
         $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month', id);
+        //generateReport(m + '/' + y, 'month', id);
+        $("#generateReport").prop("disabled", true);
 
+        $('#selectEmployee').on('change', function () {
+            $("#generateReport").removeAttr('disabled');
+        });
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
@@ -237,6 +242,8 @@
             $("#inputweek").val(firstDate + " - " + lastDate);
         });
         $('#generateReport').on('click', function () {
+            $('#attendanceReport').show();
+            $('#tblExample').show();
             var id = $('#selectEmployee').val();
             var v = $('#select').val();
             if (v == 'year') {
@@ -336,14 +343,14 @@
                             }
                             else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound")
                             { 
-                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn)+'</span>';
+                                return '<span class="label label-warning">' + calculate(row.DateIn)+'</span>';
                             }
                             else if (data == true) {
-                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                                return '<span style="font-size:15px" class="label label-success">Present</span>';
                             } else {
                                 var dateIn = moment(row.DateIn).format('L');
                                 var date = moment(new Date()).format('L');
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                                return '<span style="font-size:15px" class="label label-danger">Absent</span>';
                             }
                         }
                     },
@@ -364,7 +371,7 @@
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
                             if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("mm:ss");
+                            data = moment(data, "HH:mm:ss").format("HH:mm");
                             return data;
                         }
                     }      
