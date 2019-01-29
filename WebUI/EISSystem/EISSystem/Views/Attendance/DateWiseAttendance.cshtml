@@ -5,6 +5,7 @@
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -43,7 +44,7 @@
 <body>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="Attendance Reports"></HeaderWithButton>
+            <HeaderWithButton header-name="Datewise Attendance"></HeaderWithButton>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -54,7 +55,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))" style="width:200px;">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))">
                                             <option>-- Select --</option>
                                         </select>
                                     </div>
@@ -125,15 +126,25 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
 
+        $('#generateReport').prop('disabled', true);
+        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         $("#fromdate").datetimepicker({
-                    format: 'DD/MM/YYYY'
+            format: 'DD/MM/YYYY'
         });
         $("#todate").datetimepicker({
             format: 'DD/MM/YYYY'
         });
-
+        
+        $('#selectEmployee').on('change', function () {
+            if ($(this).children("option:selected").text() == "-- Select --") {
+                $('#generateReport').prop('disabled', true);
+            } else {
+                $('#generateReport').removeAttr('disabled');
+            }
+            
+        })
+        
         $('#generateReport').on('click', function () {
             var id = $('#selectEmployee').val();
             var empName = $('#selectEmployee').children("option:selected").text();
@@ -170,7 +181,7 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/GetDateWiseAttendance",
+                    "url": "/Attendance/DateWiseAttendance",
                     "type": "POST",
                     "datatype": "json",
                     "data": { "fromdate": fromValue, "todate": toValue,"id":id},
@@ -194,7 +205,13 @@
                     },
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (data == true) {
+                            if (new Date(row.DateIn).getDay() == 0 && row.TimeIn == row.TimeOut) {
+                                return '<span style="font-size:12px;" class="label label-warning">Weekly Holiday</span>';
+                            }
+                            else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound") {
+                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn) + '</span>';
+                            }
+                            else if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
                             } else {
                                 var dateIn = moment(row.DateIn).format('L');
@@ -223,5 +240,57 @@
             });
         }
     });
+    function calculate(date) {
+        var d = new Date(date);
+        var mon = d.toLocaleString('en-us', { month: 'long' });
+        var yea = d.getFullYear();
+        var dat = 1;
+        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
+        var first = myDays[myDate.getDay()];
+        //alert(first);
+        var secnd;
+        var forth;
+        switch (first) {
+            case "Sunday":
+                secnd = yea + '-' + mon + '-' + 14;
+                forth = yea + '-' + mon + '-' + 28;
+                break;
+            case "Monday":
+                secnd = yea + '-' + mon + '-' + 13;
+                forth = yea + '-' + mon + '-' + 27;
+                break;
+            case "Tuesday":
+                secnd = yea + '-' + mon + '-' + 12;
+                forth = yea + '-' + mon + '-' + 26;
+                break;
+            case "Wednesday":
+                secnd = yea + '-' + mon + '-' + 11;
+                forth = yea + '-' + mon + '-' + 25;
+                break;
+            case "Thursday":
+                secnd = yea + '-' + mon + '-' + 10;
+                forth = yea + '-' + mon + '-' + 24;
+                break;
+            case "Friday":
+                secnd = yea + '-' + mon + '-' + 9;
+                forth = yea + '-' + mon + '-' + 23;
+                break;
+            case "Saturday":
+                secnd = yea + '-' + mon + '-' + 8;
+                forth = yea + '-' + mon + '-' + 22;
+                break;
+            default: break;
+        }
+        if (d.getDate() == new Date(secnd).getDate()) {
+            return "2nd Saturday";
+        }
+        else if (d.getDate() == new Date(forth).getDate()) {
+            return "4th Saturday";
+        }
+        else {
+            return "NotFound";
+        }
+    }
 </script>
 

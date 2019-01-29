@@ -45,9 +45,7 @@
                                     <th>
                                         Available
                                     </th>
-                                    <th>
-                                        Actions
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                         </table>
@@ -130,11 +128,6 @@
                 {
                     "data": "Available", "autoWidth": true, render: function (data) {
                         return data;
-                    }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="inactive" href="/People/Delete?id=' + row.Id + '">Delete</a></li></ul></div>';
                     }
                 }
             ],

@@ -67,9 +67,7 @@
                                         <th>
                                             Leave Reason
                                         </th>
-                                        <th>
-                                            Actions
-                                        </th>
+                                        
                                     </tr>
                                 </thead>
                             </table>
@@ -161,23 +159,8 @@
                     "data": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Pending") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
-                        }
-                        else if (row.Status == "Approved") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
-                        }
-                        else if (row.Status == "Requested For Cancel") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-                        }
-                        else {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
-                        }
-                    }
                 }
+                
             ],
             "initComplete": function () {
                 var $searchInput = $('div.dataTables_filter input');

@@ -59,31 +59,31 @@
                             <div class="row col-md-12">
                                 <div class="col-md-9">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-sm-6">
                                             <label>Select Type Of Reports</label>
-                                            <select class="form-control" id="select">
+                                            <select class="form-control" id="select" style="width:200px">
                                                 <option value="year" id="year">Year</option>
                                                 <option value="month" selected id="month">Month</option>
                                                 <option value="week" id="week">Week</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-sm-6">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" style="width:200px"/>
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" style="width:200px;" placeholder="select month" />
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" style="width:200px"/>
                                             </div>
                                             <div id="inputweekdiv" hidden="hidden">
                                                 <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
+                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" style="width:200px"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-sm-6">
                                             <br />
-                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                            <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
                                     </div>
 
@@ -146,12 +146,10 @@
                                             <th>Time In</th>
                                             <th>Time Out</th>
                                             <th>Total Hours</th>
-
-
                                         </tr>
                                     </thead>
                                 </table>
-</div>
+                            </div>
 
                         </div>
                     </div>
@@ -326,13 +324,15 @@
                     },
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (new Date(row.DateIn).getDay()==0)
-                            { 
-                                return '<span style="font-size:12px;" class="label label-success">Weekly Holiday</span>';
+                            if (new Date(row.DateIn).getDay() == 0 && row.TimeIn == row.TimeOut) {
+                                return '<span style="font-size:12px;" class="label label-warning">Weekly Holiday</span>';
+                            }
+                            else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound") {
+                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn) + '</span>';
                             }
                             else if (data == true) {
                                 return '<span style="font-size:12px;" class="label label-success">Present</span>';
-                            } else if (data == false) {
+                            } else {
                                 var dateIn = moment(row.DateIn).format('L');
                                 var date = moment(new Date()).format('L');
                                 return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
@@ -356,7 +356,7 @@
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
                             if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("mm:ss");
+                            data = moment(data, "HH:mm:ss").format("HH:mm:ss");
                             return data;
                         }
                     }      
@@ -379,4 +379,56 @@
             });
         }
     });
+    function calculate(date) {
+        var d = new Date(date);
+        var mon = d.toLocaleString('en-us', { month: 'long' });
+        var yea = d.getFullYear();
+        var dat = 1;
+        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
+        var first = myDays[myDate.getDay()];
+        //alert(first);
+        var secnd;
+        var forth;
+        switch (first) {
+            case "Sunday":
+                secnd = yea + '-' + mon + '-' + 14;
+                forth = yea + '-' + mon + '-' + 28;
+                break;
+            case "Monday":
+                secnd = yea + '-' + mon + '-' + 13;
+                forth = yea + '-' + mon + '-' + 27;
+                break;
+            case "Tuesday":
+                secnd = yea + '-' + mon + '-' + 12;
+                forth = yea + '-' + mon + '-' + 26;
+                break;
+            case "Wednesday":
+                secnd = yea + '-' + mon + '-' + 11;
+                forth = yea + '-' + mon + '-' + 25;
+                break;
+            case "Thursday":
+                secnd = yea + '-' + mon + '-' + 10;
+                forth = yea + '-' + mon + '-' + 24;
+                break;
+            case "Friday":
+                secnd = yea + '-' + mon + '-' + 9;
+                forth = yea + '-' + mon + '-' + 23;
+                break;
+            case "Saturday":
+                secnd = yea + '-' + mon + '-' + 8;
+                forth = yea + '-' + mon + '-' + 22;
+                break;
+            default: break;
+        }
+        if (d.getDate() == new Date(secnd).getDate()) {
+            return "2nd Saturday";
+        }
+        else if (d.getDate() == new Date(forth).getDate()) {
+            return "4th Saturday";
+        }
+        else {
+            return "NotFound";
+        }
+    }
 </script>
