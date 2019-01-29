@@ -41,8 +41,11 @@ namespace EIS.WebApp.TagHelpers
                                           select i;
                         foreach (var submenu in subMenuList)
                         {
-                            if(SubMenus.Contains(submenu.Name))
-                                output.Content.AppendHtml("<li><a href=" + submenu.URL + ">" + submenu.Name + "</a></li>");
+                            if (SubMenus.Contains(submenu.Name))
+                            {
+                                var href = "~" + submenu.URL;
+                                output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
+                            }
                         }
                         output.Content.AppendHtml("</ul>");
                     }
