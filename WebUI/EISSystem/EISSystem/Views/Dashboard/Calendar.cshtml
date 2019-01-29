@@ -2,6 +2,8 @@
     <link rel='stylesheet' href='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.css' />
     <!-- qTip -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+
+
 </head>
 <div class="container-fluid">
     <div class="block-header">
@@ -44,6 +46,7 @@
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/lib/jquery-ui.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <!-- qTip -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
 
@@ -69,50 +72,50 @@
                 GenerateCalendar(events);
             },
             error: function (error) {
-                alert('failed');
+                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }
         })
 
         function GenerateCalendar(events) {
             $('#calendar').fullCalendar('destroy');
             $('#calendar').fullCalendar({
+                showNonCurrentDates: false,
                 contentHeight: 700,
                 defaultDate: new Date(),
-
+                defaultView: 'month',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,basicWeek,basicDay,agenda'
+
                 },
                 eventLimit: true,
                 eventColor: '#378006',
                 events: events,
                 eventRender: function (event, element) {
+
                     element.qtip(
                         {
                             content: event.description
                         });
+
                 },
                 eventClick: function (calEvent, jsEvent, view) {
                     $('#myModal #eventTitle').text(calEvent.title);
                     var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
                     if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY")));
+                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
                     }
                     $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
-                }
-                //eventClick: function (calEvent, jsEvent, view) {
-                //    alert('You clicked on event id: ' + calEvent.id
-                //        + "\nSpecial ID: " + calEvent.someKey
-                //        + "\nAnd the title is: " + calEvent.title);
-                //    $('#myModal #eventTitle').text(calEvent.title);
-                //}
+                },
+
             })
         }
     })
+
 </script>
 

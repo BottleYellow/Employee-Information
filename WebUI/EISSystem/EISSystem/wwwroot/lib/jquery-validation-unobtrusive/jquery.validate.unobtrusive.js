@@ -175,7 +175,7 @@
             /// Parses a single HTML element for unobtrusive validation attributes.
             /// </summary>
             /// <param name="element" domElement="true">The HTML element to be parsed.</param>
-            /// <param name="skipAttach" type="Boolean">[Optional] true to skip attaching the
+            /// <param name="skipAttach" type="bean">[Optional] true to skip attaching the
             /// validation to the form. If parsing just this single element, you should specify true.
             /// If parsing several elements, you should specify false, and manually attach the validation
             /// to the form when you are finished. The default is false.</param>
@@ -271,7 +271,7 @@
         return this;
     };
 
-    adapters.addBool = function (adapterName, ruleName) {
+    adapters.addb = function (adapterName, ruleName) {
         /// <summary>Adds a new adapter to convert unobtrusive HTML into a jQuery Validate validation, where
         /// the jQuery Validate validation rule has no parameter values.</summary>
         /// <param name="adapterName" type="String">The name of the adapter to be added. This matches the name used
@@ -366,7 +366,7 @@
     }
 
     adapters.addSingleVal("regex", "pattern");
-    adapters.addBool("creditcard").addBool("date").addBool("digits").addBool("email").addBool("number").addBool("url");
+    adapters.addb("creditcard").addb("date").addb("digits").addb("email").addb("number").addb("url");
     adapters.addMinMax("length", "minlength", "maxlength", "rangelength").addMinMax("range", "min", "max", "range");
     adapters.addMinMax("minlength", "minlength").addMinMax("maxlength", "minlength", "maxlength");
     adapters.add("equalto", ["other"], function (options) {

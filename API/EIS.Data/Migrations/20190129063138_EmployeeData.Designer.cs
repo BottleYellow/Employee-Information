@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190125092415_EmployeeData")]
+    [Migration("20190129063138_EmployeeData")]
     partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,7 +104,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("MobileNumber")
                         .IsRequired()
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<int>("PersonId");
 
@@ -302,7 +302,9 @@ namespace EIS.Data.Migrations
                         .HasColumnType("date");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -346,7 +348,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("MobileNumber")
                         .IsRequired()
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("PanCard")
                         .HasColumnType("varchar(10)");
@@ -360,7 +362,7 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<double>("Salary")
+                    b.Property<double?>("Salary")
                         .HasColumnType("float");
 
                     b.Property<int>("TenantId");

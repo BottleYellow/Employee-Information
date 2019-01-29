@@ -31,7 +31,7 @@ namespace EIS.Entities.Employee
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string EmailAddress { get; set; }
-        public float Salary { get; set; }
+        public float? Salary { get; set; }
         public string Description { get; set; }
         public int RoleId { get; set; }
         public int ReportingPersonId { get; set; }

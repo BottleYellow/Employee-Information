@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
 @using EIS.WebApp.Services;
-@{ 
+@{
     RedisAgent Cache = new RedisAgent();
 }
 <html>
@@ -11,7 +11,7 @@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-    
+
     <style>
         .disabledLink {
             color: currentColor;
@@ -36,10 +36,10 @@
             @if (Cache.GetStringValue("Role") == "Admin")
             {
                 <HeaderWithButton header-name="My Leave Requests"></HeaderWithButton>
-             }
+            }
             else
             {
-                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
              }
             
         </div>
@@ -88,10 +88,14 @@
 </body>
 </html>
 
-
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
     $(document).ready(function () {
+        $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
         var dTable = $('#example').DataTable({
             destroy: true,
             "processing": true, // for show progress bar
@@ -123,7 +127,8 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/ShowMyLeaves",
+                //"url": "/Leave/ShowMyLeaves",
+                "url":'@Url.Action("ShowMyLeaves", "Leave")',
                 "type": "POST",
                 "datatype": "json"
             },
@@ -158,11 +163,11 @@
                 {
                     "data": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
-                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
                         } else if (data == "Rejected") {
-                            return '<span style="font-size:12px;" class="label label-danger">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
                         } else {
-                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
                         }
                     }
                 },

@@ -14,37 +14,7 @@ namespace EIS.WebAPI.Utilities
             _configuration = configuration;
         }
 
-        public void SendEmailWithAttachment(string Subject, string Body, string To, string filepath)
-        {
-            string UserID, Password, SMTPPort, Host;
-            UserID = _configuration["appSettings:UserID"];
-            Password = _configuration["appSettings:Password"];
-            SMTPPort = _configuration["appSettings:SMTPPort"];
-            Host = _configuration["appSettings:Host"];
-        
-            MailMessage mail = new MailMessage();
-            Attachment data = new Attachment(
-                     filepath,
-                     MediaTypeNames.Application.Octet);
-            mail.Attachments.Add(data);
-
-            mail.To.Add(To);
-            mail.From = new MailAddress(UserID);
-            mail.Subject = Subject;
-            mail.Body = Body;
-            SmtpClient smtp = new SmtpClient
-            {
-                Host = Host,
-                Port = Convert.ToInt16(SMTPPort),
-                Credentials = new NetworkCredential(UserID, Password),
-                EnableSsl = true
-            };
-        
-            smtp.Send(mail);
-            data.Dispose();
-        }
-
-        public void SendEmail(string Subject, string Body, string To)
+        public void SendEmail(string Subject, string Body, string To, string fileAttachment)
         {
             string  UserID, Password, SMTPPort, Host;
             UserID = _configuration["appSettings:UserID"];
@@ -63,7 +33,17 @@ namespace EIS.WebAPI.Utilities
                 Credentials = new NetworkCredential(UserID, Password),
                 EnableSsl = true
             };
+        if(!string.IsNullOrEmpty(fileAttachment))
+        {
+            Attachment data = new Attachment(fileAttachment, MediaTypeNames.Application.Octet);
+            mail.Attachments.Add(data);
             smtp.Send(mail);
+            data.Dispose();
+        }
+        else
+        { 
+            smtp.Send(mail);
+        }
         }
 
         public static string CreateRandomPassword(int PasswordLength)

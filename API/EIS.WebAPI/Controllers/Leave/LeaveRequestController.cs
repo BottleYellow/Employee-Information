@@ -224,7 +224,7 @@ namespace EIS.WebAPI.Controllers
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
             }
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
         }
 
         [DisplayName("PastLeaves")]

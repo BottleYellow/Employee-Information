@@ -115,13 +115,13 @@ namespace EIS.Data.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     JoinDate = table.Column<DateTime>(type: "date", nullable: false),
                     LeavingDate = table.Column<DateTime>(type: "date", nullable: false),
-                    MobileNumber = table.Column<string>(type: "varchar(15)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
+                    MobileNumber = table.Column<string>(type: "varchar(10)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "getdate()"),
                     EmailAddress = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    Salary = table.Column<double>(type: "float", nullable: false),
+                    Salary = table.Column<double>(type: "float", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     RoleId = table.Column<int>(nullable: false),
-                    ReportingPersonId = table.Column<int>(nullable: true),
+                    ReportingPersonId = table.Column<int>(nullable: false),
                     Gender = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>
@@ -220,7 +220,7 @@ namespace EIS.Data.Migrations
                     Country = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     PinCode = table.Column<string>(type: "varchar(6)", nullable: false),
                     Relation = table.Column<string>(type: "varchar(30)", nullable: false),
-                    MobileNumber = table.Column<string>(type: "varchar(15)", nullable: false),
+                    MobileNumber = table.Column<string>(type: "varchar(10)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "varchar(15)", nullable: true)
                 },
                 constraints: table =>

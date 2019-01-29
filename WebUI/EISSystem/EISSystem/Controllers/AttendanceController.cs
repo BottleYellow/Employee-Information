@@ -32,11 +32,8 @@ namespace EIS.WebApp.Controllers
         public IActionResult AllAttendance(string date, string type)
         {
             string url = GetAllAttendanceData(date, type);
-            ArrayList arrayData = new ArrayList();
-           arrayData = LoadData<Person>(url);
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+           return LoadData<Person>(url,null);
+
         }
         #endregion
 
@@ -54,12 +51,8 @@ namespace EIS.WebApp.Controllers
         {
             int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             string url = GetAttendanceByIdData(date, type, pId);
-            ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Attendance>(url);
+            return LoadData<Attendance>(url,null);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IEnumerable<Attendance> data = JsonConvert.DeserializeObject<IEnumerable<Attendance>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }    
 
         [HttpPost]
@@ -94,7 +87,7 @@ namespace EIS.WebApp.Controllers
         }
         [ActionName("AttendanceSummary")]
         [HttpPost]
-        public JsonResult EmployeeReportsById(string date, string type, int? id)
+        public IActionResult EmployeeReportsById(string date, string type, int? id)
         {
             if (id == null)
             {
@@ -102,11 +95,8 @@ namespace EIS.WebApp.Controllers
             }
             string url = GetAttendanceByIdData(date, type, id);
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Attendance>(url);
+            return LoadData<Attendance>(url,null);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<Attendance> data = JsonConvert.DeserializeObject<IList<Attendance>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
         [ActionName("AttendanceSummary")]
         [HttpPut]
@@ -303,11 +293,8 @@ namespace EIS.WebApp.Controllers
             
             string url = url = "api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("dd-MM-yyyy") + "/" + Convert.ToDateTime(todate).ToString("dd-MM-yyyy");
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Attendance>(url);
+            return LoadData<Attendance>(url,null);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IEnumerable<Attendance> data = JsonConvert.DeserializeObject<IEnumerable<Attendance>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
 
         }
     }

@@ -232,10 +232,10 @@ jQuery.extend = jQuery.fn.extend = function() {
 		deep = false;
 
 	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
+	if ( typeof target === "bean" ) {
 		deep = target;
 
-		// Skip the boolean and the target
+		// Skip the bean and the target
 		target = arguments[ i ] || {};
 		i++;
 	}
@@ -475,7 +475,7 @@ if ( typeof Symbol === "function" ) {
 }
 
 // Populate the class2type map
-jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
+jQuery.each( "bean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
 function( i, name ) {
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 } );
@@ -566,7 +566,7 @@ var i,
 		return -1;
 	},
 
-	booleans = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",
+	beans = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",
 
 	// Regular expressions
 
@@ -615,7 +615,7 @@ var i,
 		"CHILD": new RegExp( "^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\(" + whitespace +
 			"*(even|odd|(([+-]|)(\\d*)n|)" + whitespace + "*(?:([+-]|)" + whitespace +
 			"*(\\d+)|))" + whitespace + "*\\)|)", "i" ),
-		"bool": new RegExp( "^(?:" + booleans + ")$", "i" ),
+		"b": new RegExp( "^(?:" + beans + ")$", "i" ),
 		// For use in libraries implementing .is()
 		// We use this for POS matching in `select`
 		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
@@ -876,7 +876,7 @@ function markFunction( fn ) {
 
 /**
  * Support testing using an element
- * @param {Function} fn Passed the created element and returns a boolean result
+ * @param {Function} fn Passed the created element and returns a bean result
  */
 function assert( fn ) {
 	var el = document.createElement("fieldset");
@@ -961,7 +961,7 @@ function createButtonPseudo( type ) {
 
 /**
  * Returns a function to use in pseudos for :enabled/:disabled
- * @param {Boolean} disabled true for :disabled; false for :enabled
+ * @param {bean} disabled true for :disabled; false for :enabled
  */
 function createDisabledPseudo( disabled ) {
 
@@ -1005,7 +1005,7 @@ function createDisabledPseudo( disabled ) {
 
 		// Try to winnow out elements that can't be disabled before trusting the disabled property.
 		// Some victims get caught in our net (label, legend, menu, track), but it shouldn't
-		// even exist on them, let alone have a boolean value.
+		// even exist on them, let alone have a bean value.
 		} else if ( "label" in elem ) {
 			return elem.disabled === disabled;
 		}
@@ -1040,7 +1040,7 @@ function createPositionalPseudo( fn ) {
 /**
  * Checks a node for validity as a Sizzle context
  * @param {Element|Object=} context
- * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
+ * @returns {Element|Object|bean} The input node if acceptable, otherwise a falsy value
  */
 function testContext( context ) {
 	return context && typeof context.getElementsByTagName !== "undefined" && context;
@@ -1052,7 +1052,7 @@ support = Sizzle.support = {};
 /**
  * Detects XML nodes
  * @param {Element|Object} elem An element or a document
- * @returns {Boolean} True iff elem is a non-HTML XML node
+ * @returns {bean} True iff elem is a non-HTML XML node
  */
 isXML = Sizzle.isXML = function( elem ) {
 	// documentElement is verified for cases where it doesn't yet exist
@@ -1100,7 +1100,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Support: IE<8
 	// Verify that getAttribute really returns attributes and not properties
-	// (excepting IE8 booleans)
+	// (excepting IE8 beans)
 	support.attributes = assert(function( el ) {
 		el.className = "i";
 		return !el.getAttribute("className");
@@ -1242,7 +1242,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		assert(function( el ) {
 			// Select is set to empty string on purpose
 			// This is to test IE's treatment of not explicitly
-			// setting a boolean content attribute,
+			// setting a bean content attribute,
 			// since its presence should be enough
 			// https://bugs.jquery.com/ticket/12359
 			docElem.appendChild( el ).innerHTML = "<a id='" + expando + "'></a>" +
@@ -1258,9 +1258,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 			}
 
 			// Support: IE8
-			// Boolean attributes and "value" are not treated correctly
+			// bean attributes and "value" are not treated correctly
 			if ( !el.querySelectorAll("[selected]").length ) {
-				rbuggyQSA.push( "\\[" + whitespace + "*(?:value|" + booleans + ")" );
+				rbuggyQSA.push( "\\[" + whitespace + "*(?:value|" + beans + ")" );
 			}
 
 			// Support: Chrome<29, Android<4.4, Safari<7.0+, iOS<7.0+, PhantomJS<1.9.8+
@@ -2003,7 +2003,7 @@ Expr = Sizzle.selectors = {
 			return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
 		},
 
-		// Boolean properties
+		// bean properties
 		"enabled": createDisabledPseudo( false ),
 		"disabled": createDisabledPseudo( true ),
 
@@ -2732,11 +2732,11 @@ if ( !support.attributes || !assert(function( el ) {
 }
 
 // Support: IE<9
-// Use getAttributeNode to fetch booleans when getAttribute lies
+// Use getAttributeNode to fetch beans when getAttribute lies
 if ( !assert(function( el ) {
 	return el.getAttribute("disabled") == null;
 }) ) {
-	addHandle( booleans, function( elem, name, isXML ) {
+	addHandle( beans, function( elem, name, isXML ) {
 		var val;
 		if ( !isXML ) {
 			return elem[ name ] === true ? name.toLowerCase() :
@@ -3440,7 +3440,7 @@ function adoptValue( value, resolve, reject, noValue ) {
 		// Other non-thenables
 		} else {
 
-			// Control `resolve` arguments by letting Array#slice cast boolean `noValue` to integer:
+			// Control `resolve` arguments by letting Array#slice cast bean `noValue` to integer:
 			// * false: [ value ].slice( 0 ) => resolve( value )
 			// * true: [ value ].slice( 1 ) => resolve()
 			resolve.apply( undefined, [ value ].slice( noValue ) );
@@ -4654,7 +4654,7 @@ jQuery.fn.extend( {
 		return showHide( this );
 	},
 	toggle: function( state ) {
-		if ( typeof state === "boolean" ) {
+		if ( typeof state === "bean" ) {
 			return state ? this.show() : this.hide();
 		}
 
@@ -7401,7 +7401,7 @@ jQuery.fn.extend( {
 jQuery.each( [ "toggle", "show", "hide" ], function( i, name ) {
 	var cssFn = jQuery.fn[ name ];
 	jQuery.fn[ name ] = function( speed, easing, callback ) {
-		return speed == null || typeof speed === "boolean" ?
+		return speed == null || typeof speed === "bean" ?
 			cssFn.apply( this, arguments ) :
 			this.animate( genFx( name, true ), speed, easing, callback );
 	};
@@ -7511,7 +7511,7 @@ jQuery.fn.delay = function( time, type ) {
 } )();
 
 
-var boolHook,
+var bHook,
 	attrHandle = jQuery.expr.attrHandle;
 
 jQuery.fn.extend( {
@@ -7545,7 +7545,7 @@ jQuery.extend( {
 		// Grab necessary hook if one is defined
 		if ( nType !== 1 || !jQuery.isXMLDoc( elem ) ) {
 			hooks = jQuery.attrHooks[ name.toLowerCase() ] ||
-				( jQuery.expr.match.bool.test( name ) ? boolHook : undefined );
+				( jQuery.expr.match.b.test( name ) ? bHook : undefined );
 		}
 
 		if ( value !== undefined ) {
@@ -7605,12 +7605,12 @@ jQuery.extend( {
 	}
 } );
 
-// Hooks for boolean attributes
-boolHook = {
+// Hooks for bean attributes
+bHook = {
 	set: function( elem, value, name ) {
 		if ( value === false ) {
 
-			// Remove boolean attributes when set to false
+			// Remove bean attributes when set to false
 			jQuery.removeAttr( elem, name );
 		} else {
 			elem.setAttribute( name, name );
@@ -7619,7 +7619,7 @@ boolHook = {
 	}
 };
 
-jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) {
+jQuery.each( jQuery.expr.match.b.source.match( /\w+/g ), function( i, name ) {
 	var getter = attrHandle[ name ] || jQuery.find.attr;
 
 	attrHandle[ name ] = function( elem, name, isXML ) {
@@ -7888,7 +7888,7 @@ jQuery.fn.extend( {
 		var type = typeof value,
 			isValidValue = type === "string" || Array.isArray( value );
 
-		if ( typeof stateVal === "boolean" && isValidValue ) {
+		if ( typeof stateVal === "bean" && isValidValue ) {
 			return stateVal ? this.addClass( value ) : this.removeClass( value );
 		}
 
@@ -7922,7 +7922,7 @@ jQuery.fn.extend( {
 				}
 
 			// Toggle whole class name
-			} else if ( value === undefined || type === "boolean" ) {
+			} else if ( value === undefined || type === "bean" ) {
 				className = getClass( this );
 				if ( className ) {
 
@@ -9805,7 +9805,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 	if ( typeof data !== "string" ) {
 		return [];
 	}
-	if ( typeof context === "boolean" ) {
+	if ( typeof context === "bean" ) {
 		keepScripts = context;
 		context = false;
 	}
@@ -10160,7 +10160,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 
 		// Margin is only for outerHeight, outerWidth
 		jQuery.fn[ funcName ] = function( margin, value ) {
-			var chainable = arguments.length && ( defaultExtra || typeof margin !== "boolean" ),
+			var chainable = arguments.length && ( defaultExtra || typeof margin !== "bean" ),
 				extra = defaultExtra || ( margin === true || value === true ? "margin" : "border" );
 
 			return access( this, function( elem, type, value ) {

@@ -55,22 +55,8 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult LoadData(bool type)
         {
-            ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Person>("api/employee/data");
+            return LoadData<Person>("api/employee/data",type);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
-            IList<Person> employees = new List<Person>();
-                foreach (var e in data)
-                {
-                    PropertyInfo prop = e.GetType().GetProperty("IsActive");
-                    bool obj = Convert.ToBoolean(prop.GetValue(e));
-                    if (obj == type)
-                    {
-                        employees.Add(e);
-                    }
-                }        
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = employees });
         }
         public IActionResult Profile(string PersonId)
         {
@@ -109,6 +95,7 @@ namespace EIS.WebApp.Controllers
                        where p.Role.Name != "Employee"
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
+            ViewBag.Dob = DateTime.Now.ToShortDateString();
             return View();
         }
         [HttpPost]
@@ -193,8 +180,8 @@ namespace EIS.WebApp.Controllers
             var data1 = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse("api/employee/Person/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
-            Person data = EmployeeData().Find(x => x.EmployeeCode == EmployeeCode);         
+            string stringData = _services.Employee.GetResponse("api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Person>(stringData);     
             return View(data);
         }
 
@@ -245,6 +232,7 @@ namespace EIS.WebApp.Controllers
                             }
                         }
                     }
+                    
                     if (string.IsNullOrEmpty(person.MiddleName))
                     {
                         person.MiddleName = "";

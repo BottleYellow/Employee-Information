@@ -389,7 +389,8 @@
     $('#clockIn').click(function () {
         $.ajax({
             type: 'GET',
-            url: '/Attendance/AttendanceInOut',
+            //url: '/Attendance/AttendanceInOut',
+            url:'@Url.Action("AttendanceInOut", "Attendance")',
             success: function (data) {
                 $('#eTOut').show();
                 var d = new Date();
@@ -406,7 +407,8 @@
     $('#clockOut').click(function () {
         $.ajax({
             type: 'POST',
-            url: '/Attendance/AttendanceInOut',
+            //url: '/Attendance/AttendanceInOut',
+            url:'@Url.Action("AttendanceInOut", "Attendance")',
             success: function (data) {
                 var e = new Date();
                 document.getElementById('clockOut').innerHTML = "Clock Out </br>" + e.toLocaleTimeString();
@@ -478,10 +480,10 @@
             },
             callback: function (result) {
                 if (result == true) {
-                    var url1 = "/People/DeletePermanentAddress";
+                    //var url1 = "/People/DeletePermanentAddress";
                     $.ajax({
-                        url: url1,
-                        data: { perid: @Model.PermanentAddress.Id },
+                        url: '@Url.Action("DeletePermanentAddress", "People")?perid='+@Model.PermanentAddress.Id,
+                        //data: { perid: @Model.PermanentAddress.Id },
                         success: function (Data) {
                             bootbox.alert({
                                 message: "Record Deleted Successfully!"
@@ -548,10 +550,10 @@
             },
             callback: function (result) {
                 if (result == true) {
-                    var url1 = "/People/DeleteCurrentAddress";
+                    //var url1 = "/People/DeleteCurrentAddress";
                     $.ajax({
-                        url: url1,
-                        data: { cid: @Model.CurrentAddress.Id },
+                        url: '@Url.Action("DeleteCurrentAddress", "People")?cid='+@Model.CurrentAddress.Id,
+                        //data: { cid: @Model.CurrentAddress.Id },
                         success: function (Data) {
                             bootbox.alert({
                                 message: "Record Deleted Successfully!"
@@ -587,11 +589,11 @@
             $("#editEaddpanel").slideToggle({
                 direction: "up"
             }, 300);
-            var url1 = "/People/EditEmergencyAddress";
+            //var url1 = "/People/EditEmergencyAddress";
             $.ajax({
-                url: url1,
+                url: '@Url.Action("EditEmergencyAddress", "People")?eid='+j,
                 type:'get',
-                data: { eid: j },
+                //data: { eid: j },
                 success: function (Data) {
                     $("#editform").html(Data);
                 }
@@ -636,10 +638,10 @@
             },
             callback: function (result) {
                 if (result == true) {
-                    var url1 = "/People/DeleteEmergencyAddress";
+                    //var url1 = "/People/DeleteEmergencyAddress";
                     $.ajax({
-                        url: url1,
-                        data: { eid: j },
+                        url: '@Url.Action("DeleteEmergencyAddress", "People")?eid='+j,
+                        //data: { eid: j },
                         success: function (Data) {
                             bootbox.alert({
                                 message: "Record Deleted Successfully!"
@@ -659,11 +661,11 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-                var url1 = "/People/CreatePermanentAddress?pid="+@Model.Id+"";
+                //var url1 = "/People/CreatePermanentAddress?pid="+@Model.Id+"";
                 $.ajax({
-                    url: url1,
+                    url: '@Url.Action("CreatePermanentAddress", "People")?pid='+@Model.Id+'&data='+d,
                     type: 'POST',
-                    data: d,
+                    //data: d,
                     success: function (data) {
                         window.top.location.reload(false);
                         bootbox.alert({

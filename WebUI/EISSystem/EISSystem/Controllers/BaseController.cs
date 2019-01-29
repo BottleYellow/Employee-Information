@@ -25,7 +25,7 @@ namespace EIS.WebApp.Controllers
             Cache = new RedisAgent();
             
         }
-        public ArrayList LoadData<T1>(string Url)
+        public IActionResult LoadData<T1>(string Url,bool? type)
         {
             SortEmployee sortEmployee = new SortEmployee();
             var start = Request.Form["start"].FirstOrDefault();
@@ -35,14 +35,16 @@ namespace EIS.WebApp.Controllers
             var search = Request.Form["search[value]"].FirstOrDefault();
             sortEmployee.Skip = start != null ? Convert.ToInt32(start) : 0;
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
-            sortEmployee.Search=string.IsNullOrEmpty(search)?null:search;          
+            sortEmployee.Search=string.IsNullOrEmpty(search)?null:search;
+            sortEmployee.IsActive = type;
             HttpClient client = _service.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
-            ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;
-            return arrayData;
-            
-        }
+            ArrayList arrayData = response.Content.ReadAsAsync<ArrayList>().Result;         
+            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
+            IList<T1> data = JsonConvert.DeserializeObject<IList<T1>>(arrayData[1].ToString());
+            return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = data });
+        }    
     }
 }

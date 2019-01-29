@@ -45,6 +45,7 @@
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
     @*for pdf*@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -148,8 +149,9 @@
         function generateReport(value, type, id) {
             $.ajax({
                 type: 'PUT',
-                url: "/Attendance/AttendanceSummary",
-                data: { "date": value, "type": type, "id": id },
+                //url: "/Attendance/AttendanceSummary",
+                url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type+'&id='+id,
+                //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
@@ -157,9 +159,16 @@
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalDays").innerHTML = data.TotalDays;
+                },
+     error: function (error) {
+                    bootbox.alert('<h4>Error</h4>');
                 }
             });
 
+     $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
             var dTable = $('#example').DataTable({
                 destroy: true,
                 "processing": true, // for show progress bar
@@ -192,10 +201,11 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/AttendanceSummary",
+                    //"url": "/Attendance/AttendanceSummary",
+                    "url": '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type+'&id='+id,
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type, "id": id },
+                    //"data": { "date": value, "type": type, "id": id },
                 },
                 "columns": [
                     {
