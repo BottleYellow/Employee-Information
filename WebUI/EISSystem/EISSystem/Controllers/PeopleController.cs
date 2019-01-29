@@ -201,18 +201,29 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                { 
                     var rootPath = _environment.WebRootPath;
                     var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
+                    if (!Directory.Exists(rootPath + "//EmployeeData//"))
+                    {
+                        Directory.CreateDirectory(rootPath + "//EmployeeData//");
+                    }
+                    if (!Directory.Exists(rootPath + filePath))
+                    {
+                        Directory.CreateDirectory(rootPath + filePath);
+                    }
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(file.FileName).ToLower();
                         if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                         {
-                            string[] files = Directory.GetFiles(rootPath + filePath);                            
-                            System.IO.File.Delete(files[0]);                            
-                            var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                            string[] files = Directory.GetFiles(rootPath + filePath);
+                            if (files.Length > 0)
+                            {
+                                System.IO.File.Delete(files[0]);
+                            }
+                            var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                             {
                                await file.CopyToAsync(fileStream);

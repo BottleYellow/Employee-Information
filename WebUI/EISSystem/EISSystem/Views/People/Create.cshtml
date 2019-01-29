@@ -3,6 +3,7 @@
 
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <style type="text/css">
         .form-group.required .control-label:after {
             color: #d00;
@@ -34,10 +35,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                       
+
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                      
+
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +48,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="FirstName" class="form-control" />
+                                                <input asp-for="FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
                                             </div>
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
@@ -56,7 +57,7 @@
                                         <div class="form-group">
                                             <label asp-for="MiddleName">Middle Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="MiddleName" class="form-control" />
+                                                <input asp-for="MiddleName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
 
                                             </div>
                                             <span asp-validation-for="MiddleName" class="text-danger"></span>
@@ -66,7 +67,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="LastName" class="form-control" />
+                                                <input asp-for="LastName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
 
                                             </div>
                                             <span asp-validation-for="LastName" class="text-danger"></span>
@@ -117,7 +118,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
-                                                <input asp-for="DateOfBirth" class="form-control" />
+                                                <input id="dob" class="form-control" type="text" value="@DateTime.Now" asp-for="DateOfBirth" />
 
                                             </div>
                                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
@@ -169,7 +170,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
-                                                <input asp-for="JoinDate" class="form-control" />
+                                                <input  id="doj" class="form-control" type="text" value="@DateTime.Now" asp-for="JoinDate"  />
 
                                             </div>
                                             <span asp-validation-for="JoinDate" class="text-danger"></span>
@@ -194,7 +195,7 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
+                                            <label class="control-label" asp-for="PanCard">PAN Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
 
@@ -257,46 +258,50 @@
 </div>
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <SCRIPT type="text/javascript">
-  
+    $('#dob').datetimepicker({
+        format: "DD/MM/YYYY"
+    });
+    $('#doj').datetimepicker({
+        format: "DD/MM/YYYY"
+    });
+    function MakeFirstLetterCapital(control) {
+        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
+    }
     function ValidateFileUpload() {
         var fuData = document.getElementById('imageFile');
         var FileUploadPath = fuData.value;
         var status = false;
-        if (FileUploadPath == '')
-        {
+        if (FileUploadPath == '') {
             bootbax.alert("<h4>Please upload an image.</h4>");
 
         }
-        else
-        {
+        else {
             var fileLength = fuData.files[0].size;
 
             var Extension = FileUploadPath.substring(
                 FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
 
             //The file uploaded is an image
-            if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg")
-            {
-                if (fileLength < 500000)
-                {
+            if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
+                if (fileLength < 500000) {
                     status = true;
-                }                  
-                else
-                {
-                    bootbox.alert("<h4>File must be below 60 kb.</h4>");             
+                }
+                else {
+                    bootbox.alert("<h4>File must be below 60 kb.</h4>");
                 }
 
             }
-            else
-            {
-                bootbox.alert("<h4>Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.</h4>");            
+            else {
+                bootbox.alert("<h4>Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.</h4>");
             }
         }
         if (!status) {
             fuData.value = null;
         }
-      
+
     }
 </SCRIPT>
 
