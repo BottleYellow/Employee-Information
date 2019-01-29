@@ -113,6 +113,7 @@
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
+
 @*for pdf*@
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
@@ -123,7 +124,7 @@
 <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -155,6 +156,10 @@
             });
 
         function generateReport(fromValue, toValue, id,empName) {
+     $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
             var dTable = $('#example').DataTable({
                 destroy: true,
                 sDom: '<"myexport"B>ifrtlp',

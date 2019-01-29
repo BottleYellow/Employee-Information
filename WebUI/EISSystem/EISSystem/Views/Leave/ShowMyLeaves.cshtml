@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
 @using EIS.WebApp.Services;
-@{ 
+@{
     RedisAgent Cache = new RedisAgent();
 }
 <html>
@@ -11,7 +11,7 @@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
-    
+
     <style>
         .disabledLink {
             color: currentColor;
@@ -36,7 +36,7 @@
             @if (Cache.GetStringValue("Role") == "Admin")
             {
                 <HeaderWithButton header-name="My Leave Requests"></HeaderWithButton>
-             }
+            }
             else
             {
                 <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
@@ -88,10 +88,14 @@
 </body>
 </html>
 
-
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
     $(document).ready(function () {
+        $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
         var dTable = $('#example').DataTable({
             destroy: true,
             "processing": true, // for show progress bar

@@ -187,6 +187,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -289,9 +290,15 @@
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalDays").innerHTML = data.TotalDays;
+                },
+                error: function (error) {
+                    bootbox.alert('<h4>Error</h4>');
                 }
             });
-
+      $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
             var dTable = $('#example').DataTable({
                 destroy: true,
                 "processing": true, // for show progress bar

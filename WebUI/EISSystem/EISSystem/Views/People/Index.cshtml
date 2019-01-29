@@ -117,6 +117,10 @@
         generateReport(b);
     });
     function generateReport(b) {
+        $.fn.dataTable.ext.errMode = 'none';
+        $('#example').on('error.dt', function () {
+            bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+        }).DataTable();
         var dTable = $('#example').DataTable({
             destroy: true,
             sDom: '<"myexport"B>ifrtlp',

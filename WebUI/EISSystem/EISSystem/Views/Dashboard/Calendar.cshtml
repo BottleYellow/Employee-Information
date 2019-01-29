@@ -2,14 +2,8 @@
     <link rel='stylesheet' href='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.css' />
     <!-- qTip -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
-    <style>
-        .hiddenEvent{display: none;}
-.fc-other-month .fc-day-number { display:none;}
 
-td.fc-other-month .fc-day-number {
-     visibility: hidden;
-}
-    </style>
+
 </head>
 <div class="container-fluid">
     <div class="block-header">
@@ -52,6 +46,7 @@ td.fc-other-month .fc-day-number {
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/lib/jquery-ui.min.js'></script>
 <script src='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <!-- qTip -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
 
@@ -77,7 +72,7 @@ td.fc-other-month .fc-day-number {
                 GenerateCalendar(events);
             },
             error: function (error) {
-                alert('failed');
+                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }
         })
 
@@ -85,7 +80,7 @@ td.fc-other-month .fc-day-number {
             $('#calendar').fullCalendar('destroy');
             $('#calendar').fullCalendar({
                 showNonCurrentDates: false,
-                contentHeight: 700,   
+                contentHeight: 700,
                 defaultDate: new Date(),
                 defaultView: 'month',
                 header: {
@@ -98,12 +93,12 @@ td.fc-other-month .fc-day-number {
                 eventColor: '#378006',
                 events: events,
                 eventRender: function (event, element) {
-                   
+
                     element.qtip(
                         {
                             content: event.description
                         });
-                  
+
                 },
                 eventClick: function (calEvent, jsEvent, view) {
                     $('#myModal #eventTitle').text(calEvent.title);
@@ -117,7 +112,7 @@ td.fc-other-month .fc-day-number {
 
                     $('#myModal').modal();
                 },
-                          
+
             })
         }
     })
