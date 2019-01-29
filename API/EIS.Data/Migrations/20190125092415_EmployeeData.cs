@@ -121,7 +121,7 @@ namespace EIS.Data.Migrations
                     Salary = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     RoleId = table.Column<int>(nullable: false),
-                    ReportingPersonId = table.Column<int>(nullable: false),
+                    ReportingPersonId = table.Column<int>(nullable: true),
                     Gender = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>

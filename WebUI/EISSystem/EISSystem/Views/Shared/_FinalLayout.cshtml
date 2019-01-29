@@ -17,6 +17,7 @@
     Context.Request.Cookies.TryGetValue("EmailId", out email);
 
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -94,10 +95,9 @@
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <div class="align-right">
-                    <a href="/account/logout" style="color:white;font-size:18px;font-weight:bold;border-bottom:1px solid;">sign out</a>
+                    <a href="/account/logout" style="color:white;font-size:18px;font-weight:bold;border-bottom:1px solid; text-decoration:none;">sign out</a>
                 </div>
                     <ul id="navright" class="nav navbar-nav navbar-right menu">
-
                         @RenderSection("Attendance", required: false)
                     </ul>
 
@@ -107,8 +107,6 @@
                 </div>*@
                 
             </div>
-            
-        </div>
         
     </nav>
     <!-- #Top Bar -->

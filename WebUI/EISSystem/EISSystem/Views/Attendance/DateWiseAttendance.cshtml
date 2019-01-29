@@ -5,6 +5,7 @@
     <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -54,7 +55,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))" style="width:200px;">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))">
                                             <option>-- Select --</option>
                                         </select>
                                     </div>
@@ -125,15 +126,25 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
 
+        $('#generateReport').prop('disabled', true);
+        $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         $("#fromdate").datetimepicker({
-                    format: 'DD/MM/YYYY'
+            format: 'DD/MM/YYYY'
         });
         $("#todate").datetimepicker({
             format: 'DD/MM/YYYY'
         });
-
+        
+        $('#selectEmployee').on('change', function () {
+            if ($(this).children("option:selected").text() == "-- Select --") {
+                $('#generateReport').prop('disabled', true);
+            } else {
+                $('#generateReport').removeAttr('disabled');
+            }
+            
+        })
+        
         $('#generateReport').on('click', function () {
             var id = $('#selectEmployee').val();
             var empName = $('#selectEmployee').children("option:selected").text();
