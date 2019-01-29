@@ -64,11 +64,11 @@ namespace EIS.WebApp.Controllers
             {
                 CalendarData calendarData = new CalendarData();
                 calendarData.Title = d.Vacation;
-                calendarData.Description ="Holiday due to:-"+ d.Vacation;
+                calendarData.Description ="Holiday due to "+ d.Vacation;
                 calendarData.StartDate = d.Date;
                 calendarData.EndDate = d.Date;
                 calendarData.Color = "Red";
-                calendarData.AllDay = false;
+                calendarData.IsFullDay = true;
 
                 datas.Add(calendarData);
             }
@@ -85,7 +85,7 @@ namespace EIS.WebApp.Controllers
                     leave = "CL";
                 }
                 calendarData.Title = d.EmployeeName+" ("+ leave + "-"+ d.Status+")";
-                calendarData.Description = "Leave Status:-"+d.Status;
+                calendarData.Description = "Leave Status "+d.Status;
                 calendarData.StartDate = d.FromDate;
                 calendarData.EndDate = d.ToDate;
                 if(d.Status=="Pending")
@@ -95,7 +95,7 @@ namespace EIS.WebApp.Controllers
                 else { 
                 calendarData.Color = "Blue";
                 }
-                calendarData.AllDay = false;
+                calendarData.IsFullDay = true;
                 datas.Add(calendarData);
             }
 
@@ -111,11 +111,52 @@ namespace EIS.WebApp.Controllers
                 calendarData.StartDate = d.DateIn;
                 calendarData.EndDate = d.DateOut;
                 calendarData.Color = "Green";
-                calendarData.AllDay = false;
+                calendarData.IsFullDay = true;
 
                 datas.Add(calendarData);
             }
 
+
+    
+            DateTime beginDate = new DateTime(2018, 1, 1);
+            DateTime stopDate = DateTime.Now.AddYears(2);
+            int count = 0;
+            for (DateTime date=beginDate;date<stopDate; date=date.AddDays(1))
+            {
+                if(date.Day==1)
+                {
+                    count = 0;
+                }       
+                if (date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = "Holiday";
+                    holidayCalanderData.Description = "Holiday";
+                    holidayCalanderData.StartDate = date;
+                    holidayCalanderData.EndDate = date;
+                    holidayCalanderData.Color = "Orange";
+                    holidayCalanderData.IsFullDay = true;
+                    datas.Add(holidayCalanderData);
+
+                }
+                
+                if (date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    count++;                    
+                    if( count%2==0)
+                    {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = count +"nd Saturday Holiday";
+                    holidayCalanderData.Description = "Holiday";
+                    holidayCalanderData.StartDate = date;
+                    holidayCalanderData.EndDate = date;
+                    holidayCalanderData.Color = "Orange";
+                    holidayCalanderData.IsFullDay = true;
+                    datas.Add(holidayCalanderData);
+                    }                 
+                }        
+
+            }                                     
             return Json(datas);
         }
     }

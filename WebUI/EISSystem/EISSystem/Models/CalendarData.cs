@@ -13,6 +13,6 @@ namespace EIS.WebApp.Models
         public DateTime EndDate { get; set; }
         public string Color { get; set; }
         public string MyProperty { get; set; }
-        public bool AllDay { get; set; }
+        public bool IsFullDay { get; set; }
     }
 }

@@ -2,6 +2,14 @@
     <link rel='stylesheet' href='https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.css' />
     <!-- qTip -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+    <style>
+        .hiddenEvent{display: none;}
+.fc-other-month .fc-day-number { display:none;}
+
+td.fc-other-month .fc-day-number {
+     visibility: hidden;
+}
+    </style>
 </head>
 <div class="container-fluid">
     <div class="block-header">
@@ -76,43 +84,43 @@
         function GenerateCalendar(events) {
             $('#calendar').fullCalendar('destroy');
             $('#calendar').fullCalendar({
-                contentHeight: 700,
+                showNonCurrentDates: false,
+                contentHeight: 700,   
                 defaultDate: new Date(),
-
+                defaultView: 'month',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,basicWeek,basicDay,agenda'
+
                 },
                 eventLimit: true,
                 eventColor: '#378006',
                 events: events,
                 eventRender: function (event, element) {
+                   
                     element.qtip(
                         {
                             content: event.description
                         });
+                  
                 },
                 eventClick: function (calEvent, jsEvent, view) {
                     $('#myModal #eventTitle').text(calEvent.title);
                     var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
                     if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("DD-MMM-YYYY")));
+                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
                     }
                     $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
-                }
-                //eventClick: function (calEvent, jsEvent, view) {
-                //    alert('You clicked on event id: ' + calEvent.id
-                //        + "\nSpecial ID: " + calEvent.someKey
-                //        + "\nAnd the title is: " + calEvent.title);
-                //    $('#myModal #eventTitle').text(calEvent.title);
-                //}
+                },
+                          
             })
         }
     })
+
 </script>
 

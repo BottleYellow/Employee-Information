@@ -113,7 +113,7 @@ namespace EIS.WebAPI.Controllers
                 "Your Code Number: " + person.EmployeeCode + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
                 "Password: " + pw;
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok();
         }
 
@@ -130,7 +130,7 @@ namespace EIS.WebAPI.Controllers
             string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                 "Your Information has been successfully updated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n";
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok(person);
         }
 
@@ -203,7 +203,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetData([FromBody]SortGrid sortGrid)
         {
             ArrayList employeeslist;
-            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId &&x.IsActive==sortGrid.IsActive).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
             if (sortGrid.Search == null)
             {
                 employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
@@ -232,7 +232,7 @@ namespace EIS.WebAPI.Controllers
             string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                 "Your Information have been successfully activated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n";
-            new EmailManager(_configuration).SendEmail(subject, body, To);
+            new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok();
         }
 

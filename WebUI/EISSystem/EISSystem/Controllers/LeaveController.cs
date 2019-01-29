@@ -41,10 +41,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetEmployeeLeaveRequests()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/GetLeaveRequests");
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            return LoadData<LeaveRequest>("api/LeaveRequest/GetLeaveRequests",null);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -59,10 +56,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveRequestsUnderMe()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/RequestsUnderMe");
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+           return LoadData<LeaveRequest>("api/LeaveRequest/RequestsUnderMe",null);
         }
 
         [DisplayName("Show my leaves")]
@@ -77,11 +71,8 @@ namespace EIS.WebApp.Controllers
         {
             int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRequest>("api/LeaveRequest/Employee/" + pid + "");
+            return LoadData<LeaveRequest>("api/LeaveRequest/Employee/" + pid + "",null);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<LeaveRequest> data = JsonConvert.DeserializeObject<IList<LeaveRequest>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
 
         [DisplayName("Request for leave")]
@@ -154,10 +145,8 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetPastLeaves()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<PastLeaves>("api/LeaveRequest/PastLeaves");
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<PastLeaves> data = JsonConvert.DeserializeObject<IList<PastLeaves>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            return LoadData<PastLeaves>("api/LeaveRequest/PastLeaves",null);
+
         }
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
@@ -203,11 +192,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeavePolicy()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRules>("api/LeavePolicy/GetLeavePolicies");
-
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<LeaveRules> data = JsonConvert.DeserializeObject<IList<LeaveRules>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            return LoadData<LeaveRules>("api/LeavePolicy/GetLeavePolicies",null);
         }
 
         [DisplayName("Add Leave Rule")]
@@ -256,11 +241,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRules>("api/LeaveCredit/GetLeaveCredits");
-
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<LeaveCredit> data = JsonConvert.DeserializeObject<IList<LeaveCredit>>(arrayData[1].ToString());
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            return LoadData<LeaveRules>("api/LeaveCredit/GetLeaveCredits",null);
         }
 
 

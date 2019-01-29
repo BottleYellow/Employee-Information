@@ -55,22 +55,8 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult LoadData(bool type)
         {
-            ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<Person>("api/employee/data");
+            return LoadData<Person>("api/employee/data",type);
 
-            int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
-            IList<Person> data = JsonConvert.DeserializeObject<IList<Person>>(arrayData[1].ToString());
-            IList<Person> employees = new List<Person>();
-                foreach (var e in data)
-                {
-                    PropertyInfo prop = e.GetType().GetProperty("IsActive");
-                    bool obj = Convert.ToBoolean(prop.GetValue(e));
-                    if (obj == type)
-                    {
-                        employees.Add(e);
-                    }
-                }        
-            return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = employees });
         }
         public IActionResult Profile(string PersonId)
         {
