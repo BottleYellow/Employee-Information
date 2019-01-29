@@ -100,6 +100,7 @@
     $(document).ready(function () {
         var bool = true;
         generateReport(bool);
+
         $('#select').on('change', function () {
             var v = $('#select').val();
             var bool;
@@ -113,7 +114,10 @@
             }
         });
         function generateReport(bool) {
-            debugger;
+            $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                    bootbox.alert('Unable to load data from Server. Please try after sometime');
+            }).DataTable();
             var dTable = $('#example').DataTable({
                 destroy: true,
                 sDom: '<"myexport"B>ifrtlp',
@@ -194,6 +198,7 @@
                             }
                         }
                     }
+                 
                 ],
                 "initComplete": function () {
                     var $searchInput = $('div.dataTables_filter input');
@@ -203,9 +208,10 @@
                             dTable.search(this.value).draw();
                         }
                     });
-                },
+                }
             });
         };
+       
     });
 </script>
 

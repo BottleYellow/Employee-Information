@@ -76,9 +76,14 @@
 </html>
 
 
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
     $(document).ready(function () {
+        $(document).ready(function () {
+            $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
         var dTable = $('#example').DataTable({
             destroy: true,
             "processing": true, // for show progress bar

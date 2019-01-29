@@ -168,6 +168,7 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 @*for pdf*@
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
@@ -275,9 +276,16 @@
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalDays").innerHTML = data.TotalDays;
+                },
+       error: function (error) {
+                    bootbox.alert('<h4>Error</h4>');
                 }
             });
 
+         $.fn.dataTable.ext.errMode = 'none';
+            $('#example').on('error.dt', function () {
+                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+            }).DataTable();
             var dTable = $('#example').DataTable({
                 destroy: true,
                 "processing": true, // for show progress bar
