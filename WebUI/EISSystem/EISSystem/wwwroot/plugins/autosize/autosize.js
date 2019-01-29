@@ -23,7 +23,7 @@
 
 		return {
 			has: function has(key) {
-				return Boolean(list.indexOf(key) > -1);
+				return bean(list.indexOf(key) > -1);
 			},
 			add: function add(key) {
 				list.push(key);

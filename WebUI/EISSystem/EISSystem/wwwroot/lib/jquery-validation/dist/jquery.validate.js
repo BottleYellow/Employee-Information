@@ -1072,7 +1072,7 @@ $.extend( $.validator, {
 		},
 
 		dependTypes: {
-			"boolean": function( param ) {
+			"bean": function( param ) {
 				return param;
 			},
 			"string": function( param, element ) {
@@ -1221,7 +1221,7 @@ $.extend( $.validator, {
 					value = true;
 				}
 
-				// Force non-HTML5 browsers to return bool
+				// Force non-HTML5 browsers to return b
 				value = !!value;
 			} else {
 				value = $element.attr( method );

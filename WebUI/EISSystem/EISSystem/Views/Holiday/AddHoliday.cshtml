@@ -68,11 +68,11 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            var url1 = "/Holiday/AddHoliday";
+            //var url1 = "/Holiday/AddHoliday";
             $.ajax({
-                url: url1,
+                url: '@Url.Action("AddHoliday", "Holiday")?data='+d,
                 type: 'POST',
-                data: d,
+                //data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Holiday Added Successfully!",

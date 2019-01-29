@@ -85,11 +85,11 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            var url1 = "/Leave/AddPastLeave";
+            //var url1 = "/Leave/AddPastLeave";
             $.ajax({
-                url: url1,
+                url: '@Url.Action("AddPastLeave", "Leave")?data='+d,
                 type: 'POST',
-                data: d,
+                //data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Past Leave Added Successfully!",

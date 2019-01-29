@@ -102,7 +102,7 @@ componentHandler = (function() {
    *
    * @param {string} name The name of a class we want to use.
    * @param {componentHandler.ComponentConfig=} optReplace Optional object to replace match with.
-   * @return {!Object|boolean}
+   * @return {!Object|bean}
    * @private
    */
   function findRegisteredClass_(name, optReplace) {
@@ -136,7 +136,7 @@ componentHandler = (function() {
    *
    * @param {!Element} element The element we want to check.
    * @param {string} jsClass The class to check for.
-   * @returns {boolean}
+   * @returns {bean}
    * @private
    */
   function isElementUpgraded_(element, jsClass) {
@@ -148,8 +148,8 @@ componentHandler = (function() {
    * Create an event object.
    *
    * @param {string} eventType The type name of the event.
-   * @param {boolean} bubbles Whether the event should bubble up the DOM.
-   * @param {boolean} cancelable Whether the event can be canceled.
+   * @param {bean} bubbles Whether the event should bubble up the DOM.
+   * @param {bean} cancelable Whether the event can be canceled.
    * @returns {!Event}
    */
   function createEvent_(eventType, bubbles, cancelable) {
@@ -433,7 +433,7 @@ componentHandler = (function() {
  *   constructor: Function,
  *   classAsString: string,
  *   cssClass: string,
- *   widget: (string|boolean|undefined)
+ *   widget: (string|bean|undefined)
  * }}
  */
 componentHandler.ComponentConfigPublic;  // jshint ignore:line
@@ -446,7 +446,7 @@ componentHandler.ComponentConfigPublic;  // jshint ignore:line
  *   constructor: !Function,
  *   className: string,
  *   cssClass: string,
- *   widget: (string|boolean),
+ *   widget: (string|bean),
  *   callbacks: !Array<function(!HTMLElement)>
  * }}
  */
@@ -2220,7 +2220,7 @@ MaterialSnackbar.prototype.cleanup_ = function () {
     setTimeout(function () {
         this.element_.setAttribute('aria-hidden', 'true');
         this.textElement_.textContent = '';
-        if (!Boolean(this.actionElement_.getAttribute('aria-hidden'))) {
+        if (!bean(this.actionElement_.getAttribute('aria-hidden'))) {
             this.setActionHidden_(true);
             this.actionElement_.textContent = '';
             this.actionElement_.removeEventListener('click', this.actionHandler_);
@@ -2235,7 +2235,7 @@ MaterialSnackbar.prototype.cleanup_ = function () {
 /**
    * Set the action handler hidden state.
    *
-   * @param {boolean} value
+   * @param {bean} value
    * @private
    */
 MaterialSnackbar.prototype.setActionHidden_ = function (value) {
@@ -2881,7 +2881,7 @@ MaterialTextfield.prototype['checkDisabled'] = MaterialTextfield.prototype.check
   * @public
   */
 MaterialTextfield.prototype.checkFocus = function () {
-    if (Boolean(this.element_.querySelector(':focus'))) {
+    if (bean(this.element_.querySelector(':focus'))) {
         this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
     } else {
         this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
@@ -3943,7 +3943,7 @@ MaterialRipple.prototype.init = function () {
             };
             /**
          * Sets the ripple styles.
-         * @param  {boolean} start whether or not this is the start frame.
+         * @param  {bean} start whether or not this is the start frame.
          */
             this.setRippleStyles = function (start) {
                 if (this.rippleElement_ !== null) {

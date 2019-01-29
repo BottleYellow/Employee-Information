@@ -686,7 +686,7 @@
      */
 
     if (options.backdrop !== "static") {
-      // A boolean true/false according to the Bootstrap docs
+      // A bean true/false according to the Bootstrap docs
       // should show a dialog the user can dismiss by clicking on
       // the background.
       // We always only ever pass static/false to the actual

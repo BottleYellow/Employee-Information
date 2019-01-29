@@ -6,6 +6,7 @@ using EIS.Entities.Leave;
 using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace EIS.Data
 {
@@ -42,8 +43,8 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.JoinDate).HasColumnType("date").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.LeavingDate).HasColumnType("date");
                 modelBuilder.Entity<Person>().Property(p => p.Gender).HasColumnType("varchar(15)").IsRequired();
-                modelBuilder.Entity<Person>().Property(p => p.MobileNumber).HasColumnType("varchar(15)").IsRequired();
-                modelBuilder.Entity<Person>().Property(p => p.DateOfBirth).HasColumnType("date").IsRequired();
+                modelBuilder.Entity<Person>().Property(p => p.MobileNumber).HasColumnType("varchar(10)").IsRequired();
+                modelBuilder.Entity<Person>().Property(p => p.DateOfBirth).HasColumnType("date").IsRequired().HasDefaultValueSql("getdate()");
                 modelBuilder.Entity<Person>().Property(p => p.EmailAddress).HasColumnType("nvarchar(150)").IsRequired();
                 modelBuilder.Entity<Person>().Property(p => p.Salary).HasColumnType("float");
                 modelBuilder.Entity<Person>().Property(p => p.IsActive).HasColumnType("bit").HasDefaultValue(1);
@@ -161,7 +162,7 @@ namespace EIS.Data
                 modelBuilder.Entity<Emergency>().Property(p => p.Country).HasColumnType("nvarchar(100)");
                 modelBuilder.Entity<Emergency>().Property(p => p.PinCode).HasColumnType("varchar(6)").IsRequired();
                 modelBuilder.Entity<Emergency>().Property(p => p.Relation).HasColumnType("varchar(30)").IsRequired();
-                modelBuilder.Entity<Emergency>().Property(p => p.MobileNumber).HasColumnType("varchar(15)").IsRequired();
+                modelBuilder.Entity<Emergency>().Property(p => p.MobileNumber).HasColumnType("varchar(10)").IsRequired();
                 modelBuilder.Entity<Emergency>().Property(p => p.PhoneNumber).HasColumnType("varchar(15)");
                 modelBuilder.Entity<Emergency>().Property(p => p.CreatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Emergency>().Property(p => p.UpdatedDate).HasColumnType("datetime");

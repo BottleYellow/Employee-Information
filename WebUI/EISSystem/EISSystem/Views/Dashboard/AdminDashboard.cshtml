@@ -85,11 +85,11 @@
                                         <td>
                                             @if (item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault() != null)
                                             {
-                                                <span style="font-size:12px;" class="label label-success">Present</span>
+                                                <span style="font-size:14px; font-weight:normal;" class="label label-success">Present</span>
                                             }
                                             else
                                             {
-                                                <span style="font-size:12px;" class="label label-danger">Absent</span>
+                                                <span style="font-size:14px; font-weight:normal;" class="label label-danger">Absent</span>
                                             }
                                         </td>
                                         <td>

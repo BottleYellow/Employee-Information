@@ -4053,7 +4053,7 @@ module.exports = {
     function createLocalOrUTC (input, format, locale, strict, isUTC) {
         var c = {};
 
-        if (typeof(locale) === 'boolean') {
+        if (typeof(locale) === 'bean') {
             strict = locale;
             locale = undefined;
         }
@@ -5383,7 +5383,7 @@ module.exports = {
     // (true, fmt, 5)
     // (true, fmt)
     function listWeekdaysImpl (localeSorted, format, index, field) {
-        if (typeof localeSorted === 'boolean') {
+        if (typeof localeSorted === 'bean') {
             if (typeof format === 'number') {
                 index = format;
                 format = undefined;
@@ -6736,9 +6736,9 @@ module.exports = function(Chart) {
 
 	defaults.doughnut = {
 		animation: {
-			//Boolean - Whether we animate the rotation of the Doughnut
+			//bean - Whether we animate the rotation of the Doughnut
 			animateRotate: true,
-			//Boolean - Whether we animate scaling the Doughnut from the centre
+			//bean - Whether we animate scaling the Doughnut from the centre
 			animateScale: false
 		},
 		aspectRatio: 1,
@@ -7368,7 +7368,7 @@ module.exports = function(Chart) {
 			}
 		},
 
-		//Boolean - Whether to animate the rotation of the chart
+		//bean - Whether to animate the rotation of the chart
 		animation: {
 			animateRotate: true,
 			animateScale: true
@@ -8264,7 +8264,7 @@ module.exports = function(Chart) {
 		 * @description Called before all datasets are updated. If a plugin returns false,
 		 * the datasets update will be cancelled until another chart update is triggered.
 		 * @param {Object} instance the chart instance being updated.
-		 * @returns {Boolean} false to cancel the datasets update.
+		 * @returns {bean} false to cancel the datasets update.
 		 * @memberof Chart.PluginBase
 		 * @since version 2.1.5
 		 * @instance
@@ -8527,7 +8527,7 @@ module.exports = function(Chart) {
 
 			// meta.hidden is a per chart dataset hidden flag override with 3 states: if true or false,
 			// the dataset.hidden value is ignored, else if null, the dataset hidden state is returned.
-			return typeof meta.hidden === 'boolean'? !meta.hidden : !this.data.datasets[datasetIndex].hidden;
+			return typeof meta.hidden === 'bean'? !meta.hidden : !this.data.datasets[datasetIndex].hidden;
 		},
 
 		generateLegend: function() {
@@ -10882,7 +10882,7 @@ module.exports = function(Chart) {
 		 * returned value can be used, for instance, to interrupt the current action.
 		 * @param {String} extension the name of the plugin method to call (e.g. 'beforeUpdate').
 		 * @param {Array} [args] extra arguments to apply to the extension call.
-		 * @returns {Boolean} false if any of the plugins return false, else returns true.
+		 * @returns {bean} false if any of the plugins return false, else returns true.
 		 */
 		notify: function(extension, args) {
 			var plugins = this._plugins;
@@ -13777,7 +13777,7 @@ module.exports = function(Chart) {
 	var defaultConfig = {
 		display: true,
 
-		//Boolean - Whether to animate scaling the chart from the centre
+		//bean - Whether to animate scaling the chart from the centre
 		animate: true,
 		lineArc: false,
 		position: "chartArea",
@@ -13790,7 +13790,7 @@ module.exports = function(Chart) {
 
 		// label settings
 		ticks: {
-			//Boolean - Show a backdrop to the scale label
+			//bean - Show a backdrop to the scale label
 			showLabelBackdrop: true,
 
 			//String - The colour of the label backdrop

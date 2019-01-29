@@ -39,9 +39,9 @@
             }
             else
             {
-                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
-            }
-
+                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+             }
+            
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -127,7 +127,8 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/ShowMyLeaves",
+                //"url": "/Leave/ShowMyLeaves",
+                "url":'@Url.Action("ShowMyLeaves", "Leave")',
                 "type": "POST",
                 "datatype": "json"
             },
@@ -162,11 +163,11 @@
                 {
                     "data": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
-                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
                         } else if (data == "Rejected") {
-                            return '<span style="font-size:12px;" class="label label-danger">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
                         } else {
-                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
                         }
                     }
                 },

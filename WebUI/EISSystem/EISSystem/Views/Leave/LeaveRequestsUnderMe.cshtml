@@ -115,7 +115,8 @@
                 ['5', '10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/LeaveRequestsUnderMe",
+                //"url": "/Leave/LeaveRequestsUnderMe",
+                "url":'@Url.Action("Leave", "LeaveRequestsUnderMe")',
                 "type": "POST",
                 "datatype": "json"
             },
