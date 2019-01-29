@@ -241,7 +241,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRules>("api/LeaveCredit/GetLeaveCredits",null);
+            return LoadData<LeaveCredit>("api/LeaveCredit/GetLeaveCredits",null);
         }
 
 
