@@ -29,7 +29,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Attendance> GetAttendances()
         {
-            return _repository.Attendances.FindAll().Where(x=>x.TenantId==TenantId);
+            return _repository.Attendances.FindAll().Include(x=>x.Person).Where(x=>x.TenantId==TenantId);
         }
         [HttpGet("{Id}")]
         public Attendance GetAttendancesById([FromRoute]int id)

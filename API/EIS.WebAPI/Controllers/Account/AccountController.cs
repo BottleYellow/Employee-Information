@@ -58,6 +58,7 @@ namespace EIS.WebAPI.Controllers
                         Cache.SetStringValue("TenantId", person.TenantId.ToString());
                         Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
                     }
+                    Personid = pid.ToString();
                     Cache.SetStringValue("Role", role);
                     return Ok(person);
                 }

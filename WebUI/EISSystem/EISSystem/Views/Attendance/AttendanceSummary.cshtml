@@ -336,14 +336,14 @@
                             }
                             else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound")
                             { 
-                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn)+'</span>';
+                                return '<span class="label label-warning">' + calculate(row.DateIn)+'</span>';
                             }
                             else if (data == true) {
-                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                                return '<span style="font-size:15px" class="label label-success">Present</span>';
                             } else {
                                 var dateIn = moment(row.DateIn).format('L');
                                 var date = moment(new Date()).format('L');
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                                return '<span style="font-size:15px" class="label label-danger">Absent</span>';
                             }
                         }
                     },
