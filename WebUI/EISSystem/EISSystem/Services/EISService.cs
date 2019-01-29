@@ -37,7 +37,7 @@ namespace EIS.WebApp.Services
             HttpClient client = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:54830")
-            };           
+            };          
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Add("Token", Cache.GetStringValue("TokenValue"));
             client.DefaultRequestHeaders.Accept.Add(contentType);

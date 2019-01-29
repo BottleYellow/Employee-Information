@@ -24,7 +24,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="Employee List" btn-href="location.href='@Url.Action("Create","People")'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
             if (result == true) {
                 $.ajax({
                     type: "GET",
-                    url: '/People/DeleteConfirmed?id=' + id,
+                    url: '@Url.Action("DeleteConfirmed", "People")?id=' + id,
                     data: null,
                     success: function () {
                         bootbox.alert("<h3>Record deleted successfully!</h3>", function () {
@@ -88,7 +88,7 @@
         var id = $(this).attr("id");
         $.ajax({
             type: "GET",
-            url: '/People/ActivateEmployee?EmployeeCode=' + id,
+            url: '@Url.Action("ActivateEmployee","People")?EmployeeCode=' + id,
             data: null,
             success: function () {
                 bootbox.alert("<h3>Record activated successfully!</h3>", function () {
@@ -140,7 +140,7 @@
                     ['5', '10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/People/LoadData",
+                    "url": "@Url.Action("LoadData","People")?type="+bool,
                     "type": "POST",
                     "datatype": "json",
                     "data": { "type": bool }
@@ -188,7 +188,7 @@
                         data: null, "autoWidth": true, render: function (data, type, row) {
                             var value = row.IsActive;
                             if (value == true) {
-                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                                return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                             } else {
                                 return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
                             }

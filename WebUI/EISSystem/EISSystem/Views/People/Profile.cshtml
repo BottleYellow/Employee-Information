@@ -62,7 +62,7 @@
                             <div class="profile"><label class="profilelable">Aadhar No. :</label> @Html.DisplayFor(model => model.AadharCard)</div>
                             <div class="profile"><label class="profilelable">PAN No. :</label> @Html.DisplayFor(model => model.PanCard)</div>
                             <div class="profile"><label class="profilelable">Salary :</label> @Html.DisplayFor(model => model.Salary)</div>
-                            <div class="profile"><a href="/People/Edit?EmployeeCode=@Model.EmployeeCode">Edit Profile</a></div>
+                            <div class="profile"><a href="@Url.Action("Edit","People")?EmployeeCode=@Model.EmployeeCode">Edit Profile</a></div>
                         </div>
                     </div>
 
@@ -83,17 +83,17 @@
 
                                     <div class="panel-body">
                                         <div style="display:none;" class="panel panel-body" id="createpaddpanel">
-                                            <form id="cp" method="post">
+                                            <form asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" id="cp" method="post">
                                                 @{ Html.RenderPartial("CreatePermanentAddress", Model.PermanentAddress); }
                                                 <button type="button" id="btnSubmit" name="btnSubmit" class="btn btn-primary m-t-15 waves-effect">Create</button>
                                                 <button type="button" id="pacancel" name="pacancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editpaddpanel">
-                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-pid="@Model.Id" method="post">
+                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-pid="@Model.Id"  asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <input type="hidden" id="id" name="id" asp-for="@Model.PermanentAddress.Id" />
                                                 @{ Html.RenderPartial("EditPermanentAddress", Model.PermanentAddress); }
-                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Edit</button>
+                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="button" id="pcancel" name="pcancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
@@ -153,16 +153,16 @@
                                 <div role="tabpanel" class="tab-pane fade in" id="cadd">
                                     <div class="panel-body">
                                         <div style="display:none;" class="panel panel-body" id="createcaddpanel">
-                                            <form asp-action="CreateCurrentAddress" asp-controller="People" asp-route-pid="@Model.Id" method="post">
+                                            <form asp-action="CreateCurrentAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 @{ Html.RenderPartial("CreateCurrentAddress", Model.CurrentAddress); }
                                                 <button type="button" id="cacancel" name="cacancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editcaddpanel">
-                                            <form asp-action="EditCurrentAddress" asp-controller="People" asp-route-pid="@Model.Id" method="post">
+                                            <form asp-action="EditCurrentAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <input type="hidden" id="id" name="id" asp-for="@Model.CurrentAddress.Id" />
                                                 @{ Html.RenderPartial("EditCurrentAddress", Model.CurrentAddress); }
-                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Edit</button>
+                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="button" id="ccancel" name="ccancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
@@ -221,20 +221,20 @@
                                 <div role="tabpanel" class="tab-pane fade in" id="eadd">
                                     <div class="panel-body">
                                         <div style="display:none;" class="panel panel-body" id="createEaddpanel">
-                                            <form asp-action="CreateEmergencyAddress" asp-route-pid="@Model.Id" asp-controller="People" method="post">
+                                            <form asp-action="CreateEmergencyAddress" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" asp-controller="People" method="post">
                                                 @{ Html.RenderPartial("CreateEmergencyAddress", new Emergency()); }
                                                 <button type="button" id="eacancel" name="eacancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editEaddpanel">
-                                            <form asp-action="EditEmergencyAddress" asp-controller="People" asp-route-pid="@Model.Id" method="post">
+                                            <form asp-action="EditEmergencyAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <div id="editform">
                                                     @{
                                                         Html.RenderPartial("EditEmergencyAddress", new Emergency());
                                                     }
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Edit</button>
+                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="reset" id="ecancel" name="ecancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>

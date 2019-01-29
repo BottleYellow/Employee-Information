@@ -484,7 +484,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePermanentAddress(int pid, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
+        public IActionResult CreatePermanentAddress(int pid,string EmployeeCode ,[Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
         {
 
             permanent.PersonId = pid;
@@ -495,14 +495,14 @@ namespace EIS.WebApp.Controllers
             {
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse("api/PermanentAddress", permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                return RedirectToAction("Profile", "People", new { PersonId = pid });
+                return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
             }
             return View();
         }
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(int pid, Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid,string EmployeeCode ,Permanent permanent)
         {
             permanent.UpdatedDate = DateTime.Now.Date;
             permanent.IsActive = true;
@@ -511,7 +511,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.PermanentAddress.PutResponse("api/PermanentAddress", permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
         [DisplayName("Delete Permanent Address")]
         public IActionResult DeletePermanentAddress(int perid)
@@ -526,7 +526,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateCurrentAddress(int pid, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
+        public IActionResult CreateCurrentAddress(int pid,string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
         {
 
             current.PersonId = pid;
@@ -538,12 +538,12 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse("api/CurrentAddress", current );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
         [DisplayName("Update Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditCurrentAddress(int pid, Current current)
+        public IActionResult EditCurrentAddress(int pid,string EmployeeCode, Current current)
         {
             current.UpdatedDate = DateTime.Now.Date;
             current.IsActive = true;
@@ -552,7 +552,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.CurrentAddress.PutResponse("api/CurrentAddress", current );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
         [DisplayName("Delete Current Address")]
         public IActionResult DeleteCurrentAddress(int cid)
@@ -567,7 +567,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Emergency Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateEmergencyAddress(int pid, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
+        public IActionResult CreateEmergencyAddress(int pid,string EmployeeCode, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
         {
 
             emergency.PersonId = pid;
@@ -579,7 +579,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse("api/EmergencyAddress", emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
         [DisplayName("Update Emergency Address")]
         [HttpGet]
@@ -593,7 +593,7 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditEmergencyAddress(int pid, Emergency emergency)
+        public IActionResult EditEmergencyAddress(int pid,string EmployeeCode, Emergency emergency)
         {
             emergency.UpdatedDate = DateTime.Now.Date;
             emergency.IsActive = true;
@@ -602,7 +602,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.EmergencyAddress.PutResponse("api/EmergencyAddress", emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = pid });
+            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
         [DisplayName("Delete Emergency Address")]
         public IActionResult DeleteEmergencyAddress(int eid)

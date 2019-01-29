@@ -256,7 +256,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            arrayData = LoadData<LeaveRules>("api/LeaveCredit/GetLeaveCredits");
+            arrayData = LoadData<LeaveCredit>("api/LeaveCredit/GetLeaveCredits");
 
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<LeaveCredit> data = JsonConvert.DeserializeObject<IList<LeaveCredit>>(arrayData[1].ToString());
