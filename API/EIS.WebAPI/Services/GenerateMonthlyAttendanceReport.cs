@@ -53,7 +53,11 @@ namespace EIS.WebAPI.Services
                 month = 12;
             }
             int TotalDays = DateTime.DaysInMonth(year, month);
-
+            var rootPath = @"C:\Temp\";
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
             var employees = _repository.Attendances.GetAttendanceMonthly(month, year);
             foreach (Person p in employees)
             {

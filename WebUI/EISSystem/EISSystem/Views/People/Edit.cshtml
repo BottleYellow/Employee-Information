@@ -4,8 +4,9 @@
 
 <style>
     #Imagediv {
-        position: relative;     
+        position: relative;
     }
+
     #employeeImage {
         opacity: 1;
         display: block;
@@ -33,19 +34,22 @@
     .form-group:hover .middle {
         opacity: 1;
     }
+
     #my-button {
         background-color: #4CAF50;
         color: white;
         font-size: 15px;
     }
+
     #my-file {
-   visibility:hidden;
+        visibility: hidden;
     }
 </style>
 
 
 <header>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <style type="text/css">
         .form-group.required .control-label:after {
             color: #d00;
@@ -156,7 +160,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
-                                                <input asp-for="DateOfBirth" class="form-control" />
+                                                <input id="dob" class="form-control" type="text" asp-for="DateOfBirth" />
                                             </div>
                                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                         </div>
@@ -201,7 +205,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
-                                                <input asp-for="JoinDate" class="form-control" />
+                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" />
                                             </div>
                                             <span asp-validation-for="JoinDate" class="text-danger"></span>
                                         </div>
@@ -221,7 +225,7 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <label class="control-label" asp-for="PanCard">Pan Card No. : </label>
+                                            <label class="control-label" asp-for="PanCard">PAN Card No. : </label>
                                             <div class="form-line">
                                                 <input asp-for="PanCard" class="form-control" />
                                             </div>
@@ -273,7 +277,15 @@
 
 <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script>
+    $('#dob').datetimepicker({
+        format: "DD/MM/YYYY"
+    });
+    $('#doj').datetimepicker({
+        format: "DD/MM/YYYY"
+    });
     $(document).ready(function () {
         $('#my-button').click(function () {
             $('#my-file').click();
@@ -296,12 +308,11 @@
 
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
-                if (fileLength < 60000)
-                {                    
-                  var reader = new FileReader();
-                        reader.onload = function (e) {
-                            $('#employeeImage').attr('src', e.target.result);
-                        }
+                if (fileLength < 60000) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#employeeImage').attr('src', e.target.result);
+                    }
 
                     reader.readAsDataURL(fuData.files[0]);
                     status = true;
@@ -311,8 +322,7 @@
                 }
 
             }
-            else
-        {
+            else {
                 bootbox.alert("<h4>Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. </h4>");
             }
         }
@@ -323,4 +333,4 @@
 </script>
 
 
- 
+

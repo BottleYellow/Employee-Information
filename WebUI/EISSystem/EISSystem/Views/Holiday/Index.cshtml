@@ -110,6 +110,7 @@
         $.get(url, function (data) {
             $("#modal-placeholder").html(data);
             $("#modal-placeholder").modal('show');
+            var dateNow = new Date();
             $('#inputdate').datetimepicker({
                 format: "DD/MM/YYYY"
             });
