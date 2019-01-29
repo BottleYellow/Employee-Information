@@ -93,7 +93,8 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/LeaveCredits",
+               // "url": "/Leave/LeaveCredits",
+                "url":'@Url.Action("LeaveCredits", "Leave")',
                 "type": "POST",
                 "datatype": "json"
             },

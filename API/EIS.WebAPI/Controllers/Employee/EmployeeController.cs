@@ -56,6 +56,7 @@ namespace EIS.WebAPI.Controllers
         {
             var employee = _repository.Employee.FindByConditionWithNoTracking(e => e.EmployeeCode == EmployeeCode);
             employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == employee.Id);
+            
             if (employee == null)
             {
                 return NotFound();

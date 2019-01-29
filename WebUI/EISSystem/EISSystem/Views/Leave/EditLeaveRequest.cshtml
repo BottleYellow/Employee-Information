@@ -109,16 +109,16 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            var url1 = "/Leave/EditLeaveRequest?id=" + rid;
+            //var url1 = "/Leave/EditLeaveRequest?id=" + rid;
             $.ajax({
-                url: url1,
+                url: '@Url.Action("EditLeaveRequest", "Leave")?id='+rid+'&data='+d,
                 type: 'POST',
-                data: d,
+                //data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Request Updated Successfully!",
                         callback: function () {
-                            window.location.href = '/Leave/ShowMyLeaves';
+                            window.location.href = '@Url.Action("ShowMyLeaves", "Leave")';
                         }
                     });
                 },

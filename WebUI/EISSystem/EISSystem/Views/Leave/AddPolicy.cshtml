@@ -79,11 +79,11 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-                var url1 = "/Leave/AddPolicy";
+                //var url1 = "/Leave/AddPolicy";
                 $.ajax({
-                    url: url1,
+                    url: '@Url.Action("AddPolicy", "Leave")?data='+d,
                     type: 'POST',
-                    data: d,
+                    //data: d,
                     success: function (data) {
                         bootbox.alert({
                             message: "Policy Added Successfully!",

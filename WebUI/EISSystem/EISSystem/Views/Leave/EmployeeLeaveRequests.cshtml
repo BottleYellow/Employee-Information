@@ -109,7 +109,8 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/EmployeeLeaveRequests",
+                //"url": "/Leave/EmployeeLeaveRequests",
+                "url":'@Url.Action("EmployeeLeaveRequests", "Leave")',
                 "type": "POST",
                 "datatype": "json"
             },
@@ -149,11 +150,11 @@
                 {
                     "data": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Approved") {
-                            return '<span style="font-size:12px;" class="label label-success">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
                         } else if (data == "Rejected" || data == "Cancelled") {
-                            return '<span style="font-size:12px;" class="label label-danger">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
                         } else {
-                            return '<span style="font-size:12px;" class="label label-warning">' + data + '</span>';
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
                         }
                     }
                 },

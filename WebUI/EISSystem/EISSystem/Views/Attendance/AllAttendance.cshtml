@@ -235,10 +235,10 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/AllAttendance",
+                    "url":'@Url.Action("AllAttendance","Attendance")?date='+value+'&type='+type,
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type },
+                    //"data": { "date": value, "type": type },
                 },
                 "columns": [
                     {

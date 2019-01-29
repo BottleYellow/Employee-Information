@@ -39,7 +39,8 @@
         var events = [];
         $.ajax({
             type: "POST",
-            url: "/Dashboard/GetFullCalander",
+            //url: "/Dashboard/GetFullCalander",
+            url:'@Url.Action("GetFullCalander", "Dashboard")'
             success: function (data) {
                 $.each(data, function (i, v) {
                     events.push({

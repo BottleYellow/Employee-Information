@@ -39,7 +39,7 @@
              }
             else
             {
-                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='/Leave/RequestLeave'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
              }
             
         </div>
@@ -123,7 +123,8 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                "url": "/Leave/ShowMyLeaves",
+                //"url": "/Leave/ShowMyLeaves",
+                "url":'@Url.Action("ShowMyLeaves", "Leave")',
                 "type": "POST",
                 "datatype": "json"
             },

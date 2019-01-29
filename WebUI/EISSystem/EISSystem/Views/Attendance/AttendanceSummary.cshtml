@@ -280,8 +280,8 @@
         function generateReport(value, type, id) {
             $.ajax({
                 type: 'PUT',
-                url: "/Attendance/AttendanceSummary",
-                data: { "date": value, "type": type, "id": id },
+                url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
@@ -324,10 +324,11 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/AttendanceSummary",
+                    //"url": "/Attendance/AttendanceSummary",
+                    "url":'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type, "id": id },
+                    //"data": { "date": value, "type": type, "id": id },
                 },
                 "columns": [
                     {
@@ -339,18 +340,18 @@
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
                             if (new Date(row.DateIn).getDay() == 0 && row.TimeIn==row.TimeOut) {
-                                return '<span style="font-size:12px;" class="label label-warning">Weekly Holiday</span>';
+                                return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">Weekly Holiday</span>';
                             }
                             else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound")
                             { 
-                                return '<span style="font-size:12px;" class="label label-warning">' + calculate(row.DateIn)+'</span>';
+                                return '<span style="font-size:14px; font-weight:normal" class="label label-warning">' + calculate(row.DateIn)+'</span>';
                             }
                             else if (data == true) {
-                                return '<span style="font-size:12px;" class="label label-success">Present</span>';
+                                return '<span style="font-size:14px; font-weight:normal;" class="label label-success">Present</span>';
                             } else {
                                 var dateIn = moment(row.DateIn).format('L');
                                 var date = moment(new Date()).format('L');
-                                    return '<span style="font-size:12px;" class="label label-danger">Absent</span>';
+                                return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">Absent</span>';
                             }
                         }
                     },

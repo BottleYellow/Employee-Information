@@ -266,8 +266,9 @@
         function generateReport(value, type) {
             $.ajax({
                 type: 'POST',
-                url: "/Attendance/GetAttendanceSummary",
-                data: { "date": value, "type": type },
+                //url: "/Attendance/GetAttendanceSummary",
+                url: '@Url.Action("GetAttendanceSummary", "Attendance")?date=' + value + '&type=' + type,
+                //data: { "date": value, "type": type },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
@@ -310,10 +311,11 @@
                     ['5', '10', '25', 'All']
                 ],
                 ajax: {
-                    "url": "/Attendance/EmployeeReports",
+                    //"url": "/Attendance/EmployeeReports",
+                    url: '@Url.Action("EmployeeReports", "Attendance")?date=' + value + '&type=' + type,
                     "type": "POST",
                     "datatype": "json",
-                    "data": { "date": value, "type": type },
+                    //"data": { "date": value, "type": type },
                 },
                 "columns": [
                     {

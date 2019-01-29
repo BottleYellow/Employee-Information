@@ -72,11 +72,12 @@
             if (result == true) {
                 $.ajax({
                     type: "GET",
-                    url: '/People/DeleteConfirmed?id=' + id,
+                    //url: '/People/DeleteConfirmed?id=' + id,
+                    url:"@Url.Action("DeleteConfirmed", "People")?id=" + id,
                     data: null,
                     success: function () {
                         bootbox.alert("<h3>Record deleted successfully!</h3>", function () {
-                            location.href = '/People/Index';
+                            location.href = '@Url.Action("Index", "People")';
                         });
 
                     }
@@ -89,33 +90,33 @@
         var id = $(this).attr("id");
         $.ajax({
             type: "GET",
-            url: '/People/ActivateEmployee?EmployeeCode=' + id,
+            url:'@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
             data: null,
             success: function () {
                 bootbox.alert("<h3>Record activated successfully!</h3>", function () {
-                    location.href = '/People/Index';
+                    location.href = '@Url.Action("Index", "People")';
                 });
             }
         });
     });
     $('#select').on('change', function () {
         var v = $('#select').val();
-        var bool;
+        var b;
         if (v == "active") {
-            bool = true;
-            generateReport(bool);
+            b = true;
+            generateReport(b);
         }
         else if (v == "inActive") {
-            bool = false;
-            generateReport(bool);
+            b = false;
+            generateReport(b);
         }
     });
     $(document).ready(function () {
 
-        var bool = true;
-        generateReport(bool);
+        var b = true;
+        generateReport(b);
     });
-    function generateReport(bool) {
+    function generateReport(b) {
         var dTable = $('#example').DataTable({
             destroy: true,
             sDom: '<"myexport"B>ifrtlp',
@@ -142,10 +143,10 @@
                 ['5', '10', '25', 'All']
             ],
             ajax: {
-                "url": "/People/LoadData",
+                "url": '@Url.Action("LoadData", "People")?type='+b,
                 "type": "POST",
-                "datatype": "json",
-                "data": { "type": bool }
+                "datatype": "json"//,
+                //"data": { "type": b }
             },
             "columns": [
                 { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
@@ -185,7 +186,7 @@
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         var value = row.IsActive;
                         if (value == true) {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="/People/Profile?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                         } else {
                             return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
                         }

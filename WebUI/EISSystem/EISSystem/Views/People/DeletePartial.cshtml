@@ -18,7 +18,7 @@
         $(document).ready(function () {
             $("#myModal").modal('show');
             $("#close").click(function () {
-                window.location.href = "/People/index";
+                window.location.href = '@Url.Action("Index","People")';
             });
         });
     </script>

@@ -109,6 +109,7 @@ namespace EIS.WebApp.Controllers
                        where p.Role.Name != "Employee"
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
+            ViewBag.Dob = DateTime.Now.ToShortDateString();
             return View();
         }
         [HttpPost]
@@ -193,8 +194,8 @@ namespace EIS.WebApp.Controllers
             var data1 = from p in EmployeeData()
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse("api/employee/Person/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
-            Person data = EmployeeData().Find(x => x.EmployeeCode == EmployeeCode);         
+            string stringData = _services.Employee.GetResponse("api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Person>(stringData);     
             return View(data);
         }
 
@@ -234,6 +235,7 @@ namespace EIS.WebApp.Controllers
                             }
                         }
                     }
+                    
                     if (string.IsNullOrEmpty(person.MiddleName))
                     {
                         person.MiddleName = "";

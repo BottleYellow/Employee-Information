@@ -929,7 +929,7 @@
 					before = beforeFn(new Date(currVal, 0, 1));
 					if (before === undefined) {
 						before = {};
-					} else if (typeof before === 'boolean') {
+					} else if (typeof before === 'bean') {
 						before = {enabled: before};
 					} else if (typeof before === 'string') {
 						before = {classes: before};
@@ -1019,7 +1019,7 @@
 					before = this.o.beforeShowDay(this._utc_to_local(prevMonth));
 					if (before === undefined)
 						before = {};
-					else if (typeof before === 'boolean')
+					else if (typeof before === 'bean')
 						before = {enabled: before};
 					else if (typeof before === 'string')
 						before = {classes: before};
@@ -1079,7 +1079,7 @@
           var before = that.o.beforeShowMonth(moDate);
 					if (before === undefined)
 						before = {};
-					else if (typeof before === 'boolean')
+					else if (typeof before === 'bean')
 						before = {enabled: before};
 					else if (typeof before === 'string')
 						before = {classes: before};

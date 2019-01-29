@@ -111,19 +111,19 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            var url1 = "/Leave/RequestLeave";
+            //var url1 = "/Leave/RequestLeave";
             $.ajax({
-                url: url1,
+                url: '@Url.Action("RequestLeave", "Leave")?data='+d,
                 type: 'POST',
                 //beforeSend: function () {
                 //    $('.ajax-loader').css("visibility", "visible");
                 //},
-                data: d,
+                //data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Request Submitted Successfully!",
                         callback: function () {
-                            window.location.href = '/Leave/ShowMyLeaves';
+                            window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
                         }
                     });
                 },
