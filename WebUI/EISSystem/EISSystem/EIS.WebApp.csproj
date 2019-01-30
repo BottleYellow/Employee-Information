@@ -76,4 +76,9 @@
     </Content>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Ems\js\" />
+  </ItemGroup>
+
 </Project>
