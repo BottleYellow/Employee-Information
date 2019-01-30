@@ -93,7 +93,7 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
-       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.MinuteInterval(10));
+       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Daily);
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();
