@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,14 @@ namespace EIS.WebAPI.Controllers.Dashboard
             int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             var dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
             return Ok(dashboard);
+        }
+
+        [Route("CalendarData")]
+        [HttpGet]
+        public IActionResult GetCalendarData()
+        {
+            List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails();
+            return Ok(calendarDataList);
         }
     }
 }

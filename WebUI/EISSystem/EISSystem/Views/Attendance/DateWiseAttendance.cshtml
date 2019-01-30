@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>All Attendance</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style type="text/css">
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
@@ -108,22 +107,21 @@
 
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 
 @*for pdf*@
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -136,16 +134,16 @@
         $("#todate").datetimepicker({
             format: 'DD/MM/YYYY'
         });
-        
+
         $('#selectEmployee').on('change', function () {
             if ($(this).children("option:selected").text() == "-- Select --") {
                 $('#generateReport').prop('disabled', true);
             } else {
                 $('#generateReport').removeAttr('disabled');
             }
-            
+
         })
-        
+
         $('#generateReport').on('click', function () {
             var id = $('#selectEmployee').val();
             var empName = $('#selectEmployee').children("option:selected").text();
@@ -169,11 +167,9 @@
                 buttons: [
                     {
                         extend: 'pdfHtml5',
-                        title: 'ATTENDANCE REPORT',
+                        title: 'EMPLOYEE DATE WISE ATTENDANCE REPORT',
                         text: 'Export',
-                        titleAttr: 'Export to Pdf',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
+                        titleAttr: 'Export to Pdf'
                     }
                 ],
                 "aoColumnDefs": [
@@ -225,7 +221,7 @@
                                 return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">Absent</span>';
                             }
                         }
-                    },                   
+                    },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
                             if (row.TimeIn == row.TimeOut) { return "-"; }
