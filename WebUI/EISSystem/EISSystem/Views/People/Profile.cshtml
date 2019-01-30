@@ -83,15 +83,13 @@
 
                                     <div class="panel-body">
                                         <div style="display:none;" class="panel panel-body" id="createpaddpanel">
-                                            <form asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" id="cp" method="post">
+                                            <form asp-action="CreatePermanentAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" id="cp" method="post">
                                                 @{ Html.RenderPartial("CreatePermanentAddress", Model.PermanentAddress); }
-                                                <button type="button" id="btnSubmit" name="btnSubmit" class="btn btn-primary m-t-15 waves-effect">Create</button>
                                                 <button type="button" id="pacancel" name="pacancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editpaddpanel">
-                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-pid="@Model.Id"  asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
-                                                <input type="hidden" id="id" name="id" asp-for="@Model.PermanentAddress.Id" />
+                                            <form asp-action="EditPermanentAddress" asp-controller="People"  method="post">
                                                 @{ Html.RenderPartial("EditPermanentAddress", Model.PermanentAddress); }
                                                 <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="button" id="pcancel" name="pcancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>

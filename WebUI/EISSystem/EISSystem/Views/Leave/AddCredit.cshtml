@@ -80,9 +80,9 @@
             var d = form.serialize();
                 //var url1 = "/Leave/AddCredit";
                 $.ajax({
-                    url: '@Url.Action("AddCredit", "Leave")?data='+d,
+                    url: '@Url.Action("AddCredit", "Leave")',
                     type: 'POST',
-                    //data: d,
+                    data: d,
                     success: function (data) {
                         bootbox.alert({
                             message: "Leave Credited Successfully!",

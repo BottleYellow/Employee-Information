@@ -87,9 +87,9 @@
             var d = form.serialize();
             //var url1 = "/Leave/AddPastLeave";
             $.ajax({
-                url: '@Url.Action("AddPastLeave", "Leave")?data='+d,
+                url: '@Url.Action("AddPastLeave", "Leave")',
                 type: 'POST',
-                //data: d,
+                data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Past Leave Added Successfully!",

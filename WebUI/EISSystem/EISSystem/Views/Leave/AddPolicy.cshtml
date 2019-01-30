@@ -80,9 +80,9 @@
             var d = form.serialize();
                 //var url1 = "/Leave/AddPolicy";
                 $.ajax({
-                    url: '@Url.Action("AddPolicy", "Leave")?data='+d,
+                    url: '@Url.Action("AddPolicy", "Leave")',
                     type: 'POST',
-                    //data: d,
+                    data: d,
                     success: function (data) {
                         bootbox.alert({
                             message: "Policy Added Successfully!",

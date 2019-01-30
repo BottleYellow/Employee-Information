@@ -20,8 +20,6 @@
         ViewBag.Message = null;
     }
 }
-<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
 <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
@@ -30,7 +28,8 @@
 <html>
 <head>
     <title>Holidays</title>
-
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 </head>
 <body>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddHoliday")"></div>
@@ -111,11 +110,8 @@
     });
 </script>
 <script src="~/plugins/momentjs/moment.js"></script>
-<script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
-
 <script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="../../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>

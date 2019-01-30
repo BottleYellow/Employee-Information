@@ -1,4 +1,4 @@
-﻿@model EIS.Entities.Address.Permanent;
+﻿@model EIS.Entities.Address.Permanent
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.Address" class="form-control">
@@ -41,5 +41,6 @@
     </div>
     <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
 </div>
+<button type="submit" class="btn btn-primary m-t-15 waves-effect">Create</button>
 
 
