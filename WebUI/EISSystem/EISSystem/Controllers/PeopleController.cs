@@ -129,7 +129,15 @@ namespace EIS.WebApp.Controllers
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
                     
                     if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
-                    {                                          
+                    {
+                        string[] files = Directory.GetFiles(rootPath + filePath);
+                        if (files.Length > 0)
+                        {
+                            for(int i=0; i<files.Length;i++)
+                            {
+                                System.IO.File.Delete(files[i]);
+                            }                           
+                        }
                         var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
@@ -222,7 +230,11 @@ namespace EIS.WebApp.Controllers
                             string[] files = Directory.GetFiles(rootPath + filePath);
                             if (files.Length > 0)
                             {
-                                System.IO.File.Delete(files[0]);
+                                for (int i = 0; i<files.Length; i++)
+                                {
+                                    System.IO.File.Delete(files[i]);
+                                }
+
                             }
                             var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))

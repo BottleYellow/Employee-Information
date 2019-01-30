@@ -40,8 +40,8 @@
             else
             {
                 <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
-             }
-            
+            }
+
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -87,11 +87,19 @@
     </div>
 </body>
 </html>
-
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        $(document).ready(function () {
             $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                 bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
@@ -104,11 +112,9 @@
             buttons: [
                 {
                     extend: 'pdfHtml5',
-                    title: 'Employee Report',
+                    title: 'EMPLOYEE LEAVE REPORT',
                     text: 'Export',
-                    titleAttr: 'Export to Pdf',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL'
+                    titleAttr: 'Export to Pdf'
                 }
             ],
             'columnDefs': [
@@ -222,15 +228,6 @@
     }
 </script>
 
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
 
 
