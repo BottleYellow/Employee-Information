@@ -34,6 +34,7 @@ namespace EIS.Data
                 //For Employee model validation
 
                 modelBuilder.Entity<Person>().Property(p => p.EmployeeCode).HasColumnType("nvarchar(30)").IsRequired();
+                modelBuilder.Entity<Person>().Property(p => p.StreamId).HasColumnType("int");
                 modelBuilder.Entity<Person>().Property(p => p.PanCard).HasColumnType("varchar(10)");
                 modelBuilder.Entity<Person>().Property(p => p.AadharCard).HasColumnType("varchar(12)");
                 modelBuilder.Entity<Person>().Property(p => p.Image).HasColumnType("varchar(max)");
@@ -201,12 +202,12 @@ namespace EIS.Data
 
                 #region Constraints
 
-                modelBuilder.Entity<Person>()
-                    .HasIndex(p => p.PanCard)
-                    .IsUnique();
-                modelBuilder.Entity<Person>()
-                    .HasIndex(p => p.AadharCard)
-                    .IsUnique();
+                //modelBuilder.Entity<Person>()
+                //    .HasIndex(p => p.PanCard)
+                //    .IsUnique();
+                //modelBuilder.Entity<Person>()
+                //    .HasIndex(p => p.AadharCard)
+                //    .IsUnique();
                 modelBuilder.Entity<Person>()
                     .HasIndex(p => p.MobileNumber)
                     .IsUnique();

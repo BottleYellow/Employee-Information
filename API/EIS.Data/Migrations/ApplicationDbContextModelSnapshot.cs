@@ -363,6 +363,9 @@ namespace EIS.Data.Migrations
                     b.Property<double?>("Salary")
                         .HasColumnType("float");
 
+                    b.Property<int>("StreamId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TenantId");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -370,19 +373,11 @@ namespace EIS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AadharCard")
-                        .IsUnique()
-                        .HasFilter("[AadharCard] IS NOT NULL");
-
                     b.HasIndex("EmailAddress")
                         .IsUnique();
 
                     b.HasIndex("MobileNumber")
                         .IsUnique();
-
-                    b.HasIndex("PanCard")
-                        .IsUnique()
-                        .HasFilter("[PanCard] IS NOT NULL");
 
                     b.HasIndex("RoleId");
 

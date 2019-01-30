@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmployeeData : Migration
+    public partial class EmpData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -107,6 +107,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
+                    StreamId = table.Column<int>(type: "int", nullable: false),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
                     Image = table.Column<string>(type: "varchar(max)", nullable: true),
@@ -559,14 +560,6 @@ namespace EIS.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_tblPerson_AadharCard",
-                schema: "LMS",
-                table: "tblPerson",
-                column: "AadharCard",
-                unique: true,
-                filter: "[AadharCard] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_tblPerson_EmailAddress",
                 schema: "LMS",
                 table: "tblPerson",
@@ -579,14 +572,6 @@ namespace EIS.Data.Migrations
                 table: "tblPerson",
                 column: "MobileNumber",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tblPerson_PanCard",
-                schema: "LMS",
-                table: "tblPerson",
-                column: "PanCard",
-                unique: true,
-                filter: "[PanCard] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tblPerson_RoleId",
