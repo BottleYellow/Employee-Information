@@ -36,7 +36,7 @@
     }
 
     #my-button {
-        background-color: #4CAF50;
+        background-color: dodgerblue;
         color: white;
         font-size: 15px;
     }
@@ -280,12 +280,16 @@
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script>
-    $('#dob').datetimepicker({
-        format: "DD/MM/YYYY"
-    });
-    $('#doj').datetimepicker({
-        format: "DD/MM/YYYY"
-    });
+    $("#dob").focusin(function () {
+        $('#dob').datetimepicker({
+            format: "DD/MM/YYYY"
+        });
+    })
+    $("#doj").focusin(function () {
+        $('#doj').datetimepicker({
+            format: "DD/MM/YYYY"
+        });
+    })
     $(document).ready(function () {
         $('#my-button').click(function () {
             $('#my-file').click();
@@ -308,7 +312,7 @@
 
             //The file uploaded is an image
             if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
-                if (fileLength < 60000) {
+                if (fileLength < 500000) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         $('#employeeImage').attr('src', e.target.result);
@@ -318,7 +322,7 @@
                     status = true;
                 }
                 else {
-                    bootbox.alert("<h4>File must be below 60 kb</h4>");
+                    bootbox.alert("<h4>File must be below 500 kb</h4>");
                 }
 
             }
