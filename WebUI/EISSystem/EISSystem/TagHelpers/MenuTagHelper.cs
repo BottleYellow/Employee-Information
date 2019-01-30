@@ -43,7 +43,7 @@ namespace EIS.WebApp.TagHelpers
                         {
                             if (SubMenus.Contains(submenu.Name))
                             {
-                                var href = "/ems" + submenu.URL;
+                                var href = /*"/ems" +*/ submenu.URL;
                                 output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
                             }
                         }

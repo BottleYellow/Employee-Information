@@ -31,7 +31,7 @@
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date"/>
+                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" />
                         @*<input id="hdate" asp-for="Date" type="date" value="@DateTime.Now.Date.ToShortDateString()" class="form-control" />*@
                     </div>
                     <span asp-validation-for="Date" class="text-danger"></span>
@@ -54,8 +54,8 @@
     </div>
 </div>
 <script src="~/plugins/momentjs/moment.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>

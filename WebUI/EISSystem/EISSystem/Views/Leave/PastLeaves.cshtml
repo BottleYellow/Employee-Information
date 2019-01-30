@@ -6,10 +6,9 @@
 <html>
 <head>
     <title>Past Leave Requests</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
 
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -33,11 +32,11 @@
         <div class="block-header">
             @if (Cache.GetStringValue("Role") == "Admin")
             {
-            <HeaderWithButton header-name="Past Leave Requests"></HeaderWithButton>
+                <HeaderWithButton header-name="Past Leave Requests"></HeaderWithButton>
             }
             else
             {
-            <HeaderWithButton btn-id="btnModal" header-name="Past Leave Requests" btn-text="Add Past Leave" icon-name="add"></HeaderWithButton>
+                <HeaderWithButton btn-id="btnModal" header-name="Past Leave Requests" btn-text="Add Past Leave" icon-name="add"></HeaderWithButton>
             }
         </div>
         <div class="row clearfix">
@@ -67,7 +66,7 @@
                                         <th>
                                             Leave Reason
                                         </th>
-                                        
+
                                     </tr>
                                 </thead>
                             </table>
@@ -84,7 +83,6 @@
 
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
-    $(document).ready(function () {
         $(document).ready(function () {
             $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
@@ -166,7 +164,7 @@
                         return data;
                     }
                 }
-                
+
             ],
             "initComplete": function () {
                 var $searchInput = $('div.dataTables_filter input');
@@ -209,17 +207,14 @@
 </script>
 
 <script src="~/plugins/momentjs/moment.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/2.10.6/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
-
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
