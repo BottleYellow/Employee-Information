@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -57,7 +59,23 @@ namespace EIS.WebAPI.Controllers
                         Cache.SetStringValue("Access", data);
                         Cache.SetStringValue("TenantId", person.TenantId.ToString());
                         Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
-
+                        //CookieModel Cookies = new CookieModel()
+                        //{
+                        //    TokenValue = tokenValue,
+                        //    PersonId = pid.ToString(),
+                        //    Access = data,
+                        //    TenantId = person.TenantId.ToString(),
+                        //    EmployeeCode = person.EmployeeCode,
+                        //    Role = role
+                        //};
+                        //string CookieJson = JsonConvert.SerializeObject(Cookies);
+                        //Response.Cookies.Append("CookieData", CookieJson);
+                        //Response.Cookies.Append("TokenValue", tokenValue);
+                        //Response.Cookies.Append("PersonId", pid.ToString());
+                        //Response.Cookies.Append("Access", data);
+                        //Response.Cookies.Append("TenantId", person.TenantId.ToString());
+                        //Response.Cookies.Append("EmployeeCode", person.EmployeeCode);
+                        //Response.Cookies.Append("Role", role);
                     }
                     Personid = pid.ToString();
                     Cache.SetStringValue("Role", role);
@@ -73,6 +91,14 @@ namespace EIS.WebAPI.Controllers
         [Route("logout")]
         public IActionResult Logout()
         {
+            //Response.Cookies.Delete("CookieData");
+            //Response.Cookies.Delete("PersonId");
+            //Response.Cookies.Delete("TokenValue");
+            //Response.Cookies.Delete("Access");
+            //Response.Cookies.Delete("Role");
+            //Response.Cookies.Delete("TenantId");
+            //Response.Cookies.Delete("EmployeeCode");
+
             Cache.DeleteStringValue("PersonId");
             Cache.DeleteStringValue("TokenValue");
             Cache.DeleteStringValue("Access");
