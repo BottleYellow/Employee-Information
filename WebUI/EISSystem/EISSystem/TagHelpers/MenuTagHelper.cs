@@ -20,7 +20,7 @@ namespace EIS.WebApp.TagHelpers
             List<Navigation> Access = new List<Navigation>();
             if (ac != null)
                 Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
-
+                 var appBaseUrl = MyHttpContext.AppBaseUrl;
             String[] ParentMenus = new String[7] { "Attendance Management", "Role Management", "Leave Management", "User Management", "", "Task", "Holidays" };
             String[] SubMenus = { "List Of Employees", "leave Policies", "View all requests", "leave Credits", "Show my leaves", "List of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List of Holidays","Past Leaves","Attendance Datewise" };
             if (Cache.GetStringValue("Role") == "Admin")
@@ -43,7 +43,7 @@ namespace EIS.WebApp.TagHelpers
                         {
                             if (SubMenus.Contains(submenu.Name))
                             {
-                                var href = "/ems" + submenu.URL;
+                                var href = appBaseUrl + submenu.URL;
                                 output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
                             }
                         }

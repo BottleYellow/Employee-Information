@@ -8,8 +8,6 @@ namespace EIS.WebApp.Services
     {
         private static readonly Lazy<ConnectionMultiplexer> Connection;
 
-        private static readonly string REDIS_CONNECTIONSTRING = "localhost";
-
         static RedisConnector()
         {
             var config = new ConfigurationBuilder()

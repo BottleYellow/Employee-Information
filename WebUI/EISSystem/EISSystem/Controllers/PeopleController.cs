@@ -504,6 +504,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditPermanentAddress(int pid,string EmployeeCode ,Permanent permanent)
         {
+            permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;
             permanent.IsActive = true;
             if (ModelState.IsValid)

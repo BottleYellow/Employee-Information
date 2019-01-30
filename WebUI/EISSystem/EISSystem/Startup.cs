@@ -100,7 +100,8 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
+            app.UseHttpContext();
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();
