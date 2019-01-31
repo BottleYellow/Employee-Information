@@ -41,7 +41,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetEmployeeLeaveRequests()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>("api/LeaveRequest/GetLeaveRequests",null);
+            return LoadData<LeaveRequest>(ApiUrl+"/LeaveRequest/GetLeaveRequests",null);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -56,7 +56,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveRequestsUnderMe()
         {
             ArrayList arrayData = new ArrayList();
-           return LoadData<LeaveRequest>("api/LeaveRequest/RequestsUnderMe",null);
+           return LoadData<LeaveRequest>(ApiUrl+"/LeaveRequest/RequestsUnderMe",null);
         }
 
         [DisplayName("Show my leaves")]
@@ -71,14 +71,14 @@ namespace EIS.WebApp.Controllers
         {
             int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>("api/LeaveRequest/Employee/" + pid + "",null);
+            return LoadData<LeaveRequest>(ApiUrl+"/LeaveRequest/Employee/" + pid + "",null);
 
         }
 
         [DisplayName("Request for leave")]
         public IActionResult RequestLeave()
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
+            response = _services.LeaveRules.GetResponse(ApiUrl+"/LeavePolicy" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
             if (data.Count == 0)
@@ -99,7 +99,7 @@ namespace EIS.WebApp.Controllers
             {
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse("api/LeaveRequest", request );
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl+"/LeaveRequest", request );
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -110,11 +110,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Edit Leave Request")]
         public IActionResult EditLeaveRequest(int id)
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
+            response = _services.LeaveRules.GetResponse(ApiUrl+"/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             ViewBag.ListOfPolicy = data;
-            string stringData = _services.LeaveRequest.GetResponse("api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
+            string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
             LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
             return View(leave);
         }
@@ -126,7 +126,7 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 request.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRequest.PutResponse("api/LeaveRequest/"+id, request );
+                HttpResponseMessage response = _services.LeaveRequest.PutResponse(ApiUrl+"/LeaveRequest/"+id, request );
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -145,7 +145,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetPastLeaves()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<PastLeaves>("api/LeaveRequest/PastLeaves",null);
+            return LoadData<PastLeaves>(ApiUrl+"/LeaveRequest/PastLeaves",null);
 
         }
         [DisplayName("Add Past Leave")]
@@ -165,7 +165,7 @@ namespace EIS.WebApp.Controllers
                 Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
                 Leave.IsActive = true;
                 Leave.PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-                HttpResponseMessage response = _services.PastLeave.PostResponse("api/LeaveRequest/AddPastLeave", Leave);
+                HttpResponseMessage response = _services.PastLeave.PostResponse(ApiUrl+"/LeaveRequest/AddPastLeave", Leave);
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
@@ -192,7 +192,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeavePolicy()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRules>("api/LeavePolicy/GetLeavePolicies",null);
+            return LoadData<LeaveRules>(ApiUrl+"/LeavePolicy/GetLeavePolicies",null);
         }
 
         [DisplayName("Add Leave Rule")]
@@ -210,12 +210,12 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 Leave.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRules.PostResponse("api/LeavePolicy", Leave );
+                HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl+"/LeavePolicy", Leave );
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    HttpResponseMessage response2 = _services.LeaveRules.PostResponse("api/LeaveCredit/AddCredits", LeaveRules );
+                    HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl+"/LeaveCredit/AddCredits", LeaveRules );
                     if (response2.IsSuccessStatusCode == true)
                     {
                         return View();
@@ -241,7 +241,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveCredit>("api/LeaveCredit/GetLeaveCredits",null);
+            return LoadData<LeaveCredit>(ApiUrl+"/LeaveCredit/GetLeaveCredits",null);
         }
 
 
@@ -249,14 +249,14 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()
         {
-            response = _services.LeaveRules.GetResponse("api/LeavePolicy" );
+            response = _services.LeaveRules.GetResponse(ApiUrl+"/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             if (data.Count == 0)
                 ViewBag.ListOfPolicy = null;
             else
                 ViewBag.ListOfPolicy = data;
-            HttpResponseMessage response1 = _services.Employee.GetResponse("api/employee" );
+            HttpResponseMessage response1 = _services.Employee.GetResponse(ApiUrl+"/employee" );
             string stringData = response1.Content.ReadAsStringAsync().Result;
             List<Person> data1 = JsonConvert.DeserializeObject<List<Person>>(stringData);
             ViewBag.Persons = data1;
@@ -274,7 +274,7 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 Credit.IsActive = true;
-                HttpResponseMessage response = _services.LeaveCredit.PostResponse("api/LeaveCredit", Credit);
+                HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl+"/LeaveCredit", Credit);
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveCredit LeaveRules = JsonConvert.DeserializeObject<LeaveCredit>(stringData);
                 if (response.IsSuccessStatusCode == true)

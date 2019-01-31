@@ -19,6 +19,7 @@ namespace EIS.WebApp.Controllers
     {
         public IEISService<T> _service;
         public RedisAgent Cache;
+        public string ApiUrl= MyHttpContext.APIBaseURL;
         public BaseController(IEISService<T> service)
         {
            _service = service;
@@ -37,7 +38,7 @@ namespace EIS.WebApp.Controllers
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
             sortEmployee.Search=string.IsNullOrEmpty(search)?null:search;
             sortEmployee.IsActive = type;
-            HttpClient client = _service.GetService();
+            HttpClient client = _service.GetService();            
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
             HttpResponseMessage response = client.PostAsync(Url, contentData).Result;
