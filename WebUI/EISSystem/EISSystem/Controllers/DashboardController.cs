@@ -26,7 +26,7 @@ namespace EIS.WebApp.Controllers
             ViewData["Message"] = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Admin");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            var dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            AdminDashboard dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
             return View(dashBoard);
         }
 
@@ -34,7 +34,7 @@ namespace EIS.WebApp.Controllers
         {
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Manager");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            var dashBoard = JsonConvert.DeserializeObject<ManagerDashboard>(stringData);
+            ManagerDashboard dashBoard = JsonConvert.DeserializeObject<ManagerDashboard>(stringData);
             return View(dashBoard);
         }
 
@@ -43,13 +43,12 @@ namespace EIS.WebApp.Controllers
             int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Employee/" + PersonId + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            var dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
+            EmployeeDashboard dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
             return View(dashBoard);
         }
 
         public IActionResult Calendar()
         {
-
             return View();
         }
 
@@ -58,8 +57,8 @@ namespace EIS.WebApp.Controllers
         {
             HttpResponseMessage response = _service.GetResponse("api/Dashboard/CalendarData");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<CalendarData> datas = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);         
-            return Json(datas);
+            List<CalendarData> data = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);         
+            return Json(data);
         }
     }
 

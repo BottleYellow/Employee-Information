@@ -24,11 +24,12 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCurrent([FromRoute] int id)
         {
-            var current = _repository.CurrentAddress.FindByCondition(addr=>addr.PersonId==id);
-            if (current == null)
+            Current currentAddress = _repository.CurrentAddress.FindByCondition(addr=>addr.PersonId==id);
+            if (currentAddress == null)
                 return NotFound();
-            return Ok(current);
+            return Ok(currentAddress);
         }
+
         [DisplayName("Update Current Address")]
         [HttpPut]
         public IActionResult PutCurrent([FromBody] Current current)
@@ -56,8 +57,8 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteCurrent([FromRoute] int id)
         {
-            var current = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
-            if (current == null)
+            Current currentAddress = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
+            if (currentAddress == null)
             {
                 return NotFound();
             }
@@ -65,21 +66,21 @@ namespace EIS.WebAPI.Controllers
             {
                 TenantId=TenantId,
                 AddressType = "Current Address",
-                PersonId = current.PersonId,
-                Address = current.Address,
-                City = current.City,
-                State = current.State,
-                Country = current.Country,
-                Person = current.Person,
-                PhoneNumber = current.PhoneNumber,
-                PinCode = current.PinCode,
+                PersonId = currentAddress.PersonId,
+                Address = currentAddress.Address,
+                City = currentAddress.City,
+                State = currentAddress.State,
+                Country = currentAddress.Country,
+                Person = currentAddress.Person,
+                PhoneNumber = currentAddress.PhoneNumber,
+                PinCode = currentAddress.PinCode,
                 IsActive = false,
-                CreatedDate = current.CreatedDate,
+                CreatedDate = currentAddress.CreatedDate,
                 UpdatedDate = DateTime.Now
             };
             _repository.OtherAddress.CreateAndSave(other);
-            _repository.CurrentAddress.DeleteAndSave(current);
-            return Ok(current);
+            _repository.CurrentAddress.DeleteAndSave(currentAddress);
+            return Ok(currentAddress);
         }
     }
 }

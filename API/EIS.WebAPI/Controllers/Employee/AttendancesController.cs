@@ -79,7 +79,7 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAttendance([FromRoute] int id)
         {
-            var Attendance = _repository.Attendances.FindByCondition(x => x.Id == id);
+            Attendance Attendance = _repository.Attendances.FindByCondition(x => x.Id == id);
             _repository.Attendances.DeleteAndSave(Attendance);
             return Ok(Attendance);
         }
@@ -91,7 +91,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
@@ -101,7 +101,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceYearly(year);
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceYearly(year);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
@@ -112,7 +112,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] string startOfWeek, [FromRoute] string endOfWeek)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
@@ -152,7 +152,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetWeeklyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             ArrayList data = new ArrayList();
-            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
+            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
             IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
@@ -199,7 +199,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetWeeklySummaryAttendanceById([FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            var attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
+            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(7, attendanceData);
             return Ok(attendanceReport);
         }
@@ -210,9 +210,9 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetDateWiseAttendance([FromBody]SortGrid sortGrid, [FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             ArrayList data = new ArrayList();
-            var sDate = Convert.ToDateTime(startDate);
-            var tDate = Convert.ToDateTime(endDate);
-            var PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
+            DateTime sDate = Convert.ToDateTime(startDate);
+            DateTime tDate = Convert.ToDateTime(endDate);
+            int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
             IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceDateWise(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());

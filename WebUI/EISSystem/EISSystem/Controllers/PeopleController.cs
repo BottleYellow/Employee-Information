@@ -54,7 +54,8 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         public IActionResult LoadData(bool type)
-        {
+               {
+            
             return LoadData<Person>("api/employee/data",type);
 
         }
@@ -113,8 +114,8 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                
-                var rootPath = _environment.WebRootPath;
-                var filePath = "//EmployeeData//" + tId+  person.EmployeeCode + "//Image//";
+                string rootPath = _environment.WebRootPath;
+                string filePath = "//EmployeeData//" + tId+  person.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
                 {
                     Directory.CreateDirectory(rootPath + "//EmployeeData//");
@@ -123,7 +124,7 @@ namespace EIS.WebApp.Controllers
                 {
                     Directory.CreateDirectory(rootPath + filePath);
                 }
-                var uploadPath = rootPath + filePath;
+                string uploadPath = rootPath + filePath;
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();

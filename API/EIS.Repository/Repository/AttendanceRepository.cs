@@ -81,6 +81,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
+
                 TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
                 DateTime timeIn = DateTime.Today.Add(averageTimeIn);
                 attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");

@@ -19,8 +19,10 @@ namespace EIS.WebApp.Controllers
     {
         public IEISService<T> _service;
         public RedisAgent Cache;
+        public static string APIUrl;
         public BaseController(IEISService<T> service)
         {
+            APIUrl = MyHttpContext.APIBaseURL;
            _service = service;
             Cache = new RedisAgent();
             

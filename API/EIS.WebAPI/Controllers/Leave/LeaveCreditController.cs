@@ -27,7 +27,7 @@ namespace EIS.WebAPI.Controllers.Leave
         public ActionResult Get([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            var credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId);
+            IQueryable<LeaveCredit> credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {

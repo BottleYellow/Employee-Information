@@ -16,11 +16,11 @@ namespace EIS.WebApp.TagHelpers
         public static RedisAgent Cache = new RedisAgent();
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var ac = Cache.GetStringValue("Access");
+            string ac = Cache.GetStringValue("Access");
             List<Navigation> Access = new List<Navigation>();
             if (ac != null)
                 Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
-                 var appBaseUrl = MyHttpContext.AppBaseUrl;
+                 string appBaseUrl = MyHttpContext.AppBaseUrl;
             String[] ParentMenus = new String[7] { "Attendance Management", "Role Management", "Leave Management", "User Management", "", "Task", "Holidays" };
             String[] SubMenus = { "List Of Employees", "leave Policies", "View all requests", "leave Credits", "Show my leaves", "List of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List of Holidays","Past Leaves","Attendance Datewise" };
             if (Cache.GetStringValue("Role") == "Admin")
@@ -36,14 +36,14 @@ namespace EIS.WebApp.TagHelpers
                     {
                         output.Content.AppendHtml("<a class='menu-toggle'><span>" + menu.Name + "</span></a>");
                         output.Content.AppendHtml("<ul class='ml-menu'>");
-                        var subMenuList = from i in Access
+                        IEnumerable<Navigation> subMenuList = from i in Access
                                           where i.ParentId == menu.Id
                                           select i;
                         foreach (var submenu in subMenuList)
                         {
                             if (SubMenus.Contains(submenu.Name))
                             {
-                                var href = appBaseUrl + submenu.URL;
+                                string href = appBaseUrl + submenu.URL;
                                 output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
                             }
                         }

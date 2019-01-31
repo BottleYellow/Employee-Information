@@ -34,8 +34,8 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Holiday")]
         public IActionResult AddHoliday()
         {
-            var model = new Holiday();
-            return PartialView("AddHoliday", model);
+            Holiday holiday = new Holiday();
+            return PartialView("AddHoliday", holiday);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

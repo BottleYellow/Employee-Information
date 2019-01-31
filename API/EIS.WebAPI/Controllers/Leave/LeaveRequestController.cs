@@ -35,7 +35,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId); ;
+            IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId); ;
            
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
@@ -56,9 +56,9 @@ namespace EIS.WebAPI.Controllers
         [HttpPost]
         public ActionResult GetLeaveRequestsUnderMe([FromBody]SortGrid sortGrid)
         {
-            var PersonId = Cache.GetStringValue("PersonId");
+            string PersonId = Cache.GetStringValue("PersonId");
             ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
+            IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
@@ -85,7 +85,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetLeaveRequestsByEmployee([FromBody]SortGrid sortGrid, [FromRoute] int id)
         {
             ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
+            IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
         
             if (leaveData == null)
             {
@@ -167,7 +167,7 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLeave([FromRoute] int id)
         {
-            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
+            LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
             if (leave == null)
             {
                 return NotFound();
@@ -178,8 +178,8 @@ namespace EIS.WebAPI.Controllers
 
         public void SendMail(int RequestId,string status)
         {
-            var leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
-            var person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
+            Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             string To = person.EmailAddress;
             string subject = "EMS Leave Request";
             string body = "Hello " + person.FirstName + "\n";
@@ -223,7 +223,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetPastLeaves([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            var leaveData = _repository.LeaveRequest.GetPastLeaves(TenantId);
+            IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(TenantId);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
