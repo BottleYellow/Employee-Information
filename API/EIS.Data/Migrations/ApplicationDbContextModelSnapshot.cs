@@ -254,7 +254,7 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("DateIn")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("DateOut")
+                    b.Property<DateTime?>("DateOut")
                         .HasColumnType("date");
 
                     b.Property<bool>("IsActive");
@@ -271,10 +271,10 @@ namespace EIS.Data.Migrations
                     b.Property<TimeSpan>("TimeIn")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("TimeOut")
+                    b.Property<TimeSpan?>("TimeOut")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("TotalHours")
+                    b.Property<TimeSpan?>("TotalHours")
                         .HasColumnType("time");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -363,7 +363,7 @@ namespace EIS.Data.Migrations
                     b.Property<double?>("Salary")
                         .HasColumnType("float");
 
-                    b.Property<int>("StreamId")
+                    b.Property<int?>("StreamId")
                         .HasColumnType("int");
 
                     b.Property<int>("TenantId");

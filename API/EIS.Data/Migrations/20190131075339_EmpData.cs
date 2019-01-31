@@ -107,7 +107,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    StreamId = table.Column<int>(type: "int", nullable: false),
+                    StreamId = table.Column<int>(type: "int", nullable: true),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
                     Image = table.Column<string>(type: "varchar(max)", nullable: true),
@@ -152,9 +152,9 @@ namespace EIS.Data.Migrations
                     PersonId = table.Column<int>(nullable: false),
                     DateIn = table.Column<DateTime>(type: "date", nullable: false),
                     TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DateOut = table.Column<DateTime>(type: "date", nullable: false),
-                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: false),
-                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: false)
+                    DateOut = table.Column<DateTime>(type: "date", nullable: true),
+                    TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
+                    TotalHours = table.Column<TimeSpan>(type: "time", nullable: true)
                 },
                 constraints: table =>
                 {

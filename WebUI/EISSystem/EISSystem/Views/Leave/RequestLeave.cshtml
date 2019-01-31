@@ -2,6 +2,7 @@
 @model EIS.Entities.Leave.LeaveRequest;
 @using EIS.WebApp.Services;
 @{
+    string APIURL = MyHttpContext.APIBaseURL;
     RedisAgent Cache = new RedisAgent();
 }
 <html>
@@ -191,7 +192,7 @@
             $("#btnSubmit").prop("disabled", true);
         }
         var pid = @Cache.GetStringValue("PersonId");
-        $.getJSON("http://localhost:54830/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+        $.getJSON("@APIURL/LeaveRequest/" + pid + "/" + x + "", function (data) {
             availableLeaves = data;
             if (data == 0) {
                 $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');

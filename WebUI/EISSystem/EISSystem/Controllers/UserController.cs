@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.User;
 using EIS.WebApp.IServices;
+using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -18,14 +19,15 @@ namespace EIS.WebApp.Controllers
         public readonly IEISService<Users> service;
         public static List<Users> Users;
         public static List<Person> Persons;
+        public string ApiUrl = MyHttpContext.APIBaseURL;
         public UserController(IEISService<Users> service)
         {
             this.service = service;
-            HttpResponseMessage response = service.GetResponse("api/User");
+            HttpResponseMessage response = service.GetResponse(ApiUrl+"/User");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Users = JsonConvert.DeserializeObject<List<Users>>(stringData);
 
-            response = service.GetResponse("api/Employee");
+            response = service.GetResponse(ApiUrl+"/Employee");
             string stringData2 = response.Content.ReadAsStringAsync().Result;
             Persons = JsonConvert.DeserializeObject<List<Person>>(stringData2);
             
