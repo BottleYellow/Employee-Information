@@ -502,8 +502,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(int pid,string EmployeeCode ,Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid,Permanent permanent)
         {
+            permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;
             permanent.IsActive = true;
             if (ModelState.IsValid)
@@ -511,7 +512,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.PermanentAddress.PutResponse("api/PermanentAddress", permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
+            return RedirectToAction("Profile", "People", new { PersonId = permanent.Person.EmployeeCode });
         }
         [DisplayName("Delete Permanent Address")]
         public IActionResult DeletePermanentAddress(int perid)

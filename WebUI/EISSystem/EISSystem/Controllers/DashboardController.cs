@@ -23,6 +23,7 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult AdminDashboard()
         {
+            ViewData["Message"] = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
             HttpResponseMessage response = _services.Employee.GetResponse("api/Dashboard/Admin");
             string stringData = response.Content.ReadAsStringAsync().Result;
             var dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
