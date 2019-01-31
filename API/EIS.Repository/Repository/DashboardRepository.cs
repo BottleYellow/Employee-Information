@@ -27,6 +27,11 @@ namespace EIS.Repositories.Repository
 
         public AdminDashboard GetAdminDashboard(int TenantId)
         {
+            List<Attendance> attendance = null;
+            if (_dbContext.Attendances != null)
+            {
+                attendance = _dbContext.Attendances.ToList();
+            }
             var employees = _dbContext.Person.Include(x=>x.Attendance).Include(x=>x.Role).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin").AsQueryable();
             var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
             var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x=>x.Role).Where(x=>x.Role.Name!="Admin" && x.IsActive==true).ToList();
@@ -112,8 +117,8 @@ namespace EIS.Repositories.Repository
                     if (d != null)
                     {
                         CalendarData calendarData = new CalendarData();
-                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.ToString(@"hh\:mm") + ")";
-                        calendarData.Description = "Working Hours:-" + d.TotalHours.ToString(@"hh\:mm");
+                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut==null?"00:00": Convert.ToDateTime(d.TimeOut).ToString(@"hh\:mm") + ")";
+                        calendarData.Description = "Working Hours:-" + d.TotalHours==null? "0.0": Convert.ToDateTime(d.TotalHours).ToString(@"hh\:mm");
                         calendarData.StartDate = d.DateIn;
                         calendarData.EndDate = d.DateOut;
                         calendarData.Color = "Green";
