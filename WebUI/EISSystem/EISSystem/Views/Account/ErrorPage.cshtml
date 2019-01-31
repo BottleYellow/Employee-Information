@@ -3,7 +3,7 @@
     ViewData["Title"] = "Error";
     Layout = null;
     RedisAgent Cache = new RedisAgent();
-    var PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+    var PersonId = Cache.GetStringValue("EmployeeCode");
 }
 
 <html>
@@ -34,7 +34,7 @@
                             </div>
 
                             <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@PersonId">Go Back To Profile</a></div>
-                            <div><a asp-action="LogOut" asp-controller="Account" asp-route-id=3>Logout</a></div>
+                            <div><a asp-action="Login" asp-controller="Account" asp-route-id=3>Logout</a></div>
                         </div>
 
                     </div>
