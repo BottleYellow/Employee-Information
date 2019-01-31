@@ -1,4 +1,9 @@
-﻿<head>
+﻿@using EIS.WebApp.Services
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+}
+
+<head>
 
     <link href="~/Ems/css/fullcalendar.min.css" rel="stylesheet" />
     <!-- qTip -->
@@ -56,7 +61,7 @@
         var events = [];
         $.ajax({
             type: "POST",
-            url: "/Dashboard/GetFullCalendar",
+            url: '@Url.Action("GetFullCalendar", "Dashboard")',
             success: function (data) {
                 $.each(data, function (i, v) {
                     events.push({
@@ -67,14 +72,14 @@
                         color: v.Color,
                         allDay: v.IsFullDay
                     });
-                })
+                });
 
                 GenerateCalendar(events);
             },
             error: function (error) {
                 bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }
-        })
+        });
 
         function GenerateCalendar(events) {
             $('#calendar').fullCalendar('destroy');
@@ -111,11 +116,11 @@
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
-                },
+                }
 
-            })
+            });
         }
-    })
+    });
 
 </script>
 

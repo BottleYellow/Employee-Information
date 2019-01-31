@@ -57,7 +57,6 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -70,9 +69,9 @@
             var d = form.serialize();
             //var url1 = "/Holiday/AddHoliday";
             $.ajax({
-                url: '@Url.Action("AddHoliday", "Holiday")?data='+d,
+                url: '@Url.Action("AddHoliday", "Holiday")',
                 type: 'POST',
-                //data: d,
+                data: d,
                 success: function (data) {
                     bootbox.alert({
                         message: "Holiday Added Successfully!",

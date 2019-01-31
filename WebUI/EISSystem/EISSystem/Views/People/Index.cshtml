@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Person>
+@using EIS.WebApp.Services
 
 <head>
     <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
@@ -14,6 +15,7 @@
 </head>
 
 @{
+    string rootPath = MyHttpContext.AppBaseUrl;
     if (ViewBag.Message != null)
     {
         <script>
@@ -29,7 +31,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="Employee List" btn-href="location.href='/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="Employee List" btn-href="location.href='@rootPath/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
