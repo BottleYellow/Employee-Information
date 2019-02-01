@@ -14,7 +14,7 @@ namespace EIS.Entities.Employee
     {
         #region [Entities]
         public string EmployeeCode { get; set; }
-        public int StreamId { get; set; }
+        public int? StreamId { get; set; }
         public string PanCard { get; set; }
         public string AadharCard { get; set; }
         public string Image { get; set; }
@@ -26,7 +26,7 @@ namespace EIS.Entities.Employee
         public DateTime JoinDate { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime LeavingDate { get; set; }
+        public DateTime? LeavingDate { get; set; }
         public string MobileNumber { get; set; }
 
         [DataType(DataType.Date)]
@@ -40,8 +40,6 @@ namespace EIS.Entities.Employee
 
         #region [Relations]
         public virtual Users User { get; set; }
-
-
         public virtual Gender Gender { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; }

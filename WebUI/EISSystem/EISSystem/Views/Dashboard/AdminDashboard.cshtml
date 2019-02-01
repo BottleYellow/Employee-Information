@@ -95,7 +95,7 @@
                                         <td>
                                             @if (item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault() != null)
                                             {
-                                                @item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault().TotalHours.Hours.ToString() <text>:</text> @item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault().TotalHours.Minutes.ToString();
+                                                @item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault().TotalHours.GetValueOrDefault().Hours.ToString() <text>:</text> @item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault().TotalHours.GetValueOrDefault().Minutes.ToString();
                                             }
                                             else
                                             {

@@ -41,8 +41,8 @@ namespace EIS.WebAPI.Controllers
                 string status = _repository.Users.ValidateUser(user);
                 if (status == "success")
                 {
-                    var b = Request.Headers[HeaderNames.UserAgent].ToString();
-                    var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
+                    string b = Request.Headers[HeaderNames.UserAgent].ToString();
+                    string ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
                     Users newUser = _repository.Users.FindByUserName(user.UserName);
                     JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
                     string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
@@ -53,7 +53,7 @@ namespace EIS.WebAPI.Controllers
                     {
                         person = _repository.Employee.FindByCondition(x => x.Id == pid);
                         role = _repository.Employee.GetDesignationById(person.RoleId).Name;
-                        var data = _repository.Employee.GetDesignationById(person.RoleId).Access;
+                        string data = _repository.Employee.GetDesignationById(person.RoleId).Access;
                         Cache.SetStringValue("TokenValue", tokenValue);
                         Cache.SetStringValue("PersonId", pid.ToString());
                         Cache.SetStringValue("Access", data);
@@ -110,7 +110,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetLogin([FromRoute] int id)
         {
-            var login = _repository.Users.FindByCondition(x => x.Id == id);
+            Users login = _repository.Users.FindByCondition(x => x.Id == id);
             if (login == null)
             {
                 return NotFound();
@@ -139,7 +139,7 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteLogin([FromRoute] int id)
         {
-            var login = _repository.Users.FindByCondition(x => x.Id == id);
+            Users login = _repository.Users.FindByCondition(x => x.Id == id);
             if (login == null)
             {
                 return NotFound();
@@ -160,7 +160,7 @@ namespace EIS.WebAPI.Controllers
                 "Your new password is : " + password;
 
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
-            var user = _repository.Users.FindByUserName(username);
+            Users user = _repository.Users.FindByUserName(username);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);
             return Ok();

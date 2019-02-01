@@ -10,7 +10,7 @@ namespace EIS.WebApp.Services
         private static IDatabase _database;
         public RedisAgent()
         {
-            var connection = RedisConnector.GetConnection();
+            ConnectionMultiplexer connection = RedisConnector.GetConnection();
 
             _database = connection.GetDatabase();
         }

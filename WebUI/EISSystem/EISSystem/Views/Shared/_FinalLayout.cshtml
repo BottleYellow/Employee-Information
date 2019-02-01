@@ -92,7 +92,7 @@
 
 @RenderSection("Attendance", required: false)
 <li>
-    <a href="@Url.Action("LogOut","Account")">
+    <a href="@rootPath/Account/Logout">
         <span style="color:white;font-size:18px;" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
     </a>
 </li>
@@ -116,9 +116,9 @@
     <aside id="leftsidebar" class="sidebar">
         <!-- User Info -->
         <div class="user-info">
-            <div style="height:10px;"></div>
+            <div style="height:2px;"></div>
             <div class="image">
-                <img src="~/images/user.png" width="48" height="48" alt="User" />
+                <img src="~/images/user.png" alt="User" />
             </div>
             <div class="info-container">
                 <div class="idno">@idcard</div>
@@ -132,30 +132,28 @@
                     </ul>
                 </div>
             </div>
+           
         </div>
         <!-- #User Info -->
         <!-- Menu -->
         <div class="menu">
             <ul class="list">
 
-@if (Cache.GetStringValue("Role") == "Admin")
+                    @if (Cache.GetStringValue("Role") == "Admin")
                     {
-                <li>
-                    <a href="@rootPath/Dashboard/AdminDashboard"><span>Dashboard</span></a></li>
+                        <li><a href="@rootPath/Dashboard/AdminDashboard"><span>Dashboard</span></a></li>
                     }
                     else if (Cache.GetStringValue("Role") == "Manager")
                     {
-                <li>
-                    <a href="@rootPath/Dashboard/ManagerDashboard"><span>Dashboard</span></a></li>
+                        <li><a href="@rootPath/Dashboard/ManagerDashboard"><span>Dashboard</span></a></li>
                     }
                      else if (Cache.GetStringValue("Role") == "Employee")
                     {
-                <li>
-                    <a href="@rootPath/Dashboard/EmployeeDashboard"><span>Dashboard</span></a></li>
-}
-<DynamicMenu></DynamicMenu>
-</ul>
-</div>
+                        <li><a href="@rootPath/Dashboard/EmployeeDashboard"><span>Dashboard</span></a></li>
+                    }
+                    <DynamicMenu></DynamicMenu>
+            </ul>
+        </div>
 <!-- #Menu -->
 <!-- Footer -->
 <div class="legal">

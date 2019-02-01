@@ -10,6 +10,17 @@
 <head>
 
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -30,7 +41,19 @@
                             <div>
                                 <p>
                                     An Unexpected error has Occurred.
+
                                 </p>
+
+                                <table border="1" style="width:100%">
+                                    <tr>
+                                        <th>MESSAGE:</th>
+                                        <td>@ViewBag.Error</td>
+                                    </tr>
+                                    <tr>
+                                        <th>STACK TRACE:</th>
+                                        <td>@ViewBag.Trace</td>
+                                    </tr>
+                                </table>
                             </div>
 
                             <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@PersonId">Go Back To Profile</a></div>

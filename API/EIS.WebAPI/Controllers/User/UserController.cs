@@ -30,7 +30,7 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
         {
-            var user = _repository.Users.FindByCondition(e => e.PersonId == id);
+            Users user = _repository.Users.FindByCondition(e => e.PersonId == id);
             if (user == null)
             {
                 return NotFound();

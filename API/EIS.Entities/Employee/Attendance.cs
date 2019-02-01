@@ -13,11 +13,12 @@ namespace EIS.Entities.Employee
         [DataType(DataType.Time)]
         public TimeSpan TimeIn { get; set; }
         [DataType(DataType.Date)]
-        public DateTime DateOut { get; set; }
+        public DateTime? DateOut { get; set; }
         [DataType(DataType.Time)]
-        public TimeSpan TimeOut { get; set; }
-        public TimeSpan TotalHours { get; set; }
+        public TimeSpan? TimeOut { get; set; }
+        public TimeSpan? TotalHours { get; set; }
         #endregion
+
         public virtual Person Person { get; set; }
     }
 }

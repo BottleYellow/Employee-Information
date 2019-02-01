@@ -33,13 +33,13 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-            var employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
+            IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
             return Ok(employees);
         }
         [HttpGet("{EmployeeCode}")]
         public IActionResult GetById([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.FindByCondition(e => e.EmployeeCode == EmployeeCode);
+            Person employee = _repository.Employee.FindByCondition(e => e.EmployeeCode == EmployeeCode);
             employee.User = _repository.Users.FindByCondition(u => u.PersonId == employee.Id);
             if (employee == null)
             {
@@ -54,7 +54,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{EmployeeCode}")]
         public IActionResult GetPerson([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.FindByConditionWithNoTracking(e => e.EmployeeCode == EmployeeCode);
+            Person employee = _repository.Employee.FindByConditionWithNoTracking(e => e.EmployeeCode == EmployeeCode);
             employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == employee.Id);
             
             if (employee == null)
@@ -70,7 +70,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetProfile([FromRoute]string EmployeeCode)
         {
-            var employee = _repository.Employee.GetProfile(EmployeeCode);
+            Person employee = _repository.Employee.GetProfile(EmployeeCode);
             if (employee == null)
             {
                 return NotFound();
@@ -84,7 +84,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public int CreateNewIdCardNo()
         {
-            var n = _repository.Employee.GenerateNewIdCardNo(TenantId);
+            int n = _repository.Employee.GenerateNewIdCardNo(TenantId);
             return n;
         }
 
@@ -170,7 +170,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetDesignationNameById([FromRoute]int did)
         {
-            var d = _repository.Employee.GetDesignationById(did);
+            Role d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
         
@@ -178,7 +178,7 @@ namespace EIS.WebAPI.Controllers
         [HttpPost]
         public IActionResult CreateDesignation([FromBody]Role designation)
         {
-            var DesignationExists=_repository.Employee.DesignationExists(designation.Name,TenantId);
+            bool DesignationExists=_repository.Employee.DesignationExists(designation.Name,TenantId);
             if (DesignationExists)
             {
                 return BadRequest("Designation already Exists");
@@ -204,7 +204,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetData([FromBody]SortGrid sortGrid)
         {
             ArrayList employeeslist;
-            var list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId &&x.IsActive==sortGrid.IsActive).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+            IQueryable<Person> list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId &&x.IsActive==sortGrid.IsActive).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
             if (sortGrid.Search == null)
             {
                 employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);

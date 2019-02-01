@@ -38,19 +38,19 @@ namespace EIS.WebApp.Services
                 if (!actionDescriptors.Any())
                     continue;
 
-                var actionDescriptor = actionDescriptors.First();
-                var controllerTypeInfo = actionDescriptor.ControllerTypeInfo;
-                var currentController = new MvcControllerInfo
+                ControllerActionDescriptor actionDescriptor = actionDescriptors.First();
+                TypeInfo controllerTypeInfo = actionDescriptor.ControllerTypeInfo;
+                MvcControllerInfo currentController = new MvcControllerInfo
                 {
                     AreaName = controllerTypeInfo.GetCustomAttribute<AreaAttribute>()?.RouteValue,
                     DisplayName = controllerTypeInfo.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName,
                     Name = actionDescriptor.ControllerName,
                 };
 
-                var actions = new List<MvcActionInfo>();
+                List<MvcActionInfo> actions = new List<MvcActionInfo>();
                 foreach (var descriptor in actionDescriptors.GroupBy(a => a.ActionName).Select(g => g.First()))
                 {
-                    var methodInfo = descriptor.MethodInfo;
+                    MethodInfo methodInfo = descriptor.MethodInfo;
                     if (IsAllowAnonymous(controllerTypeInfo, methodInfo))
                         actions.Add(new MvcActionInfo
                         {

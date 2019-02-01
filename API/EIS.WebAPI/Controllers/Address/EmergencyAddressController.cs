@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -26,14 +27,14 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("Get/{id}")]
         public Emergency GetEmergencyById([FromRoute] int id)
         {
-            var EmergencyAddress = _repository.EmergencyAddress.FindByCondition(e=>e.Id==id);
+            Emergency EmergencyAddress = _repository.EmergencyAddress.FindByCondition(e=>e.Id==id);
             return EmergencyAddress;
         }
         [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IEnumerable<Emergency> GetEmergencyByPersonId([FromRoute] int id)
         {
-            var EmergencyAddresses = _repository.EmergencyAddress.FindAllByCondition(addr=>addr.PersonId==id);
+            IEnumerable<Emergency> EmergencyAddresses = _repository.EmergencyAddress.FindAllByCondition(addr=>addr.PersonId==id).ToList();
             return EmergencyAddresses;
         }
 
@@ -66,7 +67,7 @@ namespace EIS.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {
-            var Emergency = _repository.EmergencyAddress.FindByCondition(addr => addr.Id == id);
+            Emergency Emergency = _repository.EmergencyAddress.FindByCondition(addr => addr.Id == id);
             if (Emergency == null)
             {
                 return NotFound();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using EIS.Entities.Dashboard;
 using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
         [HttpGet]
         public IActionResult GetAdminDashboard()
         {
-            var dashboard = _repository.Dashboard.GetAdminDashboard(TenantId);
+            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(TenantId);
             return Ok(dashboard);
         }
 
@@ -30,7 +31,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
         [HttpGet]
         public IActionResult GetManagerDashboard()
         {
-            var dashboard = _repository.Dashboard.GetManagerDashboard(TenantId);
+            ManagerDashboard dashboard = _repository.Dashboard.GetManagerDashboard(TenantId);
             return Ok(dashboard);
         }
 
@@ -39,7 +40,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetEmployeeDashboard()
         {
             int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            var dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
+            EmployeeDashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
             return Ok(dashboard);
         }
 

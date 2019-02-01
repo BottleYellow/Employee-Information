@@ -76,7 +76,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
+            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
                             select new Person
                             {
                                 Id = e.Id,
@@ -116,7 +116,7 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult AttendanceInOut()
         {
-            var attendance = new Attendance();
+            Attendance attendance = new Attendance();
             int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
@@ -152,7 +152,7 @@ namespace EIS.WebApp.Controllers
         //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
         //    string stringData = response.Content.ReadAsStringAsync().Result;
         //    IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-        //    var employees = from e in employeesdata
+        //    IEnumerable<Person> employees = from e in employeesdata
         //                    select new Person
         //                    {
         //                        Id = e.Id,
@@ -276,7 +276,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            var employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
+            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
                             select new Person
                             {
                                 EmployeeCode = e.EmployeeCode,

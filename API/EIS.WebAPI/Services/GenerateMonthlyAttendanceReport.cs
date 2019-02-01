@@ -2,18 +2,13 @@
 using EIS.Entities.Employee;
 using EIS.Entities.Enums;
 using EIS.Repositories.IRepository;
-using EIS.WebAPI.Controllers;
 using EIS.WebAPI.Utilities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EIS.WebAPI.Services
 {
@@ -41,6 +36,7 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
+
             int year = DateTime.Now.Year;
             int month = DateTime.Now.Month;
             if (month != 1)
@@ -52,6 +48,7 @@ namespace EIS.WebAPI.Services
                 year = year - 1;
                 month = 12;
             }
+            string monthName = new DateTime(2000, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
             int TotalDays = DateTime.DaysInMonth(year, month);
 
             var rootPath = @"C:\Temp\";
@@ -59,11 +56,19 @@ namespace EIS.WebAPI.Services
             {
                 Directory.CreateDirectory(rootPath);
             }
+            if (!Directory.Exists(rootPath + year + "\\"))
+            {
+                Directory.CreateDirectory(rootPath + year + "\\");
+            }
+            if (!Directory.Exists(rootPath + year + "\\" + monthName + "\\"))
+            {
+                Directory.CreateDirectory(rootPath + year + "\\" + monthName + "\\");
+            }
             var employees = _repository.Attendances.GetAttendanceMonthly(month, year);
             foreach (Person p in employees)
             {
 
-                string attendanceReportPath = @"C:\Temp\" + p.EmployeeCode + "AttendanceReport.txt";
+                string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
 
                 if (File.Exists(attendanceReportPath))
                 {

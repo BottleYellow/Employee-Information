@@ -10,7 +10,7 @@ namespace EIS.WebApp.Services
 
         static RedisConnector()
         {
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -21,7 +21,7 @@ namespace EIS.WebApp.Services
             //    throw new KeyNotFoundException($"Environment variable for {REDIS_CONNECTIONSTRING} was not found.");
             //}
 
-            var options = ConfigurationOptions.Parse("localhost");
+            ConfigurationOptions options = ConfigurationOptions.Parse("localhost");
 
             Connection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(options));
         }

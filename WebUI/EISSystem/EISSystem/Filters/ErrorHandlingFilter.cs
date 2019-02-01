@@ -26,18 +26,18 @@ namespace EIS.WebApp.Filters
         }
         private static void HandleExceptionAsync(ExceptionContext context,ILoggerFactory loggerFactory)
         {
-            var exception = context.Exception;
+            Exception exception = context.Exception;
             if (exception is UnauthorizedAccessException)
             {
-                context.Result = new RedirectToActionResult("AccessDenied", "Account",null);
+                context.Result = new RedirectToActionResult("AccessDenied", "Account", null);
             }
             else
             {             
-                    var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
+                    ILogger logger = loggerFactory.CreateLogger("Serilog Global exception logger");
                     logger.LogError(500, exception, exception.Message);
                 
-                var code = context.HttpContext.Response.StatusCode;
-                context.Result = new RedirectToActionResult("ErrorPage", "Account", null);
+                int code = context.HttpContext.Response.StatusCode;
+                context.Result = new RedirectToActionResult("ErrorPage", "Account", new { Errordata = exception.Message, StackTrace= exception.StackTrace});
             }
         }
     }

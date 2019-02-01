@@ -10,7 +10,7 @@ namespace EIS.WebApp.Filters
     {
         public static IApplicationBuilder UseWebAppExceptionHandler(this IApplicationBuilder app)
         {
-            var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
+            ILoggerFactory loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 
             return app.UseExceptionHandler(HandleAppException(loggerFactory));
         }
@@ -21,15 +21,15 @@ namespace EIS.WebApp.Filters
             {
                 appBuilder.Run(async context =>
                 {
-                    var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    IExceptionHandlerFeature exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
 
                     if (exceptionHandlerFeature != null)
                     {
-                        var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
+                        ILogger logger = loggerFactory.CreateLogger("Serilog Global exception logger");
                         logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
                     }
 
-                    var code = context.Response.StatusCode;
+                    int code = context.Response.StatusCode;
                     context.Response.Redirect("/Account/ErrorPage");
                     await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
 

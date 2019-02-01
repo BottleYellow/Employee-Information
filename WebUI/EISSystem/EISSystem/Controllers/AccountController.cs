@@ -44,7 +44,7 @@ namespace EIS.WebApp.Controllers
             else
             {
                 string stringData = response.Content.ReadAsStringAsync().Result;
-                var person = JsonConvert.DeserializeObject<Person>(stringData);
+                Person person = JsonConvert.DeserializeObject<Person>(stringData);
                 Task<string> tokenResult = response.Content.ReadAsAsync<string>();
                 //pid = tokenResult.Result.ToString();
                 pid = person.Id.ToString();
@@ -106,8 +106,10 @@ namespace EIS.WebApp.Controllers
 
         [DisplayName("Error Page")]
         [HttpGet]
-        public IActionResult ErrorPage()
+        public IActionResult ErrorPage(string Errordata,string StackTrace)
         {
+            ViewBag.Error = Errordata;
+            ViewBag.Trace = StackTrace;
             return View();
         }
     }

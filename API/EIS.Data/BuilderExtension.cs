@@ -265,10 +265,10 @@ namespace EIS.Data
                    .HasForeignKey<EmployeeLeaves>(s => s.PersonId);
 
                 //one employee has many attendance
-                modelBuilder.Entity<Attendance>()
-                   .HasOne(s => s.Person)
-                   .WithMany(g => g.Attendance)
-                   .HasForeignKey(g => g.PersonId);
+                //modelBuilder.Entity<Attendance>()
+                //   .HasOne(s => s.Person)
+                //   .WithMany(g => g.Attendance)
+                //   .HasForeignKey(g => g.PersonId);
 
                 //one Employee has one Role
                 modelBuilder.Entity<Person>()

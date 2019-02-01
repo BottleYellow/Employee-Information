@@ -10,6 +10,9 @@
     <Compile Remove="Migrations\20190124062055_PastLeaves.cs" />
     <Compile Remove="Migrations\20190124062442_PastLeavesWithSchema.cs" />
     <Compile Remove="Migrations\20190130062310_EmpData.cs" />
+    <Compile Remove="Migrations\20190131071057_Change.cs" />
+    <Compile Remove="Migrations\20190131071204_EmpData.cs" />
+    <Compile Remove="Migrations\20190131071800_EmpData.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

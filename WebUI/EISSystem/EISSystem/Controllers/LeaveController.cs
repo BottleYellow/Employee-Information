@@ -151,7 +151,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {
-            var model = new PastLeaves();
+            PastLeaves model = new PastLeaves();
             return PartialView("AddPastLeave", model);
         }
         [HttpPost]
@@ -198,8 +198,8 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
         {
-            var model = new LeaveRules();
-            return PartialView("AddPolicy", model);
+            LeaveRules leaveRule = new LeaveRules();
+            return PartialView("AddPolicy", leaveRule);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -260,8 +260,8 @@ namespace EIS.WebApp.Controllers
             string stringData = response1.Content.ReadAsStringAsync().Result;
             List<Person> data1 = JsonConvert.DeserializeObject<List<Person>>(stringData);
             ViewBag.Persons = data1;
-            var model = new LeaveCredit();
-            return PartialView("AddCredit", model);
+            LeaveCredit leaveCredit = new LeaveCredit();
+            return PartialView("AddCredit", leaveCredit);
         }
 
         [HttpPost]

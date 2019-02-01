@@ -33,11 +33,11 @@ namespace EIS.WebApp.Filters
             {
                 return;
             }
-            var data = Cache.GetStringValue("Access");
+            string data = Cache.GetStringValue("Access");
             if (data != null)
             {
                 List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
-                var check = Access.Find(x => x.URL == access);
+                Navigation check = Access.Find(x => x.URL == access);
                 //if (check == null)
                     //context.Result = new RedirectResult("/Account/AccessDenied");
             }

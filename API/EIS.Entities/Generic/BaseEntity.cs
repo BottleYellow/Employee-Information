@@ -12,7 +12,7 @@ namespace EIS.Entities.Generic
         [DataType(DataType.Date)]
         public DateTime CreatedDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public bool IsActive { get; set; }
 
         [NotMapped]
