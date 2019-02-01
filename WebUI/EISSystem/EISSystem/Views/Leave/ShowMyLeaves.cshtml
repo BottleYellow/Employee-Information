@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
 @using EIS.WebApp.Services;
 @{
+    string APIURL = MyHttpContext.APIBaseURL;
     RedisAgent Cache = new RedisAgent();
 }
 <html>
@@ -205,7 +206,7 @@
         });
     });
     function UpdateStatus(RequestId, Status) {
-        var url1 = "http://localhost:54830/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
+        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
         $.ajax({
             url: url1,
             type: 'POST',

@@ -23,11 +23,11 @@ namespace EIS.WebApp.Controllers
         public UserController(IEISService<Users> service)
         {
             this.service = service;
-            HttpResponseMessage response = service.GetResponse(ApiUrl+"/User");
+            HttpResponseMessage response = service.GetResponse(ApiUrl+"/api/User");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Users = JsonConvert.DeserializeObject<List<Users>>(stringData);
 
-            response = service.GetResponse(ApiUrl+"/Employee");
+            response = service.GetResponse(ApiUrl+"/api/Employee");
             string stringData2 = response.Content.ReadAsStringAsync().Result;
             Persons = JsonConvert.DeserializeObject<List<Person>>(stringData2);
             

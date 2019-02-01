@@ -192,7 +192,7 @@
             $("#btnSubmit").prop("disabled", true);
         }
         var pid = @Cache.GetStringValue("PersonId");
-        $.getJSON("@APIURL/LeaveRequest/" + pid + "/" + x + "", function (data) {
+        $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
             availableLeaves = data;
             if (data == 0) {
                 $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');

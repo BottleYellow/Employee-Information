@@ -26,7 +26,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List of Holidays")]
         public IActionResult Index()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/Holiday");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Holiday");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
             return View(data);
@@ -44,7 +44,7 @@ namespace EIS.WebApp.Controllers
             holiday.CreatedDate = DateTime.Now.Date;
             holiday.UpdatedDate = DateTime.Now.Date;
             holiday.IsActive = true;
-            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/Holiday", holiday);
+            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Holiday", holiday);
             string stringData = response.Content.ReadAsStringAsync().Result;
 
             if (response.IsSuccessStatusCode == true)
