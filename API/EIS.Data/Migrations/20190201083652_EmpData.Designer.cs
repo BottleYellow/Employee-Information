@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190131075339_EmpData")]
+    [Migration("20190201083652_EmpData")]
     partial class EmpData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -129,7 +129,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -182,7 +182,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -233,7 +233,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -279,7 +279,7 @@ namespace EIS.Data.Migrations
                     b.Property<TimeSpan?>("TotalHours")
                         .HasColumnType("time");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -340,7 +340,7 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("LeavingDate")
+                    b.Property<DateTime?>("LeavingDate")
                         .HasColumnType("date");
 
                     b.Property<string>("MiddleName")
@@ -370,7 +370,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("date");
 
                     b.HasKey("Id");
@@ -405,7 +405,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.HasKey("Id");
 
@@ -435,7 +435,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.Property<string>("Vacation")
                         .HasColumnType("nvarchar(100)");
@@ -477,7 +477,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int?>("TypeOfLeaveId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -522,7 +522,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("ValidFrom")
@@ -594,7 +594,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TypeId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
@@ -631,7 +631,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("ValidFrom")
@@ -680,7 +680,7 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.HasKey("Id");
 
@@ -703,7 +703,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.Property<DateTime>("ValidFrom");
 
@@ -743,7 +743,7 @@ namespace EIS.Data.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime?>("UpdatedDate");
 
                     b.Property<string>("UserName")
                         .IsRequired()

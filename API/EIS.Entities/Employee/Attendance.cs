@@ -18,6 +18,7 @@ namespace EIS.Entities.Employee
         public TimeSpan? TimeOut { get; set; }
         public TimeSpan? TotalHours { get; set; }
         #endregion
+
         public virtual Person Person { get; set; }
     }
 }
