@@ -89,7 +89,7 @@
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editpaddpanel">
-                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-pid="@Model.Id"  asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
+                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <input type="hidden" id="id" name="id" asp-for="@Model.PermanentAddress.Id" />
                                                 @{await Html.RenderPartialAsync("EditPermanentAddress", Model.PermanentAddress); }
                                                 <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
@@ -322,7 +322,7 @@
 @section Attendance
     {  
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
-    <li><button type="button" class="btn btn-primary" id="clockOut"><b>Clock Out</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
 
 }

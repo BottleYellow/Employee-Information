@@ -35,7 +35,7 @@ namespace EIS.WebApp.Controllers
         {
             string pid = "";
             string EmployeeCode = "";
-            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/account/login", user ); 
+            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)
             {
                 ViewBag.CheckCreadentials = "<p style='color: red'>Please check username or password</p>";
@@ -74,8 +74,8 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult LogOut()
         {
-            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/account/logout",null );
-            return View("Login");
+            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/logout",null );
+            return RedirectToAction("Login","Account");
         }
         [DisplayName("Forgot Password")]
         [HttpGet]
@@ -88,7 +88,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult ForgotPassword(string username)
         { 
             HttpClient client = _service.GetService();
-            HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl+"/account/forgot/"+username+"",username).Result;
+            HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl+"/api/account/forgot/"+username+"",username).Result;
             if(response.IsSuccessStatusCode==true)
             { 
                 ViewBag.Message = "Success! Password has been changed Successfully. Please check your email.";

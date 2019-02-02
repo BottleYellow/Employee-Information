@@ -89,7 +89,7 @@ namespace EIS.Repositories.Repository
                 //DateTime dateTime = DateTime.ParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture);
                 //Console.WriteLine(dateTime.ToShortTimeString());
 
-                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut!=null?  Convert.ToDateTime(x.TimeOut).Ticks:DateTime.Now.Ticks )));
+                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
                 DateTime timeOut = DateTime.Today.Add(averageTimeOut);
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
                 var hour = timeOut - timeIn;

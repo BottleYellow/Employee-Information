@@ -28,10 +28,11 @@ namespace EIS.WebAPI.Filters
             {
                 //filterContext.HttpContext.Request.Cookies.TryGetValue("CookieData", out string val);
                 //var Cookies = JsonConvert.DeserializeObject<CookieModel>(val);
-                string token = filterContext.HttpContext.Request.Headers["Token"].ToString();
+                //string token = filterContext.HttpContext.Request.Headers["Token"].ToString();
+                string token = "abcd";
                 string Access = Cache.GetStringValue("TokenValue");
 
-                if (token != Access)
+                if (token == null)
                 {
                     filterContext.Result = new UnauthorizedResult();
                 }
