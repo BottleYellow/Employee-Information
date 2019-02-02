@@ -512,7 +512,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(int pid, Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid, string EmployeeCode, Permanent permanent)
         {
             permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;

@@ -166,7 +166,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x=>x.TimeIn!=null && x.TimeOut!=null);
+            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x=>x.TimeOut!=null);
             int TotalDays = (DateTime.IsLeapYear(year)) ? 366 : 365;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
             return Ok(attendanceReport);

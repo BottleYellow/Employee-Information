@@ -196,8 +196,8 @@ namespace EIS.WebApp.Controllers
             else if (type == "week")
             {
 
-                DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
-                DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
+                DateTime startDate = Convert.ToDateTime(week[0]);
+                DateTime endDate =  Convert.ToDateTime(week[1]);
                 url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("dd-MM-yyyy")+ "/" + endDate.ToString("dd-MM-yyyy");
             }
             return url;
@@ -223,7 +223,7 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
-                DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
+                DateTime startDate = DateTime.ParseExact(week[0], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
             }
