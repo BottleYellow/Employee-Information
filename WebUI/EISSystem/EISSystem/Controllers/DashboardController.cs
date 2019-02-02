@@ -7,6 +7,7 @@ using EIS.Entities.Dashboard;
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
 {
+    [SessionTimeOut]
     public class DashboardController : BaseController<Person>
     {
         public readonly IServiceWrapper _services;
@@ -40,7 +42,8 @@ namespace EIS.WebApp.Controllers
 
         public IActionResult EmployeeDashboard()
         {
-            int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            //int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int PersonId = Convert.ToInt32(GetSession().PersonId);
             HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Employee/" + PersonId + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             EmployeeDashboard dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);

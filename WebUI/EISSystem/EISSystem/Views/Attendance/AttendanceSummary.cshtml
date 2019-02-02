@@ -1,7 +1,16 @@
-﻿@model IEnumerable<EIS.Entities.Employee.Person>
-@using EIS.WebApp.Services;
+﻿@using EIS.WebApp.Services
+@using Newtonsoft.Json
+@using EIS.Entities.OtherEntities;
+@using Microsoft.AspNetCore.Http;
+@model IEnumerable<EIS.Entities.Employee.Person>
 @{
     RedisAgent Cache = new RedisAgent();
+    string cookiesdata = Context.Session.GetString("CookieData");
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <style type="text/css">
     td {
@@ -192,7 +201,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var id =@Cache.GetStringValue("PersonId");
+        var id =@cookies.PersonId;
         $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
         var totalDays = 0;
         var currentDate = new Date();

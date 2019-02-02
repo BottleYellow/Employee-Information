@@ -37,9 +37,8 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("Employee/{PersonId}")]
         [HttpGet]
-        public IActionResult GetEmployeeDashboard()
+        public IActionResult GetEmployeeDashboard([FromRoute]int PersonId)
         {
-            int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             EmployeeDashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
             return Ok(dashboard);
         }

@@ -1,9 +1,21 @@
-﻿@using EIS.WebApp.Services;
+﻿@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
 @model IEnumerable<EIS.Entities.Leave.PastLeaves>
 
 @{
     string APIURL = MyHttpContext.APIBaseURL;
     RedisAgent Cache = new RedisAgent();
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
+
 }
 <html>
 <head>
@@ -32,7 +44,7 @@
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPastLeave")"></div>
     <div class="container-fluid">
         <div class="block-header">
-            @if (Cache.GetStringValue("Role") == "Admin")
+            @if (cookies.Role == "Admin")
             {
                 <HeaderWithButton header-name="Past Leave Requests"></HeaderWithButton>
             }

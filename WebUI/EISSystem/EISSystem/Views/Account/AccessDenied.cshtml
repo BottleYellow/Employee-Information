@@ -1,7 +1,9 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "Error";
     Layout = null;
+    string idcard = null;
+    idcard = Context.Session.GetString("IdCard");
 }
 
 <html>
@@ -30,15 +32,15 @@
                                     Sorry about that. But You do not have permission to access the requested page.
                                 </p>
                             </div>
-                            
-                            <div><a asp-action="Login" asp-controller="Account">Back</a></div>
-                            <div><a asp-action="Login" asp-controller="Account">Logout</a></div>
+
+                            <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@idcard">Back To Profile</a></div>
+                            <div><a asp-action="Logout" asp-controller="Account">Logout</a></div>
                         </div>
-                        
+
                     </div>
                 </div>
-                
-                
+
+
             </div>
             <div class="col-md-2">
 

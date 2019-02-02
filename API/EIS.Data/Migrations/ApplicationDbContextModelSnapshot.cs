@@ -297,7 +297,7 @@ namespace EIS.Data.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("DateOfBirth")
                         .ValueGeneratedOnAdd()
@@ -369,7 +369,7 @@ namespace EIS.Data.Migrations
                     b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 

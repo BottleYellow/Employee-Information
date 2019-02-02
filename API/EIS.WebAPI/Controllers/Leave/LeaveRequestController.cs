@@ -51,12 +51,11 @@ namespace EIS.WebAPI.Controllers
 
         }
 
-        [Route("RequestsUnderMe")]
+        [Route("RequestsUnderMe/{PersonId}")]
         [DisplayName("Leave Requests of employees under me")]
         [HttpPost]
-        public ActionResult GetLeaveRequestsUnderMe([FromBody]SortGrid sortGrid)
+        public ActionResult GetLeaveRequestsUnderMe([FromRoute]int PersonId , [FromBody]SortGrid sortGrid)
         {
-            string PersonId = Cache.GetStringValue("PersonId");
             ArrayList data = new ArrayList();
             IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
 

@@ -1,9 +1,20 @@
-﻿@using EIS.WebApp.Services;
+﻿@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "Error";
     Layout = null;
     RedisAgent Cache = new RedisAgent();
     var PersonId = Cache.GetStringValue("EmployeeCode");
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 
 <html>
@@ -56,7 +67,7 @@
                                 </table>
                             </div>
 
-                            <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@PersonId">Go Back To Profile</a></div>
+                            <div><a asp-action="Profile" asp-controller="People" asp-route-PersonId="@cookies.EmployeeCode">Go Back To Profile</a></div>
                             <div><a asp-action="Login" asp-controller="Account" asp-route-id=3>Logout</a></div>
                         </div>
 

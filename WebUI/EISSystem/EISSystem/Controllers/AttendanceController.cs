@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using EIS.Entities.Employee;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
 {
+    [SessionTimeOut]
     [DisplayName("Attendance Management")]
     public class AttendanceController : BaseController<Attendance>
     {
@@ -49,7 +51,8 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
         {
-            int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
             return LoadData<Attendance>(url,null);
 
@@ -58,7 +61,8 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
-            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int id = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url );
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -76,7 +80,7 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
+            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=GetSession().EmployeeCode)
                             select new Person
                             {
                                 Id = e.Id,
@@ -91,7 +95,8 @@ namespace EIS.WebApp.Controllers
         {
             if (id == null)
             {
-                id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+                id = Convert.ToInt32(GetSession().PersonId);
+                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
             //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
@@ -118,22 +123,24 @@ namespace EIS.WebApp.Controllers
         public IActionResult AttendanceInOut()
         {
             Attendance attendance = new Attendance();
-            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int id = Convert.ToInt32(GetSession().PersonId);
+            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
                 HttpClient client = _service.GetService();
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl+"/api/attendances/" + id + "", attendance).Result;
+                HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl+"api/attendances/" + id + "", attendance).Result;
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);
             }
-            return RedirectToAction("Profile","People",new { PersonId = Cache.GetStringValue("EmployeeCode") });
+            return RedirectToAction("Profile","People",new { PersonId = GetSession().EmployeeCode });
         }
 
         [HttpPost]
         public IActionResult AttendanceInOut(int id, Attendance attendance)
         {
-            id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            id = Convert.ToInt32(GetSession().PersonId);
+            //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
                 HttpClient client = _service.GetService();
@@ -144,7 +151,7 @@ namespace EIS.WebApp.Controllers
                 Attendance attendances = JsonConvert.DeserializeObject<Attendance>(result);
                 ViewBag.TotalHrs = attendances.TotalHours;
             }
-            return RedirectToAction("Profile", "People", new { PersonId = Cache.GetStringValue("EmployeeCode") });
+            return RedirectToAction("Profile", "People", new { PersonId = GetSession().EmployeeCode });
         }
         #endregion
 
@@ -170,7 +177,8 @@ namespace EIS.WebApp.Controllers
         {
             if (id == null)
             {
-                id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+                id = Convert.ToInt32(GetSession().PersonId);
+                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
 
             string url = "";
@@ -273,11 +281,12 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult DateWiseAttendance()
         {
-            int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int id = Convert.ToInt32(GetSession().PersonId);
+            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=Cache.GetStringValue("EmployeeCode"))
+            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=GetSession().EmployeeCode)
                             select new Person
                             {
                                 EmployeeCode = e.EmployeeCode,

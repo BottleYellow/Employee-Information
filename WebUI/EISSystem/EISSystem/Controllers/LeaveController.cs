@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
 {
+    [SessionTimeOut]
     [DisplayName("Leave Management")]
     public class LeaveController : BaseController<EmployeeLeaves>
     {
@@ -55,8 +57,9 @@ namespace EIS.WebApp.Controllers
         [ActionName("LeaveRequestsUnderMe")]
         public IActionResult GetLeaveRequestsUnderMe()
         {
+            int pid = Convert.ToInt32(GetSession().PersonId);
             ArrayList arrayData = new ArrayList();
-           return LoadData<LeaveRequest>(ApiUrl+"/api/LeaveRequest/RequestsUnderMe",null);
+           return LoadData<LeaveRequest>(ApiUrl+ "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null);
         }
 
         [DisplayName("Show my leaves")]
@@ -69,7 +72,8 @@ namespace EIS.WebApp.Controllers
         [ActionName("ShowMyLeaves")]
         public IActionResult GetMyLeaves()
         {
-            int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            //int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            int pid = Convert.ToInt32(GetSession().PersonId);
             ArrayList arrayData = new ArrayList();
             return LoadData<LeaveRequest>(ApiUrl+"/api/LeaveRequest/Employee/" + pid + "",null);
 
@@ -164,7 +168,7 @@ namespace EIS.WebApp.Controllers
             {
                 Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
                 Leave.IsActive = true;
-                Leave.PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+                Leave.PersonId = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.PastLeave.PostResponse(ApiUrl+"/api/LeaveRequest/AddPastLeave", Leave);
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);

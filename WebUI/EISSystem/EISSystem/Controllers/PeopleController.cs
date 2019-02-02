@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using EIS.WebApp.Services;
@@ -22,6 +23,7 @@ using System.Threading.Tasks;
 
 namespace EIS.WebApp.Controllers
 {
+    [SessionTimeOut]
     [DisplayName("Employee Management")]
     public class PeopleController : BaseController<Person>
     {
@@ -105,7 +107,13 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
-            var tId = Cache.GetStringValue("TenantId");
+            if (person.DateOfBirth != null)
+            {
+                var d = DateTime.Parse(person.DateOfBirth.ToString());
+                person.DateOfBirth = d;
+            }
+            var tId = GetSession().TenantId;
+            //var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
             var data = from p in EmployeeData()
@@ -204,8 +212,8 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
-           
-            var tId = Cache.GetStringValue("TenantId");
+            var tId = GetSession().TenantId;
+            //var tId = Cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
                 return NotFound();
@@ -262,10 +270,12 @@ namespace EIS.WebApp.Controllers
                     }
                     person.IsActive = true;
                     HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl+"/api/employee/" + id + "", person );
-                    if (id == Convert.ToInt32(Cache.GetStringValue("PersonId")))
+                    if (id == Convert.ToInt32(GetSession().PersonId))
                     {
-                        Cache.DeleteStringValue("EmployeeCode");
-                        Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+                        HttpContext.Session.Remove("IdCard");
+                        HttpContext.Session.SetString("IdCard", person.EmployeeCode);
+                        //Cache.DeleteStringValue("EmployeeCode");
+                        //Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
                     }
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
@@ -484,10 +494,13 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"/api/Employee/UpdateDesignation", role );
-                if (Cache.GetStringValue("Role") == role.Name)
+                if (GetSession().Role == role.Name)
                 {
-                    Cache.DeleteStringValue("Access");
-                    Cache.SetStringValue("Access", role.Access);
+                    string CookieJson = JsonConvert.SerializeObject(GetSession());
+                    HttpContext.Session.Remove("CookieData");
+                    HttpContext.Session.SetString("CookieData", CookieJson);
+                    //Cache.DeleteStringValue("Access");
+                    //Cache.SetStringValue("Access", role.Access);
                 }
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Roles", "People");

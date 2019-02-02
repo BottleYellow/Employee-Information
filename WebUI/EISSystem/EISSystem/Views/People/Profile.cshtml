@@ -1,9 +1,21 @@
 ﻿@model EIS.Entities.Employee.Person
 @using EIS.Entities.Address;
+@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
 @using Microsoft.AspNetCore.Http;
 @using EIS.WebApp.Services;
 @{
     RedisAgent Cache = new RedisAgent();
+
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <html>
 <head>
@@ -97,7 +109,7 @@
                                             </form>
                                         </div>
                                         <div id="paddtable" class="body table-responsive">
-                                            @if (Model.PermanentAddress.Address != null || Cache.GetStringValue("Role") == "Admin")
+                                            @if (Model.PermanentAddress.Address != null || cookies.Role == "Admin")
                                             {
                                                 <table id="ptable" name="ptable" class="table table-bordered table-hover">
                                                     <tr>
@@ -166,7 +178,7 @@
                                             </form>
                                         </div>
                                         <div id="caddtable" class="body table-responsive">
-                                            @if (Model.CurrentAddress.Address != null || Cache.GetStringValue("Role") == "Admin")
+                                            @if (Model.CurrentAddress.Address != null || cookies.Role == "Admin")
                                             {
                                                 <table id="ctable" name="ctable" class="table table-bordered table-hover">
                                                     <tr>
@@ -229,14 +241,14 @@
                                             <form asp-action="EditEmergencyAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <div id="editform">
                                                     @{
-                                                       await Html.RenderPartialAsync("EditEmergencyAddress", new Emergency());
+                                                        await Html.RenderPartialAsync("EditEmergencyAddress", new Emergency());
                                                     }
                                                 </div>
-                                                
+
                                             </form>
                                         </div>
                                         <div id="eaddtable" class="body table-responsive">
-                                            @if (Model.EmergencyAddress.Count > 0 || Cache.GetStringValue("Role") == "Admin")
+                                            @if (Model.EmergencyAddress.Count > 0 || cookies.Role == "Admin")
                                             {
                                                 <table id="etable" name="etable" class="table table-bordered table-hover">
                                                     <tr>
@@ -318,7 +330,7 @@
 
 
 @section Attendance
-    {  
+    {
     <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
@@ -360,7 +372,7 @@
                 $(a.target).prev('.panel-heading').removeClass('active');
             });
 
-        @if(Cache.GetStringValue("Role")=="Admin" && Model.OtherAddress.Count > 0)
+        @if(cookies.Role=="Admin" && Model.OtherAddress.Count > 0)
         {
             foreach(var other in Model.OtherAddress)
             {

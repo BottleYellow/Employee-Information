@@ -14,19 +14,29 @@ namespace EIS.WebApp.TagHelpers
     public class MenuTagHelper : TagHelper
     {
         public static RedisAgent Cache = new RedisAgent();
+        public string Access
+        {
+            get;
+            set;
+        }
+        public string Role
+        {
+            get;
+            set;
+        }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            string ac = Cache.GetStringValue("Access");
-            List<Navigation> Access = new List<Navigation>();
+            string ac = Access;
+            List<Navigation> AccessList = new List<Navigation>();
             if (ac != null)
-                Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
-                 string appBaseUrl = MyHttpContext.AppBaseUrl;
+                AccessList = JsonConvert.DeserializeObject<List<Navigation>>(ac);
+            string appBaseUrl = MyHttpContext.AppBaseUrl;
             String[] ParentMenus = new String[7] { "Attendance Management", "Role Management", "Leave Management", "User Management", "", "Task", "Holidays" };
             String[] SubMenus = { "List Of Employees", "leave Policies", "View all requests", "leave Credits", "Show my leaves", "List of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List of Holidays","Past Leaves","Attendance Datewise" };
-            if (Cache.GetStringValue("Role") == "Admin")
+            if (Role == "Admin")
                 ParentMenus.SetValue("Employee Management", 4);
 
-            foreach (var menu in Access)
+            foreach (var menu in AccessList)
             {
                 if (ParentMenus.Contains(menu.Name))
                 {
@@ -36,7 +46,7 @@ namespace EIS.WebApp.TagHelpers
                     {
                         output.Content.AppendHtml("<a class='menu-toggle'><span>" + menu.Name + "</span></a>");
                         output.Content.AppendHtml("<ul class='ml-menu'>");
-                        IEnumerable<Navigation> subMenuList = from i in Access
+                        IEnumerable<Navigation> subMenuList = from i in AccessList
                                           where i.ParentId == menu.Id
                                           select i;
                         foreach (var submenu in subMenuList)

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class Data : Migration
+    public partial class data : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,8 +102,8 @@ namespace EIS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "date", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),

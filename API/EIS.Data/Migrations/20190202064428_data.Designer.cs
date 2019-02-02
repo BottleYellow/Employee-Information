@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190201122616_Data")]
-    partial class Data
+    [Migration("20190202064428_data")]
+    partial class data
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -299,7 +299,7 @@ namespace EIS.Data.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("DateOfBirth")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace EIS.Data.Migrations
                     b.Property<int>("TenantId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 

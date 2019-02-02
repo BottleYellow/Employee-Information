@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using EIS.Entities.Employee;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.Collections.Generic;
+using EIS.Entities.OtherEntities;
 
 namespace EIS.WebApp.Controllers
 {
@@ -44,15 +48,24 @@ namespace EIS.WebApp.Controllers
             else
             {
                 string stringData = response.Content.ReadAsStringAsync().Result;
-                Person person = JsonConvert.DeserializeObject<Person>(stringData);
-                Task<string> tokenResult = response.Content.ReadAsAsync<string>();
-                //pid = tokenResult.Result.ToString();
-                pid = person.Id.ToString();
-                EmployeeCode = person.EmployeeCode;
-                Response.Cookies.Append("IdCard", person.EmployeeCode);
-                Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
-                Response.Cookies.Append("EmailId", person.EmailAddress);
-                string role = Cache.GetStringValue("Role");
+                PersonWithCookie CookiesData = JsonConvert.DeserializeObject<PersonWithCookie>(stringData);
+
+                string CookieJson = JsonConvert.SerializeObject(CookiesData.Cookies);
+                HttpContext.Session.SetString("CookieData", CookieJson);
+                HttpContext.Session.SetString("IdCard", CookiesData.Person.EmployeeCode);
+                HttpContext.Session.SetString("Name", CookiesData.Person.FirstName + " " + CookiesData.Person.LastName);
+                HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
+                string role = CookiesData.Cookies.Role;
+                //Person person = JsonConvert.DeserializeObject<Person>(stringData);
+                //Task<string> tokenResult = response.Content.ReadAsAsync<string>();
+                ////pid = tokenResult.Result.ToString();
+                //HttpContext.Session.SetString("EmployeeCode", person.EmployeeCode);
+                //pid = person.Id.ToString();
+                //EmployeeCode = person.EmployeeCode;
+                //Response.Cookies.Append("IdCard", person.EmployeeCode);
+                //Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
+                //Response.Cookies.Append("EmailId", person.EmailAddress);
+                //string role = Cache.GetStringValue("Role");
                 if (role == "Admin")
                 {
                     return RedirectToAction("AdminDashboard", "Dashboard");
@@ -66,14 +79,20 @@ namespace EIS.WebApp.Controllers
                     return RedirectToAction("ManagerDashboard", "Dashboard");
                 }
             }
-            
+           
+
+
             return RedirectToAction("Profile","People",new { PersonId=EmployeeCode});
         }
 
         [DisplayName("Logout")]
         [HttpGet]
-        public IActionResult LogOut()
+        public IActionResult Logout()
         {
+            HttpContext.Session.Remove("CookieData");
+            HttpContext.Session.Remove("IdCard");
+            HttpContext.Session.Remove("Name");
+            HttpContext.Session.Remove("EmailId");
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/logout",null );
             return RedirectToAction("Login","Account");
         }
@@ -121,4 +140,9 @@ namespace EIS.WebApp.Controllers
             return View();
         }
     }
+}
+public class PersonWithCookie
+{
+    public virtual Person Person { get; set; }
+    public virtual CookieModel Cookies { get; set; }
 }

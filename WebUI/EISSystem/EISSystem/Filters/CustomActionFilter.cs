@@ -1,4 +1,5 @@
 ﻿
+using EIS.Entities.OtherEntities;
 using EIS.WebApp.Models;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Http;
@@ -26,27 +27,30 @@ namespace EIS.WebApp.Filters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            string actionName = context.RouteData.Values["action"].ToString();
-            string controllerName = context.RouteData.Values["controller"].ToString();
-            string access = "/" + controllerName + "/" + actionName;
-            if (access == "/Account/Login")
-            {
-                return;
-            }
-            string data = Cache.GetStringValue("Access");
-            if (data != null)
-            {
-                List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
-                Navigation check = Access.Find(x => x.URL == access);
-                //if (check == null)
-                    //context.Result = new RedirectResult("/Account/AccessDenied");
-            }
            
 
         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
-           
+            string val = context.HttpContext.Session.GetString("CookieData");
+            CookieModel Cookies = val != null ? JsonConvert.DeserializeObject<CookieModel>(val) : new CookieModel();
+            string actionName = context.RouteData.Values["action"].ToString();
+            string controllerName = context.RouteData.Values["controller"].ToString();
+            string access = "/" + controllerName + "/" + actionName;
+            if (access == "/Account/Login" || access=="/Account/Logout")
+            {
+                return;
+            }
+            string AppUrl = MyHttpContext.AppBaseUrl;
+            string data = Cookies.Access;
+            if (data != null)
+            {
+                List<Navigation> Access = JsonConvert.DeserializeObject<List<Navigation>>(data);
+                Navigation check = Access.Find(x => x.URL == access);
+                if (check == null)
+                    context.Result = new RedirectResult(""+AppUrl+"/Account/AccessDenied");
+            }
+
         }
 
     }

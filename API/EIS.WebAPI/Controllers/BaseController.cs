@@ -16,7 +16,8 @@ namespace EIS.WebAPI.Controllers
         {
             _repository = repository;
             Cache = new RedisAgent();
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            //TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+            TenantId = 1;
             //try
             //{
             //    Request.Cookies.TryGetValue("CookieData", out string val);

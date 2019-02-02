@@ -1,9 +1,20 @@
 ﻿@using EIS.Entities.Enums;
+@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
 @model EIS.Entities.Leave.LeaveRequest;
-@using EIS.WebApp.Services;
 @{
     string APIURL = MyHttpContext.APIBaseURL;
     RedisAgent Cache = new RedisAgent();
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <html>
 <head>
@@ -15,9 +26,9 @@
         }
     </style>
     @**@<!-- Bootstrap Material Datetime Picker Css -->
-        <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
-        <!-- Bootstrap DatePicker Css -->
-        <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- Bootstrap DatePicker Css -->
+    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container-fluid">
@@ -80,9 +91,9 @@
             </div>
         </div>
     </div>
- 
 
- 
+
+
     <!-- Autosize Plugin Js -->
     <script src="~/plugins/autosize/autosize.js"></script>
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
@@ -202,7 +213,7 @@
             $("#reason").prop("disabled", true);
             $("#btnSubmit").prop("disabled", true);
         }
-        var pid = @Cache.GetStringValue("PersonId");
+        var pid = @cookies.PersonId;
         $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
             availableLeaves = data;
             if (data == 0) {
@@ -265,7 +276,7 @@
             $("#btnSubmit").removeAttr('disabled');
         }
     }
-    
+
 </script>
 
 

@@ -9,9 +9,7 @@ namespace EIS.Entities.Generic
     { 
         public T Id { get; set; }
         public T TenantId { get; set; }
-        [DataType(DataType.Date)]
         public DateTime CreatedDate { get; set; }
-        [DataType(DataType.Date)]
         public DateTime? UpdatedDate { get; set; }
         public bool IsActive { get; set; }
 

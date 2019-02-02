@@ -7,9 +7,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EIS.Entities.Employee;
+using EIS.Entities.OtherEntities;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
 using EIS.WebApp.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -25,7 +27,22 @@ namespace EIS.WebApp.Controllers
             ApiUrl = MyHttpContext.APIBaseURL;
            _service = service;
             Cache = new RedisAgent();
-            
+          
+
+        }
+        public CookieModel GetSession()
+        {
+            CookieModel Cookies = new CookieModel();
+            try
+            {
+                string val = HttpContext.Session.GetString("CookieData");
+                Cookies = JsonConvert.DeserializeObject<CookieModel>(val);
+            }
+            catch (NullReferenceException)
+            {
+                Cookies = new CookieModel();
+            }
+            return Cookies;
         }
         public IActionResult LoadData<T1>(string Url,bool? type)
         {

@@ -51,8 +51,8 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.Salary).HasColumnType("float");
                 modelBuilder.Entity<Person>().Property(p => p.IsActive).HasColumnType("bit").HasDefaultValue(1);
                 modelBuilder.Entity<Person>().Property(p => p.Description).HasColumnType("text");
-                modelBuilder.Entity<Person>().Property(p => p.CreatedDate).HasColumnType("date");
-                modelBuilder.Entity<Person>().Property(p => p.UpdatedDate).HasColumnType("date");
+                modelBuilder.Entity<Person>().Property(p => p.CreatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<Person>().Property(p => p.UpdatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Person>().Property(p => p.RowVersion).HasColumnType("rowversion").IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();
                 #endregion
 

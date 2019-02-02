@@ -10,8 +10,10 @@ using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -68,6 +70,13 @@ namespace EIS.WebApp
             services.AddTransient<IServiceWrapper, ServiceWrapper>();
             services.AddTransient(typeof(IEISService<>), typeof(EISService<>));
             services.AddSingleton<IControllerService, ControllerService>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                    {
+                        options.AccessDeniedPath = new PathString("/login");
+                        options.LoginPath = new PathString("/login");
+                        options.SlidingExpiration = true;
+                    });
             ////Authorization
             //services.AddAuthorization(options =>
             //{

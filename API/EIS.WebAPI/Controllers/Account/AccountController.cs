@@ -49,25 +49,26 @@ namespace EIS.WebAPI.Controllers
                     int pid = newUser.PersonId;
                     string role = "";
                     Person person = new Person();
+                    CookieModel CookiesData = new CookieModel();
                     if (tokenValue != null)
                     {
                         person = _repository.Employee.FindByCondition(x => x.Id == pid);
                         role = _repository.Employee.GetDesignationById(person.RoleId).Name;
                         string data = _repository.Employee.GetDesignationById(person.RoleId).Access;
-                        Cache.SetStringValue("TokenValue", tokenValue);
-                        Cache.SetStringValue("PersonId", pid.ToString());
-                        Cache.SetStringValue("Access", data);
-                        Cache.SetStringValue("TenantId", person.TenantId.ToString());
-                        Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
-                        //CookieModel Cookies = new CookieModel()
-                        //{
-                        //    TokenValue = tokenValue,
-                        //    PersonId = pid.ToString(),
-                        //    Access = data,
-                        //    TenantId = person.TenantId.ToString(),
-                        //    EmployeeCode = person.EmployeeCode,
-                        //    Role = role
-                        //};
+                        //Cache.SetStringValue("TokenValue", tokenValue);
+                        //Cache.SetStringValue("PersonId", pid.ToString());
+                        //Cache.SetStringValue("Access", data);
+                        //Cache.SetStringValue("TenantId", person.TenantId.ToString());
+                        //Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+                        CookiesData = new CookieModel()
+                        {
+                            TokenValue = tokenValue,
+                            PersonId = pid.ToString(),
+                            Access = data,
+                            TenantId = person.TenantId.ToString(),
+                            EmployeeCode = person.EmployeeCode,
+                            Role = role
+                        };
                         //string CookieJson = JsonConvert.SerializeObject(Cookies);
                         //Response.Cookies.Append("CookieData", CookieJson);
                         //Response.Cookies.Append("TokenValue", tokenValue);
@@ -77,9 +78,14 @@ namespace EIS.WebAPI.Controllers
                         //Response.Cookies.Append("EmployeeCode", person.EmployeeCode);
                         //Response.Cookies.Append("Role", role);
                     }
+                    PersonWithCookie pc = new PersonWithCookie()
+                    {
+                        Person = person,
+                        Cookies = CookiesData
+                    };
                     Personid = pid.ToString();
-                    Cache.SetStringValue("Role", role);
-                    return Ok(person);
+                    //Cache.SetStringValue("Role", role);
+                    return Ok(pc);
                 }
             }
             return NotFound("");
@@ -99,10 +105,10 @@ namespace EIS.WebAPI.Controllers
             //Response.Cookies.Delete("TenantId");
             //Response.Cookies.Delete("EmployeeCode");
 
-            Cache.DeleteStringValue("PersonId");
-            Cache.DeleteStringValue("TokenValue");
-            Cache.DeleteStringValue("Access");
-            Cache.DeleteStringValue("Role");
+            //Cache.DeleteStringValue("PersonId");
+            //Cache.DeleteStringValue("TokenValue");
+            //Cache.DeleteStringValue("Access");
+            //Cache.DeleteStringValue("Role");
             return Ok("Successfully Logged out.");
         }
 
@@ -168,4 +174,9 @@ namespace EIS.WebAPI.Controllers
 
         
     }
+}
+public class PersonWithCookie
+{
+    public virtual Person Person { get; set; }
+    public virtual CookieModel Cookies { get; set; }
 }

@@ -1,10 +1,22 @@
 ﻿@using EIS.Entities.Enums;
-@using EIS.WebApp.Services;
+@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
 @model EIS.Entities.Leave.LeaveRequest;
 
 @{
     string APIURL = MyHttpContext.APIBaseURL;
     RedisAgent Cache = new RedisAgent();
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookies != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
+
 }
 <html>
 <head>
@@ -142,7 +154,7 @@
             $("#btnSubmit").prop("disabled", true);
         }
         var trd = document.getElementById("trd").value;
-        var pid = @Cache.GetStringValue("PersonId");
+        var pid = @cookies.PersonId;
         $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
             var c = parseInt(data) + parseInt(trd);
             availableLeaves = c;

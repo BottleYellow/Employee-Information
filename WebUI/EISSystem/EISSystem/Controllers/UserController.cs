@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.User;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using System.Net.Http;
 
 namespace EIS.WebApp.Controllers
 {
-
+    [SessionTimeOut]
     [DisplayName("User Management")]
     public class UserController : Controller
     {

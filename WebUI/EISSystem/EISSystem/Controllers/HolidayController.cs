@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using EIS.Entities.Hoildays;
+using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ using Newtonsoft.Json.Linq;
 
 namespace EIS.WebApp.Controllers
 {
+    [SessionTimeOut]
     [DisplayName("Holidays")]
     public class HolidayController : BaseController<Holiday>
     {
