@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace EIS.WebApp.Services
 {
     public class MyHttpContext
     {
+ 
         private static IHttpContextAccessor m_httpContextAccessor;
 
         public static HttpContext Current => m_httpContextAccessor.HttpContext;
-        public static string APIBaseURL => $"http://localhost:54830/api";
+        public static string APIBaseURL =>  $"http://localhost:54830/";
         public static string AppBaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
 
         internal static void Configure(IHttpContextAccessor contextAccessor)

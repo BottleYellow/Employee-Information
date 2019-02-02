@@ -109,20 +109,20 @@ namespace EIS.Repositories.Repository
             IEnumerable<Attendance> data = _dbContext.Attendances.Include(x => x.Person).ToList();
 
             DateTime beginDate = _dbContext.Roles.Where(x => x.Name == "Admin").FirstOrDefault().CreatedDate;
-            DateTime stopDate = DateTime.Now.AddYears(1);
-            int count = 0;
-            for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
-            {
-                Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
-                if (d != null)
+                DateTime stopDate = DateTime.Now.AddYears(1);
+                int count = 0;
+                for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
                 {
-                    CalendarData calendarData = new CalendarData();
-                    calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut == null ? "00:00" : Convert.ToDateTime(d.TimeOut).ToString(@"hh\:mm") + ")";
-                    calendarData.Description = "Working Hours:-" + d.TotalHours == null ? "0.0" : Convert.ToDateTime(d.TotalHours).ToString(@"hh\:mm");
-                    calendarData.StartDate = d.DateIn;
-                    calendarData.EndDate = d.DateOut;
-                    calendarData.Color = "Green";
-                    calendarData.IsFullDay = true;
+                    Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
+                    if (d != null)
+                    {
+                        CalendarData calendarData = new CalendarData();
+                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault().ToString(@"hh\:mm") + ")";
+                        calendarData.Description = "Working Hours:-" + d.TotalHours.GetValueOrDefault().ToString(@"hh\:mm");
+                        calendarData.StartDate = d.DateIn;
+                        calendarData.EndDate = d.DateOut;
+                        calendarData.Color = "Green";
+                        calendarData.IsFullDay = true;
 
                     calendarDataList.Add(calendarData);
                 }

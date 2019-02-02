@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -24,7 +24,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult AdminDashboard()
         {
             ViewData["Message"] = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/Dashboard/Admin");
+            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Admin");
             string stringData = response.Content.ReadAsStringAsync().Result;
             AdminDashboard dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
             return View(dashBoard);
@@ -32,7 +32,7 @@ namespace EIS.WebApp.Controllers
 
         public IActionResult ManagerDashboard()
         {
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/Dashboard/Manager");
+            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Manager");
             string stringData = response.Content.ReadAsStringAsync().Result;
             ManagerDashboard dashBoard = JsonConvert.DeserializeObject<ManagerDashboard>(stringData);
             return View(dashBoard);
@@ -41,7 +41,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult EmployeeDashboard()
         {
             int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/Dashboard/Employee/" + PersonId + "");
+            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Employee/" + PersonId + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             EmployeeDashboard dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
             return View(dashBoard);
@@ -55,7 +55,7 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetFullCalendar()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/Dashboard/CalendarData");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Dashboard/CalendarData");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<CalendarData> data = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);         
             return Json(data);
