@@ -41,10 +41,13 @@ namespace EIS.WebAPI
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));    
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AttendanceValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddMvc(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IControllerService, ControllerService>();
             services.AddMvc(options =>
@@ -93,7 +96,7 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
-       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly(1,10));
+       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly(1, 10));
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();

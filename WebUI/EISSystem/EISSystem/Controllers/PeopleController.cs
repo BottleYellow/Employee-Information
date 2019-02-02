@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -42,7 +43,7 @@ namespace EIS.WebApp.Controllers
             _environment = environment;
             _controllerService = controllerService;
             _services = services;
-            HttpResponseMessage response = _services.Roles.GetResponse(ApiUrl+"/Employee/Designations" );
+            HttpResponseMessage response = _services.Roles.GetResponse(ApiUrl + "/Employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
             rolesList = JsonConvert.DeserializeObject<List<Role>>(stringData);
         }
@@ -57,16 +58,16 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult LoadData(bool type)
         {
-            return LoadData<Person>(ApiUrl+"/employee/data",type);
+            return LoadData<Person>(ApiUrl + "/employee/data", type);
 
         }
         public IActionResult Profile(string PersonId)
         {
-            response = _services.Employee.GetResponse(ApiUrl+"/employee/Profile/" + PersonId + "" );
+            response = _services.Employee.GetResponse(ApiUrl + "/employee/Profile/" + PersonId + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
-             ViewBag.Name = data.FullName ;
+            ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
             ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
@@ -80,7 +81,7 @@ namespace EIS.WebApp.Controllers
                 var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
                 ViewBag.EstimatedTimeOut = estTimeOut;
             }
-            
+
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };
             var cur = new Current() { PersonId = data.Id };
@@ -104,6 +105,9 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
+
+          DateTime.ParseExact(person.CreatedDate.ToString(), "dd-MMM-yyyy", CultureInfo.CurrentCulture);
+           var dara= person.CreatedDate;
             var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
@@ -111,12 +115,12 @@ namespace EIS.WebApp.Controllers
                        where p.Role.Name != "Employee"
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
-           
+
             if (ModelState.IsValid)
             {
-               
+
                 string rootPath = _environment.WebRootPath;
-                string filePath = "//EmployeeData//" + tId+  person.EmployeeCode + "//Image//";
+                string filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
                 {
                     Directory.CreateDirectory(rootPath + "//EmployeeData//");
@@ -125,25 +129,29 @@ namespace EIS.WebApp.Controllers
                 {
                     Directory.CreateDirectory(rootPath + filePath);
                 }
+                else
+                {
+                    string[] files = Directory.GetFiles(rootPath + filePath);
+                    if (files.Length > 0)
+                    {
+                        for (int i = 0; i < files.Length; i++)
+                        {
+                            System.IO.File.Delete(files[i]);
+                        }
+                    }
+                }
                 string uploadPath = rootPath + filePath;
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
-                    
+
                     if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                     {
-                        string[] files = Directory.GetFiles(rootPath + filePath);
-                        if (files.Length > 0)
-                        {
-                            for(int i=0; i<files.Length;i++)
-                            {
-                                System.IO.File.Delete(files[i]);
-                            }                           
-                        }
-                        var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
+
+                        var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
-                            await file.CopyToAsync(fileStream);                            
+                            await file.CopyToAsync(fileStream);
                             person.Image = fileName;
                         }
                     }
@@ -154,23 +162,23 @@ namespace EIS.WebApp.Controllers
                 }
                 else
                 {
-                    System.IO.File.Copy(rootPath+"//EmployeeData//DefaultImage//Default.png",uploadPath+"Default.png");
+                    System.IO.File.Copy(rootPath + "//EmployeeData//DefaultImage//Default.png", uploadPath + "Default.png");
                     person.Image = "Default.png";
 
                 }
-                if(string.IsNullOrEmpty(person.MiddleName))
+                if (string.IsNullOrEmpty(person.MiddleName))
                 {
                     person.MiddleName = "";
                 }
 
                 person.CreatedDate = DateTime.Now.Date;
-                HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl+"/employee", person );
+                HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/employee", person);
                 var data1 = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
             }
             if (file != null)
@@ -188,10 +196,10 @@ namespace EIS.WebApp.Controllers
             ViewBag.Designations = rolesList;
 
             var data1 = from p in EmployeeData()
-                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse(ApiUrl+"/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
-            var data = JsonConvert.DeserializeObject<Person>(stringData);     
+            string stringData = _services.Employee.GetResponse(ApiUrl + "/employee/Profile/" + EmployeeCode + "").Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Person>(stringData);
             return View(data);
         }
 
@@ -199,6 +207,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
+           
             var tId = Cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
@@ -212,7 +221,7 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { 
+                {
                     var rootPath = _environment.WebRootPath;
                     var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                     if (!Directory.Exists(rootPath + "//EmployeeData//"))
@@ -223,36 +232,38 @@ namespace EIS.WebApp.Controllers
                     {
                         Directory.CreateDirectory(rootPath + filePath);
                     }
+                    else
+                    {
+                        string[] files = Directory.GetFiles(rootPath + filePath);
+                        if (files.Length > 0)
+                        {
+                            for (int i = 0; i < files.Length; i++)
+                            {
+                                System.IO.File.Delete(files[i]);
+                            }
+                        }
+                    }
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(file.FileName).ToLower();
                         if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                         {
-                            string[] files = Directory.GetFiles(rootPath + filePath);
-                            if (files.Length > 0)
-                            {
-                                for (int i = 0; i<files.Length; i++)
-                                {
-                                    System.IO.File.Delete(files[i]);
-                                }
-
-                            }
                             var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                             {
-                               await file.CopyToAsync(fileStream);
+                                await file.CopyToAsync(fileStream);
                                 person.Image = fileName;
                             }
                         }
                     }
-                    
+
                     if (string.IsNullOrEmpty(person.MiddleName))
                     {
                         person.MiddleName = "";
                     }
                     person.IsActive = true;
-                    HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl+"/employee/" + id + "", person );
+                    HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl + "/employee/" + id + "", person);
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -272,18 +283,18 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                return RedirectToAction("Profile","People", new { PersonId = person.EmployeeCode });
+                return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode });
             }
             return View(person);
         }
         [AllowAnonymous]
         public List<Person> EmployeeData()
         {
-            response = _services.Employee.GetResponse(ApiUrl+"/employee" );
+            response = _services.Employee.GetResponse(ApiUrl + "/employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<Person>>(stringData);
 
-            HttpResponseMessage response2 = _services.Roles.GetResponse(ApiUrl+"/employee/Designations" );
+            HttpResponseMessage response2 = _services.Roles.GetResponse(ApiUrl + "/employee/Designations");
             string stringData1 = response2.Content.ReadAsStringAsync().Result;
             var data2 = JsonConvert.DeserializeObject<List<Role>>(stringData1);
 
@@ -301,12 +312,12 @@ namespace EIS.WebApp.Controllers
         public void DeleteConfirmed(int id)
         {
             HttpClient client = _services.Employee.GetService();
-            response = client.DeleteAsync(ApiUrl+"/employee/" + id + "").Result;
+            response = client.DeleteAsync(ApiUrl + "/employee/" + id + "").Result;
         }
         public IActionResult ActivateEmployee(string EmployeeCode)
         {
-            response = _services.Employee.GetResponse(ApiUrl+"/employee/ActivatePerson/" + EmployeeCode + "" );
-            if(response.IsSuccessStatusCode)
+            response = _services.Employee.GetResponse(ApiUrl + "/employee/ActivatePerson/" + EmployeeCode + "");
+            if (response.IsSuccessStatusCode)
                 ViewBag.Message = "Information activated successfully!";
             return View("Index");
         }
@@ -316,7 +327,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Manage Roles")]
         public IActionResult Roles()
         {
-            response = _services.Roles.GetResponse(ApiUrl+"/employee/Designations" );
+            response = _services.Roles.GetResponse(ApiUrl + "/employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             return View(data);
@@ -325,7 +336,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Role")]
         public IActionResult AddRole()
         {
-            response = _services.Roles.GetResponse(ApiUrl+"/employee/Designations" );
+            response = _services.Roles.GetResponse(ApiUrl + "/employee/Designations");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             ViewBag.Designations = data;
@@ -385,7 +396,7 @@ namespace EIS.WebApp.Controllers
                 //role.Access = JsonConvert.SerializeObject(access);
                 role.Access = JsonConvert.SerializeObject(UserAccess);
             }
-            HttpResponseMessage response = _services.Roles.PostResponse(ApiUrl+"/Employee/AddDesignation", role );
+            HttpResponseMessage response = _services.Roles.PostResponse(ApiUrl + "/Employee/AddDesignation", role);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
@@ -402,7 +413,7 @@ namespace EIS.WebApp.Controllers
         public ActionResult EditRole(int id)
         {
             ViewData["Controllers"] = _controllerService.GetControllers();
-            HttpResponseMessage response = _services.Roles.GetResponse(ApiUrl+"/Employee/Designations/" + id + "" );
+            HttpResponseMessage response = _services.Roles.GetResponse(ApiUrl + "/Employee/Designations/" + id + "");
             string stringData = response.Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
             var access = JsonConvert.DeserializeObject<List<Navigation>>(role.Access);
@@ -426,7 +437,7 @@ namespace EIS.WebApp.Controllers
                 ViewData["Controllers"] = _controllerService.GetControllers();
                 return View(viewModel);
             }
-            string stringData = _services.Roles.GetResponse(ApiUrl+"/Employee/Designations/" + id + "" ).Content.ReadAsStringAsync().Result;
+            string stringData = _services.Roles.GetResponse(ApiUrl + "/Employee/Designations/" + id + "").Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
             role.Name = viewModel.Name;
             role.UpdatedDate = DateTime.Now.Date;
@@ -469,7 +480,7 @@ namespace EIS.WebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"/Employee/UpdateDesignation", role );
+                HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl + "/Employee/UpdateDesignation", role);
                 if (Cache.GetStringValue("Role") == role.Name)
                 {
                     Cache.DeleteStringValue("Access");
@@ -486,7 +497,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePermanentAddress(int pid,string EmployeeCode ,[Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
+        public IActionResult CreatePermanentAddress(int pid, string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
         {
 
             permanent.PersonId = pid;
@@ -495,7 +506,7 @@ namespace EIS.WebApp.Controllers
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl+"/PermanentAddress", permanent );
+                HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl + "/PermanentAddress", permanent);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
             }
@@ -504,14 +515,14 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(int pid,Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid, Permanent permanent)
         {
             permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.PermanentAddress.PutResponse(ApiUrl+"/PermanentAddress", permanent );
+                HttpResponseMessage response = _services.PermanentAddress.PutResponse(ApiUrl + "/PermanentAddress", permanent);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = permanent.Person.EmployeeCode });
@@ -519,7 +530,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Permanent Address")]
         public IActionResult DeletePermanentAddress(int perid)
         {
-            HttpResponseMessage response = _services.PermanentAddress.DeleteResponse(ApiUrl+"/PermanentAddress/" + perid + "" );
+            HttpResponseMessage response = _services.PermanentAddress.DeleteResponse(ApiUrl + "/PermanentAddress/" + perid + "");
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }
@@ -529,7 +540,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateCurrentAddress(int pid,string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
+        public IActionResult CreateCurrentAddress(int pid, string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
         {
 
             current.PersonId = pid;
@@ -538,7 +549,7 @@ namespace EIS.WebApp.Controllers
             current.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl+"/CurrentAddress", current );
+                HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl + "/CurrentAddress", current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
@@ -546,13 +557,13 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditCurrentAddress(int pid,string EmployeeCode, Current current)
+        public IActionResult EditCurrentAddress(int pid, string EmployeeCode, Current current)
         {
             current.UpdatedDate = DateTime.Now.Date;
             current.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.CurrentAddress.PutResponse(ApiUrl+"/CurrentAddress", current );
+                HttpResponseMessage response = _services.CurrentAddress.PutResponse(ApiUrl + "/CurrentAddress", current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
@@ -560,7 +571,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Current Address")]
         public IActionResult DeleteCurrentAddress(int cid)
         {
-            HttpResponseMessage response = _services.CurrentAddress.DeleteResponse(ApiUrl+"/CurrentAddress/" + cid + "" );
+            HttpResponseMessage response = _services.CurrentAddress.DeleteResponse(ApiUrl + "/CurrentAddress/" + cid + "");
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }
@@ -570,7 +581,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Emergency Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateEmergencyAddress(int pid,string EmployeeCode, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
+        public IActionResult CreateEmergencyAddress(int pid, string EmployeeCode, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
         {
 
             emergency.PersonId = pid;
@@ -579,7 +590,7 @@ namespace EIS.WebApp.Controllers
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl+"/EmergencyAddress", emergency );
+                HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl + "/EmergencyAddress", emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
@@ -588,7 +599,7 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult EditEmergencyAddress(int eid)
         {
-            HttpResponseMessage response = _services.EmergencyAddress.GetResponse(ApiUrl+"/EmergencyAddress/Get/" + eid + "" );
+            HttpResponseMessage response = _services.EmergencyAddress.GetResponse(ApiUrl + "/EmergencyAddress/Get/" + eid + "");
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             string emergency = response.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Emergency>(emergency);
@@ -596,13 +607,13 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditEmergencyAddress(int pid,string EmployeeCode, Emergency emergency)
+        public IActionResult EditEmergencyAddress(int pid, string EmployeeCode, Emergency emergency)
         {
             emergency.UpdatedDate = DateTime.Now.Date;
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.EmergencyAddress.PutResponse(ApiUrl+"/EmergencyAddress", emergency );
+                HttpResponseMessage response = _services.EmergencyAddress.PutResponse(ApiUrl + "/EmergencyAddress", emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
@@ -610,7 +621,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Delete Emergency Address")]
         public IActionResult DeleteEmergencyAddress(int eid)
         {
-            HttpResponseMessage response = _services.EmergencyAddress.DeleteResponse(ApiUrl+"/EmergencyAddress/" + eid + "" );
+            HttpResponseMessage response = _services.EmergencyAddress.DeleteResponse(ApiUrl + "/EmergencyAddress/" + eid + "");
             ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             return RedirectToAction(nameof(Index));
         }

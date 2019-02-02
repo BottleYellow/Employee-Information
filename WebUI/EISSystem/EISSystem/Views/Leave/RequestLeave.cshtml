@@ -14,10 +14,10 @@
             float: right;
         }
     </style>
-    @*<!-- Bootstrap Material Datetime Picker Css -->
+    @**@<!-- Bootstrap Material Datetime Picker Css -->
         <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
         <!-- Bootstrap DatePicker Css -->
-        <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />*@
+        <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container-fluid">
@@ -46,7 +46,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <div style="width:125px;" class="form-line">
-                                            <input class="form-control" type="text" id="date1" asp-for="FromDate" value="@DateTime.Now" onchange="FunDate1();" disabled/>
+                                            <input class="form-control" type="text" id="date1" asp-for="FromDate" value="@DateTime.Now" onchange="FunDate1();" disabled />
                                             @*<input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control" disabled>*@
                                         </div>
                                     </div>
@@ -80,17 +80,28 @@
             </div>
         </div>
     </div>
+ 
 
-    <script src="~/plugins/bootbox/bootbox.min.js"></script>
-    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+ 
     <!-- Autosize Plugin Js -->
     <script src="~/plugins/autosize/autosize.js"></script>
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
 
+
+
+    <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <script src="~/plugins/momentjs/moment.js"></script>
+    <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+
+
+    <script src="~/js/pages/ui/modals.js"></script>
+
+    <script src="~/plugins/bootbox/bootbox.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/plugins/momentjs/moment.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 </body>
 </html>
 

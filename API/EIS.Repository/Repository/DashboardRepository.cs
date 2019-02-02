@@ -117,8 +117,8 @@ namespace EIS.Repositories.Repository
                     if (d != null)
                     {
                         CalendarData calendarData = new CalendarData();
-                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut==null?"00:00": Convert.ToDateTime(d.TimeOut).ToString(@"hh\:mm") + ")";
-                        calendarData.Description = "Working Hours:-" + d.TotalHours==null? "0.0": Convert.ToDateTime(d.TotalHours).ToString(@"hh\:mm");
+                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault().ToString(@"hh\:mm") + ")";
+                        calendarData.Description = "Working Hours:-" + d.TotalHours.GetValueOrDefault().ToString(@"hh\:mm");
                         calendarData.StartDate = d.DateIn;
                         calendarData.EndDate = d.DateOut;
                         calendarData.Color = "Green";
