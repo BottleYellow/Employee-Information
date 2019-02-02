@@ -7,6 +7,7 @@ using EIS.Entities.OtherEntities;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EIS.Data
 {
@@ -113,8 +114,7 @@ namespace EIS.Data
 
                 #region[Attendance]
                 //For Attendance model validation
-
-                modelBuilder.Entity<Attendance>().Property(p => p.DateIn).HasColumnType("date");
+                modelBuilder.Entity<Attendance>().Property(p => p.PersonId).HasColumnType("int");
                 modelBuilder.Entity<Attendance>().Property(p => p.TimeIn).HasColumnType("time");
                 modelBuilder.Entity<Attendance>().Property(p => p.DateOut).HasColumnType("date");
                 modelBuilder.Entity<Attendance>().Property(p => p.TimeOut).HasColumnType("time");
@@ -201,13 +201,6 @@ namespace EIS.Data
                 #endregion
 
                 #region Constraints
-
-                //modelBuilder.Entity<Person>()
-                //    .HasIndex(p => p.PanCard)
-                //    .IsUnique();
-                //modelBuilder.Entity<Person>()
-                //    .HasIndex(p => p.AadharCard)
-                //    .IsUnique();
                 modelBuilder.Entity<Person>()
                     .HasIndex(p => p.MobileNumber)
                     .IsUnique();
@@ -264,11 +257,7 @@ namespace EIS.Data
                    .WithOne(g => g.EmployeeLeaves)
                    .HasForeignKey<EmployeeLeaves>(s => s.PersonId);
 
-                //one employee has many attendance
-                //modelBuilder.Entity<Attendance>()
-                //   .HasOne(s => s.Person)
-                //   .WithMany(g => g.Attendance)
-                //   .HasForeignKey(g => g.PersonId);
+               
 
                 //one Employee has one Role
                 modelBuilder.Entity<Person>()

@@ -110,32 +110,32 @@ namespace EIS.WebApp
             string controller = "Account";
             string action = "Login";
             string Template = "{controller=" + controller + "}/{action=" + action + "}";
-            string id = new RedisAgent().GetStringValue("PersonId");
-            string EmployeeCode = new RedisAgent().GetStringValue("EmployeeCode");
+            //string id = new RedisAgent().GetStringValue("PersonId");
+            //string EmployeeCode = new RedisAgent().GetStringValue("EmployeeCode");
 
-            if (id != null)
-            {
-                string access = new RedisAgent().GetStringValue("Access");
-                string role = new RedisAgent().GetStringValue("Role");
-                if (access.Contains("/People/Index"))
-                {
-                    controller = "People";
-                    action = "Index";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}";
-                }
-                else
-                {
-                    controller = "People";
-                    action = "Profile";
-                    Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + EmployeeCode + "}";
-                }
-            }
-            else
-            {
-                controller = "Account";
-                action = "Login";
-                Template = "{controller=" + controller + "}/{action=" + action + "}";
-            }
+            //if (id != null)
+            //{
+            //    string access = new RedisAgent().GetStringValue("Access");
+            //    string role = new RedisAgent().GetStringValue("Role");
+            //    if (access.Contains("/People/Index"))
+            //    {
+            //        controller = "People";
+            //        action = "Index";
+            //        Template = "{controller=" + controller + "}/{action=" + action + "}";
+            //    }
+            //    else
+            //    {
+            //        controller = "People";
+            //        action = "Profile";
+            //        Template = "{controller=" + controller + "}/{action=" + action + "}/{PersonId=" + EmployeeCode + "}";
+            //    }
+            //}
+            //else
+            //{
+            //    controller = "Account";
+            //    action = "Login";
+            //    Template = "{controller=" + controller + "}/{action=" + action + "}";
+            //}
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

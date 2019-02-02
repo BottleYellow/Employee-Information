@@ -102,104 +102,104 @@ namespace EIS.Repositories.Repository
 
        public List<CalendarData> GetCalendarDetails()
         {          
-                List<CalendarData> calendarDataList = new List<CalendarData>();
+            List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = _dbContext.Holidays.ToList();
             IEnumerable<LeaveRequest> leaveList = _dbContext.LeaveRequests.ToList();
 
             IEnumerable<Attendance> data = _dbContext.Attendances.Include(x => x.Person).ToList();
 
             DateTime beginDate = _dbContext.Roles.Where(x => x.Name == "Admin").FirstOrDefault().CreatedDate;
-                DateTime stopDate = DateTime.Now.AddYears(1);
-                int count = 0;
-                for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            DateTime stopDate = DateTime.Now.AddYears(1);
+            int count = 0;
+            for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            {
+                Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
+                if (d != null)
                 {
-                    Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
-                    if (d != null)
-                    {
-                        CalendarData calendarData = new CalendarData();
-                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut==null?"00:00": Convert.ToDateTime(d.TimeOut).ToString(@"hh\:mm") + ")";
-                        calendarData.Description = "Working Hours:-" + d.TotalHours==null? "0.0": Convert.ToDateTime(d.TotalHours).ToString(@"hh\:mm");
-                        calendarData.StartDate = d.DateIn;
-                        calendarData.EndDate = d.DateOut;
-                        calendarData.Color = "Green";
-                        calendarData.IsFullDay = true;
+                    CalendarData calendarData = new CalendarData();
+                    calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut == null ? "00:00" : Convert.ToDateTime(d.TimeOut).ToString(@"hh\:mm") + ")";
+                    calendarData.Description = "Working Hours:-" + d.TotalHours == null ? "0.0" : Convert.ToDateTime(d.TotalHours).ToString(@"hh\:mm");
+                    calendarData.StartDate = d.DateIn;
+                    calendarData.EndDate = d.DateOut;
+                    calendarData.Color = "Green";
+                    calendarData.IsFullDay = true;
 
                     calendarDataList.Add(calendarData);
-                    }
+                }
 
-                    LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
-                    if (leavereq != null)
+                LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
+                if (leavereq != null)
+                {
+                    CalendarData calendarData = new CalendarData();
+                    string leave = "";
+                    if (leavereq.LeaveType == "Casual Leave")
                     {
-                        CalendarData calendarData = new CalendarData();
-                        string leave = "";
-                        if (leavereq.LeaveType == "Casual Leave")
-                        {
-                            leave = "CL";
-                        }
-                        calendarData.Title = leavereq.EmployeeName + " (" + leave + "-" + leavereq.Status + ")";
-                        calendarData.Description = "Leave Status " + leavereq.Status;
-                        calendarData.StartDate = leavereq.FromDate;
-                        calendarData.EndDate = leavereq.ToDate;
-                        if (leavereq.Status == "Pending")
-                        {
-                            calendarData.Color = "Orange";
-                        }
-                        else
-                        {
-                            calendarData.Color = "Blue";
-                        }
-                        calendarData.IsFullDay = true;
+                        leave = "CL";
+                    }
+                    calendarData.Title = leavereq.EmployeeName + " (" + leave + "-" + leavereq.Status + ")";
+                    calendarData.Description = "Leave Status " + leavereq.Status;
+                    calendarData.StartDate = leavereq.FromDate;
+                    calendarData.EndDate = leavereq.ToDate;
+                    if (leavereq.Status == "Pending")
+                    {
+                        calendarData.Color = "Orange";
+                    }
+                    else
+                    {
+                        calendarData.Color = "Blue";
+                    }
+                    calendarData.IsFullDay = true;
                     calendarDataList.Add(calendarData);
-                    }
+                }
 
-                    Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
-                    if (holiday != null)
-                    {
-                        CalendarData calendarData = new CalendarData();
-                        calendarData.Title = holiday.Vacation;
-                        calendarData.Description = "Holiday due to " + holiday.Vacation;
-                        calendarData.StartDate = holiday.Date;
-                        calendarData.EndDate = holiday.Date;
-                        calendarData.Color = "Red";
-                        calendarData.IsFullDay = true;
+                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
+                if (holiday != null)
+                {
+                    CalendarData calendarData = new CalendarData();
+                    calendarData.Title = holiday.Vacation;
+                    calendarData.Description = "Holiday due to " + holiday.Vacation;
+                    calendarData.StartDate = holiday.Date;
+                    calendarData.EndDate = holiday.Date;
+                    calendarData.Color = "Red";
+                    calendarData.IsFullDay = true;
 
                     calendarDataList.Add(calendarData);
-                    }
-                    if (date.Day == 1)
-                    {
-                        count = 0;
-                    }
-                    if (date.DayOfWeek == DayOfWeek.Sunday)
+                }
+                if (date.Day == 1)
+                {
+                    count = 0;
+                }
+                if (date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = "Holiday";
+                    holidayCalanderData.Description = "Holiday";
+                    holidayCalanderData.StartDate = date;
+                    holidayCalanderData.EndDate = date;
+                    holidayCalanderData.Color = "Orange";
+                    holidayCalanderData.IsFullDay = true;
+                    calendarDataList.Add(holidayCalanderData);
+
+                }
+
+                if (date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    count++;
+                    if (count % 2 == 0)
                     {
                         CalendarData holidayCalanderData = new CalendarData();
-                        holidayCalanderData.Title = "Holiday";
+                        holidayCalanderData.Title = count + "nd Saturday Holiday";
                         holidayCalanderData.Description = "Holiday";
                         holidayCalanderData.StartDate = date;
                         holidayCalanderData.EndDate = date;
                         holidayCalanderData.Color = "Orange";
                         holidayCalanderData.IsFullDay = true;
-                    calendarDataList.Add(holidayCalanderData);
-
-                    }
-
-                    if (date.DayOfWeek == DayOfWeek.Saturday)
-                    {
-                        count++;
-                        if (count % 2 == 0)
-                        {
-                            CalendarData holidayCalanderData = new CalendarData();
-                            holidayCalanderData.Title = count + "nd Saturday Holiday";
-                            holidayCalanderData.Description = "Holiday";
-                            holidayCalanderData.StartDate = date;
-                            holidayCalanderData.EndDate = date;
-                            holidayCalanderData.Color = "Orange";
-                            holidayCalanderData.IsFullDay = true;
                         calendarDataList.Add(holidayCalanderData);
-                        }
                     }
-
                 }
-                return calendarDataList;           
+
+            }
+            return calendarDataList;           
         }
 
     
