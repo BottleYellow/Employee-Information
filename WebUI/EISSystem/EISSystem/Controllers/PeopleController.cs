@@ -99,7 +99,8 @@ namespace EIS.WebApp.Controllers
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
             ViewBag.Dob = DateTime.Now.ToShortDateString();
-            return View();
+            Person per = new Person() { DateOfBirth = new DateTime(1990, 01, 01) };
+            return View(per);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -524,7 +525,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(int pid, string EmployeeCode, Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid,string EmployeeCode, Permanent permanent)
         {
             permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;

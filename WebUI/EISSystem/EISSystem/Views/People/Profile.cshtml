@@ -89,8 +89,9 @@
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editpaddpanel">
-                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
+                                            <form asp-action="EditPermanentAddress" asp-controller="People" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <input type="hidden" id="id" name="id" asp-for="@Model.PermanentAddress.Id" />
+                                                <input type="hidden" id="pid" name="pid" asp-for="@Model.PermanentAddress.PersonId" />
                                                 @{await Html.RenderPartialAsync("EditPermanentAddress", Model.PermanentAddress); }
                                                 <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="button" id="pcancel" name="pcancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
@@ -158,8 +159,9 @@
                                             </form>
                                         </div>
                                         <div style="display:none;" class="panel panel-body" id="editcaddpanel">
-                                            <form asp-action="EditCurrentAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
+                                            <form asp-action="EditCurrentAddress" asp-controller="People" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <input type="hidden" id="id" name="id" asp-for="@Model.CurrentAddress.Id" />
+                                                <input type="hidden" id="pid" name="pid" asp-for="@Model.CurrentAddress.PersonId" />
                                                 @{await Html.RenderPartialAsync("EditCurrentAddress", Model.CurrentAddress); }
                                                 <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                                 <button type="button" id="ccancel" name="ccancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
@@ -229,10 +231,11 @@
                                             <form asp-action="EditEmergencyAddress" asp-controller="People" asp-route-pid="@Model.Id" asp-route-EmployeeCode="@Model.EmployeeCode" method="post">
                                                 <div id="editform">
                                                     @{
-                                                       await Html.RenderPartialAsync("EditEmergencyAddress", new Emergency());
+                                                        await Html.RenderPartialAsync("EditEmergencyAddress", new Emergency());
                                                     }
                                                 </div>
-                                                
+                                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                                <button type="reset" id="ecancel" name="ecancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
                                             </form>
                                         </div>
                                         <div id="eaddtable" class="body table-responsive">

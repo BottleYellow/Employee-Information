@@ -103,7 +103,7 @@
                                     <div class="form-group required">
                                         <label class="control-label" asp-for="EmployeeCode">Employee Code</label>
                                         <div class="form-line">
-                                            <input asp-for="EmployeeCode" class="form-control" id="EmployeeCode"/>
+                                            <input asp-for="EmployeeCode" class="form-control" id="EmployeeCode" />
                                         </div>
                                         <span asp-validation-for="EmployeeCode" class="text-danger"></span>
                                     </div>
@@ -290,15 +290,16 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+
 <script>
     $("#dob").focusin(function () {
         $('#dob').datetimepicker({
-            format: "DD/MM/YYYY"
+            format: "DD-MMM-YYYY"
         });
     })
     $("#doj").focusin(function () {
         $('#doj').datetimepicker({
-            format: "DD/MM/YYYY"
+            format: "DD-MMM-YYYY"
         });
     })
     $(document).ready(function () {

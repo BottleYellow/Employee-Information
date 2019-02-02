@@ -57,7 +57,8 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Create Attendance")]
         [HttpPost("{id}")]
-        public IActionResult PostAttendance(int id, [FromBody] Attendance attendance)
+        //[Route("ClockIn/{id}")]
+        public IActionResult PostAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
             if (!ModelState.IsValid)
             {

@@ -69,8 +69,8 @@
     $("#date2").on("dp.change", function () {
         var d1 = document.getElementById("date1").value;
         var d2 = document.getElementById("date2").value;
-        var firstDate = moment(d1, "DD/MM/YYYY").format("DD/MM/YYYY");
-        var secondDate = moment(d2, "DD/MM/YYYY").format("DD/MM/YYYY");
+        var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var secondDate = moment(d2, "DD/MMM/YYYY").format("MM/DD/YYYY");
         if (new Date(firstDate) > new Date(secondDate)) {
             bootbox.alert({
                 message: "Please select valid date"

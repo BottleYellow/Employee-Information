@@ -107,14 +107,14 @@
 
 <script>
     $('#date1').datetimepicker({
-        format: "DD/MM/YYYY"
+        format: "DD/MMM/YYYY"
     });
     $('#date2').datetimepicker({
-        format: "DD/MM/YYYY"
+        format: "DD/MMM/YYYY"
     });
     $('#date1').on('dp.change', function (e) {
         var x = document.getElementById("date1").value;
-        var firstDate = moment(x, "DD/MM/YYYY").format("MM/DD/YYYY");
+        var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d = new Date();
         $("#date2").val('');
         $("#btnSubmit").prop("disabled", true);
@@ -129,8 +129,8 @@
     $('#date2').on('dp.change', function (e) {
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
-        var d1 = moment(fd, "DD/MM/YYYY").format("MM/DD/YYYY");
-        var d2 = moment(sd, "DD/MM/YYYY").format("MM/DD/YYYY");
+        var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var diff = new Date(new Date(d2) - new Date(d1));
         var days = diff / 1000 / 60 / 60 / 24 + 1;
         if (new Date(d1) > new Date(d2)) {
