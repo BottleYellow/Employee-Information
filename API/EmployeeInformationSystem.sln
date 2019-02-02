@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Data", "EIS.Data\EIS.Data.csproj", "{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Entities", "EIS.Entities\EIS.Entities.csproj", "{0EC1291B-E964-4A3A-B1E1-AA2581D66C24}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Repositories", "EIS.Repository\EIS.Repositories.csproj", "{EB0CFA76-8ACC-4215-A5C2-9CECAFA9F7AA}"
@@ -13,16 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Validations", "EIS.Vali
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.WebAPI", "EIS.WebAPI\EIS.WebAPI.csproj", "{77DD3A21-F9C1-4D02-956A-A1A6F3EDA58F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EIS.Data", "EIS.Data\EIS.Data.csproj", "{5B0F5716-8101-458C-A45F-D2AD22DD255D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4A94235-9BB3-4C4F-B95A-6167D00F6FDA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EC1291B-E964-4A3A-B1E1-AA2581D66C24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0EC1291B-E964-4A3A-B1E1-AA2581D66C24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EC1291B-E964-4A3A-B1E1-AA2581D66C24}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{77DD3A21-F9C1-4D02-956A-A1A6F3EDA58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77DD3A21-F9C1-4D02-956A-A1A6F3EDA58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77DD3A21-F9C1-4D02-956A-A1A6F3EDA58F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B0F5716-8101-458C-A45F-D2AD22DD255D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0F5716-8101-458C-A45F-D2AD22DD255D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0F5716-8101-458C-A45F-D2AD22DD255D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0F5716-8101-458C-A45F-D2AD22DD255D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
