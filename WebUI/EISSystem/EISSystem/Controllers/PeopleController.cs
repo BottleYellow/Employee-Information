@@ -66,7 +66,7 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
-             ViewBag.Name = data.FullName ;
+             ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
             ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
@@ -205,6 +205,7 @@ namespace EIS.WebApp.Controllers
                 return NotFound();
             }
             ViewBag.Designations = rolesList;
+          
             var data1 = from p in EmployeeData()
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
@@ -253,6 +254,11 @@ namespace EIS.WebApp.Controllers
                     }
                     person.IsActive = true;
                     HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl+"/api/employee/" + id + "", person );
+                    if (id == Convert.ToInt32(Cache.GetStringValue("PersonId")))
+                    {
+                        Cache.DeleteStringValue("EmployeeCode");
+                        Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+                    }
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -504,9 +510,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditPermanentAddress(string EmployeeCode, Permanent permanent)
+        public IActionResult EditPermanentAddress(int pid, string EmployeeCode, Permanent permanent)
         {
-            //permanent.PersonId = pid;
+            permanent.PersonId = pid;
             permanent.UpdatedDate = DateTime.Now.Date;
             permanent.IsActive = true;
             if (ModelState.IsValid)
@@ -531,7 +537,6 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateCurrentAddress(int pid,string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
         {
-
             current.PersonId = pid;
             current.CreatedDate = DateTime.Now.Date;
             current.UpdatedDate = DateTime.Now.Date;
@@ -548,6 +553,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditCurrentAddress(int pid,string EmployeeCode, Current current)
         {
+            current.PersonId = pid;
             current.UpdatedDate = DateTime.Now.Date;
             current.IsActive = true;
             if (ModelState.IsValid)

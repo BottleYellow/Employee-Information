@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmpData : Migration
+    public partial class EmployeeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
