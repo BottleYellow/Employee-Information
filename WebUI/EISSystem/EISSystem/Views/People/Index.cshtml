@@ -74,7 +74,7 @@
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "<h3>Do you want to delete this record ?</h3>"
+        var message = "<h4>Do you want to delete this record ?</h4>"
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
@@ -83,7 +83,7 @@
                     url:"@Url.Action("DeleteConfirmed", "People")?id=" + id,
                     data: null,
                     success: function () {
-                        bootbox.alert("<h3>Record deleted successfully!</h3>", function () {
+                        bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
 
@@ -95,13 +95,18 @@
     $('#example').on('click', 'a.active', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
+        var message = "<h4>Do you want to activate Employee record ?</h4>"
+        bootbox.confirm(message, function (result) {
+            if (result == true) {
         $.ajax({
             type: "GET",
             url:'@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
             data: null,
             success: function () {
-                bootbox.alert("<h3>Record activated successfully!</h3>", function () {
+                bootbox.alert("<h4>Record activated successfully!</h4>", function () {
                     location.href = '@Url.Action("Index", "People")';
+                });
+            }
                 });
             }
         });

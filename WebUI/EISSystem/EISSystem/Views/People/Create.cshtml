@@ -119,7 +119,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
-                                                <input id="dob" class="form-control" type="text" value="@DateTime.Now" asp-for="DateOfBirth" />
+                                                <input id="dob" class="form-control" type="text"  asp-for="DateOfBirth" />
 
                                             </div>
                                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
@@ -265,10 +265,10 @@
 @*<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>*@
 <SCRIPT type="text/javascript">
     $('#dob').datetimepicker({
-        format: "DD/MM/YYYY"
+        format: "DD-MMM-YYYY"
     });
     $('#doj').datetimepicker({
-        format: "DD/MM/YYYY"
+        format: "DD-MMM-YYYY"
     });
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);

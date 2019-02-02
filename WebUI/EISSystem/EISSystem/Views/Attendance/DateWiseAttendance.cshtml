@@ -129,10 +129,10 @@
         $('#generateReport').prop('disabled', true);
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         $("#fromdate").datetimepicker({
-            format: 'DD/MM/YYYY'
+            format: "MMM/DD/YYYY"
         });
         $("#todate").datetimepicker({
-            format: 'DD/MM/YYYY'
+            format: "MMM/DD/YYYY"
         });
 
         $('#selectEmployee').on('change', function () {

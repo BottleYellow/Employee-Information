@@ -57,7 +57,8 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Create Attendance")]
         [HttpPost("{id}")]
-        public IActionResult PostAttendance(int id, [FromBody] Attendance attendance)
+        //[Route("ClockIn/{id}")]
+        public IActionResult PostAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
             if (!ModelState.IsValid)
             {
@@ -166,7 +167,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x=>x.TimeIn!=null && x.TimeOut!=null);
+            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x=>x.TimeOut!=null);
             int TotalDays = (DateTime.IsLeapYear(year)) ? 366 : 365;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
             return Ok(attendanceReport);
@@ -214,7 +215,7 @@ namespace EIS.WebAPI.Controllers
             DateTime tDate = Convert.ToDateTime(endDate);
             int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceDateWise(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData.AsQueryable());
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
             return Ok(data);
