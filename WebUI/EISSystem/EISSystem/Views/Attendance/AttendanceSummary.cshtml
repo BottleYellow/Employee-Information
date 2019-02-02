@@ -228,19 +228,19 @@
                 });
             }
             else if (v == 'week') {
-                $("#inputweek").val("30/12/2018-05/01/2019");
+                //$("#inputweek").val("30/12/2018-05/01/2019");
                 $('#inputmonthdiv').hide();
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').show();
                 $("#inputweek").datetimepicker({
-                    format: 'DD/MM/YYYY'
+                    format: 'MM/DD/YYYY'
                 });
             }
         });
         $('#inputweek').on('dp.change', function (e) {
             var value = $("#inputweek").val();
-            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("MM/DD/YYYY");
+            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("MM/DD/YYYY");
             $("#inputweek").val(firstDate + " - " + lastDate);
         });
         $('#generateReport').on('click', function () {
