@@ -105,6 +105,12 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
         {
+            if (person.DateOfBirth != null)
+            {
+                var d = DateTime.Parse(person.DateOfBirth.ToString());
+                person.DateOfBirth = d;
+            }
+
             var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 

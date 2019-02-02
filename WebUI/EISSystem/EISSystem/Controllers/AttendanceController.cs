@@ -198,7 +198,7 @@ namespace EIS.WebApp.Controllers
 
                 DateTime startDate = Convert.ToDateTime(week[0]);
                 DateTime endDate =  Convert.ToDateTime(week[1]);
-                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("dd-MM-yyyy")+ "/" + endDate.ToString("dd-MM-yyyy");
+                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("MMM-dd-yyyy")+ "/" + endDate.ToString("MMM-dd-yyyy");
             }
             return url;
         }
@@ -223,9 +223,9 @@ namespace EIS.WebApp.Controllers
             }
             else if (type == "week")
             {
-                DateTime startDate = DateTime.ParseExact(week[0], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
+                url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
             }
             else
             {
@@ -258,11 +258,12 @@ namespace EIS.WebApp.Controllers
 
             }
             else if (type == "week")
-            {
+            {           
+
                 DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 ViewBag.startDate = startDate;
-                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("dd-MM-yyyy") + "/" + endDate.ToString("dd-MM-yyyy");
+                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
             }
             return url;
         }
@@ -292,7 +293,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
         {
             
-            string url = ApiUrl+"/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("dd-MM-yyyy") + "/" + Convert.ToDateTime(todate).ToString("dd-MM-yyyy");
+            string url = ApiUrl+"/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
             ArrayList arrayData = new ArrayList();
             return LoadData<Attendance>(url,null);
 

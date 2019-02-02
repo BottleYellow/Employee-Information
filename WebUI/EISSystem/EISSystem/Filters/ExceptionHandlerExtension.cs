@@ -30,9 +30,9 @@ namespace EIS.WebApp.Filters
                     }
 
                     int code = context.Response.StatusCode;
-                    context.Response.Redirect("/Account/ErrorPage");
-                    await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred");
-
+                    //context.Response.Redirect("/Account/ErrorPage");
+                    await context.Response.WriteAsync("An unexpected fault happened. Status Code " + code + " occurred \n"+ exceptionHandlerFeature.Error.Message +"\n"+exceptionHandlerFeature.Error.StackTrace);
+                   
                 });
             };
         }

@@ -214,7 +214,7 @@ namespace EIS.WebAPI.Controllers
             DateTime tDate = Convert.ToDateTime(endDate);
             int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceDateWise(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData.AsQueryable());
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
             data.Add(attendanceData.Count());
             return Ok(data);
