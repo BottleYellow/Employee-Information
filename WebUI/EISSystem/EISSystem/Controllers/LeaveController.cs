@@ -253,7 +253,7 @@ namespace EIS.WebApp.Controllers
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             if (data.Count == 0)
-                ViewBag.ListOfPolicy = null;
+                ViewBag.ListOfPolicy = new List<LeaveRules>();
             else
                 ViewBag.ListOfPolicy = data;
             HttpResponseMessage response1 = _services.Employee.GetResponse(ApiUrl+"/api/employee" );

@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -66,7 +67,7 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
             ViewBag.ImagePath = data.Image;
-             ViewBag.Name = data.FullName;
+            ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
             ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
@@ -80,7 +81,7 @@ namespace EIS.WebApp.Controllers
                 var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
                 ViewBag.EstimatedTimeOut = estTimeOut;
             }
-            
+
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };
             var cur = new Current() { PersonId = data.Id };
@@ -111,12 +112,12 @@ namespace EIS.WebApp.Controllers
                        where p.Role.Name != "Employee"
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
-           
+
             if (ModelState.IsValid)
             {
-               
+
                 string rootPath = _environment.WebRootPath;
-                string filePath = "//EmployeeData//" + tId+  person.EmployeeCode + "//Image//";
+                string filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
                 {
                     Directory.CreateDirectory(rootPath + "//EmployeeData//");
@@ -125,25 +126,29 @@ namespace EIS.WebApp.Controllers
                 {
                     Directory.CreateDirectory(rootPath + filePath);
                 }
+                else
+                {
+                    string[] files = Directory.GetFiles(rootPath + filePath);
+                    if (files.Length > 0)
+                    {
+                        for (int i = 0; i < files.Length; i++)
+                        {
+                            System.IO.File.Delete(files[i]);
+                        }
+                    }
+                }
                 string uploadPath = rootPath + filePath;
                 if (file != null && file.Length > 0)
                 {
                     var fileExtension = Path.GetExtension(file.FileName).ToLower();
-                    
+
                     if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                     {
-                        string[] files = Directory.GetFiles(rootPath + filePath);
-                        if (files.Length > 0)
-                        {
-                            for(int i=0; i<files.Length;i++)
-                            {
-                                System.IO.File.Delete(files[i]);
-                            }                           
-                        }
-                        var fileName = person.FirstName+ "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
+
+                        var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
-                            await file.CopyToAsync(fileStream);                            
+                            await file.CopyToAsync(fileStream);
                             person.Image = fileName;
                         }
                     }
@@ -154,11 +159,11 @@ namespace EIS.WebApp.Controllers
                 }
                 else
                 {
-                    System.IO.File.Copy(rootPath+"//EmployeeData//DefaultImage//Default.png",uploadPath+"Default.png");
+                    System.IO.File.Copy(rootPath + "//EmployeeData//DefaultImage//Default.png", uploadPath + "Default.png");
                     person.Image = "Default.png";
 
                 }
-                if(string.IsNullOrEmpty(person.MiddleName))
+                if (string.IsNullOrEmpty(person.MiddleName))
                 {
                     person.MiddleName = "";
                 }
@@ -170,7 +175,7 @@ namespace EIS.WebApp.Controllers
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
             }
             if (file != null)
@@ -188,7 +193,7 @@ namespace EIS.WebApp.Controllers
             ViewBag.Designations = rolesList;
 
             var data1 = from p in EmployeeData()
-                       select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Person>(stringData);     
@@ -199,6 +204,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
+           
             var tId = Cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
@@ -213,7 +219,7 @@ namespace EIS.WebApp.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { 
+                {
                     var rootPath = _environment.WebRootPath;
                     var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                     if (!Directory.Exists(rootPath + "//EmployeeData//"))
@@ -224,30 +230,32 @@ namespace EIS.WebApp.Controllers
                     {
                         Directory.CreateDirectory(rootPath + filePath);
                     }
+                    else
+                    {
+                        string[] files = Directory.GetFiles(rootPath + filePath);
+                        if (files.Length > 0)
+                        {
+                            for (int i = 0; i < files.Length; i++)
+                            {
+                                System.IO.File.Delete(files[i]);
+                            }
+                        }
+                    }
                     var uploadPath = rootPath + filePath;
                     if (file != null && file.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(file.FileName).ToLower();
                         if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                         {
-                            string[] files = Directory.GetFiles(rootPath + filePath);
-                            if (files.Length > 0)
-                            {
-                                for (int i = 0; i<files.Length; i++)
-                                {
-                                    System.IO.File.Delete(files[i]);
-                                }
-
-                            }
                             var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                             using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                             {
-                               await file.CopyToAsync(fileStream);
+                                await file.CopyToAsync(fileStream);
                                 person.Image = fileName;
                             }
                         }
                     }
-                    
+
                     if (string.IsNullOrEmpty(person.MiddleName))
                     {
                         person.MiddleName = "";
@@ -278,7 +286,7 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                return RedirectToAction("Profile","People", new { PersonId = person.EmployeeCode });
+                return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode });
             }
             return View(person);
         }
@@ -535,7 +543,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateCurrentAddress(int pid,string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
+        public IActionResult CreateCurrentAddress(int pid, string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
         {
             current.PersonId = pid;
             current.CreatedDate = DateTime.Now.Date;
@@ -576,7 +584,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Emergency Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateEmergencyAddress(int pid,string EmployeeCode, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
+        public IActionResult CreateEmergencyAddress(int pid, string EmployeeCode, [Bind("FirstName,LastName,Address,City,State,Country,PinCode,PhoneNumber,MobileNumber,Relation")]Emergency emergency)
         {
 
             emergency.PersonId = pid;
@@ -602,7 +610,7 @@ namespace EIS.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditEmergencyAddress(int pid,string EmployeeCode, Emergency emergency)
+        public IActionResult EditEmergencyAddress(int pid, string EmployeeCode, Emergency emergency)
         {
             emergency.UpdatedDate = DateTime.Now.Date;
             emergency.IsActive = true;

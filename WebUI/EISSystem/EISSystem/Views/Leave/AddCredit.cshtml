@@ -20,7 +20,7 @@
 
                 <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
-                    <label class="control-label" asp-for="PersonId">Leave Type</label>
+                    <label class="control-label" asp-for="PersonId">Select Employee</label>
                     <select asp-for="PersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
                         <option>-- Select --</option>
                     </select>

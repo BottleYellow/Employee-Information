@@ -93,6 +93,7 @@ namespace EIS.WebApp.Controllers
             {
                 id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
+            //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
             ArrayList arrayData = new ArrayList();
             return LoadData<Attendance>(url,null);
