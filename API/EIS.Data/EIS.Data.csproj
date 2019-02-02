@@ -5,14 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190119111024_DatabaseData.cs" />
-    <Compile Remove="Migrations\20190123071035_HolidayTable.cs" />
-    <Compile Remove="Migrations\20190124062055_PastLeaves.cs" />
-    <Compile Remove="Migrations\20190124062442_PastLeavesWithSchema.cs" />
-    <Compile Remove="Migrations\20190130062310_EmpData.cs" />
-    <Compile Remove="Migrations\20190131071057_Change.cs" />
-    <Compile Remove="Migrations\20190131071204_EmpData.cs" />
-    <Compile Remove="Migrations\20190131071800_EmpData.cs" />
+    <Compile Remove="Migrations\20190201091412_EmpData.cs" />
+    <Compile Remove="Migrations\20190201092609_Initial.cs" />
+    <Compile Remove="Migrations\20190201095241_Initial2.cs" />
+    <Compile Remove="Migrations\20190201101410_Initial3.cs" />
+    <Compile Remove="Migrations\20190201101915_Initial4.cs" />
+    <Compile Remove="Migrations\20190201102922_Initial4.cs" />
+    <Compile Remove="Migrations\20190201103221_InitialData.cs" />
+    <Compile Remove="Migrations\20190201111644_InitialData.cs" />
+    <Compile Remove="Migrations\20190201111950_InitialData.cs" />
+    <Compile Remove="Migrations\20190201121124_Changes.cs" />
+    <Compile Remove="Migrations\20190201121232_Changes.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,10 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

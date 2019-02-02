@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmpData : Migration
+    public partial class Data : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -149,8 +149,8 @@ namespace EIS.Data.Migrations
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    DateIn = table.Column<DateTime>(type: "date", nullable: false),
+                    PersonId = table.Column<int>(type: "int", nullable: true),
+                    DateIn = table.Column<DateTime>(nullable: false),
                     TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateOut = table.Column<DateTime>(type: "date", nullable: true),
                     TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
@@ -165,7 +165,7 @@ namespace EIS.Data.Migrations
                         principalSchema: "LMS",
                         principalTable: "tblPerson",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

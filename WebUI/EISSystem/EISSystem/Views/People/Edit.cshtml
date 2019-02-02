@@ -75,7 +75,6 @@
                         <input type="hidden" asp-for="TenantId" />
                         <input type="hidden" asp-for="Image" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="EmployeeCode" value="@Model.EmployeeCode" />
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
@@ -96,6 +95,17 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-md-9">
+                                <div class="col-md-4">
+                                    <div class="form-group required">
+                                        <label class="control-label" asp-for="EmployeeCode">Employee Code</label>
+                                        <div class="form-line">
+                                            <input asp-for="EmployeeCode" class="form-control" id="EmployeeCode"/>
+                                        </div>
+                                        <span asp-validation-for="EmployeeCode" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>

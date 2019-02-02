@@ -251,15 +251,15 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("DateIn")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateIn");
 
                     b.Property<DateTime?>("DateOut")
                         .HasColumnType("date");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("PersonId");
+                    b.Property<int?>("PersonId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -794,8 +794,7 @@ namespace EIS.Data.Migrations
                 {
                     b.HasOne("EIS.Entities.Employee.Person", "Person")
                         .WithMany("Attendance")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PersonId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>

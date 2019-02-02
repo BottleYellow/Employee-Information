@@ -50,7 +50,7 @@
 <label>Phone No</label>
 <div class="form-group">
     <div class="form-line">
-        <input asp-for="@Model.PhoneNumber" class="form-control" inputmode="numeric" maxlength="6">
+        <input asp-for="@Model.PhoneNumber" class="form-control" inputmode="numeric">
     </div>
 </div>
 
@@ -67,6 +67,8 @@
         <input asp-for="@Model.Relation" class="form-control">
     </div>
 </div>
+<button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+<button type="reset" id="ecancel" name="ecancel" class="btn btn-primary m-t-15 waves-effect">Cancel</button>
 <input type="hidden" asp-for="@Model.Id" />
 <input type="hidden" asp-for="@Model.PersonId" />
 <input type="hidden" asp-for="@Model.CreatedDate" />

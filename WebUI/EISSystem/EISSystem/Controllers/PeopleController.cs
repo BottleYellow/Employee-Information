@@ -211,6 +211,7 @@ namespace EIS.WebApp.Controllers
                 return NotFound();
             }
             ViewBag.Designations = rolesList;
+          
             var data1 = from p in EmployeeData()
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
@@ -261,6 +262,11 @@ namespace EIS.WebApp.Controllers
                     }
                     person.IsActive = true;
                     HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl+"/api/employee/" + id + "", person );
+                    if (id == Convert.ToInt32(Cache.GetStringValue("PersonId")))
+                    {
+                        Cache.DeleteStringValue("EmployeeCode");
+                        Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+                    }
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -494,7 +500,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Permanent Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePermanentAddress(int pid, string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
+        public IActionResult CreatePermanentAddress(int pid,string EmployeeCode ,[Bind("Address,City,State,Country,PinCode,PhoneNumber")]Permanent permanent)
         {
 
             permanent.PersonId = pid;
@@ -539,7 +545,6 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateCurrentAddress(int pid, string EmployeeCode, [Bind("Address,City,State,Country,PinCode,PhoneNumber")]Current current)
         {
-
             current.PersonId = pid;
             current.CreatedDate = DateTime.Now.Date;
             current.UpdatedDate = DateTime.Now.Date;
@@ -554,8 +559,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Current Address")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditCurrentAddress(int pid, string EmployeeCode, Current current)
+        public IActionResult EditCurrentAddress(int pid,string EmployeeCode, Current current)
         {
+            current.PersonId = pid;
             current.UpdatedDate = DateTime.Now.Date;
             current.IsActive = true;
             if (ModelState.IsValid)
