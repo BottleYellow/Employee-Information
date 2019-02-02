@@ -218,14 +218,14 @@
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').show();
                 $("#inputweek").datetimepicker({
-                    format: 'DD/MM/YYYY'
+                    format: "MMM/DD/YYYY"
                 });
             }
         });
         $('#inputweek').on('dp.change', function (e) {
             var value = $("#inputweek").val();
-            var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-            var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+            var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
+            var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
             $("#inputweek").val(firstDate + " - " + lastDate);
         });
         $('#generateReport').on('click', function () {
@@ -253,8 +253,8 @@
             }
             else if (v == 'week') {
                 var value = $("#inputweek").val();
-                var firstDate = moment(value, "DD/MM/YYYY").day(0).format("DD/MM/YYYY");
-                var lastDate = moment(value, "DD/MM/YYYY").day(6).format("DD/MM/YYYY");
+                var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
+                var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
                 generateReport(firstDate + " - " + lastDate, 'week');
                 totalDays = 7;
@@ -360,7 +360,10 @@
                     },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
+                            if (data == null || (row.TimeIn == row.TimeOut)) {
+                                return "-";
+                            } else 
+                               
                             data = moment(data, "HH:mm:ss").format("HH:mm:ss");
                             return data;
                         }

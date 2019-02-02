@@ -23,7 +23,7 @@ namespace EIS.Repositories.Repository
                     p,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year)
                 });
-                
+
             foreach (var x in results)
             {
                 x.p.Attendance = x.Attendances.ToList();
@@ -31,11 +31,11 @@ namespace EIS.Repositories.Repository
             var result = results.Select(x => x.p);
             return result;
         }
-       
+
         public IQueryable<Person> GetAttendanceMonthly(int month, int year)
         {
 
-            var results = _dbContext.Person.Include(x=>x.Role).Where(x=>x.Role.Name!="Admin")
+            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
                 .Select(p => new
                 {
                     p,
@@ -55,14 +55,14 @@ namespace EIS.Repositories.Repository
               .Select(p => new
               {
                   p,
-                  Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn<= endOfWeek)
+                  Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
               });
             foreach (var x in results)
             {
                 x.p.Attendance = x.Attendances.ToList();
             }
             var result = results.Select(x => x.p);
-            
+
             return result;
         }
 
@@ -94,7 +94,7 @@ namespace EIS.Repositories.Repository
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
                 var hour = timeOut - timeIn;
                 DateTime avgHours = DateTime.Today.Add(hour);
-                attendanceReport.AverageTime = hour.Hours.ToString()+":"+hour.Minutes.ToString();
+                attendanceReport.AverageTime = hour.Hours.ToString() + ":" + hour.Minutes.ToString();
             }
             return attendanceReport;
         }
@@ -106,60 +106,33 @@ namespace EIS.Repositories.Repository
             {
                 Attendance newlist = new Attendance();
                 newlist.DateIn = date;
-                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut,x.TotalHours }).FirstOrDefault();
+                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
                 if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                 {
                     newlist.TimeIn = new TimeSpan();
                     newlist.TimeOut = new TimeSpan();
                     newlist.IsActive = false;
-                    newlist.TotalHours= new TimeSpan();
+                    newlist.TotalHours = new TimeSpan();
                 }
                 else
                 {
                     newlist.TimeIn = attendance.TimeIn;
                     newlist.TimeOut = attendance.TimeOut;
                     newlist.IsActive = true;
-                    newlist.TotalHours = attendance.TotalHours;
-                }
-                attendances.Add(newlist);
-            }
-            IEnumerable<Attendance> attendancelist = attendances;
-            return  attendancelist;
-        }
-
-        public IEnumerable<Attendance> GetAttendanceDateWise(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData)
-        {
-            IList<Attendance> attendances = new List<Attendance>();
-            for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
-            {
-                Attendance newlist = new Attendance();
-                newlist.DateIn = date;
-
-                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-
-                if (attendance == null || attendance.TimeIn == attendance.TimeOut)
-                {
-                    if (date < DateTime.Now.Date)
+                    if (newlist.TotalHours == null)
                     {
-
-                        newlist.TimeIn = new TimeSpan();
-                        newlist.TimeOut = new TimeSpan();
-                        newlist.IsActive = false;
                         newlist.TotalHours = new TimeSpan();
-
                     }
-                }
-                else
-                {
-                    newlist.TimeIn = attendance.TimeIn;
-                    newlist.TimeOut = attendance.TimeOut;
-                    newlist.IsActive = true;
-                    newlist.TotalHours = attendance.TotalHours;
+                    else
+                    {
+                        newlist.TotalHours = attendance.TotalHours;
+                    }
+
                 }
                 attendances.Add(newlist);
             }
             IEnumerable<Attendance> attendancelist = attendances;
-                return attendancelist;
-            }
+            return attendancelist;
         }
+    }
 }

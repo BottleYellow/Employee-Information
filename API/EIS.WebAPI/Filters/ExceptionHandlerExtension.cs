@@ -75,7 +75,7 @@ namespace EIS.WebAPI.ExceptionHandle
 
             context.Response.ContentType = "application/json";
 
-            return context.Response.WriteAsync("An unexpected fault happened. Status Code: " +code+" occurred<br/> Status:- "+ status + " occurred. Message :" + message);
+            return context.Response.WriteAsync("An unexpected fault happened. Status Code: " +code+ " occurred \n Status:- " + status + " occurred.\n Message :" + message);
         }
     }
 }
