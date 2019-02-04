@@ -71,7 +71,7 @@ namespace EIS.WebAPI
                     options => options.SerializerSettings.ReferenceLoopHandling
                         = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddHangfire(config =>
-                config.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+                config.UseSqlServerStorage(Configuration.GetConnectionString("HangFireConnection")));
             services.AddScoped<IGenerateMonthlyAttendanceReport, GenerateMonthlyAttendanceReport>();
 
         }
