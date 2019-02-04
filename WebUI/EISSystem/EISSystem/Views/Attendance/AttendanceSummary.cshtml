@@ -237,7 +237,13 @@
                 });
             }
             else if (v == 'week') {
-                $("#inputweek").val("DEC/30/2018-JAN/05/2019");
+                var fd = getSunday(new Date());
+                var ld = new Date();
+                ld.setDate(fd.getDate() + 6);
+                var firstDate = moment(fd, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
+                var lastDate = moment(ld, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
+                var weekstring = firstDate + '-' + lastDate;
+                $("#inputweek").val(weekstring);
                 $('#inputmonthdiv').hide();
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').show();
@@ -246,6 +252,12 @@
                 });
             }
         });
+        function getSunday(d) {
+            d = new Date(d);
+            var day = d.getDay(),
+                diff = d.getDate() - day /*+ (day == 0 ? -6 : 1)*/; // adjust when day is sunday
+            return new Date(d.setDate(diff));
+        }
         $('#inputweek').on('dp.change', function (e) {
             var value = $("#inputweek").val();
             var firstDate = moment(value,"MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");

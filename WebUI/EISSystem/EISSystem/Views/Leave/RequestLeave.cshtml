@@ -24,6 +24,19 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 50%;
+                left: 50%;
+            }
     </style>
     @**@<!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
@@ -31,6 +44,9 @@
     <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/ajax-loader.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Request For Leave"></HeaderWithButton>
@@ -57,7 +73,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <div style="width:125px;" class="form-line">
-                                            <input class="form-control" type="text" id="date1" asp-for="FromDate" value="@DateTime.Now" onchange="FunDate1();" disabled />
+                                            <input class="form-control" type="text" id="date1" asp-for="FromDate" disabled />
                                             @*<input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control" disabled>*@
                                         </div>
                                     </div>
@@ -66,7 +82,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <div style="width:125px;" class="form-line">
-                                            <input class="form-control" type="text" id="date2" asp-for="ToDate" value="@DateTime.Now" onchange="FunDate2();" disabled />
+                                            <input class="form-control" type="text" id="date2" asp-for="ToDate" disabled />
                                             @*<input id="date2" asp-for="ToDate" type="date" onchange="FunDate2();" class="form-control" disabled>*@
                                         </div>
                                     </div>
@@ -98,10 +114,6 @@
     <script src="~/plugins/autosize/autosize.js"></script>
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
 
-
-
-    <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-
     <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
     <script src="~/plugins/momentjs/moment.js"></script>
@@ -117,12 +129,19 @@
 </html>
 
 <script>
-    $('#date1').datetimepicker({
-        format: "DD/MMM/YYYY"
-    });
-    $('#date2').datetimepicker({
-        format: "DD/MMM/YYYY"
-    });
+    $(document).ready(function () {
+        var d = new Date();
+        d.setDate(d.getDate() + 1);
+        $('#date1').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: d
+        });
+        $('#date2').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: d
+        });
+    })
+
     $('#date1').on('dp.change', function (e) {
         var x = document.getElementById("date1").value;
         var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
@@ -137,6 +156,7 @@
             $("#date2").val('');
         }
     });
+  
     $('#date2').on('dp.change', function (e) {
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
@@ -180,12 +200,12 @@
             var d = form.serialize();
             //var url1 = "/Leave/RequestLeave";
             $.ajax({
-                url: '@Url.Action("RequestLeave", "Leave")?data='+d,
+                url: '@Url.Action("RequestLeave", "Leave")',
                 type: 'POST',
-                //beforeSend: function () {
-                //    $('.ajax-loader').css("visibility", "visible");
-                //},
-                //data: d,
+                data: d,
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
                 success: function (data) {
                     bootbox.alert({
                         message: "Request Submitted Successfully!",
@@ -194,9 +214,9 @@
                         }
                     });
                 },
-                //complete: function () {
-                //    $('.ajax-loader').css("visibility", "hidden");
-                //},
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                },
                 error: function (data) {
                     alert(data.responseText);
                 }
@@ -238,44 +258,7 @@
         });
 
     }
-    function FunDate1() {
-        var x = document.getElementById("date1").value;
-        var d = new Date();
-        $("#date2").val('');
-        $("#btnSubmit").prop("disabled", true);
-        if (new Date(x) <= d) {
-            bootbox.alert({
-                message: "Please select valid date."
-            });
-            $("#date1").val('');
-            $("#date2").val('');
-        }
-    }
-    function FunDate2() {
-        var d1 = document.getElementById("date1").value;
-        var d2 = document.getElementById("date2").value;
-        var diff = new Date(new Date(d2) - new Date(d1));
-        var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (new Date(d1) > new Date(d2))
-        {
-            bootbox.alert({
-                message: "Please select valid date"
-            });
-            $("#date2").val('');
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else if (parseInt(days) > parseInt(availableLeaves)) {
-            bootbox.alert({
-                message: "You can request leave for only " + availableLeaves + " days."
-            });
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else {
-            $("#trd").val(days);
-            $("#av").val(availableLeaves);
-            $("#btnSubmit").removeAttr('disabled');
-        }
-    }
+
 
 </script>
 
