@@ -229,6 +229,7 @@ namespace EIS.WebApp.Controllers
             {
                 try
                 {
+                    person.UpdatedDate = DateTime.Now;
                     var rootPath = _environment.WebRootPath;
                     var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                     if (!Directory.Exists(rootPath + "//EmployeeData//"))
