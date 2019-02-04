@@ -212,12 +212,14 @@
         });
 
         function generateReport(value, type) {
+     
       $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }).DataTable();
+            $('#example').DataTable().destroy();
+        $('#example tbody').empty();
             var dTable = $('#example').DataTable({
-                destroy: true,
                 sDom: '<"myexport"B>ifrtlp',
                 "processing": true, // for show progress bar
                 "serverSide": true, // for process server side

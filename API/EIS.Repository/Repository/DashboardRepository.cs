@@ -113,20 +113,25 @@ namespace EIS.Repositories.Repository
                 int count = 0;
                 for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
                 {
-                    Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
+                   IEnumerable<Attendance> attendances = data.Where(x => x.DateIn == date);
+
+                CalendarData calendarData1 = new CalendarData();
+                calendarData1.Title = "Present Count-" + attendances.Count();
+                calendarData1.StartDate = date;
+                calendarData1.EndDate = date;
+                calendarData1.Color = "Green";
+                calendarData1.IsFullDay = true;
+                StringBuilder sb = new StringBuilder();
+                foreach (var d in attendances)
+                { 
                     if (d != null)
                     {
-                        CalendarData calendarData = new CalendarData();
-                        calendarData.Title = d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")";
-                        calendarData.Description = "Working Hours:-" + d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm");
-                        calendarData.StartDate = d.DateIn;
-                        calendarData.EndDate = d.DateOut.GetValueOrDefault(new DateTime());
-                        calendarData.Color = "Green";
-                        calendarData.IsFullDay = true;
-
-                    calendarDataList.Add(calendarData);
+                        sb.AppendLine("<br/>");
+                        sb.AppendLine(d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-"+d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));                             
+                    }
                 }
-
+                calendarData1.Description = sb.ToString();
+                calendarDataList.Add(calendarData1);
                 LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
                 if (leavereq != null)
                 {
