@@ -111,9 +111,11 @@ namespace EIS.Repositories.Repository
             DateTime beginDate = _dbContext.Roles.Where(x => x.Name == "Admin").FirstOrDefault().CreatedDate;
                 DateTime stopDate = DateTime.Now.AddYears(1);
                 int count = 0;
-                for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            {
+                IEnumerable<Attendance> attendances = data.Where(x => x.DateIn == date);
+                foreach (var d in attendances)
                 {
-                    Attendance d = data.Where(x => x.DateIn == date).FirstOrDefault();
                     if (d != null)
                     {
                         CalendarData calendarData = new CalendarData();
@@ -124,7 +126,8 @@ namespace EIS.Repositories.Repository
                         calendarData.Color = "Green";
                         calendarData.IsFullDay = true;
 
-                    calendarDataList.Add(calendarData);
+                        calendarDataList.Add(calendarData);
+                    }
                 }
 
                 LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
