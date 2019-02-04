@@ -171,7 +171,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
-                                                <input id="doj" class="form-control" type="text" value="@DateTime.Now" asp-for="JoinDate" />
+                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" />
 
                                             </div>
                                             <span asp-validation-for="JoinDate" class="text-danger"></span>
@@ -261,15 +261,20 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 @*<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>*@
-<SCRIPT type="text/javascript">
-    $('#dob').datetimepicker({
-        format: "DD-MMM-YYYY"
-    });
-    $('#doj').datetimepicker({
-        format: "DD-MMM-YYYY"
-    });
+<script>
+    $(document).ready(function () {
+        var d = new Date();
+        $('#dob').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: new Date(1990,0,1)
+        });
+        $('#doj').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: d
+        });
+    })
+  
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
     }
@@ -306,5 +311,5 @@
         }
 
     }
-</SCRIPT>
+</script>
 

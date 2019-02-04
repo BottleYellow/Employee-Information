@@ -101,8 +101,7 @@ namespace EIS.WebApp.Controllers
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
             ViewBag.Dob = DateTime.Now.ToShortDateString();
-            Person per = new Person() { DateOfBirth = new DateTime(1990, 01, 01) };
-            return View(per);
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
