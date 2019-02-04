@@ -44,10 +44,6 @@ namespace EIS.WebAPI
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));    
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AttendanceValidator>());
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddMvc(options =>
-            {
-                options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
-            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IControllerService, ControllerService>();
             services.AddMvc(options =>
