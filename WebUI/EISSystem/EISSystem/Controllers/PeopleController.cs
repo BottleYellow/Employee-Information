@@ -71,19 +71,25 @@ namespace EIS.WebApp.Controllers
             ViewBag.ImagePath = data.Image;
             ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
-            ViewBag.TimeIn = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
-            ViewBag.TimeOut = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
-            ViewBag.TotalHrs = (attendance == null) ? new TimeSpan(0, 0, 0) : attendance.TotalHours;
-            if (attendance == null)
+            ViewBag.TimeIn = new TimeSpan(0, 0, 0);
+            ViewBag.TimeOut = new TimeSpan(0, 0, 0);
+            ViewBag.TotalHrs = new TimeSpan(0, 0, 0);
+            ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
+            if (attendance != null)
             {
-                ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
+                ViewBag.TimeIn = (attendance.TimeIn == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
+                ViewBag.TimeOut = (attendance.TimeOut == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
+                ViewBag.TotalHrs = (attendance.TotalHours == null) ? new TimeSpan(0, 0, 0) : attendance.TotalHours;
+                if (attendance.TimeIn == null)
+                {
+                    ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
+                }
+                else
+                {
+                    var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
+                    ViewBag.EstimatedTimeOut = estTimeOut;
+                }
             }
-            else
-            {
-                var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
-                ViewBag.EstimatedTimeOut = estTimeOut;
-            }
-
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };
             var cur = new Current() { PersonId = data.Id };
@@ -451,7 +457,7 @@ namespace EIS.WebApp.Controllers
                 ViewData["Controllers"] = _controllerService.GetControllers();
                 return View(viewModel);
             }
-            string stringData = _services.Roles.GetResponse(ApiUrl+"/api/Employee/Designations/" + id + "" ).Content.ReadAsStringAsync().Result;
+            string stringData = _services.Roles.GetResponse(ApiUrl+"api/Employee/Designations/" + id + "" ).Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
             role.Name = viewModel.Name;
             role.UpdatedDate = DateTime.Now.Date;
@@ -494,7 +500,7 @@ namespace EIS.WebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"/api/Employee/UpdateDesignation", role );
+                HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"api/Employee/UpdateDesignation", role );
                 if (GetSession().Role == role.Name)
                 {
                     string CookieJson = JsonConvert.SerializeObject(GetSession());
