@@ -12,7 +12,7 @@
     string cookiesdata = Context.Session.GetString("CookieData");
 
     CookieModel cookies = new CookieModel();
-    if (cookies != null)
+    if (cookiesdata != null)
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
@@ -67,7 +67,7 @@
                         <div class="content-area">
                             <h3>@ViewBag.Name</h3>
                             <div class="profile"><label class="profilelable">Designation : </label> @Html.DisplayFor(model => model.Role.Name)</div>
-                            <div class="profile"><label class="profilelable">Email Id :</label> @Html.DisplayFor(model => model.EmailAddress)</div>
+                            <div class="profile"><label class="profilelable">Email :</label> @Html.DisplayFor(model => model.EmailAddress)</div>
                             <div class="profile"><label class="profilelable">DOB :</label> @Html.DisplayFor(model => model.DateOfBirth)</div>
                             <div class="profile"><label class="profilelable">Mobile No. :</label> @Html.DisplayFor(model => model.MobileNumber)</div>
                             <div class="profile"><label class="profilelable">Gender :</label> @Html.DisplayFor(model => model.Gender)</div>

@@ -293,15 +293,19 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
-    $("#dob").focusin(function () {
+    $(document).ready(function () {
+        var d1 = document.getElementById("dob").value;
+        var d2 = document.getElementById("doj").value;
+        var dob = moment(d1, "DD/MM/YYYY").format("DD/MMM/YYYY");
+        var doj = moment(d2, "DD/MM/YYYY").format("DD/MMM/YYYY");
         $('#dob').datetimepicker({
-            format: "DD-MMM-YYYY"
+            format: "DD/MMM/YYYY"
         });
-    })
-    $("#doj").focusin(function () {
         $('#doj').datetimepicker({
-            format: "DD-MMM-YYYY"
+            format: "DD/MMM/YYYY"
         });
+        $('#dob').val(dob);
+        $('#doj').val(doj);
     })
     $(document).ready(function () {
         $('#my-button').click(function () {

@@ -92,7 +92,12 @@
                         });                    
                     },
                     error: function (data) {
-                        alert(data);
+                        bootbox.alert({
+                            message: 'Error',
+                            callback: function () {
+                                window.parent.location.reload();
+                            }
+                        }); 
 
                     }
                 });
