@@ -73,15 +73,14 @@
 <script>
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
+        debugger;
         var id = $(this).attr("id");
         var message = "<h4>Do you want to delete this record ?</h4>"
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
                     type: "GET",
-                    //url: '/People/DeleteConfirmed?id=' + id,
-                    url:"@Url.Action("DeleteConfirmed", "People")?id=" + id,
-                    data: null,
+                    url: '@Url.Action("DeleteConfirmed", "People")?id=' + id,
                     success: function () {
                         bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
                             location.href = '@Url.Action("Index", "People")';
@@ -98,15 +97,15 @@
         var message = "<h4>Do you want to activate Employee record ?</h4>"
         bootbox.confirm(message, function (result) {
             if (result == true) {
-        $.ajax({
-            type: "GET",
-            url:'@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
-            data: null,
-            success: function () {
-                bootbox.alert("<h4>Record activated successfully!</h4>", function () {
-                    location.href = '@Url.Action("Index", "People")';
-                });
-            }
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
+                    data: null,
+                    success: function () {
+                        bootbox.alert("<h4>Record activated successfully!</h4>", function () {
+                            location.href = '@Url.Action("Index", "People")';
+                        });
+                    }
                 });
             }
         });
@@ -236,4 +235,4 @@
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
 
-<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

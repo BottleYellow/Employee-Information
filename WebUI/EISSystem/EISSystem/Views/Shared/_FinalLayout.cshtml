@@ -23,7 +23,7 @@
     string cookiesdata = Context.Session.GetString("CookieData");
 
     CookieModel cookies = new CookieModel();
-    if (cookies != null)
+    if (cookiesdata != null)
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }

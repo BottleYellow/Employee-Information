@@ -1,9 +1,6 @@
-﻿using EIS.Entities.OtherEntities;
-using EIS.Repositories.IRepository;
+﻿using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
 
 namespace EIS.WebAPI.Controllers
 {

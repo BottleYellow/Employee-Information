@@ -43,11 +43,11 @@ namespace EIS.WebAPI.Controllers.Dashboard
             return Ok(dashboard);
         }
 
-        [Route("CalendarData")]
+        [Route("CalendarData/{startDate}/{endDate}")]
         [HttpGet]
-        public IActionResult GetCalendarData()
+        public IActionResult GetCalendarData([FromRoute]string startDate, [FromRoute]string endDate)
         {
-            List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails();
+            List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
             return Ok(calendarDataList);
         }
     }

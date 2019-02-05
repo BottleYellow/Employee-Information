@@ -7,7 +7,7 @@
     RedisAgent Cache = new RedisAgent();
     string cookiesdata = Context.Session.GetString("CookieData");
     CookieModel cookies = new CookieModel();
-    if (cookies != null)
+    if (cookiesdata != null)
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
@@ -184,8 +184,8 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
 @*<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>*@
-<script src="../../plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="../../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>

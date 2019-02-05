@@ -8,7 +8,11 @@
     <link href="~/Ems/css/fullcalendar.min.css" rel="stylesheet" />
     <!-- qTip -->
     <link href="~/Ems/css/jquery.qtip.min.css" rel="stylesheet" />
-
+    <style>
+        .fc-other-month .fc-day-number {
+            display: none;
+        }
+    </style>
 </head>
 <div class="container-fluid">
     <div class="block-header">
@@ -58,33 +62,7 @@
 
 <script>
     $(document).ready(function () {
-        var events = [];
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetFullCalendar", "Dashboard")',
-            success: function (data) {
-                $.each(data, function (i, v) {
-                    events.push({
-                        title: v.Title,
-                        description: v.Description,
-                        start: moment(v.StartDate).format('YYYY-MM-DD'),
-                        end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
-                        color: v.Color,
-                        allDay: v.IsFullDay
-                    });
-                });
-
-                GenerateCalendar(events);
-            },
-            error: function (error) {
-                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-            }
-        });
-
-        function GenerateCalendar(events) {
-            $('#calendar').fullCalendar('destroy');
-            $('#calendar').fullCalendar({
-                showNonCurrentDates: false,
+        $('#calendar').fullCalendar({
                 contentHeight: 700,
                 defaultDate: new Date(),
                 defaultView: 'month',
@@ -94,9 +72,42 @@
                     right: 'month,basicWeek,basicDay,agenda'
 
                 },
-                eventLimit: true,
-                eventColor: '#378006',
-                events: events,
+            viewRender: function (view, element) {     
+               
+                    intervalStart = view.intervalStart;
+                    intervalEnd = view.intervalEnd;
+            },
+
+            events: function (start, end, timezone, callback) {   
+                var events = [];
+                    var startDate = intervalStart.format("YYYY-MM-DD");
+                    var endDate = intervalEnd.format("YYYY-MM-DD");                
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetFullCalendar", "Dashboard")',
+                    data: {
+                        "intervalStart": startDate,
+                        "intervalEnd": endDate
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            events.push({
+                                title: v.Title,
+                                description: v.Description,
+                                start: moment(v.StartDate).format('YYYY-MM-DD'),
+                                end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
+                                color: v.Color,
+                                allDay: v.IsFullDay
+                            });
+                        });
+                        callback(events);
+
+                    },
+                    error: function (error) {
+                        bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+                    }
+                });
+                },        
                 eventRender: function (event, element) {
 
                     element.qtip(
@@ -117,9 +128,7 @@
 
                     $('#myModal').modal();
                 }
-
             });
-        }
     });
 
 </script>

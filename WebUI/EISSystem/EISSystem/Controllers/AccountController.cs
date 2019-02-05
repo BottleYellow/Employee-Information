@@ -1,19 +1,13 @@
-﻿using EIS.Entities.User;
-using EIS.WebApp.IServices;
-using EIS.WebApp.Services;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using EIS.Entities.Employee;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
-using System.Collections.Generic;
+﻿using EIS.Entities.Employee;
 using EIS.Entities.OtherEntities;
+using EIS.Entities.User;
+using EIS.WebApp.IServices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Net.Http;
 
 namespace EIS.WebApp.Controllers
 {
@@ -37,7 +31,6 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult Login(Users user)
         {
-            string pid = "";
             string EmployeeCode = "";
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)
