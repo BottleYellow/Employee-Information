@@ -183,7 +183,7 @@
             $("#btnSubmit").removeAttr('disabled');
         }
     });
-    var availableLeaves;
+    var availableLeaves = null;
     $(document).ready(function () {
         @if (ViewBag.ListOfPolicy==null)
         {
@@ -194,6 +194,14 @@
         }
     });
     $('#btnSubmit').click(function () {
+        var av = document.getElementById("av").value;
+        alert(av);
+        if (av == '') {
+            var trd = document.getElementById("trd").value;
+            alert(trd);
+            availableLeaves = availableLeaves - trd;
+            $("#av").val(availableLeaves);
+        }
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
