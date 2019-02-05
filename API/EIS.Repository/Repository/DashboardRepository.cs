@@ -32,11 +32,11 @@ namespace EIS.Repositories.Repository
             {
                 attendance = _dbContext.Attendances.ToList();
             }
-            var employees = _dbContext.Person.Include(x=>x.Attendance).Include(x=>x.Role).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin").AsQueryable();
+            var employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin").AsQueryable();
             var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x=>x.Role).Where(x=>x.Role.Name!="Admin" && x.IsActive==true).ToList();
+            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true).ToList();
             int pcount = 0;
-            foreach(var pa in employees)
+            foreach (var pa in employees)
             {
                 foreach (var a in pa.Attendance)
                 {
@@ -52,7 +52,7 @@ namespace EIS.Repositories.Repository
                 PresentEmployees = pcount,
                 AbsentEmployees = employees.Count() - pcount,
                 PendingLeavesCount = leaves,
-                Employees=EmployeesWithAttendance
+                Employees = EmployeesWithAttendance
             };
             return dashboard;
         }
@@ -74,64 +74,63 @@ namespace EIS.Repositories.Repository
             }
             ManagerDashboard dashboard = new ManagerDashboard
             {
-            
+
             };
 
 
             return dashboard;
         }
-        public EmployeeDashboard GetEmployeeDashboard(int TenantId,int PersonId)
+        public EmployeeDashboard GetEmployeeDashboard(int TenantId, int PersonId)
         {
             int currentMonth = new DateTime().Month;
             int currentYear = new DateTime().Year;
             int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
-            var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month==currentMonth&& x.DateIn.Year==currentYear);
+            var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month == currentMonth && x.DateIn.Year == currentYear);
             var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);
             var availableLeaves = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId).Sum(x => x.Available);
 
             EmployeeDashboard dashboard = new EmployeeDashboard
             {
                 MonthlyPresentDays = attendance.Count(),
-                MonthlyAbsentDays= TotalDays - attendance.Count(),
-                TotalLeavesAvailable= Convert.ToInt32(availableLeaves),
-                TotalLeavesTaken=Convert.ToInt32(leaves)
+                MonthlyAbsentDays = TotalDays - attendance.Count(),
+                TotalLeavesAvailable = Convert.ToInt32(availableLeaves),
+                TotalLeavesTaken = Convert.ToInt32(leaves)
             };
             return dashboard;
         }
-               
 
-       public List<CalendarData> GetCalendarDetails()
-        {          
+
+        public List<CalendarData> GetCalendarDetails(DateTime beginDate, DateTime stopDate)
+        {
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = _dbContext.Holidays.ToList();
             IEnumerable<LeaveRequest> leaveList = _dbContext.LeaveRequests.ToList();
-
             IEnumerable<Attendance> data = _dbContext.Attendances.Include(x => x.Person).ToList();
-
-            DateTime beginDate = _dbContext.Roles.Where(x => x.Name == "Admin").FirstOrDefault().CreatedDate;
-                DateTime stopDate = DateTime.Now.AddYears(1);
-                int count = 0;
-                for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            int count = 0;
+            for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            {
+                IEnumerable<Attendance> attendances = data.Where(x => x.DateIn == date);
+                if (attendances.Count() != 0)
                 {
-                   IEnumerable<Attendance> attendances = data.Where(x => x.DateIn == date);
-
-                CalendarData calendarData1 = new CalendarData();
-                calendarData1.Title = "Present Count-" + attendances.Count();
-                calendarData1.StartDate = date;
-                calendarData1.EndDate = date;
-                calendarData1.Color = "Green";
-                calendarData1.IsFullDay = true;
-                StringBuilder sb = new StringBuilder();
-                foreach (var d in attendances)
-                { 
-                    if (d != null)
+                    CalendarData calendarData1 = new CalendarData();
+                    calendarData1.Title = "Present Count:" + attendances.Count();
+                    calendarData1.StartDate = date;
+                    calendarData1.EndDate = date;
+                    calendarData1.Color = "Green";
+                    calendarData1.IsFullDay = true;
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var d in attendances)
                     {
-                        sb.AppendLine("<br/>");
-                        sb.AppendLine(d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-"+d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));                             
+                        if (d != null)
+                        {
+                            sb.AppendLine("<br/>");
+                            sb.AppendLine(d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                        }
                     }
+                    calendarData1.Description = sb.ToString();
+                    calendarDataList.Add(calendarData1);
                 }
-                calendarData1.Description = sb.ToString();
-                calendarDataList.Add(calendarData1);
+
                 LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
                 if (leavereq != null)
                 {
@@ -204,9 +203,9 @@ namespace EIS.Repositories.Repository
                 }
 
             }
-            return calendarDataList;           
+            return calendarDataList;
         }
 
-    
+
     }
 }

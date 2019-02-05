@@ -53,7 +53,7 @@
 <body id="body" name="body">
     <div class="container-fluid">
         <div class="row clearfix">
-            <input id="InTime" type="hidden" value="@ViewBag.TimeIn.ToString(@"hh\:mm\:ss")" />
+            <input id="InTime" type="hidden" value="@ViewBag.TimeIn!=null?@ViewBag.TimeIn.ToString(@"hh\:mm\:ss"):'00:00:00'" />
             <input id="OutTime" type="hidden" value="@ViewBag.TimeOut.ToString(@"hh\:mm\:ss")" />
             <input id="totalHours" type="hidden" value="@ViewBag.TotalHrs.ToString(@"hh\:mm\:ss")" />
             <input id="estimatedTimeOut" type="hidden" value="@ViewBag.EstimatedTimeOut.ToString(@"hh\:mm\:ss")" />
@@ -290,8 +290,6 @@
                                                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                                                             <span><strong>Edit</strong></span>
                                                                         </button>
-                                                                    </div>
-                                                                    <div class="col-md-6">
                                                                         <button id="@item.Id" type="button" class="btn btn btn-danger waves-effect delete">
                                                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                                                             <span><strong>Delete</strong></span>
