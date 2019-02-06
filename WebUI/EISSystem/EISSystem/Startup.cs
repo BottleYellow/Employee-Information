@@ -65,7 +65,7 @@ namespace EIS.WebApp
 
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDistributedMemoryCache();
-            services.AddScoped<RedisAgent>();
+
             services.AddSession();
             services.AddTransient<IServiceWrapper, ServiceWrapper>();
             services.AddTransient(typeof(IEISService<>), typeof(EISService<>));

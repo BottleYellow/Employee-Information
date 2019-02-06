@@ -7,7 +7,6 @@
 @model EIS.Entities.Leave.LeaveRequest;
 @{
     string APIURL = MyHttpContext.APIBaseURL;
-    RedisAgent Cache = new RedisAgent();
     string cookiesdata = Context.Session.GetString("CookieData");
 
     CookieModel cookies = new CookieModel();

@@ -6,7 +6,7 @@ namespace EIS.WebAPI.Filters
 {
     public class CustomFilter : ActionFilterAttribute, IActionFilter
     {
-        RedisAgent Cache = new RedisAgent();
+
         private readonly IControllerService _controllerService;
         public CustomFilter(IControllerService controllerService)
         {

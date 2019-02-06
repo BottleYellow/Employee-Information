@@ -15,7 +15,6 @@ namespace EIS.WebApp.TagHelpers
     //[HtmlTargetElement("HeaderWithButton")]
     public class HeaderTagHelper : TagHelper
     {
-        public static RedisAgent Cache = new RedisAgent();
         public string HeaderName
         {
             get;

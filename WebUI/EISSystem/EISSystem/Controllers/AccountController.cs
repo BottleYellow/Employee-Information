@@ -37,7 +37,6 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult Login(Users user)
         {
-            string pid = "";
             string EmployeeCode = "";
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)

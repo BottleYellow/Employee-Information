@@ -3,11 +3,9 @@
 @using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
-
 @using Microsoft.AspNetCore.Http;
-@using EIS.WebApp.Services;
+
 @{
-    RedisAgent Cache = new RedisAgent();
 
     string cookiesdata = Context.Session.GetString("CookieData");
 

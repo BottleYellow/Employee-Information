@@ -20,10 +20,9 @@ namespace EIS.WebApp.Filters
 {
     public class CustomActionFilter : IActionFilter
     {
-        public RedisAgent Cache;
         public CustomActionFilter()
         {
-            Cache = new RedisAgent();
+            
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {

@@ -7,14 +7,7 @@
 
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
-    RedisAgent Cache = new RedisAgent();
-    var ac = Cache.GetStringValue("Access");
-    List<string> links = new List<string>();
-    List<Navigation> Access = new List<Navigation>();
-    if (ac != null)
-    {
-        Access = JsonConvert.DeserializeObject<List<Navigation>>(ac);
-    }
+
     string idcard = null, name = null, email = null;
     idcard=Context.Session.GetString("IdCard");
     name= Context.Session.GetString("Name");

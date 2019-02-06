@@ -19,7 +19,7 @@ namespace EIS.WebAPI.Services
     public class GenerateMonthlyAttendanceReport : IGenerateMonthlyAttendanceReport
     {
         private readonly IRepositoryWrapper _repository;
-        protected RedisAgent Cache;
+
         internal int TenantId = 0;
         protected ApplicationDbContext _dbContext;
         public readonly IConfiguration _configuration;
@@ -30,8 +30,8 @@ namespace EIS.WebAPI.Services
             _dbContext = dbContext;
             _configuration = configuration;
             _repository = repository;
-            Cache = new RedisAgent();
-            TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
+
+
         }
 
         public void EmailSentToAllEmployee()
