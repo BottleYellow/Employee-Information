@@ -6,7 +6,7 @@ namespace EIS.Repositories.IRepository
 {
     public interface ILeaveRequestRepository : IRepositorybase<LeaveRequest>
     {
-        IQueryable<PastLeaves> GetPastLeaves(int TenantId);
+        IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId);
         void AddPastLeave(PastLeaves pastLeave);
         void UpdateRequestStatus(int RequestId, string Status);
         IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);

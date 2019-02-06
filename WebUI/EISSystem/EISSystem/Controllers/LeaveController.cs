@@ -148,8 +148,12 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetPastLeaves()
         {
-            ArrayList arrayData = new ArrayList();
-            return LoadData<PastLeaves>(ApiUrl+"/api/LeaveRequest/PastLeaves",null);
+            int PersonId = 0;
+            if(GetSession().Role!="Admin")
+            {
+                PersonId = Convert.ToInt32(GetSession().PersonId);
+            }
+            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null);
 
         }
         [DisplayName("Add Past Leave")]

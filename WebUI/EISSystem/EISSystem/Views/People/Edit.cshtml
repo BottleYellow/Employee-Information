@@ -1,10 +1,11 @@
 ﻿
 @using Microsoft.Net.Http;
 @using EIS.Entities.Enums;
-@using EIS.WebApp.Services
+@using EIS.WebApp.Services;
 @using Microsoft.AspNetCore.Http;
 @using EIS.Entities.OtherEntities;
-@using Newtonsoft.Json
+@using Newtonsoft.Json;
+@using System.Globalization;
 @model EIS.Entities.Employee.Person
 @{
     string cookiesdata = Context.Session.GetString("CookieData");
@@ -310,8 +311,10 @@
     $(document).ready(function () {
         var d1 = document.getElementById("dob").value;
         var d2 = document.getElementById("doj").value;
-        var dob = moment(d1, "DD/MM/YYYY").format("DD/MMM/YYYY");
-        var doj = moment(d2, "DD/MM/YYYY").format("DD/MMM/YYYY");
+        var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
+        cultureInfo = cultureInfo.toUpperCase();
+        var dob = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+        var doj = moment(d2, cultureInfo).format("DD/MMM/YYYY");
         $('#dob').datetimepicker({
             format: "DD/MMM/YYYY"
         });

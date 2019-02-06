@@ -62,7 +62,7 @@
                                 <div class="form-group" id="LType">
                                     <label asp-for="LeaveType">Leave Type : </label>
                                     <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                                        <option>-- Select Leave Type --</option>
+                                        <option value="0">-- Select Leave Type --</option>
                                     </select>
                                     <span asp-validation-for="LeaveType" class="text-danger"></span>
                                 </div>
@@ -158,13 +158,18 @@
     });
   
     $('#date2').on('dp.change', function (e) {
+        debugger;
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
         var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var diff = new Date(new Date(d2) - new Date(d1));
         var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (new Date(d1) > new Date(d2)) {
+        if (document.getElementById("type").value == 0)
+        { 
+            $("#btnSubmit").prop("disabled", true);
+        }
+        else if (new Date(d1) > new Date(d2)) {
             bootbox.alert({
                 message: "Please select valid date"
             });
@@ -227,35 +232,37 @@
     function myFunction() {
         $("#msg").remove();
         var x = document.getElementById("type").value;
-        if (x == "-- Select Leave Type --") {
+        if (x == 0) {
             $("#date1").prop("disabled", true);
             $("#date2").prop("disabled", true);
             $("#reason").prop("disabled", true);
             $("#btnSubmit").prop("disabled", true);
         }
-        var pid = @cookies.PersonId;
-        $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-            availableLeaves = data;
-            if (data == 0) {
-                $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
-            }
-            else if (data == -1) {
-                bootbox.alert({
-                    message: "Leaves are not credited in your account."
-                });
-            }
-            else {
-                var t = $("#type option:selected").text();
-                $("#tp").val(t);
-                $("#psid").val(pid);
-                $("#typeid").val(x);
-                $("#LType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
-                $("#date1").removeAttr('disabled');
-                $("#date2").removeAttr('disabled');
-                $("#reason").removeAttr('disabled');
-            }
+        else {
+            var pid = @cookies.PersonId;
+            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+                availableLeaves = data;
+                if (data == 0) {
+                    $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
+                }
+                else if (data == -1) {
+                    bootbox.alert({
+                        message: "Leaves are not credited in your account."
+                    });
+                }
+                else {
+                    var t = $("#type option:selected").text();
+                    $("#tp").val(t);
+                    $("#psid").val(pid);
+                    $("#typeid").val(x);
+                    $("#LType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
+                    $("#date1").removeAttr('disabled');
+                    $("#date2").removeAttr('disabled');
+                    $("#reason").removeAttr('disabled');
+                }
 
-        });
+            });
+        }
 
     }
 

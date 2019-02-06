@@ -30,9 +30,9 @@ namespace EIS.Repositories.Repository
             return results;
         }
 
-        public IQueryable<PastLeaves> GetPastLeaves(int TenantId)
+        public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId)
         {
-            var result = _dbContext.PastLeaves.Where(x => x.TenantId == TenantId);
+            var result = PersonId == 0 ? _dbContext.PastLeaves.Where(x => x.TenantId == TenantId) : _dbContext.PastLeaves.Where(x => x.TenantId == TenantId && x.PersonId == PersonId);
             return result;
         }
 

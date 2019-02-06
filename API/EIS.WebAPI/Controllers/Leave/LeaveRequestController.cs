@@ -217,12 +217,12 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("PastLeaves")]
-        [Route("PastLeaves")]
+        [Route("PastLeaves/{id}")]
         [HttpPost]
-        public IActionResult GetPastLeaves([FromBody]SortGrid sortGrid)
+        public IActionResult GetPastLeaves([FromRoute]int id,[FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(TenantId);
+            IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(id, TenantId);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
