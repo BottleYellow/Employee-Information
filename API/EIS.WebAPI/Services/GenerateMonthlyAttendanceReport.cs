@@ -30,8 +30,6 @@ namespace EIS.WebAPI.Services
             _dbContext = dbContext;
             _configuration = configuration;
             _repository = repository;
-
-
         }
 
         public void EmailSentToAllEmployee()

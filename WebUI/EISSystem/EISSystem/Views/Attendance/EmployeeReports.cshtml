@@ -367,19 +367,20 @@
                     },
                     {
                         "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
+                            if (data == null || row.TimeIn == row.TimeOut) { return "-"; } else {
                             data = moment(data, "HH:mm:ss").format("hh:mm A");
-                            return data;
+                                return data;
+                            }
                         }
                     },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
                             if (data == null || (row.TimeIn == row.TimeOut)) {
                                 return "-";
-                            } else 
-                               
+                            } else {                            
                             data = moment(data, "HH:mm:ss").format("HH:mm:ss");
                             return data;
+                            }
                         }
                     }
                 ],
