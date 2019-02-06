@@ -124,7 +124,7 @@ namespace EIS.Repositories.Repository
                         if (d != null)
                         {
                             sb.AppendLine("<br/>");
-                            sb.AppendLine(d.Person.FirstName + d.Person.LastName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                            sb.AppendLine(d.Person.FullName + " (" + d.TimeIn.ToString(@"hh\:mm") + "-" + d.TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
                         }
                     }
                     calendarData1.Description = sb.ToString();

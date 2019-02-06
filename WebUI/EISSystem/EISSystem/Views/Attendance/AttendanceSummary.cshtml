@@ -4,7 +4,6 @@
 @using Microsoft.AspNetCore.Http;
 @model IEnumerable<EIS.Entities.Employee.Person>
 @{
-    RedisAgent Cache = new RedisAgent();
     string cookiesdata = Context.Session.GetString("CookieData");
     CookieModel cookies = new CookieModel();
     if (cookiesdata != null)
@@ -117,40 +116,59 @@
                                     <h4><span id="report">Attendance Report</span></h4>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2 col-sm-2">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average Hrs</div>
-                                            <div id="averageHours" class="panel-body"><span></span></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-2">
+
+                                    <div class="col-md-3 col-sm-2">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeIn</div>
                                             <div id="averageTimeIn" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
                                             <div id="averageTimeOut" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-md-3 col-sm-2">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">Average Hrs</div>
+                                            <div id="averageHours" class="panel-body"><span></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">Additional Working Hours</div>
+                                            <div id="AddtionalWorkingHours" class="panel-body">08:00</div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Present Days</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Absent Days</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Total Working Days</div>
-                                            <div id="totalDays" class="panel-body"></div>
+                                            <div id="totalWorkingDays" class="panel-body"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">Total Number Of Days</div>
+                                            <div id="totalNoOfDays" class="panel-body">31</div>
                                         </div>
                                     </div>
                                 </div>
@@ -303,7 +321,7 @@
         function generateReport(value, type, id) {
             $.ajax({
                 type: 'PUT',
-                url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                    url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -311,7 +329,8 @@
                     document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
-                    document.getElementById("totalDays").innerHTML = data.TotalDays;
+                    document.getElementById("totalWorkingDays").innerHTML = data.TotalDays;
+
                 },
                 error: function (error) {
                     bootbox.alert('<h4>Error</h4>');
@@ -323,7 +342,7 @@
             }).DataTable();
                      $('#example').DataTable().destroy();
         $('#example tbody').empty();
-            var dTable = $('#example').DataTable({         
+            var dTable = $('#example').DataTable({
                 "processing": true, // for show progress bar
                 "serverSide": true, // for process server side
                 "filter": true, // this is for disable filter (search box)
@@ -394,16 +413,20 @@
                     },
                     {
                         "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("hh:mm A");
-                            return data;
+                            if (data == null || row.TimeIn == row.TimeOut) { return "-"; } else {
+                                data = moment(data, "HH:mm:ss").format("hh:mm A");
+                                return data;
+                            }
                         }
                     },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("HH:mm");
-                            return data;
+                            if (data == null || (row.TimeIn == row.TimeOut)) {
+                                return "-";
+                            } else {
+                                data = moment(data, "HH:mm:ss").format("HH:mm:ss");
+                                return data;
+                            }
                         }
                     }
                 ],

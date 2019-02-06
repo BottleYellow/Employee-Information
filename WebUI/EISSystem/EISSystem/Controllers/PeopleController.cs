@@ -71,24 +71,19 @@ namespace EIS.WebApp.Controllers
             ViewBag.ImagePath = data.Image;
             ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
-            ViewBag.TimeIn = new TimeSpan(0, 0, 0);
-            ViewBag.TimeOut = new TimeSpan(0, 0, 0);
-            ViewBag.TotalHrs = new TimeSpan(0, 0, 0);
-            ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
             if (attendance != null)
             {
-                ViewBag.TimeIn = (attendance.TimeIn == null) ? new TimeSpan(0, 0, 0) : attendance.TimeIn;
-                ViewBag.TimeOut = (attendance.TimeOut == null) ? new TimeSpan(0, 0, 0) : attendance.TimeOut;
-                ViewBag.TotalHrs = (attendance.TotalHours == null) ? new TimeSpan(0, 0, 0) : attendance.TotalHours;
-                if (attendance.TimeIn == null)
-                {
-                    ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
-                }
-                else
-                {
-                    var estTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
-                    ViewBag.EstimatedTimeOut = estTimeOut;
-                }
+                ViewBag.TimeIn = attendance.TimeIn;
+                ViewBag.TimeOut = attendance.TimeOut.GetValueOrDefault();
+                ViewBag.TotalHrs = attendance.TotalHours.GetValueOrDefault();
+                ViewBag.EstimatedTimeOut = attendance.TimeIn + new TimeSpan(9, 0, 0);
+            }
+            else
+            {
+                ViewBag.TimeIn = new TimeSpan(0, 0, 0);
+                ViewBag.TimeOut = new TimeSpan(0, 0, 0);
+                ViewBag.TotalHrs = new TimeSpan(0, 0, 0);
+                ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
             }
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };

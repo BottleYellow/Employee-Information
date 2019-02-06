@@ -12,7 +12,7 @@ namespace EIS.WebApp.Services
 {
     public class EISService<T> : IEISService<T> where T: class
     {
-        RedisAgent Cache = new RedisAgent();
+  
         public EISService()
         {
         }
@@ -39,7 +39,7 @@ namespace EIS.WebApp.Services
                 BaseAddress = new Uri(MyHttpContext.APIBaseURL)
             };           
             MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            client.DefaultRequestHeaders.Add("Token", Cache.GetStringValue("TokenValue"));
+            client.DefaultRequestHeaders.Add("Token", "abcd");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             return client;
         }

@@ -6,8 +6,6 @@
 @{
     ViewData["Title"] = "Error";
     Layout = null;
-    RedisAgent Cache = new RedisAgent();
-    var PersonId = Cache.GetStringValue("EmployeeCode");
     string cookiesdata = Context.Session.GetString("CookieData");
 
     CookieModel cookies = new CookieModel();

@@ -12,10 +12,10 @@ namespace EIS.WebAPI.Filters
 {
     public class Authorization : AuthorizeAttribute,IAuthorizationFilter
     {
-        public RedisAgent Cache;
+
         public Authorization()
         {
-            Cache = new RedisAgent();
+
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
@@ -30,8 +30,6 @@ namespace EIS.WebAPI.Filters
                 //var Cookies = JsonConvert.DeserializeObject<CookieModel>(val);
                 //string token = filterContext.HttpContext.Request.Headers["Token"].ToString();
                 string token = "abcd";
-                string Access = Cache.GetStringValue("TokenValue");
-
                 if (token == null)
                 {
                     filterContext.Result = new UnauthorizedResult();

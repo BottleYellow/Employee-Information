@@ -13,7 +13,6 @@ namespace EIS.WebApp.TagHelpers
     //[HtmlTargetElement("HeaderWithButton")]
     public class MenuTagHelper : TagHelper
     {
-        public static RedisAgent Cache = new RedisAgent();
         public string Access
         {
             get;
