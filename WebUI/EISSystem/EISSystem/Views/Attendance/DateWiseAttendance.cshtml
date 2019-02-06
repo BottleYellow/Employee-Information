@@ -224,9 +224,12 @@
                     },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("mm:ss");
-                            return data;
+                            if (data == null || (row.TimeIn == row.TimeOut)) {
+                                return "-";
+                            } else {
+                                data = moment(data, "HH:mm:ss").format("HH:mm:ss");
+                                return data;
+                            }
                         }
                     }
                 ],

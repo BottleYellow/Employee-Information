@@ -139,7 +139,7 @@
                                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Additional Working Hours</div>
-                                            <div id="totalDays" class="panel-body">08:00</div>
+                                            <div id="AddtionalWorkingHours" class="panel-body">08:00</div>
                                         </div>
                                     </div>
 
@@ -320,8 +320,8 @@
 
         function generateReport(value, type, id) {
             $.ajax({
-                type: 'PUT',               
-                url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                type: 'PUT',
+                    url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -330,7 +330,6 @@
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalWorkingDays").innerHTML = data.TotalDays;
-
 
                 },
                 error: function (error) {
@@ -343,7 +342,7 @@
             }).DataTable();
                      $('#example').DataTable().destroy();
         $('#example tbody').empty();
-            var dTable = $('#example').DataTable({         
+            var dTable = $('#example').DataTable({
                 "processing": true, // for show progress bar
                 "serverSide": true, // for process server side
                 "filter": true, // this is for disable filter (search box)
@@ -414,16 +413,20 @@
                     },
                     {
                         "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("hh:mm A");
-                            return data;
+                            if (data == null || row.TimeIn == row.TimeOut) { return "-"; } else {
+                                data = moment(data, "HH:mm:ss").format("hh:mm A");
+                                return data;
+                            }
                         }
                     },
                     {
                         "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("HH:mm");
-                            return data;
+                            if (data == null || (row.TimeIn == row.TimeOut)) {
+                                return "-";
+                            } else {
+                                data = moment(data, "HH:mm:ss").format("HH:mm:ss");
+                                return data;
+                            }
                         }
                     }
                 ],
