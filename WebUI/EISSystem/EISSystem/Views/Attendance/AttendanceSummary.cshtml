@@ -320,8 +320,8 @@
 
         function generateReport(value, type, id) {
             $.ajax({
-                type: 'PUT',
-                url:'@Url.Action("GetAttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                type: 'PUT',               
+                url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -330,7 +330,7 @@
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalWorkingDays").innerHTML = data.TotalDays;
-                    document.getElementById("totalNoOfDays").innerHTML = data.TotalDays;
+
 
                 },
                 error: function (error) {
