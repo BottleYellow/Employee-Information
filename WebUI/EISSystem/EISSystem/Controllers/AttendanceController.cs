@@ -124,7 +124,6 @@ namespace EIS.WebApp.Controllers
         {
             Attendance attendance = new Attendance();
             int id = Convert.ToInt32(GetSession().PersonId);
-            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
                 HttpClient client = _service.GetService();
@@ -194,19 +193,21 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl+"/api/Attendances/GetYearlyAttendanceSummaryById/" + id + "/" + monthYear[0];
+                url = ApiUrl + "/api/Attendances/GetYearlyAttendanceSummaryById/" + id + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = ApiUrl+"/api/Attendances/GetMonthlyAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
+                url = ApiUrl + "/api/Attendances/GetMonthlyAttendanceSummaryById/" + id + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")
-            {
-
-                DateTime startDate = Convert.ToDateTime(week[0]);
-                DateTime endDate =  Convert.ToDateTime(week[1]);
-                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("MMM-dd-yyyy")+ "/" + endDate.ToString("MMM-dd-yyyy");
+            {      
+                if (!string.IsNullOrEmpty(week[0]) && !string.IsNullOrEmpty(week[1]))
+                {
+                    DateTime startDate = Convert.ToDateTime(week[0]);
+                    DateTime endDate = Convert.ToDateTime(week[1]);
+                    url = ApiUrl + "/api/Attendances/GetWeeklyAttendanceSummaryById/" + id + "/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
+                }
             }
             return url;
         }
@@ -301,12 +302,13 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
         {
-            
-            string url = ApiUrl+"/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
+            string url = "";
+            if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))
+            {
+                url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
+            }
             ArrayList arrayData = new ArrayList();
             return LoadData<Attendance>(url,null);
-
-
         }
     }
 }

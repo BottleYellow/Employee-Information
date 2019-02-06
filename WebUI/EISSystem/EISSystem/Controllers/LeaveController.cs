@@ -279,11 +279,9 @@ namespace EIS.WebApp.Controllers
             {
                 Credit.IsActive = true;
                 HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl+"/api/LeaveCredit", Credit);
-                string stringData = response.Content.ReadAsStringAsync().Result;
-                LeaveCredit LeaveRules = JsonConvert.DeserializeObject<LeaveCredit>(stringData);
                 if (response.IsSuccessStatusCode == true)
-                {              
-                     return View();
+                {
+                    return RedirectToAction("LeaveCredits", "Leave");
                 }
             }
             return View("AddCredit", Credit);

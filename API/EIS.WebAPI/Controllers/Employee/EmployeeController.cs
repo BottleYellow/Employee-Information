@@ -110,10 +110,11 @@ namespace EIS.WebAPI.Controllers
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-                "Your have been successfully registered with employee system. : \n" +
+                "Your information have been successfully registered with employee system. : \n" +
                 "Your Code Number: " + person.EmployeeCode + "\n" +
                 "User Name: " + person.EmailAddress + "\n" +
-                "Password: " + pw;
+                "Password: " + pw+"\n"+
+                "Click here http://aclpune.com/ems to login";
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok();
         }
@@ -231,8 +232,9 @@ namespace EIS.WebAPI.Controllers
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-                "Your Information have been successfully activated with employee system. : \n" +
-                "User Name: " + person.EmailAddress + "\n";
+                "Your Information has been successfully activated with employee system. : \n" +
+                "User Name: " + person.EmailAddress + "\n"+
+                "Click here http://aclpune.com/ems to login";
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok();
         }

@@ -1,7 +1,20 @@
-﻿@model EIS.Entities.Employee.Person
+﻿
 @using Microsoft.Net.Http;
 @using EIS.Entities.Enums;
+@using EIS.WebApp.Services
+@using Microsoft.AspNetCore.Http;
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+@model EIS.Entities.Employee.Person
+@{
+    string cookiesdata = Context.Session.GetString("CookieData");
 
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
+}
 <style>
     #Imagediv {
         position: relative;
@@ -278,8 +291,9 @@
                                 </div>
                             </div>
                         </div><br /><br />
-                        <button type="submit" asp-action="Index" class="btn btn-primary">Back</button>
                         <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@cookies.EmployeeCode" class="btn btn-primary">Back</button>
+
                     </form>
                 </div>
             </div>
@@ -293,15 +307,19 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
-    $("#dob").focusin(function () {
+    $(document).ready(function () {
+        var d1 = document.getElementById("dob").value;
+        var d2 = document.getElementById("doj").value;
+        var dob = moment(d1, "DD/MM/YYYY").format("DD/MMM/YYYY");
+        var doj = moment(d2, "DD/MM/YYYY").format("DD/MMM/YYYY");
         $('#dob').datetimepicker({
-            format: "DD-MMM-YYYY"
+            format: "DD/MMM/YYYY"
         });
-    })
-    $("#doj").focusin(function () {
         $('#doj').datetimepicker({
-            format: "DD-MMM-YYYY"
+            format: "DD/MMM/YYYY"
         });
+        $('#dob').val(dob);
+        $('#doj').val(doj);
     })
     $(document).ready(function () {
         $('#my-button').click(function () {

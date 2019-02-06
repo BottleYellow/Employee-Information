@@ -163,7 +163,8 @@ namespace EIS.WebAPI.Controllers
             string To = username;
             string subject = "New Password";
             string body = "Hello!" +"\n"+
-                "Your new password is : " + password;
+                "Your new password is : " + password+
+                "\n"+ "Click here http://aclpune.com/ems to login";
 
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
             Users user = _repository.Users.FindByUserName(username);
