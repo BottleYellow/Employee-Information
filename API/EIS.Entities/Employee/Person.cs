@@ -14,6 +14,7 @@ namespace EIS.Entities.Employee
     {
         #region [Entities]
         public string EmployeeCode { get; set; }
+        public int LocationId { get; set; }
         public int? StreamId { get; set; }
         public string PanCard { get; set; }
         public string AadharCard { get; set; }
@@ -47,6 +48,7 @@ namespace EIS.Entities.Employee
         public virtual ICollection<Attendance> Attendance { get; set; }
         public virtual ICollection<LeaveCredit> LeaveCredits { get; set; }
         public virtual Permanent PermanentAddress { get; set; }
+        public virtual Locations Location { get; set; }
         public virtual Current CurrentAddress { get; set; }
         public virtual ICollection<Emergency> EmergencyAddress { get; set; }
         public virtual ICollection<Other> OtherAddress { get; set; }

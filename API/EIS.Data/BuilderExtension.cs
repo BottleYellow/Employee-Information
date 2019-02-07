@@ -191,6 +191,10 @@ namespace EIS.Data
                 modelBuilder.Entity<Holiday>().Property(p => p.Vacation).HasColumnType("nvarchar(100)");
                 #endregion
 
+                #region [Locations]
+                modelBuilder.Entity<Locations>().Property(p => p.LocationName).HasColumnType("nvarchar(50)").IsRequired();
+                #endregion
+
                 #region [PastLeaves]
                 modelBuilder.Entity<PastLeaves>().Property(p => p.FromDate).HasColumnType("date").IsRequired();
                 modelBuilder.Entity<PastLeaves>().Property(p => p.ToDate).HasColumnType("date").IsRequired();
@@ -320,6 +324,7 @@ namespace EIS.Data
                 modelBuilder.Entity<Configuration>().ToTable("tblConfiguration", "LMS");
                 modelBuilder.Entity<Holiday>().ToTable("tblHolidays", "LMS");
                 modelBuilder.Entity<PastLeaves>().ToTable("tblPastLeaves", "LMS");
+                modelBuilder.Entity<Locations>().ToTable("tblLocations", "LMS");
                 #endregion
             }
             catch (System.Exception ex)

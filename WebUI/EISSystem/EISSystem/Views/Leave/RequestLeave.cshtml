@@ -160,7 +160,6 @@
     });
   
     $('#date2').on('dp.change', function (e) {
-        debugger;
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
         var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
@@ -198,10 +197,8 @@
     });
     $('#btnSubmit').click(function () {
         var av = document.getElementById("av").value;
-        alert(av);
         if (av == '') {
             var trd = document.getElementById("trd").value;
-            alert(trd);
             availableLeaves = availableLeaves - trd;
             $("#av").val(availableLeaves);
         }
