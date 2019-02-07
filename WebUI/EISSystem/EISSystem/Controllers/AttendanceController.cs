@@ -56,8 +56,8 @@ namespace EIS.WebApp.Controllers
             string url = GetAttendanceByIdData(date, type, pId);
             return LoadData<Attendance>(url, null, null);
 
-        }    
-
+        }
+        [ActionName(" EmployeeReports")]
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
