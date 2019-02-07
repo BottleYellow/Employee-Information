@@ -121,6 +121,7 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult AccessDenied()
         {
+            HttpContext.Response.StatusCode = 401;
             return View();
         }
 

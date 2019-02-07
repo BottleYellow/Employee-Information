@@ -12,6 +12,6 @@ namespace EIS.Repositories.IRepository
         AdminDashboard GetAdminDashboard(int TenantId);
         ManagerDashboard GetManagerDashboard(int TenantId);
         EmployeeDashboard GetEmployeeDashboard(int TenantId,int PersonId);
-        List<CalendarData> GetCalendarDetails(DateTime beginDate, DateTime stopDate);
+        List<CalendarData> GetCalendarDetails(string location,DateTime beginDate, DateTime stopDate);
     }
 }
