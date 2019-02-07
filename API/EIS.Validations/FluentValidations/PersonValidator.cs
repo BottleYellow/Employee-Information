@@ -26,7 +26,20 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.AadharCard).Must(UniqueAadhar).WithMessage("Aadhar No already exists");
             RuleFor(x => x.PanCard).Must(UniquePan).WithMessage("Pan Card No already exists");
+            //RuleFor(x => x.RoleId).Must(NotNull).WithMessage("Please Select Role");
+            //RuleFor(x => x.LocationId).Must(NotNull).WithMessage("Please Select Location");
         }
+        //public bool NotNull(int RoleId)
+        //{
+        //    if (RoleId == 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
         public bool UniqueCode(Person obj, string EmployeeCode)
         {
             var person = _repositoryWrapper.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);

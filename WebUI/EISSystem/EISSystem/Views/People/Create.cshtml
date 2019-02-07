@@ -36,7 +36,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="LocationId">Location : </label>
+                                            <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                                <option value="0">-- Select Location --</option>
+                                            </select>
+                                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
 
@@ -140,9 +146,9 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
-                                            <label class="control-label" asp-for="RoleId">Designation : </label>
-                                            <select id="did" asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick" onchange="myFunction();">
-                                                <option>-- Select Designation --</option>
+                                            <label class="control-label" asp-for="RoleId">Role : </label>
+                                            <select id="did" asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
+                                                <option value="0">-- Select Role --</option>
                                             </select>
                                             <span asp-validation-for="RoleId" class="text-danger"></span>
                                         </div>
