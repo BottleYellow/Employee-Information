@@ -61,6 +61,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();
             services.AddTransient<IValidator<Other>, OtherAddressValidator>();
             services.AddTransient<IValidator<Holiday>, HolidayValidator>();
+            services.AddTransient<IValidator<Locations>, LocationValidator>();
             #endregion
 
             services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();

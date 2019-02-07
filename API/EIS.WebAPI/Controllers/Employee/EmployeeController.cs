@@ -88,35 +88,53 @@ namespace EIS.WebAPI.Controllers
             return n;
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody]Person person)
+        [HttpPost("{id}")]
+        public IActionResult Create([FromRoute]int id, [FromBody]Person person)
         {
-            //person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
-            if (!ModelState.IsValid)
+            if (id == 0)
             {
-                return BadRequest(ModelState);
+                //person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                person.TenantId = TenantId;
+                _repository.Employee.CreateAndSave(person);
+                Users u = new Users
+                {
+                    TenantId = TenantId,
+                    UserName = person.EmailAddress,
+                    Password = EmailManager.CreateRandomPassword(8),
+                    PersonId = person.Id
+                };
+                string pw = u.Password;
+                _repository.Users.CreateUserAndSave(u);
+                string To = person.EmailAddress;
+                string subject = "Employee Registration";
+                string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                    "Your information have been successfully registered with employee system. : \n" +
+                    "Your Code Number: " + person.EmployeeCode + "\n" +
+                    "User Name: " + person.EmailAddress + "\n" +
+                    "Password: " + pw + "\n" +
+                    "Click here http://aclpune.com/ems to login";
+                new EmailManager(_configuration).SendEmail(subject, body, To, null);
+                return Ok();
             }
-            person.TenantId = TenantId;
-            _repository.Employee.CreateAndSave(person);
-            Users u = new Users
+            else 
             {
-                TenantId = TenantId,
-                UserName = person.EmailAddress,
-                Password = EmailManager.CreateRandomPassword(8),
-                PersonId = person.Id
-            };
-            string pw = u.Password;
-            _repository.Users.CreateUserAndSave(u);
-            string To = person.EmailAddress;
-            string subject = "Employee Registration";
-            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
-                "Your information have been successfully registered with employee system. : \n" +
-                "Your Code Number: " + person.EmployeeCode + "\n" +
-                "User Name: " + person.EmailAddress + "\n" +
-                "Password: " + pw+"\n"+
-                "Click here http://aclpune.com/ems to login";
-            new EmailManager(_configuration).SendEmail(subject, body, To,null);
-            return Ok();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.Employee.UpdateAndSave(person);
+                string To = person.EmailAddress;
+                string subject = "Employee Registration";
+                string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+                    "Your Information has been successfully updated with employee system. : \n" +
+                    "User Name: " + person.EmailAddress + "\n";
+                new EmailManager(_configuration).SendEmail(subject, body, To, null);
+                return Ok(person);
+            }
         }
 
         [HttpPut("{id}")]
@@ -135,8 +153,8 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
             return Ok(person);
         }
-
-        [HttpDelete("{id}")]
+        [Route("PersonDelete/{id}")]
+        [HttpPost]
         public IActionResult Delete([FromRoute]int id)
         {
             Person person = _repository.Employee.FindByCondition(x => x.Id == id);
@@ -175,18 +193,30 @@ namespace EIS.WebAPI.Controllers
             return Ok(d.Name);
         }
         
-        [Route("AddDesignation")]
+        [Route("AddDesignation/{id}")]
         [HttpPost]
-        public IActionResult CreateDesignation([FromBody]Role designation)
+        public IActionResult CreateDesignation([FromRoute]int id,[FromBody]Role designation)
         {
-            bool DesignationExists=_repository.Employee.DesignationExists(designation.Name,TenantId);
-            if (DesignationExists)
+            if (id == 0)
             {
-                return BadRequest("Designation already Exists");
+                bool DesignationExists = _repository.Employee.DesignationExists(designation.Name, TenantId);
+                if (DesignationExists)
+                {
+                    return BadRequest("Designation already Exists");
+                }
+                designation.TenantId = TenantId;
+                _repository.Employee.AddDesignationAndSave(designation);
+                return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
             }
-            designation.TenantId = TenantId;
-            _repository.Employee.AddDesignationAndSave(designation);
-            return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
+            else
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.Employee.UpdateDesignationAndSave(designation);
+                return NoContent();
+            }
         }
         [Route("UpdateDesignation")]
         public IActionResult UpdateDesignationData([FromBody]Role designation)

@@ -1,0 +1,74 @@
+﻿@using EIS.Entities.Employee
+@model Locations
+<!-- Modal -->
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+        /*margin-left: 8px;*/
+        /*top: 7px;*/
+    }
+</style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<div id="md" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <HeaderWithButton class="modal-title" header-name="Add Location"></HeaderWithButton>
+        </div>
+        <div class="modal-body">
+            <form name="cp" id="cp" asp-action="AddLocation" asp-controller="Location" method="post">
+
+                <input type="hidden" asp-for="Id" value="0" />
+                <div class="form-group required">
+                    <label class="control-label">Location</label>
+                    <div class="form-line">
+                        <input asp-for="LocationName" class="form-control" />
+                    </div>
+
+                    <span asp-validation-for="LocationName" class="text-danger"></span>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Save</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $('#btnSubmit').click(function () {
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var d = form.serialize();
+            //var url1 = "/Holiday/AddHoliday";
+            $.ajax({
+                url: '@Url.Action("AddLocation", "Location")',
+                type: 'POST',
+                data: d,
+                success: function (data) {
+                    bootbox.alert({
+                        message: "Location Added Successfully!",
+                        callback: function () {
+                            window.parent.location.reload();
+                        }
+                    });
+                },
+                error: function (data) {
+                    $("#md").replaceWith(data.responseText);
+                }
+            });
+        }
+        return false;
+    });
+</script>

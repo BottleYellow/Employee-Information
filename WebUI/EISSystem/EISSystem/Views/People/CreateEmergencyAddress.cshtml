@@ -4,59 +4,69 @@
         <input asp-for="@Model.FirstName" class="form-control">
         <label class="form-label">First Name</label>
     </div>
+    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.LastName" class="form-control">
         <label class="form-label">Last Name</label>
     </div>
+    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.Address" class="form-control">
         <label class="form-label">Address</label>
     </div>
+    <span asp-validation-for="@Model.Address" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.City" class="form-control">
         <label class="form-label">City</label>
     </div>
+    <span asp-validation-for="@Model.City" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.State" class="form-control">
         <label class="form-label">State</label>
     </div>
+    <span asp-validation-for="@Model.State" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.Country" class="form-control">
         <label class="form-label">Country</label>
     </div>
+    <span asp-validation-for="@Model.Country" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.PinCode" class="form-control" inputmode="numeric" maxlength="6">
         <label class="form-label">Pin Code</label>
     </div>
+    <span asp-validation-for="@Model.PinCode" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
         <label class="form-label">Phone No</label>
     </div>
+    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
         <label class="form-label">Mobile Number</label>
     </div>
+    <span asp-validation-for="@Model.MobileNumber" class="text-danger"></span>
 </div>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.Relation" class="form-control">
         <label class="form-label">Relation</label>
     </div>
+    <span asp-validation-for="@Model.Relation" class="text-danger"></span>
 </div>
 <button type="submit" class="btn btn-primary m-t-15 waves-effect">Create</button>

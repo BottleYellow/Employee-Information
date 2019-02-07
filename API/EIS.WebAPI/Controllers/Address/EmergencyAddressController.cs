@@ -50,21 +50,33 @@ namespace EIS.WebAPI.Controllers
             return Ok(emergency);
         }
 
-        [DisplayName("Add Emergency Address")]
+        [Route("AddEmergency/{id}")]
         [HttpPost]
-        public IActionResult PostEmergency([FromBody] Emergency emergency)
+        public IActionResult PostEmergency([FromRoute]int id,[FromBody] Emergency emergency)
         {
-            if (!ModelState.IsValid)
+            if (id == 0)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                emergency.TenantId = TenantId;
+                _repository.EmergencyAddress.CreateAndSave(emergency);
+                return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
             }
-            emergency.TenantId = TenantId;
-            _repository.EmergencyAddress.CreateAndSave(emergency);
-            return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
+            else
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.EmergencyAddress.UpdateAndSave(emergency);
+                return Ok(emergency);
+            }
         }
 
-        [DisplayName("Delete Emergency Address")]
-        [HttpDelete("{id}")]
+        [Route("DeleteEmergency/{id}")]
+        [HttpPost("{id}")]
         public IActionResult DeleteEmergency([FromRoute] int id)
         {
             Emergency Emergency = _repository.EmergencyAddress.FindByCondition(addr => addr.Id == id);

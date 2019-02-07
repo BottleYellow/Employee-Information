@@ -33,6 +33,7 @@ namespace EIS.Repositories.Repository
 
         private IPastLeavesRepository _pastLeaves;
 
+        private ILocationRepository _locations;
         public IEmployeeRepository Employee 
         {
             get {
@@ -165,6 +166,17 @@ namespace EIS.Repositories.Repository
                     _holiday = new HolidayRepository(_dbContext);
                 }
                 return _holiday;
+            }
+        }
+        public ILocationRepository Locations
+        {
+            get
+            {
+                if (_locations == null)
+                {
+                    _locations = new LocationRepository(_dbContext);
+                }
+                return _locations;
             }
         }
         public IPastLeavesRepository PastLeaves
