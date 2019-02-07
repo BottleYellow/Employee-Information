@@ -42,22 +42,33 @@ namespace EIS.WebAPI.Controllers
             _repository.PermanentAddress.UpdateAndSave(permanent);
             return Ok(permanent);
         }
-
-        [DisplayName("Add Permanent Address")]
+        [Route("AddPermanent/{id}")]
         [HttpPost]
-        public IActionResult PostPermanent([FromBody] Permanent permanent)
+        public IActionResult PostPermanent([FromRoute]int id,[FromBody] Permanent permanent)
         {
-            if (!ModelState.IsValid)
+            if (id == 0)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                permanent.TenantId = TenantId;
+                _repository.PermanentAddress.CreateAndSave(permanent);
+                return CreatedAtAction("GetPermanent", new { id = permanent.Id }, permanent);
             }
-            permanent.TenantId = TenantId;
-            _repository.PermanentAddress.CreateAndSave(permanent);
-            return CreatedAtAction("GetPermanent", new { id = permanent.Id }, permanent);
+            else
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.PermanentAddress.UpdateAndSave(permanent);
+                return Ok(permanent);
+            }
         }
 
-        [DisplayName("Delete Permanent Address")]
-        [HttpDelete("{id}")]
+        [Route("DeletePermanent/{id}")]
+        [HttpPost]
         public IActionResult DeletePermanent([FromRoute] int id)
         {
             Permanent permanent = _repository.PermanentAddress.FindByCondition(addr => addr.Id == id);

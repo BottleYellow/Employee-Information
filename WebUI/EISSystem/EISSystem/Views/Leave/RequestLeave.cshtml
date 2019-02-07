@@ -139,6 +139,9 @@
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
+        if (document.getElementById("type").value == 0) {
+            $("#btnSubmit").prop("disabled", true);
+        }
     })
 
     $('#date1').on('dp.change', function (e) {
@@ -157,18 +160,13 @@
     });
   
     $('#date2').on('dp.change', function (e) {
-        debugger;
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
         var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var diff = new Date(new Date(d2) - new Date(d1));
         var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (document.getElementById("type").value == 0)
-        { 
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else if (new Date(d1) > new Date(d2)) {
+        if (new Date(d1) > new Date(d2)) {
             bootbox.alert({
                 message: "Please select valid date"
             });
@@ -199,10 +197,8 @@
     });
     $('#btnSubmit').click(function () {
         var av = document.getElementById("av").value;
-        alert(av);
         if (av == '') {
             var trd = document.getElementById("trd").value;
-            alert(trd);
             availableLeaves = availableLeaves - trd;
             $("#av").val(availableLeaves);
         }
@@ -266,6 +262,7 @@
                     $("#date1").removeAttr('disabled');
                     $("#date2").removeAttr('disabled');
                     $("#reason").removeAttr('disabled');
+                    $("#btnSubmit").removeAttr('disabled');
                 }
 
             });

@@ -41,20 +41,32 @@ namespace EIS.WebAPI.Controllers
             _repository.CurrentAddress.UpdateAndSave(current);          
             return Ok(current);
         }
-        [DisplayName("Add Current Address")]
+        [Route("AddCurrent/{id}")]
         [HttpPost]
-        public IActionResult PostCurrent([FromBody] Current current)
+        public IActionResult PostCurrent([FromRoute]int id,[FromBody] Current current)
         {
-            if (!ModelState.IsValid)
+            if (id == 0)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                current.TenantId = TenantId;
+                _repository.CurrentAddress.CreateAndSave(current);
+                return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
             }
-            current.TenantId = TenantId;
-            _repository.CurrentAddress.CreateAndSave(current);
-            return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
+            else
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.CurrentAddress.UpdateAndSave(current);
+                return Ok(current);
+            }
         }
-        [DisplayName("Delete Current Address")]
-        [HttpDelete("{id}")]
+        [Route("DeleteCurrent/{id}")]
+        [HttpPost]
         public IActionResult DeleteCurrent([FromRoute] int id)
         {
             Current currentAddress = _repository.CurrentAddress.FindByCondition(addr => addr.Id == id);
