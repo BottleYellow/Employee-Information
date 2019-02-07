@@ -15,40 +15,77 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public IQueryable<Person> GetAttendanceYearly(int year)
+        public IQueryable<Person> GetAttendanceYearly(int year, int loc)
         {
-            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
+            if (loc == 0)
+            {
+                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
                 .Select(p => new
                 {
                     p,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year)
                 });
 
-            foreach (var x in results)
-            {
-                x.p.Attendance = x.Attendances.ToList();
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p);
+                return result;
             }
-            var result = results.Select(x => x.p);
-            return result;
+            else
+            {
+                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin")
+                .Select(p => new
+                {
+                    p,
+                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year)
+                });
+
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p);
+                return result;
+            }
+            
         }
 
-        public IQueryable<Person> GetAttendanceMonthly(int month, int year)
+        public IQueryable<Person> GetAttendanceMonthly(int month, int year, int loc)
         {
-
-            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
+            if (loc == 0)
+            {
+                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location).Where(y=>y.Location.Id==y.LocationId)
                 .Select(p => new
                 {
                     p,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
                 }).ToList();
-            foreach (var x in results)
-            {
-                x.p.Attendance = x.Attendances.ToList();
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p).ToList();
+                return result.AsQueryable();
             }
-            var result = results.Select(x => x.p).ToList();
-            return result.AsQueryable();
+            else
+            {
+                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z=>z.Location).Where(z=>z.Id==loc)
+                    .Select(p => new
+                    {
+                        p,
+                        Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
+                    }).ToList();
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p).ToList();
+                return result.AsQueryable();
+            }
         }
-
+   
         public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek)
         {
             var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")

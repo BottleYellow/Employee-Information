@@ -58,9 +58,9 @@
                     <div class="body">
                         <div class="row col-md-12">
                             <div class="col-md-3">
-                                <label>Location</label>
+                                <label>Select Location</label>
                                 <select class="form-control" id="location">
-                                    <option>All Employee</option>
+                                    <option>All</option>
                                     <option>Baner</option>
                                     <option>Kondhwa</option>
                                 </select>
@@ -100,8 +100,8 @@
                                 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
                                             <th>Location</th>
+                                            <th>Name</th>
                                             <th>Present Days</th>
                                             <th>Absent Days</th>
                                             <th>Total Days</th>
@@ -150,7 +150,8 @@
         var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
         totalDays = days;
         $('#inputmonth').val(m + '/' + y);
-        generateReport(m + '/' + y, 'month');
+        var location = $('#location').val();
+        generateReport(m + '/' + y, 'month',location);
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
@@ -200,6 +201,7 @@
         });
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
+            var location = $('#location').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
@@ -211,7 +213,7 @@
                 //else {
                 //    totalDays = 365;
                 //}
-                generateReport(value, 'year');
+                generateReport(value, 'year', location);
             }
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
@@ -222,21 +224,23 @@
                 var ld = new Date(y, m, 0).getDate();
                 var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
                 totalDays = days;
-                generateReport(value, 'month');
+                var location = $('#location').val();
+                generateReport(value, 'month',location);
             }
             else if (v == 'week') {
                 var value = $("#inputweek").val();
+                var location = $('#location').val();
                 var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week');
+                generateReport(firstDate + " - " + lastDate, 'week', location);
                 var days = workingDaysBetweenDates(moment(value, "MMM/DD/YYYY").day(0).format("YYYY-MM-DD"), moment(value, "MMM/DD/YYYY").day(6).format("YYYY-MM-DD"));
                 totalDays = days;
             }
         });
 
-        function generateReport(value, type) {
-     
+        function generateReport(value, type, location) {
+
       $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
@@ -266,19 +270,21 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    "url":'@Url.Action("AllAttendance","Attendance")?date='+value+'&type='+type,
+                    "url":'@Url.Action("AllAttendance","Attendance")?date='+value+'&type='+type+'&location='+location,
                     "type": "POST",
                     "datatype": "json",
                     //"data": { "date": value, "type": type },
                 },
                 "columns": [
                     {
-                        "data": null, "name": "FirstName", "autoWidth": true, render: function (row) {
-                            return row.FirstName + " " + row.MiddleName + " " + row.LastName;
+                        "data": null, "name": "Location", "autoWidth": true, render: function (row) {
+                            return row.location.LocationName;
                         }
                     },
                     {
-                        "name": "Location", "autoWidth": true ;
+                        "data": null, "name": "FirstName", "autoWidth": true, render: function (row) {
+                            return row.FullName;
+                        }
                     },
                     {
                         "data": "Attendance", "name": "Attendance", "autoWidth": true, render: function (data) {
@@ -320,7 +326,7 @@
         var millisecondsPerDay = 86400 * 1000; // Day in milliseconds
         startDate.setHours(0, 0, 0, 1);  // Start just after midnight
         endDate.setHours(23, 59, 59, 999);  // End just before midnight
-        var diff = endDate - startDate;  // Milliseconds between datetime objects    
+        var diff = endDate - startDate;  // Milliseconds between datetime objects
         var days = Math.ceil(diff / millisecondsPerDay);
 
         // Subtract two weekend days for every week in between
@@ -331,7 +337,7 @@
         var startDay = startDate.getDay();
         var endDay = endDate.getDay();
 
-        // Remove weekend not previously removed.   
+        // Remove weekend not previously removed.
         if (startDay - endDay > 1) {
             days -= 2;
         }

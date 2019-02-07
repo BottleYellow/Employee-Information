@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class data : Migration
+    public partial class EmployeeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,24 @@ namespace EIS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblLocations",
+                schema: "LMS",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LocationName = table.Column<string>(type: "nvarchar(50)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblLocations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblRoles",
                 schema: "LMS",
                 columns: table => new
@@ -107,6 +125,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
+                    LocationId = table.Column<int>(nullable: false),
                     StreamId = table.Column<int>(type: "int", nullable: true),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
@@ -128,6 +147,13 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tblPerson", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblPerson_tblLocations_LocationId",
+                        column: x => x.LocationId,
+                        principalSchema: "LMS",
+                        principalTable: "tblLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_tblPerson_tblRoles_RoleId",
                         column: x => x.RoleId,
@@ -567,6 +593,12 @@ namespace EIS.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_tblPerson_LocationId",
+                schema: "LMS",
+                table: "tblPerson",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tblPerson_MobileNumber",
                 schema: "LMS",
                 table: "tblPerson",
@@ -665,6 +697,10 @@ namespace EIS.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "tblPerson",
+                schema: "LMS");
+
+            migrationBuilder.DropTable(
+                name: "tblLocations",
                 schema: "LMS");
 
             migrationBuilder.DropTable(

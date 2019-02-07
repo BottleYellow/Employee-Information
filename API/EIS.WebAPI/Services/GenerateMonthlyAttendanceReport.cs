@@ -62,7 +62,8 @@ namespace EIS.WebAPI.Services
             {
                 Directory.CreateDirectory(rootPath + year + "\\" + monthName + "\\");
             }
-            var employees = _repository.Attendances.GetAttendanceMonthly(month, year);
+            int loc = 0;
+            var employees = _repository.Attendances.GetAttendanceMonthly(month, year,loc);
             foreach (Person p in employees)
             {
 
