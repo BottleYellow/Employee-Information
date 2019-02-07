@@ -34,13 +34,10 @@ namespace EIS.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<EIS.Data.Context.ApplicationDbContext>(config =>
             {
                 config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
-
             services.AddMvc();
             services.AddMvc(options =>
             {

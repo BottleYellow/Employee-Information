@@ -100,7 +100,7 @@ namespace EIS.Repositories.Repository
         }
 
 
-        public List<CalendarData> GetCalendarDetails(DateTime beginDate, DateTime stopDate)
+        public List<CalendarData> GetCalendarDetails(string location,DateTime beginDate, DateTime stopDate)
         {
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = _dbContext.Holidays.ToList();
@@ -131,20 +131,20 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(calendarData1);
                 }
 
-                LeaveRequest leavereq = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
-                if (leavereq != null)
+                LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
+                if (leaveRequest != null)
                 {
                     CalendarData calendarData = new CalendarData();
                     string leave = "";
-                    if (leavereq.LeaveType == "Casual Leave")
+                    if (leaveRequest.LeaveType == "Casual Leave")
                     {
                         leave = "CL";
                     }
-                    calendarData.Title = leavereq.EmployeeName + " (" + leave + "-" + leavereq.Status + ")";
-                    calendarData.Description = "Leave Status " + leavereq.Status;
-                    calendarData.StartDate = leavereq.FromDate;
-                    calendarData.EndDate = leavereq.ToDate;
-                    if (leavereq.Status == "Pending")
+                    calendarData.Title = leaveRequest.EmployeeName + " (" + leave + "-" + leaveRequest.Status + ")";
+                    calendarData.Description = "Leave Status " + leaveRequest.Status;
+                    calendarData.StartDate = leaveRequest.FromDate;
+                    calendarData.EndDate = leaveRequest.ToDate;
+                    if (leaveRequest.Status == "Pending")
                     {
                         calendarData.Color = "Orange";
                     }
@@ -176,8 +176,8 @@ namespace EIS.Repositories.Repository
                 if (date.DayOfWeek == DayOfWeek.Sunday)
                 {
                     CalendarData holidayCalanderData = new CalendarData();
-                    holidayCalanderData.Title = "Holiday";
-                    holidayCalanderData.Description = "Holiday";
+                    holidayCalanderData.Title = "Weekly Off";
+                    holidayCalanderData.Description = "Weekly Off";
                     holidayCalanderData.StartDate = date;
                     holidayCalanderData.EndDate = date;
                     holidayCalanderData.Color = "Orange";

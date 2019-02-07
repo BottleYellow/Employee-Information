@@ -25,12 +25,22 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult AdminDashboard()
         {
-            ViewData["Message"] = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Admin");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin");
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AdminDashboard dashBoard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
-            return View(dashBoard);
+            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            return View(dashboard);
         }
+
+        [HttpPost]
+        public IActionResult AdminDashboard(string status)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin" + status);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            return View(dashboard);
+        }
+        
+
 
         public IActionResult ManagerDashboard()
         {
@@ -56,14 +66,14 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetFullCalendar(string intervalStart, string intervalEnd)
+        public IActionResult GetFullCalendar(string intervalStart, string intervalEnd,string location)
         {
             List<CalendarData> data = new List<CalendarData>();
             if (!string.IsNullOrEmpty(intervalStart)&& !string.IsNullOrEmpty(intervalEnd))
             {
                 DateTime startDate = Convert.ToDateTime(intervalStart);
                 DateTime endDate = Convert.ToDateTime(intervalEnd);
-                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/CalendarData/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/CalendarData/" +location+"/"+startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
 
                 string stringData = response.Content.ReadAsStringAsync().Result;
 
