@@ -55,12 +55,13 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
         [HttpPost]
-        public IActionResult LoadData(bool type)
+        public IActionResult LoadData(bool type, int LocationId)
         {
-            return LoadData<Person>(ApiUrl+"/api/employee/data",type);
+            return LoadData<Person>(ApiUrl + "/api/employee/data", type, LocationId);
 
         }
         public IActionResult Profile(string PersonId)
@@ -96,6 +97,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Create Employee")]
         public IActionResult Create()
         {
+            ViewBag.Locations = GetLocations();
             ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                        where p.Role.Name != "Employee"
@@ -104,16 +106,20 @@ namespace EIS.WebApp.Controllers
             ViewBag.Dob = DateTime.Now.ToShortDateString();
             return View();
         }
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id")]Person person, IFormFile file)
+        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id,LocationId")]Person person, IFormFile file)
         {
             if (person.DateOfBirth != null)
             {
                 var d = DateTime.Parse(person.DateOfBirth.ToString());
                 person.DateOfBirth = d;
             }
+            if (person.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");
+            if (person.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
             var tId = GetSession().TenantId;
+            ViewBag.Locations = GetLocations();
             //var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
@@ -200,7 +206,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Edit(string EmployeeCode)
         {
             ViewBag.Designations = rolesList;
-
+            ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
@@ -220,11 +226,13 @@ namespace EIS.WebApp.Controllers
                 return NotFound();
             }
             ViewBag.Designations = rolesList;
-          
+            ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
             person.UpdatedDate = DateTime.Now.Date;
+            if (person.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");
+            if (person.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
             if (ModelState.IsValid)
             {
                 try

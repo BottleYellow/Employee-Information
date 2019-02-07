@@ -235,7 +235,15 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetData([FromBody]SortGrid sortGrid)
         {
             ArrayList employeeslist;
-            IQueryable<Person> list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId &&x.IsActive==sortGrid.IsActive).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+            IQueryable<Person> list = null;
+            if (sortGrid.LocationId == 0)
+            {
+                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive).Include(x=>x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+            }
+            else
+            {
+                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+            }
             if (sortGrid.Search == null)
             {
                 employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);

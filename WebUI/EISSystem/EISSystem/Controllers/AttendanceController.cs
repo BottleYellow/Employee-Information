@@ -34,7 +34,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult AllAttendance(string date, string type)
         {
             string url = GetAllAttendanceData(date, type);
-           return LoadData<Person>(url,null);
+            return LoadData<Person>(url, null, null);
 
         }
         #endregion
@@ -54,7 +54,7 @@ namespace EIS.WebApp.Controllers
             //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url, null, null);
 
         }    
 
@@ -101,7 +101,7 @@ namespace EIS.WebApp.Controllers
             //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
             ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url, null, null);
 
         }
         [ActionName("AttendanceSummary")]
@@ -308,7 +308,7 @@ namespace EIS.WebApp.Controllers
                 url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
             }
             ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url, null, null);
         }
     }
 }
