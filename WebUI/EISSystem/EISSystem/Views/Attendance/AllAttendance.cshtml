@@ -16,6 +16,10 @@
             background-color: #808080;
         }
 
+        #location {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
         #generateReport {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
@@ -53,38 +57,39 @@
                 <div class="card">
                     <div class="body">
                         <div class="row col-md-12">
-                            <div class="col-md-9">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Select Type Of Reports</label>
-                                        <select class="form-control" id="select">
-                                            <option value="year" id="year">Year</option>
-                                            <option selected value="month" id="month">Month</option>
-                                            <option value="week" id="week">Week</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div id="inputyeardiv" hidden="hidden">
-                                            <label>Select Year</label><br />
-                                            <input class="form-control" type="text" id="inputyear" placeholder="select year" />
-                                        </div>
-                                        <div id="inputmonthdiv">
-                                            <label>Select Month</label><br />
-                                            <input class="form-control" type="text" id="inputmonth" placeholder="select month" />
-                                        </div>
-                                        <div id="inputweekdiv" hidden="hidden">
-                                            <label>Select Week</label><br />
-                                            <input class="form-control" type="text" id="inputweek" placeholder="select week" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <br />
-                                        <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
-                                    </div>
+                            <div class="col-md-3">
+                                <label>Location</label>
+                                <select class="form-control" id="location">
+                                    <option>All Employee</option>
+                                    <option>Baner</option>
+                                    <option>Kondhwa</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Select Type Of Reports</label>
+                                <select class="form-control" id="select">
+                                    <option value="year" id="year">Year</option>
+                                    <option selected value="month" id="month">Month</option>
+                                    <option value="week" id="week">Week</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <div id="inputyeardiv" hidden="hidden">
+                                    <label>Select Year</label><br />
+                                    <input class="form-control" type="text" id="inputyear" placeholder="select year" />
+                                </div>
+                                <div id="inputmonthdiv">
+                                    <label>Select Month</label><br />
+                                    <input class="form-control" type="text" id="inputmonth" placeholder="select month" />
+                                </div>
+                                <div id="inputweekdiv" hidden="hidden">
+                                    <label>Select Week</label><br />
+                                    <input class="form-control" type="text" id="inputweek" placeholder="select week" />
                                 </div>
                             </div>
-                            <div class="col-md-3 col-xs-12">
-
+                            <div class="col-md-3">
+                                <br />
+                                <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
                             </div>
                         </div>
                         <div>
@@ -96,6 +101,7 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Location</th>
                                             <th>Present Days</th>
                                             <th>Absent Days</th>
                                             <th>Total Days</th>
@@ -270,6 +276,9 @@
                         "data": null, "name": "FirstName", "autoWidth": true, render: function (row) {
                             return row.FirstName + " " + row.MiddleName + " " + row.LastName;
                         }
+                    },
+                    {
+                        "name": "Location", "autoWidth": true ;
                     },
                     {
                         "data": "Attendance", "name": "Attendance", "autoWidth": true, render: function (data) {
