@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EIS.Entities.Employee;
+using EIS.Entities.Generic;
 using EIS.Entities.OtherEntities;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -42,7 +43,6 @@ namespace EIS.WebApp.Controllers
             }
             return Cookies;
         }
-
         [NonAction]
         public List<Locations> GetLocations()
         {
@@ -51,10 +51,9 @@ namespace EIS.WebApp.Controllers
             List<Locations> locations = JsonConvert.DeserializeObject<List<Locations>>(stringData);
             return locations;
         }
-
-        public IActionResult LoadData<T1>(string Url,bool? type)
+        public IActionResult LoadData<T1>(string Url,bool? type,int? LocationId)
         {
-            SortEmployee sortEmployee = new SortEmployee();
+            SortGrid sortEmployee = new SortGrid();
             var start = Request.Form["start"].FirstOrDefault();
             var length = Request.Form["length"].FirstOrDefault();
             sortEmployee.SortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
@@ -64,6 +63,7 @@ namespace EIS.WebApp.Controllers
             sortEmployee.PageSize = length != null ? Convert.ToInt32(length) : 0;
             sortEmployee.Search=string.IsNullOrEmpty(search)?null:search;
             sortEmployee.IsActive = type;
+            sortEmployee.LocationId = LocationId;
             HttpClient client = _service.GetService();
             string stringData = JsonConvert.SerializeObject(sortEmployee);
             var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");

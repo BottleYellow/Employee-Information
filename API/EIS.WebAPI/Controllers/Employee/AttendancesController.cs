@@ -88,21 +88,21 @@ namespace EIS.WebAPI.Controllers
 
         #region[Attendance Reports]
         [DisplayName("Attendance Reports")]
-        [HttpPost("GetAllAttendanceMonthly/{month}/{year}")]
-        public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
+        [HttpPost("GetAllAttendanceMonthly/{month}/{year}/{loc}")]
+        public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year, [FromRoute] int loc)
         {
             ArrayList data = new ArrayList();
-            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year);
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year,loc);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
 
         [DisplayName("Attendance Reports")]
-        [HttpPost("GetAllAttendanceYearly/{year}")]
-        public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
+        [HttpPost("GetAllAttendanceYearly/{year}/{loc}")]
+        public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year, [FromRoute] int loc)
         {
             ArrayList data = new ArrayList();
-            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceYearly(year);
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceYearly(year,loc);
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }

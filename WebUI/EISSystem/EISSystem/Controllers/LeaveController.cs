@@ -43,7 +43,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetEmployeeLeaveRequests()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl+"/api/LeaveRequest/GetLeaveRequests",null);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests", null, null);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -59,7 +59,7 @@ namespace EIS.WebApp.Controllers
         {
             int pid = Convert.ToInt32(GetSession().PersonId);
             ArrayList arrayData = new ArrayList();
-           return LoadData<LeaveRequest>(ApiUrl+ "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null, null);
         }
 
         [DisplayName("Show my leaves")]
@@ -75,7 +75,7 @@ namespace EIS.WebApp.Controllers
             //int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pid = Convert.ToInt32(GetSession().PersonId);
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl+"/api/LeaveRequest/Employee/" + pid + "",null);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/Employee/" + pid + "", null, null);
 
         }
 
@@ -153,7 +153,7 @@ namespace EIS.WebApp.Controllers
             {
                 PersonId = Convert.ToInt32(GetSession().PersonId);
             }
-            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null);
+            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, null);
 
         }
         [DisplayName("Add Past Leave")]
@@ -200,7 +200,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeavePolicy()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRules>(ApiUrl+"/api/LeavePolicy/GetLeavePolicies",null);
+            return LoadData<LeaveRules>(ApiUrl + "/api/LeavePolicy/GetLeavePolicies", null, null);
         }
 
         [DisplayName("Add Leave Rule")]
@@ -249,7 +249,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetLeaveCredits()
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveCredit>(ApiUrl+"/api/LeaveCredit/GetLeaveCredits",null);
+            return LoadData<LeaveCredit>(ApiUrl + "/api/LeaveCredit/GetLeaveCredits", null, null);
         }
 
 

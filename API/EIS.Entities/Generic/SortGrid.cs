@@ -10,6 +10,7 @@ namespace EIS.Entities.Generic
         public int PageSize { get; set; }
         public string Search { get; set; }
         public bool? IsActive { get; set; }
+        public int? LocationId { get; set; }
     }
     
 }

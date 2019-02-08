@@ -58,7 +58,7 @@ namespace EIS.WebApp.Controllers
             {
                 dynamic data = JObject.Parse(stringData);
                 var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
-                string error = data.Date.ToString();
+                string error = data.LocationName.ToString();
                 error=error.Replace("[", null); error=error.Replace("]", null);
 
                 ModelState.AddModelError("Date", error);

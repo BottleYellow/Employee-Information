@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190207070335_AddLocationTable")]
-    partial class AddLocationTable
+    [Migration("20190207093010_EmployeeData")]
+    partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
