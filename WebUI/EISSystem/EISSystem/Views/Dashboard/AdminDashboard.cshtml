@@ -237,8 +237,14 @@
     function getda(Employees) {
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
-            array.push([Employees[i].Location.LocationName, Employees[i].FullName])
-
+            if (Employees[i].Attendance.length==0) {
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName,'onLeave','-','-','-'])
+            }
+            else {
+                var TimeOut = Employees[i].Attendance[0].TimeOut == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                var TotalHours = Employees[i].Attendance[0].TotalHours == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName, 'Present', Employees[i].Attendance[0].TimeIn, TimeOut, TotalHours])
+            }
         }
         $('#myTable').DataTable().destroy();
          $('#myTable').DataTable({

@@ -27,51 +27,28 @@ namespace EIS.Repositories.Repository
 
         public AdminDashboard GetAdminDashboard(string attendanceStatus, string location,int TenantId)
         {
-            List<Attendance> attendance = null;
             List<Person> employees = new List<Person>();
             int leaves = 0;
             int pcount = 0;
-            if (_dbContext.Attendances != null)
-            {
-                attendance = _dbContext.Attendances.ToList();
-            }
-            if(location == "All")
-            {
-                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true&& x.Role.Name != "Admin").ToList();
-                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            }
-            else
-            if(location == "Kondhwa")
-            {
-                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin"&& x.Location.LocationName==location).ToList();
-                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            }
-            else
-                if(location == "Baner" )
-            {
-                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin"&& x.Location.LocationName == location).ToList();
-                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();             
-            }
+            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+           .Select(p => new
+           {
+               p,
+               Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
+           });
 
-
-            foreach (var pa in employees)
+            foreach (var x in results)
             {
-                foreach (var a in pa.Attendance)
-                {
-                    if (a.DateIn.Date == DateTime.Now.Date)
-                    {
-                        
-                        pcount++;
-                    }
-                }
+                x.p.Attendance = x.Attendances.ToList();
             }
+            var result = results.Select(x => x.p).ToList();
             AdminDashboard dashboard = new AdminDashboard
             {
-                AllEmployeesCount = employees.Count(),
+                AllEmployeesCount = result.Count(),
                 PresentEmployees = pcount,
-                AbsentEmployees = employees.Count() - pcount,
+                AbsentEmployees = result.Count() - pcount,
                 PendingLeavesCount = leaves,
-                Employees = employees
+                Employees = result
             };
             return dashboard;
         }
