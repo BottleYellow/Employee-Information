@@ -25,7 +25,7 @@
                 </a>
                     <div class="content">
                         <div class="text">TOTAL EMPLOYEES</div>
-                        <div class="number count-to">@Model.AllEmployeesCount</div>
+                        <div id="totalEmployeeCount" class="number count-to"></div>
                     </div>              
             </div>
             
@@ -40,7 +40,7 @@
                 </a>
                 <div class="content">
                     <div class="text">EMPLOYEE PRESENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.PresentEmployees</div>
+                    <div id="employeePresentCount" class="number count-to"></div>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 </a>
                 <div class="content">
                     <div class="text">EMPLOYEE ABSENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.AbsentEmployees</div>
+                    <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                 </a>
                 <div class="content">
                     <div class="text">PENDING LEAVES</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.PendingLeavesCount</div>
+                    <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
                 </div>
             </div>
         </div>
@@ -88,15 +88,16 @@
                         <table class="table table-hover dashboard-task-infos" id="myTable">
                             <thead>
                                 <tr>
-                                    <th>Location</th>
-                                    <th>Name</th>
+                                    <th>LOCATION NAME</th>
+                                    <th>NAME</th>
                                     <th>Status</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Working Hrs</th>
+                                    <th>ClockIn</th>
+                                    <th>ClockOut</th>
+                                    <th>WorkingHours</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody></tbody>
+                            @*<tbody>
                                 @foreach (var item in Model.Employees)
                                 {
                                 <tr>
@@ -139,7 +140,7 @@
 
                                 </tr>
                                 }
-                            </tbody>
+                            </tbody>*@
                         </table>
                     </div>
                 </div>
@@ -188,10 +189,7 @@
     $(document).ready(function () {
         selectOpt = $('#select option:selected').text();
         generateReport("All", selectOpt);
-        $('#myTable').dataTable({
-            sDom: 'Biftlp',
-        });
-
+        //$('#myTable').DataTable();
     });
     var buttonSelected="All";
     var selectOpt;
@@ -221,13 +219,34 @@
         generateReport(buttonSelected, selectOpt);
     });
 
-    function generateReport(employeecount, location) {
-
+    function generateReport(employeecount, location) {      
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AdminDashboard","Dashboard")',
-            data: { "attendanceStatus": employeecount, "location": location }            
+            data: { "attendanceStatus": employeecount, "location": location },
+            success: function (data) {
+                document.getElementById("totalEmployeeCount").innerHTML = data.AllEmployeesCount;
+                document.getElementById("employeePresentCount").innerHTML = data.PresentEmployees;
+                document.getElementById("employeeAbsentCount").innerHTML = data.AbsentEmployees;
+                document.getElementById("employeeLeavesCount").innerHTML = data.PendingLeavesCount; 
+                getda(data.Employees);
+            }
         });
     }
+
+    function getda(Employees) {
+        var array=[];
+        for (var i = 0; i < Employees.length; i++) {
+            array.push([Employees[i].Location.LocationName, Employees[i].FullName])
+
+        }
+        $('#myTable').DataTable().destroy();
+         $('#myTable').DataTable({
+             data: array
+         });
+        }
+
+
     
+
 </script>

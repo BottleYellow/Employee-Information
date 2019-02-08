@@ -28,20 +28,39 @@ namespace EIS.Repositories.Repository
         public AdminDashboard GetAdminDashboard(string attendanceStatus, string location,int TenantId)
         {
             List<Attendance> attendance = null;
+            List<Person> employees = new List<Person>();
+            int leaves = 0;
+            int pcount = 0;
             if (_dbContext.Attendances != null)
             {
                 attendance = _dbContext.Attendances.ToList();
             }
-            var employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x=>x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin").AsQueryable();
-            var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true).ToList();
-            int pcount = 0;
+            if(location == "All")
+            {
+                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true&& x.Role.Name != "Admin").ToList();
+                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
+            }
+            else
+            if(location == "Kondhwa")
+            {
+                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin"&& x.Location.LocationName==location).ToList();
+                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
+            }
+            else
+                if(location == "Baner" )
+            {
+                employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin"&& x.Location.LocationName == location).ToList();
+                leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();             
+            }
+
+
             foreach (var pa in employees)
             {
                 foreach (var a in pa.Attendance)
                 {
                     if (a.DateIn.Date == DateTime.Now.Date)
                     {
+                        
                         pcount++;
                     }
                 }
@@ -52,7 +71,7 @@ namespace EIS.Repositories.Repository
                 PresentEmployees = pcount,
                 AbsentEmployees = employees.Count() - pcount,
                 PendingLeavesCount = leaves,
-                Employees = EmployeesWithAttendance
+                Employees = employees
             };
             return dashboard;
         }
