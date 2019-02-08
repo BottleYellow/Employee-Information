@@ -5207,7 +5207,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
-          "EIS.Entities": "1.0.0",
           "EIS.Repositories": "1.0.0",
           "FluentValidation.AspNetCore": "8.1.2"
         },

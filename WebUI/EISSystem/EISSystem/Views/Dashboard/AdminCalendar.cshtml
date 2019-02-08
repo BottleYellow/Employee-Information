@@ -1,0 +1,153 @@
+﻿@using EIS.WebApp.Services
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+}
+<head>
+
+    <link href="~/Ems/css/fullcalendar.min.css" rel="stylesheet" />
+    <!-- qTip -->
+    <link href="~/Ems/css/jquery.qtip.min.css" rel="stylesheet" />
+    <style>
+        .fc-other-month .fc-day-number {
+            display: none;
+        }
+    </style>
+</head>
+<div class="container-fluid">
+    <div class="block-header">
+        <div class="row">
+            <div class="col-md-12">
+                <HeaderWithButton header-name="Calendar"></HeaderWithButton>
+            </div>
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
+                <option value="0">All</option>
+            </select>
+            <div class="card">
+                <div class="body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span id="eventTitle"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="pDetails"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+ </div>
+<script src="~/Ems/js/fullcalendar-3.1.0-lib-moment.min.js"></script>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="~/Ems/js/fullcalendar-3.1.0-lib-jquery-ui.min.js"></script>
+<script src="~/Ems/js/fullcalendar-3.1.0-fullcalendar.min.js"></script>
+<script src="~/Ems/js/maxcdn.bootstrapcdn.com-bootstrap-3.4.0-js-bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var selectOption = "All";
+        generateCalendarData(selectOption);
+    });
+
+    $('#select').on('change', function () {
+       var selectOpt= $('#select option:selected').text();
+        generateCalendarData(selectOpt);
+    });
+
+   function generateCalendarData(selectOption)
+   {
+       $('#calendar').fullCalendar('destroy');
+         $('#calendar').fullCalendar({
+                contentHeight: 700,
+                defaultDate: new Date(),
+                defaultView: 'month',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay,agenda'
+                },
+            viewRender: function (view, element) {
+
+                    intervalStart = view.intervalStart;
+                    intervalEnd = view.intervalEnd;
+            },
+
+            events: function (start, end, timezone, callback) {
+                var events = [];
+                    var startDate = intervalStart.format("YYYY-MM-DD");
+                    var endDate = intervalEnd.format("YYYY-MM-DD");
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AdminCalendar", "Dashboard")',
+                    data: {
+                        "intervalStart": startDate,
+                        "intervalEnd": endDate,
+                        "location": selectOption
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            events.push({
+                                title: v.Title,
+                                description: v.Description,
+                                start: moment(v.StartDate).format('YYYY-MM-DD'),
+                                end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
+                                color: v.Color,
+                                allDay: v.IsFullDay
+                            });
+                        });
+                        callback(events);
+
+                    },
+                    error: function (error) {
+                        bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+                    }
+                });
+                },
+            eventClick: function (calEvent, jsEvent, view) {            
+                var titledata = calEvent.title;
+                if (titledata.search("Pending") > 0) {
+                    $('#myModal #eventTitle').text(calEvent.title);
+                    var $description = $('<div/>');
+                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    if (calEvent.end != null) {
+                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
+                    }
+                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                    $description.append($('<p/>').html('<b>ACTION: </b><button>APPROVE</button><a onclick="javascript: UpdateStatus(' + calEvent.Id + ',\'Reject\')">Reject</a>'));
+                    $('#myModal #pDetails').empty().html($description);
+
+                    $('#myModal').modal();
+
+                } else {
+                    $('#myModal #eventTitle').text(calEvent.title);
+                    var $description = $('<div/>');
+                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    if (calEvent.end != null) {
+                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
+                    }
+                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                    $('#myModal #pDetails').empty().html($description);
+
+                    $('#myModal').modal();
+                }
+            }
+        });
+    }      
+</script>
+

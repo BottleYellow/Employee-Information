@@ -287,6 +287,29 @@ namespace EIS.Data.Migrations
                     b.ToTable("tblAttendance","LMS");
                 });
 
+            modelBuilder.Entity("EIS.Entities.Employee.Locations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("LocationName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("TenantId");
+
+                    b.Property<DateTime?>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblLocations","LMS");
+                });
+
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -341,6 +364,8 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime?>("LeavingDate")
                         .HasColumnType("date");
 
+                    b.Property<int>("LocationId");
+
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(50)");
 
@@ -375,6 +400,8 @@ namespace EIS.Data.Migrations
 
                     b.HasIndex("EmailAddress")
                         .IsUnique();
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("MobileNumber")
                         .IsUnique();
@@ -799,6 +826,11 @@ namespace EIS.Data.Migrations
 
             modelBuilder.Entity("EIS.Entities.Employee.Person", b =>
                 {
+                    b.HasOne("EIS.Entities.Employee.Locations", "Location")
+                        .WithMany("Employees")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("EIS.Entities.Employee.Role", "Role")
                         .WithMany("Persons")
                         .HasForeignKey("RoleId")

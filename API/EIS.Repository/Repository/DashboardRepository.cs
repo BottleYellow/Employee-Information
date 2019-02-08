@@ -25,14 +25,14 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public AdminDashboard GetAdminDashboard(int TenantId)
+        public AdminDashboard GetAdminDashboard(string attendanceStatus, string location,int TenantId)
         {
             List<Attendance> attendance = null;
             if (_dbContext.Attendances != null)
             {
                 attendance = _dbContext.Attendances.ToList();
             }
-            var employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin").AsQueryable();
+            var employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x=>x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin").AsQueryable();
             var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
             var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true).ToList();
             int pcount = 0;
@@ -103,9 +103,22 @@ namespace EIS.Repositories.Repository
         public List<CalendarData> GetCalendarDetails(string location,DateTime beginDate, DateTime stopDate)
         {
             List<CalendarData> calendarDataList = new List<CalendarData>();
-            IEnumerable<Holiday> holidays = _dbContext.Holidays.ToList();
-            IEnumerable<LeaveRequest> leaveList = _dbContext.LeaveRequests.ToList();
-            IEnumerable<Attendance> data = _dbContext.Attendances.Include(x => x.Person).ToList();
+            IEnumerable<Holiday> holidays = new List<Holiday>();
+            IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
+            IEnumerable<Attendance> data = new List<Attendance>();
+            if (location=="All")
+            {
+               holidays = _dbContext.Holidays.ToList();
+                leaveList = _dbContext.LeaveRequests.ToList();
+                data = _dbContext.Attendances.Include(x => x.Person).ToList();
+            }
+            else
+            {
+               holidays = _dbContext.Holidays.Where(x => x.Location == location).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Person.Location.LocationName == location).ToList();
+                data = _dbContext.Attendances.Include(x => x.Person).Where(x => x.Person.Location.LocationName == location).ToList();
+            }
+
             int count = 0;
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {

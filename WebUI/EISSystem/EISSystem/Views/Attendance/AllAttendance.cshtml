@@ -101,7 +101,6 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Location</th>
                                             <th>Present Days</th>
                                             <th>Absent Days</th>
                                             <th>Total Days</th>
@@ -277,9 +276,7 @@
                             return row.FirstName + " " + row.MiddleName + " " + row.LastName;
                         }
                     },
-                    {
-                        "name": "Location", "autoWidth": true ;
-                    },
+        
                     {
                         "data": "Attendance", "name": "Attendance", "autoWidth": true, render: function (data) {
                             return data.length;

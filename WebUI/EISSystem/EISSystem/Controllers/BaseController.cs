@@ -42,6 +42,16 @@ namespace EIS.WebApp.Controllers
             }
             return Cookies;
         }
+
+        [NonAction]
+        public List<Locations> GetLocations()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Location");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Locations> locations = JsonConvert.DeserializeObject<List<Locations>>(stringData);
+            return locations;
+        }
+
         public IActionResult LoadData<T1>(string Url,bool? type)
         {
             SortEmployee sortEmployee = new SortEmployee();

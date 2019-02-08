@@ -19,11 +19,11 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public DashboardController(IRepositoryWrapper repository) : base(repository)
         {        }
 
-        [Route("Admin")]
+        [Route("Admin/{attendanceStatus}/{location}")]
         [HttpGet]
-        public IActionResult GetAdminDashboard()
+        public IActionResult GetAdminDashboard(string attendanceStatus, string location)
         {
-            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(TenantId);
+            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus,location,TenantId);
             return Ok(dashboard);
         }
 

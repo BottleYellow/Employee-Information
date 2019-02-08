@@ -24,11 +24,6 @@
 
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <select class="form-control" id="select" style="width:165px">
-                <option id="All">All</option>
-                <option id="Baner">Baner</option>
-                <option id="Kondhwa">Kondhwa</option>
-            </select>
             <div class="card">
                 <div class="body">
                     <div id="calendar"></div>
@@ -63,44 +58,31 @@
 
 <script>
     $(document).ready(function () {
-        var selectOption = "All";
-        generateCalendarData(selectOption);
-    });
-
-    $('#select').on('change', function () {
-        var selectOpt = $('#select').val();
-        generateCalendarData(selectOpt);
-    });
-
-   function generateCalendarData(selectOption)
-   {
-       $('#calendar').fullCalendar('destroy');
-         $('#calendar').fullCalendar({
-                contentHeight: 700,
-                defaultDate: new Date(),
-                defaultView: 'month',
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,basicWeek,basicDay,agenda'
-                },
+        $('#calendar').fullCalendar({
+            contentHeight: 700,
+            defaultDate: new Date(),
+            defaultView: 'month',
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,basicWeek,basicDay,agenda'
+            },
             viewRender: function (view, element) {
 
-                    intervalStart = view.intervalStart;
-                    intervalEnd = view.intervalEnd;
+                intervalStart = view.intervalStart;
+                intervalEnd = view.intervalEnd;
             },
 
             events: function (start, end, timezone, callback) {
                 var events = [];
-                    var startDate = intervalStart.format("YYYY-MM-DD");
-                    var endDate = intervalEnd.format("YYYY-MM-DD");
+                var startDate = intervalStart.format("YYYY-MM-DD");
+                var endDate = intervalEnd.format("YYYY-MM-DD");
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("GetFullCalendar", "Dashboard")',
+                    url: '@Url.Action("GetEmployeeCalendar", "Dashboard")',
                     data: {
                         "intervalStart": startDate,
                         "intervalEnd": endDate,
-                        "location": selectOption
                     },
                     success: function (data) {
                         $.each(data, function (i, v) {
@@ -120,8 +102,8 @@
                         bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
                     }
                 });
-                },
-            eventClick: function (calEvent, jsEvent, view) {            
+            },
+            eventClick: function (calEvent, jsEvent, view) {
                 var titledata = calEvent.title;
                 if (titledata.search("Pending") > 0) {
                     $('#myModal #eventTitle').text(calEvent.title);
@@ -150,6 +132,6 @@
                 }
             }
         });
-    }      
+    });      
 </script>
 

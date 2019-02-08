@@ -9411,7 +9411,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
-      "EIS.Entities >= 1.0.0",
       "EIS.Repositories >= 1.0.0",
       "FluentValidation.AspNetCore >= 8.1.2",
       "Microsoft.NETCore.App >= 2.2.0"
@@ -9447,9 +9446,6 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj": {
-              "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj"
-            },
             "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj": {
               "projectPath": "C:\\Users\\Aadyam\\Documents\\GitHub\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj"
             }
