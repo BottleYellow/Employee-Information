@@ -28,6 +28,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Attendance Reports")]
         public IActionResult AllAttendance()
         {
+            
             return View();
         }
         [HttpPost]

@@ -1,5 +1,6 @@
 ﻿ using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,19 +26,20 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult AdminDashboard()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/All/All");
             string stringData = response.Content.ReadAsStringAsync().Result;
             AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            ViewBag.Locations = GetLocations();
             return View(dashboard);
         }
 
         [HttpPost]
-        public IActionResult AdminDashboard(string status)
+        public IActionResult AdminDashboard(string attendanceStatus,string location)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin" + status);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/"+attendanceStatus+"/"+location);
             string stringData = response.Content.ReadAsStringAsync().Result;
             AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
-            return View(dashboard);
+            return Json(dashboard);
         }
         
 
@@ -60,13 +62,16 @@ namespace EIS.WebApp.Controllers
             return View(dashBoard);
         }
 
-        public IActionResult Calendar()
+        [DisplayName("Admin Calendar")]
+        public IActionResult AdminCalendar()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
 
+        [ActionName("AdminCalendar")]
         [HttpPost]
-        public IActionResult GetFullCalendar(string intervalStart, string intervalEnd,string location)
+        public IActionResult GetAdminCalendar(string intervalStart, string intervalEnd,string location)
         {
             List<CalendarData> data = new List<CalendarData>();
             if (!string.IsNullOrEmpty(intervalStart)&& !string.IsNullOrEmpty(intervalEnd))
@@ -78,6 +83,30 @@ namespace EIS.WebApp.Controllers
                 string stringData = response.Content.ReadAsStringAsync().Result;
 
                 data = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);              
+            }
+            return Json(data);
+        }
+
+        [DisplayName("Employee Calendar")]
+        public IActionResult EmployeeCalendar()
+        {
+            return View();
+        }
+        
+        [ActionName("EmployeeCalendar")]
+        [HttpPost]
+        public IActionResult GetEmployeeCalendar(string intervalStart, string intervalEnd)
+        {
+            List<CalendarData> data = new List<CalendarData>();
+            if (!string.IsNullOrEmpty(intervalStart) && !string.IsNullOrEmpty(intervalEnd))
+            {
+                DateTime startDate = Convert.ToDateTime(intervalStart);
+                DateTime endDate = Convert.ToDateTime(intervalEnd);
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/CalendarData/"+ startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
+
+                string stringData = response.Content.ReadAsStringAsync().Result;
+
+                data = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);
             }
             return Json(data);
         }
