@@ -12,14 +12,13 @@ namespace EIS.Validations.FluentValidations
         public HolidayValidator(IRepositoryWrapper repositoryWrapper)
         {
             _repositoryWrapper = repositoryWrapper;
-            RuleFor(x => x.Location).NotEmpty().WithMessage("Please select location");
             RuleFor(x => x.Date).NotEmpty().WithMessage("Please select date")
                 .Must(UniqueForLocation).WithMessage("Holiday already added with this date for given location");
             RuleFor(x => x.Vacation).NotEmpty().WithMessage("Please enter vacation for holiday");
         }
         public bool UniqueForLocation(Holiday obj,DateTime date)
         {
-            var holiday = _repositoryWrapper.Holidays.FindByCondition(x => x.Date == date.Date && x.Location == obj.Location);
+            var holiday = _repositoryWrapper.Holidays.FindByCondition(x => x.Date == date.Date && x.LocationId == obj.LocationId);
             if (holiday == null)
             {
                 return true;

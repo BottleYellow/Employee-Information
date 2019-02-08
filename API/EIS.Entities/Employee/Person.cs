@@ -14,7 +14,7 @@ namespace EIS.Entities.Employee
     {
         #region [Entities]
         public string EmployeeCode { get; set; }
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         public int? StreamId { get; set; }
         public string PanCard { get; set; }
         public string AadharCard { get; set; }

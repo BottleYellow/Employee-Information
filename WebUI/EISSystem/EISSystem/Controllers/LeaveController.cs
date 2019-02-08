@@ -35,15 +35,16 @@ namespace EIS.WebApp.Controllers
         [DisplayName("View all requests")]
         public IActionResult EmployeeLeaveRequests()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
 
         [ActionName("EmployeeLeaveRequests")]
         [HttpPost]
-        public IActionResult GetEmployeeLeaveRequests()
+        public IActionResult GetEmployeeLeaveRequests(int LocationId)
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests", null, null);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests", null, LocationId);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -206,6 +207,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
         {
+            ViewBag.Locations = GetLocations();
             LeaveRules leaveRule = new LeaveRules();
             return PartialView("AddPolicy", leaveRule);
         }
@@ -213,6 +215,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddPolicy(LeaveRules Leave)
         {
+            ViewBag.Locations = GetLocations();
             Leave.CreatedDate = DateTime.Now.Date;
             Leave.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)

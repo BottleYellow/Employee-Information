@@ -19,11 +19,11 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public DashboardController(IRepositoryWrapper repository) : base(repository)
         {        }
 
-        [Route("Admin")]
+        [Route("Admin/{attendanceStatus}/{location}")]
         [HttpGet]
-        public IActionResult GetAdminDashboard()
+        public IActionResult GetAdminDashboard(string attendanceStatus, string location)
         {
-            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(TenantId);
+            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus,location,TenantId);
             return Ok(dashboard);
         }
 
@@ -45,7 +45,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("CalendarData/{location}/{startDate}/{endDate}")]
         [HttpGet]
-        public IActionResult GetCalendarData([FromRoute]string location,[FromRoute]string startDate, [FromRoute]string endDate)
+        public IActionResult GetCalendarData([FromRoute]int location,[FromRoute]string startDate, [FromRoute]string endDate)
         {
             List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails(location,Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
             return Ok(calendarDataList);

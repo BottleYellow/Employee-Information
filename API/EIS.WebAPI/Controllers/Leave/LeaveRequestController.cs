@@ -35,7 +35,17 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.FindAll().Where(x => x.TenantId == TenantId); ;
+            IQueryable<LeaveRequest> leaveData = null;
+            if(sortGrid.LocationId==0)
+            {
+                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x=>x.Person.Location).Where(x => x.TenantId == TenantId);
+            }
+            else
+            {
+                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.LocationId == sortGrid.LocationId);
+                leaveData.Include(x => x.Person.Location);
+            }
+            
            
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
