@@ -25,23 +25,25 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public AdminDashboard GetAdminDashboard(string attendanceStatus, string location,int TenantId)
+        public AdminDashboard GetAdminDashboard(string attendanceStatus, int location,int TenantId)
         {
             List<Person> employees = new List<Person>();
             int leaves = 0;
             int pcount = 0;
+            
             var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
            .Select(p => new
            {
                p,
                Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
            });
-
+            pcount = results.Where(x => x.Attendances!=null && x.Attendances.Count()>0).Count();
             foreach (var x in results)
             {
                 x.p.Attendance = x.Attendances.ToList();
             }
             var result = results.Select(x => x.p).ToList();
+            result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
             AdminDashboard dashboard = new AdminDashboard
             {
                 AllEmployeesCount = result.Count(),

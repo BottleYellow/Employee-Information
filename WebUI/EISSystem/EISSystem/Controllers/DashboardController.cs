@@ -31,7 +31,7 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminDashboard(string attendanceStatus,string location)
+        public IActionResult AdminDashboard(string attendanceStatus,int location)
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/"+attendanceStatus+"/"+location);
             string stringData = response.Content.ReadAsStringAsync().Result;

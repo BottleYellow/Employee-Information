@@ -88,8 +88,8 @@
                         <table class="table table-hover dashboard-task-infos" id="myTable">
                             <thead>
                                 <tr>
-                                    <th>LOCATION NAME</th>
-                                    <th>NAME</th>
+                                    <th>Location</th>
+                                    <th>Name</th>
                                     <th>Status</th>
                                     <th>ClockIn</th>
                                     <th>ClockOut</th>
@@ -187,39 +187,39 @@
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
-        selectOpt = $('#select option:selected').text();
-        generateReport("All", selectOpt);
+        selectOpt = $('#select option:selected').val();
+        generateReport(0, selectOpt);
         //$('#myTable').DataTable();
     });
-    var buttonSelected="All";
+    var buttonSelected=0;
     var selectOpt;
     $('#allEmployee').on('click', function () {
-        buttonSelected = "All";
+        buttonSelected = 0;
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });
     $('#employeePresent').on('click', function () {
         buttonSelected = "Present";
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });  
     $('#employeeAbsent').on('click', function () {
         buttonSelected = "Absent";
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });
     $('#select').on('change', function () {
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
     });
 
-    function generateReport(employeecount, location) {      
+    function generateReport(employeecount, location) {  
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AdminDashboard","Dashboard")',
@@ -235,6 +235,7 @@
     }
 
     function getda(Employees) {
+        debugger;
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
             if (Employees[i].Attendance.length==0) {

@@ -21,7 +21,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("Admin/{attendanceStatus}/{location}")]
         [HttpGet]
-        public IActionResult GetAdminDashboard(string attendanceStatus, string location)
+        public IActionResult GetAdminDashboard(string attendanceStatus, int location)
         {
             AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus,location,TenantId);
             return Ok(dashboard);
