@@ -5,6 +5,7 @@ using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace EIS.Repositories.Repository
 {
@@ -30,9 +31,22 @@ namespace EIS.Repositories.Repository
             return results;
         }
 
-        public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId)
+        public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId,int? LocationId)
         {
-            var result = PersonId == 0 ? _dbContext.PastLeaves.Where(x => x.TenantId == TenantId) : _dbContext.PastLeaves.Where(x => x.TenantId == TenantId && x.PersonId == PersonId);
+            IQueryable<PastLeaves> result = null;
+            if (PersonId == 0 && LocationId == 0)
+            {
+                result = _dbContext.PastLeaves.Include(x => x.Person).Where(x => x.TenantId == TenantId).Include(x=>x.Person.Location);
+            }
+            else if (PersonId != 0 && LocationId == 0)
+            {
+                result= _dbContext.PastLeaves.Include(x => x.Person).Where(x => x.TenantId == TenantId && x.PersonId == PersonId).Include(x => x.Person.Location);
+            }
+            else
+            {
+                result = _dbContext.PastLeaves.Include(x=>x.Person).Where(x => x.TenantId == TenantId && x.Person.LocationId==LocationId).Include(x=>x.Person.Location);
+            }
+           
             return result;
         }
 

@@ -8,6 +8,7 @@ using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EIS.WebAPI.Controllers.Leave
 {
@@ -27,7 +28,16 @@ namespace EIS.WebAPI.Controllers.Leave
         public ActionResult Get([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            IQueryable<LeaveCredit> credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId);
+            IQueryable<LeaveCredit> credits = null;
+            if(sortGrid.LocationId==0)
+            {
+                credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId).Include(x=>x.Person.Location);
+            }
+            else
+            {
+                credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId && x.Person.LocationId==sortGrid.LocationId).Include(x => x.Person.Location);
+            }
+            
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {

@@ -3,6 +3,7 @@ using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,29 @@ namespace EIS.WebAPI.Controllers.Leave
         public LeavePolicyController(IRepositoryWrapper repository):base(repository)
         {
         }
+        [Route("GetPolicies/{loc}")]
+        [HttpGet]
+        public IActionResult GetPolicyLocationWise(int loc)
+        {
+            if (loc == 0)
+            {
+                IQueryable<LeaveRules> policies = _repository.LeaveRules.FindAll();
+                return Ok(policies);
+            }
+            else
+            {
+                IQueryable<LeaveRules> policies = _repository.LeaveRules.FindAllByCondition(e => e.LocationId == loc);
+                return Ok(policies);
+            }
 
+        }
+        [Route("GetPolicyByLocation/{PersonId}")]
+        [HttpGet]
+        public IEnumerable<LeaveRules> GetLeavePolicies([FromRoute]int PersonId)
+        {
+            string locationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId.ToString();
+            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId==Convert.ToInt32(locationId));
+        }
         [DisplayName("leave Policies")]
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
@@ -32,7 +55,16 @@ namespace EIS.WebAPI.Controllers.Leave
         public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            IQueryable<LeaveRules> employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId);
+            IQueryable<LeaveRules> employeeData = null;
+            if(sortGrid.LocationId==0)
+            {
+                employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId).Include(x=>x.Location);
+            }
+            else
+            {
+                employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId == sortGrid.LocationId).Include(x => x.Location);
+            }
+            
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 

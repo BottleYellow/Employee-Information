@@ -232,7 +232,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetPastLeaves([FromRoute]int id,[FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
-            IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(id, TenantId);
+            IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(id, TenantId, sortGrid.LocationId);
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
