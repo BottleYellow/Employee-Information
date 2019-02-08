@@ -16,6 +16,14 @@
     <Compile Remove="Migrations\20190201111950_InitialData.cs" />
     <Compile Remove="Migrations\20190201121124_Changes.cs" />
     <Compile Remove="Migrations\20190201121232_Changes.cs" />
+    <Compile Remove="Migrations\20190208045640_Final.cs" />
+    <Compile Remove="Migrations\20190208061416_Final.cs" />
+    <Compile Remove="Migrations\20190208062117_Final.cs" />
+    <Compile Remove="Migrations\20190208062432_Final.cs" />
+    <Compile Remove="Migrations\20190208062723_Final.cs" />
+    <Compile Remove="Migrations\20190208062910_FinalData.cs" />
+    <Compile Remove="Migrations\20190208063206_FinalData.cs" />
+    <Compile Remove="Migrations\20190208063436_FinalChanges.cs" />
   </ItemGroup>
 
   <ItemGroup>

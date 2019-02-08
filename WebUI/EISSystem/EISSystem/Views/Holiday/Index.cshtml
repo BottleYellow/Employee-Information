@@ -17,14 +17,16 @@
                 toastr.success("@ViewBag.Message");
             });
         </script>
-        ViewBag.Message = null;
+            ViewBag.Message = null;
+        }
     }
-}
+
 <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
 <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
 
-
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <html>
 <head>
     <title>Holidays</title>
@@ -39,6 +41,11 @@
             <HeaderWithButton btn-id="btnModal" header-name="Holidays" btn-text="Add Holiday" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                    <option value="0">All</option>
+                </select>
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
@@ -57,23 +64,6 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Location)
-                                            </td>
-                                            <td>
-                                                @item.Date.ToString("dd/MMM/yyyy")
-                                            </td>
-
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Vacation)
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
                             </table>
                         </div>
 
@@ -89,14 +79,83 @@
 
 <script>
     $(document).ready(function () {
-        var table = $('#example').DataTable({
-            rowReorder: {
-                selector: 'td:nth-child(2)'
-            },
-            responsive: true
-        });
+        GenerateReport(0);
     });
+    $('#locations').on('change', function () {
+        var c = $('#locations').val();
+        GenerateReport(c);
+    });
+    function GenerateReport(c) {
+                $.fn.dataTable.ext.errMode = 'none';
+        $('#example').on('error.dt', function () {
+            bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+        }).DataTable();
+        $('#example').DataTable().destroy();
+        $('#example tbody').empty();
+        var dTable = $('#example').DataTable({
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    title: 'EMPLOYEE PAST LEAVE REPORT',
+                    text: 'Export',
+                    titleAttr: 'Export to Pdf'
+                }
+            ],
+            'columnDefs': [
+                {
+                    'searchable': false,
+                    'targets': [0, 1, 2]
+                }
+            ],
+            "aoColumnDefs": [
+                { "aTargets": [0], "bSortable": true },
+                { "aTargets": [1], "bSortable": true },
+                { "aTargets": ['_all'], "bSortable": false }
+            ],
+            sDom: '<"myexport"B>ifrtlp',
+            lengthMenu: [
+                [10, 25, -1],
+                ['10', '25', 'All']
+            ],
+            ajax: {
+                //"url": "/Leave/PastLeaves",
+                "url": '@Url.Action("Index", "Holiday")?id='+c,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+                {
+                    "data": "LocationId", "autoWidth": true, render: function (data, type, row) {
+                        return row.Location.LocationName;
+                    }
+                },
+                {
+                    "data": "Date", "autoWidth": true, render: function (data) {
+                        data = moment(data).format('DD MMM YYYY');
+                        return data;
+                    }
+                },
+                {
+                    "data": "Vacation", "autoWidth": true, render: function (data) {
+                        return data;
+                    }
+                }
 
+            ],
+            "initComplete": function () {
+                var $searchInput = $('div.dataTables_filter input');
+                $searchInput.unbind();
+                $searchInput.bind('keyup', function (e) {
+                    if (this.value.length >= 3 || this.value.length == 0) {
+                        dTable.search(this.value).draw();
+                    }
+                });
+            }
+        });
+    }
     $("#btnModal").click(function () {
         var url = $("#modal-placeholder").data('url');
         $.get(url, function (data) {
@@ -109,14 +168,19 @@
         });
     });
 </script>
+
 <script src="~/plugins/momentjs/moment.js"></script>
+@*<script src="~/Ems/js/moment.min.js"></script>*@
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-
-<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+@*<script src="~/Ems/js/dataTables.buttons.min.js"></script>*@
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
 

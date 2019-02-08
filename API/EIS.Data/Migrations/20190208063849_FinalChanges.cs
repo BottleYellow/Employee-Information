@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmployeeData : Migration
+    public partial class FinalChanges : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,49 +30,6 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tblConfiguration", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "tblHolidays",
-                schema: "LMS",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Date = table.Column<DateTime>(type: "date", nullable: false),
-                    Vacation = table.Column<string>(type: "nvarchar(100)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tblHolidays", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "tblLeaveRules",
-                schema: "LMS",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TenantId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LeaveType = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Description = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ValidFrom = table.Column<DateTime>(type: "date", nullable: false),
-                    ValidTo = table.Column<DateTime>(type: "date", nullable: false),
-                    Validity = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tblLeaveRules", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +70,64 @@ namespace EIS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblHolidays",
+                schema: "LMS",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: true),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
+                    Vacation = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblHolidays", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblHolidays_tblLocations_LocationId",
+                        column: x => x.LocationId,
+                        principalSchema: "LMS",
+                        principalTable: "tblLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblLeaveRules",
+                schema: "LMS",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TenantId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LocationId = table.Column<int>(type: "int", nullable: true),
+                    LeaveType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", nullable: true),
+                    ValidFrom = table.Column<DateTime>(type: "date", nullable: false),
+                    ValidTo = table.Column<DateTime>(type: "date", nullable: false),
+                    Validity = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblLeaveRules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblLeaveRules_tblLocations_LocationId",
+                        column: x => x.LocationId,
+                        principalSchema: "LMS",
+                        principalTable: "tblLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblPerson",
                 schema: "LMS",
                 columns: table => new
@@ -125,7 +140,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    LocationId = table.Column<int>(nullable: false),
+                    LocationId = table.Column<int>(nullable: true),
                     StreamId = table.Column<int>(type: "int", nullable: true),
                     PanCard = table.Column<string>(type: "varchar(10)", nullable: true),
                     AadharCard = table.Column<string>(type: "varchar(12)", nullable: true),
@@ -153,7 +168,7 @@ namespace EIS.Data.Migrations
                         principalSchema: "LMS",
                         principalTable: "tblLocations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_tblPerson_tblRoles_RoleId",
                         column: x => x.RoleId,
@@ -543,6 +558,12 @@ namespace EIS.Data.Migrations
                 column: "TypeOfLeaveId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tblHolidays_LocationId",
+                schema: "LMS",
+                table: "tblHolidays",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tblLeaveCredit_LeaveId",
                 schema: "LMS",
                 table: "tblLeaveCredit",
@@ -565,6 +586,12 @@ namespace EIS.Data.Migrations
                 schema: "LMS",
                 table: "tblLeaveRequests",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblLeaveRules_LocationId",
+                schema: "LMS",
+                table: "tblLeaveRules",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tblOtherAddress_PersonId",
