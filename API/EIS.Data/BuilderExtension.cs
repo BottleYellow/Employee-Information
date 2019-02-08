@@ -91,7 +91,7 @@ namespace EIS.Data
 
                 #region[LeaveRules]
                 //For EmployeeLeave model validation
-
+                modelBuilder.Entity<LeaveRules>().Property(p => p.LocationId).HasColumnType("int");
                 modelBuilder.Entity<LeaveRules>().Property(p => p.LeaveType).HasColumnType("varchar(50)").IsRequired();
                 modelBuilder.Entity<LeaveRules>().Property(p => p.Description).HasColumnType("varchar(200)");
                 modelBuilder.Entity<LeaveRules>().Property(p => p.ValidFrom).HasColumnType("date").IsRequired();
@@ -186,7 +186,7 @@ namespace EIS.Data
                 #endregion
 
                 #region [Holiday]
-                modelBuilder.Entity<Holiday>().Property(p => p.Location).HasColumnType("nvarchar(50)").IsRequired();
+                modelBuilder.Entity<Holiday>().Property(p => p.LocationId).HasColumnType("int");
                 modelBuilder.Entity<Holiday>().Property(p => p.Date).HasColumnType("date").IsRequired();
                 modelBuilder.Entity<Holiday>().Property(p => p.Vacation).HasColumnType("nvarchar(100)");
                 #endregion
@@ -248,6 +248,7 @@ namespace EIS.Data
                   .HasOne(s => s.Person)
                   .WithMany(g => g.LeaveRequests)
                   .HasForeignKey(s => s.PersonId);
+
 
                 //one employee has many Leave Credits
                 modelBuilder.Entity<LeaveCredit>()

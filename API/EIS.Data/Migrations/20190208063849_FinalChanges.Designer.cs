@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190207093010_EmployeeData")]
-    partial class EmployeeData
+    [Migration("20190208063849_FinalChanges")]
+    partial class FinalChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -366,7 +366,7 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime?>("LeavingDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(50)");
@@ -456,9 +456,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TenantId");
 
@@ -468,6 +467,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("tblHolidays","LMS");
                 });
@@ -651,6 +652,9 @@ namespace EIS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -671,6 +675,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("tblLeaveRules","LMS");
                 });
@@ -830,13 +836,19 @@ namespace EIS.Data.Migrations
                 {
                     b.HasOne("EIS.Entities.Employee.Locations", "Location")
                         .WithMany("Employees")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("EIS.Entities.Employee.Role", "Role")
                         .WithMany("Persons")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.Hoildays.Holiday", b =>
+                {
+                    b.HasOne("EIS.Entities.Employee.Locations", "Location")
+                        .WithMany("Holidays")
+                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
@@ -875,6 +887,13 @@ namespace EIS.Data.Migrations
                         .WithMany("Requests")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EIS.Entities.Leave.LeaveRules", b =>
+                {
+                    b.HasOne("EIS.Entities.Employee.Locations", "Location")
+                        .WithMany("LeaveRules")
+                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.PastLeaves", b =>

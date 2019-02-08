@@ -22,11 +22,11 @@
 
                 <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
-                    <label class="control-label" asp-for="Location">Location : </label>
-                    <select style="border:ridge;" asp-for="Location" asp-items="@new SelectList(Enum.GetValues(typeof(Locations)))" class="form-control show-tick">
-                        <option value="">-- Select Location --</option>
+                    <label class="control-label" asp-for="LocationId">Location : </label>
+                    <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                        <option value="0">-- Select Location --</option>
                     </select>
-                    <span asp-validation-for="Location" class="text-danger"></span>
+                    <span asp-validation-for="LocationId" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>

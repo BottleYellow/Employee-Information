@@ -100,13 +100,13 @@ namespace EIS.Repositories.Repository
         }
 
 
-        public List<CalendarData> GetCalendarDetails(string location,DateTime beginDate, DateTime stopDate)
+        public List<CalendarData> GetCalendarDetails(int location,DateTime beginDate, DateTime stopDate)
         {
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
             IEnumerable<Attendance> data = new List<Attendance>();
-            if (location=="All")
+            if (location==0)
             {
                holidays = _dbContext.Holidays.ToList();
                 leaveList = _dbContext.LeaveRequests.ToList();
@@ -114,9 +114,9 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-               holidays = _dbContext.Holidays.Where(x => x.Location == location).ToList();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Person.Location.LocationName == location).ToList();
-                data = _dbContext.Attendances.Include(x => x.Person).Where(x => x.Person.Location.LocationName == location).ToList();
+                holidays = _dbContext.Holidays.Where(x => x.LocationId == location).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Person.Location.Id == location).ToList();
+                data = _dbContext.Attendances.Include(x => x.Person).Where(x => x.Person.Location.Id == location).ToList();
             }
 
             int count = 0;

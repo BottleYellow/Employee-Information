@@ -207,6 +207,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Rule")]
         public IActionResult AddPolicy()
         {
+            ViewBag.Locations = GetLocations();
             LeaveRules leaveRule = new LeaveRules();
             return PartialView("AddPolicy", leaveRule);
         }
@@ -214,6 +215,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddPolicy(LeaveRules Leave)
         {
+            ViewBag.Locations = GetLocations();
             Leave.CreatedDate = DateTime.Now.Date;
             Leave.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)

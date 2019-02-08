@@ -71,7 +71,7 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("AdminCalendar")]
         [HttpPost]
-        public IActionResult GetAdminCalendar(string intervalStart, string intervalEnd,string location)
+        public IActionResult GetAdminCalendar(string intervalStart, string intervalEnd,int location)
         {
             List<CalendarData> data = new List<CalendarData>();
             if (!string.IsNullOrEmpty(intervalStart)&& !string.IsNullOrEmpty(intervalEnd))

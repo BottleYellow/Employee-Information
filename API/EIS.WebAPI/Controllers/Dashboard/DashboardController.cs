@@ -45,7 +45,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("CalendarData/{location}/{startDate}/{endDate}")]
         [HttpGet]
-        public IActionResult GetCalendarData([FromRoute]string location,[FromRoute]string startDate, [FromRoute]string endDate)
+        public IActionResult GetCalendarData([FromRoute]int location,[FromRoute]string startDate, [FromRoute]string endDate)
         {
             List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails(location,Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
             return Ok(calendarDataList);

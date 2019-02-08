@@ -61,12 +61,12 @@
 
 <script>
     $(document).ready(function () {
-        var selectOption = "All";
+        var selectOption = 0;
         generateCalendarData(selectOption);
     });
 
     $('#select').on('change', function () {
-       var selectOpt= $('#select option:selected').text();
+       var selectOpt= $('#select option:selected').val();
         generateCalendarData(selectOpt);
     });
 

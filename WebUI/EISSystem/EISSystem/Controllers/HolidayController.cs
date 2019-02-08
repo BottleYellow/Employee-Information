@@ -28,14 +28,29 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List of Holidays")]
         public IActionResult Index()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Holiday");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
-            return View(data);
+            ViewBag.Locations = GetLocations();
+            return View();
         }
+
+        [ActionName("Index")]
+        [HttpPost]
+        public IActionResult GetIndex(int id)
+        {
+            return LoadData<Holiday>(ApiUrl + "/api/Holiday/GetHolidays", null, id);
+        }
+        //[DisplayName("List of Holidays")]
+        //public IActionResult Index()
+        //{
+        //    ViewBag.Locations = GetLocations();
+        //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Holiday");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
+        //    return View(data);
+        //}
         [DisplayName("Add Holiday")]
         public IActionResult AddHoliday()
         {
+            ViewBag.Locations = GetLocations();
             Holiday holiday = new Holiday();
             return PartialView("AddHoliday", holiday);
         }
@@ -43,6 +58,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddHoliday(Holiday holiday)
         {
+            ViewBag.Locations = GetLocations();
             holiday.CreatedDate = DateTime.Now.Date;
             holiday.UpdatedDate = DateTime.Now.Date;
             holiday.IsActive = true;
