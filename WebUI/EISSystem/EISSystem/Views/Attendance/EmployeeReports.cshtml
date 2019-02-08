@@ -266,9 +266,9 @@
 
         function generateReport(value, type) {
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 //url: "/Attendance/GetAttendanceSummary",
-                url: '@Url.Action("GetAttendanceSummary", "Attendance")?date=' + value + '&type=' + type,
+                url: '@Url.Action("EmployeeReports", "Attendance")?date=' + value + '&type=' + type,
                 //data: { "date": value, "type": type },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
