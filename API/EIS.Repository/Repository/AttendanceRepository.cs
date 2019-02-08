@@ -19,7 +19,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
+                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
                 .Select(p => new
                 {
                     p,
@@ -35,7 +35,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin")
+                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
                 .Select(p => new
                 {
                     p,
@@ -56,7 +56,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location).Where(y=>y.Location.Id==y.LocationId)
+                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
                 .Select(p => new
                 {
                     p,
@@ -71,7 +71,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z=>z.Location).Where(z=>z.Id==loc)
+                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z=>z.Location)
                     .Select(p => new
                     {
                         p,
@@ -86,21 +86,51 @@ namespace EIS.Repositories.Repository
             }
         }
    
-        public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek)
+        public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek, int loc)
         {
-            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin")
-              .Select(p => new
-              {
-                  p,
-                  Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
-              });
-            foreach (var x in results)
+            if (loc == 0)
             {
-                x.p.Attendance = x.Attendances.ToList();
+                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+                .Select(p => new
+                {
+                    p,
+                    Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
+                });
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p);
+                return result;
             }
-            var result = results.Select(x => x.p);
+            else
+            {
+                var results = _dbContext.Person.Where(y => y.LocationId == loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z => z.Location)
+                    .Select(p => new
+                    {
+                        p,
+                        Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
+                    }).ToList();
+                foreach (var x in results)
+                {
+                    x.p.Attendance = x.Attendances.ToList();
+                }
+                var result = results.Select(x => x.p);
+                return result.AsQueryable();
+            }
+            //var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+            //  .Select(p => new
+            //  {
+            //      p,
+            //      Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
+            //  });
+            //foreach (var x in results)
+            //{
+            //    x.p.Attendance = x.Attendances.ToList();
+            //}
+            //var result = results.Select(x => x.p);
 
-            return result;
+            //return result;
         }
 
         public AttendanceReport GetAttendanceReportSummary(int TotalDays, IQueryable<Attendance> attendanceData)

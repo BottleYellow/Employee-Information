@@ -34,6 +34,10 @@
         background-color: #808080;
     }
 
+    #locations {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+
     #generateReport {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
@@ -69,44 +73,49 @@
                     <div class="body">
                         <div>
                             <div class="row col-md-12">
+                                <div class="col-md-3">
+                                    <label>Select Location</label>
+                                    <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                        <option value="0">All</option>
+                                    </select>
+                                </div>
                                 <div class="col-md-9">
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="col-md-3">
                                             <label>Select Employee</label>
-                                            <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" style="width:200px;">
+                                            <select class="form-control" id="selectEmployee">
                                                 <option>-- Select --</option>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="col-md-3">
                                             <label>Select Type Of Reports</label>
-                                            <select class="form-control" id="select" style="width:200px;">
+                                            <select class="form-control" id="select">
                                                 <option value="month" id="month">Month</option>
                                                 <option value="year" id="year">Year</option>
                                                 <option value="week" id="week">Week</option>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="col-md-3">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" style="width:200px;" placeholder="select year" />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" />
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" style="width:200px;" placeholder="select month" />
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" />
                                             </div>
                                             <div id="inputweekdiv" hidden="hidden">
                                                 <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" style="width:200px;" placeholder="select week" />
+                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" />
                                             </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="col-md-3">
                                             <br />
                                             <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="col-md-3"></div>
                             </div>
                         </div>
                         <div>
@@ -219,6 +228,25 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        var loc = $('#locations').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                success: function (data) {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+                //error: function () {
+                //    bootbox.alert('<h4>Error</h4>');
+                //}
+
+            });
+
         var id =@cookies.PersonId;
         $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
         var totalDays = 0;
@@ -235,6 +263,28 @@
         $('#selectEmployee').on('change', function () {
             $("#generateReport").removeAttr('disabled');
         });
+
+        $('#locations').on('change', function () {
+            var loc = $('#locations').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                success: function (data) {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+                //error: function () {
+                //    bootbox.alert('<h4>Error</h4>');
+                //}
+
+            });
+        });
+
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {

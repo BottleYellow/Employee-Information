@@ -28,14 +28,14 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Attendance Reports")]
         public IActionResult AllAttendance()
         {
-            
+            ViewBag.Locations = GetLocations();
             return View();
         }
         [HttpPost]
-        public IActionResult AllAttendance(string date, string type, string location)
+        public IActionResult AllAttendance(string date, string type, int location)
         {
-            string url = GetAllAttendanceData(date, type,location);
-           return LoadData<Person>(url,null);
+            string url = GetAllAttendanceData(date, type);
+           return LoadData<Person>(url,null,location);
 
         }
         #endregion
@@ -55,7 +55,7 @@ namespace EIS.WebApp.Controllers
             //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url,null,1);
 
         }
         [ActionName(" EmployeeReports")]
@@ -76,7 +76,7 @@ namespace EIS.WebApp.Controllers
         #region[Employee Attendance History]
         [DisplayName("Employee Attendance History")]
         [HttpGet]
-        public IActionResult AttendanceSummary()
+        public IActionResult AttendanceSummary(int loc)
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee" );
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -88,8 +88,15 @@ namespace EIS.WebApp.Controllers
                                 FirstName = e.FirstName + " " + e.LastName
                             };
             ViewBag.Persons = employees;
+            ViewBag.Locations = GetLocations();
             return View(employees);
         }
+
+        //public IActionResult GetEmployeeLocationWise()
+        //{
+
+        //}
+
         [ActionName("AttendanceSummary")]
         [HttpPost]
         public IActionResult EmployeeReportsById(string date, string type, int? id)
@@ -102,7 +109,7 @@ namespace EIS.WebApp.Controllers
             //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
             ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url,null,1);
 
         }
         [ActionName("AttendanceSummary")]
@@ -213,23 +220,23 @@ namespace EIS.WebApp.Controllers
             return url;
         }
         [NonAction]
-        public string GetAllAttendanceData(string date, string type, string location)
+        public string GetAllAttendanceData(string date, string type)
         {
             string url = "";
             string[] monthYear = new string[3];
             string[] week = new string[2];
             ViewBag.type = type;
             int loc=0;
-            if(location=="All") {
-                loc = 0;
-            }else if (location == "Kondhwa")
-            {
-                loc = 1;
-            }
-            else if (location == "Baner")
-            {
-                loc = 6;
-            }
+            //if(location=="All") {
+            //    loc = 0;
+            //}else if (location == "Kondhwa")
+            //{
+            //    loc = 1;
+            //}
+            //else if (location == "Baner")
+            //{
+            //    loc = 6;
+            //}
             if (date.Contains('-'))
             {
                 week = date.Split('-');
@@ -240,17 +247,17 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceYearly/" + monthYear[0] + "/" + loc;
+                url = ApiUrl+"/api/Attendances/GetAllAttendanceYearly/" + monthYear[0];
             }
             else if (type == "week")
             {
                 DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + loc;
+                url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
             }
             else
             {
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceMonthly/" + monthYear[0] + "/" + monthYear[1]+ "/" + loc;
+                url = ApiUrl+"/api/Attendances/GetAllAttendanceMonthly/" + monthYear[0] + "/" + monthYear[1];
             }
             return url;
         }
@@ -307,6 +314,7 @@ namespace EIS.WebApp.Controllers
                                 FirstName = e.FirstName + " " + e.LastName
                             };
             ViewBag.Persons = employees;
+            ViewBag.Locations = GetLocations();
             return View(employees);
         }
         
@@ -320,7 +328,7 @@ namespace EIS.WebApp.Controllers
                 url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
             }
             ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null);
+            return LoadData<Attendance>(url,null,1);
         }
     }
 }

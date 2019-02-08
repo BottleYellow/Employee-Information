@@ -16,7 +16,7 @@
             background-color: #808080;
         }
 
-        #location {
+        #locations {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
@@ -59,10 +59,8 @@
                         <div class="row col-md-12">
                             <div class="col-md-3">
                                 <label>Select Location</label>
-                                <select class="form-control" id="location">
-                                    <option>All</option>
-                                    <option>Baner</option>
-                                    <option>Kondhwa</option>
+                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                    <option value="0">All</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -150,7 +148,7 @@
         var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
         totalDays = days;
         $('#inputmonth').val(m + '/' + y);
-        var location = $('#location').val();
+        var location = $('#locations').val();
         generateReport(m + '/' + y, 'month',location);
         $('#select').on('change', function () {
             var v = $('#select').val();
@@ -201,18 +199,12 @@
         });
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
-            var location = $('#location').val();
+            var location = $('#locations').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
                 $("#inputyear").val(value);
                 totalDays = days;
-                //if (value % 4 == 0) {
-                //    totalDays = 366;
-                //}
-                //else {
-                //    totalDays = 365;
-                //}
                 generateReport(value, 'year', location);
             }
             else if (v == 'month') {
@@ -224,12 +216,12 @@
                 var ld = new Date(y, m, 0).getDate();
                 var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
                 totalDays = days;
-                var location = $('#location').val();
+                var location = $('#locations').val();
                 generateReport(value, 'month',location);
             }
             else if (v == 'week') {
                 var value = $("#inputweek").val();
-                var location = $('#location').val();
+                var location = $('#locations').val();
                 var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
@@ -238,6 +230,41 @@
                 totalDays = days;
             }
         });
+        //$('#locations').on('change', function () {
+        //    var c = $('#locations').val();
+        //    var v = $('#select').val();
+        //    var location = $('#location').val();
+        //    if (v == 'year') {
+        //        var value = $("#inputyear").val();
+        //        var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
+        //        $("#inputyear").val(value);
+        //        totalDays = days;
+        //        generateReport(value, 'year', c);
+        //    }
+        //    else if (v == 'month') {
+        //        var value = $("#inputmonth").val();
+        //        $("#inputmonth").val(value);
+        //        var monthYear = value.split('/');
+        //        var y = monthYear[1];
+        //        var m = monthYear[0];
+        //        var ld = new Date(y, m, 0).getDate();
+        //        var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
+        //        totalDays = days;
+        //        var location = $('#location').val();
+        //        generateReport(value, 'month', c);
+        //    }
+        //    else if (v == 'week') {
+        //        var value = $("#inputweek").val();
+        //        var location = $('#location').val();
+        //        var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
+        //        var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
+        //        $("#inputweek").val(firstDate + " - " + lastDate);
+        //        generateReport(firstDate + " - " + lastDate, 'week', c);
+        //        var days = workingDaysBetweenDates(moment(value, "MMM/DD/YYYY").day(0).format("YYYY-MM-DD"), moment(value, "MMM/DD/YYYY").day(6).format("YYYY-MM-DD"));
+        //        totalDays = days;
+        //    }
+        //});
+
 
         function generateReport(value, type, location) {
 
@@ -261,7 +288,7 @@
                     }
                 ],
                 "aoColumnDefs": [
-                    { "aTargets": [0], "bSortable": true },
+                    { "aTargets": [1], "bSortable": true },
                     { "aTargets": ['_all'], "bSortable": false }
                 ],
 
@@ -277,8 +304,8 @@
                 },
                 "columns": [
                     {
-                        "data": null, "name": "Location", "autoWidth": true, render: function (row) {
-                            return row.location.LocationName;
+                        "data": null, "name": "FirstName", "autoWidth": true, render: function (row) {
+                            return row.Location.LocationName;
                         }
                     },
                     {

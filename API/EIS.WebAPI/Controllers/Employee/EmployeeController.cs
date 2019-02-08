@@ -26,6 +26,22 @@ namespace EIS.WebAPI.Controllers
         {
             _configuration = configuration;
         }
+        [Route("GetLocations/{loc}")]
+        [HttpGet]
+        public IActionResult GetEmployeeLocationWise(int loc)
+        {
+            if (loc == 0)
+            {
+                IQueryable<Person> employees = _repository.Employee.FindAllByCondition(e => e.Role.Name != "Admin");
+                return Ok(employees);
+            }
+            else
+            {
+                IQueryable<Person> employees = _repository.Employee.FindAllByCondition(e => e.LocationId == loc && e.Role.Name != "Admin");
+                return Ok(employees);
+            }
+            
+        }
 
         [HttpGet]
         public IActionResult GetAllEmployee()

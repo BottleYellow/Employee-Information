@@ -88,21 +88,23 @@ namespace EIS.WebAPI.Controllers
 
         #region[Attendance Reports]
         [DisplayName("Attendance Reports")]
-        [HttpPost("GetAllAttendanceMonthly/{month}/{year}/{loc}")]
-        public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year, [FromRoute] int loc)
+        [HttpPost("GetAllAttendanceMonthly/{month}/{year}")]
+        public IActionResult GetAllAttendanceMonthly([FromBody] SortGrid sortGrid, [FromRoute] int month, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year,loc);
+            string lid = sortGrid.LocationId.ToString();
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year,Convert.ToInt32(lid));
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
 
         [DisplayName("Attendance Reports")]
-        [HttpPost("GetAllAttendanceYearly/{year}/{loc}")]
-        public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year, [FromRoute] int loc)
+        [HttpPost("GetAllAttendanceYearly/{year}")]
+        public IActionResult GetAllAttendanceYearly([FromBody]SortGrid sortGrid, [FromRoute] int year)
         {
             ArrayList data = new ArrayList();
-            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceYearly(year,loc);
+            string lid = sortGrid.LocationId.ToString();
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceYearly(year, Convert.ToInt32(lid));
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
@@ -113,7 +115,8 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllAttendanceWeekly([FromBody]SortGrid sortGrid, [FromRoute] string startOfWeek, [FromRoute] string endOfWeek)
         {
             ArrayList data = new ArrayList();
-            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek));
+            string lid = sortGrid.LocationId.ToString();
+            IQueryable<Person> attendanceData = _repository.Attendances.GetAttendanceWeekly(Convert.ToDateTime(startOfWeek), Convert.ToDateTime(endOfWeek), Convert.ToInt32(lid));
             data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Employee.GetDataByGridCondition(null, sortGrid, attendanceData) : _repository.Employee.GetDataByGridCondition(x => x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, attendanceData);
             return Ok(data);
         }
