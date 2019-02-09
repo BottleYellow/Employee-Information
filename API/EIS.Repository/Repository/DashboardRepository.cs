@@ -37,13 +37,14 @@ namespace EIS.Repositories.Repository
                p,
                Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
            });
-            pcount = results.Where(x => x.Attendances!=null && x.Attendances.Count()>0).Count();
+           
             foreach (var x in results)
             {
                 x.p.Attendance = x.Attendances.ToList();
             }
             var result = results.Select(x => x.p).ToList();
             result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
+            pcount = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).Count();
             AdminDashboard dashboard = new AdminDashboard
             {
                 AllEmployeesCount = result.Count(),
