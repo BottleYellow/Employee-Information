@@ -153,6 +153,10 @@
                     {
                         <li><a href="@rootPath/Dashboard/EmployeeDashboard"><span>Dashboard</span></a></li>
                     }
+                      else if (cookies.Role == "HR")
+                    {
+                        <li><a href="@rootPath/Dashboard/HRDashboard"><span>Dashboard</span></a></li>
+                    }
                     <DynamicMenu access="@cookies.Access" role="@cookies.Role"></DynamicMenu>
                 </ul>
             </div>

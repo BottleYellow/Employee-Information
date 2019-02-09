@@ -47,7 +47,8 @@ namespace EIS.WebApp.Controllers
             location.CreatedDate = DateTime.Now.Date;
             location.UpdatedDate = DateTime.Now.Date;
             location.IsActive = true;
-            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Location", location);
+            location.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Location/"+0, location);
             string stringData = response.Content.ReadAsStringAsync().Result;
 
             if (response.IsSuccessStatusCode == true)
@@ -65,6 +66,38 @@ namespace EIS.WebApp.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             return PartialView("AddLocation", location);
+        }
+          [DisplayName("Edit Location")]
+        public IActionResult EditLocation(int LocationId)
+        {
+            Locations location = GetLocations().Where(x => x.Id == LocationId).FirstOrDefault();
+            return PartialView("EditLocation", location);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditLocation(Locations location)
+        {
+            location.UpdatedDate = DateTime.Now.Date;
+            location.IsActive = true;
+            location.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
+            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Location/"+location.Id, location);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+
+            if (response.IsSuccessStatusCode == true)
+            {
+                return View();
+            }
+            else
+            {
+                dynamic data = JObject.Parse(stringData);
+                var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+                string error = data.LocationName.ToString();
+                error=error.Replace("[", null); error=error.Replace("]", null);
+
+                ModelState.AddModelError("Date", error);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            return PartialView("EditLocation", location);
         }
     }
 }

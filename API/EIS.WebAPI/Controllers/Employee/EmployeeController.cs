@@ -120,6 +120,7 @@ namespace EIS.WebAPI.Controllers
                     PersonId = person.Id
                 };
                 string pw = u.Password;
+                u.CreatedBy = person.CreatedBy;
                 _repository.Users.CreateUserAndSave(u);
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
@@ -204,7 +205,20 @@ namespace EIS.WebAPI.Controllers
             Role d = _repository.Employee.GetDesignationById(did);
             return Ok(d.Name);
         }
-        
+        [AllowAnonymous]
+        [Route("CreatedBy/{PersonId}")]
+        [HttpGet]
+        public IActionResult GetCreatedByName([FromRoute] int PersonId)
+        {
+            string NameWithRole = "";
+            Person p = _repository.Employee.FindByCondition(x => x.Id == PersonId);
+            Role role = _repository.Employee.GetDesignationById(p.RoleId);
+            if (p != null)
+            {
+                NameWithRole = p.FullName + "(" + role.Name + ")";
+            }
+            return Ok(NameWithRole);
+        }
         [Route("AddDesignation/{id}")]
         [HttpPost]
         public IActionResult CreateDesignation([FromRoute]int id,[FromBody]Role designation)

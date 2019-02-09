@@ -127,7 +127,7 @@ namespace EIS.WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-
+                person.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 string rootPath = _environment.WebRootPath;
                 string filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
@@ -234,6 +234,7 @@ namespace EIS.WebApp.Controllers
             {
                 try
                 {
+                    person.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                     person.UpdatedDate = DateTime.Now;
                     var rootPath = _environment.WebRootPath;
                     var filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
@@ -424,6 +425,7 @@ namespace EIS.WebApp.Controllers
                 //role.Access = JsonConvert.SerializeObject(access);
                 role.Access = JsonConvert.SerializeObject(UserAccess);
             }
+            role.CreatedBy = Convert.ToInt32(GetSession().PersonId);
             HttpResponseMessage response = _services.Roles.PostResponse(ApiUrl + "/api/Employee/AddDesignation/" + 0, role);
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -508,6 +510,7 @@ namespace EIS.WebApp.Controllers
             }
             if (ModelState.IsValid)
             {
+                role.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 //HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"api/Employee/UpdateDesignation", role );
                 HttpResponseMessage response = _services.Roles.PostResponse(ApiUrl + "/api/Employee/AddDesignation/" + role.Id, role);
                 if (GetSession().Role == role.Name)
@@ -538,6 +541,7 @@ namespace EIS.WebApp.Controllers
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
+                permanent.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl+ "/api/PermanentAddress/AddPermanent/" + 0, permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
@@ -554,6 +558,7 @@ namespace EIS.WebApp.Controllers
             permanent.IsActive = true;
             if (ModelState.IsValid)
             {
+                permanent.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl+ "/api/PermanentAddress/AddPermanent/" + permanent.Id, permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
@@ -580,6 +585,7 @@ namespace EIS.WebApp.Controllers
             current.IsActive = true;
             if (ModelState.IsValid)
             {
+                current.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl + "/api/CurrentAddress/AddCurrent/" + 0, current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
@@ -595,6 +601,7 @@ namespace EIS.WebApp.Controllers
             current.IsActive = true;
             if (ModelState.IsValid)
             {
+                current.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl + "/api/CurrentAddress/AddCurrent/" + current.Id, current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
@@ -622,6 +629,7 @@ namespace EIS.WebApp.Controllers
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
+                emergency.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl + "/api/EmergencyAddress/AddEmergency/" + 0, emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
@@ -645,6 +653,7 @@ namespace EIS.WebApp.Controllers
             emergency.IsActive = true;
             if (ModelState.IsValid)
             {
+                emergency.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl+ "/api/EmergencyAddress/AddEmergency/"+emergency.Id, emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }

@@ -62,14 +62,18 @@ namespace EIS.WebApp.Controllers
                 if (role == "Admin")
                 {
                     return RedirectToAction("AdminDashboard", "Dashboard");
-                }else
-                if (role == "Employee")
+                }
+                else if (role == "Employee")
                 {
                     return RedirectToAction("EmployeeDashboard", "Dashboard");
-                }else
-                if (role == "Manager")
+                }
+                else if (role == "Manager")
                 {
                     return RedirectToAction("ManagerDashboard", "Dashboard");
+                }
+                else if (role == "HR")
+                {
+                    return RedirectToAction("HRDashboard", "Dashboard");
                 }
             }
            

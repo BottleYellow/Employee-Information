@@ -58,6 +58,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddHoliday(Holiday holiday)
         {
+            holiday.CreatedBy = Convert.ToInt32(GetSession().PersonId);
             ViewBag.Locations = GetLocations();
             holiday.CreatedDate = DateTime.Now.Date;
             holiday.UpdatedDate = DateTime.Now.Date;

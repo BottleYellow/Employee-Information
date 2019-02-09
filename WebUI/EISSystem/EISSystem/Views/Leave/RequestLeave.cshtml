@@ -44,7 +44,7 @@
 </head>
 <body>
     <div class="ajax-loader">
-        <img src="~/gif/ajax-loader.gif" />
+        <img src="~/gif/ajax-loader-circle.gif" />
     </div>
     <div class="container-fluid">
         <div class="block-header">
@@ -128,6 +128,7 @@
 </html>
 
 <script>
+    var availableLeaves = null;
     $(document).ready(function () {
         var d = new Date();
         d.setDate(d.getDate() + 1);
@@ -139,9 +140,13 @@
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
-        if (document.getElementById("type").value == 0) {
-            $("#btnSubmit").prop("disabled", true);
+         @if (ViewBag.ListOfPolicy==null)
+         {
+             @:bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function() {
+                 @:location.href = '@Url.Action("ShowMyLeaves", "Leave")';
+             @:});
         }
+        $("#btnSubmit").prop("disabled", true);
     })
 
     $('#date1').on('dp.change', function (e) {
@@ -158,7 +163,7 @@
             $("#date2").val('');
         }
     });
-  
+
     $('#date2').on('dp.change', function (e) {
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
@@ -185,16 +190,7 @@
             $("#btnSubmit").removeAttr('disabled');
         }
     });
-    var availableLeaves = null;
-    $(document).ready(function () {
-        @if (ViewBag.ListOfPolicy==null)
-        {
-            @:bootbox.alert({
-                @:message: "Leave Types are Not Added.You can not request for Leave."
-/**/
-            @:});
-        }
-    });
+
     $('#btnSubmit').click(function () {
         var av = document.getElementById("av").value;
         if (av == '') {

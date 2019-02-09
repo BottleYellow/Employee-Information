@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190208072727_EmployeeData")]
-    partial class EmployeeData
+    [Migration("20190209064939_Changes")]
+    partial class Changes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
@@ -61,6 +63,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -88,6 +92,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -129,6 +135,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -158,6 +166,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
@@ -181,6 +191,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -208,6 +220,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
@@ -233,6 +247,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -249,6 +265,8 @@ namespace EIS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -279,6 +297,8 @@ namespace EIS.Data.Migrations
                     b.Property<TimeSpan?>("TotalHours")
                         .HasColumnType("time");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -295,6 +315,8 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
@@ -304,6 +326,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -320,6 +344,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("AadharCard")
                         .HasColumnType("varchar(12)");
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -395,6 +421,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TenantId");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -424,6 +452,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("Access");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
@@ -431,6 +461,8 @@ namespace EIS.Data.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -449,6 +481,8 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<DateTime>("Date")
@@ -460,6 +494,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -485,6 +521,8 @@ namespace EIS.Data.Migrations
                     b.Property<double>("Available")
                         .HasColumnType("float");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
@@ -504,6 +542,8 @@ namespace EIS.Data.Migrations
                     b.Property<int>("TypeId");
 
                     b.Property<int?>("TypeOfLeaveId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -530,6 +570,8 @@ namespace EIS.Data.Migrations
                     b.Property<double>("Available")
                         .HasColumnType("float");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
@@ -549,6 +591,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -577,11 +621,15 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("AppliedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("ApprovedBy");
+
                     b.Property<double>("ApprovedDays")
                         .HasColumnType("float");
 
                     b.Property<double>("Available")
                         .HasColumnType("float");
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -622,6 +670,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("TypeId");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
@@ -639,6 +689,8 @@ namespace EIS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -661,6 +713,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -686,6 +740,8 @@ namespace EIS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -713,6 +769,8 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("date");
 
+                    b.Property<int?>("UpdatedBy");
+
                     b.Property<DateTime?>("UpdatedDate");
 
                     b.HasKey("Id");
@@ -730,11 +788,15 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("Code");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("IsActive");
 
                     b.Property<int>("TenantId");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -757,6 +819,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<int?>("CreatedBy");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("EmailConfirmed");
@@ -775,6 +839,8 @@ namespace EIS.Data.Migrations
                     b.Property<int>("TenantId");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<DateTime?>("UpdatedDate");
 

@@ -88,9 +88,9 @@
                                         <th>
                                             Requested Days
                                         </th>
-                                        <th>
+                                        @*<th>
                                             Status
-                                        </th>
+                                        </th>*@
                                         <th>
                                             Leave Reason
                                         </th>
@@ -187,17 +187,17 @@
                         return data;
                     }
                 },
-                {
-                    "data": "Status", "autoWidth": true, render: function (data) {
-                        if (data == "Approved") {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
-                        } else if (data == "Rejected" || data == "Cancelled") {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
-                        } else {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                        }
-                    }
-                },
+                //{
+                //    "data": "Status", "autoWidth": true, render: function (data) {
+                //        if (data == "Approved") {
+                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
+                //        } else if (data == "Rejected" || data == "Cancelled") {
+                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
+                //        } else {
+                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
+                //        }
+                //    }
+                //},
                 {
                     "data": "Reason", "autoWidth": true, render: function (data) {
                         return data;

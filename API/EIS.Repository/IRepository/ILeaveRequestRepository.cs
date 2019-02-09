@@ -8,7 +8,7 @@ namespace EIS.Repositories.IRepository
     {
         IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId,int? LocationId);
         void AddPastLeave(PastLeaves pastLeave);
-        void UpdateRequestStatus(int RequestId, string Status);
+        void UpdateRequestStatus(int RequestId, string Status,int PersonId);
         IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
     }
 }

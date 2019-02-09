@@ -1,7 +1,19 @@
-﻿@using EIS.WebApp.Services;
-@model IEnumerable<EIS.Entities.Leave.LeaveRequest>
+﻿@using EIS.Entities.Enums;
+@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
+@model EIS.Entities.Leave.LeaveRequest;
 @{
     string APIURL = MyHttpContext.APIBaseURL;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <html>
 <head>
@@ -222,7 +234,8 @@
         });
     }
     function UpdateStatus(RequestId, Status) {
-        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
+        var pid=@cookies.PersonId;
+        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
         $.ajax({
             url: url1,
             type: 'POST',

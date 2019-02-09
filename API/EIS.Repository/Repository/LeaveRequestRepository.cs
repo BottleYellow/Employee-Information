@@ -50,18 +50,20 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public void UpdateRequestStatus(int RequestId, string Status)
+        public void UpdateRequestStatus(int RequestId, string Status,int PersonId)
         {
             var leaveCredit = new LeaveCredit();
             LeaveRequest leaveRequest = _dbContext.LeaveRequests.Where(x => x.Id == RequestId).FirstOrDefault();
             if (Status == "Approve")
             {
+                leaveRequest.ApprovedBy = PersonId;
                 leaveRequest.Status = "Approved";
                 var requests = _dbContext.LeaveRequests.Where(x => x.PersonId == leaveRequest.PersonId);
 
             }
             else if (Status == "Reject")
             {
+                leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Rejected";
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                 leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
@@ -69,6 +71,7 @@ namespace EIS.Repositories.Repository
             }
             else if (Status == "Pending")
             {
+                leaveRequest.UpdatedBy = PersonId;
                 if (leaveRequest.Status == null || leaveRequest.Status == "Rejected")
                 {
                     leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
@@ -79,6 +82,7 @@ namespace EIS.Repositories.Repository
             }
             else if (Status == "Cancel")
             {
+                leaveRequest.UpdatedBy = PersonId;
                 if (leaveRequest.Status == "Pending")
                 {
                     leaveRequest.Status = "Cancelled";
@@ -93,6 +97,7 @@ namespace EIS.Repositories.Repository
             }
             else if (Status == "Accept Cancel")
             {
+                leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Cancelled";
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                 leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
@@ -100,10 +105,12 @@ namespace EIS.Repositories.Repository
             }
             else if (Status == "Reject Cancel")
             {
+                leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Approved(Rejected Cancel Request)";
             }
             else if (Status == null)
             {
+                leaveRequest.UpdatedBy = PersonId;
                 leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                 leaveCredit.Available = leaveRequest.Available - leaveRequest.RequestedDays;
                 leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;

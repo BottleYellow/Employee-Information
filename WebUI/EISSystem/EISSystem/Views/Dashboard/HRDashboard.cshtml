@@ -1,0 +1,259 @@
+﻿@using EIS.Entities.Employee;
+@using EIS.WebApp.Services
+@model EIS.Entities.Dashboard.AdminDashboard
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+}
+<head>
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+</head>
+<div class="container-fluid">
+    <div class="block-header">
+        <div class="row">
+            <div class="col-md-12">
+                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/AdminCalendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-pink hover-expand-effect">
+                <a role="button" id="allEmployee">
+                    <div class="icon">
+                        <i class="material-icons">playlist_add_check</i>
+                    </div>
+                </a>
+                    <div class="content">
+                        <div class="text">TOTAL EMPLOYEES</div>
+                        <div id="totalEmployeeCount" class="number count-to"></div>
+                    </div>              
+            </div>
+            
+
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class=" info-box bg-light-green hover-expand-effect">
+                <a role="button" id="employeePresent">
+                    <div class="icon">
+                        <i class="material-icons">playlist_play</i>
+                    </div>
+                </a>
+                <div class="content">
+                    <div class="text">EMPLOYEE PRESENT</div>
+                    <div id="employeePresentCount" class="number count-to"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-cyan hover-expand-effect">
+                <a role="button" id="employeeAbsent">
+                    <div class="icon">
+                        <i class="material-icons"> do_not_disturb_on</i>
+                    </div>
+                </a>
+                <div class="content">
+                    <div class="text">EMPLOYEE ABSENT</div>
+                    <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-orange hover-expand-effect">
+                <a href="@rootPath/Leave/EmployeeLeaveRequests" role="button">
+                    <div class="icon">
+                        <i class="material-icons">person_add</i>
+                    </div>
+                </a>
+                <div class="content">
+                    <div class="text">PENDING LEAVES</div>
+                    <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <!-- Task Info -->
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="card">
+                <div class="header">
+                    <h2>Today's Attendance</h2>
+                    <div>
+                        <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
+                            <option value="0">All</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-hover dashboard-task-infos" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>ClockIn</th>
+                                    <th>ClockOut</th>
+                                    <th>WorkingHours</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            @*<tbody>
+                                @foreach (var item in Model.Employees)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem=>item.Location.LocationName)
+                                        </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+                                    <td>
+                                        @if (item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault() != null)
+                                        {
+                                            <span style="font-size:14px; font-weight:normal;" class="label label-success">Present</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="font-size:14px; font-weight:normal;" class="label label-danger">On Leave</span>
+                                        }
+                                    </td>
+
+                                    @if (item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault() != null)
+                                    {
+                                        var attr = @item.Attendance.Where(x => x.DateIn == DateTime.Now.Date).FirstOrDefault();
+                                    <td>
+                                        @attr.TimeIn
+                                    </td>
+                                    <td>
+                                        @attr.TimeOut    
+                                    </td>
+                                        <td>
+                                            @attr.TotalHours.GetValueOrDefault().ToString()
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>-</td>  
+                                      <td>-</td>  
+                                      <td>-</td>  
+                                    }
+
+                                </tr>
+                                }
+                            </tbody>*@
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Task Info -->
+        <!-- Answered Tickets -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="card">
+                <div class="body bg-teal">
+                    <div class="font-bold m-b--35">ANSWERED TICKETS</div>
+                    <ul class="dashboard-stat-list">
+                        <li>
+                            TODAY
+                            <span class="pull-right"><b>12</b> <small>TICKETS</small></span>
+                        </li>
+                        <li>
+                            YESTERDAY
+                            <span class="pull-right"><b>15</b> <small>TICKETS</small></span>
+                        </li>
+                        <li>
+                            LAST WEEK
+                            <span class="pull-right"><b>90</b> <small>TICKETS</small></span>
+                        </li>
+                        <li>
+                            LAST MONTH
+                            <span class="pull-right"><b>342</b> <small>TICKETS</small></span>
+                        </li>
+                        <li>
+                            LAST YEAR
+                            <span class="pull-right"><b>4 225</b> <small>TICKETS</small></span>
+                        </li>
+                        <li>
+                            ALL
+                            <span class="pull-right"><b>8 752</b> <small>TICKETS</small></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Answered Tickets -->
+    </div>
+</div>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        selectOpt = $('#select option:selected').val();
+        generateReport(0, selectOpt);
+        //$('#myTable').DataTable();
+    });
+    var buttonSelected=0;
+    var selectOpt;
+    $('#allEmployee').on('click', function () {
+        buttonSelected = 0;
+        $('#select').val($('#select option:first').val());  
+        selectOpt = $('#select option:selected').val();
+        generateReport(buttonSelected, selectOpt);
+
+    });
+    $('#employeePresent').on('click', function () {
+        buttonSelected = "Present";
+        $('#select').val($('#select option:first').val());  
+        selectOpt = $('#select option:selected').val();
+        generateReport(buttonSelected, selectOpt);
+
+    });  
+    $('#employeeAbsent').on('click', function () {
+        buttonSelected = "Absent";
+        $('#select').val($('#select option:first').val());  
+        selectOpt = $('#select option:selected').val();
+        generateReport(buttonSelected, selectOpt);
+
+    });
+    $('#select').on('change', function () {
+        selectOpt = $('#select option:selected').val();
+        generateReport(buttonSelected, selectOpt);
+    });
+
+    function generateReport(employeecount, location) {  
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AdminDashboard","Dashboard")',
+            data: { "attendanceStatus": employeecount, "location": location },
+            success: function (data) {
+                document.getElementById("totalEmployeeCount").innerHTML = data.AllEmployeesCount;
+                document.getElementById("employeePresentCount").innerHTML = data.PresentEmployees;
+                document.getElementById("employeeAbsentCount").innerHTML = data.AbsentEmployees;
+                document.getElementById("employeeLeavesCount").innerHTML = data.PendingLeavesCount; 
+                getda(data.Employees);
+            }
+        });
+    }
+
+    function getda(Employees) {
+        debugger;
+        var array=[];
+        for (var i = 0; i < Employees.length; i++) {
+            if (Employees[i].Attendance.length==0) {
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName,'onLeave','-','-','-'])
+            }
+            else {
+                var TimeOut = Employees[i].Attendance[0].TimeOut == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                var TotalHours = Employees[i].Attendance[0].TotalHours == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName, 'Present', Employees[i].Attendance[0].TimeIn, TimeOut, TotalHours])
+            }
+        }
+        $('#myTable').DataTable().destroy();
+         $('#myTable').DataTable({
+             data: array
+         });
+        }
+
+
+    
+
+</script>

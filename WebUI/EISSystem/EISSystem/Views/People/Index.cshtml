@@ -16,6 +16,7 @@
 
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
     if (ViewBag.Message != null)
     {
         <script>
@@ -67,6 +68,7 @@
                                     <th>Mobile Number</th>
                                     <th>Email Address</th>
                                     <th>Joining Date</th>
+                                    <th>Created By</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -147,7 +149,7 @@
         }
     });
     $(document).ready(function () {
-
+        alert(getCreatedBy(1));
         var b = true;
         generateReport(b,0);
     });
@@ -229,6 +231,15 @@
                     }
                 },
                 {
+                    "data": "CreatedBy", "name": "CreatedBy", "autoWidth": true, "render": function (data, type, row) {
+                        var result = null;
+                        $.getJSON("@APIURL/api/Employee/CreatedBy/" + row.CreatedBy + "", function (data) {
+                            result = data;
+                        });
+                        return result;
+                    }
+                },
+                {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         var value = row.IsActive;
                         if (value == true) {
@@ -250,6 +261,16 @@
             },
         });
     };
+    function getCreatedBy(pid) {
+        var result = null;
+        $.getJSON("@APIURL/api/Employee/CreatedBy/" + pid + "", function (data) {
+            result = data;
+
+        });
+
+        return result;
+
+    }
 
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>

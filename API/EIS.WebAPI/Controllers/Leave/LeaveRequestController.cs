@@ -129,13 +129,13 @@ namespace EIS.WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [Route("UpdateStatus/{RequestId}/{Status}")]
+        [Route("UpdateStatus/{RequestId}/{Status}/{PersonId}")]
         [HttpPost]
-        public IActionResult UpdateRequestStatus([FromRoute]int RequestId, [FromRoute]string Status)
+        public IActionResult UpdateRequestStatus([FromRoute]int RequestId, [FromRoute]string Status, [FromRoute]int PersonId)
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status);
+                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status,PersonId);
                 SendMail(RequestId, Status);
                 return Ok();
             }
@@ -151,7 +151,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.LeaveRequest.UpdateAndSave(leave);
-            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null);
+            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null,leave.PersonId);
             return NoContent();
         }
 
@@ -167,7 +167,7 @@ namespace EIS.WebAPI.Controllers
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
-            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
+            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
             SendMail(leave.Id, "Pending");
             return Ok();
         }

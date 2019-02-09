@@ -27,12 +27,13 @@
 
 <html>
 <head>
-    <title>Holidays</title>
+    <title>Locations</title>
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 </head>
 <body>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddLocation")"></div>
+    <div id="modal-placeholder-edit" class="modal fade" role="dialog" data-url="@Url.Action("EditLocation")"></div>
     @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
@@ -49,6 +50,9 @@
                                         <th>
                                             Location
                                         </th>
+                                        <th>
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,7 +62,18 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.LocationName)
                                             </td>
-                                            
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown">
+                                                        <i class="material-icons" aria-haspopup="true" aria-expanded="true">build</i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a onclick="fun(@item.Id);">Edit</a></li>
+                                                        <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                                    </ul>
+                                                </div>
+
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
@@ -84,16 +99,20 @@
             responsive: true
         });
     });
-
+    function fun(c) {
+        debugger;
+        var url = $("#modal-placeholder-edit").data('url');
+        url = url + '?LocationId=' + c;
+        $.get(url, function (data) {
+            $("#modal-placeholder-edit").html(data);
+            $("#modal-placeholder-edit").modal('show');
+        });
+    }
     $("#btnModal").click(function () {
         var url = $("#modal-placeholder").data('url');
         $.get(url, function (data) {
             $("#modal-placeholder").html(data);
             $("#modal-placeholder").modal('show');
-            var dateNow = new Date();
-            $('#inputdate').datetimepicker({
-                format: "DD/MMM/YYYY"
-            });
         });
     });
 </script>
@@ -103,8 +122,6 @@
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-
-<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
 

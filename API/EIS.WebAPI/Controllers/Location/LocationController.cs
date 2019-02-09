@@ -20,23 +20,25 @@ namespace EIS.WebAPI.Controllers.Location
         {
             return _repository.Locations.FindAll();
         }
-        [HttpPost]
-        public IActionResult Create([FromBody]Locations location)
+        [HttpPost("{LocationId}")]
+        public IActionResult Create([FromRoute]int LocationId,[FromBody]Locations location)
         {
-            if (!ModelState.IsValid)
+            if (LocationId == 0)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                location.TenantId = TenantId;
+                _repository.Locations.CreateAndSave(location);
+                return Ok(location);
             }
-            location.TenantId = TenantId;
-            _repository.Locations.CreateAndSave(location);
-            return Ok(location);
-        }
-
-        [HttpGet]
-        public IActionResult GetAllLocations()
-        {
-
-            return Ok();
+            else
+            {
+                location.TenantId = TenantId;
+                _repository.Locations.UpdateAndSave(location);
+                return Ok(location);
+            }
         }
        
     }

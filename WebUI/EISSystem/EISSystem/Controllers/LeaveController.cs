@@ -103,6 +103,7 @@ namespace EIS.WebApp.Controllers
             request.AppliedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
+                request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 request.Id = 0;
                 HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl+"/api/LeaveRequest", request );
@@ -131,6 +132,7 @@ namespace EIS.WebApp.Controllers
             request.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
+                request.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 HttpResponseMessage response = _services.LeaveRequest.PutResponse(ApiUrl+"/api/LeaveRequest/"+id, request );
                 if (response.IsSuccessStatusCode == true)
@@ -152,7 +154,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetPastLeaves(int LocationId)
         {
             int PersonId = 0;
-            if(GetSession().Role!="Admin")
+            if(GetSession().Role=="Employee")
             {
                 PersonId = Convert.ToInt32(GetSession().PersonId);
             }
@@ -173,6 +175,7 @@ namespace EIS.WebApp.Controllers
             Leave.UpdatedDate = DateTime.Now.Date;
             if (ModelState.IsValid)
             {
+                Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
                 Leave.IsActive = true;
                 Leave.PersonId = Convert.ToInt32(GetSession().PersonId);
@@ -221,8 +224,10 @@ namespace EIS.WebApp.Controllers
             ViewBag.Locations = GetLocations();
             Leave.CreatedDate = DateTime.Now.Date;
             Leave.UpdatedDate = DateTime.Now.Date;
+            if (Leave.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
             if (ModelState.IsValid)
             {
+                Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 Leave.IsActive = true;
                 HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl+"/api/LeavePolicy", Leave );
                 string stringData = response.Content.ReadAsStringAsync().Result;
@@ -290,6 +295,7 @@ namespace EIS.WebApp.Controllers
             Credit.Available = Credit.AllotedDays;
             if (ModelState.IsValid)
             {
+                Credit.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 Credit.IsActive = true;
                 HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl+"/api/LeaveCredit", Credit);
                 if (response.IsSuccessStatusCode == true)

@@ -18,7 +18,9 @@ namespace EIS.Entities.Leave
         public DateTime AppliedDate { get; set; }
         public int TypeId { get; set; }
         public int PersonId { get; set; }
+        public int? ApprovedBy { get; set; }
         public virtual Person Person { get; set; }
         public LeaveRules TypeOfLeave { get; set; }
+        
     }
 }

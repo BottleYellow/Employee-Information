@@ -28,9 +28,9 @@ namespace EIS.Repositories.Repository
         public AdminDashboard GetAdminDashboard(string attendanceStatus, int location,int TenantId)
         {
             List<Person> employees = new List<Person>();
-            int leaves = 0;
+            int leaves = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location).Count();
             int pcount = 0;
-            
+            //leaves = location == 0 ? _dbContext.LeaveRequests.Include(x => x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x => x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.Id == location).Count();
             var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
            .Select(p => new
            {

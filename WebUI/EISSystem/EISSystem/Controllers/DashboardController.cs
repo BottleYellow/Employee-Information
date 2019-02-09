@@ -38,8 +38,21 @@ namespace EIS.WebApp.Controllers
             AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
             return Json(dashboard);
         }
-        
 
+        public IActionResult HRDashboard()
+        {
+            ViewBag.Locations = GetLocations();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult HRDashboard(string attendanceStatus, int location)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            return Json(dashboard);
+        }
 
         public IActionResult ManagerDashboard()
         {

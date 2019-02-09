@@ -89,6 +89,7 @@ namespace EIS.Repositories.Repository
             Users u = FindByCondition(x => x.PersonId == Id);
             if (u != null)
             {
+                u.UpdatedBy = Id;
                 u.Password = Helper.Encrypt(NewPassword);
                 Update(u);
                 Save();
