@@ -347,7 +347,7 @@ namespace EIS.WebApp.Controllers
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/ActivatePerson/" + EmployeeCode + "" );
             if(response.IsSuccessStatusCode)
                 ViewBag.Message = "Information activated successfully!";
-            return View("Index");
+            return RedirectToAction("Index", "People");
         }
         #endregion
 

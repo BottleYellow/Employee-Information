@@ -29,6 +29,7 @@ namespace EIS.WebApp.Controllers
           
 
         }
+        [NonAction]
         public CookieModel GetSession()
         {
             CookieModel Cookies = new CookieModel();

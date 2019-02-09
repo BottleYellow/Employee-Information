@@ -66,4 +66,20 @@ namespace EIS.Entities.Employee
             }
         }
     }
+
+    public class TempPerson
+    {
+        public string LocationName { get; set; }
+        public string PersonName { get; set; }
+        public string Status { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime InTime { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime OutTime { get; set; }
+
+        [DataType(DataType.Time)]
+        public DateTime WorkingHr { get; set; }
+    }
 }

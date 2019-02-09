@@ -20,12 +20,24 @@
             <HeaderWithButton btn-id="btnModal" header-name="Leave Credits" btn-text="Add Credit" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
+            <div class="row">
+                <div class="col-md-9" style="height:50px">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                            <option value="0">All</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
                         <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
                             <thead>
                                 <tr>
+                                    <th>
+                                        Location
+                                    </th>
                                     <th>
                                         Employee Name
                                     </th>
@@ -61,8 +73,15 @@
 
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
+    $('#locations').on('change', function () {
+        var c = $('#locations').val();
+        GenerateReport(c);
+    });
     $(document).ready(function () {
-       $.fn.dataTable.ext.errMode = 'none';
+        GenerateReport(0);
+    });
+    function GenerateReport(c) {
+               $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
         }).DataTable();
@@ -97,11 +116,16 @@
             ],
             ajax: {
                // "url": "/Leave/LeaveCredits",
-                "url":'@Url.Action("LeaveCredits", "Leave")',
+                "url":'@Url.Action("LeaveCredits", "Leave")?LocationId='+c,
                 "type": "POST",
                 "datatype": "json"
             },
             "columns": [
+                {
+                    "data": null, "autoWidth": true, render: function (row) {
+                        return row.Person.Location.LocationName;
+                    }
+                },
                 {
                     "data": null, "autoWidth": true, render: function (row) {
                         return row.Person.FullName;
@@ -145,12 +169,12 @@
                 });
             }
         });
-        $("#btnModal").click(function () {
-            var url = $("#modal-placeholder").data('url');
-            $.get(url, function (data) {
-                $("#modal-placeholder").html(data);
-                $("#modal-placeholder").modal('show');
-            });
+    }
+    $("#btnModal").click(function () {
+        var url = $("#modal-placeholder").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder").html(data);
+            $("#modal-placeholder").modal('show');
         });
     });
 </script>

@@ -25,7 +25,7 @@
                 </a>
                     <div class="content">
                         <div class="text">TOTAL EMPLOYEES</div>
-                        <div class="number count-to">@Model.AllEmployeesCount</div>
+                        <div id="totalEmployeeCount" class="number count-to"></div>
                     </div>              
             </div>
             
@@ -40,7 +40,7 @@
                 </a>
                 <div class="content">
                     <div class="text">EMPLOYEE PRESENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.PresentEmployees</div>
+                    <div id="employeePresentCount" class="number count-to"></div>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 </a>
                 <div class="content">
                     <div class="text">EMPLOYEE ABSENT</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.AbsentEmployees</div>
+                    <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                 </a>
                 <div class="content">
                     <div class="text">PENDING LEAVES</div>
-                    <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20">@Model.PendingLeavesCount</div>
+                    <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
                 </div>
             </div>
         </div>
@@ -91,12 +91,13 @@
                                     <th>Location</th>
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Working Hrs</th>
+                                    <th>ClockIn</th>
+                                    <th>ClockOut</th>
+                                    <th>WorkingHours</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody></tbody>
+                            @*<tbody>
                                 @foreach (var item in Model.Employees)
                                 {
                                 <tr>
@@ -139,7 +140,7 @@
 
                                 </tr>
                                 }
-                            </tbody>
+                            </tbody>*@
                         </table>
                     </div>
                 </div>
@@ -186,48 +187,73 @@
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
-        selectOpt = $('#select option:selected').text();
-        generateReport("All", selectOpt);
-        $('#myTable').dataTable({
-            sDom: 'Biftlp',
-        });
-
+        selectOpt = $('#select option:selected').val();
+        generateReport(0, selectOpt);
+        //$('#myTable').DataTable();
     });
-    var buttonSelected="All";
+    var buttonSelected=0;
     var selectOpt;
     $('#allEmployee').on('click', function () {
-        buttonSelected = "All";
+        buttonSelected = 0;
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });
     $('#employeePresent').on('click', function () {
         buttonSelected = "Present";
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });  
     $('#employeeAbsent').on('click', function () {
         buttonSelected = "Absent";
         $('#select').val($('#select option:first').val());  
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
 
     });
     $('#select').on('change', function () {
-        selectOpt = $('#select option:selected').text();
+        selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
     });
 
-    function generateReport(employeecount, location) {
-
+    function generateReport(employeecount, location) {  
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AdminDashboard","Dashboard")',
-            data: { "attendanceStatus": employeecount, "location": location }            
+            data: { "attendanceStatus": employeecount, "location": location },
+            success: function (data) {
+                document.getElementById("totalEmployeeCount").innerHTML = data.AllEmployeesCount;
+                document.getElementById("employeePresentCount").innerHTML = data.PresentEmployees;
+                document.getElementById("employeeAbsentCount").innerHTML = data.AbsentEmployees;
+                document.getElementById("employeeLeavesCount").innerHTML = data.PendingLeavesCount; 
+                getda(data.Employees);
+            }
         });
     }
+
+    function getda(Employees) {
+        debugger;
+        var array=[];
+        for (var i = 0; i < Employees.length; i++) {
+            if (Employees[i].Attendance.length==0) {
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName,'onLeave','-','-','-'])
+            }
+            else {
+                var TimeOut = Employees[i].Attendance[0].TimeOut == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                var TotalHours = Employees[i].Attendance[0].TotalHours == null ? '-' : Employees[i].Attendance[0].TimeOut;
+                array.push([Employees[i].Location.LocationName, Employees[i].FullName, 'Present', Employees[i].Attendance[0].TimeIn, TimeOut, TotalHours])
+            }
+        }
+        $('#myTable').DataTable().destroy();
+         $('#myTable').DataTable({
+             data: array
+         });
+        }
+
+
     
+
 </script>

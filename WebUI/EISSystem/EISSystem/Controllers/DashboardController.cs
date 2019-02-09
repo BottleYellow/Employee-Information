@@ -26,15 +26,12 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult AdminDashboard()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/All/All");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
             ViewBag.Locations = GetLocations();
-            return View(dashboard);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult AdminDashboard(string attendanceStatus,string location)
+        public IActionResult AdminDashboard(string attendanceStatus,int location)
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/"+attendanceStatus+"/"+location);
             string stringData = response.Content.ReadAsStringAsync().Result;

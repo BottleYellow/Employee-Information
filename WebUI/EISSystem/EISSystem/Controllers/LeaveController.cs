@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using EIS.Entities.Employee;
@@ -83,7 +84,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Request for leave")]
         public IActionResult RequestLeave()
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
+            response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
             if (data.Count == 0)
@@ -142,19 +143,20 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Past Leaves")]
         public IActionResult PastLeaves()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
 
         [ActionName("PastLeaves")]
         [HttpPost]
-        public IActionResult GetPastLeaves()
+        public IActionResult GetPastLeaves(int LocationId)
         {
             int PersonId = 0;
             if(GetSession().Role!="Admin")
             {
                 PersonId = Convert.ToInt32(GetSession().PersonId);
             }
-            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, null);
+            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, LocationId);
 
         }
         [DisplayName("Add Past Leave")]
@@ -193,15 +195,16 @@ namespace EIS.WebApp.Controllers
         [DisplayName("leave Policies")]
         public IActionResult LeavePolicies()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
 
         [HttpPost]
         [ActionName("LeavePolicies")]
-        public IActionResult GetLeavePolicy()
+        public IActionResult GetLeavePolicy(int LocationId)
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRules>(ApiUrl + "/api/LeavePolicy/GetLeavePolicies", null, null);
+            return LoadData<LeaveRules>(ApiUrl + "/api/LeavePolicy/GetLeavePolicies", null, LocationId);
         }
 
         [DisplayName("Add Leave Rule")]
@@ -244,15 +247,16 @@ namespace EIS.WebApp.Controllers
         [DisplayName("leave Credits")]
         public IActionResult LeaveCredits()
         {
+            ViewBag.Locations = GetLocations();
             return View();
         }
 
         [ActionName("LeaveCredits")]
         [HttpPost]
-        public IActionResult GetLeaveCredits()
+        public IActionResult GetLeaveCredits(int LocationId)
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveCredit>(ApiUrl + "/api/LeaveCredit/GetLeaveCredits", null, null);
+            return LoadData<LeaveCredit>(ApiUrl + "/api/LeaveCredit/GetLeaveCredits", null, LocationId);
         }
 
 
@@ -260,6 +264,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()
         {
+            ViewBag.Locations = GetLocations();
             response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
@@ -279,6 +284,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddCredit(LeaveCredit Credit)
         {
+            ViewBag.Locations = GetLocations();
             Credit.CreatedDate = DateTime.Now.Date;
             Credit.UpdatedDate = DateTime.Now.Date;
             Credit.Available = Credit.AllotedDays;

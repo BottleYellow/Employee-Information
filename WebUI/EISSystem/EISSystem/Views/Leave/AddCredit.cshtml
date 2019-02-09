@@ -1,4 +1,5 @@
-﻿@using EIS.Entities.Leave
+﻿@using EIS.WebApp.Services
+@using EIS.Entities.Leave
 @model LeaveCredit
 <!-- Modal -->
 <style type="text/css">
@@ -6,8 +7,6 @@
         color: #d00;
         content: "*";
         position: relative;
-        /*margin-left: 8px;*/
-        /*top: 7px;*/
     }
 </style>
 <div class="modal-dialog" role="document">
@@ -17,20 +16,25 @@
         </div>
         <div class="modal-body">
             <form name="cp" id="cp" asp-action="AddCredit" asp-controller="Leave" method="post">
-
                 <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
+                    <label class="control-label">Location : </label>
+                    <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                        <option value="0">-- Select Location --</option>
+                    </select>
+                </div>
+                <div class="form-group required">
                     <label class="control-label" asp-for="PersonId">Select Employee</label>
-                    <select asp-for="PersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                    <select id="emp" asp-for="PersonId" class="form-control show-tick">
                         <option>-- Select --</option>
                     </select>
                     <span asp-validation-for="PersonId" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" asp-for="LeaveType">Leave Type</label>
-                    <select id="type" asp-for="LeaveId" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                        <option>-- Select Leave Type --</option>
-                    </select>
+                    <select id="type" asp-for="LeaveId" class="form-control show-tick" onchange="myFunction();">
+                        <option value="0">-- Select Leave Type --</option>
+                    </select> 
                     <span asp-validation-for="LeaveType" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -71,6 +75,36 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    $('#locations').on('change', function () {
+        var loc = $('#locations').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                success: function (data) {
+                    $('#emp').empty().append('<option selected="selected" value="0">-- Select --</option>');
+                    $.each(data, function (data, value) {
+                        $('#emp').append($("<option></option>").val(this.id).html(this.fullName));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+        });
+         $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/LeavePolicy/GetPolicies/' + loc,
+                success: function (data) {
+                    $('#type').empty().append('<option selected="selected" value="0">-- Select Leave Type --</option>');
+                    $.each(data, function (data, value) {
+                        $('#type').append($("<option></option>").val(this.id).html(this.leaveType));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+            });
+    });
+
     $('#btnSubmit').click(function () {
         var t = $("#type option:selected").text();
         $("#tp").val(t);
@@ -89,7 +123,7 @@
                             callback: function () {
                                 window.parent.location.reload();
                             }
-                        });                    
+                        });
                     },
                     error: function (data) {
                         bootbox.alert({
@@ -97,7 +131,7 @@
                             callback: function () {
                                 window.parent.location.reload();
                             }
-                        }); 
+                        });
 
                     }
                 });

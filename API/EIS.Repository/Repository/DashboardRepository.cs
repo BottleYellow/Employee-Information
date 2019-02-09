@@ -25,34 +25,33 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public AdminDashboard GetAdminDashboard(string attendanceStatus, string location,int TenantId)
+        public AdminDashboard GetAdminDashboard(string attendanceStatus, int location,int TenantId)
         {
-            List<Attendance> attendance = null;
-            if (_dbContext.Attendances != null)
-            {
-                attendance = _dbContext.Attendances.ToList();
-            }
-            var employees = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Include(x=>x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name != "Admin").AsQueryable();
-            var leaves = _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count();
-            var EmployeesWithAttendance = _dbContext.Person.Include(x => x.Attendance).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true).ToList();
+            List<Person> employees = new List<Person>();
+            int leaves = 0;
             int pcount = 0;
-            foreach (var pa in employees)
+            
+            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+           .Select(p => new
+           {
+               p,
+               Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
+           });
+           
+            foreach (var x in results)
             {
-                foreach (var a in pa.Attendance)
-                {
-                    if (a.DateIn.Date == DateTime.Now.Date)
-                    {
-                        pcount++;
-                    }
-                }
+                x.p.Attendance = x.Attendances.ToList();
             }
+            var result = results.Select(x => x.p).ToList();
+            result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
+            pcount = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).Count();
             AdminDashboard dashboard = new AdminDashboard
             {
-                AllEmployeesCount = employees.Count(),
+                AllEmployeesCount = result.Count(),
                 PresentEmployees = pcount,
-                AbsentEmployees = employees.Count() - pcount,
+                AbsentEmployees = result.Count() - pcount,
                 PendingLeavesCount = leaves,
-                Employees = EmployeesWithAttendance
+                Employees = result
             };
             return dashboard;
         }

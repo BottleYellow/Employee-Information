@@ -47,8 +47,6 @@ namespace EIS.WebApp.Controllers
         {
             return View();
         }
-
-        [DisplayName("My Attendance History")]
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
         {
@@ -58,8 +56,8 @@ namespace EIS.WebApp.Controllers
             return LoadData<Attendance>(url,null,1);
 
         }
-        [ActionName(" EmployeeReports")]
-        [HttpPost]
+        [ActionName("EmployeeReports")]
+        [HttpPut]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
             //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));

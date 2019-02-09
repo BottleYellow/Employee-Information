@@ -42,7 +42,6 @@ namespace EIS.WebAPI.Controllers
             }
             
         }
-
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
