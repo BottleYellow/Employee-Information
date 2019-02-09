@@ -88,7 +88,7 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
             if (data.Count == 0)
-                ViewBag.ListOfPolicy = null;
+                ViewBag.ListOfPolicy = data;
             else
                 ViewBag.ListOfPolicy = data;
             return View();

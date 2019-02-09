@@ -99,7 +99,13 @@
                         bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
-
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 401) {
+                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                        } else {
+                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                        }
                     }
                 });
             }
@@ -119,7 +125,10 @@
                         bootbox.alert("<h4>Record activated successfully!</h4>", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
-                    }
+                    },
+                    error: function () {
+                        bootbox.alert("<h4>Unable to Activate Data");
+                    }                    
                 });
             }
         });
@@ -160,6 +169,8 @@
         }).DataTable();
         $('#example').DataTable().destroy();
         $('#example tbody').empty();
+
+        debugger;
         var dTable = $('#example').DataTable({
             sDom: '<"myexport"B>ifrtlp',
             "processing": true, // for show progress bar
