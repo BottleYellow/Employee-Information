@@ -27,8 +27,9 @@ namespace EIS.Repositories.Repository
 
         public AdminDashboard GetAdminDashboard(string attendanceStatus, int location,int TenantId)
         {
+            List<LeaveRequest> leaveRequests = new List<LeaveRequest>();
             List<Person> employees = new List<Person>();
-            int leaves = 0;
+            int leaves = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId &&x.Person.LocationId==location).Count();
             int pcount = 0;
             
             var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
@@ -37,20 +38,45 @@ namespace EIS.Repositories.Repository
                p,
                Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
            });
-            pcount = results.Where(x => x.Attendances!=null && x.Attendances.Count()>0).Count();
+           
             foreach (var x in results)
             {
                 x.p.Attendance = x.Attendances.ToList();
             }
             var result = results.Select(x => x.p).ToList();
-            result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
+            int totalCount=0;
+
+            if (attendanceStatus== "Present")
+            {
+                result = location == 0 ? result: result.Where(x =>x.LocationId == location).ToList();
+                totalCount = result.Count();
+                result = result.Where(x =>x.Attendance!=null && x.Attendance.Count() > 0).ToList();
+                pcount = result.Count();
+            }else
+            if(attendanceStatus == "Absent")
+            {
+                result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
+                totalCount = result.Count();
+                result = result.Where(x => x.Attendance.Count() == 0).ToList();
+                pcount = totalCount- result.Count();
+            }
+            else
+            {
+                result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
+                totalCount = result.Count();
+                pcount = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).Count();
+                leaveRequests =location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location).ToList();
+                leaves = leaveRequests.Count();
+            }        
+            
             AdminDashboard dashboard = new AdminDashboard
             {
-                AllEmployeesCount = result.Count(),
+                AllEmployeesCount = totalCount,
                 PresentEmployees = pcount,
-                AbsentEmployees = result.Count() - pcount,
+                AbsentEmployees = totalCount - pcount,
                 PendingLeavesCount = leaves,
-                Employees = result
+                Employees = result,
+                LeaveRequests= leaveRequests
             };
             return dashboard;
         }

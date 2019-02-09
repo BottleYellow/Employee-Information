@@ -105,7 +105,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y => y.LocationId == loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z => z.Location)
+                var results = _dbContext.Person.Include(z => z.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" &&x.LocationId==loc)
                     .Select(p => new
                     {
                         p,
@@ -118,19 +118,6 @@ namespace EIS.Repositories.Repository
                 var result = results.Select(x => x.p);
                 return result.AsQueryable();
             }
-            //var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
-            //  .Select(p => new
-            //  {
-            //      p,
-            //      Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
-            //  });
-            //foreach (var x in results)
-            //{
-            //    x.p.Attendance = x.Attendances.ToList();
-            //}
-            //var result = results.Select(x => x.p);
-
-            //return result;
         }
 
         public AttendanceReport GetAttendanceReportSummary(int TotalDays, IQueryable<Attendance> attendanceData)
@@ -152,11 +139,9 @@ namespace EIS.Repositories.Repository
                 TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
                 DateTime timeIn = DateTime.Today.Add(averageTimeIn);
                 attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
-                //string time = "10:48:00";
-                //DateTime dateTime = DateTime.ParseExact(time, "HH:mm:ss", CultureInfo.InvariantCulture);
-                //Console.WriteLine(dateTime.ToShortTimeString());
 
-                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
+                var attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null); 
+                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
                 DateTime timeOut = DateTime.Today.Add(averageTimeOut);
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
                 var hour = timeOut - timeIn;

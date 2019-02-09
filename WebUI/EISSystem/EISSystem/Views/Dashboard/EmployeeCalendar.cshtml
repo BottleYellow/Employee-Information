@@ -71,66 +71,8 @@
 
                 intervalStart = view.intervalStart;
                 intervalEnd = view.intervalEnd;
-            },
-
-            events: function (start, end, timezone, callback) {
-                var events = [];
-                var startDate = intervalStart.format("YYYY-MM-DD");
-                var endDate = intervalEnd.format("YYYY-MM-DD");
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetEmployeeCalendar", "Dashboard")',
-                    data: {
-                        "intervalStart": startDate,
-                        "intervalEnd": endDate,
-                    },
-                    success: function (data) {
-                        $.each(data, function (i, v) {
-                            events.push({
-                                title: v.Title,
-                                description: v.Description,
-                                start: moment(v.StartDate).format('YYYY-MM-DD'),
-                                end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
-                                color: v.Color,
-                                allDay: v.IsFullDay
-                            });
-                        });
-                        callback(events);
-
-                    },
-                    error: function (error) {
-                        bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-                    }
-                });
-            },
-            eventClick: function (calEvent, jsEvent, view) {
-                var titledata = calEvent.title;
-                if (titledata.search("Pending") > 0) {
-                    $('#myModal #eventTitle').text(calEvent.title);
-                    var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
-                    if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
-                    }
-                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
-                    $description.append($('<p/>').html('<b>ACTION: </b><button>APPROVE</button><a onclick="javascript: UpdateStatus(' + calEvent.Id + ',\'Reject\')">Reject</a>'));
-                    $('#myModal #pDetails').empty().html($description);
-
-                    $('#myModal').modal();
-
-                } else {
-                    $('#myModal #eventTitle').text(calEvent.title);
-                    var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
-                    if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
-                    }
-                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
-                    $('#myModal #pDetails').empty().html($description);
-
-                    $('#myModal').modal();
-                }
-            }
+            }      
+         
         });
     });      
 </script>

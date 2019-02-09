@@ -1,9 +1,11 @@
-﻿@model EIS.Entities.Dashboard.EmployeeDashboard;
+﻿@using EIS.WebApp.Services
+@model EIS.Entities.Dashboard.EmployeeDashboard
 <div class="container-fluid">
+
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="DASHBOARD"></HeaderWithButton>
+                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@MyHttpContext.AppBaseUrl/Dashboard/EmployeeCalendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
             </div>
         </div>
     </div>
