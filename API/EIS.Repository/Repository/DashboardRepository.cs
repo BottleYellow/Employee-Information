@@ -218,6 +218,15 @@ namespace EIS.Repositories.Repository
             return calendarDataList;
         }
 
+        //public List<SPAdminDashboard> GetData()
+        //{
+        //    List<SPAdminDashboard> sPAdminDashboards = new List<SPAdminDashboard>();
 
+        //     sPAdminDashboards = _dbContext.SPAdminDashboard
+        //            .FromSql("LMS.AdminDashboard",0).ToList();
+
+
+        //    return sPAdminDashboards;
+        //}
     }
 }

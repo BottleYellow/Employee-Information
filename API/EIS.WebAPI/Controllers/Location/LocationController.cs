@@ -32,12 +32,6 @@ namespace EIS.WebAPI.Controllers.Location
             return Ok(location);
         }
 
-        [HttpGet]
-        public IActionResult GetAllLocations()
-        {
-
-            return Ok();
-        }
        
     }
 }

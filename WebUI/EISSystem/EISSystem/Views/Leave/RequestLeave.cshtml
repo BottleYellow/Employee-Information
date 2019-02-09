@@ -23,6 +23,7 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -139,7 +140,15 @@
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
-        if (document.getElementById("type").value == 0) {
+        @*@if (ViewBag.ListOfPolicy == null)
+        {
+            @:bootbox.alert({
+                @:message: "Leave Types are Not Added.You can not request for Leave."
+            @:});
+        }*@
+
+        if (document.getElementById("type") == null)
+        {
             $("#btnSubmit").prop("disabled", true);
         }
     })
@@ -158,7 +167,7 @@
             $("#date2").val('');
         }
     });
-  
+
     $('#date2').on('dp.change', function (e) {
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
@@ -186,15 +195,7 @@
         }
     });
     var availableLeaves = null;
-    $(document).ready(function () {
-        @if (ViewBag.ListOfPolicy==null)
-        {
-            @:bootbox.alert({
-                @:message: "Leave Types are Not Added.You can not request for Leave."
-/**/
-            @:});
-        }
-    });
+
     $('#btnSubmit').click(function () {
         var av = document.getElementById("av").value;
         if (av == '') {

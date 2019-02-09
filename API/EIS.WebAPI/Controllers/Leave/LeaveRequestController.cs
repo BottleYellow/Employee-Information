@@ -159,14 +159,23 @@ namespace EIS.WebAPI.Controllers
         [HttpPost]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            List<Person> person = _repository.Employee.FindAll().Include(x=>x.Role).Where(x=>x.Role.Name=="Admin" || x.Role.Name=="Manager" || x.Role.Name=="HR").ToList();
+            foreach (var x in person)
+            {
+                var name = p.FirstName + " " + p.LastName;
+                SendMail(x.EmailAddress,leave.LeaveType,leave.FromDate,leave.ToDate,name);
+            }
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
+            
+            //string to = person.Select(x => x.EmailAddress).ToString();
             _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             SendMail(leave.Id, "Pending");
             return Ok();
@@ -263,6 +272,14 @@ namespace EIS.WebAPI.Controllers
             //_repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             //SendMail(leave.Id, "Pending");
             return Ok();
+        }
+
+        public void SendMail(string To,string leavetype,DateTime fromdate, DateTime todate,string name)
+        {
+            string to = To;
+            string subject = "EMS Leave Request";
+            string body = name + " " + "has send a request for " + leavetype + " leave from " + fromdate.ToString("dd/MM/yyyy") + " to " + todate.ToString("dd/MM/yyyy") + "."; 
+            new EmailManager(_configuration).SendEmail(subject, body, To, null);
         }
     }
 }
