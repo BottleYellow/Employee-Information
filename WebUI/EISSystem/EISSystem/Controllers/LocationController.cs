@@ -29,7 +29,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Manage Locations")]
         public IActionResult Index()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Location");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl+"api/Location");
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Locations> data = JsonConvert.DeserializeObject<List<Locations>>(stringData);
             return View(data);

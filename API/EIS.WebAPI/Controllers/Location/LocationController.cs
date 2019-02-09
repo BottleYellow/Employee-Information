@@ -31,6 +31,7 @@ namespace EIS.WebAPI.Controllers.Location
             _repository.Locations.CreateAndSave(location);
             return Ok(location);
         }
+
        
     }
 }

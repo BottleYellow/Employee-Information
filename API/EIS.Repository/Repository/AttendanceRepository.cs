@@ -173,11 +173,20 @@ namespace EIS.Repositories.Repository
                     newlist.IsActive = true;
                     if (newlist.TotalHours == null)
                     {
-                        newlist.TotalHours = new TimeSpan();
+                        newlist.TotalHours = attendance.TimeOut - attendance.TimeIn;
+                        //newlist.TotalHours = new TimeSpan();
                     }
                     else
                     {
-                        newlist.TotalHours = attendance.TotalHours;
+                        if (attendance.TimeOut == null)
+                        {
+                            newlist.TotalHours = new TimeSpan();
+                        }
+                        else
+                        {
+                            newlist.TotalHours = attendance.TimeOut-attendance.TimeIn;
+                        }
+                        
                     }
 
                 }

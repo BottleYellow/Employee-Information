@@ -439,7 +439,7 @@
                     {
                         data: "IsActive", "autoWidth": true, render: function (data, type, row) {
                             if (new Date(row.DateIn).getDay() == 0 && row.TimeIn==row.TimeOut) {
-                                return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">Weekly Holiday</span>';
+                                return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">Weekly Off</span>';
                             }
                             else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound")
                             {

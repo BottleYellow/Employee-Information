@@ -101,8 +101,8 @@
                                             <th>Location</th>
                                             <th>Name</th>
                                             <th>Present Days</th>
-                                            <th>Absent Days</th>
-                                            <th>Total Days</th>
+                                            <th>On Leave</th>
+                                            <th>Total Working Days</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -273,7 +273,8 @@
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }).DataTable();
             $('#example').DataTable().destroy();
-        $('#example tbody').empty();
+            $('#example tbody').empty();
+            debugger;
             var dTable = $('#example').DataTable({
                 sDom: '<"myexport"B>ifrtlp',
                 "processing": true, // for show progress bar
@@ -343,6 +344,7 @@
     });
     function workingDaysBetweenDates(d0, d1) {
         //var holidays = ['2016-05-03', '2016-05-05'];
+        debugger;
         var startDate = parseDate(d0);
         var endDate = parseDate(d1);
         // Validate input
