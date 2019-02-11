@@ -19,7 +19,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -35,7 +35,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -56,7 +56,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -71,7 +71,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z=>z.Location)
+                var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                     .Select(p => new
                     {
                         p,
@@ -90,7 +90,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -105,7 +105,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Include(z => z.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" &&x.LocationId==loc)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true && x.LocationId==loc)
                     .Select(p => new
                     {
                         p,

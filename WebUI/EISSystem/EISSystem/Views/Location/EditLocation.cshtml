@@ -18,8 +18,9 @@
         </div>
         <div class="modal-body">
             <form name="cp" id="cp" asp-action="EditLocation" asp-controller="Location" method="post">
-
-                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="Id" />
                 <div class="form-group required">
                     <label class="control-label">Location</label>
                     <div class="form-line">

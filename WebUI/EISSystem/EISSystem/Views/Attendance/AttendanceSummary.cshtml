@@ -370,8 +370,8 @@
 
         function generateReport(value, type, id) {
             $.ajax({
-                type: 'PUT',
-                    url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                type: 'POST',
+                    url:'@Url.Action("AttendanceSummaryById", "Attendance")?date='+value+'&type='+type+'&id='+id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;

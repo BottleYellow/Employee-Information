@@ -8,6 +8,6 @@ namespace EIS.Repositories.IRepository
 {
     public interface ILocationRepository : IRepositorybase<Locations>
     {
-       
+        Locations ActivateLocation(int id);
     }
 }

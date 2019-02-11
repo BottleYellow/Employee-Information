@@ -36,15 +36,15 @@ namespace EIS.Repositories.Repository
             IQueryable<PastLeaves> result = null;
             if (PersonId == 0 && LocationId == 0)
             {
-                result = _dbContext.PastLeaves.Include(x => x.Person).Where(x => x.TenantId == TenantId).Include(x=>x.Person.Location);
+                result = _dbContext.PastLeaves.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true);
             }
             else if (PersonId != 0 && LocationId == 0)
             {
-                result= _dbContext.PastLeaves.Include(x => x.Person).Where(x => x.TenantId == TenantId && x.PersonId == PersonId).Include(x => x.Person.Location);
+                result= _dbContext.PastLeaves.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.PersonId == PersonId && x.Person.Location.IsActive == true);
             }
             else
             {
-                result = _dbContext.PastLeaves.Include(x=>x.Person).Where(x => x.TenantId == TenantId && x.Person.LocationId==LocationId).Include(x=>x.Person.Location);
+                result = _dbContext.PastLeaves.Include(x=>x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.LocationId==LocationId && x.Person.Location.IsActive == true);
             }
            
             return result;
@@ -54,6 +54,7 @@ namespace EIS.Repositories.Repository
         {
             var leaveCredit = new LeaveCredit();
             LeaveRequest leaveRequest = _dbContext.LeaveRequests.Where(x => x.Id == RequestId).FirstOrDefault();
+            leaveRequest.UpdatedDate = DateTime.Now;
             if (Status == "Approve")
             {
                 leaveRequest.ApprovedBy = PersonId;

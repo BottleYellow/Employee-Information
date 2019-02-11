@@ -58,11 +58,11 @@ namespace EIS.WebAPI.Controllers.Leave
             IQueryable<LeaveRules> employeeData = null;
             if(sortGrid.LocationId==0)
             {
-                employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId).Include(x=>x.Location);
+                employeeData = _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.Location.IsActive == true);
             }
             else
             {
-                employeeData = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId == sortGrid.LocationId).Include(x => x.Location);
+                employeeData = _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
             }
             
             if (string.IsNullOrEmpty(sortGrid.Search))

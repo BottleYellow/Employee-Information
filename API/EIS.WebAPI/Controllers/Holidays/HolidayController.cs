@@ -26,11 +26,11 @@ namespace EIS.WebAPI.Controllers.Holidays
             IQueryable<Holiday> holidays = null;
             if (sortGrid.LocationId == 0)
             {
-                holidays = _repository.Holidays.FindAll().Include(x => x.Location);
+                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true);
             }
             else
             {
-                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.LocationId == sortGrid.LocationId);
+                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
             }
 
             if (string.IsNullOrEmpty(sortGrid.Search))

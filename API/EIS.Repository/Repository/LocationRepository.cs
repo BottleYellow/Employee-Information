@@ -20,5 +20,12 @@ namespace EIS.Repositories.Repository
         public LocationRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
+        public Locations ActivateLocation(int id)
+        {
+            Locations location = _dbContext.Locations.Where(x => x.Id == id).FirstOrDefault();
+            location.IsActive = true;
+            Save();
+            return (location);
+        }
     }
 }

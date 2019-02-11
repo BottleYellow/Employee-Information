@@ -29,10 +29,10 @@ namespace EIS.Repositories.Repository
         {
             List<LeaveRequest> leaveRequests = new List<LeaveRequest>();
             List<Person> employees = new List<Person>();
-            int leaves = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId &&x.Person.LocationId==location).Count();
+            int leaves = location == 0 ? _dbContext.LeaveRequests.Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true).Count() : _dbContext.LeaveRequests.Include(x=>x.Person).Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true && x.Person.LocationId==location).Count();
             int pcount = 0;
             
-            var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+            var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive==true)
            .Select(p => new
            {
                p,
@@ -65,7 +65,7 @@ namespace EIS.Repositories.Repository
                 result = location == 0 ? result : result.Where(x => x.LocationId == location).ToList();
                 totalCount = result.Count();
                 pcount = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).Count();
-                leaveRequests =location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location).ToList();
+                leaveRequests =location == 0 ? _dbContext.LeaveRequests.Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true && x.Person.LocationId == location).ToList();
                 leaves = leaveRequests.Count();
             }        
             
@@ -132,15 +132,15 @@ namespace EIS.Repositories.Repository
             IEnumerable<Attendance> data = new List<Attendance>();
             if (location==0)
             {
-               holidays = _dbContext.Holidays.ToList();
-                leaveList = _dbContext.LeaveRequests.ToList();
-                data = _dbContext.Attendances.Include(x => x.Person).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x=>x.Person.Location).Where(x=>x.Person.Location.IsActive==true).ToList();
+                data = _dbContext.Attendances.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.IsActive == true).ToList();
             }
             else
             {
-                holidays = _dbContext.Holidays.Where(x => x.LocationId == location).ToList();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Person.Location.Id == location).ToList();
-                data = _dbContext.Attendances.Include(x => x.Person).Where(x => x.Person.Location.Id == location).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
+                data = _dbContext.Attendances.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
 
             int count = 0;

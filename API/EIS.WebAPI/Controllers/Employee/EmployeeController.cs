@@ -264,11 +264,11 @@ namespace EIS.WebAPI.Controllers
             IQueryable<Person> list = null;
             if (sortGrid.LocationId == 0)
             {
-                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive).Include(x=>x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
             }
             else
             {
-                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin");
+                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
             }
             if (sortGrid.Search == null)
             {

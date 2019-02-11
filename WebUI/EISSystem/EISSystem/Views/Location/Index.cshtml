@@ -1,61 +1,71 @@
 ﻿@model IEnumerable<EIS.Entities.Employee.Locations>
+@using EIS.WebApp.Services
+
+<head>
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+    <style>
+        li:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
 @{
+    string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
     if (ViewBag.Message != null)
     {
-        <script type="text/javascript">
-            $(document).ready(function () {
-                /*toastr.options.timeOut = 5000;*/ // 5s
-                toastr.options = {
-                    "debug": false,
-                    "positionClass": "toast-top-right",
-                    "onclick": null,
-                    "fadeIn": 300,
-                    "fadeOut": 1000,
-                    "timeOut": 5000,
-                    "extendedTimeOut": 1000
-                }
-                toastr.success("@ViewBag.Message");
+        <script>
+            bootbox.alert({
+                message: "@ViewBag.Message"
             });
         </script>
         ViewBag.Message = null;
     }
 }
-<link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-<link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
 
 
-<html>
-<head>
-    <title>Locations</title>
-    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-</head>
-<body>
-    <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddLocation")"></div>
-    <div id="modal-placeholder-edit" class="modal fade" role="dialog" data-url="@Url.Action("EditLocation")"></div>
-    @*BootStrap Model*@
-    <div class="container-fluid">
-        <div class="block-header">
-            <HeaderWithButton btn-id="btnModal" header-name="Locations" btn-text="Add Location" icon-name="add"></HeaderWithButton>
+<title>Locations</title>
+
+<div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddLocation")"></div>
+<div id="modal-placeholder-edit" class="modal fade" role="dialog" data-url="@Url.Action("EditLocation")"></div>
+@*BootStrap Model*@
+
+<div class="container-fluid">
+    <div class="block-header">
+        <HeaderWithButton btn-id="btnModal" header-name="Locations" btn-text="Add Location" icon-name="add"></HeaderWithButton>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-9" style="height:50px">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <select class="form-control show-tick" id="select">
+                    <option id="active" value="active">Active</option>
+                    <option id="inActive" value="inActive">InActive</option>
+                </select>
+            </div>
+
         </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="body">
-                        <div>
-                            <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Location
-                                        </th>
-                                        <th>
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Location
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            @*<tbody>
                                     @foreach (var item in Model)
                                     {
                                         <tr>
@@ -69,36 +79,161 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a onclick="fun(@item.Id);">Edit</a></li>
-                                                        <li><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></li>
+                                                        <li><a onclick="deleteLocation(@item.Id)">Delete</a></li>
                                                     </ul>
                                                 </div>
 
                                             </td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-
+                                </tbody>*@
+                        </table>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
-
+</div>
+<style>
+    .dataTables_wrapper .myexport .dt-buttons {
+        float: right;
+    }
+</style>
 
 
 <script>
-    $(document).ready(function () {
-        var table = $('#example').DataTable({
-            rowReorder: {
-                selector: 'td:nth-child(2)'
-            },
-            responsive: true
+    $('#example').on('click', 'a.inactive', function (e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
+        var message = "<h4>Do you want to delete this location ?</h4>"
+       bootbox.confirm(message, function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Delete", "Location")?id=' + id,
+                    success: function () {
+                        bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
+                            location.href = '@Url.Action("Index", "Location")';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 401) {
+                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                        } else {
+                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                        }
+                    }
+                });
+            }
         });
     });
+    $('#example').on('click', 'a.active', function (e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
+        var message = "<h4>Do you want to activate this location ?</h4>"
+        bootbox.confirm(message, function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("ActivateLocation", "Location")?id=' + id,
+                    data: null,
+                    success: function () {
+                        bootbox.alert("<h4>Record activated successfully!</h4>", function () {
+                            location.href = '@Url.Action("Index", "Location")';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        bootbox.alert("<h4>Unable to Activate Data</h4>" + xhr.status);
+                    }
+                });
+            }
+        });
+    });
+    $('#select').on('change', function () {
+        var v = $('#select').val();
+        var b;
+        if (v == "active") {
+            b = true;
+            generateReport(b);
+        }
+        else if (v == "inActive") {
+            b = false;
+            generateReport(b);
+        }
+    });
+   $(document).ready(function () {
+        var b = true;
+        generateReport(b);
+    });
+    function generateReport(b) {
+        $.fn.dataTable.ext.errMode = 'none';
+        $('#example').on('error.dt', function () {
+            bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+        }).DataTable();
+        $('#example').DataTable().destroy();
+        $('#example tbody').empty();
+
+        debugger;
+        var dTable = $('#example').DataTable({
+            sDom: '<"myexport"B>ifrtlp',
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Location Report',
+                    text: 'Export',
+                    titleAttr: 'Export to Pdf',
+                    exportOptions: {
+                        columns: [0, 1,3,4,5,6,7]
+                    }
+                }
+            ],
+            "aoColumnDefs": [
+                { "aTargets": [0], "bSortable": true },
+                { "aTargets": [1], "bSortable": true },
+                { "aTargets": ['_all'], "bSortable": false }
+            ],
+            lengthMenu: [
+                [5, 10, 25, -1],
+                ['5', '10', '25', 'All']
+            ],
+            ajax: {
+                "url": '@Url.Action("Index", "Location")?type='+b,
+                "type": "POST",
+                "datatype": "json"//,
+                //"data": { "type": b }
+            },
+            "columns": [
+                {
+                    "data": "LocationName", "name": "LocationName", "autoWidth": true, "render": function (data, type, row) {
+                        return row.LocationName;
+                    }
+                },
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        var value = row.IsActive;
+                        if (value == true) {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a  onclick="fun('+row.Id+');">Edit</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                        } else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="active" id=' + row.Id + '>Activate</a></li></ul></div>';
+                        }
+                    }
+                }
+            ],
+            "initComplete": function () {
+                var $searchInput = $('div.dataTables_filter input');
+                $searchInput.unbind();
+                $searchInput.bind('keyup', function (e) {
+                    if (this.value.length >= 3 || this.value.length == 0) {
+                        dTable.search(this.value).draw();
+                    }
+                });
+            },
+        });
+    };
     function fun(c) {
         debugger;
         var url = $("#modal-placeholder-edit").data('url');
@@ -106,6 +241,29 @@
         $.get(url, function (data) {
             $("#modal-placeholder-edit").html(data);
             $("#modal-placeholder-edit").modal('show');
+        });
+    }
+    function deleteLocation(id) {
+        var message = "<h4>Do you want to delete this location ?</h4>"
+        bootbox.confirm(message, function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Delete", "Location")?id=' + id,
+                    success: function () {
+                        bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
+                            location.href = '@Url.Action("Index", "Location")';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 401) {
+                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                        } else {
+                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                        }
+                    }
+                });
+            }
         });
     }
     $("#btnModal").click(function () {
@@ -116,12 +274,17 @@
         });
     });
 </script>
-<script src="~/plugins/momentjs/moment.js"></script>
-<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
+
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 

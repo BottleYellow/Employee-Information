@@ -98,9 +98,9 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RequestLeave(LeaveRequest request)
         {
-            request.CreatedDate = DateTime.Now.Date;
-            request.UpdatedDate = DateTime.Now.Date;
-            request.AppliedDate = DateTime.Now.Date;
+            request.CreatedDate = DateTime.Now;
+            request.UpdatedDate = DateTime.Now;
+            request.AppliedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -129,7 +129,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditLeaveRequest(int id,LeaveRequest request)
         {
-            request.UpdatedDate = DateTime.Now.Date;
+            request.UpdatedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 request.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -171,8 +171,8 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddPastLeave(PastLeaves Leave)
         {
-            Leave.CreatedDate = DateTime.Now.Date;
-            Leave.UpdatedDate = DateTime.Now.Date;
+            Leave.CreatedDate = DateTime.Now;
+            Leave.UpdatedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -222,8 +222,8 @@ namespace EIS.WebApp.Controllers
         public IActionResult AddPolicy(LeaveRules Leave)
         {
             ViewBag.Locations = GetLocations();
-            Leave.CreatedDate = DateTime.Now.Date;
-            Leave.UpdatedDate = DateTime.Now.Date;
+            Leave.CreatedDate = DateTime.Now;
+            Leave.UpdatedDate = DateTime.Now;
             if (Leave.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
             if (ModelState.IsValid)
             {
@@ -290,8 +290,8 @@ namespace EIS.WebApp.Controllers
         public IActionResult AddCredit(LeaveCredit Credit)
         {
             ViewBag.Locations = GetLocations();
-            Credit.CreatedDate = DateTime.Now.Date;
-            Credit.UpdatedDate = DateTime.Now.Date;
+            Credit.CreatedDate = DateTime.Now;
+            Credit.UpdatedDate = DateTime.Now;
             Credit.Available = Credit.AllotedDays;
             if (ModelState.IsValid)
             {

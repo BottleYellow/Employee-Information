@@ -38,11 +38,11 @@ namespace EIS.WebAPI.Controllers
             IQueryable<LeaveRequest> leaveData = null;
             if(sortGrid.LocationId==0)
             {
-                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x=>x.Person.Location).Where(x => x.TenantId == TenantId);
+                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true);
             }
             else
             {
-                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.LocationId == sortGrid.LocationId);
+                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId);
                 leaveData.Include(x => x.Person.Location);
             }
             
