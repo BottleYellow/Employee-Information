@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using EIS.Entities.Employee;
+using EIS.Entities.Models;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;

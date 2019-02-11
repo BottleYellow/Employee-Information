@@ -8,6 +8,8 @@ namespace EIS.Entities.Models
             public string TimeOut { get; set; }
             public int PresentDays { get; set; }
             public int AbsentDays { get; set; }
-            public int TotalDays { get; set; }
+            public int TotalWorkingDays { get; set; }
+        public string AdditionalWorkingHours { get; set; }
+        public int TotalDays { get; set; }
     }
 }

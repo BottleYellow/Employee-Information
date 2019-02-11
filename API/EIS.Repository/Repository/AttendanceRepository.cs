@@ -120,18 +120,20 @@ namespace EIS.Repositories.Repository
             }
         }
 
-        public AttendanceReport GetAttendanceReportSummary(int TotalDays, IQueryable<Attendance> attendanceData)
+        public AttendanceReport GetAttendanceReportSummary(int totalDays,int totalWorkingDays, IEnumerable<Attendance> attendanceData)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            attendanceReport.TotalDays = TotalDays;
-
+            
+            attendanceReport.TotalWorkingDays = totalWorkingDays;
+            attendanceReport.TotalDays = totalDays;
             attendanceReport.PresentDays = attendanceData.Count();
-            attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
+            attendanceReport.AbsentDays = attendanceReport.TotalWorkingDays - attendanceReport.PresentDays;
             if (attendanceReport.PresentDays == 0)
             {
-                attendanceReport.TimeIn = "00:00";
-                attendanceReport.TimeOut = "00:00";
-                attendanceReport.AverageTime = "00:00";
+                attendanceReport.TimeIn = "-";
+                attendanceReport.TimeOut = "-";
+                attendanceReport.AverageTime = "-";
+                attendanceReport.AdditionalWorkingHours = "-";
             }
             else
             {
@@ -140,13 +142,36 @@ namespace EIS.Repositories.Repository
                 DateTime timeIn = DateTime.Today.Add(averageTimeIn);
                 attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
 
-                var attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null); 
+                IEnumerable<Attendance> attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null && x.TotalHours != null);
+                int attendanceCount = attendanceTimeOutData.Count();
+                if (attendanceCount > 0)
+                { 
                 TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
                 DateTime timeOut = DateTime.Today.Add(averageTimeOut);
                 attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
-                var hour = timeOut - timeIn;
-                DateTime avgHours = DateTime.Today.Add(hour);
-                attendanceReport.AverageTime = hour.Hours.ToString() + ":" + hour.Minutes.ToString();
+                TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
+                DateTime avgHour = DateTime.Today.Add(averageHour);
+                attendanceReport.AverageTime = avgHour.ToString("HH:mm");
+                    if (avgHour > new DateTime(2000, 1, 1, 9, 0, 0))
+                    {
+                         TimeSpan additionalHours=averageHour-new TimeSpan(9,0,0);
+                        TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceCount);
+                        attendanceReport.AdditionalWorkingHours = (int)result.TotalHours+":"+ result.Minutes;
+                    }
+                    else
+                    {
+                        attendanceReport.AdditionalWorkingHours ="-";
+                    }
+                 
+                
+                }
+                else
+                {
+                    attendanceReport.TimeOut = "-";
+                    attendanceReport.AverageTime = "-";
+                    attendanceReport.AdditionalWorkingHours = "-";
+                }
+              
             }
             return attendanceReport;
         }
