@@ -31,6 +31,11 @@ namespace EIS.WebApp.Filters
         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
+            bool skipAuthorization = context.Filters.Any(item => item is IAllowAnonymousFilter);
+            if (skipAuthorization)
+            {
+                return;
+            }
             string val = context.HttpContext.Session.GetString("CookieData");
             CookieModel Cookies = val != null ? JsonConvert.DeserializeObject<CookieModel>(val) : new CookieModel();
             string actionName = context.RouteData.Values["action"].ToString();

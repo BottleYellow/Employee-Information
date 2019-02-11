@@ -31,11 +31,11 @@ namespace EIS.WebAPI.Controllers.Leave
             IQueryable<LeaveCredit> credits = null;
             if(sortGrid.LocationId==0)
             {
-                credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId).Include(x=>x.Person.Location);
+                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true);
             }
             else
             {
-                credits = _repository.LeaveCredit.GetCredits().Where(x => x.TenantId == TenantId && x.Person.LocationId==sortGrid.LocationId).Include(x => x.Person.Location);
+                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
             }
             
 

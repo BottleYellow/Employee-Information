@@ -95,7 +95,7 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required" id="Imagediv">
-                                            <img id="employeeImage" src="/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
+                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
 
                                             <div class="middle">
                                                 <input type="button" class="text" id="my-button" value="Edit Image" />
@@ -302,7 +302,7 @@
                             </div>
                         </div><br /><br />
                         <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@ViewBag.EmployeeCode" class="btn btn-primary">Cancel</button>
+                        <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@Model.EmployeeCode" class="btn btn-primary">Cancel</button>
 
                     </form>
                 </div>

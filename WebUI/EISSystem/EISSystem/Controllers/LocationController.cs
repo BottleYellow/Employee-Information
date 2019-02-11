@@ -29,11 +29,25 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Manage Locations")]
         public IActionResult Index()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"api/Location");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<Locations> data = JsonConvert.DeserializeObject<List<Locations>>(stringData);
-            return View(data);
+            ViewBag.Locations = GetLocations();
+            return View();
         }
+        [ActionName("Index")]
+        [HttpPost]
+        public IActionResult GetLocations(bool type)
+        {
+            int LocationId = 0;
+            return LoadData<Locations>(ApiUrl + "/api/Location/data", type, LocationId);
+
+        }
+        //[DisplayName("Manage Locations")]
+        //public IActionResult Index()
+        //{
+        //    HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Location");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    List<Locations> data = JsonConvert.DeserializeObject<List<Locations>>(stringData);
+        //    return View(data);
+        //}
         [DisplayName("Add Location")]
         public IActionResult AddLocation()
         {
@@ -44,8 +58,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddLocation(Locations location)
         {
-            location.CreatedDate = DateTime.Now.Date;
-            location.UpdatedDate = DateTime.Now.Date;
+            location.CreatedDate = DateTime.Now;
             location.IsActive = true;
             location.CreatedBy = Convert.ToInt32(GetSession().PersonId);
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Location/"+0, location);
@@ -77,7 +90,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditLocation(Locations location)
         {
-            location.UpdatedDate = DateTime.Now.Date;
+            location.UpdatedDate = DateTime.Now;
             location.IsActive = true;
             location.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Location/"+location.Id, location);
@@ -98,6 +111,24 @@ namespace EIS.WebApp.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             return PartialView("EditLocation", location);
+        }
+        [DisplayName("Delete Location")]
+        public void Delete(int id)
+        {
+            HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Location/DeleteLocation/" + id, null);
+            if (response != null)
+            {
+                
+            }
+
+        }
+        [DisplayName("Activate Location")]
+        public IActionResult ActivateLocation(int id)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Location/ActivateLocation/" + id + "");
+            if (response.IsSuccessStatusCode)
+                ViewBag.Message = "Location activated successfully!";
+            return RedirectToAction("Index", "Location");
         }
     }
 }

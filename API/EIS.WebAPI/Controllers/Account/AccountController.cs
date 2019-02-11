@@ -41,8 +41,6 @@ namespace EIS.WebAPI.Controllers
                 string status = _repository.Users.ValidateUser(user);
                 if (status == "success")
                 {
-                    string b = Request.Headers[HeaderNames.UserAgent].ToString();
-                    string ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4()?.ToString();
                     Users newUser = _repository.Users.FindByUserName(user.UserName);
                     JwtSecurityToken token = _repository.Users.GenerateToken(newUser.Id);
                     string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
@@ -55,11 +53,6 @@ namespace EIS.WebAPI.Controllers
                         person = _repository.Employee.FindByCondition(x => x.Id == pid);
                         role = _repository.Employee.GetDesignationById(person.RoleId).Name;
                         string data = _repository.Employee.GetDesignationById(person.RoleId).Access;
-                        //Cache.SetStringValue("TokenValue", tokenValue);
-                        //Cache.SetStringValue("PersonId", pid.ToString());
-                        //Cache.SetStringValue("Access", data);
-                        //Cache.SetStringValue("TenantId", person.TenantId.ToString());
-                        //Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
                         CookiesData = new CookieModel()
                         {
                             TokenValue = tokenValue,
@@ -69,14 +62,6 @@ namespace EIS.WebAPI.Controllers
                             EmployeeCode = person.EmployeeCode,
                             Role = role
                         };
-                        //string CookieJson = JsonConvert.SerializeObject(Cookies);
-                        //Response.Cookies.Append("CookieData", CookieJson);
-                        //Response.Cookies.Append("TokenValue", tokenValue);
-                        //Response.Cookies.Append("PersonId", pid.ToString());
-                        //Response.Cookies.Append("Access", data);
-                        //Response.Cookies.Append("TenantId", person.TenantId.ToString());
-                        //Response.Cookies.Append("EmployeeCode", person.EmployeeCode);
-                        //Response.Cookies.Append("Role", role);
                     }
                     PersonWithCookie pc = new PersonWithCookie()
                     {
@@ -84,7 +69,6 @@ namespace EIS.WebAPI.Controllers
                         Cookies = CookiesData
                     };
                     Personid = pid.ToString();
-                    //Cache.SetStringValue("Role", role);
                     return Ok(pc);
                 }
             }
@@ -97,18 +81,6 @@ namespace EIS.WebAPI.Controllers
         [Route("logout")]
         public IActionResult Logout()
         {
-            //Response.Cookies.Delete("CookieData");
-            //Response.Cookies.Delete("PersonId");
-            //Response.Cookies.Delete("TokenValue");
-            //Response.Cookies.Delete("Access");
-            //Response.Cookies.Delete("Role");
-            //Response.Cookies.Delete("TenantId");
-            //Response.Cookies.Delete("EmployeeCode");
-
-            //Cache.DeleteStringValue("PersonId");
-            //Cache.DeleteStringValue("TokenValue");
-            //Cache.DeleteStringValue("Access");
-            //Cache.DeleteStringValue("Role");
             return Ok("Successfully Logged out.");
         }
 

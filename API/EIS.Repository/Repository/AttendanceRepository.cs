@@ -19,7 +19,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -35,7 +35,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -56,7 +56,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y=>y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -71,7 +71,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Where(y=>y.LocationId==loc).Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(z=>z.Location)
+                var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                     .Select(p => new
                     {
                         p,
@@ -90,7 +90,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
                     p,
@@ -105,7 +105,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                var results = _dbContext.Person.Include(z => z.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" &&x.LocationId==loc)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true && x.LocationId==loc)
                     .Select(p => new
                     {
                         p,
@@ -120,18 +120,20 @@ namespace EIS.Repositories.Repository
             }
         }
 
-        public AttendanceReport GetAttendanceReportSummary(int TotalDays, IQueryable<Attendance> attendanceData)
+        public AttendanceReport GetAttendanceReportSummary(int totalDays,int totalWorkingDays, IEnumerable<Attendance> attendanceData)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            attendanceReport.TotalDays = TotalDays;
-
+            
+            attendanceReport.TotalWorkingDays = totalWorkingDays;
+            attendanceReport.TotalDays = totalDays;
             attendanceReport.PresentDays = attendanceData.Count();
-            attendanceReport.AbsentDays = attendanceReport.TotalDays - attendanceReport.PresentDays;
+            attendanceReport.AbsentDays = attendanceReport.TotalWorkingDays - attendanceReport.PresentDays;
             if (attendanceReport.PresentDays == 0)
             {
-                attendanceReport.TimeIn = "00:00";
-                attendanceReport.TimeOut = "00:00";
-                attendanceReport.AverageTime = "00:00";
+                attendanceReport.TimeIn = "-";
+                attendanceReport.TimeOut = "-";
+                attendanceReport.AverageTime = "-";
+                attendanceReport.AdditionalWorkingHours = "-";
             }
             else
             {
@@ -140,13 +142,35 @@ namespace EIS.Repositories.Repository
                 DateTime timeIn = DateTime.Today.Add(averageTimeIn);
                 attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
 
-                var attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null); 
-                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
-                DateTime timeOut = DateTime.Today.Add(averageTimeOut);
-                attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
-                var hour = timeOut - timeIn;
-                DateTime avgHours = DateTime.Today.Add(hour);
-                attendanceReport.AverageTime = hour.Hours.ToString() + ":" + hour.Minutes.ToString();
+                IEnumerable<Attendance> attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null && x.TotalHours != null);
+                if (attendanceTimeOutData != null && attendanceTimeOutData.Count() > 0)
+                {
+                    TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
+                    DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+                    attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
+                    TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
+                    DateTime avgHour = DateTime.Today.Add(averageHour);
+                    attendanceReport.AverageTime = avgHour.ToString("HH:mm");
+                    if (avgHour > new DateTime(2000, 1, 1, 9, 0, 0))
+                    {
+                        TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
+                        TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
+                        attendanceReport.AdditionalWorkingHours = (int)result.TotalHours + ":" + result.Minutes;
+                    }
+                    else
+                    {
+                        attendanceReport.AdditionalWorkingHours = "-";
+                    }
+
+
+                }
+                else
+                {
+                    attendanceReport.TimeOut = "-";
+                    attendanceReport.AverageTime = "-";
+                    attendanceReport.AdditionalWorkingHours = "-";
+                }
+              
             }
             return attendanceReport;
         }

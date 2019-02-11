@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using EIS.Entities.Employee;
+using EIS.Entities.Models;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -56,8 +58,8 @@ namespace EIS.WebApp.Controllers
             return LoadData<Attendance>(url,null,1);
 
         }
-        [ActionName("EmployeeReports")]
-        [HttpPut]
+        [AllowAnonymous]
+        [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
             //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
@@ -110,8 +112,8 @@ namespace EIS.WebApp.Controllers
             return LoadData<Attendance>(url,null,1);
 
         }
-        [ActionName("AttendanceSummary")]
-        [HttpPut]
+        [AllowAnonymous]
+        [HttpPost]
         public JsonResult AttendanceSummaryById(string date, string type, int? id)
         {
             string url = GetAttendanceSummaryData(date, type, id);

@@ -148,7 +148,7 @@
                                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Additional Working Hours</div>
-                                            <div id="AddtionalWorkingHours" class="panel-body">08:00</div>
+                                            <div id="addtionalWorkingHours" class="panel-body"></div>
                                         </div>
                                     </div>
 
@@ -177,7 +177,7 @@
                                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Total Number Of Days</div>
-                                            <div id="totalNoOfDays" class="panel-body">31</div>
+                                            <div id="totalNoOfDays" class="panel-body"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -370,8 +370,8 @@
 
         function generateReport(value, type, id) {
             $.ajax({
-                type: 'PUT',
-                    url:'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                type: 'POST',
+                    url:'@Url.Action("AttendanceSummaryById", "Attendance")?date='+value+'&type='+type+'&id='+id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -379,8 +379,9 @@
                     document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
-                    document.getElementById("totalWorkingDays").innerHTML = data.TotalDays;
-
+                    document.getElementById("totalWorkingDays").innerHTML = data.TotalWorkingDays;
+                    document.getElementById("totalNoOfDays").innerHTML = data.TotalDays;
+                    document.getElementById("addtionalWorkingHours").innerHTML = data.AdditionalWorkingHours;
                 },
                 error: function (error) {
                     bootbox.alert('<h4>Error</h4>');

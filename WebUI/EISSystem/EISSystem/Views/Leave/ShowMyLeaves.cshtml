@@ -219,7 +219,7 @@
         });
     });
     function UpdateStatus(RequestId, Status) {
-        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "";
+        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/"+@cookies.PersonId;
         $.ajax({
             url: url1,
             type: 'POST',
