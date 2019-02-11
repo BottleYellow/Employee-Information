@@ -31,9 +31,9 @@ namespace EIS.Repositories.Repository
             List<Person> employees = new List<Person>();
             int pcount = 0;
             int leaves = 0;
-            leaveRequests = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location).ToList();
+            leaveRequests = location == 0 ? _dbContext.LeaveRequests.Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location  && x.Person.Location.IsActive == true).ToList();
             leaves = leaveRequests.Count();
-            var results = _dbContext.Person.Include(x => x.Role).Include(y => y.Location).Where(x => x.Role.Name != "Admin")
+            var results = _dbContext.Person.Include(x => x.Role).Include(x => x.Location).Where(x => x.Role.Name != "Admin" && x.Location.IsActive==true)
            .Select(p => new
            {
                p,
@@ -119,21 +119,21 @@ namespace EIS.Repositories.Repository
         }
 
 
-        public List<CalendarData> GetCalendarDetails(int location,DateTime beginDate, DateTime stopDate)
+        public List<CalendarData> GetCalendarDetails(int location, DateTime beginDate, DateTime stopDate)
         {
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
 
-            if (location==0)
+            if (location == 0)
             {
-               holidays = _dbContext.Holidays.ToList();
-                leaveList = _dbContext.LeaveRequests.ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person.Location).Where(x => x.Person.Location.IsActive == true).ToList();
             }
             else
             {
-                holidays = _dbContext.Holidays.Where(x => x.LocationId == location).ToList();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Where(x => x.Person.Location.Id == location).ToList();             
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
 
             int count = 0;
@@ -211,11 +211,11 @@ namespace EIS.Repositories.Repository
                 }
 
 
-                var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                            .Select(p => new
                            {
                                p,
-                               Attendances = p.Attendance.Where(a => a.DateIn== date)
+                               Attendances = p.Attendance.Where(a => a.DateIn == date)
                            });
 
                 foreach (var x in results)
@@ -226,46 +226,49 @@ namespace EIS.Repositories.Repository
 
                 int absentCount = 0;
                 int presentCount = 0;
-                   var resultPresent = location == 0 ? result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance != null && x.Attendance.Count() > 0).ToList();
+                var resultPresent = location == 0 ? result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance != null && x.Attendance.Count() > 0).ToList();
                 presentCount = resultPresent.Count();
-                CalendarData CalanderData10 = new CalendarData();
-                CalanderData10.Title = "Present Count:" + presentCount;
-                CalanderData10.StartDate = date;
-                CalanderData10.EndDate = date;
-                CalanderData10.Color = "Green";
-                CalanderData10.IsFullDay = true;
-                StringBuilder sb1 = new StringBuilder();
-                foreach (var d in resultPresent)
+                if (presentCount > 0)
                 {
-                    if (d != null)
+                    CalendarData CalanderData10 = new CalendarData();
+                    CalanderData10.Title = "Present Count:" + presentCount;
+                    CalanderData10.StartDate = date;
+                    CalanderData10.EndDate = date;
+                    CalanderData10.Color = "Green";
+                    CalanderData10.IsFullDay = true;
+                    StringBuilder sb1 = new StringBuilder();
+                    foreach (var d in resultPresent)
                     {
-                        sb1.AppendLine("<br/>");
-                        sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.Attendance.FirstOrDefault().TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                        if (d != null)
+                        {
+                            sb1.AppendLine("<br/>");
+                            sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.Attendance.FirstOrDefault().TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                        }
                     }
-                }
-                CalanderData10.Description = sb1.ToString();
-                calendarDataList.Add(CalanderData10);
-        
-                   var resultAbsent = location == 0 ? result.Where(x => x.Attendance.Count() == 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance.Count() == 0).ToList();
-                absentCount = resultAbsent.Count();
+                    CalanderData10.Description = sb1.ToString();
+                    calendarDataList.Add(CalanderData10);
 
-                CalendarData CalanderData11 = new CalendarData();
-                CalanderData11.Title = "Absent Count:" + absentCount;
-                CalanderData11.StartDate = date;
-                CalanderData11.EndDate = date;
-                CalanderData11.Color = "Red";
-                CalanderData11.IsFullDay = true;
-                StringBuilder sb2 = new StringBuilder();
-                foreach (var d in resultAbsent)
-                {
-                    if (d != null)
+                    var resultAbsent = location == 0 ? result.Where(x => x.Attendance.Count() == 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance.Count() == 0).ToList();
+                    absentCount = resultAbsent.Count();
+
+                    CalendarData CalanderData11 = new CalendarData();
+                    CalanderData11.Title = "Absent Count:" + absentCount;
+                    CalanderData11.StartDate = date;
+                    CalanderData11.EndDate = date;
+                    CalanderData11.Color = "Red";
+                    CalanderData11.IsFullDay = true;
+                    StringBuilder sb2 = new StringBuilder();
+                    foreach (var d in resultAbsent)
                     {
-                        sb2.AppendLine("<br/>");
-                        sb2.AppendLine(d.FullName);
+                        if (d != null)
+                        {
+                            sb2.AppendLine("<br/>");
+                            sb2.AppendLine(d.FullName);
+                        }
                     }
+                    CalanderData11.Description = sb2.ToString();
+                    calendarDataList.Add(CalanderData11);
                 }
-                CalanderData11.Description = sb2.ToString();
-                calendarDataList.Add(CalanderData11);
             }
             return calendarDataList;
         }
