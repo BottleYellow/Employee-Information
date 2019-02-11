@@ -202,6 +202,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Employee")]
         public IActionResult Edit(string EmployeeCode)
         {
+            ViewBag.EmployeeCode = EmployeeCode;
             ViewBag.Designations = rolesList;
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
