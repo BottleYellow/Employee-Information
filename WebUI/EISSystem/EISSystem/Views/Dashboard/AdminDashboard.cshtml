@@ -77,12 +77,12 @@
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                 <div class="card">
                     <div class="header">
-                        <h2>Today's Attendance</h2>
-                        <div>
-                            <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
-                                <option value="0">All</option>
-                            </select>
-                        </div>
+                        <h2 id="headerValue"> </h2>
+                                    <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
+                                    <option value="0">All</option>
+                                </select>
+                       
+                       
                     </div>
                     <div class="body" id="attendanceCard">
                         <div class="table-responsive">
@@ -188,22 +188,25 @@
 </div>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script>
-    var buttonSelected;
-    var selectOpt;
+    var buttonSelected="All";
+    var selectOpt = 0;
+    document.getElementById("headerValue").innerHTML = "Today's Attendance"; 
     $(document).ready(function () {
         selectOpt = $('#select option:selected').val();
         generateReport("All", selectOpt);
     });
     $('#allEmployee').on('click', function () {
         $('#leavesCard').hide();
-        $('#attendanceCard').show();      
+        $('#attendanceCard').show();        
         buttonSelected = "All";
+        document.getElementById("headerValue").innerHTML = "Today's Attendance"; 
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
     });
     $('#employeePresent').on('click', function () {
         $('#leavesCard').hide();
         $('#attendanceCard').show(); 
+        document.getElementById("headerValue").innerHTML = "Today's Attendance"; 
         buttonSelected = "Present";  
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
@@ -211,7 +214,8 @@
     });  
     $('#employeeAbsent').on('click', function () {
         $('#leavesCard').hide();
-        $('#attendanceCard').show(); 
+        $('#attendanceCard').show();
+        document.getElementById("headerValue").innerHTML = "Today's Attendance"; 
         buttonSelected = "Absent";
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
@@ -222,12 +226,16 @@
         $('#attendanceCard').hide();
         $('#leavesCard').show();
         buttonSelected = "Leaves";
+        document.getElementById("headerValue").innerHTML = "Pending Leaves"; 
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
     });
 
     $('#select').on('change', function () {
         selectOpt = $('#select option:selected').val();
+        if (buttonSelected == "Leaves") {
+            document.getElementById("headerValue").innerHTML = "Pending Leaves";
+        }        
         generateReport(buttonSelected, selectOpt);
     });
 

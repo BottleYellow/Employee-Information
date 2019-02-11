@@ -171,8 +171,10 @@ namespace EIS.WebAPI.Controllers
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x=>x.TimeOut!=null);
-            int TotalDays = (DateTime.IsLeapYear(year)) ? 366 : 365;
-            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
+            int TotalWorkingDays = 0;
+            int TotalDays = DateTime.IsLeapYear(year) ? 366 : 365;
+            TotalWorkingDays = TotalDays - 24;
+            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, TotalWorkingDays, attendanceData.AsEnumerable());
             return Ok(attendanceReport);
         }
 
@@ -183,18 +185,18 @@ namespace EIS.WebAPI.Controllers
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
 
-            int TotalDays = 0;
-
-            for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++)
+            int TotalWorkingDays = 0;
+            int TotalDays = DateTime.DaysInMonth(year, month);
+            for (int i = 1; i <= TotalDays; i++)
             {
                 DateTime thisDay = new DateTime(year, month, i);
                 if (thisDay.DayOfWeek != DayOfWeek.Sunday)
                 {
-                    TotalDays += 1;
+                    TotalWorkingDays += 1;
                 }
             }
-            TotalDays = TotalDays - 2;
-            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, attendanceData);
+            TotalWorkingDays = TotalWorkingDays - 2;
+            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(TotalDays, TotalWorkingDays, attendanceData.AsEnumerable());
             return Ok(attendanceReport);
         }
 
@@ -204,7 +206,7 @@ namespace EIS.WebAPI.Controllers
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
-            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(7, attendanceData);
+            attendanceReport = _repository.Attendances.GetAttendanceReportSummary(7,6, attendanceData.AsEnumerable());
             return Ok(attendanceReport);
         }
         #endregion
