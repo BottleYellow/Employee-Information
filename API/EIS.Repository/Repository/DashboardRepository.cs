@@ -226,46 +226,50 @@ namespace EIS.Repositories.Repository
 
                 int absentCount = 0;
                 int presentCount = 0;
+                
                    var resultPresent = location == 0 ? result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance != null && x.Attendance.Count() > 0).ToList();
                 presentCount = resultPresent.Count();
-                CalendarData CalanderData10 = new CalendarData();
-                CalanderData10.Title = "Present Count:" + presentCount;
-                CalanderData10.StartDate = date;
-                CalanderData10.EndDate = date;
-                CalanderData10.Color = "Green";
-                CalanderData10.IsFullDay = true;
-                StringBuilder sb1 = new StringBuilder();
-                foreach (var d in resultPresent)
+                if (presentCount>0)
                 {
-                    if (d != null)
+                    CalendarData CalanderData10 = new CalendarData();
+                    CalanderData10.Title = "Present Count:" + presentCount;
+                    CalanderData10.StartDate = date;
+                    CalanderData10.EndDate = date;
+                    CalanderData10.Color = "Green";
+                    CalanderData10.IsFullDay = true;
+                    StringBuilder sb1 = new StringBuilder();
+                    foreach (var d in resultPresent)
                     {
-                        sb1.AppendLine("<br/>");
-                        sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.Attendance.FirstOrDefault().TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                        if (d != null)
+                        {
+                            sb1.AppendLine("<br/>");
+                            sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.Attendance.FirstOrDefault().TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                        }
                     }
-                }
-                CalanderData10.Description = sb1.ToString();
-                calendarDataList.Add(CalanderData10);
-        
-                   var resultAbsent = location == 0 ? result.Where(x => x.Attendance.Count() == 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance.Count() == 0).ToList();
-                absentCount = resultAbsent.Count();
+                    CalanderData10.Description = sb1.ToString();
+                    calendarDataList.Add(CalanderData10);
 
-                CalendarData CalanderData11 = new CalendarData();
-                CalanderData11.Title = "Absent Count:" + absentCount;
-                CalanderData11.StartDate = date;
-                CalanderData11.EndDate = date;
-                CalanderData11.Color = "Red";
-                CalanderData11.IsFullDay = true;
-                StringBuilder sb2 = new StringBuilder();
-                foreach (var d in resultAbsent)
-                {
-                    if (d != null)
+                    var resultAbsent = location == 0 ? result.Where(x => x.Attendance.Count() == 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance.Count() == 0).ToList();
+                    absentCount = resultAbsent.Count();
+
+                    CalendarData CalanderData11 = new CalendarData();
+                    CalanderData11.Title = "Absent Count:" + absentCount;
+                    CalanderData11.StartDate = date;
+                    CalanderData11.EndDate = date;
+                    CalanderData11.Color = "Red";
+                    CalanderData11.IsFullDay = true;
+                    StringBuilder sb2 = new StringBuilder();
+                    foreach (var d in resultAbsent)
                     {
-                        sb2.AppendLine("<br/>");
-                        sb2.AppendLine(d.FullName);
+                        if (d != null)
+                        {
+                            sb2.AppendLine("<br/>");
+                            sb2.AppendLine(d.FullName);
+                        }
                     }
+                    CalanderData11.Description = sb2.ToString();
+                    calendarDataList.Add(CalanderData11);
                 }
-                CalanderData11.Description = sb2.ToString();
-                calendarDataList.Add(CalanderData11);
             }
             return calendarDataList;
         }
