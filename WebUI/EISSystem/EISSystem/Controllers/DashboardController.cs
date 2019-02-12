@@ -8,6 +8,7 @@ using EIS.Entities.Dashboard;
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -31,12 +32,12 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminDashboard(string attendanceStatus,int location)
+        public IActionResult AdminDashboard(string attendanceStatus, int location)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/"+attendanceStatus+"/"+location);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
-            return Json(dashboard);       
+            Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
+            return Json(dashboard);
         }
 
         public IActionResult HRDashboard()
