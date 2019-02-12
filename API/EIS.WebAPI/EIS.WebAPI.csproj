@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\**" />
     <Compile Remove="wwwroot\**" />
+    <Content Remove="Model\**" />
     <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Model\**" />
     <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Model\**" />
     <None Remove="wwwroot\**" />
   </ItemGroup>
 
@@ -36,10 +40,6 @@
     <Reference Include="Microsoft.Extensions.Caching.Abstractions">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.caching.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using EIS.Entities.Generic;
 using System.Collections;
 using System.Linq;
+using System;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EIS.WebAPI.Controllers.Holidays
@@ -62,6 +63,24 @@ namespace EIS.WebAPI.Controllers.Holidays
             _repository.Holidays.CreateAndSave(holiday);
             return Ok(holiday);
         }
-       
+
+        [HttpGet("{date}/{loc}")]
+        public IEnumerable<Holiday> GetHoliday([FromRoute] string date, [FromRoute] int loc)
+        {
+            var holiday = _repository.Holidays.GetHolidayByYear(date, loc);
+            return holiday;
+        }
+        [HttpGet("{month}/{year}/{loc}")]
+        public IEnumerable<Holiday> GetHoliday([FromRoute] string month,[FromRoute] string year, [FromRoute] int loc)
+        {
+            var holiday = _repository.Holidays.GetHolidayByMonth(month,year, loc);
+            return holiday;
+        }
+        [HttpGet("{firstDate}/{lastDate}/{v}/{location}")]
+        public IEnumerable<Holiday> GetHoliday([FromRoute] string firstDate, [FromRoute] string lastDate, [FromRoute] string v, [FromRoute] int location)
+        {
+            var holiday = _repository.Holidays.GetHolidayByWeek(firstDate, lastDate, location);
+            return holiday;
+        }
     }
 }

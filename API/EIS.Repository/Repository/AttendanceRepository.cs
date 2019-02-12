@@ -143,27 +143,26 @@ namespace EIS.Repositories.Repository
                 attendanceReport.TimeIn = timeIn.ToString("hh:mm tt");
 
                 IEnumerable<Attendance> attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null && x.TotalHours != null);
-                int attendanceCount = attendanceTimeOutData.Count();
-                if (attendanceCount > 0)
-                { 
-                TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
-                DateTime timeOut = DateTime.Today.Add(averageTimeOut);
-                attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
-                TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
-                DateTime avgHour = DateTime.Today.Add(averageHour);
-                attendanceReport.AverageTime = avgHour.ToString("HH:mm");
+                if (attendanceTimeOutData != null && attendanceTimeOutData.Count() > 0)
+                {
+                    TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
+                    DateTime timeOut = DateTime.Today.Add(averageTimeOut);
+                    attendanceReport.TimeOut = timeOut.ToString("hh:mm tt");
+                    TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
+                    DateTime avgHour = DateTime.Today.Add(averageHour);
+                    attendanceReport.AverageTime = avgHour.ToString("HH:mm");
                     if (avgHour > new DateTime(2000, 1, 1, 9, 0, 0))
                     {
-                         TimeSpan additionalHours=averageHour-new TimeSpan(9,0,0);
-                        TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceCount);
-                        attendanceReport.AdditionalWorkingHours = (int)result.TotalHours+":"+ result.Minutes;
+                        TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
+                        TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
+                        attendanceReport.AdditionalWorkingHours = (int)result.TotalHours + ":" + result.Minutes;
                     }
                     else
                     {
-                        attendanceReport.AdditionalWorkingHours ="-";
+                        attendanceReport.AdditionalWorkingHours = "-";
                     }
-                 
-                
+
+
                 }
                 else
                 {

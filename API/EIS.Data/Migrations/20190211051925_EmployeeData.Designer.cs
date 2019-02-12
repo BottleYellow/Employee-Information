@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190209064939_Changes")]
-    partial class Changes
+    [Migration("20190211051925_EmployeeData")]
+    partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

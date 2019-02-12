@@ -278,8 +278,8 @@
     function getLeavesData(Leaves) {
         var arrayLeaves = [];
         for (var i = 0; i < Leaves.length; i++) {
-            var dateFrom = Leaves[i].ToDate;
-            arrayLeaves.push([Leaves[i].Person.Location.LocationName, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, Leaves[i].ToDate, Leaves[i].RequestedDays, Leaves[i].Available, Leaves[i].Status, Leaves[i].Reason])
+            var dateFrom = moment(Leaves[i].FromDate).format('DD MMM YYYY');
+            arrayLeaves.push([Leaves[i].Person.Location.LocationName, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format('DD MMM YYYY'), Leaves[i].RequestedDays, Leaves[i].Available, Leaves[i].Status, Leaves[i].Reason])
         }
         $('#myLeavesTable').DataTable().destroy();
         $('#myLeavesTable').DataTable({
