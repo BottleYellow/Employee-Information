@@ -329,16 +329,16 @@
 
 @if (cookies.Role != "Admin")
 {
-    @section Attendance
-        {
-        <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
-        <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
-        <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
+@section Attendance
+    {
+    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
 
-    }
-    @section EstimatedTimeOut
-        {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
-    }
+}
+@section EstimatedTimeOut
+    {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
+}
 }
 <script>
 
@@ -349,18 +349,30 @@
         var estTimeOut = document.getElementById('estimatedTimeOut').value;
         var totalHrs = document.getElementById('totalHours').value;
 
-        if (TimeIn != '00:00:00') {
-            document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
-            $('#clockIn').attr('disabled', 'disabled');
+        var ci = document.getElementById('clockIn');
+        if (ci != null) {
+            if (TimeIn != '00:00:00') {
+                document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
+                $('#clockIn').attr('disabled', 'disabled');
+            }
         }
-        if (TimeOut != '00:00:00') {
-            document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+        var co = document.getElementById('clockOut');
+        if (co != null) {
+            if (TimeOut != '00:00:00') {
+                document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+            }
         }
-        if (estTimeOut != '00:00:00') {
-            document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+        var et = document.getElementById('eTOut');
+        if (et != null) {
+            if (estTimeOut != '00:00:00') {
+                document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+            }
         }
-        if (totalHrs != '00:00:00') {
-            document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+        var th = document.getElementById('tWHrs');
+        if (th != null) {
+            if (totalHrs != '00:00:00') {
+                document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+            }
         }
 
 
@@ -694,4 +706,3 @@
     fakewaffle.responsiveTabs(['xs', 'sm']);
     })(jQuery);
 </script>
-

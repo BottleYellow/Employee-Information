@@ -131,15 +131,22 @@ namespace EIS.WebAPI.Controllers
         [AllowAnonymous]
         public IActionResult ForGot_Pass(string username)
         {
+            Users user = _repository.Users.FindByUserName(username);
+            if (user == null)
+            {
+                return BadRequest();
+            }
             string password = EmailManager.CreateRandomPassword(8);
             string To = username;
-            string subject = "New Password";
-            string body = "Hello!" +"\n"+
-                "Your new password is : " + password+
-                "\n"+ "Click here http://aclpune.com/ems to login";
+            string subject = "Password Reset";
+            string body = "Hello!" + " \n " +
+                "This mail is sent from Aadyam Consultant \n " +
+                "You have requested to reset your login password \n " +
+                "Your password has been reset and the new Password is : " + password + " \n " +
+                "Please change your password on your first login" +
+                " \n " + "Click here http://aclpune.com/ems to login";
 
-            new EmailManager(_configuration).SendEmail(subject, body, To,null);
-            Users user = _repository.Users.FindByUserName(username);
+            new EmailManager(_configuration).SendEmail(subject, body, To, null);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);
             return Ok();
