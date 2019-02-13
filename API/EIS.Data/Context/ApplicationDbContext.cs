@@ -3,9 +3,11 @@ using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.OtherEntities;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 
 namespace EIS.Data.Context
@@ -33,6 +35,12 @@ namespace EIS.Data.Context
         }
 
         #region[Tables]
+        [NotMapped]
+        public virtual DbSet<SP_AdminDashboard> _sp_AdminDashboard { get; set; }
+        [NotMapped]
+        public virtual DbSet<SP_AdminDashboardCount> _sp_AdminDashboardcount { get; set; }
+        [NotMapped]
+        public virtual DbSet<Sp_AdminDashboardLeave> _sp_AdminDashboardLeave { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }
         public DbSet<LeaveRules> LeaveRules { get; set; }

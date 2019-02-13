@@ -331,8 +331,8 @@
 {
 @section Attendance
     {
-    <li><button type="button" class="btn btn-primary"><b>Clock In</b><br /></button></li>
-    <li><button type="button" class="btn btn-primary" hidden><b>Clock Out</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
     <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
 
 }
@@ -349,18 +349,30 @@
         var estTimeOut = document.getElementById('estimatedTimeOut').value;
         var totalHrs = document.getElementById('totalHours').value;
 
-        if (TimeIn != '00:00:00') {
-            document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
-            $('#clockIn').attr('disabled', 'disabled');
+        var ci = document.getElementById('clockIn');
+        if (ci != null) {
+            if (TimeIn != '00:00:00') {
+                document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
+                $('#clockIn').attr('disabled', 'disabled');
+            }
         }
-        if (TimeOut != '00:00:00') {
-            document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+        var co = document.getElementById('clockOut');
+        if (co != null) {
+            if (TimeOut != '00:00:00') {
+                document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+            }
         }
-        if (estTimeOut != '00:00:00') {
-            document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+        var et = document.getElementById('eTOut');
+        if (et != null) {
+            if (estTimeOut != '00:00:00') {
+                document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+            }
         }
-        if (totalHrs != '00:00:00') {
-            document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+        var th = document.getElementById('tWHrs');
+        if (th != null) {
+            if (totalHrs != '00:00:00') {
+                document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+            }
         }
 
 
@@ -396,7 +408,7 @@
         }
     });
 
-    $('#clockIn').click(function () {
+    @*$('#clockIn').click(function () {
         $.ajax({
             type: 'GET',
             //url: '/Attendance/AttendanceInOut',
@@ -426,11 +438,10 @@
                 if (totalHrs != '00:00:00') {
                     document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
                 }
-                @*var code = @Cache.GetStringValue("EmployeeCode");*@
                 window.parent.location.reload();
             }
         });
-    });
+    });*@
 
     $('ul.nav.nav-tabs  a').click(function (e) {
     e.preventDefault();

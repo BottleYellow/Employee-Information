@@ -4,6 +4,7 @@ using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -25,55 +27,54 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public AdminDashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId)
+        public Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId)
         {
-            List<LeaveRequest> leaveRequests = new List<LeaveRequest>();
-            List<Person> employees = new List<Person>();
-            int pcount = 0;
-            int leaves = 0;
-            leaveRequests = location == 0 ? _dbContext.LeaveRequests.Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.Location.IsActive==true).ToList() : _dbContext.LeaveRequests.Include(x => x.Person).Include(x=>x.Person.Location).Where(x => x.Status == "Pending" && x.TenantId == TenantId && x.Person.LocationId == location  && x.Person.Location.IsActive == true).ToList();
-            leaves = leaveRequests.Count();
-            var results = _dbContext.Person.Include(x => x.Role).Include(x => x.Location).Where(x => x.Role.Name != "Admin" && x.Location.IsActive==true)
-           .Select(p => new
-           {
-               p,
-               Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
-           });
+            // List<LeaveRequest> leaveRequests = new List<LeaveRequest>();
+            // List<Person> employees = new List<Person>();
+            // int leaves = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId &&x.Person.LocationId==location).Count();
+            // int pcount = 0;
 
-            foreach (var x in results)
-            {
-                x.p.Attendance = x.Attendances.ToList();
-            }
-            var result =location==0? results.Select(x => x.p).ToList(): results.Select(x => x.p).Where(x=>x.LocationId==location).ToList();
+            // var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
+            //.Select(p => new
+            //{
+            //    p,
+            //    Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
+            //});
+            //usp_GetAdminDashboardDetails
+            Admin_Dashboard Model = new Admin_Dashboard();
+            Model.sP_AdminDashboardCount = new SP_AdminDashboardCount();
+            Model.sP_AdminDashboards = new List<SP_AdminDashboard>();
 
-            int totalCount = result.Count(); ;
+            var param = new SqlParameter("@locationId", location);
+            string usp = "LMS.usp_GetAdminDashboardDetails @locationId";
+            Model.sP_AdminDashboards = _dbContext._sp_AdminDashboard.FromSql(usp, param).ToList();
+
+            usp = "LMS.usp_GetAdminDashboardCountDetails @locationId";
+            Model.sP_AdminDashboardCount = _dbContext._sp_AdminDashboardcount.FromSql(usp, param).FirstOrDefault();
+
+
+            usp = "LMS.usp_GetAdminDashboardLeaveDetails @locationId";
+            Model.sp_AdminDashboardLeaves = _dbContext._sp_AdminDashboardLeave.FromSql(usp, param).ToList();
+
+
+            //foreach (var x in results)
+            //{
+            //    x.p.Attendance = x.Attendances.ToList();
+            //}
+            //var result = results.Select(x => x.p).ToList();
+            int totalCount = 0;
 
             if (attendanceStatus == "Present")
             {
-                result = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).ToList();
-                pcount = result.Count();
+                Model.sP_AdminDashboards = Model.sP_AdminDashboards.Where(x => x.TimeIn != null).ToList();
             }
-            else
-            if (attendanceStatus == "Absent")
+            else if (attendanceStatus == "Absent")
             {
-                result = result.Where(x => x.Attendance.Count() == 0).ToList();
-                pcount = totalCount - result.Count();
-            }
-            else
-            {
-                pcount = result.Where(x => x.Attendance != null && x.Attendance.Count() > 0).Count();
+
+                Model.sP_AdminDashboards = Model.sP_AdminDashboards.Where(x => x.TimeIn == null).ToList();
             }
 
-            AdminDashboard dashboard = new AdminDashboard
-            {
-                AllEmployeesCount = totalCount,
-                PresentEmployees = pcount,
-                AbsentEmployees = totalCount - pcount,
-                PendingLeavesCount = leaves,
-                Employees = result,
-                LeaveRequests = leaveRequests
-            };
-            return dashboard;
+            return Model;
         }
 
         public ManagerDashboard GetManagerDashboard(int TenantId)

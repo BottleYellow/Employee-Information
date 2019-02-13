@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using EIS.Entities.Dashboard;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
         [HttpGet]
         public IActionResult GetAdminDashboard(string attendanceStatus, int location)
         {
-            AdminDashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus,location,TenantId);
+            Admin_Dashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus, location, TenantId);
             return Ok(dashboard);
         }
 
