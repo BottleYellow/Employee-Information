@@ -41,6 +41,10 @@ namespace EIS.Data.Context
         public virtual DbSet<SP_AdminDashboardCount> _sp_AdminDashboardcount { get; set; }
         [NotMapped]
         public virtual DbSet<Sp_AdminDashboardLeave> _sp_AdminDashboardLeave { get; set; }
+        [NotMapped]
+        public virtual DbSet<SP_EmployeeDashboard> _sp_EmployeeDashboard { get; set; }
+        [NotMapped]
+        public virtual DbSet<SP_EmployeeDashboardCount> _sp_EmployeeDashboardcount { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }
         public DbSet<LeaveRules> LeaveRules { get; set; }

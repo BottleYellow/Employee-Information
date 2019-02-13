@@ -57,6 +57,7 @@ namespace EIS.WebAPI.Controllers
                 string search = sortGrid.Search.ToLower();
                 data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search)||x.Reason.ToLower().Contains(search), sortGrid, leaveData);
             }
+            _repository.LeaveRequest.Dispose();
             return Ok(data);
 
         }
@@ -78,6 +79,7 @@ namespace EIS.WebAPI.Controllers
             {
                 data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName == sortGrid.Search, sortGrid, leaveData);
             }
+            _repository.LeaveRequest.Dispose();
             return Ok(data);
         }
 
@@ -85,7 +87,9 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public LeaveRequest GetLeaveRequestById([FromRoute] int id)
         {
-            return _repository.LeaveRequest.FindByCondition(x => x.Id == id);
+            LeaveRequest data = _repository.LeaveRequest.FindByCondition(x => x.Id == id);
+            _repository.LeaveRequest.Dispose();
+            return data;
         }
 
         [DisplayName("Show my leaves")]
@@ -110,6 +114,7 @@ namespace EIS.WebAPI.Controllers
             {
                 data = _repository.LeaveRequest.GetDataByGridCondition(x=>x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
             }
+            _repository.LeaveRequest.Dispose();
             return Ok(data);
 
         }
@@ -120,6 +125,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAvailableLeaves([FromRoute] int PersonId, [FromRoute] int LeaveId)
         {
             var leave = _repository.LeaveCredit.GetAvailableLeaves(PersonId, LeaveId);
+            _repository.LeaveRequest.Dispose();
             if (leave == 0)
             {
                 leave = -1;
@@ -152,6 +158,7 @@ namespace EIS.WebAPI.Controllers
             }
             _repository.LeaveRequest.UpdateAndSave(leave);
             _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
+            _repository.LeaveRequest.Dispose();
             return NoContent();
         }
 
@@ -192,6 +199,7 @@ namespace EIS.WebAPI.Controllers
                 return NotFound();
             }
             _repository.LeaveRequest.DeleteAndSave(leave);
+            _repository.LeaveRequest.Dispose();
             return Ok(leave);
         }
 
@@ -233,6 +241,7 @@ namespace EIS.WebAPI.Controllers
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
             }
+            _repository.LeaveRequest.Dispose();
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
         }
 
@@ -254,6 +263,7 @@ namespace EIS.WebAPI.Controllers
                 string search = sortGrid.Search.ToLower();
                 data = _repository.PastLeaves.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
             }
+            _repository.LeaveRequest.Dispose();
             return Ok(data);
 
         }
@@ -270,6 +280,7 @@ namespace EIS.WebAPI.Controllers
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.AddPastLeave(leave);
+            _repository.LeaveRequest.Dispose();
             //_repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             //SendMail(leave.Id, "Pending");
             return Ok();

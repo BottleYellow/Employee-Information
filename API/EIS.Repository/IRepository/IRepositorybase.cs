@@ -18,5 +18,8 @@ namespace EIS.Repositories.IRepository
         void DeleteAndSave(T entity);
         IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression);
         ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, IQueryable<T> data);
+        void ConnectionOpen();
+        void ConnectionClose();
+        void Dispose();
     }
 }

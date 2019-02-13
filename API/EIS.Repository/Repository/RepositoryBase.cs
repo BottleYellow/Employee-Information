@@ -13,52 +13,55 @@ using System.Linq.Expressions;
 
 namespace EIS.Repositories.Repository
 {
-    public abstract class RepositoryBase<T> : IRepositorybase<T> where T : class
+    public abstract class RepositoryBase<T> : IDisposable , IRepositorybase<T> where T : class
     {
-            protected ApplicationDbContext _dbContext { get; set; }
+        protected ApplicationDbContext _dbContext { get; set; }
 
-            public RepositoryBase(ApplicationDbContext dbContext)
-            {
-                _dbContext = dbContext;
-            }
+        public RepositoryBase(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-            public IQueryable<T> FindAll()
-            {
-                return _dbContext.Set<T>().AsNoTracking();
-            }
+        public IQueryable<T> FindAll()
+        {
+            IQueryable<T> data = _dbContext.Set<T>().AsNoTracking();
+            return data;
+        }
 
-            public T FindByCondition(Expression<Func<T, bool>> expression)
-            {
-                return _dbContext.Set<T>().Where(expression).AsNoTracking().FirstOrDefault();
-            }
+        public T FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            T entity = _dbContext.Set<T>().Where(expression).AsNoTracking().FirstOrDefault();
+            return entity;
+        }
 
-            public void Create(T entity)
-            {
-                  _dbContext.Set<T>().Add(entity);
-            }
+        public void Create(T entity)
+        {
+            _dbContext.Set<T>().Add(entity);
+        }
 
-            public void Update(T entity)
-            {
+        public void Update(T entity)
+        {
             //_dbContext.Set<T>().Update(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.Set<T>().Update(entity);
             _dbContext.SaveChanges();
         }
 
-            public void Delete(T entity)
-            {
-                 _dbContext.Set<T>().Remove(entity);
-            }
+        public void Delete(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+        }
 
-            public void Save()
-            {
-                 _dbContext.SaveChanges();
-          
-            }
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+
+        }
 
         public IQueryable<T> FindAllByCondition(Expression<Func<T, bool>> expression)
         {
-            return _dbContext.Set<T>().Where(expression);
+            IQueryable<T> data = _dbContext.Set<T>().Where(expression);
+            return data;
         }
 
         public ArrayList GetDataByGridCondition(Expression<Func<T, bool>> expression, SortGrid sortGrid, IQueryable<T> data)
@@ -114,12 +117,50 @@ namespace EIS.Repositories.Repository
 
         public IQueryable<T> FindAllWithNoTracking()
         {
-            return _dbContext.Set<T>().AsNoTracking();
+            IQueryable<T> data = _dbContext.Set<T>().AsNoTracking();
+            return data;
         }
 
         public T FindByConditionWithNoTracking(Expression<Func<T, bool>> expression)
         {
-            return _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
+            T entity = _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
+            return entity;
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void ConnectionOpen()
+        {
+            if (_dbContext != null)
+            {
+                _dbContext.Database.OpenConnection();
+            }
+        }
+
+        public void ConnectionClose()
+        {
+            if (_dbContext != null)
+            {
+                _dbContext.Database.CloseConnection();
+            }
         }
     }
 }

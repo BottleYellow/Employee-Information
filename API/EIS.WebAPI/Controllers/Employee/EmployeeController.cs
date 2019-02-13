@@ -45,7 +45,8 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-            IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
+            List<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin").ToList();
+            _repository.Employee.Dispose();
             return Ok(employees);
         }
         [HttpGet("{EmployeeCode}")]
@@ -53,6 +54,7 @@ namespace EIS.WebAPI.Controllers
         {
             Person employee = _repository.Employee.FindByCondition(e => e.EmployeeCode == EmployeeCode);
             employee.User = _repository.Users.FindByCondition(u => u.PersonId == employee.Id);
+            _repository.Employee.Dispose();
             if (employee == null)
             {
                 return NotFound();
@@ -68,7 +70,7 @@ namespace EIS.WebAPI.Controllers
         {
             Person employee = _repository.Employee.FindByConditionWithNoTracking(e => e.EmployeeCode == EmployeeCode);
             employee.User = _repository.Users.FindByConditionWithNoTracking(u => u.PersonId == employee.Id);
-            
+            _repository.Employee.Dispose();
             if (employee == null)
             {
                 return NotFound();
@@ -83,6 +85,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetProfile([FromRoute]string EmployeeCode)
         {
             Person employee = _repository.Employee.GetProfile(EmployeeCode);
+            _repository.Employee.Dispose();
             if (employee == null)
             {
                 return NotFound();
@@ -97,6 +100,7 @@ namespace EIS.WebAPI.Controllers
         public int CreateNewIdCardNo()
         {
             int n = _repository.Employee.GenerateNewIdCardNo(TenantId);
+            _repository.Employee.Dispose();
             return n;
         }
 
@@ -122,6 +126,8 @@ namespace EIS.WebAPI.Controllers
                 string pw = u.Password;
                 u.CreatedBy = person.CreatedBy;
                 _repository.Users.CreateUserAndSave(u);
+                _repository.Employee.Dispose();
+
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -140,6 +146,8 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateAndSave(person);
+                _repository.Employee.Dispose();
+
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -158,6 +166,8 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Employee.UpdateAndSave(person);
+            _repository.Employee.Dispose();
+
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -180,13 +190,16 @@ namespace EIS.WebAPI.Controllers
             users.IsActive = false;
             _repository.Employee.UpdateAndSave(person);
             _repository.Users.UpdateAndSave(users);
+            _repository.Employee.Dispose();
             return Ok(person);
         }
         [Route("Designations")]
         [HttpGet]
         public IEnumerable<Role> GetDesignations()
         {
-            return _repository.Employee.GetDesignations(TenantId);
+            List<Role> data = _repository.Employee.GetDesignations(TenantId).ToList();
+            _repository.Employee.Dispose();
+            return data;
         }
 
         [DisplayName("Manage Roles")]
@@ -194,7 +207,9 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public Role GetDesignationById([FromRoute]int did)
         {
-            return _repository.Employee.GetDesignationById(did);
+            Role role = _repository.Employee.GetDesignationById(did);
+            _repository.Employee.Dispose();
+            return role;
         }
 
         [DisplayName("Manage Roles")]
@@ -203,6 +218,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetDesignationNameById([FromRoute]int did)
         {
             Role d = _repository.Employee.GetDesignationById(did);
+            _repository.Employee.Dispose();
             return Ok(d.Name);
         }
         [AllowAnonymous]
@@ -213,6 +229,7 @@ namespace EIS.WebAPI.Controllers
             string NameWithRole = "";
             Person p = _repository.Employee.FindByCondition(x => x.Id == PersonId);
             Role role = _repository.Employee.GetDesignationById(p.RoleId);
+            _repository.Employee.Dispose();
             if (p != null)
             {
                 NameWithRole = p.FullName + "(" + role.Name + ")";
@@ -232,6 +249,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 designation.TenantId = TenantId;
                 _repository.Employee.AddDesignationAndSave(designation);
+                _repository.Employee.Dispose();
                 return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
             }
             else
@@ -241,6 +259,7 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateDesignationAndSave(designation);
+                _repository.Employee.Dispose();
                 return NoContent();
             }
         }
@@ -251,7 +270,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Employee.UpdateDesignationAndSave(designation);            
+            _repository.Employee.UpdateDesignationAndSave(designation);
+            _repository.Employee.Dispose();
             return NoContent();
         }
 
@@ -278,6 +298,7 @@ namespace EIS.WebAPI.Controllers
             {
                 employeeslist = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search || x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()) || x.MiddleName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LastName.ToLower().Contains(sortGrid.Search.ToLower())||x.EmailAddress.ToLower().Contains(sortGrid.Search.ToLower()) || x.PanCard.Contains(sortGrid.Search) || x.AadharCard.Contains(sortGrid.Search) || x.MobileNumber.Contains(sortGrid.Search), sortGrid, list);
             }
+            _repository.Employee.Dispose();
             return Ok(employeeslist);
         }
         public string GetTitle(Gender gender)
@@ -293,6 +314,8 @@ namespace EIS.WebAPI.Controllers
         public IActionResult ActivatePerson([FromRoute]string EmployeeCode)
         {
             Person person=_repository.Employee.ActivatePerson(EmployeeCode);
+            _repository.Employee.Dispose();
+
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +

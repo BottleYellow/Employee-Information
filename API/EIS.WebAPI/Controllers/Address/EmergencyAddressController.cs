@@ -21,13 +21,16 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Emergency> GetEmergencyAddresses()
         {
-            return _repository.EmergencyAddress.FindAll();
+            IEnumerable<Emergency> data = _repository.EmergencyAddress.FindAll();
+            _repository.EmergencyAddress.Dispose();
+            return data;
         }
 
         [HttpGet("Get/{id}")]
         public Emergency GetEmergencyById([FromRoute] int id)
         {
             Emergency EmergencyAddress = _repository.EmergencyAddress.FindByCondition(e=>e.Id==id);
+            _repository.EmergencyAddress.Dispose();
             return EmergencyAddress;
         }
         [DisplayName("Profile view")]
@@ -35,6 +38,7 @@ namespace EIS.WebAPI.Controllers
         public IEnumerable<Emergency> GetEmergencyByPersonId([FromRoute] int id)
         {
             IEnumerable<Emergency> EmergencyAddresses = _repository.EmergencyAddress.FindAllByCondition(addr=>addr.PersonId==id).ToList();
+            _repository.EmergencyAddress.Dispose();
             return EmergencyAddresses;
         }
 
@@ -47,6 +51,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.EmergencyAddress.UpdateAndSave(emergency);
+            _repository.EmergencyAddress.Dispose();
             return Ok(emergency);
         }
 
@@ -62,6 +67,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 emergency.TenantId = TenantId;
                 _repository.EmergencyAddress.CreateAndSave(emergency);
+                _repository.EmergencyAddress.Dispose();
                 return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
             }
             else
@@ -71,6 +77,7 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.EmergencyAddress.UpdateAndSave(emergency);
+                _repository.EmergencyAddress.Dispose();
                 return Ok(emergency);
             }
         }
@@ -102,6 +109,7 @@ namespace EIS.WebAPI.Controllers
             };
             _repository.OtherAddress.CreateAndSave(other);
             _repository.EmergencyAddress.DeleteAndSave(Emergency);
+            _repository.EmergencyAddress.Dispose();
             return Ok(Emergency);
         }
     }

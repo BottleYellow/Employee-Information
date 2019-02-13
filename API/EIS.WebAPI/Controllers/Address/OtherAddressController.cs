@@ -21,7 +21,9 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("{id}")]
         public IEnumerable<Other> GetOtherAddresseses(int id)
         {
-            return _repository.OtherAddress.FindAllByCondition(o => o.PersonId == id);
+            IEnumerable<Other> data = _repository.OtherAddress.FindAllByCondition(o => o.PersonId == id);
+            _repository.OtherAddress.Dispose();
+            return data;
         }
     }
 }

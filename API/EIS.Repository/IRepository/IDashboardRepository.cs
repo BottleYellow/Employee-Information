@@ -12,7 +12,7 @@ namespace EIS.Repositories.IRepository
     {
         Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location,int TenantId);
         ManagerDashboard GetManagerDashboard(int TenantId);
-        EmployeeDashboard GetEmployeeDashboard(int TenantId,int PersonId);
+        Employee_Dashboard GetEmployeeDashboard(int TenantId,int PersonId);
         List<CalendarData> GetCalendarDetails(int location,DateTime beginDate, DateTime stopDate);
     }
 }

@@ -31,6 +31,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p);
+                Dispose();
                 return result;
             }
             else
@@ -47,6 +48,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p);
+                Dispose();
                 return result;
             }
             
@@ -67,6 +69,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p).ToList();
+                Dispose();
                 return result.AsQueryable();
             }
             else
@@ -82,6 +85,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p).ToList();
+                Dispose();
                 return result.AsQueryable();
             }
         }
@@ -101,6 +105,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p);
+                Dispose();
                 return result;
             }
             else
@@ -116,6 +121,7 @@ namespace EIS.Repositories.Repository
                     x.p.Attendance = x.Attendances.ToList();
                 }
                 var result = results.Select(x => x.p);
+                Dispose();
                 return result.AsQueryable();
             }
         }

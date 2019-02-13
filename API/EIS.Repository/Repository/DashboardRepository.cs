@@ -100,23 +100,35 @@ namespace EIS.Repositories.Repository
 
             return dashboard;
         }
-        public EmployeeDashboard GetEmployeeDashboard(int TenantId, int PersonId)
+        public Employee_Dashboard GetEmployeeDashboard(int TenantId, int PersonId)
         {
-            int currentMonth = new DateTime().Month;
-            int currentYear = new DateTime().Year;
-            int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
-            var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month == currentMonth && x.DateIn.Year == currentYear);
-            var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);
-            var availableLeaves = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId).Sum(x => x.Available);
+            //int currentMonth = DateTime.Now.Month;
+            //int currentYear = DateTime.Now.Year;
+            //int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
+            //var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month == currentMonth && x.DateIn.Year == currentYear);
+            //var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);
+            //var availableLeaves = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId).Sum(x => x.Available);
 
-            EmployeeDashboard dashboard = new EmployeeDashboard
-            {
-                MonthlyPresentDays = attendance.Count(),
-                MonthlyAbsentDays = TotalDays - attendance.Count(),
-                TotalLeavesAvailable = Convert.ToInt32(availableLeaves),
-                TotalLeavesTaken = Convert.ToInt32(leaves)
-            };
-            return dashboard;
+            //EmployeeDashboard dashboard = new EmployeeDashboard
+            //{
+            //    MonthlyPresentDays = attendance.Count(),
+            //    MonthlyAbsentDays = TotalDays - attendance.Count(),
+            //    TotalLeavesAvailable = Convert.ToInt32(availableLeaves),
+            //    TotalLeavesTaken = Convert.ToInt32(leaves)
+            //};
+            //return dashboard;
+            Employee_Dashboard Model = new Employee_Dashboard();
+            Model.SP_EmployeeDashboardCount = new SP_EmployeeDashboardCount();
+            Model.SP_EmployeeDashboards = new List<SP_EmployeeDashboard>();
+
+            var param = new SqlParameter("@PersonId", PersonId);
+            string usp = "LMS.usp_GetEmployeeDashboardDetails @PersonId";
+            Model.SP_EmployeeDashboards = _dbContext._sp_EmployeeDashboard.FromSql(usp, param).ToList();
+
+            usp = "LMS.usp_GetEmployeeDashboardCountDetails @PersonId";
+            Model.SP_EmployeeDashboardCount = _dbContext._sp_EmployeeDashboardcount.FromSql(usp, param).FirstOrDefault();
+
+            return Model;
         }
 
 

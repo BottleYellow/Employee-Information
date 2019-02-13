@@ -67,16 +67,28 @@ namespace EIS.WebApp.Controllers
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
         }
-
         public IActionResult EmployeeDashboard()
         {
-            //int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            int PersonId = Convert.ToInt32(GetSession().PersonId);
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Employee/" + PersonId + "");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            EmployeeDashboard dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
-            return View(dashBoard);
+            return View();
         }
+
+        [HttpPost]
+        public IActionResult EmployeeDashboard(int PersonId)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Employee/" + PersonId);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Employee_Dashboard dashboard = JsonConvert.DeserializeObject<Employee_Dashboard>(stringData);
+            return Json(dashboard);
+        }
+        //public IActionResult EmployeeDashboard()
+        //{
+        //    //int PersonId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+        //    int PersonId = Convert.ToInt32(GetSession().PersonId);
+        //    HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Employee/" + PersonId + "");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    EmployeeDashboard dashBoard = JsonConvert.DeserializeObject<EmployeeDashboard>(stringData);
+        //    return View(dashBoard);
+        //}
 
         [DisplayName("Admin Calendar")]
         public IActionResult AdminCalendar()

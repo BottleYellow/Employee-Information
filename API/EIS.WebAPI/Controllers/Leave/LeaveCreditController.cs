@@ -48,6 +48,7 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 data = _repository.LeaveCredit.GetDataByGridCondition(x =>x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower())||x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);
             }
+            _repository.LeaveCredit.Dispose();
             return Ok(data);
         }
 
@@ -69,7 +70,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             Leave.TenantId = TenantId;
             _repository.LeaveCredit.AddCreditsAndSave(Leave);
-
+            _repository.LeaveCredit.Dispose();
             return Ok();
         }
 
@@ -83,7 +84,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             Credit.TenantId = TenantId;
             _repository.LeaveCredit.AddCreditAndSave(Credit);
-
+            _repository.LeaveCredit.Dispose();
             return Ok();
         }
 
