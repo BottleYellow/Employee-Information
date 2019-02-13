@@ -69,7 +69,7 @@
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card" style="min-height:100px">
+                <div class="card">
                     <div class="body">
                         <div>
                             <div class="row col-md-12">
@@ -118,8 +118,59 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div id="all">
+                                <div class="col-md-3">
+                                    <div id="pnlBaner" class="panel panel-primary">
+                                        <div class="panel-heading">Baner</div>
+                                        <div id="twoff1" class="panel-body">
+                                            <label id="alltwoffb"></label><br />
+                                            <label id="allthb"></label>
+                                        </div>
+                                        @*<div id="twoff2" class="panel-body"></div>*@
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div id="pnlKondhwa" class="panel panel-primary">
+                                        <div class="panel-heading">Kondhwa</div>
+                                        <div id="twoff1" class="panel-body">
+                                            <label id="alltwoffk"></label><br />
+                                            <label id="allthk"></label>
+                                        </div>
+                                        @*<div id="twoff2" class="panel-body"></div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="baner" hidden>
+                                <div class="col-md-3">
+                                    <div id="pnlBaner" class="panel panel-primary">
+                                        <div class="panel-heading">Baner</div>
+                                        <div id="twoff1" class="panel-body">
+                                            <label id="twoffb"></label><br />
+                                            <label id="thb"></label>
+                                        </div>
+                                        @*<div id="twoff2" class="panel-body"></div>*@
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                        <div class="row">
+                            <div id="kondhwa" hidden>
+                                <div class="col-md-3">
+                                    <div id="pnlKondhwa" class="panel panel-primary">
+                                        <div class="panel-heading">Kondhwa</div>
+                                        <div id="twoff1" class="panel-body">
+                                            <label id="twoffk"></label><br />
+                                            <label id="thk"></label>
+                                        </div>
+                                        @*<div id="twoff2" class="panel-body"></div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div>
-
                             <div class="container-fluid" id="attendanceReport" style="display:none;">
                                 <div>
                                     <h4><span id="report">Attendance Report</span></h4>
@@ -227,6 +278,7 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
 
+
     $(document).ready(function () {
         var loc = $('#locations').val();
             $.ajax({
@@ -245,7 +297,7 @@
                 //    bootbox.alert('<h4>Error</h4>');
                 //}
 
-            });
+        });
 
         var id =@cookies.PersonId;
         $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
@@ -257,6 +309,7 @@
             format: "MM/YYYY"
         });
         $('#inputmonth').val(m + '/' + y);
+
         //generateReport(m + '/' + y, 'month', id);
         $("#generateReport").prop("disabled", true);
 
@@ -265,6 +318,49 @@
         });
 
         $('#locations').on('change', function () {
+            var location = $('#locations option:selected').text();
+            if (location.startsWith("B")) {
+                //$("#pnlKondhwa").prop("hidden", true);
+                $("#all").hide();
+                $("#kondhwa").hide();
+                $("#baner").show();
+                $("#allthb").html("");
+                $("#allthk").html("");
+                $("#alltwoffb").html("");
+                $("#alltwoffk").html("");
+                $("#thb").html("");
+                $("#thk").html("");
+                $("#twoffb").html("");
+                $("#twoffk").html("");
+                
+            }
+            else if (location.startsWith("K")) {
+                //$("#pnlBaner").prop("hidden", true);
+                $("#all").hide();
+                $("#kondhwa").show();
+                $("#baner").hide();
+                $("#allthb").html("");
+                $("#allthk").html("");
+                $("#alltwoffb").html("");
+                $("#alltwoffk").html("");
+                $("#thb").html("");
+                $("#thk").html("");
+                $("#twoffb").html("");
+                $("#twoffk").html("");
+            }
+            else {
+                $("#all").show();
+                $("#kondhwa").hide();
+                $("#baner").hide();
+                $("#allthb").html("");
+                $("#allthk").html("");
+                $("#alltwoffb").html("");
+                $("#alltwoffk").html("");
+                $("#thb").html("");
+                $("#thk").html("");
+                $("#twoffb").html("");
+                $("#twoffk").html("");
+            }   
             var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -337,9 +433,47 @@
             $('#tblExample').show();
             var id = $('#selectEmployee').val();
             var v = $('#select').val();
+            var location = $('#locations').val();
             if (v == 'year') {
+                var twok = 4 * 12;
+                var twob = 6 * 12;
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
+                $.ajax({
+                type: "GET",
+                url: "@MyHttpContext.APIBaseURL/api/Holiday/" + value + "/" + location,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        var k = 0, b = 0;
+                        debugger;
+                        $.each(data, function (i, item) {
+                            if (item.location.locationName.startsWith("B")) {
+                                b = b + 1;
+                                $('#thb').html('Holidays : ' + b);
+                                $('#twoffb').text('Weekly Off : ' + twob);
+                            }
+                            else if (item.location.locationName.startsWith("K")) {
+                                k = k + 1;
+                                $('#thk').html('Holidays : ' + k);
+                                $('#twoffk').text('Weekly Off : ' + twok);
+                            }
+                            
+                        });
+                        $('#allthb').html('Holidays : ' + b);
+                        $('#alltwoffb').text('Weekly Off : ' + twob);
+                        $('#allthk').html('Holidays : ' + k);
+                        $('#alltwoffk').text('Weekly Off : ' + twok);
+                       //$.each(data, function (i, item) {
+                        //    $('#tholiday').text(item.length);
+                        //})
+                    generateReport(value, 'year', location);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+            });
+
                 if (value % 4 == 0) {
                     totalDays = 366;
                 }
@@ -350,12 +484,45 @@
             }
 
             else if (v == 'month') {
+                var twob = 6;
+                var twok = 4;
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
                 totalDays = new Date(y, m, 0).getDate()
+                var location = $('#locations').val();
+                $.ajax({
+                type: "GET",
+                url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/"+ y +"/"+ location,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        var k = 0, b = 0;
+
+                        $.each(data, function (i, item) {
+                            if (item.location.locationName.startsWith("B")) {
+                                b = b + 1;
+                                $('#thb').html('Holidays : ' + b);
+                                $('#twoffb').text('Weekly Off : ' + twob);
+                            }
+                            else if (item.location.locationName.startsWith("K")) {
+                                k = k + 1;
+                                $('#thk').html('Holidays : ' + k);
+                                $('#twoffk').text('Weekly Off : ' + twok);
+                            }
+                        });
+                        $('#allthb').html('Holidays : ' + b);
+                        $('#allthk').html('Holidays : ' + k);
+                        $('#alltwoffk').text('Weekly Off : ' + twob);
+                        $('#alltwoffb').text('Weekly Off : ' + twok);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+            });
+
                 generateReport(value, 'month', id);
             }
             else if (v == 'week') {

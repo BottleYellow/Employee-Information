@@ -56,7 +56,7 @@ namespace EIS.Repositories.Repository
         {
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true).Include(x => x.LeaveRequests)
                 .Select(p => new
                 {
                     p,

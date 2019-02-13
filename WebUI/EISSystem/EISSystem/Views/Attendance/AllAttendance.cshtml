@@ -183,13 +183,13 @@
             //$("#pnlKondhwa").prop("hidden", true);
             $("#pnlKondhwa").hide();
             $("#pnlBaner").show();
-            $('#twoff').text('Weekly Off :' + 4);
+            $('#twoff').text('Weekly Off :' + 6);
         }
         else if (loc.startsWith("K")) {
             //$("#pnlBaner").prop("hidden", true);
             $("#pnlBaner").hide();
             $("#pnlKondhwa").show();
-            $('#twoff').text('6');
+            $('#twoff').text('Weekly Off :' + 4);
         }
         else {
             $("#pnlBaner").show();
@@ -198,6 +198,8 @@
         }   
     });
     var totalDays = 0;
+    var totalDaysb = 0;
+    var totalDaysk = 0;
     $(document).ready(function () {
         $('#twoffk').text('Weekly Off : ' + 4);
         $('#twoffb').text('Weekly Off : ' + 6);
@@ -209,8 +211,8 @@
         });
         var y = new Date().getFullYear();
         var ld = new Date(y, m, 0).getDate();
-        var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
-        totalDays = days;
+        //var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
+        //totalDays = days;
         $('#inputmonth').val(m + '/' + y);
         var location = $('#locations').val();
         
@@ -225,11 +227,13 @@
                 $.each(data, function (i, item) {
                     if (item.location.locationName.startsWith("B")) {
                         b = b + 1;
+                        totalDaysb = ld - (b + 6);
                     }
                     else if (item.location.locationName.startsWith("K")) {
                         k = k + 1;
+                        totalDaysk = ld - (b + 4);
                     }
-                    totalDays = ld - (b + 6);
+                    //totalDays = ld - (b + 6);
                 });
                 $('#thb').html('Holidays : ' + b);
                 $('#thk').html('Holidays : ' + k);
@@ -294,10 +298,12 @@
             var v = $('#select').val();
             var location = $('#locations').val();
             if (v == 'year') {
+                var twok = 4 * 12;
+                var twob = 6 * 12;
                 var value = $("#inputyear").val();
-                var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
+                //var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
                 $("#inputyear").val(value);
-                totalDays = days;
+                //totalDays = days;
                 $.ajax({
                 type: "GET",
                 url: "@MyHttpContext.APIBaseURL/api/Holiday/" + value + "/" + location,
@@ -305,20 +311,22 @@
                 dataType: "json",
                     success: function (data) {
                         var k = 0, b = 0;
-
+                        debugger;
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;
+                                totalDaysb = value % 4 == 0 ? (366 - b - twob) : (365 - b - twob);
                             }
                             else if (item.location.locationName.startsWith("K")) {
                                 k = k + 1;
+                                totalDaysk = value % 4 == 0 ? (366 - k - twok) : (365 - k - twok);
                             }
-
+                            
                         });
                         $('#thb').html('Holidays : ' + b);
                         $('#thk').html('Holidays : ' + k);
-                        $('#twoffk').text('Weekly Off : ' + 4*12);
-                        $('#twoffb').text('Weekly Off : ' + 6*12);
+                        $('#twoffk').text('Weekly Off : ' + twok);
+                        $('#twoffb').text('Weekly Off : ' + twob);
                         //$.each(data, function (i, item) {
                         //    $('#tholiday').text(item.length);
                         //})
@@ -505,8 +513,15 @@
                         }
                     },
                     {
-                        data: null, "autoWidth": true, render: function () {
-                            return totalDays;
+                        data: null, "autoWidth": true, render: function (row) {
+                            var td = 0;
+                            if (row.Location.LocationName.startsWith("B")) {
+                                td = totalDaysb;
+                            }
+                            else if (row.Location.LocationName.startsWith("K")) {
+                                td = totalDaysk;
+                            }
+                            return td;
                         }
                     }
                 ],
