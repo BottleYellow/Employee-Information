@@ -15,8 +15,8 @@
 
         .ajax-loader img {
             position: relative;
-            top: 50%;
-            left: 50%;
+            top: 40%;
+            left: 40%;
             /*width: 25%;
             height: 25%;
             opacity: 0.9;
@@ -27,7 +27,7 @@
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
 <div class="ajax-loader">
-    <img src="~/gif/ajax-loader-circle.gif" />
+    <img src="~/gif/Spinner.gif" />
 </div>
 <div class="container-fluid">
     <div class="block-header">
@@ -99,7 +99,7 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="card">
                 <div class="header">
-                    <h2>Today's Attendance</h2>
+                    <h2 id="headerValue"></h2>
                     <div>
                         <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
                             <option value="0">All</option>
@@ -210,6 +210,7 @@
 </div>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script>
+    document.getElementById("headerValue").innerHTML = "Today's Attendance"; 
     var buttonSelected = "All";
     var selectOpt;
     $(document).ready(function () {
@@ -237,7 +238,6 @@
         buttonSelected = "Absent";
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
-
     });
 
     $('#pendingLeaveButton').on('click', function () {
@@ -248,16 +248,21 @@
         generateReport(buttonSelected, selectOpt);
     });
 
-    $('#select').on('change', function () {
+    $('#select').on('change', function () { 
         selectOpt = $('#select option:selected').val();
         generateReport(buttonSelected, selectOpt);
     });
 
-    function generateReport(employeecount, location) {
+    function generateReport(buttonSelected, location) {    
+        if (buttonSelected == "Leaves") {
+            document.getElementById("headerValue").innerHTML = "Leave Report";
+        } else {
+            document.getElementById("headerValue").innerHTML = "Today's Attendance";
+        }
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AdminDashboard","Dashboard")',
-            data: { "attendanceStatus": employeecount, "location": location },
+            data: { "attendanceStatus": buttonSelected, "location": location },
             beforeSend: function () {
                 $('.ajax-loader').css("visibility", "visible");
             },
@@ -267,9 +272,11 @@
                     document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
                     document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
                     document.getElementById("employeeLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
-                    getData(data.sP_AdminDashboards);
-                    getLeavesData(data.sp_AdminDashboardLeaves);
-
+                    if (buttonSelected == "Leaves") {
+                        getLeavesData(data.sp_AdminDashboardLeaves);
+                    } else {
+                        getData(data.sP_AdminDashboards);
+                    }
                 }
             },
             complete: function () {

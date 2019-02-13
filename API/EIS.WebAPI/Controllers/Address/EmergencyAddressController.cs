@@ -96,7 +96,7 @@ namespace EIS.WebAPI.Controllers
                 TenantId = TenantId,
                 AddressType = "Emergency Address",
                 PersonId = Emergency.PersonId,
-                Address = Emergency.Address,
+                Address = Emergency.FirstName+" "+Emergency.LastName+" ADDRESS:-"+Emergency.Address,
                 City = Emergency.City,
                 State = Emergency.State,
                 Country = Emergency.Country,

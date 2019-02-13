@@ -15,114 +15,172 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public IQueryable<Person> GetAttendanceYearly(int year, int loc)
+        public IList<AttendanceData> GetAttendanceYearly(int year, int loc)
         {
+            IList<AttendanceData> attendanceData = new List<AttendanceData>();
             if (loc == 0)
             {
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
-                    p,
-                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year)
+                    Location = p.Location.LocationName,
+                    Name = p.FullName,
+                    AttendanceCount = p.Attendance.Where(a => a.DateIn.Year == year ).Count(),
+                    OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Year == year).Sum(x => x.ApprovedDays),
+                    TotalWorkingDays = 365
                 });
 
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
                 }
-                var result = results.Select(x => x.p);
-                Dispose();
-                return result;
+                return attendanceData;
             }
             else
             {
                 var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
-                    p,
-                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year)
+                    Location = p.Location.LocationName,
+                    Name = p.FullName,
+                    AttendanceCount = p.Attendance.Where(a => a.DateIn.Year == year).Count(),
+                    OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Year == year).Sum(x => x.ApprovedDays),
+                    TotalWorkingDays = 365
                 });
 
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
                 }
-                var result = results.Select(x => x.p);
-                Dispose();
-                return result;
+                return attendanceData;
             }
-            
         }
 
-        public IQueryable<Person> GetAttendanceMonthly(int month, int year, int loc)
+        public IList<AttendanceData> GetAttendanceMonthly(int month, int year, int loc)
         {
+            IList<AttendanceData> attendanceData=new List<AttendanceData>();
             if (loc == 0)
             {
-                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true).Include(x => x.LeaveRequests)
                 .Select(p => new
                 {
-                    p,
-                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
+                    Location = p.Location.LocationName,
+                    Name = p.FullName,
+                    AttendanceCount = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month).Count(),
+                    OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Year == year && a.AppliedDate.Month == month).Sum(x => x.ApprovedDays),
+                    TotalWorkingDays = DateTime.DaysInMonth(year, month)
                 }).ToList();
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
-                }
-                var result = results.Select(x => x.p).ToList();
-                Dispose();
-                return result.AsQueryable();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
+            }
+
+                return attendanceData;
             }
             else
             {
                 var results = _dbContext.Person.Where(x=>x.LocationId==loc).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                     .Select(p => new
                     {
-                        p,
-                        Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
+                        Location = p.Location.LocationName,
+                        Name = p.FullName,
+                        AttendanceCount = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month).Count(),
+                        OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Year == year && a.AppliedDate.Month == month).Sum(x => x.ApprovedDays),
+                        TotalWorkingDays = DateTime.DaysInMonth(year, month)
                     }).ToList();
+
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
                 }
-                var result = results.Select(x => x.p).ToList();
-                Dispose();
-                return result.AsQueryable();
+                return attendanceData;
             }
         }
    
-        public IQueryable<Person> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek, int loc)
+        public IList<AttendanceData> GetAttendanceWeekly(DateTime startOfWeek, DateTime endOfWeek, int loc)
         {
+            IList<AttendanceData> attendanceData = new List<AttendanceData>();
             if (loc == 0)
             {
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
-                    p,
-                    Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
+                    Location = p.Location.LocationName,
+                    Name = p.FullName,
+                    AttendanceCount = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek).Count(),
+                    OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Date >= startOfWeek && a.AppliedDate.Date <= endOfWeek).Sum(x => x.ApprovedDays),
+                    TotalWorkingDays = 7
                 });
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
                 }
-                var result = results.Select(x => x.p);
-                Dispose();
-                return result;
+                return attendanceData;
             }
             else
             {
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true && x.LocationId==loc)
                     .Select(p => new
                     {
-                        p,
-                        Attendances = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek)
+                        Location = p.Location.LocationName,
+                        Name = p.FullName,
+                        AttendanceCount = p.Attendance.Where(a => a.DateIn >= startOfWeek && a.DateIn <= endOfWeek).Count(),
+                        OnLeave = p.LeaveRequests.Where(a => a.AppliedDate.Date >= startOfWeek && a.AppliedDate.Date <= endOfWeek).Sum(x => x.ApprovedDays),
+                        TotalWorkingDays = 7
                     }).ToList();
                 foreach (var x in results)
                 {
-                    x.p.Attendance = x.Attendances.ToList();
+                    AttendanceData attendance = new AttendanceData
+                    {
+                        Location = x.Location,
+                        Name = x.Name,
+                        PresentDays = x.AttendanceCount,
+                        OnLeave = (int)x.OnLeave,
+                        TotalWorkingDays = x.TotalWorkingDays
+                    };
+                    attendanceData.Add(attendance);
                 }
-                var result = results.Select(x => x.p);
-                Dispose();
-                return result.AsQueryable();
+                return attendanceData;
             }
         }
 
@@ -162,21 +220,17 @@ namespace EIS.Repositories.Repository
                         TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
                         TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
                         attendanceReport.AdditionalWorkingHours = (int)result.TotalHours + ":" + result.Minutes;
-                    }
-                    else
+                    }else
                     {
                         attendanceReport.AdditionalWorkingHours = "-";
                     }
-
-
                 }
                 else
                 {
                     attendanceReport.TimeOut = "-";
                     attendanceReport.AverageTime = "-";
                     attendanceReport.AdditionalWorkingHours = "-";
-                }
-              
+                }              
             }
             return attendanceReport;
         }
@@ -199,31 +253,13 @@ namespace EIS.Repositories.Repository
                 else
                 {
                     newlist.TimeIn = attendance.TimeIn;
-                    newlist.TimeOut = attendance.TimeOut;
+                    newlist.TimeOut = attendance.TimeOut==null? new TimeSpan(): attendance.TimeOut;
                     newlist.IsActive = true;
-                    if (newlist.TotalHours == null)
-                    {
-                        newlist.TotalHours = attendance.TimeOut - attendance.TimeIn;
-                        //newlist.TotalHours = new TimeSpan();
-                    }
-                    else
-                    {
-                        if (attendance.TimeOut == null)
-                        {
-                            newlist.TotalHours = new TimeSpan();
-                        }
-                        else
-                        {
-                            newlist.TotalHours = attendance.TimeOut-attendance.TimeIn;
-                        }
-                        
-                    }
-
+                    newlist.TotalHours = attendance.TotalHours == null ? new TimeSpan() : attendance.TotalHours;
                 }
                 attendances.Add(newlist);
             }
-            IEnumerable<Attendance> attendancelist = attendances;
-            return attendancelist;
+            return attendances;
         }
     }
 }

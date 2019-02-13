@@ -11,6 +11,10 @@
         li:hover {
             cursor: pointer;
         }
+        
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
     </style>
 </head>
 
@@ -79,13 +83,17 @@
             </div>
         </div>
 </div>
-<style>
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-</style>
 
 <script>
+     $(document).ready(function () {
+        if ('@ViewBag.Success' != '') {
+            bootbox.alert({
+                message: '@ViewBag.Success'
+            });
+        }
+        var b = true;
+        generateReport(b,0);
+    });
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
@@ -156,12 +164,7 @@
             b = false;
             generateReport(b,c);
         }
-    });
-    $(document).ready(function () {
-       
-        var b = true;
-        generateReport(b,0);
-    });
+    });  
     function generateReport(b,c) {
         $.fn.dataTable.ext.errMode = 'none';
         $('#example').on('error.dt', function () {
@@ -183,13 +186,14 @@
                     text: 'Export',
                     titleAttr: 'Export to Pdf',
                     exportOptions: {
-                        columns: [0, 1,3,4,5,6,7]
+                        columns: [0,1,2,4,5,6,7,8]
                     }
                 }
             ],
             "aoColumnDefs": [
                 { "aTargets": [0], "bSortable": true },
                 { "aTargets": [1], "bSortable": true },
+                {"aTargets" : [2], "bSortable":true  },
                 { "aTargets": ['_all'], "bSortable": false }
             ],
             lengthMenu: [
@@ -204,7 +208,7 @@
             },
             "columns": [
                 {
-                    "data": "LocationId", "name": "LocationId", "autoWidth": true, "render": function (data, type, row) {
+                    "data": null, "name": "LocationId", "autoWidth": true, "render": function (data, type, row) {
                         return row.Location.LocationName;
                     }
                 },
@@ -276,13 +280,9 @@
         var result = null;
         $.getJSON("@APIURL/api/Employee/CreatedBy/" + pid + "", function (data) {
             result = data;
-
         });
-
         return result;
-
     }
-
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
@@ -294,6 +294,4 @@
 <script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-
-
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
