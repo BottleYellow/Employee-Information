@@ -109,6 +109,10 @@ namespace EIS.WebApp.Controllers
             { 
                 ViewBag.Message = "Success! Password has been changed Successfully. Please check your email.";
             }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                ViewBag.Message = "Invalid user!";
+            }
             else
             {
                 ViewBag.Message = "Something went wrong!";

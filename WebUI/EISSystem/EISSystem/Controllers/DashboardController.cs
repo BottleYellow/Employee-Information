@@ -51,16 +51,21 @@ namespace EIS.WebApp.Controllers
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AdminDashboard dashboard = JsonConvert.DeserializeObject<AdminDashboard>(stringData);
+            Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
         }
-
         public IActionResult ManagerDashboard()
         {
-            HttpResponseMessage response = _services.Employee.GetResponse(ApiUrl+"/api/Dashboard/Manager");
+            ViewBag.Locations = GetLocations();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ManagerDashboard(string attendanceStatus, int location)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            ManagerDashboard dashBoard = JsonConvert.DeserializeObject<ManagerDashboard>(stringData);
-            return View(dashBoard);
+            Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
+            return Json(dashboard);
         }
 
         public IActionResult EmployeeDashboard()
