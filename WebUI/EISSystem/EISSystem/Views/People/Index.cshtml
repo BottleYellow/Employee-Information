@@ -11,6 +11,10 @@
         li:hover {
             cursor: pointer;
         }
+        
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
     </style>
 </head>
 
@@ -79,13 +83,17 @@
             </div>
         </div>
 </div>
-<style>
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-</style>
 
 <script>
+     $(document).ready(function () {
+        if ('@ViewBag.Success' != '') {
+            bootbox.alert({
+                message: '@ViewBag.Success'
+            });
+        }
+        var b = true;
+        generateReport(b,0);
+    });
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
@@ -156,12 +164,7 @@
             b = false;
             generateReport(b,c);
         }
-    });
-    $(document).ready(function () {
-       
-        var b = true;
-        generateReport(b,0);
-    });
+    });  
     function generateReport(b,c) {
         $.fn.dataTable.ext.errMode = 'none';
         $('#example').on('error.dt', function () {

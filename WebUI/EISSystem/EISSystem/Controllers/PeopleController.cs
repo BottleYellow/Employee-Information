@@ -52,6 +52,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
+            var success = TempData["success"];
+            if (success != null)
+            {
+                ViewBag.Success = success;
+            }
             ViewBag.Locations = GetLocations();
             return View();
         }
@@ -66,7 +71,7 @@ namespace EIS.WebApp.Controllers
             var success = TempData["success"];
             if (success != null)
             {
-                ViewBag.Success = "Successfull";
+                ViewBag.Success = success;
             }
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -192,6 +197,7 @@ namespace EIS.WebApp.Controllers
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
+                    TempData["success"] = "Employee Created Successfully";
                     return RedirectToAction("Index");
                 }
             }
@@ -311,7 +317,7 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                TempData["success"] = "Success";
+                TempData["success"] = "Employee Edited Successfully";
                 return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode});
             }
             return View(person);
@@ -551,6 +557,7 @@ namespace EIS.WebApp.Controllers
                 permanent.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl+ "/api/PermanentAddress/AddPermanent/" + 0, permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Created Successfully";
                 return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
             }
             return View();
@@ -568,6 +575,11 @@ namespace EIS.WebApp.Controllers
                 permanent.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.PermanentAddress.PostResponse(ApiUrl+ "/api/PermanentAddress/AddPermanent/" + permanent.Id, permanent );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Edited Successfully";
+            }
+            else
+            {
+                TempData["success"] = "Unable to Edit Address.Please try again";
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
@@ -595,6 +607,11 @@ namespace EIS.WebApp.Controllers
                 current.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl + "/api/CurrentAddress/AddCurrent/" + 0, current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Created Successfully";
+            }
+            else
+            {
+                TempData["success"] = "Unable to Add Address.Please try again";
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
@@ -611,6 +628,10 @@ namespace EIS.WebApp.Controllers
                 current.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.CurrentAddress.PostResponse(ApiUrl + "/api/CurrentAddress/AddCurrent/" + current.Id, current);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Edited Successfully";
+            }else
+            {
+                TempData["success"] = "Unable to Edit Address.Please try again";
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
@@ -639,6 +660,10 @@ namespace EIS.WebApp.Controllers
                 emergency.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl + "/api/EmergencyAddress/AddEmergency/" + 0, emergency);
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Added Successfully";
+            }else
+            {
+                TempData["success"] = "Unable to Add Address.Please try again";
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
@@ -663,6 +688,10 @@ namespace EIS.WebApp.Controllers
                 emergency.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 HttpResponseMessage response = _services.EmergencyAddress.PostResponse(ApiUrl+ "/api/EmergencyAddress/AddEmergency/"+emergency.Id, emergency );
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                TempData["success"] = "Address Edited Successfully";
+            }else
+            {
+                TempData["success"] = "Unable to Eidt Address.Please try again";
             }
             return RedirectToAction("Profile", "People", new { PersonId = EmployeeCode });
         }
