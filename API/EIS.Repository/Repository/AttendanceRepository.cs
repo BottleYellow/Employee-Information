@@ -164,6 +164,9 @@ namespace EIS.Repositories.Repository
                         TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
                         TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTotalHoursData.Count());
                         attendanceReport.AdditionalWorkingHours = (int)result.TotalHours + ":" + result.Minutes;
+                    }else
+                    {
+                        attendanceReport.AdditionalWorkingHours = "-";
                     }
                 }
                 else

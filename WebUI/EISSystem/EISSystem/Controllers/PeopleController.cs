@@ -63,6 +63,11 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Profile(string PersonId)
         {
+            var success = TempData["success"];
+            if (success != null)
+            {
+                ViewBag.Success = "Successfull";
+            }
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -306,7 +311,8 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode });
+                TempData["success"] = "Success";
+                return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode});
             }
             return View(person);
         }

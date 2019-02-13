@@ -102,8 +102,8 @@ namespace EIS.Repositories.Repository
         }
         public EmployeeDashboard GetEmployeeDashboard(int TenantId, int PersonId)
         {
-            int currentMonth = new DateTime().Month;
-            int currentYear = new DateTime().Year;
+            int currentMonth = DateTime.Now.Month;
+            int currentYear = DateTime.Now.Year;
             int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
             var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month == currentMonth && x.DateIn.Year == currentYear);
             var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);

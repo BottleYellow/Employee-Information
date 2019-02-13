@@ -14,6 +14,14 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
+
+    if(@ViewBag.Success != null)
+    {
+        <script>
+             alert('@ViewBag.Success');
+        </script>
+       
+    }
 }
 <html>
 <head>
@@ -253,7 +261,6 @@
                                             {
                                                 <table id="etable" name="etable" class="table table-bordered table-hover">
                                                     <tr>
-                                                        <th>Name</th>
                                                         <th>Address</th>
                                                         <th>Contacts</th>
                                                         <th>Active Status</th>
@@ -263,9 +270,7 @@
                                                     {
                                                         <tr>
                                                             <td>
-                                                                @item.FirstName @item.LastName
-                                                            </td>
-                                                            <td>
+                                                                @item.FirstName @item.LastName<br />
                                                                 @item.Address, @item.City, @item.State, @item.Country - @item.PinCode
                                                             </td>
                                                             <td>
@@ -348,19 +353,30 @@
         var TimeOut = document.getElementById('OutTime').value;
         var estTimeOut = document.getElementById('estimatedTimeOut').value;
         var totalHrs = document.getElementById('totalHours').value;
-
-        if (TimeIn != '00:00:00') {
-            document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
-            $('#clockIn').attr('disabled', 'disabled');
+        var ci = document.getElementById('clockIn');
+        if (ci != null) {
+            if (TimeIn != '00:00:00') {
+                document.getElementById('clockIn').innerHTML = "Clock In </br>" + TimeIn;
+                $('#clockIn').attr('disabled', 'disabled');
+            }
         }
-        if (TimeOut != '00:00:00') {
-            document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+        var co = document.getElementById('clockOut');
+        if (co != null) {
+            if (TimeOut != '00:00:00') {
+                document.getElementById('clockOut').innerHTML = "Clock Out </br>" + TimeOut;
+            }
         }
-        if (estTimeOut != '00:00:00') {
-            document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+        var et = document.getElementById('eTOut');
+        if (et != null) {
+            if (estTimeOut != '00:00:00') {
+                document.getElementById('eTOut').innerHTML = "Estimated time out : " + estTimeOut;
+            }
         }
-        if (totalHrs != '00:00:00') {
-            document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+        var th = document.getElementById('tWHrs');
+        if (th != null) {
+            if (totalHrs != '00:00:00') {
+                document.getElementById('tWHrs').innerHTML = "Total hours </br>" + totalHrs;
+            }
         }
 
 
@@ -389,7 +405,7 @@
                  }
                 else if(other.AddressType=="Emergency Address")
                 {
-                 @:var tblRow = '<tr><td></td><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+                 @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
                  @:$("#etable").append(tblRow);
                  }
             }
