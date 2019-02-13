@@ -119,7 +119,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div id="all">
+                            <div id="all" hidden>
                                 <div class="col-md-3">
                                     <div id="pnlBaner" class="panel panel-primary">
                                         <div class="panel-heading">Baner</div>
@@ -280,6 +280,7 @@
 
 
     $(document).ready(function () {
+        $('#all').show();
         var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -318,49 +319,6 @@
         });
 
         $('#locations').on('change', function () {
-            var location = $('#locations option:selected').text();
-            if (location.startsWith("B")) {
-                //$("#pnlKondhwa").prop("hidden", true);
-                $("#all").hide();
-                $("#kondhwa").hide();
-                $("#baner").show();
-                $("#allthb").html("");
-                $("#allthk").html("");
-                $("#alltwoffb").html("");
-                $("#alltwoffk").html("");
-                $("#thb").html("");
-                $("#thk").html("");
-                $("#twoffb").html("");
-                $("#twoffk").html("");
-                
-            }
-            else if (location.startsWith("K")) {
-                //$("#pnlBaner").prop("hidden", true);
-                $("#all").hide();
-                $("#kondhwa").show();
-                $("#baner").hide();
-                $("#allthb").html("");
-                $("#allthk").html("");
-                $("#alltwoffb").html("");
-                $("#alltwoffk").html("");
-                $("#thb").html("");
-                $("#thk").html("");
-                $("#twoffb").html("");
-                $("#twoffk").html("");
-            }
-            else {
-                $("#all").show();
-                $("#kondhwa").hide();
-                $("#baner").hide();
-                $("#allthb").html("");
-                $("#allthk").html("");
-                $("#alltwoffb").html("");
-                $("#alltwoffk").html("");
-                $("#thb").html("");
-                $("#thk").html("");
-                $("#twoffb").html("");
-                $("#twoffk").html("");
-            }   
             var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -374,10 +332,6 @@
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.status);
                 }
-                //error: function () {
-                //    bootbox.alert('<h4>Error</h4>');
-                //}
-
             });
         });
 
@@ -434,6 +388,21 @@
             var id = $('#selectEmployee').val();
             var v = $('#select').val();
             var location = $('#locations').val();
+            if (location == 0) {
+                $('#all').show();
+                $('#baner').hide();
+                $('#kondhwa').hide();
+            }
+            else if (location == 1) {
+                $('#all').hide();
+                $('#baner').hide();
+                $('#kondhwa').show();
+            }
+            else if (location == 2) {
+                $('#all').hide();
+                $('#baner').show();
+                $('#kondhwa').hide();
+            }
             if (v == 'year') {
                 var twok = 4 * 12;
                 var twob = 6 * 12;
@@ -529,7 +498,43 @@
                 var value = $("#inputweek").val();
                 var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
+                var fdate = moment(value, "MMM-DD-YYYY").day(0).format("MMM-DD-YYYY");
+                var ldate = moment(value, "MMM-DD-YYYY").day(6).format("MMM-DD-YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
+                var location = $('#locations').val();
+                var url = "@MyHttpContext.APIBaseURL/api/Holiday/" + fdate + "/" + ldate + "/" + v + "/" + location;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        var k = 0, b = 0;
+
+                        $.each(data, function (i, item) {
+                            if (item.location.locationName.startsWith("B")) {
+                                b = b + 1;
+                                $('#twoffb').html('Weekly Off : ' + 1);
+                                $('#thb').html('Holidays : ' + b);
+                            }
+                            else if (item.location.locationName.startsWith("K")) {
+                                k = k + 1;
+                                $('#twoffk').html('Weekly Off : ' + 1)
+                                $('#thk').html('Holidays : ' + k);
+                            }
+
+                        });
+                        $('#allthb').html('Holidays : ' + b);
+                        $('#allthk').html('Holidays : ' + k);
+                        $('#alltwoffb').html('Weekly Off : ' + 1)
+                        $('#alltwoffk').html('Weekly Off : ' + 1)
+                        generateReport(firstDate + " - " + lastDate, 'week', location);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+            });
+
                 generateReport(firstDate + " - " + lastDate, 'week', id);
                 totalDays = 7;
             }
