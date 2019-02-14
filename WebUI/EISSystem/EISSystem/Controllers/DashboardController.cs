@@ -8,6 +8,7 @@ using EIS.Entities.Dashboard;
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;

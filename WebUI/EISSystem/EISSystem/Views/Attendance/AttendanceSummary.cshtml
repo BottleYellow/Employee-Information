@@ -229,21 +229,21 @@
 
     $(document).ready(function () {
         var loc = $('#locations').val();
-            $.ajax({
-                type: 'GET',
-                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
-                success: function (data) {
-                    $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
-                    $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status);
-                }
-                //error: function () {
-                //    bootbox.alert('<h4>Error</h4>');
-                //}
+        $.ajax({
+            type: 'GET',
+            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+            success: function (data) {
+                $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
+                $.each(data, function (data, value) {
+                    $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status);
+            }
+            //error: function () {
+            //    bootbox.alert('<h4>Error</h4>');
+            //}
 
             });
 
@@ -328,8 +328,8 @@
         }
         $('#inputweek').on('dp.change', function (e) {
             var value = $("#inputweek").val();
-            var firstDate = moment(value,"MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-            var lastDate = moment(value,"MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
+            var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
+            var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
             $("#inputweek").val(firstDate + " - " + lastDate);
         });
         $('#generateReport').on('click', function () {
@@ -367,11 +367,12 @@
                 totalDays = 7;
             }
         });
+    });
 
         function generateReport(value, type, id) {
             $.ajax({
                 type: 'POST',
-                    url:'@Url.Action("AttendanceSummaryById", "Attendance")?date='+value+'&type='+type+'&id='+id,
+                url: '@Url.Action("AttendanceSummaryById", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
                 //data: { "date": value, "type": type, "id": id },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
@@ -387,112 +388,27 @@
                     bootbox.alert('<h4>Error</h4>');
                 }
             });
-      $.fn.dataTable.ext.errMode = 'none';
-            $('#example').on('error.dt', function () {
-                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-            }).DataTable();
-                     $('#example').DataTable().destroy();
-        $('#example tbody').empty();
-            var dTable = $('#example').DataTable({
-                "processing": true, // for show progress bar
-                "serverSide": true, // for process server side
-                "filter": true, // this is for disable filter (search box)
-                buttons: [
-                    {
-                        extend: 'pdfHtml5',
-                        title: 'EMPLOYEE ATTENDANCE REPORT',
-                        text: 'Export',
-                        titleAttr: 'Export to Pdf',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
-                    }
-                ],
-                'columnDefs': [
-                    {
-                        'searchable': false,
-                        'targets': [0, 1, 2]
-                    }
-                ],
 
-                "aoColumnDefs": [
-                    { "aTargets": [0], "bSortable": true },
-                    { "aTargets": ['_all'], "bSortable": false }
-                ],
-                sDom: '<"myexport"B>irtlp',
-                lengthMenu: [
-                    [10, 25, -1],
-                    ['10', '25', 'All']
-                ],
-                ajax: {
-                    //"url": "/Attendance/AttendanceSummary",
-                    "url":'@Url.Action("AttendanceSummary", "Attendance")?date='+value+'&type='+type+'&id='+id,
-                    "type": "POST",
-                    "datatype": "json",
-                    //"data": { "date": value, "type": type, "id": id },
-                },
-                "columns": [
-                    {
-                        "data": "DateIn", "name": "DateIn", "autoWidth": true, render: function (data, type, row) {
-                            data = moment(data).format('DD MMM YYYY');
-                            return data;
-                        }
-                    },
-                    {
-                        data: "IsActive", "autoWidth": true, render: function (data, type, row) {
-                            if (new Date(row.DateIn).getDay() == 0 && row.TimeIn==row.TimeOut) {
-                                return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">Weekly Off</span>';
-                            }
-                            else if (new Date(row.DateIn).getDay() == 6 && calculate(row.DateIn) != "NotFound")
-                            {
-                                return '<span style="font-size:14px; font-weight:normal" class="label label-warning">' + calculate(row.DateIn)+'</span>';
-                            }
-                            else if (data == true) {
-                                return '<span style="font-size:14px; font-weight:normal;" class="label label-success">Present</span>';
-                            } else {
-                                var dateIn = moment(row.DateIn).format('L');
-                                var date = moment(new Date()).format('L');
-                                return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">On Leave</span>';
-                            }
-                        }
-                    },
-                    {
-                        "data": "TimeIn", "autoWidth": true, render: function (data, type, row) {
-                            if (row.TimeIn == row.TimeOut) { return "-"; }
-                            data = moment(data, "HH:mm:ss").format("hh:mm A");
-                            return data;
-                        }
-                    },
-                    {
-                        "data": "TimeOut", "autoWidth": true, render: function (data, type, row) {
-                            if (data == null || row.TimeIn == row.TimeOut) { return "-"; } else {
-                                data = moment(data, "HH:mm:ss").format("hh:mm A");
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        "data": "TotalHours", "autoWidth": true, render: function (data, type, row) {
-                            if (data == null || (row.TimeIn == row.TimeOut)) {
-                                return "-";
-                            } else {
-                                data = moment(data, "HH:mm:ss").format("HH:mm:ss");
-                                return data;
-                            }
-                        }
+            $.ajax({
+                "url": '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
+                "type": "POST",
+                "datatype": "json",
+                success: function (data) {
+                    var array = [];
+                    for (var i = 0; i < data.length; i++) {
+                        array.push([data[i].Date, data[i].Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
                     }
-                ],
-                "initComplete": function () {
-                    var $searchInput = $('div.dataTables_filter input');
-                    $searchInput.unbind();
-                    $searchInput.bind('keyup', function (e) {
-                        if (this.value.length >= 3 || this.value.length == 0) {
-                            dTable.search(this.value).draw();
-                        }
+                    $('#example').DataTable().destroy();
+                    $('#example').DataTable({
+                        data: array
                     });
-                }
+                },
+
             });
         }
-    });
+  
+
+   
     function calculate(date) {
         var d = new Date(date);
         var mon = d.toLocaleString('en-us', { month: 'long' });

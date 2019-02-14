@@ -481,7 +481,6 @@
                 datatype: "json",
                 data: { "date": value,"type":type,"location":location },
                 success: function (data) {
-                    debugger;
                 var array = [];
                     for (var i = 0; i < data.sP_GetAttendanceCountReports.length; i++) {
                         array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName , data.sP_GetAttendanceCountReports[i].PresentDays , data.sP_GetAttendanceCountReports[i].NoLeave , data.sP_GetAttendanceCountReports[i].WorkingDay ])

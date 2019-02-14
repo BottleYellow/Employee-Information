@@ -116,43 +116,35 @@ namespace EIS.WebAPI.Controllers
 
         #region[My Attendance History]
         [DisplayName("My Attendance History")]
-        [HttpPost("GetYearlyAttendanceById/{id}/{year}")]
-        public IActionResult GetYearlyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute] int year, [FromRoute]int id)
+        [HttpGet("GetYearlyAttendanceById/{id}/{year}")]
+        public IActionResult GetYearlyAttendanceById([FromRoute] int year, [FromRoute]int id)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
+            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id);
             DateTime startDate = new DateTime(year, 1, 1);
             DateTime endDate = startDate.AddYears(1);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
-            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
-            data.Add(attendanceData.Count());
-            return Ok(data);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+            return Ok(attendancelist);
         }
 
         [DisplayName("My Attendance History")]
-        [HttpPost("GetMonthlyAttendanceById/{id}/{year}/{month}")]
-        public IActionResult GetMonthlyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
+        [HttpGet("GetMonthlyAttendanceById/{id}/{year}/{month}")]
+        public IActionResult GetMonthlyAttendanceById([FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
+
+            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
             DateTime startDate = new DateTime(year, month, 1);
             DateTime endDate = startDate.AddMonths(1);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
-            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
-            data.Add(attendanceData.Count());
-            return Ok(data);
+           List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+            return Ok(attendancelist);
         }
 
         [DisplayName("My Attendance History")]
-        [HttpPost("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
-        public IActionResult GetWeeklyAttendanceById([FromBody]SortGrid sortGrid, [FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
+        [HttpGet("GetWeeklyAttendanceById/{id}/{startDate}/{endDate}")]
+        public IActionResult GetWeeklyAttendanceById([FromRoute]int id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
-            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
-            data.Add(attendanceData.Count());
-            return Ok(data);
+            IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            return Ok(attendancelist);
         }
         #endregion
 
@@ -203,19 +195,14 @@ namespace EIS.WebAPI.Controllers
         }
         #endregion
 
-
-        [HttpPost("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
-        public IActionResult GetDateWiseAttendance([FromBody]SortGrid sortGrid, [FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
+        
+        [HttpGet("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
+        public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
         {
-            ArrayList data = new ArrayList();
-            DateTime sDate = Convert.ToDateTime(startDate);
-            DateTime tDate = Convert.ToDateTime(endDate);
             int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId);
-            IEnumerable<Attendance> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData.AsQueryable());
-            data = string.IsNullOrEmpty(sortGrid.Search) ? _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable()) : _repository.Attendances.GetDataByGridCondition(null, sortGrid, attendancelist.AsQueryable());
-            data.Add(attendanceData.Count());
-            return Ok(data);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData);
+            return Ok(attendancelist);
         }
     }
 }

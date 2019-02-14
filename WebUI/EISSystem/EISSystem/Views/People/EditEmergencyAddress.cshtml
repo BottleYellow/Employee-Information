@@ -2,14 +2,14 @@
 <label>First Name</label>
 <div class="form-group">
     <div class="form-line">
-        <input asp-for="@Model.FirstName" class="form-control">
+        <input asp-for="@Model.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
     </div>
 </div>
 
 <label>Last Name</label>
 <div class="form-group">
     <div class="form-line">
-        <input asp-for="@Model.LastName" class="form-control">
+        <input asp-for="@Model.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
     </div>
 </div>
 <label>Address</label>
@@ -74,3 +74,8 @@
 <input type="hidden" asp-for="@Model.RowVersion" />
 <input type="hidden" asp-for="@Model.TenantId" />
 
+<script type="text/javascript">
+    function MakeFirstLetterCapital(control) {
+        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
+    }
+</script>
