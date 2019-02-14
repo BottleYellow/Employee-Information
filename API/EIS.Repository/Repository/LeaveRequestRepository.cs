@@ -22,10 +22,18 @@ namespace EIS.Repositories.Repository
             _dbContext.SaveChanges();
         }
 
-        public string CheckForScheduledLeave(int PersonId,DateTime FromDate, DateTime ToDate)
+        public IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
+        {
+            var results = from Requests in _dbContext.LeaveRequests
+                          join Person in _dbContext.Person on Requests.PersonId equals Person.Id
+                          where Person.ReportingPersonId == PersonId && Requests.TenantId == TenantId
+                          select Requests;
+            return results;
+        }
+        public string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate)
         {
             string result = "success";
-            IQueryable<LeaveRequest> requests = _dbContext.LeaveRequests.Where(x => ((x.FromDate <=FromDate && FromDate<=x.ToDate) || (x.FromDate <= ToDate && ToDate<=x.ToDate)||(FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+            IQueryable<LeaveRequest> requests = _dbContext.LeaveRequests.Where(x => ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
             LeaveRequest request = null;
             if (requests != null && requests.Count() > 0)
             {
@@ -36,19 +44,9 @@ namespace EIS.Repositories.Repository
                     result = "success";
                 }
             }
-           
+
             return result;
         }
-
-        public IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId)
-        {
-            var results = from Requests in _dbContext.LeaveRequests
-                          join Person in _dbContext.Person on Requests.PersonId equals Person.Id
-                          where Person.ReportingPersonId == PersonId && Requests.TenantId == TenantId
-                          select Requests;
-            return results;
-        }
-
         public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId,int? LocationId)
         {
             IQueryable<PastLeaves> result = null;

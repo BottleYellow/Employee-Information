@@ -23,6 +23,7 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -148,7 +149,6 @@
         }
         $("#btnSubmit").prop("disabled", true);
     })
-
     $('#date1').on('dp.change', function (e) {
         var x = document.getElementById("date1").value;
         var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
@@ -163,7 +163,6 @@
             $("#date2").val('');
         }
     });
-
     $('#date2').on('dp.change', function (e) {
         var fd = document.getElementById("date1").value;
         var sd = document.getElementById("date2").value;
@@ -190,7 +189,6 @@
             $("#btnSubmit").removeAttr('disabled');
         }
     });
-
     $('#btnSubmit').click(function () {
         var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
         var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
@@ -247,7 +245,6 @@
                 alert(data.responseText);
             }
         });
-
     });
     function myFunction() {
         $("#msg").remove();
@@ -281,14 +278,7 @@
                     $("#reason").removeAttr('disabled');
                     $("#btnSubmit").removeAttr('disabled');
                 }
-
             });
         }
-
     }
-
-
 </script>
-
-
-

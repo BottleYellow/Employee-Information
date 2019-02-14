@@ -22,9 +22,7 @@ namespace EIS.WebAPI.Controllers.Location
         [HttpGet]
         public IEnumerable<Locations> GetLocations()
         {
-            List<Locations> data = _repository.Locations.FindAll().Where(x => x.IsActive == true).ToList();
-            _repository.Locations.Dispose();
-            return data;
+            return _repository.Locations.FindAll().Where(x => x.IsActive == true);
         }
         [HttpPost]
         [Route("Data")]
@@ -42,7 +40,6 @@ namespace EIS.WebAPI.Controllers.Location
             {
                 locationsList = _repository.Locations.GetDataByGridCondition(x => x.LocationName == sortGrid.Search , sortGrid, list);
             }
-            _repository.Locations.Dispose();
             return Ok(locationsList);
         }
         [HttpPost("{LocationId}")]
@@ -56,14 +53,12 @@ namespace EIS.WebAPI.Controllers.Location
                 }
                 location.TenantId = TenantId;
                 _repository.Locations.CreateAndSave(location);
-                _repository.Locations.Dispose();
                 return Ok(location);
             }
             else
             {
                 location.TenantId = TenantId;
                 _repository.Locations.UpdateAndSave(location);
-                _repository.Locations.Dispose();
                 return Ok(location);
             }
         }
@@ -78,7 +73,6 @@ namespace EIS.WebAPI.Controllers.Location
             }
             location.IsActive = false;
             _repository.Locations.UpdateAndSave(location);
-            _repository.Locations.Dispose();
             return Ok(location);
         }
         [Route("ActivateLocation/{id}")]
@@ -86,8 +80,7 @@ namespace EIS.WebAPI.Controllers.Location
         public IActionResult ActivateLocation([FromRoute]int id)
         {
             Locations location = _repository.Locations.ActivateLocation(id);
-            _repository.Locations.Dispose();
-            if (location==null)
+            if(location==null)
             {
                 return BadRequest();
             }

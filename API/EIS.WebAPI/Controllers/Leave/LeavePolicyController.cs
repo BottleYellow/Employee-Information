@@ -40,17 +40,13 @@ namespace EIS.WebAPI.Controllers.Leave
         public IEnumerable<LeaveRules> GetLeavePolicies([FromRoute]int PersonId)
         {
             string locationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId.ToString();
-            List<LeaveRules> data = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId == Convert.ToInt32(locationId)).ToList();
-            _repository.LeaveRules.Dispose();
-            return data;
+            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId==Convert.ToInt32(locationId));
         }
         [DisplayName("leave Policies")]
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
         {
-            List<LeaveRules> data = _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId).ToList();
-            _repository.LeaveRules.Dispose();
-            return data;
+            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId);
         }
 
         [DisplayName("leave Policies")]
@@ -78,7 +74,6 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
             }
-            _repository.LeaveRules.Dispose();
             return Ok(data);
         }
 
@@ -92,7 +87,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             policy.TenantId = TenantId;
             _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
-            _repository.LeaveRules.Dispose();
+
             return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
         }
     }

@@ -72,7 +72,7 @@
                                 <select class="form-control" id="select">
                                     <option value="year" id="year">Year</option>
                                     <option selected value="month" id="month">Month</option>
-                                    <option value="week" id="week">Week</option>
+                                    @*<option value="week" id="week">Week</option>*@
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -190,7 +190,7 @@
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
-    
+
     var totalDays = 0;
     var totalDaysb = 0;
     var totalDaysk = 0;
@@ -307,7 +307,7 @@
                 $('#baner').show();
                 $('#kondhwa').hide();
             }
-            
+
             if (v == 'year') {
                 var twok = 4 * 12;
                 var twob = 6 * 12;
@@ -483,8 +483,8 @@
                 success: function (data) {
                     debugger;
                 var array = [];
-                    for (var i = 0; i < data.length; i++) {
-                        array.push([data[i].Location, data[i].Name, data[i].PresentDays, data[i].OnLeave, data[i].TotalWorkingDays])
+                    for (var i = 0; i < data.sP_GetAttendanceCountReports.length; i++) {
+                        array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName , data.sP_GetAttendanceCountReports[i].PresentDays , data.sP_GetAttendanceCountReports[i].NoLeave , data.sP_GetAttendanceCountReports[i].WorkingDay ])
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
