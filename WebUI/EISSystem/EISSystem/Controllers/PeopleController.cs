@@ -52,11 +52,6 @@ namespace EIS.WebApp.Controllers
         [DisplayName("List Of Employees")]
         public IActionResult Index()
         {
-            var success = TempData["success"];
-            if (success != null)
-            {
-                ViewBag.Success = success;
-            }
             ViewBag.Locations = GetLocations();
             return View();
         }
@@ -68,11 +63,6 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult Profile(string PersonId)
         {
-            var success = TempData["success"];
-            if (success != null)
-            {
-                ViewBag.Success = success;
-            }
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);

@@ -84,7 +84,6 @@ namespace EIS.WebAPI.Services
 
                 using (StreamWriter sw = File.CreateText(attendanceReportPath))
                 {
-
                     sw.WriteLine("Employee Name:-" + p.FullName);
                     sw.WriteLine("Employee Code:-" + p.EmployeeCode);
                     sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);

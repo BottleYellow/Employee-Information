@@ -213,7 +213,7 @@ namespace EIS.Repositories.Repository
                     if (count % 2 == 0)
                     {
                         CalendarData holidayCalanderData = new CalendarData();
-                        holidayCalanderData.Title = count + "nd Saturday Holiday";
+                        holidayCalanderData.Title = count + "nd Saturday Weekly Off";
                         holidayCalanderData.Description = "Holiday";
                         holidayCalanderData.StartDate = date;
                         holidayCalanderData.EndDate = date;

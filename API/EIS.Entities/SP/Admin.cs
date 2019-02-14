@@ -48,7 +48,7 @@ namespace EIS.Entities.SP
         public System.DateTime ToDate { get; set; }
         public double RequestedDays { get; set; }
         public string ApprovedBy { get; set; }
-        public double Available { get; set; }
+        public System.DateTime AppliedDate { get; set; }
         public string LocationName { get; set; }
         public double ApprovedDays { get; set; }
         public string Reason { get; set; }

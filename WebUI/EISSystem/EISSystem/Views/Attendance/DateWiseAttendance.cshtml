@@ -178,8 +178,35 @@
             generateReport(fromValue, toValue, id,empName);
             });
 
-        function generateReport(fromValue, toValue, id,empName) {
-     $.fn.dataTable.ext.errMode = 'none';
+        function generateReport(fromValue, toValue, id, empName) {
+              $.ajax({
+                   "url": '@Url.Action("DateWiseAttendance", "Attendance")?fromdate=' + fromValue + '&todate=' + toValue + '&id='+id,
+                    "type": "POST",
+                    "datatype": "json",
+                success: function (data) {
+                    debugger;
+                    var array = [];
+                    for (var i = 0; i < data.length; i++) {
+                        array.push([id, empName, data[i].Date, data[i].Status,data[i].TotalHours])
+                    }
+                    $('#example').DataTable().destroy();
+                    $('#example').DataTable({
+                        data: array
+                    });
+                },
+
+            });
+        }
+
+
+                  
+                
+              
+   
+
+
+
+     @*$.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }).DataTable();
@@ -268,8 +295,8 @@
                         }
                     });
                 }
-            });
-        }
+            });*@
+      
     });
     function calculate(date) {
         var d = new Date(date);

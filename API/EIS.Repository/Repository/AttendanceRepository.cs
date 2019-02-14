@@ -215,7 +215,7 @@ namespace EIS.Repositories.Repository
                     TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
                     DateTime avgHour = DateTime.Today.Add(averageHour);
                     attendanceReport.AverageTime = avgHour.ToString("HH:mm");
-                    if (avgHour > new DateTime(2000, 1, 1, 9, 0, 0))
+                    if (averageHour > new TimeSpan(9, 0, 0))
                     {
                         TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
                         TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
@@ -235,29 +235,38 @@ namespace EIS.Repositories.Repository
             return attendanceReport;
         }
 
-        public IEnumerable<Attendance> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IQueryable<Attendance> attendanceData)
+        public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData)
         {
-            IList<Attendance> attendances = new List<Attendance>();
+            
+            List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
             for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
             {
-                Attendance newlist = new Attendance();
-                newlist.DateIn = date;
-                var attendance = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+                AttendanceReportByDate attendance = new AttendanceReportByDate();
+                attendance.Date = date.ToShortDateString();
+                var attendancedata = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
                 {
-                    newlist.TimeIn = new TimeSpan();
-                    newlist.TimeOut = new TimeSpan();
-                    newlist.IsActive = false;
-                    newlist.TotalHours = new TimeSpan();
+                    if (date.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        attendance.Status = "Weekly Off";
+                    }
+                    else
+                    {
+                        attendance.Status = "-";
+                    }
+                        attendance.TimeIn = "-";
+                    attendance.TimeOut = "-";
+                    
+                    attendance.TotalHours = "-";
                 }
                 else
                 {
-                    newlist.TimeIn = attendance.TimeIn;
-                    newlist.TimeOut = attendance.TimeOut==null? new TimeSpan(): attendance.TimeOut;
-                    newlist.IsActive = true;
-                    newlist.TotalHours = attendance.TotalHours == null ? new TimeSpan() : attendance.TotalHours;
+                    attendance.TimeIn = attendancedata.TimeIn.ToString();
+                    attendance.TimeOut = attendancedata.TimeOut==null? new TimeSpan().ToString(): attendancedata.TimeOut.ToString();
+                    attendance.Status = "Present";
+                    attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
                 }
-                attendances.Add(newlist);
+                attendances.Add(attendance);
             }
             return attendances;
         }

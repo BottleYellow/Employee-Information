@@ -338,14 +338,13 @@
         {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
     }
 }
-<script>
+           <script>
 
-    $(document).ready(function () {
-        if ('@ViewBag.Success' != '') {
+               $(document).ready(function () {
+        if ('@TempData["success"]' != '') {
             bootbox.alert({
-                message: '@ViewBag.Success'
+                message: '@TempData["success"]'
             });
-
         }
         var TimeIn = document.getElementById('InTime').value;
         var TimeOut = document.getElementById('OutTime').value;
@@ -707,5 +706,5 @@
                         });
                         fakewaffle.responsiveTabs(['xs', 'sm']);
                         })(jQuery);
-                        </script>
+           </script>
 

@@ -110,10 +110,13 @@ namespace EIS.WebApp.Controllers
             }
             //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
-            ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null,1);
 
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
+            return Json(attendanceReport);
         }
+
         [AllowAnonymous]
         [HttpPost]
         public JsonResult AttendanceSummaryById(string date, string type, int? id)
@@ -121,8 +124,7 @@ namespace EIS.WebApp.Controllers
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url );
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AttendanceReport attendanceReport = new AttendanceReport();
-            attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
+            AttendanceReport attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
             return Json(attendanceReport);
         }
         #endregion
@@ -321,15 +323,17 @@ namespace EIS.WebApp.Controllers
         
         [ActionName("DateWiseAttendance")]
         [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id)
+        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id) 
         {
             string url = "";
             if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))
             {
                 url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
             }
-            ArrayList arrayData = new ArrayList();
-            return LoadData<Attendance>(url,null,1);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
+            return Json(attendanceReport);
         }
     }
 }

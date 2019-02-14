@@ -86,9 +86,9 @@
 
 <script>
      $(document).ready(function () {
-        if ('@ViewBag.Success' != '') {
+        if ('@TempData["success"]' != '') {
             bootbox.alert({
-                message: '@ViewBag.Success'
+                message: '@TempData["success"]'
             });
         }
         var b = true;
