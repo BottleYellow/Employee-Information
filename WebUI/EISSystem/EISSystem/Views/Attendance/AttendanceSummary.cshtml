@@ -436,7 +436,6 @@
                        //$.each(data, function (i, item) {
                         //    $('#tholiday').text(item.length);
                         //})
-                    generateReport(value, 'year', location);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.status);
@@ -528,7 +527,7 @@
                         $('#allthk').html('Holidays : ' + k);
                         $('#alltwoffb').html('Weekly Off : ' + 1)
                         $('#alltwoffk').html('Weekly Off : ' + 1)
-                        generateReport(firstDate + " - " + lastDate, 'week', location);
+                        //generateReport(firstDate + " - " + lastDate, 'week', location);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.status);
