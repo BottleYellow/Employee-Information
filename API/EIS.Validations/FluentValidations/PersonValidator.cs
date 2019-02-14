@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Repositories.IRepository;
 using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +19,7 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.FirstName).MaximumLength(50).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.MiddleName).MaximumLength(50).Matches("^[a-zA-Z ]*$");
             RuleFor(x => x.LastName).MaximumLength(50).Matches("^[a-zA-Z ]*$").NotNull();
-            RuleFor(x => x.JoinDate).NotNull();
+            RuleFor(x => x.JoinDate).LessThanOrEqualTo(DateTime.Now.Date).NotNull();
             RuleFor(x => x.Gender).NotNull();
             RuleFor(x => x.MobileNumber).Length(10).Matches("^[0-9]*$").NotNull().Must(UniqueMobileNumber).WithMessage("Mobile Number already exists"); ;
             RuleFor(x => x.DateOfBirth).NotNull();

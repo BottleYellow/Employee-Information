@@ -139,7 +139,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="FirstName" class="form-control" />
+                                                <input asp-for="FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
                                             </div>
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
@@ -148,7 +148,7 @@
                                         <div class="form-group">
                                             <label asp-for="MiddleName">Middle Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="MiddleName" class="form-control" />
+                                                <input asp-for="MiddleName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
                                             </div>
                                             <span asp-validation-for="MiddleName" class="text-danger"></span>
                                         </div>
@@ -157,7 +157,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="LastName" class="form-control" />
+                                                <input asp-for="LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
                                             </div>
                                             <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
@@ -317,6 +317,9 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+    function MakeFirstLetterCapital(control) {
+        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
+    }
     $(document).ready(function () {
         debugger;
         var d1 = document.getElementById("dob").value;
