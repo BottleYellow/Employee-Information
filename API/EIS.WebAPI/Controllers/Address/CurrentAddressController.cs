@@ -18,16 +18,13 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Current> GetCurrentAddresses()
         {
-            IEnumerable<Current> data =_repository.CurrentAddress.FindAll();
-            _repository.CurrentAddress.Dispose();
-            return data;
+            return _repository.CurrentAddress.FindAll();
         }
         [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetCurrent([FromRoute] int id)
         {
             Current currentAddress = _repository.CurrentAddress.FindByCondition(addr=>addr.PersonId==id);
-            _repository.CurrentAddress.Dispose();
             if (currentAddress == null)
                 return NotFound();
             return Ok(currentAddress);
@@ -41,8 +38,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.CurrentAddress.UpdateAndSave(current);
-            _repository.CurrentAddress.Dispose();
+            _repository.CurrentAddress.UpdateAndSave(current);          
             return Ok(current);
         }
         [Route("AddCurrent/{id}")]
@@ -57,7 +53,6 @@ namespace EIS.WebAPI.Controllers
                 }
                 current.TenantId = TenantId;
                 _repository.CurrentAddress.CreateAndSave(current);
-                _repository.CurrentAddress.Dispose();
                 return CreatedAtAction("GetCurrent", new { id = current.Id }, current);
             }
             else
@@ -67,7 +62,6 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.CurrentAddress.UpdateAndSave(current);
-                _repository.CurrentAddress.Dispose();
                 return Ok(current);
             }
         }
@@ -98,7 +92,6 @@ namespace EIS.WebAPI.Controllers
             };
             _repository.OtherAddress.CreateAndSave(other);
             _repository.CurrentAddress.DeleteAndSave(currentAddress);
-            _repository.CurrentAddress.Dispose();
             return Ok(currentAddress);
         }
     }

@@ -23,9 +23,7 @@ namespace EIS.WebAPI.Controllers.User
         [HttpGet]
         public IEnumerable<Users> Get()
         {
-            IEnumerable<Users> data = _repository.Users.FindAllByCondition(x=>x.TenantId==TenantId);
-            _repository.Users.Dispose();
-            return data;
+            return _repository.Users.FindAllByCondition(x=>x.TenantId==TenantId);
         }
 
         [AllowAnonymous]
@@ -33,7 +31,6 @@ namespace EIS.WebAPI.Controllers.User
         public IActionResult GetById([FromRoute]int id)
         {
             Users user = _repository.Users.FindByCondition(e => e.PersonId == id);
-            _repository.Users.Dispose();
             if (user == null)
             {
                 return NotFound();
@@ -48,7 +45,6 @@ namespace EIS.WebAPI.Controllers.User
         {
             user.TenantId = TenantId;
             _repository.Users.CreateUserAndSave(user);
-            _repository.Users.Dispose();
         }
         [AllowAnonymous]
         [HttpPut("{id}")]
@@ -60,7 +56,6 @@ namespace EIS.WebAPI.Controllers.User
                 return BadRequest(ModelState);
             }
             _repository.Users.UpdateAndSave(user);
-            _repository.Users.Dispose();
             return Ok(user);
         }
 

@@ -25,7 +25,6 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetAdminDashboard(string attendanceStatus, int location)
         {
             Admin_Dashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus, location, TenantId);
-            _repository.Dashboard.Dispose();
             return Ok(dashboard);
         }
 
@@ -34,7 +33,6 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetManagerDashboard()
         {
             ManagerDashboard dashboard = _repository.Dashboard.GetManagerDashboard(TenantId);
-            _repository.Dashboard.Dispose();
             return Ok(dashboard);
         }
 
@@ -43,7 +41,6 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetEmployeeDashboard([FromRoute]int PersonId)
         {
             Employee_Dashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
-            _repository.Dashboard.Dispose();
             return Ok(dashboard);
         }
 
@@ -52,7 +49,6 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetCalendarData([FromRoute]int location,[FromRoute]string startDate, [FromRoute]string endDate)
         {
             List<CalendarData> calendarDataList = _repository.Dashboard.GetCalendarDetails(location,Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
-            _repository.Dashboard.Dispose();
             return Ok(calendarDataList);
         }
     }

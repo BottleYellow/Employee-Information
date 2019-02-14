@@ -19,16 +19,13 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Permanent> GetPermanentAddresses()
         {
-            IEnumerable<Permanent> data = _repository.PermanentAddress.FindAll();
-            _repository.PermanentAddress.Dispose();
-            return data;
+            return _repository.PermanentAddress.FindAll();
         }
         [DisplayName("Profile view")]
         [HttpGet("{id}")]
         public IActionResult GetPermanent([FromRoute] int id)
         {
             Permanent Permanent = _repository.PermanentAddress.FindByCondition(addr=>addr.PersonId==id);
-            _repository.PermanentAddress.Dispose();
             if (Permanent == null)
                 return NotFound();
             return Ok(Permanent);
@@ -43,7 +40,6 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.PermanentAddress.UpdateAndSave(permanent);
-            _repository.PermanentAddress.Dispose();
             return Ok(permanent);
         }
         [Route("AddPermanent/{id}")]
@@ -58,7 +54,6 @@ namespace EIS.WebAPI.Controllers
                 }
                 permanent.TenantId = TenantId;
                 _repository.PermanentAddress.CreateAndSave(permanent);
-                _repository.PermanentAddress.Dispose();
                 return CreatedAtAction("GetPermanent", new { id = permanent.Id }, permanent);
             }
             else
@@ -68,7 +63,6 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.PermanentAddress.UpdateAndSave(permanent);
-                _repository.PermanentAddress.Dispose();
                 return Ok(permanent);
             }
         }
@@ -100,7 +94,6 @@ namespace EIS.WebAPI.Controllers
             };
             _repository.OtherAddress.CreateAndSave(other);
             _repository.PermanentAddress.DeleteAndSave(permanent);
-            _repository.PermanentAddress.Dispose();
             return Ok(permanent);
         }
     }

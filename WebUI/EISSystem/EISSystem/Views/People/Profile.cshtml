@@ -14,7 +14,6 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
-
 }
 <html>
 <head>
@@ -254,6 +253,7 @@
                                             {
                                                 <table id="etable" name="etable" class="table table-bordered table-hover">
                                                     <tr>
+                                                        <th>Name</th>
                                                         <th>Address</th>
                                                         <th>Contacts</th>
                                                         <th>Active Status</th>
@@ -263,7 +263,9 @@
                                                     {
                                                         <tr>
                                                             <td>
-                                                                @item.FirstName @item.LastName<br />
+                                                                @item.FirstName @item.LastName
+                                                            </td>
+                                                            <td>
                                                                 @item.Address, @item.City, @item.State, @item.Country - @item.PinCode
                                                             </td>
                                                             <td>
@@ -327,30 +329,26 @@
 
 @if (cookies.Role != "Admin")
 {
-    @section Attendance
-        {
-        <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
-        <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
-        <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
+@section Attendance
+    {
+    <li><button type="button" class="btn btn-primary"><b>Clock In</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" hidden><b>Clock Out</b><br /></button></li>
+    <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
 
-    }
-    @section EstimatedTimeOut
-        {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
-    }
+}
+@section EstimatedTimeOut
+    {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
+}
 }
 <script>
 
     $(document).ready(function () {
-        if ('@ViewBag.Success' != '') {
-            bootbox.alert({
-                message: '@ViewBag.Success'
-            });
 
-        }
         var TimeIn = document.getElementById('InTime').value;
         var TimeOut = document.getElementById('OutTime').value;
         var estTimeOut = document.getElementById('estimatedTimeOut').value;
         var totalHrs = document.getElementById('totalHours').value;
+
         var ci = document.getElementById('clockIn');
         if (ci != null) {
             if (TimeIn != '00:00:00') {
@@ -387,30 +385,30 @@
                 $(a.target).prev('.panel-heading').removeClass('active');
             });
 
-@if (cookies.Role == "Admin" && Model.OtherAddress.Count > 0)
-{
-    foreach (var other in Model.OtherAddress)
-    {
-        if (other.AddressType == "Permanent Address")
+        @if(cookies.Role=="Admin" && Model.OtherAddress.Count > 0)
         {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
-            @:$("#ptable").append(tblRow);
+            foreach(var other in Model.OtherAddress)
+            {
+                if(other.AddressType=="Permanent Address")
+                {
+                 @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+                 @:$("#ptable").append(tblRow);
+                 }
+                else if(other.AddressType=="Current Address")
+                {
+                 @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+                 @:$("#ctable").append(tblRow);
+                 }
+                else if(other.AddressType=="Emergency Address")
+                {
+                 @:var tblRow = '<tr><td></td><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+                 @:$("#etable").append(tblRow);
+                 }
+            }
         }
-        else if (other.AddressType == "Current Address")
-        {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
-            @:$("#ctable").append(tblRow);
-        }
-        else if (other.AddressType == "Emergency Address")
-        {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
-            @:$("#etable").append(tblRow);
-        }
-    }
-}
     });
 
-@*$('#clockIn').click(function () {
+    @*$('#clockIn').click(function () {
         $.ajax({
             type: 'GET',
             //url: '/Attendance/AttendanceInOut',
@@ -508,204 +506,203 @@
                         url: '@Url.Action("DeletePermanentAddress", "People")?perid='+@Model.PermanentAddress.Id,
                         //data: { perid: @Model.PermanentAddress.Id },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
-                        $("#padd").load(document.URL + ' #padd');
+                            bootbox.alert({
+                                message: "Record Deleted Successfully!"
+                            });
+                            $("#padd").load(document.URL + ' #padd');
 
                         },
 
-                        });
-                        }
-                        }
-                        });
-                        });
-                        $("#createcadd").click(function () {
-                        $("#createcadd").hide();
-                        //var h = document.getElementById("createcadd").innerHTML;
-                        //document.getElementById("createcadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
-                        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
-                        $("#caddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#createcaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        });
-                        $("#editcadd").click(function () {
-                        $("#caddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#editcaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        });
-                        $("#ccancel").click(function () {
-                        $("#caddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#editcaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        });
-                        $("#cacancel").click(function () {
-                        $("#caddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#createcaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        $("#createcadd").show();
-                        });
-                        $("#btndeletecurrent").click(function () {
-                        bootbox.confirm({
-                        title: "Delete Address?",
-                        message: "Do you want to remove this record?",
-                        buttons: {
-                        confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                        },
-                        cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                        }
-                        },
-                        callback: function (result) {
-                        if (result == true) {
-                        //var url1 = "/People/DeleteCurrentAddress";
-                        $.ajax({
+                    });
+                    }
+            }
+        });
+    });
+    $("#createcadd").click(function () {
+        $("#createcadd").hide();
+        //var h = document.getElementById("createcadd").innerHTML;
+        //document.getElementById("createcadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
+        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
+        $("#caddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#createcaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+    });
+    $("#editcadd").click(function () {
+        $("#caddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#editcaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+    });
+    $("#ccancel").click(function () {
+        $("#caddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#editcaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+    });
+    $("#cacancel").click(function () {
+        $("#caddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#createcaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+        $("#createcadd").show();
+    });
+    $("#btndeletecurrent").click(function () {
+        bootbox.confirm({
+            title: "Delete Address?",
+            message: "Do you want to remove this record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    //var url1 = "/People/DeleteCurrentAddress";
+                    $.ajax({
                         url: '@Url.Action("DeleteCurrentAddress", "People")?cid='+@Model.CurrentAddress.Id,
                         //data: { cid: @Model.CurrentAddress.Id },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
-                        $("#cadd").load(document.URL + ' #cadd');
+                            bootbox.alert({
+                                message: "Record Deleted Successfully!"
+                            });
+                            $("#cadd").load(document.URL + ' #cadd');
 
                         },
-                        });
-                        }
-                        }
-                        });
-                        });
-                        $("#createEadd").click(function () {
-                        $("#createEadd").hide();
-                        //var h = document.getElementById("createEadd").innerHTML;
-                        //document.getElementById("createEadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
-                        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
-                        $("#eaddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#createEaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        });
+                    });
+                    }
+            }
+        });
+    });
+    $("#createEadd").click(function () {
+        $("#createEadd").hide();
+        //var h = document.getElementById("createEadd").innerHTML;
+        //document.getElementById("createEadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
+        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
+        $("#eaddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#createEaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+    });
 
-                        var buttons = document.getElementsByClassName('btn btn-primary waves-effect emergency');
-                        for (var i = 0; i < buttons.length; i++) {
-                        buttons[i].addEventListener("click", function () {
-                        debugger;
-                        var j = $(this).attr('id');
-                        $("#eaddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#editEaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        //var url1 = "/People/EditEmergencyAddress";
-                        $.ajax({
-                        url: '@Url.Action("EditEmergencyAddress", "People")?eid='+j,
-                        type:'get',
-                        //data: { eid: j },
-                        success: function (Data) {
-                        $("#editform").html(Data);
-                        }
-                        });
-                        $("#createEadd").hide();
-                        });
-                        }
-                        $("#ecancel").click(function () {
-                        $("#eaddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#editEaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        $("#createEadd").show();
-                        });
-                        $("#eacancel").click(function () {
-                        $("#eaddtable").slideToggle({
-                        direction: "down"
-                        }, 300);
-                        $("#createEaddpanel").slideToggle({
-                        direction: "up"
-                        }, 300);
-                        $("#createEadd").show();
-                        });
-                        var buttons = document.getElementsByClassName('btn btn btn-danger waves-effect delete');
-                        for (var i = 0; i < buttons.length; i++) {
-                        buttons[i].addEventListener("click", function () {
-                        var j = $(this).attr('id');
-                        bootbox.confirm({
-                        title: "Delete Address?",
-                        message: "Do you want to remove this record?",
-                        buttons: {
-                        confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                        },
-                        cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                        }
-                        },
-                        callback: function (result) {
-                        if (result == true) {
-                        //var url1 = "/People/DeleteEmergencyAddress";
-                        $.ajax({
+    var buttons = document.getElementsByClassName('btn btn-primary waves-effect emergency');
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function () {
+            debugger;
+            var j = $(this).attr('id');
+            $("#eaddtable").slideToggle({
+                direction: "down"
+            }, 300);
+            $("#editEaddpanel").slideToggle({
+                direction: "up"
+            }, 300);
+            //var url1 = "/People/EditEmergencyAddress";
+            $.ajax({
+                url: '@Url.Action("EditEmergencyAddress", "People")?eid='+j,
+                type:'get',
+                //data: { eid: j },
+                success: function (Data) {
+                    $("#editform").html(Data);
+                }
+            });
+            $("#createEadd").hide();
+            });
+        }
+    $("#ecancel").click(function () {
+        $("#eaddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#editEaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+        $("#createEadd").show();
+    });
+    $("#eacancel").click(function () {
+        $("#eaddtable").slideToggle({
+            direction: "down"
+        }, 300);
+        $("#createEaddpanel").slideToggle({
+            direction: "up"
+        }, 300);
+        $("#createEadd").show();
+    });
+    var buttons = document.getElementsByClassName('btn btn btn-danger waves-effect delete');
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function () {
+            var j = $(this).attr('id');
+            bootbox.confirm({
+            title: "Delete Address?",
+            message: "Do you want to remove this record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    //var url1 = "/People/DeleteEmergencyAddress";
+                    $.ajax({
                         url: '@Url.Action("DeleteEmergencyAddress", "People")?eid='+j,
                         //data: { eid: j },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
-                        $("#eadd").load(document.URL + ' #eadd');
+                            bootbox.alert({
+                                message: "Record Deleted Successfully!"
+                            });
+                            $("#eadd").load(document.URL + ' #eadd');
 
                         },
 
-                        });
-                        }
-                        }
-                        });
-                        });
-                        }
-                        $('#btnSubmit').click(function () {
-                        var form = $("#cp");
-                        $.validator.unobtrusive.parse(form);
-                        if (form.valid()) {
-                        var d = form.serialize();
-                        //var url1 = "/People/CreatePermanentAddress?pid="+@Model.Id+"";
-                        $.ajax({
-                        url: '@Url.Action("CreatePermanentAddress", "People")?pid='+@Model.Id+'&data='+d,
-                        type: 'POST',
-                        //data: d,
-                        success: function (data) {
+                    });
+                    }
+            }
+        });
+        });
+    }
+    $('#btnSubmit').click(function () {
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var d = form.serialize();
+                //var url1 = "/People/CreatePermanentAddress?pid="+@Model.Id+"";
+                $.ajax({
+                    url: '@Url.Action("CreatePermanentAddress", "People")?pid='+@Model.Id+'&data='+d,
+                    type: 'POST',
+                    //data: d,
+                    success: function (data) {
                         window.top.location.reload(false);
                         bootbox.alert({
-                        message: "Address Saved Successfully!"
+                            message: "Address Saved Successfully!"
                         });
-                        }
-                        });
-                        }
-                        return false;
-                        });
-                        (function ($) {
-                        // Test for making sure event are maintained
-                        $('.js-alert-test').click(function () {
-                        alert('Button Clicked: Event was maintained');
-                        });
-                        fakewaffle.responsiveTabs(['xs', 'sm']);
-                        })(jQuery);
-                        </script>
-
+                    }
+                });
+            }
+            return false;
+    });
+    (function ($) {
+    // Test for making sure event are maintained
+    $('.js-alert-test').click(function () {
+        alert('Button Clicked: Event was maintained');
+    });
+    fakewaffle.responsiveTabs(['xs', 'sm']);
+    })(jQuery);
+</script>
