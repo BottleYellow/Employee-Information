@@ -1,0 +1,79 @@
+﻿@model IEnumerable<EIS.Entities.Hoildays.Holiday>
+@using EIS.WebApp.Services
+
+<head>
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <style>
+        li:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
+}
+
+
+<title>Holidays</title>
+
+<div class="container-fluid">
+    <div class="block-header">
+        <HeaderWithButton header-name="Holidays"></HeaderWithButton>
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Date
+                                    </th>
+                                    <th>
+                                        Holiday
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Date.ToString("dd/MM/yyyy")
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Vacation)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $('#example').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        });
+    });
+</script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+
