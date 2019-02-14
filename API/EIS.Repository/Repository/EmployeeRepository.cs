@@ -51,8 +51,7 @@ namespace EIS.Repositories.Repository
 
         public Role GetDesignationById(int id)
         {
-            Role entity = _dbContext.Roles.Where(x => x.Id == id).FirstOrDefault();
-            return entity;
+            return _dbContext.Roles.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public IEnumerable<Role> GetDesignations(int TenantId)

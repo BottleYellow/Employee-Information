@@ -3,7 +3,6 @@ using EIS.Entities.Employee;
 using EIS.Entities.Enums;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Utilities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Globalization;
@@ -63,18 +62,11 @@ namespace EIS.WebAPI.Services
             {
                 Directory.CreateDirectory(rootPath + year + "\\" + monthName + "\\");
             }
-
-            var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true).Include(x => x.LeaveRequests)
-                .Select(p => new
-                {
-                    FullName = p.FullName,
-                    EmployeeCode=p.EmployeeCode,
-                    EmailAddress=p.EmailAddress,
-                    Gender= p.Gender,
-                    Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
-                }).ToList();
-            foreach (var p in results)
+            int loc = 0;
+            var employees = _repository.Attendances.GetAttendanceMonthlyReport(month, year,loc);
+            foreach (Person p in employees)
             {
+
                 string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
 
                 if (File.Exists(attendanceReportPath))
@@ -95,20 +87,16 @@ namespace EIS.WebAPI.Services
                     for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                     {
                         newlist.Append(date.ToShortDateString() + "   ");
-                        var attendance = p.Attendances.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                        var attendance = p.Attendance.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
                         if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                         {
-                            if (date.DayOfWeek ==DayOfWeek.Sunday)
+                            if (date < DateTime.Now.Date)
                             {
-                                newlist.Append("WeeklyOff ");
+                                newlist.Append("Absent   ");
+                                newlist.Append("   -      ");
+                                newlist.Append("   -      ");
+                                newlist.Append("   -      ");
                             }
-                            else
-                            {
-                                newlist.Append("Absent   "); 
-                            }
-                            newlist.Append("   -      ");
-                            newlist.Append("   -      ");
-                            newlist.Append("   -      ");
                         }
                         else
                         {
@@ -125,6 +113,7 @@ namespace EIS.WebAPI.Services
                     sw.WriteLine("File created: {0}", DateTime.Now.ToString());
                     sw.WriteLine("Total No of Days:-" + TotalDays);
                     sw.WriteLine("No of Days Present:-" + counter);
+                    sw.WriteLine("No of Days Absent:-" + (TotalDays - counter));
                     sw.WriteLine("For any assistance please contact accounts department");
                     sw.Flush();
                     sw.Close();
@@ -136,6 +125,7 @@ namespace EIS.WebAPI.Services
                     "Monthly report is attached. : \n" +
                     "Your Code Number: " + p.EmployeeCode + "\n" +
                     "User Name: " + p.EmailAddress;
+
                 new EmailManager(_configuration).SendEmail(subject, body, To, attendanceReportPath);
             }
         }

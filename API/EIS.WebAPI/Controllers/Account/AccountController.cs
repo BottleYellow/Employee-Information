@@ -69,8 +69,6 @@ namespace EIS.WebAPI.Controllers
                         Cookies = CookiesData
                     };
                     Personid = pid.ToString();
-                    _repository.Users.Dispose();
-                    _repository.Employee.Dispose();
                     return Ok(pc);
                 }
             }
@@ -91,7 +89,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetLogin([FromRoute] int id)
         {
             Users login = _repository.Users.FindByCondition(x => x.Id == id);
-            _repository.Users.Dispose();
             if (login == null)
             {
                 return NotFound();
@@ -104,7 +101,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult VerifyPasswordForChange([FromRoute]int id,[FromRoute]string password)
         {
             bool result=_repository.Users.VerifyPassword(id, password);
-            _repository.Users.Dispose();
             return Ok(result);
         }
 
@@ -114,7 +110,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult ChangePassword([FromRoute]int id, [FromRoute]string password)
         {
             _repository.Users.ChangePasswordAndSave(id, password);
-            _repository.Users.Dispose();
             return Ok();
         }
 
@@ -127,8 +122,7 @@ namespace EIS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            _repository.Users.DeleteAndSave(login);
-            _repository.Users.Dispose();
+            _repository.Users.DeleteAndSave(login);            
             return Ok(login);
         }
 
@@ -155,7 +149,6 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(_configuration).SendEmail(subject, body, To, null);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);
-            _repository.Users.Dispose();
             return Ok();
         }
 

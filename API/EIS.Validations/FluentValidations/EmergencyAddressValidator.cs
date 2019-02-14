@@ -10,9 +10,9 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.FirstName).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.LastName).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.Address).NotNull();
-            RuleFor(x => x.City).Matches("^[a-zA-Z ]*$");
-            RuleFor(x => x.State).Matches("^[a-zA-Z ]*$");
-            RuleFor(x => x.Country).Matches("^[a-zA-Z ]*$");
+            RuleFor(x => x.City).Matches("^[a-zA-Z ]*$").NotNull();
+            RuleFor(x => x.State).Matches("^[a-zA-Z ]*$").NotNull();
+            RuleFor(x => x.Country).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.PinCode).Matches("^[0-9]*$").NotNull();
             RuleFor(x => x.Relation).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.MobileNumber).Matches("^[0-9]*$").NotNull();

@@ -29,18 +29,7 @@ namespace EIS.Repositories.Repository
 
         public Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId)
         {
-            // List<LeaveRequest> leaveRequests = new List<LeaveRequest>();
-            // List<Person> employees = new List<Person>();
-            // int leaves = location == 0 ? _dbContext.LeaveRequests.Where(x => x.Status == "Pending" && x.TenantId == TenantId).Count() : _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Status == "Pending" && x.TenantId == TenantId &&x.Person.LocationId==location).Count();
-            // int pcount = 0;
-
-            // var results = _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name != "Admin").Include(y => y.Location)
-            //.Select(p => new
-            //{
-            //    p,
-            //    Attendances = p.Attendance.Where(a => a.DateIn.Date == DateTime.Now.Date)
-            //});
-            //usp_GetAdminDashboardDetails
+            
             Admin_Dashboard Model = new Admin_Dashboard();
             Model.sP_AdminDashboardCount = new SP_AdminDashboardCount();
             Model.sP_AdminDashboards = new List<SP_AdminDashboard>();
@@ -102,21 +91,6 @@ namespace EIS.Repositories.Repository
         }
         public Employee_Dashboard GetEmployeeDashboard(int TenantId, int PersonId)
         {
-            //int currentMonth = DateTime.Now.Month;
-            //int currentYear = DateTime.Now.Year;
-            //int TotalDays = DateTime.DaysInMonth(currentYear, currentMonth);
-            //var attendance = _dbContext.Attendances.Where(x => x.PersonId == PersonId && x.DateIn.Month == currentMonth && x.DateIn.Year == currentYear);
-            //var leaves = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId && x.TenantId == TenantId && x.Status == "Approved").Sum(x => x.RequestedDays);
-            //var availableLeaves = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId).Sum(x => x.Available);
-
-            //EmployeeDashboard dashboard = new EmployeeDashboard
-            //{
-            //    MonthlyPresentDays = attendance.Count(),
-            //    MonthlyAbsentDays = TotalDays - attendance.Count(),
-            //    TotalLeavesAvailable = Convert.ToInt32(availableLeaves),
-            //    TotalLeavesTaken = Convert.ToInt32(leaves)
-            //};
-            //return dashboard;
             Employee_Dashboard Model = new Employee_Dashboard();
             Model.SP_EmployeeDashboardCount = new SP_EmployeeDashboardCount();
             Model.SP_EmployeeDashboards = new List<SP_EmployeeDashboard>();

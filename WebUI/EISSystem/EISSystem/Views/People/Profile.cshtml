@@ -507,9 +507,12 @@
                         url: '@Url.Action("DeletePermanentAddress", "People")?perid='+@Model.PermanentAddress.Id,
                         //data: { perid: @Model.PermanentAddress.Id },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
+                            bootbox.alert(
+                                "Record Deleted Successfully!",
+                                function () {
+                                    window.location.reload();
+                                }
+                            );
                         $("#padd").load(document.URL + ' #padd');
 
                         },
@@ -577,9 +580,12 @@
                         url: '@Url.Action("DeleteCurrentAddress", "People")?cid='+@Model.CurrentAddress.Id,
                         //data: { cid: @Model.CurrentAddress.Id },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
+                            bootbox.alert(
+                                "Record Deleted Successfully!",
+                                function () {
+                                    window.location.reload();
+                                }
+                            );
                         $("#cadd").load(document.URL + ' #cadd');
 
                         },
@@ -666,9 +672,13 @@
                         url: '@Url.Action("DeleteEmergencyAddress", "People")?eid='+j,
                         //data: { eid: j },
                         success: function (Data) {
-                        bootbox.alert({
-                        message: "Record Deleted Successfully!"
-                        });
+                            bootbox.alert(
+                                "Record Deleted Successfully!",
+                                function() {
+                                    window.location.reload();
+                                }
+                            );
+                           
                         $("#eadd").load(document.URL + ' #eadd');
 
                         },

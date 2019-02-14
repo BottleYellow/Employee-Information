@@ -54,4 +54,22 @@ namespace EIS.Entities.SP
         public string Reason { get; set; }
         public string Status { get; set; }
     }
+
+    public class SP_GetAttendanceCountReport
+    {
+        [Key]
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<int> PresentDays { get; set; }
+        public Nullable<int> WorkingDay { get; set; }
+        public Nullable<int> NoLeave { get; set; }
+    }
+    public class Attendance_Report
+    {
+        public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
+    }
+
+
+
 }

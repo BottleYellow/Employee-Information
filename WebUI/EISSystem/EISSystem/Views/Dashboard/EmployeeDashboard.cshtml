@@ -157,28 +157,22 @@
                     document.getElementById("TotalLeavesTaken").innerHTML = data.SP_EmployeeDashboardCount.TotalLeavesTaken;
                     document.getElementById("AvailableLeaves").innerHTML = data.SP_EmployeeDashboardCount.AvailableLeaves;
                     getData(data.SP_EmployeeDashboards);
-
                 }
             }
-          
+
         });
     }
-
     function getData(Employees) {
-
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
                 var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
                 var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
                 var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
                 array.push([moment(Employees[i].DateIn).format("DD MMM YYYY") , TimeIn, TimeOut, TotalHours, Employees[i].Status])
-
         }
         $('#myTable').DataTable().destroy();
          $('#myTable').DataTable({
              data: array
         });
     }
-
-
 </script>

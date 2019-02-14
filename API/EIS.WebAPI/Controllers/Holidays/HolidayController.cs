@@ -44,16 +44,13 @@ namespace EIS.WebAPI.Controllers.Holidays
                 string search = sortGrid.Search.ToLower();
                 data = _repository.Holidays.GetDataByGridCondition(x => x.Location.LocationName.ToLower().Contains(search) || x.Vacation.ToLower().Contains(search), sortGrid, holidays);
             }
-            _repository.Holidays.Dispose();
             return Ok(data);
 
         }
         [HttpGet]
         public IEnumerable<Holiday> GetHolidays()
         {
-            IEnumerable<Holiday> data= _repository.Holidays.FindAll().Include(x => x.Location);
-            _repository.Holidays.Dispose();
-            return data;
+            return _repository.Holidays.FindAll().Include(x=>x.Location);
         }
         [HttpPost]
         public IActionResult Create([FromBody]Holiday holiday)
@@ -64,7 +61,6 @@ namespace EIS.WebAPI.Controllers.Holidays
             }
             holiday.TenantId = TenantId;
             _repository.Holidays.CreateAndSave(holiday);
-            _repository.Holidays.Dispose();
             return Ok(holiday);
         }
 
@@ -72,21 +68,18 @@ namespace EIS.WebAPI.Controllers.Holidays
         public IEnumerable<Holiday> GetHoliday([FromRoute] string date, [FromRoute] int loc)
         {
             var holiday = _repository.Holidays.GetHolidayByYear(date, loc);
-            _repository.Holidays.Dispose();
             return holiday;
         }
         [HttpGet("{month}/{year}/{loc}")]
         public IEnumerable<Holiday> GetHoliday([FromRoute] string month,[FromRoute] string year, [FromRoute] int loc)
         {
             var holiday = _repository.Holidays.GetHolidayByMonth(month,year, loc);
-            _repository.Holidays.Dispose();
             return holiday;
         }
         [HttpGet("{firstDate}/{lastDate}/{v}/{location}")]
         public IEnumerable<Holiday> GetHoliday([FromRoute] string firstDate, [FromRoute] string lastDate, [FromRoute] string v, [FromRoute] int location)
         {
             var holiday = _repository.Holidays.GetHolidayByWeek(firstDate, lastDate, location);
-            _repository.Holidays.Dispose();
             return holiday;
         }
     }

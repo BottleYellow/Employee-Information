@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using EIS.Entities.Employee;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -39,8 +40,8 @@ namespace EIS.WebApp.Controllers
             string url = GetAllAttendanceData(date, type, location);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<AttendanceData> attendanceData = JsonConvert.DeserializeObject<List<AttendanceData>>(stringData);
-           return Json(attendanceData);
+            Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
+            return Json(attendanceData);
         }
         #endregion
 
@@ -57,7 +58,7 @@ namespace EIS.WebApp.Controllers
             //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
-            return LoadData<Attendance>(url,null,1);
+            return LoadData<Attendance>(url, null, 1);
 
         }
         [AllowAnonymous]
@@ -67,7 +68,7 @@ namespace EIS.WebApp.Controllers
             //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int id = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceSummaryData(date, type, id);
-            HttpResponseMessage response = _service.GetResponse(url );
+            HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             AttendanceReport attendanceReport = new AttendanceReport();
             attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
@@ -80,15 +81,15 @@ namespace EIS.WebApp.Controllers
         [HttpGet]
         public IActionResult AttendanceSummary(int loc)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee" );
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=GetSession().EmployeeCode)
-                            select new Person
-                            {
-                                Id = e.Id,
-                                FirstName = e.FirstName + " " + e.LastName
-                            };
+            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
+                                            select new Person
+                                            {
+                                                Id = e.Id,
+                                                FirstName = e.FirstName + " " + e.LastName
+                                            };
             ViewBag.Persons = employees;
             ViewBag.Locations = GetLocations();
             return View(employees);
@@ -122,7 +123,7 @@ namespace EIS.WebApp.Controllers
         public JsonResult AttendanceSummaryById(string date, string type, int? id)
         {
             string url = GetAttendanceSummaryData(date, type, id);
-            HttpResponseMessage response = _service.GetResponse(url );
+            HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             AttendanceReport attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
             return Json(attendanceReport);
@@ -141,10 +142,10 @@ namespace EIS.WebApp.Controllers
                 HttpClient client = _service.GetService();
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl+"api/attendances/" + id + "", attendance).Result;
+                HttpResponseMessage response = client.PostAsJsonAsync(ApiUrl + "api/attendances/" + id + "", attendance).Result;
                 ViewBag.statusCode = Convert.ToInt32(response.StatusCode);
             }
-            return RedirectToAction("Profile","People",new { PersonId = GetSession().EmployeeCode });
+            return RedirectToAction("Profile", "People", new { PersonId = GetSession().EmployeeCode });
         }
 
         [HttpPost]
@@ -157,7 +158,7 @@ namespace EIS.WebApp.Controllers
                 HttpClient client = _service.GetService();
                 string stringData = JsonConvert.SerializeObject(attendance);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PutAsJsonAsync(ApiUrl+"/api/attendances/" + id + "", attendance).Result;
+                HttpResponseMessage response = client.PutAsJsonAsync(ApiUrl + "/api/attendances/" + id + "", attendance).Result;
                 string result = response.Content.ReadAsStringAsync().Result;
                 Attendance attendances = JsonConvert.DeserializeObject<Attendance>(result);
                 ViewBag.TotalHrs = attendances.TotalHours;
@@ -213,7 +214,7 @@ namespace EIS.WebApp.Controllers
 
             }
             else if (type == "week")
-            {      
+            {
                 if (!string.IsNullOrEmpty(week[0]) && !string.IsNullOrEmpty(week[1]))
                 {
                     DateTime startDate = Convert.ToDateTime(week[0]);
@@ -224,7 +225,7 @@ namespace EIS.WebApp.Controllers
             return url;
         }
         [NonAction]
-        public string GetAllAttendanceData(string date, string type,int location)
+        public string GetAllAttendanceData(string date, string type, int location)
         {
             string url = "";
             string[] monthYear = new string[3];
@@ -250,17 +251,17 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceYearly/" + monthYear[0]+"/"+ location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Year/" + monthYear[0] + "/0/" + location;
             }
             else if (type == "week")
             {
                 DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceWeekly/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location;
             }
             else
             {
-                url = ApiUrl+"/api/Attendances/GetAllAttendanceMonthly/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/"+ monthYear[0] + "/" + monthYear[1] + "/" + location;
             }
             return url;
         }
@@ -281,20 +282,20 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl+"/api/Attendances/GetYearlyAttendanceById/" + pId + "/" + monthYear[0];
+                url = ApiUrl + "/api/Attendances/GetYearlyAttendanceById/" + pId + "/" + monthYear[0];
             }
             else if (type == "month")
             {
-                url = ApiUrl+"/api/Attendances/GetMonthlyAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
+                url = ApiUrl + "/api/Attendances/GetMonthlyAttendanceById/" + pId + "/" + monthYear[1] + "/" + monthYear[0];
 
             }
             else if (type == "week")
-            {           
+            {
 
                 DateTime startDate = week[0] == null ? new DateTime(2018, 12, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
                 ViewBag.startDate = startDate;
-                url = ApiUrl+"/api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
+                url = ApiUrl + "/api/Attendances/GetWeeklyAttendanceById/" + pId + "/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy");
             }
             return url;
         }
@@ -307,20 +308,20 @@ namespace EIS.WebApp.Controllers
         {
             int id = Convert.ToInt32(GetSession().PersonId);
             //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
             IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x=>x.EmployeeCode!=GetSession().EmployeeCode)
-                            select new Person
-                            {
-                                EmployeeCode = e.EmployeeCode,
-                                FirstName = e.FirstName + " " + e.LastName
-                            };
+            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
+                                            select new Person
+                                            {
+                                                EmployeeCode = e.EmployeeCode,
+                                                FirstName = e.FirstName + " " + e.LastName
+                                            };
             ViewBag.Persons = employees;
             ViewBag.Locations = GetLocations();
             return View(employees);
         }
-        
+
         [ActionName("DateWiseAttendance")]
         [HttpPost]
         public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id) 

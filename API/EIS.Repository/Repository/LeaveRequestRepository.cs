@@ -30,7 +30,23 @@ namespace EIS.Repositories.Repository
                           select Requests;
             return results;
         }
+        public string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate)
+        {
+            string result = "success";
+            IQueryable<LeaveRequest> requests = _dbContext.LeaveRequests.Where(x => ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+            LeaveRequest request = null;
+            if (requests != null && requests.Count() > 0)
+            {
+                result = "Leaves are already scheduled on requested dates";
+                request = requests.Where(x => x.Status == "Cancelled").FirstOrDefault();
+                if (request != null)
+                {
+                    result = "success";
+                }
+            }
 
+            return result;
+        }
         public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId,int? LocationId)
         {
             IQueryable<PastLeaves> result = null;
