@@ -285,7 +285,14 @@ namespace EIS.WebAPI.Controllers
             //SendMail(leave.Id, "Pending");
             return Ok();
         }
-
+        [AllowAnonymous]
+        [Route("CheckDates/{PersonId}/{FromDate}/{ToDate}")]
+        [HttpGet]
+        public IActionResult CheckForScheduledLeave([FromRoute]int PersonId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
+        {
+            var result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+            return Ok(result);
+        }
         public void SendMail(string To,string leavetype,DateTime fromdate, DateTime todate,string name)
         {
             string to = To;

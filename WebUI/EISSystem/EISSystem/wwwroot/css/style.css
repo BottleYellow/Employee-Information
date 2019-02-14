@@ -10128,7 +10128,7 @@ fieldset[disabled] .form-control {
 }
 
     .sidebar .legal {
-        position: absolute;
+        /*position: absolute;*/
         bottom: 0;
         width: 100%;
         border-top: 1px solid #eee;

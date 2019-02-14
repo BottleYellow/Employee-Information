@@ -215,7 +215,7 @@ namespace EIS.Repositories.Repository
                     TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
                     DateTime avgHour = DateTime.Today.Add(averageHour);
                     attendanceReport.AverageTime = avgHour.ToString("HH:mm");
-                    if (avgHour > new DateTime(2000, 1, 1, 9, 0, 0))
+                    if (averageHour > new TimeSpan(9, 0, 0))
                     {
                         TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
                         TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
