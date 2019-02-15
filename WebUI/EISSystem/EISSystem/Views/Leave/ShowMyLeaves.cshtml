@@ -89,30 +89,14 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Leave Type
-                                        </th>
-                                        <th>
-                                            From Date
-                                        </th>
-                                        <th>
-                                            To Date
-                                        </th>
-                                        <th>
-                                            Days
-                                        </th>
-                                        <th>
-                                            Available
-                                        </th>
-                                        <th>
-                                            Status
-                                        </th>
-                                        <th>
-                                            Leave Reason
-                                        </th>
-                                        <th>
-                                            Actions
-                                        </th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Available</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -151,16 +135,6 @@
                     pageSize: 'LEGAL'
                 }
             ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
                 [10, 25, -1],
@@ -174,34 +148,34 @@
             },
             "columns": [
                 {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+                    "data": "LeaveType", "name": "LeaveType", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "FromDate", "autoWidth": true, render: function (data) {
+                    "data": "FromDate",   "name": "FromDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ToDate", "autoWidth": true, render: function (data) {
+                    "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "RequestedDays", "autoWidth": true, render: function (data) {
+                    "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Available", "autoWidth": true, render: function (data) {
+                    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Status", "autoWidth": true, render: function (data) {
+                    "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
                         } else if (data == "Rejected") {
@@ -212,7 +186,7 @@
                     }
                 },
                 {
-                    "data": "Reason", "autoWidth": true, render: function (data) {
+                    "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
@@ -227,16 +201,7 @@
 
                     }
                 }
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+            ]
         });
         $("#btnModal").click(function () {
             var url = $("#modal-placeholder").data('url');

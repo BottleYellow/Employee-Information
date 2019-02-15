@@ -104,14 +104,7 @@
                     'searchable': false,
                     'targets': [0, 1, 2]
                 }
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": [1], "bSortable": true },
-                { "aTargets": [2], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
-          
+            ],          
             lengthMenu: [
                 [10, 25, -1],
                 ['10', '25', 'All']
@@ -124,32 +117,23 @@
             },
             "columns": [
                 {
-                    "data": "LocationId", "autoWidth": true, render: function (data, type, row) {
+                    "data": "Location.LocationName","data": "Location.LocationName", "autoWidth": true, render: function (data, type, row) {
                         return row.Location.LocationName;
                     }
                 },
                 {
-                    "data": "Date", "autoWidth": true, render: function (data) {
+                    "data": "Date", "name": "Date" ,"autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "Vacation", "autoWidth": true, render: function (data) {
+                    "data": "Vacation", "name": "Vacation", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 }
 
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+            ]
         });
     }
     $("#btnModal").click(function () {

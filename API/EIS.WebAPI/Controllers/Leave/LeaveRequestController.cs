@@ -108,7 +108,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x=>x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
+                data = _repository.LeaveRequest.GetDataByGridCondition(x=>x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower())||x.Status.Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
             }
             return Ok(data);
 

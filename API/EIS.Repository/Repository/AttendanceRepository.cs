@@ -246,9 +246,9 @@ namespace EIS.Repositories.Repository
                         else
                         {
                             attendance.TimeIn = attendancedata.TimeIn.ToString();
-                            attendance.TimeOut = attendancedata.TimeOut == null ? new TimeSpan().ToString() : attendancedata.TimeOut.ToString();
+                            attendance.TimeOut = attendancedata.TimeOut == null ? "-" : attendancedata.TimeOut.ToString();
                             attendance.Status = "Present";
-                            attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
+                            attendance.TotalHours = attendancedata.TotalHours == null ? "-" : attendancedata.TotalHours.ToString();
                         }
                         attendances.Add(attendance);
                     }
@@ -283,9 +283,9 @@ namespace EIS.Repositories.Repository
                     else
                     {
                         attendance.TimeIn = attendancedata.TimeIn.ToString();
-                        attendance.TimeOut = attendancedata.TimeOut == null ? new TimeSpan().ToString() : attendancedata.TimeOut.ToString();
+                        attendance.TimeOut = attendancedata.TimeOut == null ? "-" : attendancedata.TimeOut.ToString();
                         attendance.Status = "Present";
-                        attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
+                        attendance.TotalHours = attendancedata.TotalHours == null ? "-" : attendancedata.TotalHours.ToString();
                     }
                     attendances.Add(attendance);
 
