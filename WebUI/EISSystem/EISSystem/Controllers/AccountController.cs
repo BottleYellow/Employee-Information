@@ -48,6 +48,8 @@ namespace EIS.WebApp.Controllers
                 HttpContext.Session.SetString("IdCard", CookiesData.Person.EmployeeCode);
                 HttpContext.Session.SetString("Name", CookiesData.Person.FirstName + " " + CookiesData.Person.LastName);
                 HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
+                //@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image
+                HttpContext.Session.SetString("ImagePath", "EmployeeData/" + CookiesData.Person.TenantId + CookiesData.Person.EmployeeCode + "/Image/" + CookiesData.Person.Image);
                 string role = CookiesData.Cookies.Role;
                 //Person person = JsonConvert.DeserializeObject<Person>(stringData);
                 //Task<string> tokenResult = response.Content.ReadAsAsync<string>();

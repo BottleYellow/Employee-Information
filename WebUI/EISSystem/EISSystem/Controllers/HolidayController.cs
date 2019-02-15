@@ -38,15 +38,14 @@ namespace EIS.WebApp.Controllers
         {
             return LoadData<Holiday>(ApiUrl + "/api/Holiday/GetHolidays", null, id);
         }
-        //[DisplayName("List of Holidays")]
-        //public IActionResult Index()
-        //{
-        //    ViewBag.Locations = GetLocations();
-        //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Holiday");
-        //    string stringData = response.Content.ReadAsStringAsync().Result;
-        //    List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
-        //    return View(data);
-        //}
+        [DisplayName("Show Holidays")]
+        public IActionResult EmployeeHolidays()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Holiday/"+GetSession().PersonId);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<Holiday> data = JsonConvert.DeserializeObject<List<Holiday>>(stringData);
+            return View(data);
+        }
         [DisplayName("Add Holiday")]
         public IActionResult AddHoliday()
         {

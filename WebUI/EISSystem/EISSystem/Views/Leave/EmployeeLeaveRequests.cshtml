@@ -57,37 +57,18 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Location
-                                        </th>
-                                        <th>
-                                            Employee Name
-                                        </th>
+                                        <th>Actions</th>
+                                        <th>Location</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Available</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
 
-                                        <th>
-                                            Leave Type
-                                        </th>
-                                        <th>
-                                            From Date
-                                        </th>
-                                        <th>
-                                            To Date
-                                        </th>
-                                        <th>
-                                            Days
-                                        </th>
-                                        <th>
-                                            Available
-                                        </th>
-                                        <th>
-                                            Status
-                                        </th>
-                                        <th>
-                                            Leave Reason
-                                        </th>
-                                        <th>
-                                            Actions
-                                        </th>
                                     </tr>
                                 </thead>
                             </table>
@@ -129,15 +110,10 @@
                     titleAttr: 'Export to Pdf'
                 }
             ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
             "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
                 { "aTargets": [1], "bSortable": true },
+                { "aTargets": [2], "bSortable": true },
+                { "aTargets": [8], "bSortable": true },
                 { "aTargets": ['_all'], "bSortable": false }
             ],
             sDom: '<"myexport"B>ifrtlp',
@@ -152,6 +128,22 @@
                 "datatype": "json"
             },
             "columns": [
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        if (row.Status == "Pending") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
+                        }
+                        else if (row.Status == "Approved") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
+                        }
+                        else if (row.Status == "Requested For Cancel") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+                        }
+                        else {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
+                        }
+                    }
+                },
                 {
                     "data": "EmployeeName", "autoWidth": true, render: function (data, type, row) {
                         return row.Person.Location.LocationName;
@@ -190,6 +182,12 @@
                     }
                 },
                 {
+                    "data": "AppliedDate", "autoWidth": true, render: function (data) {
+                        data = moment(data).format("DD MMM YYYY");
+                        return data;
+                    }
+                },
+                {
                     "data": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Approved") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
@@ -204,23 +202,7 @@
                     "data": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Pending") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
-                        }
-                        else if (row.Status == "Approved") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject\')">Reject</a></li></ul></div>';
-                        }
-                        else if (row.Status == "Requested For Cancel") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-                        }
-                        else {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
-                        }
-                    }
-                }
+                }              
             ],
             "initComplete": function () {
                 var $searchInput = $('div.dataTables_filter input');

@@ -35,29 +35,13 @@
                         <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
                             <thead>
                                 <tr>
-                                    <th>
-                                        Location
-                                    </th>
-                                    <th>
-                                        Employee Name
-                                    </th>
-
-                                    <th>
-                                        Leave Type
-                                    </th>
-                                    <th>
-                                        Valid From
-                                    </th>
-                                    <th>
-                                        Valid To
-                                    </th>
-                                    <th>
-                                        Days
-                                    </th>
-                                    <th>
-                                        Available
-                                    </th>
-
+                                    <th>Location</th>
+                                    <th>Employee Name</th>
+                                    <th>Leave Type</th>
+                                    <th>Valid From</th>
+                                    <th>Valid To</th>
+                                    <th>Days</th>
+                                    <th>Available</th>
                                 </tr>
                             </thead>
                         </table>
@@ -105,10 +89,7 @@
                     'targets': [0, 1, 2]
                 }
             ],
-            "aoColumnDefs": [
-                { "aTargets": [1], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
+
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
                 [10, 25, -1],
@@ -122,52 +103,43 @@
             },
             "columns": [
                 {
-                    "data": null, "autoWidth": true, render: function (row) {
+                    "data": null,"name":"Person.Location.LocationName", "autoWidth": true, render: function (row) {
                         return row.Person.Location.LocationName;
                     }
                 },
                 {
-                    "data": null, "autoWidth": true, render: function (row) {
+                    "data": null,"name":"Person.FullName", "autoWidth": true, render: function (row) {
                         return row.Person.FullName;
                     }
                 },
                 {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+                    "data": "LeaveType","name":"LeaveType", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "ValidFrom", "autoWidth": true, render: function (data) {
+                    "data": "ValidFrom","name":"ValidFrom", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ValidTo", "autoWidth": true, render: function (data) {
+                    "data": "ValidTo","name":"ValidTo", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "AllotedDays", "autoWidth": true, render: function (data) {
+                    "data": "AllotedDays","name":"AllotedDays" ,"autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Available", "autoWidth": true, render: function (data) {
+                    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 }
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+            ]
         });
     }
     $("#btnModal").click(function () {

@@ -212,17 +212,59 @@ namespace EIS.Repositories.Repository
             return attendanceReport;
         }
 
-        public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData)
+        public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData,string id,int? loc)
         {
-            
             List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
-            if (attendanceData != null && attendanceData.Count() > 0)
+            if (id == "0")
             {
                 for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                 {
+
+                    List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
+                    foreach (var person in Emps)  
+                    {
+                        AttendanceReportByDate attendance = new AttendanceReportByDate();
+                        attendance.Date = date.ToShortDateString();
+                        attendance.EmployeeCode = person.EmployeeCode;
+                        attendance.EmployeeName = person.FullName;
+                        var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                        if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
+                        {
+                            if (date.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                attendance.Status = "Weekly Off";
+                            }
+                            else
+                            {
+                                attendance.Status = "-";
+                            }
+                            attendance.TimeIn = "-";
+                            attendance.TimeOut = "-";
+
+                            attendance.TotalHours = "-";
+                        }
+                        else
+                        {
+                            attendance.TimeIn = attendancedata.TimeIn.ToString();
+                            attendance.TimeOut = attendancedata.TimeOut == null ? new TimeSpan().ToString() : attendancedata.TimeOut.ToString();
+                            attendance.Status = "Present";
+                            attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
+                        }
+                        attendances.Add(attendance);
+                    }
+                }
+            }
+            else
+            {
+                Person person = _dbContext.Person.Where(x => x.EmployeeCode == id).FirstOrDefault();
+                for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                {
                     AttendanceReportByDate attendance = new AttendanceReportByDate();
+
                     attendance.Date = date.ToShortDateString();
-                    var attendancedata = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                    attendance.EmployeeCode = person.EmployeeCode;
+                    attendance.EmployeeName = person.FullName;
+                    var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
                     if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
                     {
                         if (date.DayOfWeek == DayOfWeek.Sunday)
@@ -246,8 +288,10 @@ namespace EIS.Repositories.Repository
                         attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
                     }
                     attendances.Add(attendance);
+
                 }
             }
+           
             return attendances;
         }
 
