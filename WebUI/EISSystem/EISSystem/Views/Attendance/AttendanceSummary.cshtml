@@ -49,6 +49,19 @@
     #inputyear, #inputmonth, #inputweek {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+        .ajax-loader img {
+            position: relative;
+            top: 45%;
+            left: 45%;
+        }
 </style>
 <head>
     <title>Employee wise Reports</title>
@@ -63,6 +76,9 @@
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Attendance Report(Employee wise)"></HeaderWithButton>
@@ -260,8 +276,14 @@
         //generateReport(m + '/' + y, 'month', id);
         $("#generateReport").prop("disabled", true);
 
-        $('#selectEmployee').on('change', function () {
-            $("#generateReport").removeAttr('disabled');
+        $('#selectEmployee').on('change', function () { 
+            if ($('#selectEmployee').val() == 0) {
+                $("#generateReport").prop("disabled", true);
+            }
+            else {
+                $("#generateReport").removeAttr('disabled');
+            };
+            
         });
 
         $('#locations').on('change', function () {
@@ -374,6 +396,9 @@
                 type: 'POST',
                 url: '@Url.Action("AttendanceSummaryById", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
                 //data: { "date": value, "type": type, "id": id },
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageTime;
                     document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
@@ -386,6 +411,9 @@
                 },
                 error: function (error) {
                     bootbox.alert('<h4>Error</h4>');
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
                 }
             });
 

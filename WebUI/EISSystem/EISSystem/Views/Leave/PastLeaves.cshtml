@@ -37,9 +37,25 @@
         a {
             cursor: pointer;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
     </style>
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPastLeave")"></div>
     <div class="container-fluid">
         <div class="block-header">
@@ -152,7 +168,13 @@
                 //"url": "/Leave/PastLeaves",
                 "url": '@Url.Action("PastLeaves", "Leave")?LocationId=' + c,
                 "type": "POST",
-                "datatype": "json"
+                "datatype": "json",
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
             },
             "columns": [
                 {

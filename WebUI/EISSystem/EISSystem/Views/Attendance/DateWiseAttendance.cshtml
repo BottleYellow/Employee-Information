@@ -43,9 +43,25 @@
             font-size: medium;
             text-align: center
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
     </style>
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Datewise Attendance"></HeaderWithButton>
@@ -184,6 +200,9 @@
                 "url": '@Url.Action("DateWiseAttendance", "Attendance")?fromdate=' + fromValue + '&todate=' + toValue + '&id=' + id + '&LocationId=' + loc,
                 "type": "POST",
                 "datatype": "json",
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
                 success: function (data) {
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
@@ -194,7 +213,9 @@
                         data: array
                     });
                 },
-
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
             });
         }      
     });

@@ -39,13 +39,29 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
     </style>
 </head>
 
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
-            @if (cookies.Role== "Admin")
+            @if (cookies.Role == "Admin")
             {
                 <HeaderWithButton header-name="My Leave Requests"></HeaderWithButton>
             }
@@ -116,7 +132,13 @@
                 //"url": "/Leave/ShowMyLeaves",
                 "url":'@Url.Action("ShowMyLeaves", "Leave")',
                 "type": "POST",
-                "datatype": "json"
+                "datatype": "json",
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
             },
             "columns": [
                 {

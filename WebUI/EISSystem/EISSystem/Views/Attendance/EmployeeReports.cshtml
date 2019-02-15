@@ -34,6 +34,19 @@
     #inputyear, #inputmonth, #inputweek {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+        .ajax-loader img {
+            position: relative;
+            top: 70%;
+            left: 40%;
+        }
 </style>
 <head>
     <title>Attendance History</title>
@@ -46,6 +59,9 @@
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="My Attendance History"></HeaderWithButton>
@@ -308,8 +324,10 @@
                 type: 'POST',
                 url: '@Url.Action("EmployeeReports","Attendance")?date=' + value + '&type=' + type,
                 datatype: 'JSON',
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
                 success: function (data) {
-                    debugger;
                     var array = [];
                     for (var i = 0; i < data.length; i++)
                     {
@@ -319,6 +337,9 @@
                     $('#example').DataTable({
                         data: array
                     });
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
                 }
             });       
         }

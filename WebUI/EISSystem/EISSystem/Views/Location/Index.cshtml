@@ -12,6 +12,19 @@
         li:hover {
             cursor: pointer;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
     </style>
 </head>
 
@@ -35,7 +48,9 @@
 <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddLocation")"></div>
 <div id="modal-placeholder-edit" class="modal fade" role="dialog" data-url="@Url.Action("EditLocation")"></div>
 @*BootStrap Model*@
-
+<div class="ajax-loader">
+    <img src="~/gif/Spinner.gif" />
+</div>
 <div class="container-fluid">
     <div class="block-header">
         <HeaderWithButton btn-id="btnModal" header-name="Locations" btn-text="Add Location" icon-name="add"></HeaderWithButton>
@@ -174,8 +189,13 @@
             ajax: {
                 "url": '@Url.Action("Index", "Location")?type='+b,
                 "type": "POST",
-                "datatype": "json"//,
-                //"data": { "type": b }
+                "datatype": "json",
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
             },
             "columns": [
                 {

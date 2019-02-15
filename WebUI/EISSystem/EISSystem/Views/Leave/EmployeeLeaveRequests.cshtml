@@ -33,9 +33,25 @@
         a {
             cursor: pointer;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
     </style>
 </head>
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Leave Request"></HeaderWithButton>
@@ -125,7 +141,13 @@
                 //"url": "/Leave/EmployeeLeaveRequests",
                 "url": '@Url.Action("EmployeeLeaveRequests", "Leave")?LocationId=' + location,
                 "type": "POST",
-                "datatype": "json"
+                "datatype": "json",
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
             },
             "columns": [
                 {
