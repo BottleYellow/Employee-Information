@@ -58,7 +58,10 @@ namespace EIS.WebApp.Controllers
             //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
-            return LoadData<Attendance>(url, null, 1);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<AttendanceReportByDate> attendances = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
+            return Json(attendances);
 
         }
         [AllowAnonymous]
