@@ -66,7 +66,7 @@
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
                                         <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FirstName"))">
-                                            <option>-- Select --</option>
+                                            <option value="0">All</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -133,7 +133,7 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#generateReport').prop('disabled', true);
+        //$('#generateReport').prop('disabled', true);
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         $("#fromdate").datetimepicker({
             format: "MMM/DD/YYYY"
@@ -148,7 +148,7 @@
                 type: 'GET',
                 url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
                 success: function (data) {
-                    $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     $.each(data, function (data, value) {
                         $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
@@ -160,34 +160,34 @@
             });
         });
 
-        $('#selectEmployee').on('change', function () {
-            if ($(this).children("option:selected").text() == "-- Select --") {
-                $('#generateReport').prop('disabled', true);
-            } else {
-                $('#generateReport').removeAttr('disabled');
-            }
+        //$('#selectEmployee').on('change', function () {
+        //    if ($(this).children("option:selected").text() == "-- Select --") {
+        //        $('#generateReport').prop('disabled', true);
+        //    } else {
+        //        $('#generateReport').removeAttr('disabled');
+        //    }
 
-        })
+        //})
 
         $('#generateReport').on('click', function () {
+            var loc = $('#locations').val();
             var id = $('#selectEmployee').val();
             var empName = $('#selectEmployee').children("option:selected").text();
             //var empName = $('#selectEmployee').text();
-        var fromValue = $("#fromdate").val();
-        var toValue = $("#todate").val();
-            generateReport(fromValue, toValue, id,empName);
-            });
+            var fromValue = $("#fromdate").val();
+            var toValue = $("#todate").val();
+            generateReport(fromValue, toValue, id, loc);
+        });
 
-        function generateReport(fromValue, toValue, id, empName) {
-              $.ajax({
-                   "url": '@Url.Action("DateWiseAttendance", "Attendance")?fromdate=' + fromValue + '&todate=' + toValue + '&id='+id,
-                    "type": "POST",
-                    "datatype": "json",
+        function generateReport(fromValue, toValue, id, loc) {
+            $.ajax({
+                "url": '@Url.Action("DateWiseAttendance", "Attendance")?fromdate=' + fromValue + '&todate=' + toValue + '&id=' + id + '&LocationId=' + loc,
+                "type": "POST",
+                "datatype": "json",
                 success: function (data) {
-                    debugger;
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
-                        array.push([id, empName, data[i].Date, data[i].Status,data[i].TotalHours])
+                        array.push([data[i].EmployeeCode, data[i].EmployeeName, data[i].Date, data[i].Status, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
