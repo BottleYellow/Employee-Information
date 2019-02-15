@@ -261,7 +261,7 @@
     });
 
 
-    function generateReport(buttonSelected, location) {    
+    function generateReport(buttonSelected, location) {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("AdminDashboard","Dashboard")',
@@ -292,7 +292,7 @@
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-          
+
                 var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
                 var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
@@ -301,7 +301,7 @@
             } else
             {
                 KondhwaAttendanceArray.push([Employees[i].EmployeeName, Employees[i].Status, TimeIn, TimeOut, TotalHours])
-            }                
+            }
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({

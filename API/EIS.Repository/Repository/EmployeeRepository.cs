@@ -59,6 +59,17 @@ namespace EIS.Repositories.Repository
             return _dbContext.Roles.AsNoTracking().Where(x => x.TenantId == TenantId);
         }
 
+        public string GetEmployeeCode(int PersonId)
+        {
+            string code = null;
+            Person emp = _dbContext.Person.Where(x => x.Id == PersonId).FirstOrDefault();
+            if (emp != null)
+            {
+                code = emp.EmployeeCode;
+            }
+            return code;
+        }
+
         public Person GetProfile(string EmployeeCode)
         {
             return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();

@@ -8,10 +8,11 @@
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
 
-    string idcard = null, name = null, email = null;
+    string idcard = null, name = null, email = null,imagepath=null;
     idcard=Context.Session.GetString("IdCard");
     name= Context.Session.GetString("Name");
     email= Context.Session.GetString("EmailId");
+    imagepath= Context.Session.GetString("ImagePath");
 
     string cookiesdata = Context.Session.GetString("CookieData");
 
@@ -120,7 +121,8 @@
             <div class="user-info" style="background: url('@MyHttpContext.AppBaseUrl/images/emp-img-background.jpg') no-repeat no-repeat;">
                 <div style="height:2px;"></div>
                 <div class="image">
-                    <img src="~/images/user.png" alt="User" />
+                    @*<img src="~/images/user.png" alt="User" />*@
+                    <img src="@MyHttpContext.AppBaseUrl/@imagepath" style="height:50px; width:50px;" alt="User" />
                 </div>
                 <div class="info-container">
                     <div class="idno">@idcard</div>

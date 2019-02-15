@@ -17,5 +17,6 @@ namespace EIS.Repositories.IRepository
         void UpdateDesignationAndSave(Role designation);
         Person GetProfile(string EmployeeCode);
         Person ActivatePerson(string EmployeeCode);
+        string GetEmployeeCode(int PersonId);
     }
 }

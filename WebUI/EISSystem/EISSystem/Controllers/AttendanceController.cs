@@ -167,22 +167,6 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-        //public IActionResult GetEmployeeAttendance()
-        //{
-        //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
-        //    string stringData = response.Content.ReadAsStringAsync().Result;
-        //    IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-        //    IEnumerable<Person> employees = from e in employeesdata
-        //                    select new Person
-        //                    {
-        //                        Id = e.Id,
-        //                        FirstName = e.FirstName + " " + e.LastName
-        //                    };
-        //    ViewBag.Persons = employees;
-        //    return View(employees);
-        //}
-
-
         #region[Method]
         [NonAction]
         public string GetAttendanceSummaryData(string date, string type, int? id)
@@ -301,7 +285,7 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-
+        #region Datewise Attendance
         [DisplayName("Attendance Datewise")]
         [HttpGet]
         public IActionResult DateWiseAttendance()
@@ -324,17 +308,35 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("DateWiseAttendance")]
         [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id) 
+        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id,int LocationId) 
         {
             string url = "";
             if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))
             {
-                url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
+                url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + LocationId + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
             }
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
             return Json(attendanceReport);
         }
+        #endregion
+
+
+        //public IActionResult GetEmployeeAttendance()
+        //{
+        //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+        //    IEnumerable<Person> employees = from e in employeesdata
+        //                    select new Person
+        //                    {
+        //                        Id = e.Id,
+        //                        FirstName = e.FirstName + " " + e.LastName
+        //                    };
+        //    ViewBag.Persons = employees;
+        //    return View(employees);
+        //}
+
     }
 }

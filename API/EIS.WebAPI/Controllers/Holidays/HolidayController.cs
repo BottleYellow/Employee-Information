@@ -52,6 +52,12 @@ namespace EIS.WebAPI.Controllers.Holidays
         {
             return _repository.Holidays.FindAll().Include(x=>x.Location);
         }
+        [HttpGet("{PersonId}")]
+        public IEnumerable<Holiday> GetHolidaysForEmployee([FromRoute]int PersonId)
+        {
+            int? LocationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId;
+            return _repository.Holidays.FindAll().Where(x=>x.LocationId==LocationId);
+        }
         [HttpPost]
         public IActionResult Create([FromBody]Holiday holiday)
         {
