@@ -216,34 +216,37 @@ namespace EIS.Repositories.Repository
         {
             
             List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
-            for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+            if (attendanceData != null && attendanceData.Count() > 0)
             {
-                AttendanceReportByDate attendance = new AttendanceReportByDate();
-                attendance.Date = date.ToShortDateString();
-                var attendancedata = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
+                for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                 {
-                    if (date.DayOfWeek == DayOfWeek.Sunday)
+                    AttendanceReportByDate attendance = new AttendanceReportByDate();
+                    attendance.Date = date.ToShortDateString();
+                    var attendancedata = attendanceData.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                    if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
                     {
-                        attendance.Status = "Weekly Off";
+                        if (date.DayOfWeek == DayOfWeek.Sunday)
+                        {
+                            attendance.Status = "Weekly Off";
+                        }
+                        else
+                        {
+                            attendance.Status = "-";
+                        }
+                        attendance.TimeIn = "-";
+                        attendance.TimeOut = "-";
+
+                        attendance.TotalHours = "-";
                     }
                     else
                     {
-                        attendance.Status = "-";
+                        attendance.TimeIn = attendancedata.TimeIn.ToString();
+                        attendance.TimeOut = attendancedata.TimeOut == null ? new TimeSpan().ToString() : attendancedata.TimeOut.ToString();
+                        attendance.Status = "Present";
+                        attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
                     }
-                        attendance.TimeIn = "-";
-                    attendance.TimeOut = "-";
-                    
-                    attendance.TotalHours = "-";
+                    attendances.Add(attendance);
                 }
-                else
-                {
-                    attendance.TimeIn = attendancedata.TimeIn.ToString();
-                    attendance.TimeOut = attendancedata.TimeOut==null? new TimeSpan().ToString(): attendancedata.TimeOut.ToString();
-                    attendance.Status = "Present";
-                    attendance.TotalHours = attendancedata.TotalHours == null ? new TimeSpan().ToString() : attendancedata.TotalHours.ToString();
-                }
-                attendances.Add(attendance);
             }
             return attendances;
         }
