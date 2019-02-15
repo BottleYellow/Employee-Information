@@ -29,9 +29,11 @@
             opacity: 0.5;
             text-decoration: none;
         }
+
         li:hover {
             cursor: pointer;
         }
+
         select {
             border: solid;
         }
@@ -39,13 +41,37 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 40%;
+                left: 40%;
+                /*width: 25%;
+            height: 25%;
+            opacity: 0.9;
+            filter: alpha(opacity=50);*/
+            }
+
+        a {
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
     <div class="container-fluid">
         <div class="block-header">
-            @if (cookies.Role== "Admin")
+            @if (cookies.Role == "Admin")
             {
                 <HeaderWithButton header-name="My Leave Requests"></HeaderWithButton>
             }
@@ -84,7 +110,9 @@
 </body>
 </html>
 
-<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
         $(document).ready(function () {
             $.fn.dataTable.ext.errMode = 'none';
@@ -164,8 +192,8 @@
                 },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Rejected" || row.Status == "Cancelled") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink" onclick="javascript: UpdateStatus(' + row.Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
+                        if (row.Status == "Rejected" || row.Status == "Cancelled" || row.Status == "Requested For Cancel") {
+                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Cancel Request</a></li></ul></div>';
                         }
                         else {
                             return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
@@ -189,11 +217,22 @@
             url: url1,
             type: 'POST',
             data: {},
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
             success: function (data) {
-                window.location.reload();
+                bootbox.alert({
+                    message: data,
+                    callback: function () {
+                        window.location.reload();
+                    }
+                });        
             },
             error: function (data) {
                 alert(data.responseText);
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
             }
         });
     }

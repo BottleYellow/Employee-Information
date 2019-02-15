@@ -137,9 +137,9 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
+                string messsege =_repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
                 SendMail(RequestId, Status);
-                return Ok();
+                return Ok(messsege);
             }
             return NotFound();
         }
@@ -153,8 +153,8 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.LeaveRequest.UpdateAndSave(leave);
-            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
-            return NoContent();
+            string msg =_repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
+            return Ok(msg);
         }
 
 
@@ -177,11 +177,11 @@ namespace EIS.WebAPI.Controllers
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
-            
+
             //string to = person.Select(x => x.EmailAddress).ToString();
-            _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending",leave.PersonId);
+            string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
             SendMail(leave.Id, "Pending");
-            return Ok();
+            return Ok(msg);
         }
 
         // DELETE: api/Leaves/5

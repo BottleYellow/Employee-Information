@@ -1,8 +1,19 @@
 ﻿@using EIS.Entities.Employee;
 @using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
 @model EIS.Entities.Dashboard.AdminDashboard
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <style>
     .ajax-loader {
@@ -22,12 +33,14 @@
             opacity: 0.9;
             filter: alpha(opacity=50);*/
         }
+
     a {
         cursor: pointer;
     }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+
 </head>
 <div class="ajax-loader">
     <img src="~/gif/Spinner.gif" />
@@ -227,6 +240,9 @@
 </div>
 <script src="~/plugins/jquery/jquery.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     var buttonSelected = "All";
     $(document).ready(function () {
@@ -323,16 +339,16 @@
             var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY")
             var actionButton;
             if (Leaves[i].Status == "Pending") {
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject\')">Reject</a></li></ul></div>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
             else if (Leaves[i].Status == "Approved") {
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject\')">Reject</a></li></ul></div>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
             else if (Leaves[i].Status == "Requested For Cancel") {
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
             }
             else {
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Pending\')">Mark Pending</a></li></ul></div>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
             }
             if (Leaves[i].LocationName == "Baner") {
                 banerArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
@@ -352,5 +368,30 @@
             "order":[7,"desc"]
         });
     }
-
+    function UpdateStatus(RequestId, Status) {
+        var pid=@cookies.PersonId;
+        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            data: {},
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            success: function (data) {
+                bootbox.alert(
+                    data,
+                    function () {
+                        window.location.reload();
+                    }
+                );
+            },
+            error: function (data) {
+                alert(data.responseText);
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
+            }
+        });
+    }
 </script>
