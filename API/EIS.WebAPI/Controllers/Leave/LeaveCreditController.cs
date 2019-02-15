@@ -46,7 +46,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             else
             {
-                data = _repository.LeaveCredit.GetDataByGridCondition(x =>x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower())||x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);
+                data = _repository.LeaveCredit.GetDataByGridCondition(x => x.Person.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower())||x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower())||x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);
             }
             return Ok(data);
         }

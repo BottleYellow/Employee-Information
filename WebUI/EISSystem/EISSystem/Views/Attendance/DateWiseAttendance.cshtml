@@ -70,16 +70,14 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <div id="inputdatediv">
-                                            <label>From Date</label><br />
-                                            <input class="form-control" type="text" id="fromdate" value=@DateTime.Now.Date />
-                                        </div>
+                                            <label>From Date</label>
+
+                                            <input class="form-control" type="text" id="fromdate" />
+                                       
                                     </div>
-                                    <div class="col-md-3">
-                                        <div id="inputdatediv">
-                                            <label>To Date</label><br />
-                                            <input class="form-control" type="text" id="todate" value=@DateTime.Now.Date />
-                                        </div>
+                                    <div class="col-md-3">                                        
+                                            <label>To Date</label>
+                                            <input class="form-control" type="text" id="todate"/>
                                     </div>
                                     <div class="col-md-3">
                                         <br />
@@ -135,11 +133,15 @@
     $(document).ready(function () {
         //$('#generateReport').prop('disabled', true);
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
+        var d = new Date();
+        d.setDate(d.getDate());
         $("#fromdate").datetimepicker({
-            format: "MMM/DD/YYYY"
+            format: "DD-MMM-YYYY",
+            defaultDate: d
         });
         $("#todate").datetimepicker({
-            format: "MMM/DD/YYYY"
+            format: "DD-MMM-YYYY",
+            defaultDate: d
         });
 
         $('#locations').on('change', function () {
@@ -159,7 +161,9 @@
 
             });
         });
-
+        var fromValue = $("#fromdate").val();
+        var toValue = $("#todate").val();
+        generateReport(fromValue, toValue, 0, 0);
         //$('#selectEmployee').on('change', function () {
         //    if ($(this).children("option:selected").text() == "-- Select --") {
         //        $('#generateReport').prop('disabled', true);

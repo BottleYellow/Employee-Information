@@ -41,18 +41,30 @@
             <HeaderWithButton header-name="Leave Request"></HeaderWithButton>
         </div>
         <div class="row clearfix">
-            <div class="row">
-                <div class="col-md-9" style="height:50px">
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
-                            <option value="0">All</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <label>Select Location</label>
+                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                <label>From Date</label>
+                                <input class="form-control" type="text" id="fromDate" value=@DateTime.Now.Date />
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
+                                <label>To Date</label>
+                                <input class="form-control" type="text" id="toDate" value=@DateTime.Now.Date />
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
+                                <br />
+                                <input class=" form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
+                            </div>
+                        </div>
                         <div>
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
@@ -68,7 +80,6 @@
                                         <th>Requested Date</th>
                                         <th>Status</th>
                                         <th>Leave Reason</th>
-
                                     </tr>
                                 </thead>
                             </table>
@@ -81,17 +92,39 @@
     </div>
 </body>
 </html>
+@*for datetimepicker*@
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
-    $('#locations').on('change', function () {
-        var c = $('#locations').val();
-        GenerateReport(c);
-    });
     $(document).ready(function () {
-        GenerateReport(0);
+        var d = new Date();
+        d.setDate(d.getDate());
+        $("#fromDate").datetimepicker({
+            format: "DD-MMM-YYYY",
+            defaultDate: d
+        });
+        $("#toDate").datetimepicker({
+            format: "DD-MMM-YYYY",
+            defaultDate: d
+        });
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        GenerateReport(0,fromDate,toDate);
     });
-    function GenerateReport(location) {
+
+    $('#generateReport').on('click', function () {
+        var locationValue = $('#locations').val();
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        GenerateReport(locationValue,fromDate,toDate);
+    });
+
+    function GenerateReport(location,fromDate,toDate) {
                $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
@@ -102,6 +135,7 @@
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
+            "order":[8,'desc'],
             buttons: [
                 {
                     extend: 'pdfHtml5',
@@ -111,10 +145,8 @@
                 }
             ],
             "aoColumnDefs": [
-                { "aTargets": [1], "bSortable": true },
-                { "aTargets": [2], "bSortable": true },
-                { "aTargets": [8], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
+                { "aTargets": [0], "bSortable": false },
+                { "aTargets": ['_all'], "bSortable": true }
             ],
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
@@ -123,9 +155,9 @@
             ],
             ajax: {
                 //"url": "/Leave/EmployeeLeaveRequests",
-                "url": '@Url.Action("EmployeeLeaveRequests", "Leave")?LocationId=' + location,
+                "url": '@Url.Action("EmployeeLeaveRequests", "Leave")?LocationId=' + location + '&fromDate=' + fromDate + '&toDate=' + toDate,
                 "type": "POST",
-                "datatype": "json"
+                "datatype": "json",       
             },
             "columns": [
                 {
@@ -145,50 +177,50 @@
                     }
                 },
                 {
-                    "data": "EmployeeName", "autoWidth": true, render: function (data, type, row) {
+                    "data": "Person.Location.LocationName", "name": "Person.Location.LocationName", "autoWidth": true, render: function (data, type, row) {
                         return row.Person.Location.LocationName;
                     }
                 },
                 {
-                    "data": "EmployeeName", "autoWidth": true, render: function (data) {
+                    "data": "EmployeeName","name": "EmployeeName", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+                    "data": "LeaveType", "name": "LeaveType", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "FromDate", "autoWidth": true, render: function (data) {
+                    "data": "FromDate","name": "FromDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ToDate", "autoWidth": true, render: function (data) {
+                    "data": "ToDate","name": "ToDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "RequestedDays", "autoWidth": true, render: function (data) {
+                    "data": "RequestedDays","name": "RequestedDays", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Available", "autoWidth": true, render: function (data) {
+                    "data": "Available","name": "Available", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "AppliedDate", "autoWidth": true, render: function (data) {
+                    "data": "AppliedDate","name": "AppliedDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format("DD MMM YYYY");
                         return data;
                     }
                 },
                 {
-                    "data": "Status", "autoWidth": true, render: function (data) {
+                    "data": "Status","name":"Status", "autoWidth": true, render: function (data) {
                         if (data == "Approved") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
                         } else if (data == "Rejected" || data == "Cancelled") {
@@ -199,20 +231,11 @@
                     }
                 },
                 {
-                    "data": "Reason", "autoWidth": true, render: function (data) {
+                    "data": "Reason","name": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
-                }              
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+                }
+            ]
         });
     }
     function UpdateStatus(RequestId, Status) {

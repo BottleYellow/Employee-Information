@@ -58,22 +58,11 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Location
-                                        </th>
-                                        <th>
-                                            Leave type
-                                        </th>
-                                        <th>
-                                            Validity
-                                        </th>
-                                        <th>
-                                            Valid From
-                                        </th>
-                                        <th>
-                                            Valid To
-                                        </th>
-
+                                        <th>Location</th>
+                                        <th>Leave type</th>
+                                        <th>Validity</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
                                     </tr>
                                 </thead>
 
@@ -115,16 +104,6 @@
                     titleAttr: 'Export to Pdf'
                 }
             ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
                 [10, 25, -1],
@@ -138,28 +117,28 @@
             },
             "columns": [
                 {
-                    "data": "LocationId", "autoWidth": true, render: function (data, type, row) {
+                    "data": "Location.LocationName", "name": "Location.LocationName", "autoWidth": true, render: function (data, type, row) {
                         return row.Location.LocationName;
                     }
                 },
                 {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+                    "data": "LeaveType", "name": "LeaveType", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Validity", "autoWidth": true, render: function (data) {
+                    "data": "Validity",  "name": "Validity", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "ValidFrom", "autoWidth": true, render: function (data) {
+                    "data": "ValidFrom", "name": "ValidFrom", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ValidTo", "autoWidth": true, render: function (data) {
+                    "data": "ValidTo", "name": "ValidTo", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
