@@ -66,16 +66,18 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public void UpdateRequestStatus(int RequestId, string Status,int PersonId)
+        public string UpdateRequestStatus(int RequestId, string Status,int PersonId)
         {
+            string messege = null;
             var leaveCredit = new LeaveCredit();
-            LeaveRequest leaveRequest = _dbContext.LeaveRequests.Where(x => x.Id == RequestId).FirstOrDefault();
+            LeaveRequest leaveRequest = _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Id == RequestId).FirstOrDefault();
             leaveRequest.UpdatedDate = DateTime.Now;
             if (Status == "Approve")
             {
                 leaveRequest.ApprovedBy = PersonId;
                 leaveRequest.Status = "Approved";
-                var requests = _dbContext.LeaveRequests.Where(x => x.PersonId == leaveRequest.PersonId);
+                messege = "Request of " + leaveRequest.Person.FirstName + " is approved for " + leaveRequest.RequestedDays + " days";
+                //var requests = _dbContext.LeaveRequests.Where(x => x.PersonId == leaveRequest.PersonId);
 
             }
             else if (Status == "Reject")
@@ -85,6 +87,7 @@ namespace EIS.Repositories.Repository
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                 leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                 leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                messege = "Request of " + leaveRequest.Person.FirstName + " is rejected for " + leaveRequest.RequestedDays + " days";
             }
             else if (Status == "Pending")
             {
@@ -96,6 +99,7 @@ namespace EIS.Repositories.Repository
                     leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
                 }
                 leaveRequest.Status = "Pending";
+                messege = "Request of " + leaveRequest.Person.FirstName + " marked as pending";
             }
             else if (Status == "Cancel")
             {
@@ -106,10 +110,12 @@ namespace EIS.Repositories.Repository
                     leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                     leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                     leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                    messege = "Your request has been cancelled";
                 }
                 else if (leaveRequest.Status == "Approved")
                 {
                     leaveRequest.Status = "Requested For Cancel";
+                    messege = "Your request for cancelling submitted successully";
                 }
             }
             else if (Status == "Accept Cancel")
@@ -119,11 +125,13 @@ namespace EIS.Repositories.Repository
                 leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
                 leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                 leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                messege = "Request is cancelled";
             }
             else if (Status == "Reject Cancel")
             {
                 leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Approved(Rejected Cancel Request)";
+                messege = "Request for cancelling rejected successfully";
             }
             else if (Status == null)
             {
@@ -133,6 +141,7 @@ namespace EIS.Repositories.Repository
                 leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
             }
             Save();
+            return messege;
         }
     }
 }

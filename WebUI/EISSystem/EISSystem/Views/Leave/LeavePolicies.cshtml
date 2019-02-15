@@ -32,10 +32,14 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+        a {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPolicy")"></div>
+    <div id="modal-placeholder-editpolicy" class="modal fade" role="dialog" data-url="@Url.Action("EditPolicy")"></div>
     @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
@@ -73,7 +77,9 @@
                                         <th>
                                             Valid To
                                         </th>
-
+                                        <th>
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
 
@@ -163,6 +169,16 @@
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
+                },
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        var value = row.IsActive;
+                        if (value == true) {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun('+row.Id+');">Edit</a></li></ul></div>';
+                        } else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
+                        }
+                    }
                 }
 
             ],
@@ -175,6 +191,15 @@
                     }
                 });
             }
+        });
+    }
+    function fun(c) {
+        debugger;
+        var url = $("#modal-placeholder-editpolicy").data('url');
+        url = url + '?Id=' + c;
+        $.get(url, function (data) {
+            $("#modal-placeholder-editpolicy").html(data);
+            $("#modal-placeholder-editpolicy").modal('show');
         });
     }
     $("#btnModal").click(function () {
