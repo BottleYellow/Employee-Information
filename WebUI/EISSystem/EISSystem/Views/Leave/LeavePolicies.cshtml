@@ -52,6 +52,7 @@
         <img src="~/gif/Spinner.gif" />
     </div>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPolicy")"></div>
+    <div id="modal-placeholder-editpolicy" class="modal fade" role="dialog" data-url="@Url.Action("EditPolicy")"></div>
     @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
@@ -74,22 +75,12 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Location
-                                        </th>
-                                        <th>
-                                            Leave type
-                                        </th>
-                                        <th>
-                                            Validity
-                                        </th>
-                                        <th>
-                                            Valid From
-                                        </th>
-                                        <th>
-                                            Valid To
-                                        </th>
-
+                                        <th>Location</th>
+                                        <th>Leave type</th>
+                                        <th>Validity</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
 
@@ -131,16 +122,6 @@
                     titleAttr: 'Export to Pdf'
                 }
             ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
             sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
                 [10, 25, -1],
@@ -160,30 +141,40 @@
             },
             "columns": [
                 {
-                    "data": "LocationId", "autoWidth": true, render: function (data, type, row) {
+                    "data": "Location.LocationName", "name": "Location.LocationName", "autoWidth": true, render: function (data, type, row) {
                         return row.Location.LocationName;
                     }
                 },
                 {
-                    "data": "LeaveType", "autoWidth": true, render: function (data) {
+                    "data": "LeaveType", "name": "LeaveType", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "Validity", "autoWidth": true, render: function (data) {
+                    "data": "Validity",  "name": "Validity", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "ValidFrom", "autoWidth": true, render: function (data) {
+                    "data": "ValidFrom", "name": "ValidFrom", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ValidTo", "autoWidth": true, render: function (data) {
+                    "data": "ValidTo", "name": "ValidTo", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
+                    }
+                },
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        var value = row.IsActive;
+                        if (value == true) {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun('+row.Id+');">Edit</a></li></ul></div>';
+                        } else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
+                        }
                     }
                 }
 
@@ -197,6 +188,15 @@
                     }
                 });
             }
+        });
+    }
+    function fun(c) {
+        debugger;
+        var url = $("#modal-placeholder-editpolicy").data('url');
+        url = url + '?Id=' + c;
+        $.get(url, function (data) {
+            $("#modal-placeholder-editpolicy").html(data);
+            $("#modal-placeholder-editpolicy").modal('show');
         });
     }
     $("#btnModal").click(function () {

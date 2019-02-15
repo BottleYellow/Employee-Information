@@ -276,7 +276,8 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                employeeslist = _repository.Employee.GetDataByGridCondition(x => x.EmployeeCode == sortGrid.Search || x.FirstName.ToLower().Contains(sortGrid.Search.ToLower()) || x.MiddleName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LastName.ToLower().Contains(sortGrid.Search.ToLower())||x.EmailAddress.ToLower().Contains(sortGrid.Search.ToLower()) || x.PanCard.Contains(sortGrid.Search) || x.AadharCard.Contains(sortGrid.Search) || x.MobileNumber.Contains(sortGrid.Search), sortGrid, list);
+                string search = sortGrid.Search.ToLower();
+                employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.Location.LocationName.ToLower().Contains(search)|| x.EmployeeCode == search || x.FirstName.ToLower().Contains(search)||x.MiddleName.ToLower().Contains(search)||x.LastName.ToLower().Contains(search)||x.EmailAddress.ToLower().Contains(search) || x.MobileNumber.Contains(search), sortGrid, list);
             }
             return Ok(employeeslist);
         }

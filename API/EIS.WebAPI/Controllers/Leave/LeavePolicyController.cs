@@ -42,6 +42,12 @@ namespace EIS.WebAPI.Controllers.Leave
             string locationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId.ToString();
             return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.LocationId==Convert.ToInt32(locationId));
         }
+        [Route("GetPolicyById/{Id}")]
+        [HttpGet]
+        public LeaveRules GetPolicyById([FromRoute]int Id)
+        {
+            return _repository.LeaveRules.FindByCondition(x => x.Id == Id);
+        }
         [DisplayName("leave Policies")]
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
@@ -72,23 +78,45 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             else
             {
-                data = _repository.LeaveRules.GetDataByGridCondition(x => x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
+                data = _repository.LeaveRules.GetDataByGridCondition(x => x.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
             }
             return Ok(data);
         }
 
         [DisplayName("Add Leave Rule")]
-        [HttpPost]
-        public IActionResult PostLeavePolicy([FromBody] LeaveRules policy)
+        [HttpPost("{Id}")]
+        public IActionResult PostLeavePolicy([FromRoute] int Id,[FromBody] LeaveRules policy)
         {
-            if (!ModelState.IsValid)
+            if (Id == 0)
             {
-                return BadRequest(ModelState);
-            }
-            policy.TenantId = TenantId;
-            _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                policy.TenantId = TenantId;
+                _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
 
-            return CreatedAtAction("GetLeavePolicies", new { id = policy.Id}, policy);
+                return CreatedAtAction("GetLeavePolicies", new { id = policy.Id }, policy);
+            }
+            else
+            {
+                policy.TenantId = TenantId;
+                _repository.LeaveRules.UpdateAndSave(policy);
+                List<LeaveCredit> Credits = _repository.LeaveCredit.FindAllByCondition(x => x.LeaveId == policy.Id).ToList();
+                foreach (var Credit in Credits)
+                {
+                    float diff = Credit.AllotedDays - Credit.Available;
+                    Credit.LeaveType = policy.LeaveType;
+                    Credit.ValidFrom = policy.ValidFrom;
+                    Credit.ValidTo = policy.ValidTo;
+                    Credit.AllotedDays = policy.Validity;
+                    Credit.Available = Credit.AllotedDays - diff;
+                    Credit.UpdatedDate = policy.UpdatedDate;
+                    Credit.UpdatedBy = policy.UpdatedBy;
+                    _repository.LeaveCredit.UpdateAndSave(Credit);
+                }
+                return Ok(policy);
+            }
         }
     }
 }

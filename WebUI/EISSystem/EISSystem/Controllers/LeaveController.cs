@@ -42,10 +42,10 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("EmployeeLeaveRequests")]
         [HttpPost]
-        public IActionResult GetEmployeeLeaveRequests(int LocationId)
+        public IActionResult GetEmployeeLeaveRequests(int LocationId,string fromDate,string toDate)
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests", null, LocationId);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/"+fromDate+"/"+toDate, null, LocationId);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -194,7 +194,7 @@ namespace EIS.WebApp.Controllers
 
         #endregion
 
-        #region Leave Type
+        #region Leave Policy
         [DisplayName("leave Policies")]
         public IActionResult LeavePolicies()
         {
@@ -229,7 +229,7 @@ namespace EIS.WebApp.Controllers
             {
                 Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 Leave.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl+"/api/LeavePolicy", Leave );
+                HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl+"/api/LeavePolicy/"+0, Leave );
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
@@ -243,6 +243,40 @@ namespace EIS.WebApp.Controllers
             }
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("AddPolicy", Leave);
+
+        }
+        [DisplayName("Edit Leave Rule")]
+        public IActionResult EditPolicy(int Id)
+        {
+            ViewBag.Locations = GetLocations();
+            string stringData = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyById/" + Id + "").Content.ReadAsStringAsync().Result;
+            LeaveRules leaveRule = JsonConvert.DeserializeObject<LeaveRules>(stringData);
+            return PartialView("EditPolicy", leaveRule);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPolicy(LeaveRules Leave)
+        {
+            ViewBag.Locations = GetLocations();
+            Leave.UpdatedDate = DateTime.Now;
+            Leave.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
+            if (ModelState.IsValid)
+            {
+                Leave.IsActive = true;
+                HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeavePolicy/"+Leave.Id, Leave);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    //HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeaveCredit/AddCredits", LeaveRules);
+                    //if (response2.IsSuccessStatusCode == true)
+                    //{
+                        return View();
+                    //}
+                }
+            }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("EditPolicy", Leave);
 
         }
 
