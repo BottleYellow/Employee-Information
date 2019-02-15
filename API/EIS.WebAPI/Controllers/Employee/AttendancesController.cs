@@ -131,7 +131,7 @@ namespace EIS.WebAPI.Controllers
             {
                 endDate = startDate.AddYears(1);
             }
-            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData, Code, null);
             return Ok(attendancelist);
         }
 
@@ -152,7 +152,7 @@ namespace EIS.WebAPI.Controllers
             {
                 endDate = startDate.AddMonths(1);
             } 
-           List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData);
+           List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData,Code,null);
             return Ok(attendancelist);
         }
 
@@ -171,7 +171,7 @@ namespace EIS.WebAPI.Controllers
                 eDate = DateTime.Now.Date;
             }
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= sDate && x.DateIn.Date <= eDate && x.PersonId == id);
-            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate.AddDays(1), attendanceData);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate.AddDays(1), attendanceData,Code,null);
             return Ok(attendancelist);
         }
         #endregion
