@@ -22,6 +22,9 @@
             opacity: 0.9;
             filter: alpha(opacity=50);*/
         }
+    a {
+        cursor: pointer;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -165,6 +168,7 @@
                             <table class="table table-hover dashboard-task-infos" id="BanerLeavesTable">
                                 <thead>
                                     <tr>
+                                        <th>Actions</th>
                                         <th>Employee Name</th>
                                         <th>Leave Type</th>
                                         <th>From Date</th>
@@ -194,6 +198,7 @@
                             <table class="table table-hover dashboard-task-infos" id="KondhwaLeavesTable">
                                 <thead>
                                     <tr>
+                                        <th>Actions</th>
                                         <th>Employee Name</th>
                                         <th>Leave Type</th>
                                         <th>From Date</th>
@@ -316,22 +321,35 @@
         for (var i = 0; i < Leaves.length; i++) {
             var dateFrom = moment(Leaves[i].FromDate).format("DD MMM YYYY");
             var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY")
+            var actionButton;
+            if (Leaves[i].Status == "Pending") {
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject\')">Reject</a></li></ul></div>';
+            }
+            else if (Leaves[i].Status == "Approved") {
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject\')">Reject</a></li></ul></div>';
+            }
+            else if (Leaves[i].Status == "Requested For Cancel") {
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+            }
+            else {
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Reason + ',\'Pending\')">Mark Pending</a></li></ul></div>';
+            }
             if (Leaves[i].LocationName == "Baner") {
-                banerArrayLeaves.push([Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
-            }else
-                kondhwaArrayLeaves.push([Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
+                banerArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
+            } else
+                kondhwaArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
             }
 
         $('#BanerLeavesTable').DataTable().destroy();
         $('#BanerLeavesTable').DataTable({
             data: banerArrayLeaves,
-            "order": [6, "desc"]
+            "order": [7, "desc"]
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
         $('#KondhwaLeavesTable').DataTable({
             data: kondhwaArrayLeaves,
-            "order":[6,"desc"]
+            "order":[7,"desc"]
         });
     }
 

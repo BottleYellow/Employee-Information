@@ -252,7 +252,7 @@ namespace EIS.WebAPI.Controllers
             else
             {
                 string search = sortGrid.Search.ToLower();
-                data = _repository.PastLeaves.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
+                data = _repository.PastLeaves.GetDataByGridCondition(x => x.Person.Location.LocationName.Contains(search)|| x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
             }
             return Ok(data);
 

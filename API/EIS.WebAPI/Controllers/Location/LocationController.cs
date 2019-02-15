@@ -38,7 +38,7 @@ namespace EIS.WebAPI.Controllers.Location
             }
             else
             {
-                locationsList = _repository.Locations.GetDataByGridCondition(x => x.LocationName == sortGrid.Search , sortGrid, list);
+                locationsList = _repository.Locations.GetDataByGridCondition(x => x.LocationName.Contains(sortGrid.Search) , sortGrid, list);
             }
             return Ok(locationsList);
         }

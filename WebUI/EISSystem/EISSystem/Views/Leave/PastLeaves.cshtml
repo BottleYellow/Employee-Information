@@ -55,15 +55,15 @@
         <div class="row clearfix">
             @if (cookies.Role == "Admin")
             {
-            <div class="row">
-                <div class="col-md-9" style="height:50px">
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations, "Id", "LocationName"))" class="form-control show-tick">
-                            <option value="0">All</option>
-                        </select>
+                <div class="row">
+                    <div class="col-md-9" style="height:50px">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations, "Id", "LocationName"))" class="form-control show-tick">
+                                <option value="0">All</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
             }
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
@@ -89,8 +89,8 @@
                                             Requested Days
                                         </th>
                                         @*<th>
-                                            Status
-                                        </th>*@
+                                                Status
+                                            </th>*@
                                         <th>
                                             Leave Reason
                                         </th>
@@ -126,6 +126,7 @@
             $('#example').DataTable().destroy();
             $('#example tbody').empty();
         var dTable = $('#example').DataTable({
+            sDom: '<"myexport"B>ifrtlp',
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
@@ -143,47 +144,41 @@
                     'targets': [0, 1, 2]
                 }
             ],
-            "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": [1], "bSortable": true },
-                { "aTargets": ['_all'], "bSortable": false }
-            ],
-            sDom: '<"myexport"B>ifrtlp',
             lengthMenu: [
                 [10, 25, -1],
                 ['10', '25', 'All']
             ],
             ajax: {
                 //"url": "/Leave/PastLeaves",
-                "url":'@Url.Action("PastLeaves", "Leave")?LocationId='+c,
+                "url": '@Url.Action("PastLeaves", "Leave")?LocationId=' + c,
                 "type": "POST",
                 "datatype": "json"
             },
             "columns": [
                 {
-                    "data": "EmployeeName", "autoWidth": true, render: function (data, type, row) {
+                    "data": "LocationName", "name": "Person.Location.LocationName", "autoWidth": true, render: function (data, type, row) {
                         return row.Person.Location.LocationName;
                     }
                 },
                 {
-                    "data": "EmployeeName", "autoWidth": true, render: function (data) {
+                    "data": "EmployeeName", "name": "EmployeeName", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
                 {
-                    "data": "FromDate", "autoWidth": true, render: function (data) {
+                    "data": "FromDate", "name": "FromDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "ToDate", "autoWidth": true, render: function (data) {
+                    "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
                     }
                 },
                 {
-                    "data": "RequestedDays", "autoWidth": true, render: function (data) {
+                    "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
@@ -199,21 +194,11 @@
                 //    }
                 //},
                 {
-                    "data": "Reason", "autoWidth": true, render: function (data) {
+                    "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 }
-
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+            ]
         });
     }
     $("#btnModal").click(function () {
@@ -244,17 +229,16 @@
         });
     }
 </script>
-
-<script src="~/plugins/momentjs/moment.js"></script>
-@*<script src="~/Ems/js/moment.min.js"></script>*@
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
-@*<script src="~/Ems/js/dataTables.buttons.min.js"></script>*@
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
+
+
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
