@@ -212,8 +212,8 @@
     var totalDaysk = 0;
     $(document).ready(function () {
         $('#all').show();
-        $('#twoffk').text('Weekly Off : ' + 4);
-        $('#twoffb').text('Weekly Off : ' + 6);
+        $('#alltwoffk').text('Weekly Off : ' + 4);
+        $('#alltwoffb').text('Weekly Off : ' + 6);
 
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
@@ -233,6 +233,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
+                debugger;
                 var k = 0, b = 0;
 
                 $.each(data, function (i, item) {
@@ -246,8 +247,8 @@
                     }
                     //totalDays = ld - (b + 6);
                 });
-                $('#thb').html('Holidays : ' + b);
-                $('#thk').html('Holidays : ' + k);
+                $('#allthb').html('Holidays : ' + b);
+                $('#allthk').html('Holidays : ' + k);
                 generateReport(m + '/' + y, 'month', location);
             },
             error: function (jqXHR, textStatus, errorThrown) {

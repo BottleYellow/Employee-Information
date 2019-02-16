@@ -3,7 +3,6 @@
 
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <style>
         li:hover {
@@ -63,10 +62,6 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
-            rowReorder: {
-                selector: 'td:nth-child(2)'
-            },
-            responsive: true
         });
     });
 </script>
@@ -74,6 +69,5 @@
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
 
-<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 

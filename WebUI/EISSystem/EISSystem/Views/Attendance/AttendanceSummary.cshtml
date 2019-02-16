@@ -287,6 +287,8 @@
         });
 
         $('#locations').on('change', function () {
+                $("#generateReport").prop("disabled", true);
+            
             var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -362,12 +364,6 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
-                //if (value % 4 == 0) {
-                //    totalDays = 366;
-                //}
-                //else {
-                //    totalDays = 365;
-                //}
                 generateReport(value, 'year', id);
             }
 
@@ -377,7 +373,6 @@
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
-                //totalDays = new Date(y, m, 0).getDate()
                 generateReport(value, 'month', id);
             }
             else if (v == 'week') {
@@ -424,7 +419,14 @@
                 success: function (data) {
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
-                        array.push([data[i].Date, data[i].Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
+                        var Status = data[i].Status;
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                        } else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        }   
+
+                        array.push([data[i].Date, Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
