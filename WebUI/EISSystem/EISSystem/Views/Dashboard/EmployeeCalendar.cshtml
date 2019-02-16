@@ -1,6 +1,16 @@
 ﻿@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <head>
 
@@ -23,7 +33,7 @@
     </div>
 
     <div class="row clearfix">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">            
             <div class="card">
                 <div class="body">
                     <div id="calendar"></div>
@@ -46,9 +56,9 @@
                 </div>
             </div>
         </div>
-      
+
     </div>
- </div>
+</div>
 <script src="~/Ems/js/fullcalendar-3.1.0-lib-moment.min.js"></script>
 <script src="~/plugins/jquery/jquery.min.js"></script>
 <script src="~/Ems/js/fullcalendar-3.1.0-lib-jquery-ui.min.js"></script>
@@ -58,22 +68,74 @@
 
 <script>
     $(document).ready(function () {
-        $('#calendar').fullCalendar({
-            contentHeight: 700,
-            defaultDate: new Date(),
-            defaultView: 'month',
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,basicWeek,basicDay,agenda'
-            },
+        generateCalendarData();
+    });
+
+   function generateCalendarData()
+   {
+       $('#calendar').fullCalendar('destroy');
+         $('#calendar').fullCalendar({
+                contentHeight: 700,
+                defaultDate: new Date(),
+                defaultView: 'month',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay,agenda'
+                },
             viewRender: function (view, element) {
 
-                intervalStart = view.intervalStart;
-                intervalEnd = view.intervalEnd;
-            }      
-         
+                    intervalStart = view.intervalStart;
+                    intervalEnd = view.intervalEnd;
+            },
+
+             events: function (start, end, timezone, callback) {
+                var pid=@cookies.PersonId;
+                var events = [];
+                    var startDate = intervalStart.format("YYYY-MM-DD");
+                    var endDate = intervalEnd.format("YYYY-MM-DD");
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EmployeeCalendar", "Dashboard")',
+                    data: {
+                        "intervalStart": startDate,
+                        "intervalEnd": endDate,
+                        "personId": pid
+                    },
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            events.push({
+                                title: v.Title,
+                                description: v.Description,
+                                start: moment(v.StartDate).format('YYYY-MM-DD'),
+                                end: v.EndDate != null ? moment(v.EndDate).format('YYYY-MM-DD') : null,
+                                color: v.Color,
+                                allDay: v.IsFullDay
+                            });
+                        });
+                        callback(events);
+
+                    },
+                    error: function (error) {
+                        bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+                    }
+                });
+                },
+            eventClick: function (calEvent, jsEvent, view) {
+                var titledata = calEvent.title;
+
+                    $('#myModal #eventTitle').text(calEvent.title);
+                    var $description = $('<div/>');
+                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    if (calEvent.end != null) {
+                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
+                    }
+                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                    $('#myModal #pDetails').empty().html($description);
+
+                    $('#myModal').modal();
+            }
         });
-    });      
+    }
 </script>
 

@@ -1,6 +1,5 @@
 ﻿@using EIS.WebApp.Services
 @model EIS.Entities.Dashboard.EmployeeDashboard
-@using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http;
@@ -86,10 +85,11 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
+                                    <th>Status</th>
                                     <th>Clock In</th>
                                     <th>Clock Out</th>
                                     <th>Working Hours</th>
-                                    <th>Status</th>
+
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -165,10 +165,16 @@
     function getData(Employees) {
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
-                var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
+            var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
                 var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
-                var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
-                array.push([moment(Employees[i].DateIn).format("DD MMM YYYY") , TimeIn, TimeOut, TotalHours, Employees[i].Status])
+            var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
+            var Status = Employees[i].Status;
+            if (Status == "Present") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+            } else {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            }            
+            array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status,TimeIn, TimeOut, TotalHours])
         }
         $('#myTable').DataTable().destroy();
          $('#myTable').DataTable({
