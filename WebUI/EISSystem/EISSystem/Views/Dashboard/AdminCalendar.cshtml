@@ -121,20 +121,7 @@
                 },
             eventClick: function (calEvent, jsEvent, view) {            
                 var titledata = calEvent.title;
-                if (titledata.search("Pending") > 0) {
-                    $('#myModal #eventTitle').text(calEvent.title);
-                    var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
-                    if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
-                    }
-                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
-                    $description.append($('<p/>').html('<b>ACTION: </b><button>APPROVE</button><a onclick="javascript: UpdateStatus(' + calEvent.Id + ',\'Reject\')">Reject</a>'));
-                    $('#myModal #pDetails').empty().html($description);
 
-                    $('#myModal').modal();
-
-                } else {
                     $('#myModal #eventTitle').text(calEvent.title);
                     var $description = $('<div/>');
                     $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
@@ -145,7 +132,6 @@
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
-                }
             }
         });
     }      

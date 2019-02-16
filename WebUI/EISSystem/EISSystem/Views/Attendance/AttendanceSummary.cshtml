@@ -265,7 +265,7 @@
 
         var id =@cookies.PersonId;
         $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
-        var totalDays = 0;
+
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
@@ -361,13 +361,7 @@
             var v = $('#select').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
-                $("#inputyear").val(value);
-                if (value % 4 == 0) {
-                    totalDays = 366;
-                }
-                else {
-                    totalDays = 365;
-                }
+                $("#inputyear").val(value);                
                 generateReport(value, 'year', id);
             }
 
@@ -377,7 +371,6 @@
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
-                totalDays = new Date(y, m, 0).getDate()
                 generateReport(value, 'month', id);
             }
             else if (v == 'week') {
@@ -386,7 +379,6 @@
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
                 generateReport(firstDate + " - " + lastDate, 'week', id);
-                totalDays = 7;
             }
         });
     });
@@ -424,7 +416,13 @@
                 success: function (data) {
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
-                        array.push([data[i].Date, data[i].Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
+                        var Status = data[i].Status;
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                        } else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        }  
+                        array.push([data[i].Date, Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
@@ -437,58 +435,58 @@
   
 
    
-    function calculate(date) {
-        var d = new Date(date);
-        var mon = d.toLocaleString('en-us', { month: 'long' });
-        var yea = d.getFullYear();
-        var dat = 1;
-        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
-        var first = myDays[myDate.getDay()];
-        //alert(first);
-        var secnd;
-        var forth;
-        switch (first) {
-            case "Sunday":
-                secnd = yea + '-' + mon + '-' + 14;
-                forth = yea + '-' + mon + '-' + 28;
-                break;
-            case "Monday":
-                secnd = yea + '-' + mon + '-' + 13;
-                forth = yea + '-' + mon + '-' + 27;
-                break;
-            case "Tuesday":
-                secnd = yea + '-' + mon + '-' + 12;
-                forth = yea + '-' + mon + '-' + 26;
-                break;
-            case "Wednesday":
-                secnd = yea + '-' + mon + '-' + 11;
-                forth = yea + '-' + mon + '-' + 25;
-                break;
-            case "Thursday":
-                secnd = yea + '-' + mon + '-' + 10;
-                forth = yea + '-' + mon + '-' + 24;
-                break;
-            case "Friday":
-                secnd = yea + '-' + mon + '-' + 9;
-                forth = yea + '-' + mon + '-' + 23;
-                break;
-            case "Saturday":
-                secnd = yea + '-' + mon + '-' + 8;
-                forth = yea + '-' + mon + '-' + 22;
-                break;
-            default: break;
-        }
-        if (d.getDate() == new Date(secnd).getDate()) {
-            return "2nd Saturday";
-        }
-        else if (d.getDate() == new Date(forth).getDate()) {
-            return "4th Saturday";
-        }
-        else {
-            return "NotFound";
-        }
-    }
+    //function calculate(date) {
+    //    var d = new Date(date);
+    //    var mon = d.toLocaleString('en-us', { month: 'long' });
+    //    var yea = d.getFullYear();
+    //    var dat = 1;
+    //    myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    //    myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
+    //    var first = myDays[myDate.getDay()];
+    //    //alert(first);
+    //    var secnd;
+    //    var forth;
+    //    switch (first) {
+    //        case "Sunday":
+    //            secnd = yea + '-' + mon + '-' + 14;
+    //            forth = yea + '-' + mon + '-' + 28;
+    //            break;
+    //        case "Monday":
+    //            secnd = yea + '-' + mon + '-' + 13;
+    //            forth = yea + '-' + mon + '-' + 27;
+    //            break;
+    //        case "Tuesday":
+    //            secnd = yea + '-' + mon + '-' + 12;
+    //            forth = yea + '-' + mon + '-' + 26;
+    //            break;
+    //        case "Wednesday":
+    //            secnd = yea + '-' + mon + '-' + 11;
+    //            forth = yea + '-' + mon + '-' + 25;
+    //            break;
+    //        case "Thursday":
+    //            secnd = yea + '-' + mon + '-' + 10;
+    //            forth = yea + '-' + mon + '-' + 24;
+    //            break;
+    //        case "Friday":
+    //            secnd = yea + '-' + mon + '-' + 9;
+    //            forth = yea + '-' + mon + '-' + 23;
+    //            break;
+    //        case "Saturday":
+    //            secnd = yea + '-' + mon + '-' + 8;
+    //            forth = yea + '-' + mon + '-' + 22;
+    //            break;
+    //        default: break;
+    //    }
+    //    if (d.getDate() == new Date(secnd).getDate()) {
+    //        return "2nd Saturday";
+    //    }
+    //    else if (d.getDate() == new Date(forth).getDate()) {
+    //        return "4th Saturday";
+    //    }
+    //    else {
+    //        return "NotFound";
+    //    }
+    //}
 </script>
 
 

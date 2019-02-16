@@ -29,7 +29,7 @@ namespace EIS.Repositories.Repository
 
         public Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId)
         {
-            
+
             Admin_Dashboard Model = new Admin_Dashboard();
             Model.sP_AdminDashboardCount = new SP_AdminDashboardCount();
             Model.sP_AdminDashboards = new List<SP_AdminDashboard>();
@@ -106,7 +106,7 @@ namespace EIS.Repositories.Repository
         }
 
 
-        public List<CalendarData> GetCalendarDetails(int location, DateTime beginDate, DateTime stopDate)
+        public List<CalendarData> GetAdminCalendarDetails(int location, DateTime beginDate, DateTime stopDate)
         {
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = new List<Holiday>();
@@ -130,12 +130,7 @@ namespace EIS.Repositories.Repository
                 if (leaveRequest != null)
                 {
                     CalendarData calendarData = new CalendarData();
-                    string leave = "";
-                    if (leaveRequest.LeaveType == "Casual Leave")
-                    {
-                        leave = "CL";
-                    }
-                    calendarData.Title = leaveRequest.EmployeeName + " (" + leave + "-" + leaveRequest.Status + ")";
+                    calendarData.Title = leaveRequest.EmployeeName + " (" + leaveRequest.Status + ")";
                     calendarData.Description = "Leave Status " + leaveRequest.Status;
                     calendarData.StartDate = leaveRequest.FromDate;
                     calendarData.EndDate = leaveRequest.ToDate;
@@ -154,15 +149,15 @@ namespace EIS.Repositories.Repository
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
                 {
-                    CalendarData calendarData = new CalendarData();
-                    calendarData.Title = holiday.Vacation;
-                    calendarData.Description = "Holiday due to " + holiday.Vacation;
-                    calendarData.StartDate = holiday.Date;
-                    calendarData.EndDate = holiday.Date;
-                    calendarData.Color = "Red";
-                    calendarData.IsFullDay = true;
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = holiday.Vacation;
+                    holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
+                    holidayCalanderData.StartDate = holiday.Date;
+                    holidayCalanderData.EndDate = holiday.Date;
+                    holidayCalanderData.Color = "Red";
+                    holidayCalanderData.IsFullDay = true;
 
-                    calendarDataList.Add(calendarData);
+                    calendarDataList.Add(holidayCalanderData);
                 }
                 if (date.Day == 1)
                 {
@@ -217,33 +212,33 @@ namespace EIS.Repositories.Repository
                 presentCount = resultPresent.Count();
                 if (presentCount > 0)
                 {
-                    CalendarData CalanderData10 = new CalendarData();
-                    CalanderData10.Title = "Present Count:" + presentCount;
-                    CalanderData10.StartDate = date;
-                    CalanderData10.EndDate = date;
-                    CalanderData10.Color = "Green";
-                    CalanderData10.IsFullDay = true;
+                    CalendarData presentCalanderData = new CalendarData();
+                    presentCalanderData.Title = "Present Count:" + presentCount;
+                    presentCalanderData.StartDate = date;
+                    presentCalanderData.EndDate = date;
+                    presentCalanderData.Color = "Green";
+                    presentCalanderData.IsFullDay = true;
                     StringBuilder sb1 = new StringBuilder();
                     foreach (var d in resultPresent)
                     {
                         if (d != null)
                         {
                             sb1.AppendLine("<br/>");
-                            sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ") Working Hours-" + d.Attendance.FirstOrDefault().TotalHours.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm"));
+                            sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
                         }
                     }
-                    CalanderData10.Description = sb1.ToString();
-                    calendarDataList.Add(CalanderData10);
+                    presentCalanderData.Description = sb1.ToString();
+                    calendarDataList.Add(presentCalanderData);
 
                     var resultAbsent = location == 0 ? result.Where(x => x.Attendance.Count() == 0).ToList() : result.Where(x => x.LocationId == location && x.Attendance.Count() == 0).ToList();
                     absentCount = resultAbsent.Count();
 
-                    CalendarData CalanderData11 = new CalendarData();
-                    CalanderData11.Title = "Absent Count:" + absentCount;
-                    CalanderData11.StartDate = date;
-                    CalanderData11.EndDate = date;
-                    CalanderData11.Color = "Red";
-                    CalanderData11.IsFullDay = true;
+                    CalendarData absentCalanderData = new CalendarData();
+                    absentCalanderData.Title = "Absent Count:" + absentCount;
+                    absentCalanderData.StartDate = date;
+                    absentCalanderData.EndDate = date;
+                    absentCalanderData.Color = "Red";
+                    absentCalanderData.IsFullDay = true;
                     StringBuilder sb2 = new StringBuilder();
                     foreach (var d in resultAbsent)
                     {
@@ -253,13 +248,126 @@ namespace EIS.Repositories.Repository
                             sb2.AppendLine(d.FullName);
                         }
                     }
-                    CalanderData11.Description = sb2.ToString();
-                    calendarDataList.Add(CalanderData11);
+                    absentCalanderData.Description = sb2.ToString();
+                    calendarDataList.Add(absentCalanderData);
                 }
             }
             return calendarDataList;
         }
 
+        public List<CalendarData> GetEmployeeCalendarDetails(int personId, DateTime beginDate, DateTime stopDate)
+        {
+            List<CalendarData> calendarDataList = new List<CalendarData>();
+            IEnumerable<Holiday> holidays = new List<Holiday>();
+            IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
+            IEnumerable<Attendance> attendances= new  List<Attendance>();
+            int? locationId = _dbContext.Person.Where(x => x.Id == personId).FirstOrDefault().LocationId;
+            
+            attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
+            if(locationId!=null)
+            {
+                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId);
+            }
+           
+            leaveList = _dbContext.LeaveRequests.Where(x => x.PersonId == personId);
+            int count = 0;
+          
+            for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
+            {
 
-    }
+                LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
+                if (leaveRequest != null)
+                {
+                    CalendarData calendarData = new CalendarData();
+                    calendarData.Title = "Leave Status (" + leaveRequest.Status + ")";
+                    calendarData.Description = "Leave Status " + leaveRequest.Status;
+                    calendarData.StartDate = leaveRequest.FromDate;
+                    calendarData.EndDate = leaveRequest.ToDate;
+                    if (leaveRequest.Status == "Pending")
+                    {
+                        calendarData.Color = "Blue";
+                    }
+                    else if (leaveRequest.Status == "Approved"){
+                        calendarData.Color = "Orange";
+                    }else if(leaveRequest.Status == "Rejected")
+                    {
+                        calendarData.Color = "Red";
+                    }
+                    else
+                    {
+                        calendarData.Color = "Violet";
+                    }
+                            
+                    
+                    calendarData.IsFullDay = true;
+                    calendarDataList.Add(calendarData);
+                }
+
+                Attendance attendance = attendances.Where(x => x.DateIn == date).FirstOrDefault();
+
+                if (attendance != null)
+                {
+                    CalendarData attendanceCalendarData = new CalendarData();
+                    string timeout = attendance.TimeOut == null ? "nil" : attendance.TimeOut.ToString();
+                    attendanceCalendarData.Title = "Present ("+DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt")+"-"+ timeout + ")";
+                    attendanceCalendarData.Description = "TotalWorkingHours " + attendance.TotalHours;
+                    attendanceCalendarData.Color = "Green";
+                    attendanceCalendarData.StartDate = date;
+                    attendanceCalendarData.EndDate = date;
+                    attendanceCalendarData.IsFullDay = true;
+                    calendarDataList.Add(attendanceCalendarData);
+                }
+               
+
+                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
+                if (holiday != null)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = holiday.Vacation;
+                    holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
+                    holidayCalanderData.StartDate = holiday.Date;
+                    holidayCalanderData.EndDate = holiday.Date;
+                    holidayCalanderData.Color = "Red";
+                    holidayCalanderData.IsFullDay = true;
+
+                    calendarDataList.Add(holidayCalanderData);
+                }
+                if (date.Day == 1)
+                {
+                    count = 0;
+                }
+                if (date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = "Weekly Off";
+                    holidayCalanderData.Description = "Weekly Off";
+                    holidayCalanderData.StartDate = date;
+                    holidayCalanderData.EndDate = date;
+                    holidayCalanderData.Color = "Orange";
+                    holidayCalanderData.IsFullDay = true;
+                    calendarDataList.Add(holidayCalanderData);
+
+                }
+                if (locationId == 2) { 
+                if (date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    count++;
+                    if (count % 2 == 0)
+                    {
+                        CalendarData holidayCalanderData = new CalendarData();
+                        holidayCalanderData.Title = count + "nd Saturday Weekly Off";
+                        holidayCalanderData.Description = "Holiday";
+                        holidayCalanderData.StartDate = date;
+                        holidayCalanderData.EndDate = date;
+                        holidayCalanderData.Color = "Orange";
+                        holidayCalanderData.IsFullDay = true;
+                        calendarDataList.Add(holidayCalanderData);
+                    }
+                }
+                }
+            }
+
+            return calendarDataList;
+        }
+    }        
 }

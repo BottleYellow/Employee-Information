@@ -215,6 +215,7 @@ namespace EIS.Repositories.Repository
         public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData,string id,int? loc)
         {
             List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
+            var holidays = _dbContext.Holidays.Where(x => x.LocationId == loc);
             if (id == "0")
             {
                 for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
@@ -228,7 +229,7 @@ namespace EIS.Repositories.Repository
                         attendance.EmployeeCode = person.EmployeeCode;
                         attendance.EmployeeName = person.FullName;
                         var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                        if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
+                        if (attendancedata == null)
                         {
                             if (date.DayOfWeek == DayOfWeek.Sunday)
                             {
@@ -260,25 +261,51 @@ namespace EIS.Repositories.Repository
                 for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                 {
                     AttendanceReportByDate attendance = new AttendanceReportByDate();
-
+                    
                     attendance.Date = date.ToShortDateString();
                     attendance.EmployeeCode = person.EmployeeCode;
                     attendance.EmployeeName = person.FullName;
                     var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                    if (attendancedata == null || attendancedata.TimeIn == attendancedata.TimeOut)
+                    if (attendancedata == null)
                     {
-                        if (date.DayOfWeek == DayOfWeek.Sunday)
+                        var holiday=holidays.Where(x => x.Date == date).FirstOrDefault();
+                        if (holiday == null)
                         {
-                            attendance.Status = "Weekly Off";
-                        }
-                        else
-                        {
-                            attendance.Status = "-";
-                        }
-                        attendance.TimeIn = "-";
-                        attendance.TimeOut = "-";
+                            if (date.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                attendance.Status = "Weekly Off";
+                            }
+                            else
+                            {
+                                if (loc == 2 && date.DayOfWeek == DayOfWeek.Saturday)
+                                {
+                                    string alternateDateStatus = CalculateDate(date);
+                                    if (!string.IsNullOrEmpty(alternateDateStatus))
+                                    {
+                                        attendance.Status = alternateDateStatus;
+                                    }
+                                    else
+                                    {
+                                        attendance.Status = "On Leave";
+                                    }
 
-                        attendance.TotalHours = "-";
+                                }
+                                else
+                                {
+
+                                    attendance.Status = "On Leave";
+                                }
+                            }
+                            attendance.TimeIn = "-";
+                            attendance.TimeOut = "-";
+                            attendance.TotalHours = "-";
+                        }else
+                        {
+                            attendance.Status = holiday.Vacation;
+                            attendance.TimeIn = "-";
+                            attendance.TimeOut = "-";
+                            attendance.TotalHours = "-";
+                        }
                     }
                     else
                     {
@@ -328,6 +355,60 @@ namespace EIS.Repositories.Repository
                 var result = results.Select(x => x.p).ToList();
                 return result.AsQueryable();
             }
+        }
+
+        public string CalculateDate(DateTime date)
+        {
+            string data= "";
+            int mon = date.Month;
+            int yea = date.Year;
+            var dat = 1;
+            DateTime myDate = new DateTime(yea, mon, dat);
+            string first= myDate.DayOfWeek.ToString();
+            DateTime secnd=new DateTime();
+            DateTime forth = new DateTime();
+
+            switch (first)
+            {
+                case "Sunday":
+                    secnd = new DateTime(yea, mon, 14);
+                    forth = new DateTime(yea, mon, 28);
+                    break;
+                case "Monday":
+                    secnd = new DateTime(yea, mon, 13);
+                    forth = new DateTime(yea, mon, 27);
+                    break;
+                case "Tuesday":
+                    secnd = new DateTime(yea, mon, 12);
+                    forth = new DateTime(yea, mon, 26);
+                    break;
+                case "Wednesday":
+                    secnd = new DateTime(yea, mon, 11);
+                    forth = new DateTime(yea, mon, 25);
+                    break;
+                case "Thursday":
+                    secnd = new DateTime(yea, mon, 10);
+                    forth = new DateTime(yea, mon, 24);
+                    break;
+                case "Friday":
+                    secnd = new DateTime(yea, mon, 9);
+                    forth = new DateTime(yea, mon, 23);
+                    break;
+                case "Saturday":
+                    secnd = new DateTime(yea, mon, 8);
+                    forth = new DateTime(yea, mon, 22);
+                    break;
+                default: break;
+            }
+            if (date == secnd)
+            {
+                data= "2nd Saturday Weekly Off";
+            }
+            else if (date == forth)
+            {
+                data= "4th Saturday Weekly Off";
+            }
+            return data;
         }
     }
 }

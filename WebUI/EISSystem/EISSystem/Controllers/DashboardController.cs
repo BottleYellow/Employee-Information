@@ -107,7 +107,7 @@ namespace EIS.WebApp.Controllers
             {
                 DateTime startDate = Convert.ToDateTime(intervalStart);
                 DateTime endDate = Convert.ToDateTime(intervalEnd);
-                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/CalendarData/" +location+"/"+startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/AdminCalendarData/" +location+"/"+startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
 
                 string stringData = response.Content.ReadAsStringAsync().Result;
 
@@ -124,14 +124,14 @@ namespace EIS.WebApp.Controllers
         
         [ActionName("EmployeeCalendar")]
         [HttpPost]
-        public IActionResult GetEmployeeCalendar(string intervalStart, string intervalEnd)
+        public IActionResult GetEmployeeCalendar(string intervalStart, string intervalEnd,int personId)
         {
             List<CalendarData> data = new List<CalendarData>();
             if (!string.IsNullOrEmpty(intervalStart) && !string.IsNullOrEmpty(intervalEnd))
             {
                 DateTime startDate = Convert.ToDateTime(intervalStart);
                 DateTime endDate = Convert.ToDateTime(intervalEnd);
-                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/CalendarData/"+ startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/EmployeeCalendarData/"+personId+"/"+ startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy"));
 
                 string stringData = response.Content.ReadAsStringAsync().Result;
 
