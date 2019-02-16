@@ -235,6 +235,7 @@ namespace EIS.WebAPI.Controllers
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
             }
+            _repository.LeaveCredit.Dispose();
             new EmailManager(_configuration).SendEmail(subject, body, To,null);
         }
 
@@ -272,6 +273,7 @@ namespace EIS.WebAPI.Controllers
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.AddPastLeave(leave);
+            _repository.LeaveRequest.Dispose();
             //_repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending");
             //SendMail(leave.Id, "Pending");
             return Ok();

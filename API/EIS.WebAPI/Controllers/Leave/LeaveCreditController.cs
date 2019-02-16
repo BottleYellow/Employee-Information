@@ -69,7 +69,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             Leave.TenantId = TenantId;
             _repository.LeaveCredit.AddCreditsAndSave(Leave);
-
+            _repository.LeaveCredit.Dispose();
             return Ok();
         }
 
@@ -83,7 +83,7 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             Credit.TenantId = TenantId;
             _repository.LeaveCredit.AddCreditAndSave(Credit);
-
+            _repository.LeaveCredit.Dispose();
             return Ok();
         }
 

@@ -95,7 +95,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 }
                 policy.TenantId = TenantId;
                 _repository.LeaveRules.CreateLeaveRuleAndSave(policy);
-
+                _repository.LeaveRules.Dispose();
                 return CreatedAtAction("GetLeavePolicies", new { id = policy.Id }, policy);
             }
             else
@@ -114,6 +114,7 @@ namespace EIS.WebAPI.Controllers.Leave
                     Credit.UpdatedDate = policy.UpdatedDate;
                     Credit.UpdatedBy = policy.UpdatedBy;
                     _repository.LeaveCredit.UpdateAndSave(Credit);
+                    _repository.LeaveRules.Dispose();
                 }
                 return Ok(policy);
             }

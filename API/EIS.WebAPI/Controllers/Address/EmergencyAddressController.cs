@@ -47,6 +47,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.EmergencyAddress.UpdateAndSave(emergency);
+            _repository.EmergencyAddress.Dispose();
             return Ok(emergency);
         }
 
@@ -62,6 +63,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 emergency.TenantId = TenantId;
                 _repository.EmergencyAddress.CreateAndSave(emergency);
+                _repository.CurrentAddress.Dispose();
                 return CreatedAtAction("GetEmergencyById", new { id = emergency.Id }, emergency);
             }
             else
@@ -71,6 +73,7 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.EmergencyAddress.UpdateAndSave(emergency);
+                _repository.CurrentAddress.Dispose();
                 return Ok(emergency);
             }
         }
@@ -102,6 +105,7 @@ namespace EIS.WebAPI.Controllers
             };
             _repository.OtherAddress.CreateAndSave(other);
             _repository.EmergencyAddress.DeleteAndSave(Emergency);
+            _repository.CurrentAddress.Dispose();
             return Ok(Emergency);
         }
     }
