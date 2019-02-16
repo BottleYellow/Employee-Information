@@ -108,7 +108,7 @@
                                             <select class="form-control" id="select">
                                                 <option value="month" id="month">Month</option>
                                                 <option value="year" id="year">Year</option>
-                                                <option value="week" id="week">Week</option>
+                                                @*<option value="week" id="week">Week</option>*@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -362,12 +362,12 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
-                if (value % 4 == 0) {
-                    totalDays = 366;
-                }
-                else {
-                    totalDays = 365;
-                }
+                //if (value % 4 == 0) {
+                //    totalDays = 366;
+                //}
+                //else {
+                //    totalDays = 365;
+                //}
                 generateReport(value, 'year', id);
             }
 
@@ -377,7 +377,7 @@
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
-                totalDays = new Date(y, m, 0).getDate()
+                //totalDays = new Date(y, m, 0).getDate()
                 generateReport(value, 'month', id);
             }
             else if (v == 'week') {
@@ -386,7 +386,7 @@
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
                 generateReport(firstDate + " - " + lastDate, 'week', id);
-                totalDays = 7;
+                //totalDays = 7;
             }
         });
     });
@@ -400,11 +400,11 @@
                     $('.ajax-loader').css("visibility", "visible");
                 },
                 success: function (data) {
-                    document.getElementById("averageHours").innerHTML = data.AverageTime;
-                    document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
-                    document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
+                    document.getElementById("averageHours").innerHTML = data.AverageHours;
+                    document.getElementById("averageTimeIn").innerHTML = data.AverageTimeIn;
+                    document.getElementById("averageTimeOut").innerHTML = data.AverageTimeOut;
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
-                    document.getElementById("absentDays").innerHTML = data.AbsentDays;
+                    document.getElementById("absentDays").innerHTML = data.LeaveDays;
                     document.getElementById("totalWorkingDays").innerHTML = data.TotalWorkingDays;
                     document.getElementById("totalNoOfDays").innerHTML = data.TotalDays;
                     document.getElementById("addtionalWorkingHours").innerHTML = data.AdditionalWorkingHours;

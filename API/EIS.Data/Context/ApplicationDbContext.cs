@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.Entities.OtherEntities;
 using EIS.Entities.SP;
 using EIS.Entities.User;
@@ -47,7 +48,8 @@ namespace EIS.Data.Context
         public virtual DbSet<SP_EmployeeDashboardCount> _sp_EmployeeDashboardcount { get; set; }
         [NotMapped]
         public virtual DbSet<SP_GetAttendanceCountReport> _sp_GetAttendanceCountReport { get; set; }
-
+        [NotMapped]
+        public virtual DbSet<AttendanceReport> _sp_GetEmployeeAttendanceCountReport { get; set; }
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }

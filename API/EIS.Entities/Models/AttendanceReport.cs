@@ -1,15 +1,18 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace EIS.Entities.Models
 {
     public class AttendanceReport
     {
-            public string AverageTime { get; set; }
-            public string TimeIn { get; set; }
-            public string TimeOut { get; set; }
-            public int PresentDays { get; set; }
-            public int AbsentDays { get; set; }
-            public int TotalWorkingDays { get; set; }
+        [Key]
+        public string AverageTimeIn { get; set; }
+        public string AverageTimeOut { get; set; }
+        public string AverageHours { get; set; }
         public string AdditionalWorkingHours { get; set; }
+        public int PresentDays { get; set; }
+        public int LeaveDays { get; set; }
+        public int TotalWorkingDays { get; set; }
         public int TotalDays { get; set; }
     }
 }
