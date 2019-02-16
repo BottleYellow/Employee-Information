@@ -122,6 +122,7 @@ namespace EIS.WebAPI.Controllers
                 string pw = u.Password;
                 u.CreatedBy = person.CreatedBy;
                 _repository.Users.CreateUserAndSave(u);
+                _repository.Users.Dispose();
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -140,6 +141,7 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateAndSave(person);
+                _repository.Employee.Dispose();
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -158,6 +160,7 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Employee.UpdateAndSave(person);
+            _repository.Employee.Dispose();
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -180,6 +183,7 @@ namespace EIS.WebAPI.Controllers
             users.IsActive = false;
             _repository.Employee.UpdateAndSave(person);
             _repository.Users.UpdateAndSave(users);
+            _repository.Employee.Dispose();
             return Ok(person);
         }
         [Route("Designations")]
@@ -232,6 +236,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 designation.TenantId = TenantId;
                 _repository.Employee.AddDesignationAndSave(designation);
+                _repository.Employee.Dispose();
                 return CreatedAtAction("GetDesignationById", new { did = designation.Id }, designation);
             }
             else
@@ -241,6 +246,7 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateDesignationAndSave(designation);
+                _repository.Employee.Dispose();
                 return NoContent();
             }
         }
@@ -251,7 +257,8 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _repository.Employee.UpdateDesignationAndSave(designation);            
+            _repository.Employee.UpdateDesignationAndSave(designation);
+            _repository.Employee.Dispose();
             return NoContent();
         }
 

@@ -67,6 +67,7 @@ namespace EIS.WebAPI.Controllers.Holidays
             }
             holiday.TenantId = TenantId;
             _repository.Holidays.CreateAndSave(holiday);
+            _repository.Holidays.Dispose();
             return Ok(holiday);
         }
 

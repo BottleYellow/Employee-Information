@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 
 namespace EIS.Repositories.Repository
 {
-    public abstract class RepositoryBase<T> : Disposable, IRepositorybase<T> where T : class
+    public abstract class RepositoryBase<T> : IDisposable, IRepositorybase<T> where T : class
     {
             protected ApplicationDbContext _dbContext { get; set; }
 
@@ -36,6 +36,7 @@ namespace EIS.Repositories.Repository
             public void Create(T entity)
             {
                   _dbContext.Set<T>().Add(entity);
+                   
             }
 
             public void Update(T entity)
@@ -121,6 +122,25 @@ namespace EIS.Repositories.Repository
         public T FindByConditionWithNoTracking(Expression<Func<T, bool>> expression)
         {
             return _dbContext.Set<T>().AsNoTracking().Where(expression).FirstOrDefault();
+        }
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

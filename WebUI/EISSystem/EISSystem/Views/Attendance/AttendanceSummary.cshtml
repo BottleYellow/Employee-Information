@@ -424,7 +424,13 @@
                 success: function (data) {
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
-                        array.push([data[i].Date, data[i].Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
+                        var Status = data[i].Status;
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                        } else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        }   
+                        array.push([data[i].Date, Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({

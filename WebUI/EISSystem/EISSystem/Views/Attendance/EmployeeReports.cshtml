@@ -306,11 +306,11 @@
                 url: '@Url.Action("GetAttendanceSummary", "Attendance")?date=' + value + '&type=' + type,
                 //data: { "date": value, "type": type },
                 success: function (data) {
-                    document.getElementById("averageHours").innerHTML = data.AverageTime;
-                    document.getElementById("averageTimeIn").innerHTML = data.TimeIn;
-                    document.getElementById("averageTimeOut").innerHTML = data.TimeOut;
+                    document.getElementById("averageHours").innerHTML = data.AverageHours;
+                    document.getElementById("averageTimeIn").innerHTML = data.AverageTimeIn;
+                    document.getElementById("averageTimeOut").innerHTML = data.AverageTimeOut;
                     document.getElementById("presentDays").innerHTML = data.PresentDays;
-                    document.getElementById("absentDays").innerHTML = data.AbsentDays;
+                    document.getElementById("absentDays").innerHTML = data.LeaveDays;
                     document.getElementById("totalWorkingDays").innerHTML = data.TotalWorkingDays;
                     document.getElementById("totalNoOfDays").innerHTML = data.TotalDays;
                     document.getElementById("addtionalWorkingHours").innerHTML = data.AdditionalWorkingHours;
@@ -331,7 +331,13 @@
                     var array = [];
                     for (var i = 0; i < data.length; i++)
                     {
-                        array.push([data[i].Date,data[i].Status,data[i].TimeIn,data[i].TimeOut,data[i].TotalHours])
+                        var Status = data[i].Status;
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                        } else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        }   
+                        array.push([data[i].Date,Status,data[i].TimeIn,data[i].TimeOut,data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({

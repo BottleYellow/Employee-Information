@@ -88,13 +88,15 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
+                                        @if (cookies.Role != "Employee")
+                                        {
                                         <th>
                                             Location
                                         </th>
                                         <th>
                                             Employee Name
                                         </th>
-
+                                        }
                                         <th>
                                             From Date
                                         </th>
@@ -135,94 +137,172 @@
         GenerateReport(c);
     });
     function GenerateReport(c) {
-                    $.fn.dataTable.ext.errMode = 'none';
+
+        var Role = '@cookies.Role';
+            $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                 bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
             }).DataTable();
             $('#example').DataTable().destroy();
             $('#example tbody').empty();
-        var dTable = $('#example').DataTable({
-            sDom: '<"myexport"B>ifrtlp',
-            "processing": true, // for show progress bar
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            "order":[2,'desc'],
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'EMPLOYEE PAST LEAVE REPORT',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf'
-                }
-            ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-            lengthMenu: [
-                [10, 25, -1],
-                ['10', '25', 'All']
-            ],
-            ajax: {
-                //"url": "/Leave/PastLeaves",
-                "url": '@Url.Action("PastLeaves", "Leave")?LocationId=' + c,
-                "type": "POST",
-                "datatype": "json",
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                }
-            },
-            "columns": [
-                {
-                    "data": "LocationName", "name": "Person.Location.LocationName", "autoWidth": true, render: function (data, type, row) {
-                        return row.Person.Location.LocationName;
-                    }
-                },
-                {
-                    "data": "EmployeeName", "name": "EmployeeName", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    "data": "FromDate", "name": "FromDate", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                {
-                    "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                {
-                    "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                //{
-                //    "data": "Status", "autoWidth": true, render: function (data) {
-                //        if (data == "Approved") {
-                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
-                //        } else if (data == "Rejected" || data == "Cancelled") {
-                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
-                //        } else {
-                //            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                //        }
-                //    }
-                //},
-                {
-                    "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                }
-            ]
-        });
+            if (Role != 'Employee') {
+                var dTable = $('#example').DataTable({
+                    sDom: '<"myexport"B>ifrtlp',
+                    "processing": true, // for show progress bar
+                    "serverSide": true, // for process server side
+                    "filter": true, // this is for disable filter (search box)
+                    "order": [2, 'desc'],
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'EMPLOYEE PAST LEAVE REPORT',
+                            text: 'Export',
+                            titleAttr: 'Export to Pdf'
+                        }
+                    ],
+                    'columnDefs': [
+                        {
+                            'searchable': false,
+                            'targets': [0, 1, 2]
+                        }
+                    ],
+                    lengthMenu: [
+                        [10, 25, -1],
+                        ['10', '25', 'All']
+                    ],
+                    ajax: {
+                        //"url": "/Leave/PastLeaves",
+                        "url": '@Url.Action("PastLeaves", "Leave")?LocationId=' + c,
+                        "type": "POST",
+                        "datatype": "json",
+                        beforeSend: function () {
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
+                        complete: function () {
+                            $('.ajax-loader').css("visibility", "hidden");
+                        }
+                    },
+                    "columns": [
+                        {
+                            "data": "LocationName", "name": "Person.Location.LocationName", "autoWidth": true, render: function (data, type, row) {
+                                return row.Person.Location.LocationName;
+                            }
+                        },
+                        {
+                            "data": "EmployeeName", "name": "EmployeeName", "autoWidth": true, render: function (data) {
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "FromDate", "name": "FromDate", "autoWidth": true, render: function (data) {
+                                data = moment(data).format('DD MMM YYYY');
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
+                                data = moment(data).format('DD MMM YYYY');
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
+                                return data;
+                            }
+                        },
+                        //{
+                        //    "data": "Status", "autoWidth": true, render: function (data) {
+                        //        if (data == "Approved") {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
+                        //        } else if (data == "Rejected" || data == "Cancelled") {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
+                        //        } else {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
+                        //        }
+                        //    }
+                        //},
+                        {
+                            "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
+                                return data;
+                            }
+                        }
+                    ]
+                });
+            }
+            else {
+                 var dTable = $('#example').DataTable({
+                    sDom: '<"myexport"B>ifrtlp',
+                    "processing": true, // for show progress bar
+                    "serverSide": true, // for process server side
+                    "filter": true, // this is for disable filter (search box)
+                    "order": [2, 'desc'],
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'EMPLOYEE PAST LEAVE REPORT',
+                            text: 'Export',
+                            titleAttr: 'Export to Pdf'
+                        }
+                    ],
+                    'columnDefs': [
+                        {
+                            'searchable': false,
+                            'targets': [0, 1, 2]
+                        }
+                    ],
+                    lengthMenu: [
+                        [10, 25, -1],
+                        ['10', '25', 'All']
+                    ],
+                    ajax: {
+                        //"url": "/Leave/PastLeaves",
+                        "url": '@Url.Action("PastLeaves", "Leave")?LocationId=' + c,
+                        "type": "POST",
+                        "datatype": "json",
+                        beforeSend: function () {
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
+                        complete: function () {
+                            $('.ajax-loader').css("visibility", "hidden");
+                        }
+                    },
+                    "columns": [
+                        {
+                            "data": "FromDate", "name": "FromDate", "autoWidth": true, render: function (data) {
+                                data = moment(data).format('DD MMM YYYY');
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
+                                data = moment(data).format('DD MMM YYYY');
+                                return data;
+                            }
+                        },
+                        {
+                            "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
+                                return data;
+                            }
+                        },
+                        //{
+                        //    "data": "Status", "autoWidth": true, render: function (data) {
+                        //        if (data == "Approved") {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
+                        //        } else if (data == "Rejected" || data == "Cancelled") {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
+                        //        } else {
+                        //            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
+                        //        }
+                        //    }
+                        //},
+                        {
+                            "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
+                                return data;
+                            }
+                        }
+                    ]
+                });
+            }
     }
     $("#btnModal").click(function () {
         var url = $("#modal-placeholder").data('url');

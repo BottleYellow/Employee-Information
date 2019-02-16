@@ -167,7 +167,7 @@ namespace EIS.Repositories.Repository
             string InputTwo = month.ToString().PadLeft(2, c);
 
             AttendanceReport Model = new AttendanceReport();
-            
+
             var SP_SelectType = new SqlParameter("@SelectType", type);
             var SP_PersonId = new SqlParameter("@PersonId", PersonId);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
@@ -230,37 +230,125 @@ namespace EIS.Repositories.Repository
         //    return attendanceReport;
         //}
 
-        public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData,string id,int? loc)
+        public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData, string id, int? loc)
         {
             List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
-            var holidays = _dbContext.Holidays.Where(x => x.LocationId == loc);
-            if (id == "0")
+            var holidays = _dbContext.Holidays.ToList();
+            if (attendanceData.Count() > 0)
             {
-                for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                if (id == "0")
                 {
+                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    {
 
-                    List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
-                    foreach (var person in Emps)  
+                        List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
+                        foreach (var person in Emps)
+                        {
+
+                            AttendanceReportByDate attendance = new AttendanceReportByDate();
+                            attendance.Date = date.ToShortDateString();
+                            attendance.EmployeeCode = person.EmployeeCode;
+                            attendance.EmployeeName = person.FullName;
+                            int locationId = person.LocationId.GetValueOrDefault();
+                            var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                            if (attendancedata == null)
+                            {
+                                attendance.TimeIn = "-";
+                                attendance.TimeOut = "-";
+                                attendance.TotalHours = "-";
+                                var holiday = holidays.Where(x => x.Date == date && x.LocationId == locationId).FirstOrDefault();
+                                if (holiday == null)
+                                {
+                                    if (date.DayOfWeek == DayOfWeek.Sunday)
+                                    {
+                                        attendance.Status = "Weekly Off";
+                                    }
+                                    else
+                                    {
+                                        if (locationId == 2 && date.DayOfWeek == DayOfWeek.Saturday)
+                                        {
+                                            string alternateDateStatus = CalculateDate(date);
+                                            if (!string.IsNullOrEmpty(alternateDateStatus))
+                                            {
+                                                attendance.Status = alternateDateStatus;
+                                            }
+                                            else
+                                            {
+                                                attendance.Status = "On Leave";
+                                            }
+
+                                        }
+                                        else
+                                        {
+
+                                            attendance.Status = "On Leave";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    attendance.Status = holiday.Vacation;
+                                }
+                            }
+                            else
+                            {
+                                attendance.TimeIn = attendancedata.TimeIn.ToString();
+                                attendance.TimeOut = attendancedata.TimeOut == null ? "-" : attendancedata.TimeOut.ToString();
+                                attendance.Status = "Present";
+                                attendance.TotalHours = attendancedata.TotalHours == null ? "-" : attendancedata.TotalHours.ToString();
+                            }
+                            attendances.Add(attendance);
+                        }
+                    }
+                }
+                else
+                {
+                    Person person = _dbContext.Person.Where(x => x.EmployeeCode == id).FirstOrDefault();
+                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                     {
                         AttendanceReportByDate attendance = new AttendanceReportByDate();
+
                         attendance.Date = date.ToShortDateString();
                         attendance.EmployeeCode = person.EmployeeCode;
                         attendance.EmployeeName = person.FullName;
                         var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
                         if (attendancedata == null)
                         {
-                            if (date.DayOfWeek == DayOfWeek.Sunday)
+                            var holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
+                            if (holiday == null)
                             {
-                                attendance.Status = "Weekly Off";
+                                attendance.TimeIn = "-";
+                                attendance.TimeOut = "-";
+                                attendance.TotalHours = "-";
+                                if (date.DayOfWeek == DayOfWeek.Sunday)
+                                {
+                                    attendance.Status = "Weekly Off";
+                                }
+                                else
+                                {
+                                    if (loc == 2 && date.DayOfWeek == DayOfWeek.Saturday)
+                                    {
+                                        string alternateDateStatus = CalculateDate(date);
+                                        if (!string.IsNullOrEmpty(alternateDateStatus))
+                                        {
+                                            attendance.Status = alternateDateStatus;
+                                        }
+                                        else
+                                        {
+                                            attendance.Status = "On Leave";
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        attendance.Status = "On Leave";
+                                    }
+                                }
                             }
                             else
                             {
-                                attendance.Status = "-";
+                                attendance.Status = holiday.Vacation;
                             }
-                            attendance.TimeIn = "-";
-                            attendance.TimeOut = "-";
-
-                            attendance.TotalHours = "-";
                         }
                         else
                         {
@@ -270,73 +358,11 @@ namespace EIS.Repositories.Repository
                             attendance.TotalHours = attendancedata.TotalHours == null ? "-" : attendancedata.TotalHours.ToString();
                         }
                         attendances.Add(attendance);
+
                     }
                 }
             }
-            else
-            {
-                Person person = _dbContext.Person.Where(x => x.EmployeeCode == id).FirstOrDefault();
-                for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
-                {
-                    AttendanceReportByDate attendance = new AttendanceReportByDate();
-                    
-                    attendance.Date = date.ToShortDateString();
-                    attendance.EmployeeCode = person.EmployeeCode;
-                    attendance.EmployeeName = person.FullName;
-                    var attendancedata = attendanceData.Where(x => x.DateIn == date && x.PersonId == person.Id).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                    if (attendancedata == null)
-                    {
-                        var holiday=holidays.Where(x => x.Date == date).FirstOrDefault();
-                        if (holiday == null)
-                        {
-                            if (date.DayOfWeek == DayOfWeek.Sunday)
-                            {
-                                attendance.Status = "Weekly Off";
-                            }
-                            else
-                            {
-                                if (loc == 2 && date.DayOfWeek == DayOfWeek.Saturday)
-                                {
-                                    string alternateDateStatus = CalculateDate(date);
-                                    if (!string.IsNullOrEmpty(alternateDateStatus))
-                                    {
-                                        attendance.Status = alternateDateStatus;
-                                    }
-                                    else
-                                    {
-                                        attendance.Status = "On Leave";
-                                    }
 
-                                }
-                                else
-                                {
-
-                                    attendance.Status = "On Leave";
-                                }
-                            }
-                            attendance.TimeIn = "-";
-                            attendance.TimeOut = "-";
-                            attendance.TotalHours = "-";
-                        }else
-                        {
-                            attendance.Status = holiday.Vacation;
-                            attendance.TimeIn = "-";
-                            attendance.TimeOut = "-";
-                            attendance.TotalHours = "-";
-                        }
-                    }
-                    else
-                    {
-                        attendance.TimeIn = attendancedata.TimeIn.ToString();
-                        attendance.TimeOut = attendancedata.TimeOut == null ? "-" : attendancedata.TimeOut.ToString();
-                        attendance.Status = "Present";
-                        attendance.TotalHours = attendancedata.TotalHours == null ? "-" : attendancedata.TotalHours.ToString();
-                    }
-                    attendances.Add(attendance);
-
-                }
-            }
-           
             return attendances;
         }
 
@@ -377,13 +403,13 @@ namespace EIS.Repositories.Repository
 
         public string CalculateDate(DateTime date)
         {
-            string data= "";
+            string data = "";
             int mon = date.Month;
             int yea = date.Year;
             var dat = 1;
             DateTime myDate = new DateTime(yea, mon, dat);
-            string first= myDate.DayOfWeek.ToString();
-            DateTime secnd=new DateTime();
+            string first = myDate.DayOfWeek.ToString();
+            DateTime secnd = new DateTime();
             DateTime forth = new DateTime();
 
             switch (first)
@@ -420,11 +446,11 @@ namespace EIS.Repositories.Repository
             }
             if (date == secnd)
             {
-                data= "2nd Saturday Weekly Off";
+                data = "2nd Saturday Weekly Off";
             }
             else if (date == forth)
             {
-                data= "4th Saturday Weekly Off";
+                data = "4th Saturday Weekly Off";
             }
             return data;
         }
