@@ -8300,6 +8300,7 @@
       "Microsoft.AspNetCore.Mvc.Core >= 2.2.0",
       "Microsoft.EntityFrameworkCore >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
+      "System.Data.SqlClient >= 4.6.0",
       "System.Linq.Dynamic.Core >= 1.0.9",
       "System.Management >= 4.5.0"
     ]
@@ -8365,6 +8366,10 @@
             "target": "Package",
             "version": "[2.2.0, )",
             "autoReferenced": true
+          },
+          "System.Data.SqlClient": {
+            "target": "Package",
+            "version": "[4.6.0, )"
           },
           "System.Linq.Dynamic.Core": {
             "target": "Package",

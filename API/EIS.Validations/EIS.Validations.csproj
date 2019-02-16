@@ -9,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EIS.Data\EIS.Data.csproj" />
+    <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
     <ProjectReference Include="..\EIS.Repository\EIS.Repositories.csproj" />
   </ItemGroup>
 

@@ -5193,6 +5193,7 @@
           "EIS.Entities": "1.0.0",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.0",
+          "System.Data.SqlClient": "4.6.0",
           "System.Linq.Dynamic.Core": "1.0.9",
           "System.Management": "4.5.0"
         },
@@ -5207,6 +5208,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
+          "EIS.Data": "1.0.0",
+          "EIS.Entities": "1.0.0",
           "EIS.Repositories": "1.0.0",
           "FluentValidation.AspNetCore": "8.1.2"
         },

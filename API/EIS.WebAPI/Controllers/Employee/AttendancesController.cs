@@ -227,6 +227,10 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("GetDateWiseAttendance/{id}/{LocationId}/{startDate}/{endDate}")]
         public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]int LocationId, [FromRoute]string startDate, [FromRoute]string endDate)
         {
+            if (Convert.ToDateTime(endDate) > DateTime.Now.Date)
+            {
+                endDate = DateTime.Now.Date.ToString();
+            }
             List<AttendanceReportByDate> attendancelist = null;
             if (id == "0")
             {

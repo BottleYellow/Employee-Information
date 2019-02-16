@@ -3101,6 +3101,7 @@
           "EIS.Entities": "1.0.0",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.0",
+          "System.Data.SqlClient": "4.6.0",
           "System.Linq.Dynamic.Core": "1.0.9",
           "System.Management": "4.5.0"
         },
@@ -9286,6 +9287,8 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
+      "EIS.Data >= 1.0.0",
+      "EIS.Entities >= 1.0.0",
       "EIS.Repositories >= 1.0.0",
       "FluentValidation.AspNetCore >= 8.1.2",
       "Microsoft.NETCore.App >= 2.2.0"
@@ -9321,6 +9324,12 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
+            "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj": {
+              "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj"
+            },
+            "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj": {
+              "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj"
+            },
             "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj": {
               "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj"
             }
