@@ -28,10 +28,6 @@
             position: relative;
             top: 45%;
             left: 45%;
-            /*width: 25%;
-            height: 25%;
-            opacity: 0.9;
-            filter: alpha(opacity=50);*/
         }
 
     a {
@@ -313,6 +309,11 @@
                 var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var Status = Employees[i].Status;
+            if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {                
+                    var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('HH:mm:ss');
+                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+                }
+
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
             } else {
@@ -343,35 +344,64 @@
         for (var i = 0; i < Leaves.length; i++) {
             var dateFrom = moment(Leaves[i].FromDate).format("DD MMM YYYY");
             var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY")
+            var Status = Leaves[i].Status;
             var actionButton;
-            if (Leaves[i].Status == "Pending") {
+            if (Status == "Pending") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
-            else if (Leaves[i].Status == "Approved") {
+            else if (Status == "Approved") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
-            else if (Leaves[i].Status == "Requested For Cancel") {
+            else if (Status == "Requested For Cancel") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
             }
             else {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
             }
             if (Leaves[i].LocationName == "Baner") {
-                banerArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
+                banerArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             } else
-                kondhwaArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Leaves[i].Status, Leaves[i].Reason])
+                kondhwaArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             }
 
         $('#BanerLeavesTable').DataTable().destroy();
         $('#BanerLeavesTable').DataTable({
+            "aoColumns": [
+                null,
+                null,
+                null,
+                { "sType": "date" },
+                { "sType": "date" },
+                null,
+                { "sType": "date" },
+                null,
+                null
+            ],
+            "order": [[7, "desc"], [6 , "desc"]],
             data: banerArrayLeaves,
-            "order": [7, "desc"]
+    
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
         $('#KondhwaLeavesTable').DataTable({
+            "aoColumns": [
+                null,
+                null,
+                null,
+                { "sType": "date" },
+                { "sType": "date" },
+                null,
+                { "sType": "date" },
+                null,
+                null
+            ],
+            "order": [[7, "desc"], [6, "desc"]],
             data: kondhwaArrayLeaves,
-            "order":[7,"desc"]
+
         });
     }
     function UpdateStatus(RequestId, Status) {

@@ -66,7 +66,6 @@
 <head>
     <title>Employee wise Reports</title>
 
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -207,7 +206,6 @@
                                             <th>Time In</th>
                                             <th>Time Out</th>
                                             <th>Total Hours</th>
-
                                         </tr>
                                     </thead>
                                 </table>
@@ -238,9 +236,12 @@
 <script src="~/Ems/js/buttons.flash.min.js"></script>
 <script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/buttons.print.min.js"></script>
-<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
+
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src=" //cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.15/sorting/datetime-moment.js"></script>
+
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -429,68 +430,22 @@
                         array.push([data[i].Date, Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
+
                     $('#example').DataTable({
+                        "aoColumns": [
+                            { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
                         data: array
                     });
                 },
 
             });
-        }
-  
-
-   
-    function calculate(date) {
-        var d = new Date(date);
-        var mon = d.toLocaleString('en-us', { month: 'long' });
-        var yea = d.getFullYear();
-        var dat = 1;
-        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
-        var first = myDays[myDate.getDay()];
-        //alert(first);
-        var secnd;
-        var forth;
-        switch (first) {
-            case "Sunday":
-                secnd = yea + '-' + mon + '-' + 14;
-                forth = yea + '-' + mon + '-' + 28;
-                break;
-            case "Monday":
-                secnd = yea + '-' + mon + '-' + 13;
-                forth = yea + '-' + mon + '-' + 27;
-                break;
-            case "Tuesday":
-                secnd = yea + '-' + mon + '-' + 12;
-                forth = yea + '-' + mon + '-' + 26;
-                break;
-            case "Wednesday":
-                secnd = yea + '-' + mon + '-' + 11;
-                forth = yea + '-' + mon + '-' + 25;
-                break;
-            case "Thursday":
-                secnd = yea + '-' + mon + '-' + 10;
-                forth = yea + '-' + mon + '-' + 24;
-                break;
-            case "Friday":
-                secnd = yea + '-' + mon + '-' + 9;
-                forth = yea + '-' + mon + '-' + 23;
-                break;
-            case "Saturday":
-                secnd = yea + '-' + mon + '-' + 8;
-                forth = yea + '-' + mon + '-' + 22;
-                break;
-            default: break;
-        }
-        if (d.getDate() == new Date(secnd).getDate()) {
-            return "2nd Saturday";
-        }
-        else if (d.getDate() == new Date(forth).getDate()) {
-            return "4th Saturday";
-        }
-        else {
-            return "NotFound";
-        }
-    }
+        } 
+ 
 </script>
 
 

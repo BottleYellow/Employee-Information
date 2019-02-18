@@ -50,7 +50,7 @@
 </style>
 <head>
     <title>Attendance History</title>
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -202,7 +202,7 @@
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
-
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
 
 <script type="text/javascript">
@@ -341,6 +341,13 @@
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
+                        "aoColumns": [
+                            { "sType": "date" },
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
                         data: array
                     });
                 },

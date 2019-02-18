@@ -1,7 +1,6 @@
 ﻿using EIS.Entities.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EIS.Entities.Employee
 {

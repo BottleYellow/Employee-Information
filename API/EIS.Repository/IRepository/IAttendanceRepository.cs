@@ -3,7 +3,6 @@ using EIS.Entities.Models;
 using EIS.Entities.SP;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EIS.Repositories.IRepository
 {

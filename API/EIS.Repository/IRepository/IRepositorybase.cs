@@ -1,5 +1,4 @@
-﻿using EIS.Entities.Employee;
-using EIS.Entities.Generic;
+﻿using EIS.Entities.Generic;
 using System;
 using System.Collections;
 using System.Linq;

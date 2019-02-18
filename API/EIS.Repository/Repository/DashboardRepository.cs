@@ -130,17 +130,25 @@ namespace EIS.Repositories.Repository
                 if (leaveRequest != null)
                 {
                     CalendarData calendarData = new CalendarData();
-                    calendarData.Title = leaveRequest.EmployeeName + " (" + leaveRequest.Status + ")";
+                    calendarData.Title = leaveRequest.EmployeeName + " (Leave " + leaveRequest.Status + ")";
                     calendarData.Description = "Leave Status " + leaveRequest.Status;
                     calendarData.StartDate = leaveRequest.FromDate;
-                    calendarData.EndDate = leaveRequest.ToDate;
+                    calendarData.EndDate = leaveRequest.ToDate;            
                     if (leaveRequest.Status == "Pending")
+                    {
+                        calendarData.Color = "Light Blue";
+                    }
+                    else if (leaveRequest.Status == "Approved")
                     {
                         calendarData.Color = "Orange";
                     }
+                    else if (leaveRequest.Status == "Rejected")
+                    {
+                        calendarData.Color = "Red";
+                    }
                     else
                     {
-                        calendarData.Color = "Blue";
+                        calendarData.Color = "Violet";
                     }
                     calendarData.IsFullDay = true;
                     calendarDataList.Add(calendarData);
@@ -285,7 +293,7 @@ namespace EIS.Repositories.Repository
                     calendarData.EndDate = leaveRequest.ToDate;
                     if (leaveRequest.Status == "Pending")
                     {
-                        calendarData.Color = "Blue";
+                        calendarData.Color = "Light Blue";
                     }
                     else if (leaveRequest.Status == "Approved"){
                         calendarData.Color = "Orange";
