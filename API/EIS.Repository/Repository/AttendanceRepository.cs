@@ -176,7 +176,7 @@ namespace EIS.Repositories.Repository
             Model = _dbContext._sp_GetEmployeeAttendanceCountReport.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).FirstOrDefault();
 
             return Model;
-        }      
+        }
 
         public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData, string id, int? loc)
         {
@@ -186,7 +186,7 @@ namespace EIS.Repositories.Repository
             {
                 if (id == "0")
                 {
-                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                     {
 
                         List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
@@ -252,7 +252,7 @@ namespace EIS.Repositories.Repository
                 else
                 {
                     Person person = _dbContext.Person.Where(x => x.EmployeeCode == id).FirstOrDefault();
-                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                     {
                         AttendanceReportByDate attendance = new AttendanceReportByDate();
 

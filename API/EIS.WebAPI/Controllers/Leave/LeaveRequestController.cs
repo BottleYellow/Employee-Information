@@ -30,22 +30,20 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("View all requests")]
-        [Route("GetLeaveRequests/{fromDate}/{toDate}")]
+        [Route("GetLeaveRequests")]
         [HttpPost]
-        public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid,[FromRoute]string fromDate,[FromRoute]string toDate)
+        public IActionResult GetLeaveRequests([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
             IEnumerable<LeaveRequest> leaveData = null;
-            DateTime dateFrom = Convert.ToDateTime(fromDate);
-            DateTime dateTo = Convert.ToDateTime(toDate);
 
             if (sortGrid.LocationId==0)
             {
-                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true &&((x.FromDate>= dateFrom && x.FromDate<= dateTo) || (x.ToDate>= dateFrom && x.ToDate<= dateTo))).ToList();
+                leaveData = _repository.LeaveRequest.FindAll().Where(x=>x.Status=="Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();
             }
             else
             {
-                leaveData = _repository.LeaveRequest.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId&& ((x.FromDate >= dateFrom && x.FromDate <= dateTo) || (x.ToDate >= dateFrom && x.ToDate <= dateTo))).ToList();
+                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status == "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList();
             }
             
            
@@ -58,6 +56,39 @@ namespace EIS.WebAPI.Controllers
             {
                 string search = sortGrid.Search.ToLower();
                 data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search)||x.Reason.ToLower().Contains(search) || x.Status.ToLower().Contains(search), sortGrid, leaveData.AsQueryable());
+            }
+            return Ok(data);
+
+        }
+
+        [Route("GetLeaveHistory/{fromDate}/{toDate}")]
+        [HttpPost]
+        public IActionResult GetLeaveHistory([FromBody]SortGrid sortGrid, [FromRoute]string fromDate, [FromRoute]string toDate)
+        {
+            ArrayList data = new ArrayList();
+            IEnumerable<LeaveRequest> leaveData = null;
+            DateTime dateFrom = Convert.ToDateTime(fromDate);
+            DateTime dateTo = Convert.ToDateTime(toDate);
+
+            if (sortGrid.LocationId == 0)
+            {
+                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && ((x.FromDate >= dateFrom && x.FromDate <= dateTo) || (x.ToDate >= dateFrom && x.ToDate <= dateTo))).ToList();
+            }
+            else
+            {
+                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId && ((x.FromDate >= dateFrom && x.FromDate <= dateTo) || (x.ToDate >= dateFrom && x.ToDate <= dateTo))).ToList();
+            }
+
+
+            if (string.IsNullOrEmpty(sortGrid.Search))
+            {
+
+                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData.AsQueryable());
+            }
+            else
+            {
+                string search = sortGrid.Search.ToLower();
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search) || x.Reason.ToLower().Contains(search) || x.Status.ToLower().Contains(search), sortGrid, leaveData.AsQueryable());
             }
             return Ok(data);
 

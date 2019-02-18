@@ -154,7 +154,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                endDate = startDate.AddMonths(1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData, Code, locationId);
      
@@ -177,7 +177,7 @@ namespace EIS.WebAPI.Controllers
                 eDate = DateTime.Now.Date;
             }
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= sDate && x.DateIn.Date <= eDate && x.PersonId == id);
-            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate.AddDays(1), attendanceData,Code, locationId);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate, attendanceData,Code, locationId);
             return Ok(attendancelist);
         }
         #endregion
@@ -241,13 +241,13 @@ namespace EIS.WebAPI.Controllers
             if (id == "0")
             {
                 IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate)).Include(x=>x.Person);
-                attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData,id,LocationId);
+                attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate), attendanceData,id,LocationId);
             }
             else
             {
                 int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
                 IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId).Include(x => x.Person);
-                attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData, id, LocationId);
+                attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate), attendanceData, id, LocationId);
             }
         //[HttpGet("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
         //public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)

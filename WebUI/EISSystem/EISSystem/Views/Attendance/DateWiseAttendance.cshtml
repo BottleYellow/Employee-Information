@@ -112,6 +112,8 @@
                                             <th>Employee Code</th>
                                             <th>Name</th>
                                             <th>Date</th>
+                                            <th>Clock In</th>
+                                            <th>Clock Out</th>
                                             <th>Status</th>
                                             <th>Total Working Hours</th>
                                         </tr>
@@ -216,7 +218,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }   
 
-                        array.push([data[i].EmployeeCode, data[i].EmployeeName, data[i].Date, Status , data[i].TotalHours])
+                        array.push([data[i].EmployeeCode, data[i].EmployeeName, data[i].Date, data[i].TimeIn, data[i].TimeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
