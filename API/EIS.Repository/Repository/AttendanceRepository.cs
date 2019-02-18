@@ -178,58 +178,6 @@ namespace EIS.Repositories.Repository
             return Model;
         }
 
-        //public AttendanceReport GetAttendanceReportSummary(int totalDays, int totalWorkingDays, IEnumerable<Attendance> attendanceData)
-        //{
-        //    AttendanceReport attendanceReport = new AttendanceReport();
-
-        //    attendanceReport.TotalWorkingDays = totalWorkingDays;
-        //    attendanceReport.TotalDays = totalDays;
-        //    attendanceReport.PresentDays = attendanceData.Count();
-        //    attendanceReport.LeaveDays = attendanceReport.TotalWorkingDays - attendanceReport.PresentDays;
-        //    if (attendanceReport.PresentDays == 0)
-        //    {
-        //        attendanceReport.AverageTimeIn = "-";
-        //        attendanceReport.AverageTimeOut = "-";
-        //        attendanceReport.AverageHours = "-";
-        //        attendanceReport.AdditionalWorkingHours = "-";
-        //    }
-        //    else
-        //    {
-
-        //        TimeSpan averageTimeIn = new TimeSpan(Convert.ToInt64(attendanceData.Average(x => x.TimeIn.Ticks)));
-        //        DateTime timeIn = DateTime.Today.Add(averageTimeIn);
-        //        attendanceReport.AverageTimeIn = timeIn.ToString("hh:mm tt");
-
-        //        IEnumerable<Attendance> attendanceTimeOutData = attendanceData.Where(x => x.TimeOut != null && x.TotalHours != null);
-        //        if (attendanceTimeOutData != null && attendanceTimeOutData.Count() > 0)
-        //        {
-        //            TimeSpan averageTimeOut = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TimeOut.GetValueOrDefault().Ticks)));
-        //            DateTime timeOut = DateTime.Today.Add(averageTimeOut);
-        //            attendanceReport.AverageTimeOut = timeOut.ToString("hh:mm tt");
-        //            TimeSpan averageHour = new TimeSpan(Convert.ToInt64(attendanceTimeOutData.Average(x => x.TotalHours.GetValueOrDefault().Ticks)));
-        //            DateTime avgHour = DateTime.Today.Add(averageHour);
-        //            attendanceReport.AverageHours = avgHour.ToString("HH:mm");
-        //            if (averageHour > new TimeSpan(9, 0, 0))
-        //            {
-        //                TimeSpan additionalHours = averageHour - new TimeSpan(9, 0, 0);
-        //                TimeSpan result = TimeSpan.FromTicks(additionalHours.Ticks * attendanceTimeOutData.Count());
-        //                attendanceReport.AdditionalWorkingHours = (int)result.TotalHours + ":" + result.Minutes;
-        //            }
-        //            else
-        //            {
-        //                attendanceReport.AdditionalWorkingHours = "-";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            attendanceReport.AverageTimeOut = "-";
-        //            attendanceReport.AverageHours = "-";
-        //            attendanceReport.AdditionalWorkingHours = "-";
-        //        }
-        //    }
-        //    return attendanceReport;
-        //}
-
         public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData, string id, int? loc)
         {
             List<AttendanceReportByDate> attendances = new List<AttendanceReportByDate>();
@@ -238,7 +186,7 @@ namespace EIS.Repositories.Repository
             {
                 if (id == "0")
                 {
-                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                     {
 
                         List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
@@ -304,7 +252,7 @@ namespace EIS.Repositories.Repository
                 else
                 {
                     Person person = _dbContext.Person.Where(x => x.EmployeeCode == id).FirstOrDefault();
-                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                     {
                         AttendanceReportByDate attendance = new AttendanceReportByDate();
 
