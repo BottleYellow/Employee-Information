@@ -48,7 +48,7 @@ namespace EIS.WebApp.Controllers
             return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
         }
 
-        [DisplayName("Employees Leave History")]
+        [DisplayName("Leave History")]
         public IActionResult EmployeeLeaveHistory()
         {
             ViewBag.Locations = GetLocations();

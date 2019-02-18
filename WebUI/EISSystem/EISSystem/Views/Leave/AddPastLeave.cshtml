@@ -63,6 +63,14 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     $("#date1").on("dp.change", function () {
+        var d1 = document.getElementById("date1").value;
+        var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        if (new Date(firstDate) > new Date()) {
+            bootbox.alert({
+                message: "Please select date before Today's date"
+            });
+            $("#date1").val('');
+        }
         $("#date2").val('');
         $("#btnSubmit").prop("disabled", true);
     })
@@ -78,7 +86,14 @@
             $("#date2").val('');
             $("#btnSubmit").prop("disabled", true);
         }
-        else {
+        else if (new Date(secondDate) > new Date()) {
+            bootbox.alert({
+                message: "Please select date before Today's date"
+            });
+            $("#date2").val('');
+            $("#btnSubmit").prop("disabled", true);
+        }else
+        {
             $("#btnSubmit").removeAttr('disabled');
         }
     })

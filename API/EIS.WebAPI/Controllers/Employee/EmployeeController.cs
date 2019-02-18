@@ -30,17 +30,17 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetEmployeeLocationWise(int loc)
         {
+            IQueryable<Person> employees;
             if (loc == 0)
             {
-                IQueryable<Person> employees = _repository.Employee.FindAllByCondition(e => e.Role.Name != "Admin");
-                return Ok(employees);
+                employees = _repository.Employee.FindAllByCondition(e => e.Role.Name != "Admin");
             }
             else
             {
-                IQueryable<Person> employees = _repository.Employee.FindAllByCondition(e => e.LocationId == loc && e.Role.Name != "Admin");
-                return Ok(employees);
+                employees = _repository.Employee.FindAllByCondition(e => e.LocationId == loc && e.Role.Name != "Admin");               
             }
-            
+            return Ok(employees);
+
         }
         [HttpGet]
         public IActionResult GetAllEmployee()
@@ -48,6 +48,7 @@ namespace EIS.WebAPI.Controllers
             IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
             return Ok(employees);
         }
+
         [HttpGet("{EmployeeCode}")]
         public IActionResult GetById([FromRoute]string EmployeeCode)
         {
@@ -62,6 +63,7 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
+
         [Route("Person")]
         [HttpGet("{EmployeeCode}")]
         public IActionResult GetPerson([FromRoute]string EmployeeCode)
@@ -78,6 +80,7 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
+
         [Route("Profile/{EmployeeCode}")]
         [HttpGet]
         public IActionResult GetProfile([FromRoute]string EmployeeCode)
@@ -92,6 +95,7 @@ namespace EIS.WebAPI.Controllers
                 return Ok(employee);
             }
         }
+
         [Route("GenNewIdCardNo")]
         [HttpGet]
         public int CreateNewIdCardNo()
