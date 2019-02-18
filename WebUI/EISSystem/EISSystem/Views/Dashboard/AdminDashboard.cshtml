@@ -365,13 +365,13 @@
         $('#BanerLeavesTable').DataTable().destroy();
         $('#BanerLeavesTable').DataTable({
             data: banerArrayLeaves,
-            "order": [7, "desc"]
+            "order": [[6,"desc"],[7, "desc"]]
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
         $('#KondhwaLeavesTable').DataTable({
             data: kondhwaArrayLeaves,
-            "order":[7,"desc"]
+            "order": [[6, "desc"], [7, "desc"]]
         });
     }
     function UpdateStatus(RequestId, Status) {

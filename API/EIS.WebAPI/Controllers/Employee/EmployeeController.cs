@@ -141,6 +141,9 @@ namespace EIS.WebAPI.Controllers
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateAndSave(person);
+                Users u = _repository.Users.FindByCondition(x => x.PersonId == person.Id);
+                u.UserName = person.EmailAddress;
+                _repository.Users.UpdateAndSave(u);
                 _repository.Employee.Dispose();
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";

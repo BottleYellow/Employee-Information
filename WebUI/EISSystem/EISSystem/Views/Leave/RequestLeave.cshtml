@@ -37,6 +37,18 @@
                 top: 45%;
                 left: 45%;
             }
+        table, td, th {
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+        }
     </style>
     @**@<!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
@@ -87,6 +99,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div>
                             </div>
                             <div class="form-group">
                                 <label>Reason For Requested Leave :</label>
@@ -184,13 +198,83 @@
             $("#btnSubmit").prop("disabled", true);
         }
         else {
-            $("#trd").val(days);
-            $("#av").val(availableLeaves);
-            $("#btnSubmit").removeAttr('disabled');
+              var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
+              var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
+              var result = null;
+              var pid = @cookies.PersonId;
+              $.ajax({
+                  url: "@APIURL/api/LeaveRequest/CheckDates/" + pid + "/" + x + "/" + y,
+                  type: 'GET',
+                  success: function (data) {
+                      if (data == 'success') {
+                          $.ajax({
+                              url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
+                              type: 'GET',
+                              success: function (data) {
+                                  days = data;
+                                  if (days == 0) { 
+                                      bootbox.alert({
+                                          message: "Plese select working days"
+                                      });
+                                      $("#btnSubmit").prop("disabled", true);
+                                  }
+                                  else {
+                                      $("#trd").val(days);
+                                      $("#btnSubmit").removeAttr('disabled');
+                                  }
+                              },
+                              error: function (data) {
+                                  //alert(data.responseText);
+                              }
+                          });
+                      }
+                      else {
+                          bootbox.alert({
+                              message: data
+                          });
+                          $("#btnSubmit").prop("disabled", true);
+                      }
+                  },
+                  error: function (data) {
+                     
+                  }
+              });
         }
     });
     $('#btnSubmit').click(function () {
-        var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
+        var trd = document.getElementById("trd").value;
+        availableLeaves = availableLeaves - trd;
+        $("#av").val(availableLeaves);
+         var form = $("#cp");
+         $.validator.unobtrusive.parse(form);
+         if (form.valid()) {
+             var d = form.serialize();
+             //var url1 = "/Leave/RequestLeave";
+             $.ajax({
+                 url: '@Url.Action("RequestLeave", "Leave")',
+                 type: 'POST',
+                 data: d,
+                 beforeSend: function () {
+                     $('.ajax-loader').css("visibility", "visible");
+                 },
+                 success: function (data) {
+                     bootbox.alert({
+                         message: "Request Submitted Successfully!",
+                         callback: function () {
+                             window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
+                         }
+                     });
+                 },
+                 complete: function () {
+                     $('.ajax-loader').css("visibility", "hidden");
+                 },
+                 error: function (data) {
+                     alert(data.responseText);
+                 }
+             });
+         }
+         return false;
+        @*var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
         var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
         var result = null;
         var pid = @cookies.PersonId;
@@ -244,7 +328,7 @@
             error: function (data) {
                 alert(data.responseText);
             }
-        });
+        });*@
     });
     function myFunction() {
         $("#msg").remove();

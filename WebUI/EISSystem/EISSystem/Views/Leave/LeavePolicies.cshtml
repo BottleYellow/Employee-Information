@@ -29,6 +29,9 @@
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
 
     <style>
+        li:hover {
+            cursor: pointer;
+        }
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
@@ -104,9 +107,9 @@
 
     });
     function GenerateReport(c) {
-             $.fn.dataTable.ext.errMode = 'none';
-            $('#example').on('error.dt', function () {
-                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
+        $.fn.dataTable.ext.errMode = 'none';
+        $('#example').on('error.dt', function () {
+            bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
         }).DataTable();
         $('#example').DataTable().destroy();
         $('#example tbody').empty();
@@ -129,7 +132,7 @@
             ],
             ajax: {
                 //"url": "/Leave/LeavePolicies",
-                "url":'@Url.Action("LeavePolicies", "Leave")?LocationId='+c,
+                "url": '@Url.Action("LeavePolicies", "Leave")?LocationId=' + c,
                 "type": "POST",
                 "datatype": "json",
                 beforeSend: function () {
@@ -151,7 +154,7 @@
                     }
                 },
                 {
-                    "data": "Validity",  "name": "Validity", "autoWidth": true, render: function (data) {
+                    "data": "Validity", "name": "Validity", "autoWidth": true, render: function (data) {
                         return data;
                     }
                 },
@@ -171,7 +174,7 @@
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         var value = row.IsActive;
                         if (value == true) {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun('+row.Id+');">Edit</a></li></ul></div>';
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + row.Id + ');">Edit</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
                         } else {
                             return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
                         }
@@ -190,6 +193,31 @@
             }
         });
     }
+      $('#example').on('click', 'a.inactive', function (e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
+        var message = "<h4>Do you want to delete this Leave Policy ?</h4>"
+        bootbox.confirm(message, function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DeletePolicy", "Leave")?id=' + id,
+                    success: function () {
+                        bootbox.alert("<h4>Policy deleted successfully!</h4>", function () {
+                            location.href = '@Url.Action("LeavePolicies", "Leave")';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 401) {
+                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                        } else {
+                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                        }
+                    }
+                });
+            }
+        });
+    });
     function fun(c) {
         debugger;
         var url = $("#modal-placeholder-editpolicy").data('url');
@@ -197,6 +225,12 @@
         $.get(url, function (data) {
             $("#modal-placeholder-editpolicy").html(data);
             $("#modal-placeholder-editpolicy").modal('show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to Edit the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to Edit the Record</h4>");
+            }
         });
     }
     $("#btnModal").click(function () {
@@ -204,6 +238,12 @@
         $.get(url, function (data) {
             $("#modal-placeholder").html(data);
             $("#modal-placeholder").modal('show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to add the Record</h4>");
+            }
         });
     });
 </script>

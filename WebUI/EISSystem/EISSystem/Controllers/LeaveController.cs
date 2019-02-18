@@ -279,7 +279,17 @@ namespace EIS.WebApp.Controllers
             return PartialView("EditPolicy", Leave);
 
         }
+        public void DeletePolicy(int id)
+        {
+            HttpClient client = _services.LeaveRules.GetService();
+            HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeavePolicy/PolicyDelete/" + id, null);
+            //response = _services.Employee.PostResponse(ApiUrl + "/api/employee/Delete/" + id + "/" + op, person);
+            if (response != null)
+            {
 
+            }
+
+        }
         #endregion
 
         #region Credits
@@ -331,13 +341,58 @@ namespace EIS.WebApp.Controllers
             {
                 Credit.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 Credit.IsActive = true;
-                HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl+"/api/LeaveCredit", Credit);
+                HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl + "/api/LeaveCredit/" + 0, Credit);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return RedirectToAction("LeaveCredits", "Leave");
                 }
             }
             return View("AddCredit", Credit);
+
+        }
+        [DisplayName("Edit Leave Credit")]
+        public IActionResult EditCredit(int Id)
+        {
+            ViewBag.Locations = GetLocations();
+            string stringData = _services.LeaveCredit.GetResponse(ApiUrl + "/api/LeaveCredit/GetCreditById/" + Id + "").Content.ReadAsStringAsync().Result;
+            LeaveCredit credit = JsonConvert.DeserializeObject<LeaveCredit>(stringData);
+            return PartialView("EditCredit", credit);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditCredit(LeaveCredit credit)
+        {
+            ViewBag.Locations = GetLocations();
+            credit.UpdatedDate = DateTime.Now;
+            credit.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
+            if (ModelState.IsValid)
+            {
+                credit.IsActive = true;
+                HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl + "/api/LeaveCredit/" + credit.Id, credit);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                LeaveCredit LeaveRules = JsonConvert.DeserializeObject<LeaveCredit>(stringData);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    //HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeaveCredit/AddCredits", LeaveRules);
+                    //if (response2.IsSuccessStatusCode == true)
+                    //{
+                    return View();
+                    //}
+                }
+            }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("EditCredit", credit);
+
+        }
+        public void DeleteCredit(int id)
+        {
+            HttpClient client = _services.LeaveCredit.GetService();
+            HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl + "/api/LeaveCredit/CreditDelete/" + id, null);
+            //response = _services.Employee.PostResponse(ApiUrl + "/api/employee/Delete/" + id + "/" + op, person);
+            if (response != null)
+            {
+
+            }
 
         }
         #endregion
