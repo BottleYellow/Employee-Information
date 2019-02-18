@@ -42,10 +42,25 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("EmployeeLeaveRequests")]
         [HttpPost]
-        public IActionResult GetEmployeeLeaveRequests(int LocationId,string fromDate,string toDate)
+        public IActionResult GetEmployeeLeaveRequests(int LocationId)
         {
             ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/"+fromDate+"/"+toDate, null, LocationId);
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
+        }
+
+        [DisplayName("Leave History")]
+        public IActionResult EmployeeLeaveHistory()
+        {
+            ViewBag.Locations = GetLocations();
+            return View();
+        }
+
+        [ActionName("EmployeeLeaveHistory")]
+        [HttpPost]
+        public IActionResult GetEmployeeLeaveHistory(int LocationId, string fromDate, string toDate)
+        {
+            ArrayList arrayData = new ArrayList();
+            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveHistory/" + fromDate + "/" + toDate, null, LocationId);
         }
 
         [DisplayName("Show Employees Requests")]

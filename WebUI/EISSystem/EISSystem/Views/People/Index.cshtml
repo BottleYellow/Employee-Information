@@ -2,7 +2,6 @@
 @using EIS.WebApp.Services
 
 <head>
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -206,10 +205,10 @@
                 }
             ],
             "aoColumnDefs": [
-                { "aTargets": [0], "bSortable": true },
-                { "aTargets": [1], "bSortable": true },
-                {"aTargets" : [2], "bSortable":true  },
-                { "aTargets": ['_all'], "bSortable": false }
+                { "aTargets": [3], "bSortable": false },
+                { "aTargets": [6], "bSortable": false },
+                {"aTargets":[9],"bSortable":false},
+                { "aTargets": ['_all'], "bSortable": true }
             ],
             lengthMenu: [
                 [5, 10, 25, -1],
@@ -313,6 +312,5 @@
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/buttons.print.min.js"></script>
-<script src="~/Ems/js/dataTables.rowReorder.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

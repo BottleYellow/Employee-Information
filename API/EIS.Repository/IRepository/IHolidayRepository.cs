@@ -1,5 +1,4 @@
 ﻿using EIS.Entities.Hoildays;
-using System;
 using System.Collections.Generic;
 
 namespace EIS.Repositories.IRepository

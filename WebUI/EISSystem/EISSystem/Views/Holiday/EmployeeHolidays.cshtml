@@ -44,7 +44,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @item.Date.ToString("dd/MM/yyyy")
+                                            @item.Date.ToString("dd MMM yyyy")
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Vacation)
                                         </td>
@@ -62,6 +62,10 @@
 <script>
     $(document).ready(function () {
         $('#example').DataTable({
+            "aoColumns": [
+                { "sType": "date" },
+                null
+            ],
         });
     });
 </script>

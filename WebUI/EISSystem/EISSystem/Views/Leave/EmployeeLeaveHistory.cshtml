@@ -19,6 +19,7 @@
 <head>
     <title>Leave Requests</title>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -48,8 +49,8 @@
 
             .ajax-loader img {
                 position: relative;
-                top: 45%;
-                left: 45%;
+                top: 40%;
+                left: 40%;
                 /*width: 25%;
             height: 25%;
             opacity: 0.9;
@@ -59,13 +60,6 @@
         a {
             cursor: pointer;
         }
-        #locations {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        }
-
-        #generateReport {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        }
     </style>
 </head>
 <body>
@@ -74,7 +68,7 @@
     </div>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="Leave Request"></HeaderWithButton>
+            <HeaderWithButton header-name="Leave History"></HeaderWithButton>
         </div>
         <div class="row clearfix">
 
@@ -87,6 +81,14 @@
                                 <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                     <option value="0">All</option>
                                 </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                <label>From Date</label>
+                                <input class="form-control" type="text" id="fromDate" value=@DateTime.Now.Date />
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
+                                <label>To Date</label>
+                                <input class="form-control" type="text" id="toDate" value=@DateTime.Now.Date />
                             </div>
                             <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
                                 <br />
@@ -165,7 +167,7 @@
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
-            "order":[8,'desc'],
+            "order":[[8,'desc'],[9,'desc']],
             buttons: [
                 {
                     extend: 'pdfHtml5',
@@ -185,9 +187,9 @@
             ],
             ajax: {
                 //"url": "/Leave/EmployeeLeaveRequests",
-                "url": '@Url.Action("EmployeeLeaveRequests", "Leave")?LocationId=' + location,
+                "url": '@Url.Action("EmployeeLeaveHistory", "Leave")?LocationId=' + location + '&fromDate=' + fromDate + '&toDate=' + toDate,
                 "type": "POST",
-                "datatype": "json",       
+                "datatype": "json",
             },
             "columns": [
                 {

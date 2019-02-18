@@ -2,7 +2,6 @@
 @model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>All Attendance</title>
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -113,6 +112,8 @@
                                             <th>Employee Code</th>
                                             <th>Name</th>
                                             <th>Date</th>
+                                            <th>Clock In</th>
+                                            <th>Clock Out</th>
                                             <th>Status</th>
                                             <th>Total Working Hours</th>
                                         </tr>
@@ -211,16 +212,26 @@
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
                         var Status = data[i].Status;
+                        var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }   
 
-                        array.push([data[i].EmployeeCode, data[i].EmployeeName, data[i].Date, Status , data[i].TotalHours])
+                        array.push([data[i].EmployeeCode, data[i].EmployeeName, date, data[i].TimeIn, data[i].TimeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
+                        "aoColumns": [
+                            null,
+                            null,
+                            { "sType": "date" },
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
                         data: array
                     });
                 },
@@ -230,57 +241,6 @@
             });
         }      
     });
-    function calculate(date) {
-        var d = new Date(date);
-        var mon = d.toLocaleString('en-us', { month: 'long' });
-        var yea = d.getFullYear();
-        var dat = 1;
-        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
-        var first = myDays[myDate.getDay()];
-        //alert(first);
-        var secnd;
-        var forth;
-        switch (first) {
-            case "Sunday":
-                secnd = yea + '-' + mon + '-' + 14;
-                forth = yea + '-' + mon + '-' + 28;
-                break;
-            case "Monday":
-                secnd = yea + '-' + mon + '-' + 13;
-                forth = yea + '-' + mon + '-' + 27;
-                break;
-            case "Tuesday":
-                secnd = yea + '-' + mon + '-' + 12;
-                forth = yea + '-' + mon + '-' + 26;
-                break;
-            case "Wednesday":
-                secnd = yea + '-' + mon + '-' + 11;
-                forth = yea + '-' + mon + '-' + 25;
-                break;
-            case "Thursday":
-                secnd = yea + '-' + mon + '-' + 10;
-                forth = yea + '-' + mon + '-' + 24;
-                break;
-            case "Friday":
-                secnd = yea + '-' + mon + '-' + 9;
-                forth = yea + '-' + mon + '-' + 23;
-                break;
-            case "Saturday":
-                secnd = yea + '-' + mon + '-' + 8;
-                forth = yea + '-' + mon + '-' + 22;
-                break;
-            default: break;
-        }
-        if (d.getDate() == new Date(secnd).getDate()) {
-            return "2nd Saturday";
-        }
-        else if (d.getDate() == new Date(forth).getDate()) {
-            return "4th Saturday";
-        }
-        else {
-            return "NotFound";
-        }
-    }
+
 </script>
 
