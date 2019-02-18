@@ -331,13 +331,14 @@
                     var array = [];
                     for (var i = 0; i < data.length; i++)
                     {
+                        var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
                         var Status = data[i].Status;
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }   
-                        array.push([data[i].Date,Status,data[i].TimeIn,data[i].TimeOut,data[i].TotalHours])
+                        array.push([date,Status,data[i].TimeIn,data[i].TimeOut,data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({

@@ -212,13 +212,14 @@
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
                         var Status = data[i].Status;
+                        var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }   
 
-                        array.push([data[i].EmployeeCode, data[i].EmployeeName, data[i].Date, data[i].TimeIn, data[i].TimeOut, Status , data[i].TotalHours])
+                        array.push([data[i].EmployeeCode, data[i].EmployeeName, date, data[i].TimeIn, data[i].TimeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
@@ -226,6 +227,8 @@
                             null,
                             null,
                             { "sType": "date" },
+                            null,
+                            null,
                             null,
                             null
                         ],

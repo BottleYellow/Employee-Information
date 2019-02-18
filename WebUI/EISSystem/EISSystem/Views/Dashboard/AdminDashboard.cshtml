@@ -118,7 +118,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-hover dashboard-task-infos" id="BanerAttendanceTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-hover dashboard-task-infos" id="KondhwaAttendanceTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -174,7 +174,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-hover dashboard-task-infos" id="BanerLeavesTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
                                 <thead>
                                     <tr>
                                         <th>Actions</th>
@@ -204,7 +204,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-hover dashboard-task-infos" id="KondhwaLeavesTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
                                 <thead>
                                     <tr>
                                         <th>Actions</th>
@@ -343,7 +343,8 @@
         var kondhwaArrayLeaves = [];
         for (var i = 0; i < Leaves.length; i++) {
             var dateFrom = moment(Leaves[i].FromDate).format("DD MMM YYYY");
-            var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY")
+            var toDate = moment(Leaves[i].ToDate).format("DD MMM YYYY");
+            var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY");
             var Status = Leaves[i].Status;
             var actionButton;
             if (Status == "Pending") {
@@ -363,9 +364,9 @@
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
             }
             if (Leaves[i].LocationName == "Baner") {
-                banerArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             } else
-                kondhwaArrayLeaves.push([actionButton,Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate , Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             }
 
         $('#BanerLeavesTable').DataTable().destroy();
