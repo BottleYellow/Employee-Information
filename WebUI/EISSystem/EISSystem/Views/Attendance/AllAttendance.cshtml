@@ -361,6 +361,12 @@
 
             }
             else if (v == 'month') {
+                var twok = 4;
+                var twob = 6;
+                $('#thb').html('Holidays : ' + 0);
+                $('#thk').html('Holidays : ' + 0);
+                $('#twoffb').text('Weekly Off : ' + twob);
+                $('#twoffk').text('Weekly Off : ' + twok);
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
                 var monthYear = value.split('/');
@@ -377,7 +383,6 @@
                     dataType: "json",
                     success: function (data) {
                         var k = 0, b = 0;
-                        debugger;
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;
