@@ -31,11 +31,11 @@ namespace EIS.WebAPI.Controllers.Leave
             IQueryable<LeaveCredit> credits = null;
             if(sortGrid.LocationId==0)
             {
-                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true);
+                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive==true && x.Person.Location.IsActive == true);
             }
             else
             {
-                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
+                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true &&  x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
             }
             
 
@@ -52,10 +52,11 @@ namespace EIS.WebAPI.Controllers.Leave
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [Route("GetCreditById/{Id}")]
+        [HttpGet]
+        public LeaveCredit GetCreditById([FromRoute]int Id)
         {
-            return "value";
+            return _repository.LeaveCredit.FindByCondition(x => x.Id == Id);
         }
 
         [DisplayName("Add Leave Credit")]
@@ -74,22 +75,44 @@ namespace EIS.WebAPI.Controllers.Leave
         }
 
         [DisplayName("Add Leave Credit")]
-        [HttpPost]
-        public IActionResult PostLeaveCredit([FromBody] LeaveCredit Credit)
+        [HttpPost("{Id}")]
+        public IActionResult PostLeaveCredit([FromRoute]int Id,[FromBody] LeaveCredit Credit)
         {
-            if (!ModelState.IsValid)
+            if (Id == 0)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                Credit.TenantId = TenantId;
+                _repository.LeaveCredit.AddCreditAndSave(Credit);
+                _repository.LeaveCredit.Dispose();
+                return Ok();
             }
-            Credit.TenantId = TenantId;
-            _repository.LeaveCredit.AddCreditAndSave(Credit);
-            _repository.LeaveCredit.Dispose();
-            return Ok();
+            else
+            {
+                LeaveCredit leaveCredit = _repository.LeaveCredit.FindByCondition(x => x.Id == Credit.Id);
+                float diff = leaveCredit.AllotedDays - leaveCredit.Available;
+                Credit.TenantId = TenantId;
+                Credit.Available = Credit.AllotedDays - diff;
+                _repository.LeaveCredit.UpdateAndSave(Credit);
+                return Ok(Credit);
+            }
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Route("CreditDelete/{id}")]
+        [HttpPost]
+        public IActionResult Delete([FromRoute]int id)
         {
+            LeaveCredit credit = _repository.LeaveCredit.FindByCondition(x => x.Id == id);
+            if (credit == null)
+            {
+                return NotFound();
+            }
+            credit.IsActive = false;
+            _repository.LeaveCredit.UpdateAndSave(credit);
+            _repository.LeaveCredit.Dispose();
+            return Ok(credit);
         }
     }
 }

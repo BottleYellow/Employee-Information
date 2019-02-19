@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Generic;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
@@ -198,19 +199,20 @@ namespace EIS.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
-            List<Person> person = _repository.Employee.FindAll().Include(x=>x.Role).Where(x=>x.Role.Name=="Admin" || x.Role.Name=="Manager" || x.Role.Name=="HR").ToList();
-            foreach (var x in person)
-            {
-                var name = p.FirstName + " " + p.LastName;
-                SendMail(x.EmailAddress,leave.LeaveType,leave.FromDate,leave.ToDate,name);
-            }
+          
             leave.EmployeeName = p.FirstName + " " + p.LastName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
 
             //string to = person.Select(x => x.EmailAddress).ToString();
             string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
+            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            List<Person> person = _repository.Employee.FindAll().Include(x => x.Role).Where(x => x.Role.Name == "Admin" || x.Role.Name == "Manager" || x.Role.Name == "HR").ToList();
+            foreach (var x in person)
+            {
+                var name = p.FirstName + " " + p.LastName;
+                SendMail(x.EmailAddress, leave.LeaveType, leave.FromDate, leave.ToDate, name);
+            }
             SendMail(leave.Id, "Pending");
             return Ok(msg);
         }
@@ -238,6 +240,9 @@ namespace EIS.WebAPI.Controllers
             if (status == "Pending")
             {
                 body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
+                body += "Date From:" + leave.FromDate + "\n";
+                body += "Date To:" + leave.ToDate + "\n";
+                body += "Requested Days:" + leave.RequestedDays;
             }
             else if (status == "Reject")
             {
@@ -316,6 +321,60 @@ namespace EIS.WebAPI.Controllers
         {
             var result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
             return Ok(result);
+        }
+        [AllowAnonymous]
+        [Route("CalculateDates/{PersonId}/{days}/{FromDate}/{ToDate}")]
+        [HttpGet]
+        public IActionResult CalculateDates([FromRoute]int PersonId, [FromRoute]int days, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
+        {
+            int requestedDays = days;
+            int? LocationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId;
+            int count = 0;
+            for (var d = FromDate; d <= ToDate; d=d.AddDays(1))
+            {
+                Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId);
+                if (holiday != null)
+                {
+                    if (holiday.Date.DayOfWeek == DayOfWeek.Sunday && d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        count++;
+                    }
+                    else if (holiday.Date.DayOfWeek == DayOfWeek.Saturday && d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    {
+                        string check = _repository.Attendances.CalculateDate(d);
+                        count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;
+                    }
+                    else if (holiday.Date == d)
+                    {
+                        count++;
+                    }
+                    else if (d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        count++;
+                    }
+                    else if (d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    {
+                        string check = _repository.Attendances.CalculateDate(d);
+                        count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;
+                    }
+                }
+                else
+                {
+                    if (d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        count++;
+                    }
+                    else if (d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    {
+                        string check = _repository.Attendances.CalculateDate(d);
+                        count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;
+                    }
+                }
+
+            }
+            requestedDays = requestedDays - count;
+          
+            return Ok(requestedDays);
         }
         public void SendMail(string To,string leavetype,DateTime fromdate, DateTime todate,string name)
         {

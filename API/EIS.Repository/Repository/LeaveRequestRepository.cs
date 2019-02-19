@@ -92,12 +92,6 @@ namespace EIS.Repositories.Repository
             else if (Status == "Pending")
             {
                 leaveRequest.UpdatedBy = PersonId;
-                if (leaveRequest.Status == null || leaveRequest.Status == "Rejected")
-                {
-                    leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
-                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
-                }
                 leaveRequest.Status = "Pending";
                 messege = "Request of " + leaveRequest.Person.FirstName + " marked as pending";
             }

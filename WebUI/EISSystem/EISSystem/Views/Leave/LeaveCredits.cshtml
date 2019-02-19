@@ -6,9 +6,14 @@
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
 
     <style>
+        li:hover {
+            cursor: pointer;
+        }
+
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -29,6 +34,7 @@
         <img src="~/gif/Spinner.gif" />
     </div>
     <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddCredit")"></div>
+    <div id="modal-placeholder-editcredit" class="modal fade" role="dialog" data-url="@Url.Action("EditCredit")"></div>
     @*BootStrap Model*@
     <div class="container-fluid">
         <div class="block-header">
@@ -47,7 +53,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable">
+                        <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>Location</th>
@@ -57,6 +63,7 @@
                                     <th>Valid To</th>
                                     <th>Days</th>
                                     <th>Available</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -159,15 +166,72 @@
                     "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
                         return data;
                     }
+                },
+                {
+                    data: null, "autoWidth": true, render: function (data, type, row) {
+                        var value = row.IsActive;
+                        if (value == true) {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + row.Id + ');">Edit</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
+                        } else {
+                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
+                        }
+                    }
                 }
             ]
+        });
+    }
+      $('#example').on('click', 'a.inactive', function (e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
+        var message = "<h4>Do you want to delete this Leave Credit ?</h4>"
+        bootbox.confirm(message, function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DeleteCredit", "Leave")?id=' + id,
+                    success: function () {
+                        bootbox.alert("<h4>Credit deleted successfully!</h4>", function () {
+                            location.href = '@Url.Action("LeaveCredits", "Leave")';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status == 401) {
+                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                        } else {
+                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                        }
+                    }
+                });
+            }
+        });
+    });
+    function fun(c) {
+        debugger;
+        var url = $("#modal-placeholder-editcredit").data('url');
+        url = url + '?Id=' + c;
+        $.get(url, function (data) {
+            $("#modal-placeholder-editcredit").html(data);
+            $("#modal-placeholder-editcredit").modal('show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to Edit the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to Edit the Record</h4>");
+            }
         });
     }
     $("#btnModal").click(function () {
         var url = $("#modal-placeholder").data('url');
         $.get(url, function (data) {
+
             $("#modal-placeholder").html(data);
             $("#modal-placeholder").modal('show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to add the Record</h4>");
+            }
         });
     });
 </script>
@@ -176,7 +240,7 @@
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
