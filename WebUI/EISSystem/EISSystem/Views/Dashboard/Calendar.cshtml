@@ -94,7 +94,7 @@
                     var endDate = intervalEnd.format("YYYY-MM-DD");
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AdminCalendar", "Dashboard")',
+                    url: '@Url.Action("Calendar", "Dashboard")',
                     data: {
                         "intervalStart": startDate,
                         "intervalEnd": endDate,

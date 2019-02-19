@@ -212,14 +212,24 @@
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
                         var Status = data[i].Status;
+                        var timeIn;
+                        var timeOut;
                         var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                        } else {
+                            timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                            if (data[i].TimeOut == '-') {
+                                timeOut = data[i].TimeOut;
+                            } else {
+                                timeOut = data[i].TimeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                            }
+                        }
+                        else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            timeIn = '-';
+                            timeOut = '-';
                         }   
-
-                        array.push([data[i].EmployeeCode, data[i].EmployeeName, date, data[i].TimeIn, data[i].TimeOut, Status , data[i].TotalHours])
+                        array.push([data[i].EmployeeCode, data[i].EmployeeName, date, timeIn, timeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({

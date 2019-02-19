@@ -92,13 +92,13 @@ namespace EIS.WebApp.Controllers
         //}
 
         [DisplayName("Admin Calendar")]
-        public IActionResult AdminCalendar()
+        public IActionResult Calendar()
         {
             ViewBag.Locations = GetLocations();
             return View();
         }
 
-        [ActionName("AdminCalendar")]
+        [ActionName("Calendar")]
         [HttpPost]
         public IActionResult GetAdminCalendar(string intervalStart, string intervalEnd,int location)
         {

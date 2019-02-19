@@ -1,8 +1,19 @@
 ﻿@using EIS.Entities.Employee;
 @using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
 @model EIS.Entities.Dashboard.AdminDashboard
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
 }
 <style>
     .ajax-loader {
@@ -15,25 +26,26 @@
 
         .ajax-loader img {
             position: relative;
-            top: 50%;
-            left: 50%;
-            /*width: 25%;
-            height: 25%;
-            opacity: 0.9;
-            filter: alpha(opacity=50);*/
+            top: 45%;
+            left: 45%;
         }
+
+    a {
+        cursor: pointer;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+
 </head>
 <div class="ajax-loader">
-    <img src="~/gif/ajax-loader-circle.gif" />
+    <img src="~/gif/Spinner.gif" />
 </div>
 <div class="container-fluid">
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/AdminCalendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
+                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/Calendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -42,7 +54,7 @@
             <div class="info-box bg-pink hover-expand-effect">
                 <a role="button" id="allEmployee">
                     <div class="icon">
-                        <i class="material-icons">playlist_add_check</i>
+                        <i class="material-icons">supervisor_account</i>
                     </div>
                 </a>
                 <div class="content">
@@ -57,7 +69,7 @@
             <div class=" info-box bg-light-green hover-expand-effect">
                 <a role="button" id="employeePresent">
                     <div class="icon">
-                        <i class="material-icons">playlist_play</i>
+                        <i class="material-icons">assignment_ind</i>
                     </div>
                 </a>
                 <div class="content">
@@ -71,7 +83,7 @@
             <div class="info-box bg-cyan hover-expand-effect">
                 <a role="button" id="employeeAbsent">
                     <div class="icon">
-                        <i class="material-icons"> do_not_disturb_on</i>
+                        <i class="material-icons"> assignment_late</i>
                     </div>
                 </a>
                 <div class="content">
@@ -84,7 +96,9 @@
             <div class="info-box bg-orange hover-expand-effect">
                 <a id="pendingLeaveButton" role="button">
                     <div class="icon">
-                        <i class="material-icons">person_add</i>
+                        <i class="material-icons">
+                            account_circle
+                        </i>
                     </div>
                 </a>
                 <div class="content">
@@ -95,182 +109,189 @@
         </div>
     </div>
     <div class="row clearfix">
-        <!-- Task Info -->
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            <div class="card">
-                <div class="header">
-                    <h2>Today's Attendance</h2>
-                    <div>
-                        <select class="form-control" id="select" style="width:165px" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))">
-                            <option value="0">All</option>
-                        </select>
+        <!-- Attendance Data-->
+        <div id="attendanceData">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="header">
+                        <h2>BANER</h2>
                     </div>
-                </div>
-                <div class="body" id="attendanceCard">
-                    <div class="table-responsive">
-                        <table class="table table-hover dashboard-task-infos" id="myTable">
-                            <thead>
-                                <tr>
-                                    <th>Location</th>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>ClockIn</th>
-                                    <th>ClockOut</th>
-                                    <th>WorkingHours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>ClockIn</th>
+                                        <th>ClockOut</th>
+                                        <th>WorkingHours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div class="body" id="leavesCard" hidden>
-                    <div class="table-responsive">
-                        <table class="table table-hover dashboard-task-infos" id="myLeavesTable">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Location
-                                    </th>
-                                    <th>
-                                        Employee Name
-                                    </th>
-                                    <th>
-                                        Leave Type
-                                    </th>
-                                    <th>
-                                        From Date
-                                    </th>
-                                    <th>
-                                        To Date
-                                    </th>
-                                    <th>
-                                        Days
-                                    </th>
-                                    <th>
-                                        Available
-                                    </th>
-                                    <th>
-                                        Status
-                                    </th>
-                                    <th>
-                                        Leave Reason
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="header">
+                        <h2>KONDHWA</h2>
                     </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>ClockIn</th>
+                                        <th>ClockOut</th>
+                                        <th>WorkingHours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
 
 
+            </div>
+        </div>
+        <!-- #END# Attendance Data -->
+        <!-- Leave Data -->
+        <div id="leavesData" hidden>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="header">
+                        <h2>BANER</h2>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+
+
+                    </div>
                 </div>
             </div>
 
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="header">
+                        <h2>KONDHWA</h2>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
 
 
-        </div>
-        <!-- #END# Task Info -->
-        <!-- Answered Tickets -->
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <div class="card">
-                <div class="body bg-teal">
-                    <div class="font-bold m-b--35">ANSWERED TICKETS</div>
-                    <ul class="dashboard-stat-list">
-                        <li>
-                            TODAY
-                            <span class="pull-right"><b>12</b> <small>TICKETS</small></span>
-                        </li>
-                        <li>
-                            YESTERDAY
-                            <span class="pull-right"><b>15</b> <small>TICKETS</small></span>
-                        </li>
-                        <li>
-                            LAST WEEK
-                            <span class="pull-right"><b>90</b> <small>TICKETS</small></span>
-                        </li>
-                        <li>
-                            LAST MONTH
-                            <span class="pull-right"><b>342</b> <small>TICKETS</small></span>
-                        </li>
-                        <li>
-                            LAST YEAR
-                            <span class="pull-right"><b>4 225</b> <small>TICKETS</small></span>
-                        </li>
-                        <li>
-                            ALL
-                            <span class="pull-right"><b>8 752</b> <small>TICKETS</small></span>
-                        </li>
-                    </ul>
+
+                    </div>
                 </div>
+
+
+
             </div>
         </div>
-        <!-- #END# Answered Tickets -->
+        <!-- #END# Leave Data -->
     </div>
 </div>
+<script src="~/plugins/jquery/jquery.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     var buttonSelected = "All";
-    var selectOpt;
     $(document).ready(function () {
         selectOpt = $('#select option:selected').val();
-        generateReport("All", selectOpt);
+        generateReport("All", 0);
     });
     $('#allEmployee').on('click', function () {
-        $('#leavesCard').hide();
-        $('#attendanceCard').show();
+        $('#leavesData').hide();
+        $('#attendanceData').show();
         buttonSelected = "All";
-        selectOpt = $('#select option:selected').val();
-        generateReport(buttonSelected, selectOpt);
+        generateReport(buttonSelected, 0);
     });
     $('#employeePresent').on('click', function () {
-        $('#leavesCard').hide();
-        $('#attendanceCard').show();
+        $('#leavesData').hide();
+        $('#attendanceData').show();
         buttonSelected = "Present";
-        selectOpt = $('#select option:selected').val();
-        generateReport(buttonSelected, selectOpt);
+        generateReport(buttonSelected, 0);
 
     });
     $('#employeeAbsent').on('click', function () {
-        $('#leavesCard').hide();
-        $('#attendanceCard').show();
+        $('#leavesData').hide();
+        $('#attendanceData').show();
         buttonSelected = "Absent";
-        selectOpt = $('#select option:selected').val();
-        generateReport(buttonSelected, selectOpt);
-
+        generateReport(buttonSelected, 0);
     });
 
     $('#pendingLeaveButton').on('click', function () {
-        $('#attendanceCard').hide();
-        $('#leavesCard').show();
+        $('#attendanceData').hide();
+        $('#leavesData').show();
         buttonSelected = "Leaves";
-        selectOpt = $('#select option:selected').val();
-        generateReport(buttonSelected, selectOpt);
+        generateReport(buttonSelected, 0);
     });
 
-    $('#select').on('change', function () {
-        selectOpt = $('#select option:selected').val();
-        generateReport(buttonSelected, selectOpt);
-    });
 
-    function generateReport(employeecount, location) {
+    function generateReport(buttonSelected, location) {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("ManagerDashboard","Dashboard")',
-            data: { "attendanceStatus": employeecount, "location": location },
+            data: { "attendanceStatus": buttonSelected, "location": location },
             beforeSend: function () {
                 $('.ajax-loader').css("visibility", "visible");
             },
             success: function (data) {
                 if (data != null) {
-                    debugger;
                     document.getElementById("totalEmployeeCount").innerHTML = data.sP_AdminDashboardCount.AllEmployeesCount ;
                     document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
                     document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
                     document.getElementById("employeeLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
-                    getData(data.sP_AdminDashboards);
-                    getLeavesData(data.sp_AdminDashboardLeaves);
-
+                    if (buttonSelected == "Leaves") {
+                        getLeavesData(data.sp_AdminDashboardLeaves);
+                    } else {
+                        getData(data.sP_AdminDashboards);
+                    }
                 }
             },
             complete: function () {
@@ -280,31 +301,135 @@
     }
 
     function getData(Employees) {
-
-        var array=[];
+        var banerAttendanceArray = [];
+        var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-                var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
-                var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
-                var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
-                array.push([Employees[i].LocationName, Employees[i].EmployeeName, Employees[i].Status, TimeIn, TimeOut, TotalHours])
 
+            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
+            var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
+            var Status = Employees[i].Status;
+            if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
+                var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+                TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+            } else {
+                TimeOut = Employees[i].TimeOut == null ? '-' :moment(Employees[i].TimeOut,'HH:mm:ss').format('hh:mm A');
+            }
+
+            if (Status == "Present") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+            } else {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            }
+            if (Employees[i].LocationName == "Baner") {
+                banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+            } else
+            {
+                KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+            }
         }
-        $('#myTable').DataTable().destroy();
-         $('#myTable').DataTable({
-             data: array
+        $('#BanerAttendanceTable').DataTable().destroy();
+        $('#BanerAttendanceTable').DataTable({
+            data: banerAttendanceArray,
+            "order":[2,"desc"]
+        });
+        $('#KondhwaAttendanceTable').DataTable().destroy();
+        $('#KondhwaAttendanceTable').DataTable({
+            data: KondhwaAttendanceArray,
+            "order":[2,"desc"]
         });
     }
 
     function getLeavesData(Leaves) {
-        var arrayLeaves = [];
+        var banerArrayLeaves = [];
+        var kondhwaArrayLeaves = [];
         for (var i = 0; i < Leaves.length; i++) {
             var dateFrom = moment(Leaves[i].FromDate).format("DD MMM YYYY");
-            arrayLeaves.push([Leaves[i].LocationName, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, moment(Leaves[i].ToDate).format("DD MMM YYYY"), Leaves[i].RequestedDays, Leaves[i].Available, Leaves[i].Status, Leaves[i].Reason])
-        }
-        $('#myLeavesTable').DataTable().destroy();
-        $('#myLeavesTable').DataTable({
-            data: arrayLeaves
+            var toDate = moment(Leaves[i].ToDate).format("DD MMM YYYY");
+            var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY");
+            var Status = Leaves[i].Status;
+            var actionButton;
+            if (Status == "Pending") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+            }
+            else if (Status == "Approved") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+            }
+            else if (Status == "Requested For Cancel") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+            }
+            else {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
+            }
+            if (Leaves[i].LocationName == "Baner") {
+                banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+            } else
+                kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate , Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+            }
+
+        $('#BanerLeavesTable').DataTable().destroy();
+        $('#BanerLeavesTable').DataTable({
+            "aoColumns": [
+                null,
+                null,
+                null,
+                { "sType": "date" },
+                { "sType": "date" },
+                null,
+                { "sType": "date" },
+                null,
+                null
+            ],
+            "order": [[7, "desc"], [6 , "desc"]],
+            data: banerArrayLeaves,
+
+        });
+
+        $('#KondhwaLeavesTable').DataTable().destroy();
+        $('#KondhwaLeavesTable').DataTable({
+            "aoColumns": [
+                null,
+                null,
+                null,
+                { "sType": "date" },
+                { "sType": "date" },
+                null,
+                { "sType": "date" },
+                null,
+                null
+            ],
+            "order": [[7, "desc"], [6, "desc"]],
+            data: kondhwaArrayLeaves,
+
         });
     }
-
+    function UpdateStatus(RequestId, Status) {
+        var pid=@cookies.PersonId;
+        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            data: {},
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            success: function (data) {
+                bootbox.alert(
+                    data,
+                    function () {
+                        window.location.reload();
+                    }
+                );
+            },
+            error: function (data) {
+                alert(data.responseText);
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
+            }
+        });
+    }
 </script>

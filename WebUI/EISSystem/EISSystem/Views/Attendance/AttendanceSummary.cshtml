@@ -113,15 +113,15 @@
                                         <div class="col-md-3">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" autocomplete="off" placeholder="select year" />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off"/>
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" autocomplete="off" placeholder="select month" />
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off"/>
                                             </div>
                                             <div id="inputweekdiv" hidden="hidden">
                                                 <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" autocomplete="off" placeholder="select week" />
+                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off"/>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -263,6 +263,7 @@
             //}
 
             });
+
 
         var id =@cookies.PersonId;
         $('select[id="selectEmployee"]').find('option[value=' + id + ']').attr("selected", true);
@@ -418,17 +419,29 @@
                 "type": "POST",
                 "datatype": "json",
                 success: function (data) {
+                    debugger;
                     var array = [];
                     for (var i = 0; i < data.length; i++) {
                         var date = moment(data[i].Date).format("DD MMM YYYY");
+                        var timeIn;
+                        var timeOut;
                         var Status = data[i].Status;
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                        } else {
+                            timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                            if (data[i].TimeOut == '-') {
+                                timeOut = data[i].TimeOut;
+                            } else {
+                                timeOut = data[i].TimeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                            }
+                        }
+                        else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            timeIn = '-';
+                            timeOut = '-';
                         }   
 
-                        array.push([date, Status, data[i].TimeIn, data[i].TimeOut, data[i].TotalHours])
+                        array.push([date, Status, timeIn, timeOut, data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
 
