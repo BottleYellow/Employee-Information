@@ -93,15 +93,15 @@
                             <div class="col-md-3">
                                 <div id="inputyeardiv" hidden="hidden">
                                     <label>Select Year</label><br />
-                                    <input class="form-control" type="text" id="inputyear" placeholder="select year" />
+                                    <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off"/>
                                 </div>
                                 <div id="inputmonthdiv">
                                     <label>Select Month</label><br />
-                                    <input class="form-control" type="text" id="inputmonth" placeholder="select month" />
+                                    <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off"/>
                                 </div>
                                 <div id="inputweekdiv" hidden="hidden">
                                     <label>Select Week</label><br />
-                                    <input class="form-control" type="text" id="inputweek" placeholder="select week" />
+                                    <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -120,7 +120,6 @@
                                                     <label id="alltwoffb"></label><br />
                                                     <label id="allthb"></label>
                                                 </div>
-                                                @*<div id="twoff2" class="panel-body"></div>*@
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -130,7 +129,6 @@
                                                     <label id="alltwoffk"></label><br />
                                                     <label id="allthk"></label>
                                                 </div>
-                                                @*<div id="twoff2" class="panel-body"></div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -144,7 +142,6 @@
                                                     <label id="twoffb"></label><br />
                                                     <label id="thb"></label>
                                                 </div>
-                                                @*<div id="twoff2" class="panel-body"></div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -158,7 +155,6 @@
                                                     <label id="twoffk"></label><br />
                                                     <label id="thk"></label>
                                                 </div>
-                                                @*<div id="twoff2" class="panel-body"></div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -189,7 +185,6 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-@*<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>*@
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
@@ -203,11 +198,11 @@
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
-
     var totalDays = 0;
     var totalDaysb = 0;
     var totalDaysk = 0;
     $(document).ready(function () {
+        debugger;
         $('#all').show();
         $('#alltwoffk').text('Weekly Off : ' + 4);
         $('#alltwoffb').text('Weekly Off : ' + 6);
