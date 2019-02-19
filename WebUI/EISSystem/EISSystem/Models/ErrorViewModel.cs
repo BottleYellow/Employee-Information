@@ -1,4 +1,4 @@
-namespace EIS.WebApp.Models
+﻿namespace EIS.WebApp.Models
 {
     public class ErrorViewModel
     {

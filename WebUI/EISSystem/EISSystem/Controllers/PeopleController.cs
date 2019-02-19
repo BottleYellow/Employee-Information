@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
+using EIS.Entities.OtherEntities;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -183,11 +184,10 @@ namespace EIS.WebApp.Controllers
                 person.CreatedDate = DateTime.Now.Date;
                 HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/api/employee/" + 0, person);
                 var data1 = response.Content.ReadAsStringAsync().Result;
-
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
-                   TempData["success"] = "Record created successfully.";
+                    TempData["success"] = "Record created successfully.";
                     return RedirectToAction("Index");
                 }
             }
@@ -278,14 +278,15 @@ namespace EIS.WebApp.Controllers
                         person.MiddleName = "";
                     }
                     person.IsActive = true;
-                    //HttpResponseMessage response = _services.Employee.PutResponse(ApiUrl+"/api/employee/" + id + "", person );
                     HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/api/employee/" + id, person);
-                    if (id == Convert.ToInt32(GetSession().PersonId))
+                    if(response.IsSuccessStatusCode) TempData["success"] = "Record updated successfully.";
+                    if (response.IsSuccessStatusCode && id == Convert.ToInt32(GetSession().PersonId))
                     {
+                        HttpContext.Session.Remove("ImagePath");
                         HttpContext.Session.Remove("IdCard");
                         HttpContext.Session.SetString("IdCard", person.EmployeeCode);
-                        //Cache.DeleteStringValue("EmployeeCode");
-                        //Cache.SetStringValue("EmployeeCode", person.EmployeeCode);
+                        HttpContext.Session.SetString("ImagePath", "EmployeeData/" + person.TenantId + person.EmployeeCode + "/Image/" + person.Image);
+
                     }
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 }
@@ -306,7 +307,7 @@ namespace EIS.WebApp.Controllers
                         + "the Save button again. Otherwise click the Back to List hyperlink.");
                     person.RowVersion = databaseValues.RowVersion;
                 }
-                TempData["success"] = "Record updated successfully.";
+                
                 return RedirectToAction("Profile", "People", new { PersonId = person.EmployeeCode });
             }
             return View(person);
@@ -424,7 +425,6 @@ namespace EIS.WebApp.Controllers
                 }
 
                 var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
-                //role.Access = JsonConvert.SerializeObject(access);
                 role.Access = JsonConvert.SerializeObject(UserAccess);
             }
             role.CreatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -505,23 +505,19 @@ namespace EIS.WebApp.Controllers
                     }
                     n++;
                 }
-
-                var accessJson = JsonConvert.SerializeObject(viewModel.SelectedControllers);
-                //role.Access = JsonConvert.SerializeObject(access);
                 role.Access = JsonConvert.SerializeObject(UserAccess);
             }
             if (ModelState.IsValid)
             {
                 role.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
-                //HttpResponseMessage response = _services.Roles.PutResponse(ApiUrl+"api/Employee/UpdateDesignation", role );
                 HttpResponseMessage response = _services.Roles.PostResponse(ApiUrl + "/api/Employee/AddDesignation/" + role.Id, role);
-                if (GetSession().Role == role.Name)
+                if (response.IsSuccessStatusCode && GetSession().Role == role.Name)
                 {
-                    string CookieJson = JsonConvert.SerializeObject(GetSession());
+                    CookieModel cookieModel = GetSession();
+                    cookieModel.Access = role.Access;
+                    string CookieJson = JsonConvert.SerializeObject(cookieModel);
                     HttpContext.Session.Remove("CookieData");
                     HttpContext.Session.SetString("CookieData", CookieJson);
-                    //Cache.DeleteStringValue("Access");
-                    //Cache.SetStringValue("Access", role.Access);
                 }
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 return RedirectToAction("Roles", "People");

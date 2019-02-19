@@ -48,19 +48,9 @@ namespace EIS.WebApp.Controllers
                 HttpContext.Session.SetString("IdCard", CookiesData.Person.EmployeeCode);
                 HttpContext.Session.SetString("Name", CookiesData.Person.FirstName + " " + CookiesData.Person.LastName);
                 HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
-                //@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image
                 HttpContext.Session.SetString("ImagePath", "EmployeeData/" + CookiesData.Person.TenantId + CookiesData.Person.EmployeeCode + "/Image/" + CookiesData.Person.Image);
                 string role = CookiesData.Cookies.Role;
-                //Person person = JsonConvert.DeserializeObject<Person>(stringData);
-                //Task<string> tokenResult = response.Content.ReadAsAsync<string>();
-                ////pid = tokenResult.Result.ToString();
-                //HttpContext.Session.SetString("EmployeeCode", person.EmployeeCode);
-                //pid = person.Id.ToString();
-                //EmployeeCode = person.EmployeeCode;
-                //Response.Cookies.Append("IdCard", person.EmployeeCode);
-                //Response.Cookies.Append("Name", person.FirstName+" "+person.LastName);
-                //Response.Cookies.Append("EmailId", person.EmailAddress);
-                //string role = Cache.GetStringValue("Role");
+              
                 if (role == "Admin")
                 {
                     return RedirectToAction("AdminDashboard", "Dashboard");
@@ -89,6 +79,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("CookieData");
+            HttpContext.Session.Remove("ImagePath");
             HttpContext.Session.Remove("IdCard");
             HttpContext.Session.Remove("Name");
             HttpContext.Session.Remove("EmailId");
