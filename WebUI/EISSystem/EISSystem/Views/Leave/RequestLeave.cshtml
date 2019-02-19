@@ -144,8 +144,7 @@
 
 <script>
     var availableLeaves = null;
-    $(document).ready(function () {
-        var d = new Date();
+    var d = new Date();
         d.setDate(d.getDate() + 1);
         $('#date1').datetimepicker({
             format: "DD/MMM/YYYY",
@@ -155,6 +154,8 @@
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
+    $(document).ready(function () {
+        
          @if (ViewBag.ListOfPolicy==null)
          {
              @:bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function() {

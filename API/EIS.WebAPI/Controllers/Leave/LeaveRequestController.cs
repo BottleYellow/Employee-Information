@@ -194,19 +194,19 @@ namespace EIS.WebAPI.Controllers
         [HttpPost]
         public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
         {
-            
+            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
           
-            leave.EmployeeName = p.FirstName + " " + p.LastName;
+            leave.EmployeeName = p.FullName;
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
 
             //string to = person.Select(x => x.EmailAddress).ToString();
             string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
-            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+   
             List<Person> person = _repository.Employee.FindAll().Include(x => x.Role).Where(x => x.Role.Name == "Admin" || x.Role.Name == "Manager" || x.Role.Name == "HR").ToList();
             foreach (var x in person)
             {
