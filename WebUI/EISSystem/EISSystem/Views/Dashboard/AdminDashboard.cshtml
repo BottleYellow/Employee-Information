@@ -45,7 +45,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/AdminCalendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
+                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/Calendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -305,14 +305,15 @@
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
 
-                var TimeIn = Employees[i].TimeIn == null ? '-' : Employees[i].TimeIn;
-                var TimeOut = Employees[i].TimeOut == null ? '-' : Employees[i].TimeOut;
+            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var Status = Employees[i].Status;
-            if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {                
-                    var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('HH:mm:ss');
-                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
-                }
+            if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
+                var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+                TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+            } else {
+                TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+            }
 
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
@@ -321,8 +322,7 @@
             }
             if (Employees[i].LocationName == "Baner") {
                 banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
-            } else
-            {
+            } else {
                 KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
             }
         }

@@ -85,15 +85,15 @@
                                         <div class="col-md-4 col-sm-6">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" style="width:200px" />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" style="width:200px" autocomplete="off" />
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" style="width:200px" />
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" style="width:200px" autocomplete="off"/>
                                             </div>
                                             <div id="inputweekdiv" hidden="hidden">
                                                 <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" style="width:200px" />
+                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" style="width:200px" autocomplete="off"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6">
@@ -333,13 +333,27 @@
                     for (var i = 0; i < data.length; i++)
                     {
                         var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
+                        var timeIn = data[i].TimeIn;
+                        if (timeIn == "-") {
+
+                        } else {
+                            timeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                        }
+                       
+                        var timeOut = data[i].TimeOut;
+                        if (timeOut == "-") {
+                            
+                        } else {
+                            timeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                        }
+                        
                         var Status = data[i].Status;
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }   
-                        array.push([date,Status,data[i].TimeIn,data[i].TimeOut,data[i].TotalHours])
+                        array.push([date,Status,timeIn,timeOut,data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
