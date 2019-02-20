@@ -1,6 +1,7 @@
 ﻿@using EIS.WebApp.Services
 @using Newtonsoft.Json
 @using EIS.Entities.OtherEntities;
+@using System.Globalization;
 @using Microsoft.AspNetCore.Http;
 @model IEnumerable<EIS.Entities.Employee.Person>
 @{
@@ -49,6 +50,7 @@
     #inputyear, #inputmonth, #inputweek {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -113,15 +115,15 @@
                                         <div class="col-md-3">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off"/>
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off"/>
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
                                             </div>
                                             <div id="inputweekdiv" hidden="hidden">
                                                 <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off"/>
+                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -278,19 +280,19 @@
         //generateReport(m + '/' + y, 'month', id);
         $("#generateReport").prop("disabled", true);
 
-        $('#selectEmployee').on('change', function () { 
+        $('#selectEmployee').on('change', function () {
             if ($('#selectEmployee').val() == 0) {
                 $("#generateReport").prop("disabled", true);
             }
             else {
                 $("#generateReport").removeAttr('disabled');
             };
-            
+
         });
 
         $('#locations').on('change', function () {
                 $("#generateReport").prop("disabled", true);
-            
+
             var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -421,8 +423,11 @@
                 success: function (data) {
                     debugger;
                     var array = [];
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
+                    cultureInfo = cultureInfo.toUpperCase();
                     for (var i = 0; i < data.length; i++) {
-                        var date = moment(data[i].Date).format("DD MMM YYYY");
+
+                        var date = moment(data[i].Date,cultureInfo).format("DD MMM YYYY");
                         var timeIn;
                         var timeOut;
                         var Status = data[i].Status;
@@ -439,7 +444,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
-                        }   
+                        }
 
                         array.push([date, Status, timeIn, timeOut, data[i].TotalHours])
                     }
@@ -458,8 +463,8 @@
                 },
 
             });
-        } 
- 
+        }
+
 </script>
 
 

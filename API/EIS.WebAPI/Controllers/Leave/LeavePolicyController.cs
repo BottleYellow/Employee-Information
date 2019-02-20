@@ -114,8 +114,8 @@ namespace EIS.WebAPI.Controllers.Leave
                     Credit.UpdatedDate = policy.UpdatedDate;
                     Credit.UpdatedBy = policy.UpdatedBy;
                     _repository.LeaveCredit.UpdateAndSave(Credit);
-                    _repository.LeaveRules.Dispose();
                 }
+                _repository.LeaveRules.Dispose();
                 return Ok(policy);
             }
         }

@@ -47,6 +47,33 @@ namespace EIS.Repositories.Repository
 
             return result;
         }
+        public string CheckForScheduledPastLeave(int PersonId, DateTime FromDate, DateTime ToDate)
+        {
+            List<Attendance> attendances = new List<Attendance>();
+            for (var d = FromDate; d <= ToDate; d = d.AddDays(1))
+            {
+                Attendance record = _dbContext.Attendances.Where(x => x.DateIn == d.Date && x.PersonId==PersonId).FirstOrDefault();
+                if (record!=null) attendances.Add(record);
+            }
+            string result = "success";
+            IQueryable<LeaveRequest> requests = _dbContext.LeaveRequests.Where(x => ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+            LeaveRequest request = null;
+            if (attendances.Count > 0)
+            {
+                result = "You must be present on requested Dates. Please Select Correct Dates";
+            }
+            else if (requests != null && requests.Count() > 0)
+            {
+                result = "Leaves are already exists on requested dates";
+                request = requests.Where(x => x.Status == "Cancelled").FirstOrDefault();
+                if (request != null)
+                {
+                    result = "success";
+                }
+            }
+
+            return result;
+        }
         public IQueryable<PastLeaves> GetPastLeaves(int PersonId,int TenantId,int? LocationId)
         {
             IQueryable<PastLeaves> result = null;
@@ -74,6 +101,11 @@ namespace EIS.Repositories.Repository
             leaveRequest.UpdatedDate = DateTime.Now;
             if (Status == "Approve")
             {
+                if (leaveRequest.FromDate <= DateTime.Now.Date || leaveRequest.ToDate<=DateTime.Now.Date)
+                {
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
+                }
                 leaveRequest.ApprovedBy = PersonId;
                 leaveRequest.Status = "Approved";
                 messege = "Request of " + leaveRequest.Person.FirstName + " is approved for " + leaveRequest.RequestedDays + " days";
@@ -92,6 +124,11 @@ namespace EIS.Repositories.Repository
             else if (Status == "Pending")
             {
                 leaveRequest.UpdatedBy = PersonId;
+                if (leaveRequest.Status == null || leaveRequest.Status == "Rejected")
+                {
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
+                }
                 leaveRequest.Status = "Pending";
                 messege = "Request of " + leaveRequest.Person.FirstName + " marked as pending";
             }
@@ -137,5 +174,7 @@ namespace EIS.Repositories.Repository
             Save();
             return messege;
         }
+
+      
     }
 }

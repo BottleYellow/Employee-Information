@@ -33,6 +33,12 @@
     a {
         cursor: pointer;
     }
+    .disabledLink {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -354,6 +360,10 @@
             else if (Status == "Approved") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                 actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+            }
+            else if (Status == "Rejected" || Status == "Cancelled") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
             }
             else if (Status == "Requested For Cancel") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';

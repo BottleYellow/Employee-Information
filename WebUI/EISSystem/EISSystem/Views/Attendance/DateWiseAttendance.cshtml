@@ -1,4 +1,5 @@
 ﻿@using EIS.WebApp.Services
+@using System.Globalization
 @model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>All Attendance</title>
@@ -210,11 +211,13 @@
                 },
                 success: function (data) {
                     var array = [];
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
+                    cultureInfo = cultureInfo.toUpperCase();
                     for (var i = 0; i < data.length; i++) {
                         var Status = data[i].Status;
                         var timeIn;
                         var timeOut;
-                        var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
+                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                             timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
@@ -228,7 +231,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
-                        }   
+                        }
                         array.push([data[i].EmployeeCode, data[i].EmployeeName, date, timeIn, timeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
@@ -249,7 +252,7 @@
                     $('.ajax-loader').css("visibility", "hidden");
                 }
             });
-        }      
+        }
     });
 
 </script>

@@ -102,8 +102,10 @@ namespace EIS.WebApp.Controllers
             response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
             data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
-            if (data.Count == 0)
+            if (data.Count == 0) { 
+                ViewBag.Status = "NoData";
                 ViewBag.ListOfPolicy = data;
+            }
             else
                 ViewBag.ListOfPolicy = data;
             return View();
@@ -114,14 +116,13 @@ namespace EIS.WebApp.Controllers
         public IActionResult RequestLeave(LeaveRequest request)
         {
             request.CreatedDate = DateTime.Now;
-            request.UpdatedDate = DateTime.Now;
             request.AppliedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl+"/api/LeaveRequest", request );
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl+"/api/LeaveRequest/Future", request );
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -179,31 +180,56 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {
-            PastLeaves model = new PastLeaves();
-            return PartialView("AddPastLeave", model);
+            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyByLocation/" + GetSession().PersonId);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
+            if (data.Count == 0)
+            {
+                ViewBag.Status = "NoData";
+                ViewBag.ListOfPolicy = data;
+            }
+            else
+                ViewBag.ListOfPolicy = data;
+            return PartialView("AddPastLeave");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPastLeave(PastLeaves Leave)
+        public IActionResult AddPastLeave(LeaveRequest request)
         {
-            Leave.CreatedDate = DateTime.Now;
-            Leave.UpdatedDate = DateTime.Now;
+            request.CreatedDate = DateTime.Now;
+            request.AppliedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
-                Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
-                Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
-                Leave.IsActive = true;
-                Leave.PersonId = Convert.ToInt32(GetSession().PersonId);
-                HttpResponseMessage response = _services.PastLeave.PostResponse(ApiUrl+"/api/LeaveRequest/AddPastLeave", Leave);
-                string stringData = response.Content.ReadAsStringAsync().Result;
-                LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
+                request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+                request.LeaveType = request.LeaveType + "(Past)";
+                request.IsActive = true;
+                request.Id = 0;
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/Past", request);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
                 }
             }
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return PartialView("AddPastLeave", Leave);
+            return PartialView("AddPastLeave", request);
+            //Leave.CreatedDate = DateTime.Now;
+            //Leave.UpdatedDate = DateTime.Now;
+            //if (ModelState.IsValid)
+            //{
+            //    Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+            //    Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
+            //    Leave.IsActive = true;
+            //    Leave.PersonId = Convert.ToInt32(GetSession().PersonId);
+            //    HttpResponseMessage response = _services.PastLeave.PostResponse(ApiUrl+"/api/LeaveRequest/AddPastLeave", Leave);
+            //    string stringData = response.Content.ReadAsStringAsync().Result;
+            //    LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
+            //    if (response.IsSuccessStatusCode == true)
+            //    {
+            //        return View();
+            //    }
+            //}
+            //else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //return PartialView("AddPastLeave", Leave);
 
         }
 

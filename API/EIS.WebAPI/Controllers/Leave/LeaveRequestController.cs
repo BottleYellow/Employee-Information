@@ -191,8 +191,8 @@ namespace EIS.WebAPI.Controllers
 
 
         [DisplayName("Request for leave")]
-        [HttpPost]
-        public IActionResult PostLeaveRequest([FromBody] LeaveRequest leave)
+        [HttpPost("{type}")]
+        public IActionResult PostLeaveRequest([FromRoute]string type,[FromBody] LeaveRequest leave)
         {
             
             if (!ModelState.IsValid)
@@ -205,14 +205,22 @@ namespace EIS.WebAPI.Controllers
             _repository.LeaveRequest.CreateAndSave(leave);
 
             //string to = person.Select(x => x.EmailAddress).ToString();
-            string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
-           
-            List<Person> person = _repository.Employee.FindAll().Include(x => x.Role).Where(x => x.Role.Name == "Admin" || x.Role.Name == "Manager" || x.Role.Name == "HR").ToList();
-            foreach (var x in person)
+            string msg = null;
+            if (type == "Future")
             {
-                var name = p.FirstName + " " + p.LastName;
-                SendMail(x.EmailAddress, leave.LeaveType, leave.FromDate, leave.ToDate, name);
+                msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
             }
+            else if (type == "Past")
+            {
+                msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
+            }
+           
+            //List<Person> person = _repository.Employee.FindAll().Include(x => x.Role).Where(x => x.Role.Name == "Admin" || x.Role.Name == "Manager" || x.Role.Name == "HR").ToList();
+            //foreach (var x in person)
+            //{
+            //    var name = p.FirstName + " " + p.LastName;
+            //    SendMail(x.EmailAddress, leave.LeaveType, leave.FromDate, leave.ToDate, name);
+            //}
             SendMail(leave.Id, "Pending");
             return Ok(msg);
         }
@@ -315,11 +323,19 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
         [AllowAnonymous]
-        [Route("CheckDates/{PersonId}/{FromDate}/{ToDate}")]
+        [Route("CheckDates/{type}/{PersonId}/{FromDate}/{ToDate}")]
         [HttpGet]
-        public IActionResult CheckForScheduledLeave([FromRoute]int PersonId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
+        public IActionResult CheckForScheduledLeave([FromRoute]string type,[FromRoute]int PersonId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
         {
-            var result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+            string result = null;
+            if (type == "Future")
+            {
+                result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+            }
+            else if (type == "Past")
+            {
+               result = _repository.LeaveRequest.CheckForScheduledPastLeave(PersonId, FromDate, ToDate);
+            }
             return Ok(result);
         }
         [AllowAnonymous]

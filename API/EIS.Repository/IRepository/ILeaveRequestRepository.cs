@@ -11,5 +11,6 @@ namespace EIS.Repositories.IRepository
         string UpdateRequestStatus(int RequestId, string Status,int PersonId);
         IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
         string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate);
+        string CheckForScheduledPastLeave(int PersonId, DateTime FromDate, DateTime ToDate);
     }
 }

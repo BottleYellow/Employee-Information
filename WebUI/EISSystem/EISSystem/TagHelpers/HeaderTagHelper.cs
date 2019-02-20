@@ -40,8 +40,29 @@ namespace EIS.WebApp.TagHelpers
             get;
             set;
         }
+        public string BtnHref2
+        {
+            get;
+            set;
+        }
+        public string IconName2
+        {
+            get;
+            set;
+        }
+        public string BtnText2
+        {
+            get;
+            set;
+        }
+        public string BtnId2
+        {
+            get;
+            set;
+        }
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            
             output.TagName = "h1";
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.AppendHtml(HeaderName);
@@ -49,6 +70,10 @@ namespace EIS.WebApp.TagHelpers
             if (BtnText != null)
             {
                 output.PostElement.AppendHtml("<button style='float:right;' id='" + BtnId + "' class='btn btn-primary waves-effect' onclick=" + BtnHref + "><i class='material-icons'>" + IconName + "</i><span style='font-size:15px;'>" + BtnText + "</span></button>");
+            }
+            if (BtnText2 != null)
+            {
+                output.PostElement.AppendHtml("<button style='margin-right:16px;' id='" + BtnId2 + "' class='btn btn-primary waves-effect pull-right' onclick=" + BtnHref2 + "><i class='material-icons'>" + IconName2 + "</i><span style='font-size:15px;'>" + BtnText2 + "</span></button>");
             }
         }
     }

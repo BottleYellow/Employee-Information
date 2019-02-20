@@ -14,6 +14,8 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <html>
 
 <head>
@@ -40,6 +42,7 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -68,6 +71,7 @@
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
+    <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("AddPastLeave")"></div>
     <div class="container-fluid">
         <div class="block-header">
             @if (cookies.Role == "Admin")
@@ -76,7 +80,7 @@
             }
             else
             {
-                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Add Leave Request" icon-name="add"></HeaderWithButton>
+                <HeaderWithButton header-name="My Leave Requests" btn-href="location.href='@Url.Action("RequestLeave","Leave")'" btn-text="Future Leave" icon-name="add" btn-id2="btnModal" btn-text2="Past Leave" icon-name2="add"></HeaderWithButton>
             }
 
         </div>
@@ -208,13 +212,7 @@
                 }
             ]
         });
-        $("#btnModal").click(function () {
-            var url = $("#modal-placeholder").data('url');
-            $.get(url, function (data) {
-                $("#modal-placeholder").html(data);
-                $("#modal-placeholder").modal('show');
-            });
-        });
+      
     });
     function UpdateStatus(RequestId, Status) {
         var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/"+@cookies.PersonId;
@@ -231,7 +229,7 @@
                     callback: function () {
                         window.location.reload();
                     }
-                });        
+                });
             },
             error: function (data) {
                 alert(data.responseText);
@@ -241,6 +239,20 @@
             }
         });
     }
+    $("#btnModal").click(function () {
+        var url = $("#modal-placeholder").data('url');
+        $.get(url, function (data) {
+            $("#modal-placeholder").html(data);
+            $("#modal-placeholder").modal('show');
+            
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to add the Record</h4>");
+            }
+        });
+    });
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
