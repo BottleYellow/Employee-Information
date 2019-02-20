@@ -1,4 +1,5 @@
-﻿@model IEnumerable<EIS.Entities.Employee.Attendance>
+﻿@using System.Globalization
+@model IEnumerable<EIS.Entities.Employee.Attendance>
 
 <style type="text/css">
     td {
@@ -330,9 +331,10 @@
                 },
                 success: function (data) {
                     var array = [];
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++)
                     {
-                        var date = moment(new Date(data[i].Date)).format("DD MMM YYYY");
+                        var date = moment(new Date(data[i].Date), cultureInfo).format("DD MMM YYYY");
                         var timeIn = data[i].TimeIn;
                         if (timeIn == "-") {
 

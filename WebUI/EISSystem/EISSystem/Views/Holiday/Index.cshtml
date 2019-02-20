@@ -1,5 +1,7 @@
-﻿@model IEnumerable<EIS.Entities.Hoildays.Holiday>
+﻿@using System.Globalization
+@model IEnumerable<EIS.Entities.Hoildays.Holiday>
 @{
+    var cultureInfo = @CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString().ToUpper();
     if (ViewBag.Message != null)
     {
         <script type="text/javascript">
@@ -17,9 +19,9 @@
                 toastr.success("@ViewBag.Message");
             });
         </script>
-            ViewBag.Message = null;
-        }
+        ViewBag.Message = null;
     }
+}
 
 <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
 
@@ -122,7 +124,7 @@
                     'searchable': false,
                     'targets': [0, 1, 2]
                 }
-            ],          
+            ],
             lengthMenu: [
                 [10, 25, -1],
                 ['10', '25', 'All']
@@ -148,7 +150,7 @@
                 },
                 {
                     "data": "Date", "name": "Date" ,"autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
+                        data = moment(data,@cultureInfo).format('DD MMM YYYY');
                         return data;
                     }
                 },

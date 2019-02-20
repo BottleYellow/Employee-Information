@@ -31,7 +31,7 @@
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" />
+                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" autocomplete="off" />
                         @*<input id="hdate" asp-for="Date" type="date" value="@DateTime.Now.Date.ToShortDateString()" class="form-control" />*@
                     </div>
                     <span asp-validation-for="Date" class="text-danger"></span>

@@ -202,7 +202,6 @@
     var totalDaysb = 0;
     var totalDaysk = 0;
     $(document).ready(function () {
-        debugger;
         $('#all').show();
         $('#alltwoffk').text('Weekly Off : ' + 4);
         $('#alltwoffb').text('Weekly Off : ' + 6);
@@ -225,7 +224,6 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                debugger;
                 var k = 0, b = 0;
 
                 $.each(data, function (i, item) {

@@ -4,6 +4,7 @@ using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
+using System.Globalization;
 using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -62,24 +63,24 @@ namespace EIS.WebAPI.Controllers
 
         }
 
-        [Route("GetLeaveHistory/{fromDate}/{toDate}")]
+        [Route("GetLeaveHistory/{employeeCode}/{month}/{year}")]
         [HttpPost]
-        public IActionResult GetLeaveHistory([FromBody]SortGrid sortGrid, [FromRoute]string fromDate, [FromRoute]string toDate)
+        public IActionResult GetLeaveHistory([FromBody]SortGrid sortGrid, [FromRoute]string employeeCode, [FromRoute]string month,[FromRoute]string year)
         {
             ArrayList data = new ArrayList();
             IEnumerable<LeaveRequest> leaveData = null;
-            DateTime dateFrom = Convert.ToDateTime(fromDate);
-            DateTime dateTo = Convert.ToDateTime(toDate);
-
+            int monthData = DateTime.ParseExact(month, "MMMM", CultureInfo.InvariantCulture).Month;
+            int yearData = Convert.ToInt32(year);
             if (sortGrid.LocationId == 0)
             {
-                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && ((x.FromDate >= dateFrom && x.FromDate <= dateTo) || (x.ToDate >= dateFrom && x.ToDate <= dateTo))).ToList();
+                leaveData= employeeCode == "0"? _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList():
+                                                _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.EmployeeCode == employeeCode && x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();                
             }
             else
             {
-                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId && ((x.FromDate >= dateFrom && x.FromDate <= dateTo) || (x.ToDate >= dateFrom && x.ToDate <= dateTo))).ToList();
+                leaveData = employeeCode == "0" ? _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList():
+                                                 _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData)&&( x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.EmployeeCode == employeeCode && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList();              
             }
-
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {

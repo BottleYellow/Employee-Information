@@ -2,6 +2,7 @@
 @using Newtonsoft.Json
 @using EIS.Entities.OtherEntities;
 @using Microsoft.AspNetCore.Http;
+@using System.Globalization
 @model IEnumerable<EIS.Entities.Employee.Person>
 @{
     string cookiesdata = Context.Session.GetString("CookieData");
@@ -419,10 +420,10 @@
                 "type": "POST",
                 "datatype": "json",
                 success: function (data) {
-                    debugger;
                     var array = [];
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++) {
-                        var date = moment(data[i].Date).format("DD MMM YYYY");
+                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
                         var timeIn;
                         var timeOut;
                         var Status = data[i].Status;

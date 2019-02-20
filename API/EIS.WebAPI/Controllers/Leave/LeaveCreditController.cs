@@ -27,27 +27,12 @@ namespace EIS.WebAPI.Controllers.Leave
         [Route("GetLeaveCredits")]
         public ActionResult Get([FromBody]SortGrid sortGrid)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<LeaveCredit> credits = null;
-            if(sortGrid.LocationId==0)
-            {
-                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive==true && x.Person.Location.IsActive == true);
-            }
-            else
-            {
-                credits = _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true &&  x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
-            }
-            
+        
+            IQueryable<LeaveCredit> credits = sortGrid.LocationId==0? _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.Location.IsActive == true):
+                _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
 
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.LeaveCredit.GetDataByGridCondition(null, sortGrid, credits);
-            }
-            else
-            {
-                data = _repository.LeaveCredit.GetDataByGridCondition(x => x.Person.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower())||x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower())||x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);
-            }
+            ArrayList data = string.IsNullOrEmpty(sortGrid.Search)? _repository.LeaveCredit.GetDataByGridCondition(null, sortGrid, credits):
+                _repository.LeaveCredit.GetDataByGridCondition(x => x.Person.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);           
             return Ok(data);
         }
 

@@ -16,23 +16,17 @@ namespace EIS.WebAPI.Controllers.Leave
     [ApiController]
     public class LeavePolicyController : BaseController
     {
-        public LeavePolicyController(IRepositoryWrapper repository):base(repository)
+        public LeavePolicyController(IRepositoryWrapper repository) : base(repository)
         {
         }
         [Route("GetPolicies/{loc}")]
         [HttpGet]
         public IActionResult GetPolicyLocationWise(int loc)
         {
-            if (loc == 0)
-            {
-                IQueryable<LeaveRules> policies = _repository.LeaveRules.FindAll().Where(x=>x.IsActive==true);
-                return Ok(policies);
-            }
-            else
-            {
-                IQueryable<LeaveRules> policies = _repository.LeaveRules.FindAllByCondition(e => e.LocationId == loc && e.IsActive==true);
-                return Ok(policies);
-            }
+            IQueryable<LeaveRules> policies = loc == 0 ? _repository.LeaveRules.FindAll().Where(x => x.IsActive == true) :
+                                                         _repository.LeaveRules.FindAllByCondition(e => e.LocationId == loc && e.IsActive == true);
+            return Ok(policies);
+
 
         }
         [Route("GetPolicyByLocation/{PersonId}")]
@@ -40,7 +34,7 @@ namespace EIS.WebAPI.Controllers.Leave
         public IEnumerable<LeaveRules> GetLeavePolicies([FromRoute]int PersonId)
         {
             string locationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId.ToString();
-            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.IsActive == true && x.LocationId==Convert.ToInt32(locationId));
+            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.IsActive == true && x.LocationId == Convert.ToInt32(locationId));
         }
         [Route("GetPolicyById/{Id}")]
         [HttpGet]
@@ -60,32 +54,17 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpPost]
         public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<LeaveRules> employeeData = null;
-            if(sortGrid.LocationId==0)
-            {
-                employeeData = _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true);
-            }
-            else
-            {
-                employeeData = _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
-            }
-            
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.LeaveRules.GetDataByGridCondition(null, sortGrid, employeeData);
-            }
-            else
-            {
-                data = _repository.LeaveRules.GetDataByGridCondition(x => x.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
-            }
+          
+            IQueryable<LeaveRules> employeeData = sortGrid.LocationId == 0?  _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true):
+                                                                             _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
+            ArrayList data = string.IsNullOrEmpty(sortGrid.Search)? _repository.LeaveRules.GetDataByGridCondition(null, sortGrid, employeeData):
+                                                                    _repository.LeaveRules.GetDataByGridCondition(x => x.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
             return Ok(data);
         }
 
         [DisplayName("Add Leave Rule")]
         [HttpPost("{Id}")]
-        public IActionResult PostLeavePolicy([FromRoute] int Id,[FromBody] LeaveRules policy)
+        public IActionResult PostLeavePolicy([FromRoute] int Id, [FromBody] LeaveRules policy)
         {
             if (Id == 0)
             {
@@ -114,8 +93,8 @@ namespace EIS.WebAPI.Controllers.Leave
                     Credit.UpdatedDate = policy.UpdatedDate;
                     Credit.UpdatedBy = policy.UpdatedBy;
                     _repository.LeaveCredit.UpdateAndSave(Credit);
-                    _repository.LeaveRules.Dispose();
                 }
+                _repository.LeaveRules.Dispose();
                 return Ok(policy);
             }
         }
@@ -139,6 +118,6 @@ namespace EIS.WebAPI.Controllers.Leave
             _repository.LeaveRules.Dispose();
             return Ok(policy);
         }
-        
+
     }
 }

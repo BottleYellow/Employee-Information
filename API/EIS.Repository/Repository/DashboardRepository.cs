@@ -51,8 +51,6 @@ namespace EIS.Repositories.Repository
             //    x.p.Attendance = x.Attendances.ToList();
             //}
             //var result = results.Select(x => x.p).ToList();
-            int totalCount = 0;
-
             if (attendanceStatus == "Present")
             {
                 Model.sP_AdminDashboards = Model.sP_AdminDashboards.Where(x => x.TimeIn != null).ToList();
@@ -183,7 +181,8 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-
+                if(location==2 ||location==0)
+                { 
                 if (date.DayOfWeek == DayOfWeek.Saturday)
                 {
                     count++;
@@ -199,7 +198,7 @@ namespace EIS.Repositories.Repository
                         calendarDataList.Add(holidayCalanderData);
                     }
                 }
-
+                }
 
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                            .Select(p => new

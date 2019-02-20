@@ -55,7 +55,7 @@ namespace EIS.Repositories.Helpers
         public static string VerifyHashedPassword(string passwordHash, string password)
         {
             string result = "Failed";
-            String ep = Decrypt(passwordHash);
+            string ep = Decrypt(passwordHash);
             if (ep == password)
             {
                 result = "Success";
