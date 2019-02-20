@@ -331,31 +331,30 @@
                 },
                 success: function (data) {
                     var array = [];
-                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
-                    cultureInfo = cultureInfo.toUpperCase();
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++)
                     {
-                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
+                        var date = moment(new Date(data[i].Date), cultureInfo).format("DD MMM YYYY");
                         var timeIn = data[i].TimeIn;
                         if (timeIn == "-") {
 
                         } else {
                             timeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
                         }
-
+                       
                         var timeOut = data[i].TimeOut;
                         if (timeOut == "-") {
-
+                            
                         } else {
                             timeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                         }
-
+                        
                         var Status = data[i].Status;
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        }
+                        }   
                         array.push([date,Status,timeIn,timeOut,data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
@@ -373,7 +372,7 @@
                 complete: function () {
                     $('.ajax-loader').css("visibility", "hidden");
                 }
-            });
+            });       
         }
     });
     function calculate(date) {

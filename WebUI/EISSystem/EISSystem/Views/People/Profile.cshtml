@@ -69,7 +69,7 @@
             <input id="OutTime" type="hidden" value="@ViewBag.TimeOut.ToString(@"hh\:mm\:ss")" />
             <input id="totalHours" type="hidden" value="@ViewBag.TotalHrs.ToString(@"hh\:mm\:ss")" />
             <input id="estimatedTimeOut" type="hidden" value="@ViewBag.EstimatedTimeOut.ToString(@"hh\:mm\:ss")" />
-            <div class="col-xs-12 col-sm-3">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <div class="card profile-card">
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
@@ -93,7 +93,7 @@
                 </div>
 
             </div>
-            <div class="col-xs-12 col-sm-9">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-8">
                 <div class="card">
                     <div class="body">
                         <div>
@@ -677,12 +677,6 @@
         }
         return false;
     });
-    (function ($) {
-        // Test for making sure event are maintained
-        $('.js-alert-test').click(function () {
-            alert('Button Clicked: Event was maintained');
-        });
-        fakewaffle.responsiveTabs(['xs', 'sm']);
-    })(jQuery);
+   
 </script>
 

@@ -125,7 +125,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
-                                                <input id="dob" class="form-control" type="text"  asp-for="DateOfBirth" />
+                                                <input id="dob" class="form-control" type="text"  asp-for="DateOfBirth" autocomplete="off"/>
 
                                             </div>
                                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
@@ -177,7 +177,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="JoinDate">Joining Date : </label>
                                             <div class="form-line">
-                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" />
+                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" autocomplete="off"/>
 
                                             </div>
                                             <span asp-validation-for="JoinDate" class="text-danger"></span>

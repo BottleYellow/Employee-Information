@@ -87,13 +87,11 @@
                                     </div>
                                     <div class="col-md-3">
                                             <label>From Date</label>
-
-                                            <input class="form-control" type="text" id="fromdate" />
-                                       
+                                            <input class="form-control" type="text" id="fromdate" autocomplete="off"/>                                      
                                     </div>
                                     <div class="col-md-3">                                        
                                             <label>To Date</label>
-                                            <input class="form-control" type="text" id="todate"/>
+                                            <input class="form-control" type="text" id="todate" autocomplete="off"/>
                                     </div>
                                     <div class="col-md-3">
                                         <br />
@@ -211,13 +209,12 @@
                 },
                 success: function (data) {
                     var array = [];
-                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
-                    cultureInfo = cultureInfo.toUpperCase();
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++) {
                         var Status = data[i].Status;
                         var timeIn;
                         var timeOut;
-                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
+                        var date = moment(new Date(data[i].Date), cultureInfo).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                             timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
@@ -231,7 +228,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
-                        }
+                        }   
                         array.push([data[i].EmployeeCode, data[i].EmployeeName, date, timeIn, timeOut, Status , data[i].TotalHours])
                     }
                     $('#example').DataTable().destroy();
@@ -252,7 +249,7 @@
                     $('.ajax-loader').css("visibility", "hidden");
                 }
             });
-        }
+        }      
     });
 
 </script>

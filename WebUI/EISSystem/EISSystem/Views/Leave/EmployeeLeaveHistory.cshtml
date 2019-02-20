@@ -75,24 +75,41 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <label>Select Location</label>
-                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
-                                    <option value="0">All</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                <label>From Date</label>
-                                <input class="form-control" type="text" id="fromDate"/>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
-                                <label>To Date</label>
-                                <input class="form-control" type="text" id="toDate"  />
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12">
-                                <br />
-                                <input class=" form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
+                        <div>
+                            <div class="row col-md-12">
+                                <div class="col-md-3">
+                                    <label>Select Location</label>
+                                    <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                        <option value="0">All</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Select Employee</label>
+                                            <select class="form-control" id="selectEmployee">
+                                                <option value="0">All</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div id="inputmonthdiv">
+                                                <label>Select Month</label><br />
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div id="inputyeardiv">
+                                                <label>Select Year</label><br />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <br />
+                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -134,29 +151,61 @@
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     $(document).ready(function () {
+         var loc = $('#locations').val();
+        $.ajax({
+            type: 'GET',
+            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+            success: function (data) {
+                $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                $.each(data, function (data, value) {
+                    $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status);
+            }
+        });
+
         var d = new Date();
-        d.setDate(d.getDate());
-        $("#fromDate").datetimepicker({
-            format: "DD-MMM-YYYY",
-            defaultDate: d
+        var y = d.getFullYear();
+        var month = new Array();
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+        var m = month[d.getMonth()];
+        $('#inputmonth').datetimepicker({
+            format: "MMMM"
         });
-        $("#toDate").datetimepicker({
-            format: "DD-MMM-YYYY",
-            defaultDate: d
+        $('#inputyear').datetimepicker({
+            format: "YYYY"
         });
-        var fromDate = $('#fromDate').val();
-        var toDate = $('#toDate').val();
-        GenerateReport(0,fromDate,toDate);
+        $('#inputmonth').val(m);
+        $('#inputyear').val(y);
+        var locationValue = $('#locations').val();
+        var employeeCode = $('#selectEmployee').val();
+        var month = $('#inputmonth').val();
+        var year = $('#inputyear').val();
+        GenerateReport(locationValue, employeeCode, month, year);
     });
 
     $('#generateReport').on('click', function () {
         var locationValue = $('#locations').val();
-        var fromDate = $('#fromDate').val();
-        var toDate = $('#toDate').val();
-        GenerateReport(locationValue,fromDate,toDate);
+        var employeeCode = $('#selectEmployee').val();
+        var month = $('#inputmonth').val();
+        var year = $('#inputyear').val();
+        GenerateReport(locationValue, employeeCode,month,year);
     });
 
-    function GenerateReport(location,fromDate,toDate) {
+    function GenerateReport(locationId,employeeCode,month,year) {
                $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                     bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
@@ -186,8 +235,7 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                //"url": "/Leave/EmployeeLeaveRequests",
-                "url": '@Url.Action("EmployeeLeaveHistory", "Leave")?LocationId=' + location + '&fromDate=' + fromDate + '&toDate=' + toDate,
+                "url": '@Url.Action("EmployeeLeaveHistory", "Leave")?LocationId=' + locationId + '&employeeCode=' + employeeCode + '&month=' + month + '&year=' + year,
                 "type": "POST",
                 "datatype": "json",
             },
@@ -296,6 +344,24 @@
             }
         });
     }
+
+     $('#locations').on('change', function () {
+            var loc = $('#locations').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                success: function (data) {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.status);
+                }
+
+            });
+        });
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>

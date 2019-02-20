@@ -168,7 +168,6 @@
             var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
             var TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
-            debugger;
             var todayDate = moment(new Date()).format("DD-MMM-YYYY");
             var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
             if (todayDate == dateInData) {  
