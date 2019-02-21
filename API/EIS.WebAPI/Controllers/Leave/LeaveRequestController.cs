@@ -71,15 +71,16 @@ namespace EIS.WebAPI.Controllers
             IEnumerable<LeaveRequest> leaveData = null;
             int monthData = DateTime.ParseExact(month, "MMMM", CultureInfo.InvariantCulture).Month;
             int yearData = Convert.ToInt32(year);
+            int IdData = Convert.ToInt32(employeeCode);
             if (sortGrid.LocationId == 0)
             {
                 leaveData= employeeCode == "0"? _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList():
-                                                _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.EmployeeCode == employeeCode && x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();                
+                                                _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == IdData && x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();                
             }
             else
             {
                 leaveData = employeeCode == "0" ? _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData) && (x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList():
-                                                 _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData)&&( x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.EmployeeCode == employeeCode && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList();              
+                                                 _repository.LeaveRequest.FindAllByCondition(x => (x.FromDate.Month == monthData || x.ToDate.Month == monthData)&&( x.FromDate.Year == yearData || x.ToDate.Year == yearData)).Where(x => x.Status != "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == IdData && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList();              
             }
 
             if (string.IsNullOrEmpty(sortGrid.Search))

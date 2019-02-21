@@ -57,28 +57,37 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddHoliday(Holiday holiday)
         {
-            holiday.CreatedBy = Convert.ToInt32(GetSession().PersonId);
             ViewBag.Locations = GetLocations();
-            holiday.CreatedDate = DateTime.Now.Date;
-            holiday.UpdatedDate = DateTime.Now.Date;
-            holiday.IsActive = true;
-            HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/Holiday", holiday);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-
-            if (response.IsSuccessStatusCode == true)
+            if (holiday.LocationId == 0)
             {
-                return View();
+                ModelState.AddModelError("LocationId","Please select location");
             }
-            else
+            if (ModelState.IsValid)
             {
-                dynamic data = JObject.Parse(stringData);
-                var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
-                string error = data.Date.ToString();
-                error=error.Replace("[", null); error=error.Replace("]", null);
+                holiday.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+                ViewBag.Locations = GetLocations();
+                holiday.CreatedDate = DateTime.Now.Date;
+                holiday.UpdatedDate = DateTime.Now.Date;
+                holiday.IsActive = true;
+                HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Holiday", holiday);
+                string stringData = response.Content.ReadAsStringAsync().Result;
 
-                ModelState.AddModelError("Date", error);
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                if (response.IsSuccessStatusCode == true)
+                {
+                    return View();
+                }
+                else
+                {
+                    dynamic data = JObject.Parse(stringData);
+                    var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+                    string error = data.Date.ToString();
+                    error = error.Replace("[", null); error = error.Replace("]", null);
+
+                    ModelState.AddModelError("Date", error);
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
             }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("AddHoliday", holiday);
         }
     }
