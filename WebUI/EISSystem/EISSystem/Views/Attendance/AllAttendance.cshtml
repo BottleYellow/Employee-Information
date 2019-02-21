@@ -302,29 +302,35 @@
         });
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
-            alert(v);
             var location = $('#locations').val();
-            if (location == 0) {
-                $('#all').show();
-                $('#baner').hide();
-                $('#kondhwa').hide();
-            }
-            else if (location == 1) {
-                $('#all').hide();
-                $('#baner').hide();
-                $('#kondhwa').show();
-            }
-            else if (location == 2) {
-                $('#all').hide();
-                $('#baner').show();
-                $('#kondhwa').hide();
-            }
             if (v == 'year') {
                 var value = $("#inputyear").val();
-                
+                if (location == 0) {
+                    $('#all').show();
+                    $('#baner').hide();
+                    $('#kondhwa').hide();
+                    var weeklyoff = calWeeklyOffYearly(value);
+                    $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+                    $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
+                }
+                else if (location == 1) {
+                    $('#all').hide();
+                    $('#baner').hide();
+                    $('#kondhwa').show();
+                    var weeklyoff = calWeeklyOffYearly(value);
+                    $('#twoffk').text('Weekly Off : ' + weeklyoff[0]);
+                }
+                else if (location == 2) {
+                    $('#all').hide();
+                    $('#baner').show();
+                    $('#kondhwa').hide();
+                    var weeklyoff = calWeeklyOffYearly(value);
+                    $('#twoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+                }
                 //var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
                 $("#inputyear").val(value);
                 //totalDays = days;
+
                 $.ajax({
                     type: "GET",
                     url: "@MyHttpContext.APIBaseURL/api/Holiday/" + value + "/" + location,
@@ -334,25 +340,19 @@
                         var k = 0, b = 0;
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
-                                b = b + 1;
-                                var weeklyoff = calWeeklyOffYearly(value);
-                                //totaldaysb = value % 4 == 0 ? (366 - b - twob) : (365 - b - twob);
+                                b = b + 1;//totaldaysb = value % 4 == 0 ? (366 - b - twob) : (365 - b - twob);
                                 $('#thb').html('Holidays : ' + b);
-                                $('#twoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
-                            }
+                             }
                             else if (item.location.locationName.startsWith("K")) {
                                 k = k + 1;
-                                var weeklyoff = calWeeklyOffYearly(value);
                                 //totalDaysk = value % 4 == 0 ? (366 - k - twok) : (365 - k - twok);
                                 $('#thk').html('Holidays : ' + k);
-                                $('#twoffk').text('Weekly Off : ' + weeklyoff[0]);
-                            }
+                             }
                         });
-                        var weeklyoff = calWeeklyOffYearly(value);
+
                         $('#allthb').html('Holidays : ' + b);
-                        $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
                         $('#allthk').html('Holidays : ' + k);
-                        $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
+
                         //$.each(data, function (i, item) {
                         //    $('#tholiday').text(item.length);
                         //})
@@ -365,8 +365,6 @@
 
             }
             else if (v == 'month') {
-                $('#thb').html('Holidays : ' + 0);
-                $('#thk').html('Holidays : ' + 0);
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
                 var monthYear = value.split('/');
@@ -376,32 +374,49 @@
                 var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
                 totalDays = days;
                 var location = $('#locations').val();
+                if (location == 0) {
+                    $('#all').show();
+                    $('#baner').hide();
+                    $('#kondhwa').hide();
+                    var weeklyoff = calWeeklyOffMonthly(m, y);
+                    $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
+                    $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
+                }
+                else if (location == 1) {
+                    $('#all').hide();
+                    $('#baner').hide();
+                    $('#kondhwa').show();
+                    var weeklyoff = calWeeklyOffMonthly(m, y);
+                    $('#twoffk').text('Weekly Off : ' + weeklyoff);
+                }
+                else if (location == 2) {
+                    $('#all').hide();
+                    $('#baner').show();
+                    $('#kondhwa').hide();
+                    var weeklyoff = calWeeklyOffMonthly(m, y);
+                    $('#twoffb').text('Weekly Off : ' + (weeklyoff + 2));
+                }
                 $.ajax({
                     type: "GET",
                     url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/" + y + "/" + location,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
+                        debugger;
                         var k = 0, b = 0;
+                        
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;
-                                $('#thb').html('Holidays : ' + b);
-                                var weeklyoff = calWeeklyOffMonthly(m, y);
-                                $('#twoffb').text('Weekly Off : ' + (weeklyoff+2));
                             }
                             else if (item.location.locationName.startsWith("K")) {
                                 k = k + 1;
-                                $('#thk').html('Holidays : ' + k);
-                                var weeklyoff = calWeeklyOffMonthly(m, y);
-                                $('#twoffk').text('Weekly Off : ' + weeklyoff);
                             }
                         });
-                        var weeklyoff = calWeeklyOffMonthly(m, y);
+                        $('#thb').html('Holidays : ' + b);
+                        $('#thk').html('Holidays : ' + k);
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
-                        $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
-                        $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
                         totalDays = totalDays - (b + 6);
                         generateReport(value, 'month', location);
                     },
@@ -426,8 +441,6 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        var k = 0, b = 0;
-
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;

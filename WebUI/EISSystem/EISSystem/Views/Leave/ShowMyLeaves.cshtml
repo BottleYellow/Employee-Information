@@ -201,7 +201,7 @@
                 },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Rejected" || row.Status == "Cancelled" || row.Status == "Requested For Cancel") {
+                        if (row.Status == "Rejected" || row.Status == "Cancelled" || row.Status == "Requested For Cancel" || row.Status =="Approved(Rejected Cancel Request)") {
                             return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Cancel Request</a></li></ul></div>';
                         }
                         else {

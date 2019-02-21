@@ -1,11 +1,13 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Employee;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using EIS.Repositories.Helpers;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -102,6 +104,11 @@ namespace EIS.Repositories.Repository
         {
             CreateUser(users);
             Save();
+        }
+
+        public List<MailConfiguration> GetMailConfiguration()
+        {
+            return _dbContext._sp_MailConfigurations.FromSql("LMS.usp_MailConfiguration").ToList();
         }
     }
 }

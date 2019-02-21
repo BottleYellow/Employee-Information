@@ -70,6 +70,12 @@ namespace EIS.Entities.SP
         public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
     }
 
+    public class GetAdminHrManager
+    {
+        [Key]
+        public string EmailAddress { get; set; }
+        public string Name { get; set; }
+    }
 
 
 }
