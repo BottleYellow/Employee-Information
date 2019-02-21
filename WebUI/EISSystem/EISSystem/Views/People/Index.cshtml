@@ -111,22 +111,22 @@
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "<h4>Do you want to delete this record ?</h4>"
+        var message = "Do you want to delete this record ?"
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
                     type: "GET",
                     url: '@Url.Action("DeleteConfirmed", "People")?id=' + id,
                     success: function () {
-                        bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
+                        bootbox.alert("Record deleted successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status == 401) {
-                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                            bootbox.alert("Access denied..Unable to Delete the Record");
                         } else {
-                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                            bootbox.alert("Unable to Delete the Record");
                         }
                     }
                 });
@@ -136,7 +136,7 @@
     $('#example').on('click', 'a.active', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "<h4>Do you want to activate Employee record ?</h4>"
+        var message = "Do you want to activate Employee record ?"
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
@@ -144,12 +144,12 @@
                     url: '@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
                     data: null,
                     success: function () {
-                        bootbox.alert("<h4>Record activated successfully!</h4>", function () {
+                        bootbox.alert("Record activated successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },
                     error: function () {
-                        bootbox.alert("<h4>Unable to Activate Data");
+                        bootbox.alert("Unable to Activate Data");
                     }                    
                 });
             }

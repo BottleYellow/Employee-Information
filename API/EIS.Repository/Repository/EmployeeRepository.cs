@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
+using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,11 @@ namespace EIS.Repositories.Repository
         {
             var MaxId = _dbContext.Person.Where(x=>x.TenantId==TenantId).Max(x => x.EmployeeCode);
             return Convert.ToInt32(MaxId) + 1;
+        }
+
+        public List<GetAdminHrManager> getAdminHrManager()
+        {
+            return _dbContext._sp_GetAdminHrManager.FromSql("LMS.usp_GetAdminHRManager").ToList();
         }
 
         public Role GetDesignationById(int id)

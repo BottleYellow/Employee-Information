@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.SP;
 using System.Collections.Generic;
 
 namespace EIS.Repositories.IRepository
@@ -14,5 +15,6 @@ namespace EIS.Repositories.IRepository
         Person GetProfile(string EmployeeCode);
         Person ActivatePerson(string EmployeeCode);
         string GetEmployeeCode(int PersonId);
+        List<GetAdminHrManager> getAdminHrManager();
     }
 }

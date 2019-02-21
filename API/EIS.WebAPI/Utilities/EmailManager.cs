@@ -1,26 +1,35 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EIS.Entities.SP;
+using EIS.Repositories.IRepository;
+using EIS.WebAPI.Controllers;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 
 namespace EIS.WebAPI.Utilities
 {
-    public class EmailManager
+    public class EmailManager:BaseController
     {
         public readonly IConfiguration _configuration;
-        public EmailManager(IConfiguration configuration)
+        public EmailManager(IConfiguration configuration, IRepositoryWrapper repository): base(repository)
         {
             _configuration = configuration;
         }
 
         public void SendEmail(string Subject, string Body, string To, string fileAttachment)
         {
-            string  UserID, Password, SMTPPort, Host;
-            UserID = _configuration["appSettings:UserID"];
-            Password = _configuration["appSettings:Password"];
-            SMTPPort = _configuration["appSettings:SMTPPort"];
-            Host = _configuration["appSettings:Host"];
+            string  UserID=null, Password=null, SMTPPort=null, Host=null;
+            List<MailConfiguration> mailConfiguration = _repository.Users.GetMailConfiguration();
+            foreach(var v in mailConfiguration)
+            {
+                UserID = v.UserId;
+                Password = v.Password;
+                SMTPPort = v.SMTPPort;
+                Host = v.Host;
+            }
+            
             MailMessage mail = new System.Net.Mail.MailMessage();
             mail.To.Add(To);
             mail.From = new MailAddress(UserID);
