@@ -16,6 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using EIS.Entities.SP;
 
 namespace EIS.WebAPI.Controllers
 {
@@ -217,12 +218,6 @@ namespace EIS.WebAPI.Controllers
                 msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
             }
            
-            //List<Person> person = _repository.Employee.FindAll().Include(x => x.Role).Where(x => x.Role.Name == "Admin" || x.Role.Name == "Manager" || x.Role.Name == "HR").ToList();
-            //foreach (var x in person)
-            //{
-            //    var name = p.FirstName + " " + p.LastName;
-            //    SendMail(x.EmailAddress, leave.LeaveType, leave.FromDate, leave.ToDate, name);
-            //}
             SendMail(leave.Id, "Pending");
             return Ok(msg);
         }
@@ -244,23 +239,28 @@ namespace EIS.WebAPI.Controllers
         {
             LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
             Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            List<GetAdminHrManager> p = _repository.Employee.getAdminHrManager();
             string To = person.EmailAddress;
             string subject = "EMS Leave Request";
             string body = "Hello " + person.FirstName + "\n";
+            string bodyforadmin = null;
             if (status == "Pending")
             {
                 body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
                 body += "Date From:" + leave.FromDate + "\n";
                 body += "Date To:" + leave.ToDate + "\n";
                 body += "Requested Days:" + leave.RequestedDays;
+                bodyforadmin= person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
             }
             else if (status == "Reject")
             {
                 body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been rejected";
+                bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
             else if (status == "Approve")
             {
                 body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been approved.\n Remaining available leaves are " + leave.Available.ToString() + " days";
+                bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved successfully.";
             }
             else if (status == "Cancel")
             {
@@ -271,18 +271,29 @@ namespace EIS.WebAPI.Controllers
                 else
                 {
                     body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days is submitted successfully.";
+                    bodyforadmin = person.FullName + " has send a request to cancel the leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy");   
                 }
             }
-            else if (status == "Approve Cancel")
+            else if (status == "Accept Cancel")
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been approved.";
+                bodyforadmin = "The leave approved for " + person.FullName + " from " +leave.FromDate.ToString("dd/MM/yyyy") +" to "+ leave.ToDate.ToString("dd/MM/yyyy") +" has been cancelled by his/her request.";
             }
             else if (status == "Reject Cancel")
             {
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
+                bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";              
             }
             _repository.LeaveCredit.Dispose();
-            new EmailManager(_configuration).SendEmail(subject, body, To,null);
+            if (bodyforadmin != null)
+            {
+                foreach(var pers in p)
+                {
+                    new EmailManager(_configuration,_repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+                }
+                //new EmailManager(_configuration).SendEmail(subject,body,)
+            }
+            new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
         }
 
         [DisplayName("PastLeaves")]
@@ -393,13 +404,6 @@ namespace EIS.WebAPI.Controllers
             requestedDays = requestedDays - count;
           
             return Ok(requestedDays);
-        }
-        public void SendMail(string To,string leavetype,DateTime fromdate, DateTime todate,string name)
-        {
-            string to = To;
-            string subject = "EMS Leave Request";
-            string body = name + " " + "has send a request for " + leavetype + " leave from " + fromdate.ToString("dd/MM/yyyy") + " to " + todate.ToString("dd/MM/yyyy") + "."; 
-            new EmailManager(_configuration).SendEmail(subject, body, To, null);
-        }
+        } 
     }
 }

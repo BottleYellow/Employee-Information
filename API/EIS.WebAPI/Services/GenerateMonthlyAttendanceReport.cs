@@ -136,7 +136,7 @@ namespace EIS.WebAPI.Services
                     "Monthly report is attached. : \n" +
                     "Your Code Number: " + p.EmployeeCode + "\n" +
                     "User Name: " + p.EmailAddress;
-                new EmailManager(_configuration).SendEmail(subject, body, To, attendanceReportPath);
+                new EmailManager(_configuration,_repository).SendEmail(subject, body, To, attendanceReportPath);
             }
         }
 

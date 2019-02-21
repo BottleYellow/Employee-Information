@@ -135,7 +135,7 @@ namespace EIS.WebAPI.Controllers
                     "User Name: " + person.EmailAddress + "\n" +
                     "Password: " + pw + "\n" +
                     "Click here http://aclpune.com/ems to login";
-                new EmailManager(_configuration).SendEmail(subject, body, To, null);
+                new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
                 return Ok();
             }
             else 
@@ -154,7 +154,7 @@ namespace EIS.WebAPI.Controllers
                 string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                     "Your Information has been successfully updated with employee system. : \n" +
                     "User Name: " + person.EmailAddress + "\n";
-                new EmailManager(_configuration).SendEmail(subject, body, To, null);
+                new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
                 return Ok(person);
             }
         }
@@ -173,7 +173,7 @@ namespace EIS.WebAPI.Controllers
             string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                 "Your Information has been successfully updated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n";
-            new EmailManager(_configuration).SendEmail(subject, body, To,null);
+            new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
             return Ok(person);
         }
         [Route("PersonDelete/{id}")]
@@ -314,7 +314,7 @@ namespace EIS.WebAPI.Controllers
                 "Your Information has been successfully activated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n"+
                 "Click here http://aclpune.com/ems to login";
-            new EmailManager(_configuration).SendEmail(subject, body, To,null);
+            new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
             return Ok();
         }
 

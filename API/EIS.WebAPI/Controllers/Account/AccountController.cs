@@ -22,7 +22,7 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        private IHttpContextAccessor _accessor;
+        private readonly IHttpContextAccessor _accessor;
         private readonly IConfiguration _configuration;
         public AccountController(IHttpContextAccessor accessor,IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
@@ -151,7 +151,7 @@ namespace EIS.WebAPI.Controllers
                 "Please change your password on your first login" +
                 " \n " + "Click here http://aclpune.com/ems to login";
 
-            new EmailManager(_configuration).SendEmail(subject, body, To, null);
+            new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
             user.Password = Helper.Encrypt(password);
             _repository.Users.UpdateAndSave(user);
             _repository.Users.Dispose();
