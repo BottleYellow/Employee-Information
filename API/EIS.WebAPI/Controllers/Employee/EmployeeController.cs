@@ -126,7 +126,6 @@ namespace EIS.WebAPI.Controllers
                 string pw = u.Password;
                 u.CreatedBy = person.CreatedBy;
                 _repository.Users.CreateUserAndSave(u);
-                _repository.Users.Dispose();
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
@@ -136,6 +135,7 @@ namespace EIS.WebAPI.Controllers
                     "Password: " + pw + "\n" +
                     "Click here http://aclpune.com/ems to login";
                 new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
+                _repository.Users.Dispose();
                 return Ok();
             }
             else 
@@ -148,13 +148,13 @@ namespace EIS.WebAPI.Controllers
                 Users u = _repository.Users.FindByCondition(x => x.PersonId == person.Id);
                 u.UserName = person.EmailAddress;
                 _repository.Users.UpdateAndSave(u);
-                _repository.Employee.Dispose();
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
                 string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                     "Your Information has been successfully updated with employee system. : \n" +
                     "User Name: " + person.EmailAddress + "\n";
                 new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
+                _repository.Employee.Dispose();
                 return Ok(person);
             }
         }
@@ -167,13 +167,13 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.Employee.UpdateAndSave(person);
-            _repository.Employee.Dispose();
             string To = person.EmailAddress;
             string subject = "Employee Registration";
             string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
                 "Your Information has been successfully updated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n";
             new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
+            _repository.Employee.Dispose();
             return Ok(person);
         }
         [Route("PersonDelete/{id}")]
