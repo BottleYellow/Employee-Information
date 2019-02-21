@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -33,22 +34,22 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Requests
+        //[DisplayName("View all requests")]
+        //public IActionResult EmployeeLeaveRequests()
+        //{
+        //    ViewBag.Locations = GetLocations();
+        //    return View();
+        //}
+
+        //[ActionName("EmployeeLeaveRequests")]
+        //[HttpPost]
+        //public IActionResult GetEmployeeLeaveRequests(int LocationId)
+        //{
+        //    ArrayList arrayData = new ArrayList();
+        //    return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
+        //}
+
         [DisplayName("View all requests")]
-        public IActionResult EmployeeLeaveRequests()
-        {
-            ViewBag.Locations = GetLocations();
-            return View();
-        }
-
-        [ActionName("EmployeeLeaveRequests")]
-        [HttpPost]
-        public IActionResult GetEmployeeLeaveRequests(int LocationId)
-        {
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
-        }
-
-        [DisplayName("Leave History")]
         public IActionResult EmployeeLeaveHistory()
         {
             ViewBag.Locations = GetLocations();
@@ -57,10 +58,27 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("EmployeeLeaveHistory")]
         [HttpPost]
-        public IActionResult GetEmployeeLeaveHistory(int LocationId,string employeeCode,string month, string year)
+        public IActionResult GetEmployeeLeaveHistory(int locationId,int employeeId, string leaveType, string type,string value)
         {
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveHistory/" + employeeCode + "/" + month+"/"+ year, null, LocationId);
+            int month=0;
+            int year=0;
+            string[] dateSplit = new string[1];
+            if(type=="month")
+            {
+                dateSplit = value.Split('/');
+                month =Convert.ToInt32(dateSplit[0]);
+                year = Convert.ToInt32(dateSplit[1]);
+
+            }
+            else
+                if(type=="year")
+            {
+                year = Convert.ToInt32(value);
+            }
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/LeaveRequest/GetLeaveHistory/" + locationId + "/" + employeeId + "/" + month + "/" + year+"/"+ leaveType);
+           string stringData= response.Content.ReadAsStringAsync().Result;
+            List<LeaveRequestViewModel> leave = JsonConvert.DeserializeObject<List<LeaveRequestViewModel>>(stringData);
+            return Json(leave);
         }
 
         [DisplayName("Show Employees Requests")]
@@ -158,25 +176,25 @@ namespace EIS.WebApp.Controllers
             }
             return View("RequestLeave", request);
         }
-        [DisplayName("Past Leaves")]
-        public IActionResult PastLeaves()
-        {
-            ViewBag.Locations = GetLocations();
-            return View();
-        }
+        //[DisplayName("Past Leaves")]
+        //public IActionResult PastLeaves()
+        //{
+        //    ViewBag.Locations = GetLocations();
+        //    return View();
+        //}
 
-        [ActionName("PastLeaves")]
-        [HttpPost]
-        public IActionResult GetPastLeaves(int LocationId)
-        {
-            int PersonId = 0;
-            if(GetSession().Role=="Employee")
-            {
-                PersonId = Convert.ToInt32(GetSession().PersonId);
-            }
-            return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, LocationId);
+        //[ActionName("PastLeaves")]
+        //[HttpPost]
+        //public IActionResult GetPastLeaves(int LocationId)
+        //{
+        //    int PersonId = 0;
+        //    if(GetSession().Role=="Employee")
+        //    {
+        //        PersonId = Convert.ToInt32(GetSession().PersonId);
+        //    }
+        //    return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, LocationId);
 
-        }
+        //}
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {

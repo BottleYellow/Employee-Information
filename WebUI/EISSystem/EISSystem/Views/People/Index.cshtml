@@ -118,15 +118,15 @@
                     type: "GET",
                     url: '@Url.Action("DeleteConfirmed", "People")?id=' + id,
                     success: function () {
-                        bootbox.alert("<h4>Record deleted successfully!</h4>", function () {
+                        bootbox.alert("Record deleted successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status == 401) {
-                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                            bootbox.alert("Access denied..Unable to Delete the Record");
                         } else {
-                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                            bootbox.alert("Unable to Delete the Record");
                         }
                     }
                 });
@@ -144,12 +144,12 @@
                     url: '@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
                     data: null,
                     success: function () {
-                        bootbox.alert("<h4>Record activated successfully!</h4>", function () {
+                        bootbox.alert("Record activated successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },
                     error: function () {
-                        bootbox.alert("<h4>Unable to Activate Data");
+                        bootbox.alert("Unable to Activate Data");
                     }                    
                 });
             }
@@ -189,7 +189,6 @@
 
         var dTable = $('#example').DataTable({
             sDom: '<"myexport"B>ifrtlp',
-            "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
             buttons: [

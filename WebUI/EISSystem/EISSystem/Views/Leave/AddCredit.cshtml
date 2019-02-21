@@ -86,8 +86,8 @@
                         $('#emp').append($("<option></option>").val(this.id).html(this.fullName));
                     });
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status);
+                error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
                 }
         });
          $.ajax({
@@ -99,8 +99,8 @@
                         $('#type').append($("<option></option>").val(this.id).html(this.leaveType));
                     });
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status);
+                error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
                 }
             });
     });

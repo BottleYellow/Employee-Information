@@ -171,8 +171,8 @@
                         $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status);
+                error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
                 }
 
             });

@@ -245,8 +245,8 @@
                 $('#allthk').html('Holidays : ' + k);
                 generateReport(m + '/' + y, 'month', location);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status);
+            error: function () {
+                bootbox.alert("Something went wrong..Please try after sometime");
             }
         });
 
@@ -358,8 +358,8 @@
                         //})
                         generateReport(value, 'year', location);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.status);
+                    error: function () {
+                        bootbox.alert("Something went wrong..Please try after sometime");
                     }
                 });
 
@@ -405,8 +405,8 @@
                         totalDays = totalDays - (b + 6);
                         generateReport(value, 'month', location);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.status);
+                    error: function () {
+                        bootbox.alert("Something went wrong..Please try after sometime");
                     }
                 });
 
@@ -446,8 +446,8 @@
                         $('#allthk').html('Holidays : ' + k);
                         generateReport(firstDate + " - " + lastDate, 'week', location);
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.status);
+                    error: function () {
+                        bootbox.alert("Something went wrong..Please try after sometime");
                     }
                 });
 

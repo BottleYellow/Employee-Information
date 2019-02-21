@@ -256,8 +256,8 @@
                     $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
                 });
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status);
+            error: function () {
+                bootbox.alert("Something went wrong..Please try after sometime");
             }
             //error: function () {
             //    bootbox.alert('<h4>Error</h4>');
@@ -302,8 +302,8 @@
                         $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
                     });
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.status);
+                error: function () {
+                   bootbox.alert("Something went wrong..Please try after sometime");
                 }
                 //error: function () {
                 //    bootbox.alert('<h4>Error</h4>');
@@ -408,7 +408,7 @@
                     document.getElementById("addtionalWorkingHours").innerHTML = data.AdditionalWorkingHours;
                 },
                 error: function (error) {
-                    bootbox.alert('<h4>Error</h4>');
+                    bootbox.alert("Something went wrong..Please try after sometime");
                 },
                 complete: function () {
                     $('.ajax-loader').css("visibility", "hidden");

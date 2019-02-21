@@ -186,8 +186,8 @@
                                       $("#btnSubmit").removeAttr('disabled');
                                   }
                               },
-                              error: function (data) {
-                                  //alert(data.responseText);
+                              error: function () {
+                                 bootbox.alert("Something went wrong..Please try after sometime");
                               }
                           });
                       }
@@ -198,8 +198,8 @@
                           $("#btnSubmit").prop("disabled", true);
                       }
                   },
-                  error: function (data) {
-
+                  error: function () {
+    bootbox.alert("Something went wrong..Please try after sometime");
                   }
               });
         }
@@ -231,8 +231,8 @@
                  complete: function () {
                      $('.ajax-loader').css("visibility", "hidden");
                  },
-                 error: function (data) {
-                     alert(data.responseText);
+                 error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
                  }
              });
          }

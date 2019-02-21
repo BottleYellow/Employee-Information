@@ -135,8 +135,8 @@
                         }
                     });
                 },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.statusText);
+                error: function () {
+              bootbox.alert("Something went wrong..Please try after sometime");
 
                 }
             });

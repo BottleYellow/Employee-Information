@@ -1,5 +1,7 @@
 ﻿using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EIS.Repositories.IRepository
@@ -12,5 +14,7 @@ namespace EIS.Repositories.IRepository
         IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
         string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate);
         string CheckForScheduledPastLeave(int PersonId, DateTime FromDate, DateTime ToDate);
+
+        List<LeaveRequestViewModel> GetLeaveData(int locationId, int employeeId, int month, int year,int TenantId,string leaveType);
     }
 }

@@ -94,7 +94,6 @@
         $('#example').DataTable().destroy();
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
-            "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
             buttons: [
@@ -190,15 +189,15 @@
                     type: "GET",
                     url: '@Url.Action("DeleteCredit", "Leave")?id=' + id,
                     success: function () {
-                        bootbox.alert("<h4>Credit deleted successfully!</h4>", function () {
+                        bootbox.alert("Credit deleted successfully!", function () {
                             location.href = '@Url.Action("LeaveCredits", "Leave")';
                         });
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status == 401) {
-                            bootbox.alert("<h4>Access denied..Unable to Delete the Record</h4>");
+                            bootbox.alert("Access denied..Unable to Delete the Record");
                         } else {
-                            bootbox.alert("<h4>Unable to Delete the Record</h4>");
+                            bootbox.alert("Unable to Delete the Record");
                         }
                     }
                 });

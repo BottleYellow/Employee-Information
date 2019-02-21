@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EIS.Entities.Leave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -9,6 +10,7 @@ namespace EIS.Entities.SP
     {
         public List<SP_EmployeeDashboard> SP_EmployeeDashboards { get; set; }
         public SP_EmployeeDashboardCount SP_EmployeeDashboardCount { get; set; }
+        public List<LeaveRequest> leaveRequests { get; set; }
     }
     public class SP_EmployeeDashboard
     {

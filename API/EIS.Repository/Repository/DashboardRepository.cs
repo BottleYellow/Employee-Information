@@ -100,6 +100,8 @@ namespace EIS.Repositories.Repository
             usp = "LMS.usp_GetEmployeeDashboardCountDetails @PersonId";
             Model.SP_EmployeeDashboardCount = _dbContext._sp_EmployeeDashboardcount.FromSql(usp, param).FirstOrDefault();
 
+            Model.leaveRequests = _dbContext.LeaveRequests.Where(x => x.PersonId == PersonId).ToList();
+
             return Model;
         }
 

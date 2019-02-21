@@ -113,7 +113,6 @@
         $('#example').DataTable().destroy();
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
-            "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)
             buttons: [
@@ -180,16 +179,7 @@
                     }
                 }
 
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
-                });
-            }
+            ]
         });
     }
       $('#example').on('click', 'a.inactive', function (e) {

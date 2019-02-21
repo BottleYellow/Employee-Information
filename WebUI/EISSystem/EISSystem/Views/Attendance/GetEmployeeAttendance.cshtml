@@ -156,8 +156,8 @@
                     document.getElementById("absentDays").innerHTML = data.AbsentDays;
                     document.getElementById("totalDays").innerHTML = data.TotalWorkingDays;
                 },
-     error: function (error) {
-                    bootbox.alert('<h4>Error</h4>');
+     error: function () {
+                   bootbox.alert("Something went wrong..Please try after sometime");
                 }
             });
 
