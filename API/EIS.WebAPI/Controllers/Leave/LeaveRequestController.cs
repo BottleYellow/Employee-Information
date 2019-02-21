@@ -230,34 +230,34 @@ namespace EIS.WebAPI.Controllers
             }
             else if (status == "Reject")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been rejected";
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") +" to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected";
                 bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
             else if (status == "Approve")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been approved.\n Remaining available leaves are " + leave.Available.ToString() + " days";
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + leave.Available.ToString() + " days";
                 bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved successfully.";
             }
             else if (status == "Cancel")
             {
                 if (leave.Status == "Pending")
                 {
-                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days has been cancelled";
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been cancelled";
                 }
                 else
                 {
-                    body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days is submitted successfully.";
+                    body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " is submitted successfully.";
                     bodyforadmin = person.FullName + " has send a request to cancel the leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy");   
                 }
             }
             else if (status == "Accept Cancel")
             {
-                body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been approved.";
+                body += "Your cancelling leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.";
                 bodyforadmin = "The leave approved for " + person.FullName + " from " +leave.FromDate.ToString("dd/MM/yyyy") +" to "+ leave.ToDate.ToString("dd/MM/yyyy") +" has been cancelled by his/her request.";
             }
             else if (status == "Reject Cancel")
             {
-                body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
+                body += "Your cancelling leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected.";
                 bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";              
             }
             
