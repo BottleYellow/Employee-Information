@@ -260,7 +260,7 @@ namespace EIS.WebAPI.Controllers
                 body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days has been rejected.";
                 bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";              
             }
-            _repository.LeaveCredit.Dispose();
+            
             if (bodyforadmin != null)
             {
                 foreach(var pers in p)
@@ -270,6 +270,7 @@ namespace EIS.WebAPI.Controllers
                 //new EmailManager(_configuration).SendEmail(subject,body,)
             }
             new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
+            _repository.LeaveCredit.Dispose();
         }
 
         [DisplayName("PastLeaves")]
