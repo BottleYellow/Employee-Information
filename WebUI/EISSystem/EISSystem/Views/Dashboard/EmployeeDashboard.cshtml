@@ -214,7 +214,13 @@
             if (buttonSelected == "totalLeave") {
                 var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
                 var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
-                array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Employees[i].Status])
+                var Status = Employees[i].Status;
+                if (Status == "Approved") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                } else {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                }
+                array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status])
             } else
             {
                 var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
