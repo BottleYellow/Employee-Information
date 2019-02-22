@@ -66,7 +66,7 @@
 </html>
 
 
-
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
     $(document).ready(function () {
         GenerateReport(0);
@@ -148,6 +148,12 @@
             $('#inputdate').datetimepicker({
                 format: "DD/MMM/YYYY"
             });
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to add the Record</h4>");
+            }
         });
     });
 </script>
