@@ -107,7 +107,7 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     var d = new Date();
-    d.setDate(d.getDate());
+    d.setDate(d.getDate()-1);
     $('#date1').datetimepicker({
         format: "DD/MMM/YYYY",
         defaultDate: d
@@ -129,6 +129,7 @@
         var d1 = document.getElementById("date1").value;
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d = new Date();
+        d.setDate(d.getDate() - 1);
         if (new Date(firstDate) >= d) {
             bootbox.alert({
                 message: "Please select date before Today's date"
@@ -144,6 +145,8 @@
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var secondDate = moment(d2, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var diff = new Date(new Date(secondDate) - new Date(firstDate));
+        var d = new Date();
+        d.setDate(d.getDate() - 1);
         var days = diff / 1000 / 60 / 60 / 24 + 1;
         if (new Date(firstDate) > new Date(secondDate)) {
             bootbox.alert({
@@ -152,7 +155,7 @@
             $("#date2").val('');
             $("#btnSubmit").prop("disabled", true);
         }
-        else if (new Date(secondDate) >= new Date()) {
+        else if (new Date(secondDate) >= d) {
             bootbox.alert({
                 message: "Please select date before Today's date"
             });

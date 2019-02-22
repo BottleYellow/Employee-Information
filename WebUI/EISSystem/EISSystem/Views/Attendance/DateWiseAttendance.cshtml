@@ -214,7 +214,7 @@
                         var Status = data[i].Status;
                         var timeIn;
                         var timeOut;
-                        var date = moment(new Date(data[i].Date), cultureInfo).format("DD MMM YYYY");
+                        var date = moment(data[i].Date , cultureInfo).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                             timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');

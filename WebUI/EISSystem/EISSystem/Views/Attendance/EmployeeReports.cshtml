@@ -334,7 +334,7 @@
                     var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++)
                     {
-                        var date = moment(new Date(data[i].Date), cultureInfo).format("DD MMM YYYY");
+                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
                         var timeIn = data[i].TimeIn;
                         if (timeIn == "-") {
 
