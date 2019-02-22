@@ -223,9 +223,9 @@ namespace EIS.WebAPI.Controllers
         {
             string NameWithRole = "";
             Person p = _repository.Employee.FindByCondition(x => x.Id == PersonId);
-            Role role = _repository.Employee.GetDesignationById(p.RoleId);
             if (p != null)
             {
+                Role role = _repository.Employee.GetDesignationById(p.RoleId);
                 NameWithRole = p.FullName + "(" + role.Name + ")";
             }
             return Ok(NameWithRole);

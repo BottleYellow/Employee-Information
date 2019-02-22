@@ -87,7 +87,7 @@
                                     <th>Mobile Number</th>
                                     <th>Email Address</th>
                                     <th>Joining Date</th>
-                                    @*<th>Created By</th>*@
+                                    <th>Created By</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -150,7 +150,7 @@
                     },
                     error: function () {
                         bootbox.alert("Unable to Activate Data");
-                    }                    
+                    }
                 });
             }
         });
@@ -178,7 +178,7 @@
             b = false;
             generateReport(b,c);
         }
-    });  
+    });
     function generateReport(b,c) {
         $.fn.dataTable.ext.errMode = 'none';
         $('#example').on('error.dt', function () {
@@ -263,15 +263,12 @@
                         return data;
                     }
                 },
-                @*{
+                {
                     "data": "CreatedBy", "name": "CreatedBy", "autoWidth": true, "render": function (data, type, row) {
-                        var result = null;
-                        $.getJSON("@APIURL/api/Employee/CreatedBy/" + row.CreatedBy + "", function (data) {
-                            result = data;
-                        });
-                        return result;
+                        var v = getCreatedBy(data);
+                        return v;
                     }
-                },*@
+                },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         var value = row.IsActive;
@@ -294,11 +291,17 @@
             },
         });
     };
-    function getCreatedBy(pid) {
+   function getCreatedBy(pid) {
         var result = null;
-        $.getJSON("@APIURL/api/Employee/CreatedBy/" + pid + "", function (data) {
-            result = data;
-        });
+        $.ajax({
+            type: "GET",
+            async: false,
+                    url: '@APIURL/api/Employee/CreatedBy/' + pid,
+                    data: null,
+                    success: function (data) {
+                        result = data;
+                    }
+                });
         return result;
     }
 </script>
