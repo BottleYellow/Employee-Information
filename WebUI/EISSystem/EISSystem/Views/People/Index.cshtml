@@ -99,12 +99,14 @@
 </div>
 
 <script>
+    var result=null;
      $(document).ready(function () {
         if ('@TempData["success"]' != '') {
             bootbox.alert({
                 message: '@TempData["success"]'
             });
-        }
+         }
+         result = getCreatedBy();
         var b = true;
         generateReport(b,0);
     });
@@ -150,7 +152,7 @@
                     },
                     error: function () {
                         bootbox.alert("Unable to Activate Data");
-                    }
+                    }                    
                 });
             }
         });
@@ -178,7 +180,7 @@
             b = false;
             generateReport(b,c);
         }
-    });
+    });  
     function generateReport(b,c) {
         $.fn.dataTable.ext.errMode = 'none';
         $('#example').on('error.dt', function () {
@@ -265,8 +267,8 @@
                 },
                 {
                     "data": "CreatedBy", "name": "CreatedBy", "autoWidth": true, "render": function (data, type, row) {
-                        var v = getCreatedBy(data);
-                        return v;
+                        var v = getCreatedname(result, data);
+                        return v;                    
                     }
                 },
                 {
@@ -291,18 +293,27 @@
             },
         });
     };
-   function getCreatedBy(pid) {
+    function getCreatedBy() {
         var result = null;
         $.ajax({
             type: "GET",
             async: false,
-                    url: '@APIURL/api/Employee/CreatedBy/' + pid,
+                    url: '@APIURL/api/Employee/CreatedBy',
                     data: null,
-                    success: function (data) {
+            success: function (data) {
                         result = data;
-                    }
-                });
+                    }                   
+        });
         return result;
+    }
+
+    function getCreatedname(result,pid) {
+        $.each(result, function (i, item){
+            if (result[i].key == pid) {
+               value= result[i].value;
+            }
+        })
+        return value;
     }
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>

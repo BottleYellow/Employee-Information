@@ -25,7 +25,7 @@ namespace EIS.WebApp.Controllers
 
         }
         // GET: /<controller>/
-        [DisplayName("List of Holidays")]
+        [DisplayName("List Of Holidays")]
         public IActionResult Index()
         {
             ViewBag.Locations = GetLocations();
