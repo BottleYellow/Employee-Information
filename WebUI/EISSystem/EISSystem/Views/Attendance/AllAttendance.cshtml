@@ -341,15 +341,16 @@
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;//totaldaysb = value % 4 == 0 ? (366 - b - twob) : (365 - b - twob);
-                                $('#thb').html('Holidays : ' + b);
+                               
                              }
                             else if (item.location.locationName.startsWith("K")) {
                                 k = k + 1;
                                 //totalDaysk = value % 4 == 0 ? (366 - k - twok) : (365 - k - twok);
-                                $('#thk').html('Holidays : ' + k);
+                                
                              }
                         });
-
+                        $('#thb').html('Holidays : ' + b);
+                        $('#thk').html('Holidays : ' + k);
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
 

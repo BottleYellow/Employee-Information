@@ -73,15 +73,15 @@
                     <div class="body">
                         <div>
                             <div class="row col-md-12">
-                                <div class="col-md-4">
+                                <div class="col-md-4 col-lg-4">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 col-lg-6">
                                             <label>Select Location</label>
                                             <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                                 <option value="0">All</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 col-lg-6">
                                             <label>Select Employee</label>
                                             <select class="form-control" id="selectEmployee">
                                                 <option value="0">All</option>
@@ -89,17 +89,17 @@
                                         </div>
                                     </div>                                   
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 col-lg-8">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Select Type Of Reports</label>
+                                        <div class="col-md-3 col-lg-3">
+                                            <label>Select Type</label>
                                             <select class="form-control" id="selectReport">
                                                 <option value="month" id="month">Month</option>
                                                 <option value="year" id="year">Year</option>
                                                 @*<option value="week" id="week">Week</option>*@
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 col-lg-3">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
                                                 <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
@@ -113,8 +113,8 @@
                                                 <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off" />
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label>Select Status of Leave</label>
+                                        <div class="col-md-3 col-lg-3">
+                                            <label>Select Status</label>
                                             <select class="form-control" id="leaveOption">
                                                 <option value="All">All</option>
                                                 <option value="Approved">Approved</option>
@@ -123,9 +123,9 @@
                                                 <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 col-lg-3">
                                             <br />
-                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
+                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:150px; height:40px; background-color:#3399ff; color:white;" />
                                         </div>
                                     </div>
 
@@ -143,7 +143,7 @@
                                         <th>From Date</th>
                                         <th>To Date</th>
                                         <th>Days</th>
-                                        <th>Available</th>
+                                        @*<th>Available</th>*@
                                         <th>Requested Date</th>
                                         <th>Status</th>
                                         <th>Approved By</th>
@@ -267,6 +267,10 @@
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     }
+                    else if (status == "Rejected" || status == "Cancelled") {
+                        status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
+                        action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
+                    }
                     else if (status == "Requested For Cancel") {
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
@@ -275,7 +279,7 @@
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                     }
-                    array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, data[i].Available, appliedDate, status, data[i].ApprovedName, data[i].Reason])
+                    array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays,  appliedDate, status, data[i].ApprovedName, data[i].Reason])
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
