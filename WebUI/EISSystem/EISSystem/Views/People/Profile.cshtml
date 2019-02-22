@@ -412,11 +412,8 @@
         e.preventDefault();
         $(this).tab('show');
     });
-    $("#createpadd").click(function () {
-        //var h = document.getElementById("createpadd").innerHTML;
-        //document.getElementById("createpadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
+    $("#createpadd").click(function () { : 'Create New';
         $("#createpadd").hide();
-        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
         $("#paddtable").slideToggle({
             direction: "down"
         }, 300);
@@ -466,10 +463,8 @@
             },
             callback: function (result) {
                 if (result == true) {
-                    //var url1 = "/People/DeletePermanentAddress";
                     $.ajax({
                         url: '@Url.Action("DeletePermanentAddress", "People")?perid=' +@Model.PermanentAddress.Id,
-                        //data: { perid: @Model.PermanentAddress.Id },
                         success: function (Data) {
                             bootbox.alert(
                                 "Record Deleted Successfully!",
@@ -488,9 +483,6 @@
     });
     $("#createcadd").click(function () {
         $("#createcadd").hide();
-        //var h = document.getElementById("createcadd").innerHTML;
-        //document.getElementById("createcadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
-        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
         $("#caddtable").slideToggle({
             direction: "down"
         }, 300);
@@ -540,10 +532,8 @@
             },
             callback: function (result) {
                 if (result == true) {
-                    //var url1 = "/People/DeleteCurrentAddress";
                     $.ajax({
                         url: '@Url.Action("DeleteCurrentAddress", "People")?cid=' +@Model.CurrentAddress.Id,
-                        //data: { cid: @Model.CurrentAddress.Id },
                         success: function (Data) {
                             bootbox.alert(
                                 "Record Deleted Successfully!",
@@ -562,9 +552,6 @@
 
     $("#createEadd").click(function () {
         $("#createEadd").hide();
-        //var h = document.getElementById("createEadd").innerHTML;
-        //document.getElementById("createEadd").innerHTML = h.startsWith('Create New') ? 'Show Addresses' : 'Create New';
-        //$(this).html=$(this).html == 'Create New' ? 'Show Addresses' : 'Create New';
         $("#eaddtable").slideToggle({
             direction: "down"
         }, 300);
@@ -583,11 +570,9 @@
             $("#editEaddpanel").slideToggle({
                 direction: "up"
             }, 300);
-            //var url1 = "/People/EditEmergencyAddress";
             $.ajax({
                 url: '@Url.Action("EditEmergencyAddress", "People")?eid=' + j,
                 type: 'get',
-                //data: { eid: j },
                 success: function (Data) {
                     $("#editform").html(Data);
                 }
@@ -635,10 +620,8 @@
                 },
                 callback: function (result) {
                     if (result == true) {
-                        //var url1 = "/People/DeleteEmergencyAddress";
                         $.ajax({
                             url: '@Url.Action("DeleteEmergencyAddress", "People")?eid=' + j,
-                            //data: { eid: j },
                             success: function (Data) {
                                 bootbox.alert(
                                     "Record Deleted Successfully!",
@@ -662,11 +645,9 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            //var url1 = "/People/CreatePermanentAddress?pid="+@Model.Id+"";
             $.ajax({
                 url: '@Url.Action("CreatePermanentAddress", "People")?pid=' +@Model.Id+'&data=' + d,
                 type: 'POST',
-                //data: d,
                 success: function (data) {
                     window.top.location.reload(false);
                     bootbox.alert({

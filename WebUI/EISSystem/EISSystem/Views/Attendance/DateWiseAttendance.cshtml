@@ -147,7 +147,6 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        //$('#generateReport').prop('disabled', true);
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         var d = new Date();
         d.setDate(d.getDate());
@@ -180,20 +179,11 @@
         var fromValue = $("#fromdate").val();
         var toValue = $("#todate").val();
         generateReport(fromValue, toValue, 0, 0);
-        //$('#selectEmployee').on('change', function () {
-        //    if ($(this).children("option:selected").text() == "-- Select --") {
-        //        $('#generateReport').prop('disabled', true);
-        //    } else {
-        //        $('#generateReport').removeAttr('disabled');
-        //    }
-
-        //})
-
+        
         $('#generateReport').on('click', function () {
             var loc = $('#locations').val();
             var id = $('#selectEmployee').val();
             var empName = $('#selectEmployee').children("option:selected").text();
-            //var empName = $('#selectEmployee').text();
             var fromValue = $("#fromdate").val();
             var toValue = $("#todate").val();
             generateReport(fromValue, toValue, id, loc);

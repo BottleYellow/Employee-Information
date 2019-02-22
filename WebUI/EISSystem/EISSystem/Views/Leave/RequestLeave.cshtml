@@ -95,7 +95,6 @@
                                     <div class="form-group">
                                         <div style="width:125px;" class="form-line">
                                             <input class="form-control" type="text" id="date2" asp-for="ToDate" autocomplete="off" disabled />
-                                            @*<input id="date2" asp-for="ToDate" type="date" onchange="FunDate2();" class="form-control" disabled>*@
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +154,6 @@
         defaultDate: d
     });
     $(document).ready(function () {
-        debugger;
         if ('@ViewBag.Status'=='NoData')
         {
             bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
@@ -245,7 +243,6 @@
                                 $.validator.unobtrusive.parse(form);
                                 if (form.valid()) {
                                     var d = form.serialize();
-                                    //var url1 = "/Leave/RequestLeave";
                                     $.ajax({
                                         url: '@Url.Action("RequestLeave", "Leave")',
                                         type: 'POST',
@@ -273,7 +270,6 @@
                             }
                         },
                         error: function (data) {
-                            //alert(data.responseText);
                         }
                     });
                 }

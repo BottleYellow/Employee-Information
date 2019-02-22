@@ -213,8 +213,7 @@
         });
         var y = new Date().getFullYear();
         var ld = new Date(y, m, 0).getDate();
-        //var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
-        //totalDays = days;
+        
         $('#inputmonth').val(m + '/' + y);
         var location = $('#locations').val();
         var alltwoffk = calWeeklyOffMonthly(m, y);
@@ -291,7 +290,7 @@
         function getSunday(d) {
             d = new Date(d);
             var day = d.getDay(),
-                diff = d.getDate() - day /*+ (day == 0 ? -6 : 1)*/; // adjust when day is sunday
+                diff = d.getDate() - day; 
             return new Date(d.setDate(diff));
         }
         $('#inputweek').on('dp.change', function (e) {
@@ -327,9 +326,9 @@
                     var weeklyoff = calWeeklyOffYearly(value);
                     $('#twoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
                 }
-                //var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
+                
                 $("#inputyear").val(value);
-                //totalDays = days;
+                
 
                 $.ajax({
                     type: "GET",
@@ -340,23 +339,17 @@
                         var k = 0, b = 0;
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
-                                b = b + 1;//totaldaysb = value % 4 == 0 ? (366 - b - twob) : (365 - b - twob);
-                               
+                                b = b + 1;
                              }
                             else if (item.location.locationName.startsWith("K")) {
                                 k = k + 1;
-                                //totalDaysk = value % 4 == 0 ? (366 - k - twok) : (365 - k - twok);
-                                
-                             }
+                            }
                         });
                         $('#thb').html('Holidays : ' + b);
                         $('#thk').html('Holidays : ' + k);
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
 
-                        //$.each(data, function (i, item) {
-                        //    $('#tholiday').text(item.length);
-                        //})
                         generateReport(value, 'year', location);
                     },
                     error: function () {
@@ -403,7 +396,6 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        debugger;
                         var k = 0, b = 0;
                         
                         $.each(data, function (i, item) {
@@ -465,46 +457,9 @@
                     }
                 });
 
-                //var days = workingDaysBetweenDates(moment(value, "MMM/DD/YYYY").day(0).format("YYYY-MM-DD"), moment(value, "MMM/DD/YYYY").day(6).format("YYYY-MM-DD"));
-                //totalDays = days;
             }
         });
-        //$('#locations').on('change', function () {
-        //    var c = $('#locations').val();
-        //    var v = $('#select').val();
-        //    var location = $('#location').val();
-        //    if (v == 'year') {
-        //        var value = $("#inputyear").val();
-        //        var days = workingDaysBetweenDates(value + "-01-01", value + "-12-31");
-        //        $("#inputyear").val(value);
-        //        totalDays = days;
-        //        generateReport(value, 'year', c);
-        //    }
-        //    else if (v == 'month') {
-        //        var value = $("#inputmonth").val();
-        //        $("#inputmonth").val(value);
-        //        var monthYear = value.split('/');
-        //        var y = monthYear[1];
-        //        var m = monthYear[0];
-        //        var ld = new Date(y, m, 0).getDate();
-        //        var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
-        //        totalDays = days;
-        //        var location = $('#location').val();
-        //        generateReport(value, 'month', c);
-        //    }
-        //    else if (v == 'week') {
-        //        var value = $("#inputweek").val();
-        //        var location = $('#location').val();
-        //        var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-        //        var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-        //        $("#inputweek").val(firstDate + " - " + lastDate);
-        //        generateReport(firstDate + " - " + lastDate, 'week', c);
-        //        var days = workingDaysBetweenDates(moment(value, "MMM/DD/YYYY").day(0).format("YYYY-MM-DD"), moment(value, "MMM/DD/YYYY").day(6).format("YYYY-MM-DD"));
-        //        totalDays = days;
-        //    }
-        //});
-
-
+        
         function generateReport(value, type, location) {
             $.ajax({
                 url: '@Url.Action("AllAttendance","Attendance")',
@@ -557,20 +512,7 @@
         if (startDay - endDay > 1) {
             days -= 2;
         }
-        // Remove start day if span starts on Sunday but ends before Saturday
-        //if (startDay == 0 && endDay != 6) {
-        //    days--;
-        //}
-        // Remove end day if span ends on Saturday but starts after Sunday
-        //if (endDay == 6 && startDay != 0) {
-        //    days--;
-        //}
-        /* Here is the code */
-        //for (var i in holidays) {
-        //    if ((holidays[i] >= d0) && (holidays[i] <= d1)) {
-        //        days--;
-        //    }
-        //}
+        
         return days;
     }
 

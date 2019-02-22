@@ -69,8 +69,6 @@
             color: #d00;
             content: "*";
             position: relative;
-            /*margin-left: 8px;*/
-            /*top: 7px;*/
         }
     </style>
 </header>
@@ -323,8 +321,6 @@
     $(document).ready(function () {
         var d1 = document.getElementById("dob").value;
         var d2 = document.getElementById("doj").value;
-        @*var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToString()';
-        cultureInfo = cultureInfo.toUpperCase();*@
         var dob = moment(d1).format("DD/MMM/YYYY");
         var doj = moment(d2).format("DD/MMM/YYYY");
         $('#dob').datetimepicker({

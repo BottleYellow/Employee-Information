@@ -55,10 +55,6 @@
                 position: relative;
                 top: 40%;
                 left: 40%;
-                /*width: 25%;
-            height: 25%;
-            opacity: 0.9;
-            filter: alpha(opacity=50);*/
             }
 
         a {
@@ -96,7 +92,6 @@
                                         <th>From Date</th>
                                         <th>To Date</th>
                                         <th>Requested Days</th>
-                                        @*<th>Available</th>*@
                                         <th>Status</th>
                                         <th>Leave Reason</th>
                                         <th>Actions</th>
@@ -144,7 +139,6 @@
                 ['10', '25', 'All']
             ],
             ajax: {
-                //"url": "/Leave/ShowMyLeaves",
                 "url":'@Url.Action("ShowMyLeaves", "Leave")',
                 "type": "POST",
                 "datatype": "json",
@@ -178,11 +172,7 @@
                         return data;
                     }
                 },
-                //{
-                //    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
-                //        return data;
-                //    }
-                //},
+                
                 {
                     "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {

@@ -112,7 +112,6 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-                //var url1 = "/Leave/AddCredit";
                 $.ajax({
                     url: '@Url.Action("AddCredit", "Leave")',
                     type: 'POST',

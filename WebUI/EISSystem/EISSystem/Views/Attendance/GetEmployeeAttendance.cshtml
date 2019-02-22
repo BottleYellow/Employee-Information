@@ -196,11 +196,9 @@
                     ['10', '25', 'All']
                 ],
                 ajax: {
-                    //"url": "/Attendance/AttendanceSummary",
                     "url": '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type+'&id='+id,
                     "type": "POST",
                     "datatype": "json",
-                    //"data": { "date": value, "type": type, "id": id },
                 },
                 "columns": [
                     {

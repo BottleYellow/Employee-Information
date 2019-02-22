@@ -225,7 +225,6 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-@*<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>*@
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
@@ -238,10 +237,7 @@
 <script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
-<script src=" //cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="//cdn.datatables.net/plug-ins/1.10.15/sorting/datetime-moment.js"></script>
 
 <script type="text/javascript">
 
@@ -259,11 +255,7 @@
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
             }
-            //error: function () {
-            //    bootbox.alert('<h4>Error</h4>');
-            //}
-
-            });
+           });
 
 
         var id =@cookies.PersonId;
@@ -305,10 +297,7 @@
                 error: function () {
                    bootbox.alert("Something went wrong..Please try after sometime");
                 }
-                //error: function () {
-                //    bootbox.alert('<h4>Error</h4>');
-                //}
-
+                
             });
         });
 
@@ -384,7 +373,6 @@
                 var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
                 $("#inputweek").val(firstDate + " - " + lastDate);
                 generateReport(firstDate + " - " + lastDate, 'week', id);
-                //totalDays = 7;
             }
         });
     });

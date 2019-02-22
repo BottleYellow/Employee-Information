@@ -7,8 +7,6 @@
         color: #d00;
         content: "*";
         position: relative;
-        /*margin-left: 8px;*/
-        /*top: 7px;*/
     }
 </style>
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -32,8 +30,7 @@
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
                         <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" autocomplete="off" />
-                        @*<input id="hdate" asp-for="Date" type="date" value="@DateTime.Now.Date.ToShortDateString()" class="form-control" />*@
-                    </div>
+                     </div>
                     <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -67,7 +64,6 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            //var url1 = "/Holiday/AddHoliday";
             $.ajax({
                 url: '@Url.Action("AddHoliday", "Holiday")',
                 type: 'POST',

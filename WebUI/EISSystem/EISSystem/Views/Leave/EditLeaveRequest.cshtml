@@ -92,12 +92,7 @@
     <script src="~/plugins/autosize/autosize.js"></script>
     <!-- Moment Plugin Js -->
     <script src="~/plugins/momentjs/moment.js"></script>
-    @*<!-- Bootstrap Material Datetime Picker Plugin Js -->
-        <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
-        <!-- Bootstrap Datepicker Plugin Js -->
-        <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>*@
     <script src="~/js/pages/forms/basic-form-elements.js"></script>
-
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
@@ -122,7 +117,6 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-            //var url1 = "/Leave/EditLeaveRequest?id=" + rid;
             $.ajax({
                 url: '@Url.Action("EditLeaveRequest", "Leave")?id='+rid,
                 type: 'POST',

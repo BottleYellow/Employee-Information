@@ -6,8 +6,6 @@
         color: #d00;
         content: "*";
         position: relative;
-        /*margin-left: 8px;*/
-        /*top: 7px;*/
     }
     .ajax-loader {
         visibility: hidden;
@@ -21,17 +19,12 @@
             position: relative;
             top: 40%;
             left: 40%;
-            /*width: 25%;
-            height: 25%;
-            opacity: 0.9;
-            filter: alpha(opacity=50);*/
         }
 </style>
 <div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <HeaderWithButton class="modal-title" header-name="Edit Policy"></HeaderWithButton>
-            @*<h4 class="modal-title" id="addPolicyLabel">Add Policy</h4>*@
         </div>
         <div class="modal-body">
             <div class="ajax-loader">
@@ -108,7 +101,6 @@
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             var d = form.serialize();
-                //var url1 = "/Leave/AddPolicy";
                 $.ajax({
                     url: '@Url.Action("EditPolicy", "Leave")',
                     type: 'POST',

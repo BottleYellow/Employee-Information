@@ -80,7 +80,6 @@
                                             <select class="form-control" id="select" style="width:200px">
                                                 <option value="year" id="year">Year</option>
                                                 <option value="month" selected id="month">Month</option>
-                                                @*<option value="week" id="week">Week</option>*@
                                             </select>
                                         </div>
                                         <div class="col-md-4 col-sm-6">
@@ -304,9 +303,7 @@
         function generateReport(value, type) {
             $.ajax({
                 type: 'POST',
-                //url: "/Attendance/GetAttendanceSummary",
                 url: '@Url.Action("GetAttendanceSummary", "Attendance")?date=' + value + '&type=' + type,
-                //data: { "date": value, "type": type },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data.AverageHours;
                     document.getElementById("averageTimeIn").innerHTML = data.AverageTimeIn;
