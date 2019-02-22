@@ -222,18 +222,20 @@ namespace EIS.Repositories.Repository
                 if (presentCount > 0)
                 {
                     CalendarData presentCalanderData = new CalendarData();
-                    presentCalanderData.Title = "Present Count:" + presentCount;
+                    presentCalanderData.Title = "Present Count : " + presentCount;
                     presentCalanderData.StartDate = date;
                     presentCalanderData.EndDate = date;
                     presentCalanderData.Color = "Green";
                     presentCalanderData.IsFullDay = true;
                     StringBuilder sb1 = new StringBuilder();
+                    int presentNumber = 1;
                     foreach (var d in resultPresent)
                     {
                         if (d != null)
                         {
                             sb1.AppendLine("<br/>");
-                            sb1.AppendLine(d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
+                            sb1.AppendLine(presentNumber + ") "+ d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
+                            presentNumber++;
                         }
                     }
                     presentCalanderData.Description = sb1.ToString();
@@ -243,18 +245,20 @@ namespace EIS.Repositories.Repository
                     absentCount = resultAbsent.Count();
 
                     CalendarData absentCalanderData = new CalendarData();
-                    absentCalanderData.Title = "Absent Count:" + absentCount;
+                    absentCalanderData.Title = "Absent Count : " + absentCount;
                     absentCalanderData.StartDate = date;
                     absentCalanderData.EndDate = date;
                     absentCalanderData.Color = "Red";
                     absentCalanderData.IsFullDay = true;
                     StringBuilder sb2 = new StringBuilder();
+                    int absentNumber = 1;
                     foreach (var d in resultAbsent)
                     {
                         if (d != null)
                         {
                             sb2.AppendLine("<br/>");
-                            sb2.AppendLine(d.FullName);
+                            sb2.AppendLine(absentNumber + ") " + d.FullName);
+                            absentNumber++;
                         }
                     }
                     absentCalanderData.Description = sb2.ToString();

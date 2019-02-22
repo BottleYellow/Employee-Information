@@ -217,19 +217,20 @@ namespace EIS.WebAPI.Controllers
             return Ok(d.Name);
         }
         [AllowAnonymous]
-        [Route("CreatedBy/{PersonId}")]
+        [Route("CreatedBy")]
         [HttpGet]
-        public IActionResult GetCreatedByName([FromRoute] int PersonId)
+        public List<KeyValuePair<int, string>> GetCreatedByName()
         {
-            string NameWithRole = "";
-            Person p = _repository.Employee.FindByCondition(x => x.Id == PersonId);
-            Role role = _repository.Employee.GetDesignationById(p.RoleId);
-            if (p != null)
+            var myList = new List<KeyValuePair<int, string>>();
+            List<Person> persons = _repository.Employee.FindAll().Include(x=>x.Role).Where(x=>x.Role.Name!="Employee").ToList();  
+            foreach(Person person in persons)
             {
-                NameWithRole = p.FullName + "(" + role.Name + ")";
+                string NameWithRole = person.FullName + "(" + person.Role.Name + ")";
+                myList.Add(new KeyValuePair<int, string>(person.Id, NameWithRole));
             }
-            return Ok(NameWithRole);
+            return myList;
         }
+
         [Route("AddDesignation/{id}")]
         [HttpPost]
         public IActionResult CreateDesignation([FromRoute]int id,[FromBody]Role designation)

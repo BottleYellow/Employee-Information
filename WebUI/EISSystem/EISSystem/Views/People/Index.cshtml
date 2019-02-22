@@ -87,7 +87,7 @@
                                     <th>Mobile Number</th>
                                     <th>Email Address</th>
                                     <th>Joining Date</th>
-                                    @*<th>Created By</th>*@
+                                    <th>Created By</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -99,12 +99,14 @@
 </div>
 
 <script>
+    var result=null;
      $(document).ready(function () {
         if ('@TempData["success"]' != '') {
             bootbox.alert({
                 message: '@TempData["success"]'
             });
-        }
+         }
+         result = getCreatedBy();
         var b = true;
         generateReport(b,0);
     });
@@ -263,15 +265,12 @@
                         return data;
                     }
                 },
-                @*{
+                {
                     "data": "CreatedBy", "name": "CreatedBy", "autoWidth": true, "render": function (data, type, row) {
-                        var result = null;
-                        $.getJSON("@APIURL/api/Employee/CreatedBy/" + row.CreatedBy + "", function (data) {
-                            result = data;
-                        });
-                        return result;
+                        var v = getCreatedname(result, data);
+                        return v;                    
                     }
-                },*@
+                },
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         var value = row.IsActive;
@@ -294,12 +293,27 @@
             },
         });
     };
-    function getCreatedBy(pid) {
+    function getCreatedBy() {
         var result = null;
-        $.getJSON("@APIURL/api/Employee/CreatedBy/" + pid + "", function (data) {
-            result = data;
+        $.ajax({
+            type: "GET",
+            async: false,
+                    url: '@APIURL/api/Employee/CreatedBy',
+                    data: null,
+            success: function (data) {
+                        result = data;
+                    }                   
         });
         return result;
+    }
+
+    function getCreatedname(result,pid) {
+        $.each(result, function (i, item){
+            if (result[i].key == pid) {
+               value= result[i].value;
+            }
+        })
+        return value;
     }
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>

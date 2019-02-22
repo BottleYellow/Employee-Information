@@ -123,11 +123,16 @@
 
                     $('#myModal #eventTitle').text(calEvent.title);
                     var $description = $('<div/>');
-                    $description.append($('<p/>').html('<b>Date:</b>' + calEvent.start.format("DD-MMM-YYYY")));
+                    $description.append($('<p/>').html('<b>Date : </b>' + calEvent.start.format("DD-MMM-YYYY")));
                     if (calEvent.end != null) {
-                        $description.append($('<p/>').html('<b>End Date:</b>' + calEvent.end.format("DD-MMM-YYYY")));
-                    }
-                    $description.append($('<p/>').html('<b>Description:</b>' + calEvent.description));
+                        $description.append($('<p/>').html('<b>End Date : </b>' + calEvent.end.format("DD-MMM-YYYY")));
+                }
+                if (calEvent.title.includes("Present")||calEvent.title.includes("Absent")) {
+                    $description.append($('<p/>').html('<b>Employees : </b>' + calEvent.description));
+                } else {
+                    $description.append($('<p/>').html('<b>Description : </b>' + calEvent.description));
+                }
+                 
                     $('#myModal #pDetails').empty().html($description);
 
                     $('#myModal').modal();
