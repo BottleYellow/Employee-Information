@@ -95,8 +95,8 @@
                                         <th>Leave Type</th>
                                         <th>From Date</th>
                                         <th>To Date</th>
-                                        <th>Days</th>
-                                        <th>Available</th>
+                                        <th>Requested Days</th>
+                                        @*<th>Available</th>*@
                                         <th>Status</th>
                                         <th>Leave Reason</th>
                                         <th>Actions</th>
@@ -178,16 +178,16 @@
                         return data;
                     }
                 },
-                {
-                    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
+                //{
+                //    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
+                //        return data;
+                //    }
+                //},
                 {
                     "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Rejected") {
+                        } else if (data == "Rejected" || data=="Cancelled") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
                         } else {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';

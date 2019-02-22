@@ -215,9 +215,19 @@
                 var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
                 var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
                 var Status = Employees[i].Status;
-                if (Status == "Approved") {
+                if (Status == "Pending") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                }
+                else if (Status == "Approved") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                } else {
+                }
+                else if (Status == "Rejected" || Status == "Cancelled") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                }
+                else if (Status == "Requested For Cancel") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                }
+                else {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
                 array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status])

@@ -333,7 +333,7 @@ namespace EIS.WebApp.Controllers
             }
             return data;
         }
-
+        [DisplayName("Delete Employee")]
         public void DeleteConfirmed(int id)
         {
             Person person = new Person();
@@ -346,6 +346,7 @@ namespace EIS.WebApp.Controllers
             }
 
         }
+        [DisplayName("Activate Employee")]
         public IActionResult ActivateEmployee(string EmployeeCode)
         {
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/ActivatePerson/" + EmployeeCode + "" );

@@ -33,6 +33,13 @@
     a {
         cursor: pointer;
     }
+
+    .disabledLink {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -276,7 +283,7 @@
     function generateReport(buttonSelected, location) {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("AdminDashboard","Dashboard")',
+            url: '@Url.Action("HRDashboard","Dashboard")',
             data: { "attendanceStatus": buttonSelected, "location": location },
             beforeSend: function () {
                 $('.ajax-loader').css("visibility", "visible");
@@ -428,7 +435,7 @@
                 );
             },
             error: function () {
-             bootbox.alert("Something went wrong..Please try after sometime");
+                bootbox.alert("Something went wrong..Please try after sometime");
             },
             complete: function () {
                 $('.ajax-loader').css("visibility", "hidden");

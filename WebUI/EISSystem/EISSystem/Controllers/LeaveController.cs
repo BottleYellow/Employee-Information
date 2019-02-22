@@ -49,7 +49,7 @@ namespace EIS.WebApp.Controllers
         //    return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
         //}
 
-        [DisplayName("View all requests")]
+        [DisplayName("View All Requests")]
         public IActionResult EmployeeLeaveHistory()
         {
             ViewBag.Locations = GetLocations();
@@ -97,7 +97,7 @@ namespace EIS.WebApp.Controllers
             return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null, null);
         }
 
-        [DisplayName("Show my leaves")]
+        [DisplayName("Show My Leaves")]
         public IActionResult ShowMyLeaves()
         {
             return View();
@@ -114,7 +114,7 @@ namespace EIS.WebApp.Controllers
 
         }
 
-        [DisplayName("Request for leave")]
+        [DisplayName("Request For Leave")]
         public IActionResult RequestLeave()
         {
             response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
@@ -254,7 +254,7 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Leave Policy
-        [DisplayName("leave Policies")]
+        [DisplayName("Leave Policies")]
         public IActionResult LeavePolicies()
         {
             ViewBag.Locations = GetLocations();
@@ -269,7 +269,7 @@ namespace EIS.WebApp.Controllers
             return LoadData<LeaveRules>(ApiUrl + "/api/LeavePolicy/GetLeavePolicies", null, LocationId);
         }
 
-        [DisplayName("Add Leave Rule")]
+        [DisplayName("Add Leave Policy")]
         public IActionResult AddPolicy()
         {
             ViewBag.Locations = GetLocations();
@@ -304,7 +304,7 @@ namespace EIS.WebApp.Controllers
             return PartialView("AddPolicy", Leave);
 
         }
-        [DisplayName("Edit Leave Rule")]
+        [DisplayName("Edit Leave Policy")]
         public IActionResult EditPolicy(int Id)
         {
             ViewBag.Locations = GetLocations();
@@ -338,6 +338,7 @@ namespace EIS.WebApp.Controllers
             return PartialView("EditPolicy", Leave);
 
         }
+        [DisplayName("Delete Leave Policy")]
         public void DeletePolicy(int id)
         {
             HttpClient client = _services.LeaveRules.GetService();
@@ -352,7 +353,7 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Credits
-        [DisplayName("leave Credits")]
+        [DisplayName("Leave Credits")]
         public IActionResult LeaveCredits()
         {
             ViewBag.Locations = GetLocations();
@@ -443,6 +444,7 @@ namespace EIS.WebApp.Controllers
             return PartialView("EditCredit", credit);
 
         }
+        [DisplayName("Delete Leave Credit")]
         public void DeleteCredit(int id)
         {
             HttpClient client = _services.LeaveCredit.GetService();

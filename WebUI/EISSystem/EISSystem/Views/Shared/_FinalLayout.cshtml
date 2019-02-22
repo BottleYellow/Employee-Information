@@ -357,6 +357,12 @@
         $.get(url, function (data) {
             $("#modal-placeholder1").html(data);
             $("#modal-placeholder1").modal('show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..You Can't Change your password</h4>");
+            } else {
+                bootbox.alert("<h4>Something went wrong!</h4>");
+            }
         });
 
     });

@@ -133,7 +133,7 @@ namespace EIS.Repositories.Repository
                     calendarData.Title = leaveRequest.EmployeeName + " (Leave " + leaveRequest.Status + ")";
                     calendarData.Description = "Leave Status " + leaveRequest.Status;
                     calendarData.StartDate = leaveRequest.FromDate;
-                    calendarData.EndDate = leaveRequest.ToDate;            
+                    calendarData.EndDate = leaveRequest.ToDate;
                     if (leaveRequest.Status == "Pending")
                     {
                         calendarData.Color = "Light Blue";
@@ -183,23 +183,23 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-                if(location==2 ||location==0)
-                { 
-                if (date.DayOfWeek == DayOfWeek.Saturday)
+                if (location == 2 || location == 0)
                 {
-                    count++;
-                    if (count % 2 == 0)
+                    if (date.DayOfWeek == DayOfWeek.Saturday)
                     {
-                        CalendarData holidayCalanderData = new CalendarData();
-                        holidayCalanderData.Title = count + "nd Saturday Weekly Off";
-                        holidayCalanderData.Description = "Holiday";
-                        holidayCalanderData.StartDate = date;
-                        holidayCalanderData.EndDate = date;
-                        holidayCalanderData.Color = "Orange";
-                        holidayCalanderData.IsFullDay = true;
-                        calendarDataList.Add(holidayCalanderData);
+                        count++;
+                        if (count % 2 == 0)
+                        {
+                            CalendarData holidayCalanderData = new CalendarData();
+                            holidayCalanderData.Title = count + "nd Saturday Weekly Off";
+                            holidayCalanderData.Description = "Holiday";
+                            holidayCalanderData.StartDate = date;
+                            holidayCalanderData.EndDate = date;
+                            holidayCalanderData.Color = "Orange";
+                            holidayCalanderData.IsFullDay = true;
+                            calendarDataList.Add(holidayCalanderData);
+                        }
                     }
-                }
                 }
 
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
@@ -234,7 +234,7 @@ namespace EIS.Repositories.Repository
                         if (d != null)
                         {
                             sb1.AppendLine("<br/>");
-                            sb1.AppendLine(presentNumber + ") "+ d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
+                            sb1.AppendLine(presentNumber + ") " + d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
                             presentNumber++;
                         }
                     }
@@ -340,7 +340,7 @@ namespace EIS.Repositories.Repository
                     holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
                     holidayCalanderData.StartDate = holiday.Date;
                     holidayCalanderData.EndDate = holiday.Date;
-                    holidayCalanderData.Color = "Red";
+                    holidayCalanderData.Color = "Orange";
                     holidayCalanderData.IsFullDay = true;
 
                     calendarDataList.Add(holidayCalanderData);
