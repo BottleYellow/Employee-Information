@@ -9,7 +9,7 @@ namespace EIS.Repositories.IRepository
     public interface IAttendanceRepository : IRepositorybase<Attendance>
     {
         //AttendanceReport GetAttendanceReportSummary(int totalDays,int totalWorkingDays, IEnumerable<Attendance> attendanceData);
-        AttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month);
+        EmployeeAttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month);
         List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData,string id,int? loc);  
         Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId);
          string CalculateDate(DateTime date);

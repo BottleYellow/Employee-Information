@@ -215,7 +215,7 @@
                 ['5', '10', '25', 'All']
             ],
             ajax: {
-                "url": '@Url.Action("LoadData", "People")?type='+b+'&LocationId='+c,
+                "url": '@Url.Action("Index", "People")?type='+b+'&LocationId='+c,
                 "type": "POST",
                 "datatype": "json",
                 beforeSend: function () {

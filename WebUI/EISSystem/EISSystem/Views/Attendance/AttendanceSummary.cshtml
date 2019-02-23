@@ -271,19 +271,19 @@
         //generateReport(m + '/' + y, 'month', id);
         $("#generateReport").prop("disabled", true);
 
-        $('#selectEmployee').on('change', function () { 
+        $('#selectEmployee').on('change', function () {
             if ($('#selectEmployee').val() == 0) {
                 $("#generateReport").prop("disabled", true);
             }
             else {
                 $("#generateReport").removeAttr('disabled');
             };
-            
+
         });
 
         $('#locations').on('change', function () {
                 $("#generateReport").prop("disabled", true);
-            
+
             var loc = $('#locations').val();
             $.ajax({
                 type: 'GET',
@@ -297,7 +297,7 @@
                 error: function () {
                    bootbox.alert("Something went wrong..Please try after sometime");
                 }
-                
+
             });
         });
 
@@ -380,20 +380,56 @@
         function generateReport(value, type, id) {
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("AttendanceSummaryById", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
+                url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
                 //data: { "date": value, "type": type, "id": id },
                 beforeSend: function () {
                     $('.ajax-loader').css("visibility", "visible");
                 },
                 success: function (data) {
-                    document.getElementById("averageHours").innerHTML = data.AverageHours;
-                    document.getElementById("averageTimeIn").innerHTML = data.AverageTimeIn;
-                    document.getElementById("averageTimeOut").innerHTML = data.AverageTimeOut;
-                    document.getElementById("presentDays").innerHTML = data.PresentDays;
-                    document.getElementById("absentDays").innerHTML = data.LeaveDays;
-                    document.getElementById("totalWorkingDays").innerHTML = data.TotalWorkingDays;
-                    document.getElementById("totalNoOfDays").innerHTML = data.TotalDays;
-                    document.getElementById("addtionalWorkingHours").innerHTML = data.AdditionalWorkingHours;
+                    document.getElementById("averageHours").innerHTML = data._SP_ReportCount.AverageHours;
+                    document.getElementById("averageTimeIn").innerHTML = data._SP_ReportCount.AverageTimeIn;
+                    document.getElementById("averageTimeOut").innerHTML = data._SP_ReportCount.AverageTimeOut;
+                    document.getElementById("presentDays").innerHTML = data._SP_ReportCount.PresentDays;
+                    document.getElementById("absentDays").innerHTML = data._SP_ReportCount.LeaveDays;
+                    document.getElementById("totalWorkingDays").innerHTML = data._SP_ReportCount.TotalWorkingDays;
+                    document.getElementById("totalNoOfDays").innerHTML = data._SP_ReportCount.TotalDays;
+                    document.getElementById("addtionalWorkingHours").innerHTML = data._SP_ReportCount.AdditionalWorkingHours;
+                    var array = [];
+                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+                    for (var i = 0; i < data._SP_AttendanceData.length; i++) {
+                        var date = moment(data._SP_AttendanceData[i].DateIn).format("DD MMM YYYY");
+                        var timeIn;
+                        var timeOut;
+                        var Status = data._SP_AttendanceData[i].Status;
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                            if (data._SP_AttendanceData[i].TimeOut == '-') {
+                                timeOut = data._SP_AttendanceData[i].TimeOut;
+                            } else {
+                                timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                            }
+                        }
+                        else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            timeIn = '-';
+                            timeOut = '-';
+                        }
+
+                        array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                    }
+                    $('#example').DataTable().destroy();
+
+                    $('#example').DataTable({
+                        "aoColumns": [
+                            { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
+                        data: array
+                    });
                 },
                 error: function (error) {
                     bootbox.alert("Something went wrong..Please try after sometime");
@@ -403,7 +439,7 @@
                 }
             });
 
-            $.ajax({
+            @*$.ajax({
                 "url": '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
                 "type": "POST",
                 "datatype": "json",
@@ -428,7 +464,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
-                        }   
+                        }
 
                         array.push([date, Status, timeIn, timeOut, data[i].TotalHours])
                     }
@@ -446,9 +482,9 @@
                     });
                 },
 
-            });
-        } 
- 
+            });*@
+        }
+
 </script>
 
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace EIS.Entities.Models
 {
@@ -14,4 +16,19 @@ namespace EIS.Entities.Models
         public int TotalWorkingDays { get; set; }
         public int TotalDays { get; set; }
     }
+    public class EmployeeAttendanceData
+    {
+        [Key]
+        public Nullable<System.DateTime> DateIn { get; set; }
+        public Nullable<System.TimeSpan> TimeIn { get; set; }
+        public Nullable<System.TimeSpan> TimeOut { get; set; }
+        public Nullable<System.TimeSpan> TotalHours { get; set; }
+        public string Status { get; set; }
+    }
+    public class EmployeeAttendanceReport
+    {
+        public AttendanceReport _SP_ReportCount { get; set; }
+        public List<EmployeeAttendanceData> _SP_AttendanceData { get; set; }
+    }
+
 }

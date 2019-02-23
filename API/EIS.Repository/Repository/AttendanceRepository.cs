@@ -19,15 +19,6 @@ namespace EIS.Repositories.Repository
 
         public Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId)
         {
-            // Month  Year Week
-            //InputOne : 01 InputTwo : 2019 -- Month
-            //InputOne : 2019 InputTwo : 0 -- Year
-            //InputOne : 'dd-mm-yyy' -FromDate  InputTwo : 'dd-mm-yyy' -Todate -- Year
-            //locationId = 0;
-            //InputOne = "2019";
-            //InputTwo = "0";
-            //SearchFor = "Year";
-
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
             InputTwo = InputTwo.ToString();
@@ -46,20 +37,23 @@ namespace EIS.Repositories.Repository
             return Model;
         }
 
-        public AttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month)
+        public EmployeeAttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month)
         {
             string InputOne = year.ToString();
             char c = '0';
             string InputTwo = month.ToString().PadLeft(2, c);
 
-            AttendanceReport Model = new AttendanceReport();
-
+            EmployeeAttendanceReport Model = new EmployeeAttendanceReport();
+            Model._SP_ReportCount = new AttendanceReport();
+            Model._SP_AttendanceData = new List<EmployeeAttendanceData>();
             var SP_SelectType = new SqlParameter("@SelectType", type);
             var SP_PersonId = new SqlParameter("@PersonId", PersonId);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
             string usp = "LMS.usp_GetEmployeewiseAttendanceCount @PersonId, @SelectType, @InputOne, @InputTwo";
-            Model = _dbContext._sp_GetEmployeeAttendanceCountReport.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).FirstOrDefault();
+            Model._SP_ReportCount = _dbContext._sp_GetEmployeeAttendanceCount.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).FirstOrDefault();
+            usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
+            Model._SP_AttendanceData=_dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
 
             return Model;
         }
