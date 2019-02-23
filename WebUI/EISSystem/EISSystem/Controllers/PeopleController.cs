@@ -57,7 +57,7 @@ namespace EIS.WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult LoadData(bool type, int LocationId)
+        public IActionResult Index(bool type, int LocationId)
         {
             return LoadData<Person>(ApiUrl + "/api/employee/data", type, LocationId);
 
