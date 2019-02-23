@@ -265,8 +265,10 @@ namespace EIS.WebApp.Controllers
         [ActionName("LeavePolicies")]
         public IActionResult GetLeavePolicy(int LocationId)
         {
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRules>(ApiUrl + "/api/LeavePolicy/GetLeavePolicies", null, LocationId);
+         HttpResponseMessage responseMessage=_service.GetResponse(ApiUrl + "/api/LeavePolicy/GetLeavePolicies/"+LocationId);
+            string stringData = responseMessage.Content.ReadAsStringAsync().Result;
+            IEnumerable<LeavePolicyViewModel> policy = JsonConvert.DeserializeObject<IEnumerable<LeavePolicyViewModel>>(stringData);
+            return Json(policy);
         }
 
         [DisplayName("Add Leave Policy")]
@@ -364,8 +366,10 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetLeaveCredits(int LocationId)
         {
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveCredit>(ApiUrl + "/api/LeaveCredit/GetLeaveCredits", null, LocationId);
+            HttpResponseMessage httpResponse= _service.GetResponse(ApiUrl + "/api/LeaveCredit/GetLeaveCredits/" + LocationId);
+            string stringData = httpResponse.Content.ReadAsStringAsync().Result;
+            IEnumerable<LeaveCreditViewModel> leaveCredits = JsonConvert.DeserializeObject<IEnumerable<LeaveCreditViewModel>>(stringData);
+            return Json(leaveCredits);
         }
 
 

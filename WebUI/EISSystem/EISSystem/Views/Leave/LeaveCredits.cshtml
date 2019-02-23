@@ -87,97 +87,37 @@
         GenerateReport(0);
     });
     function GenerateReport(c) {
-               $.fn.dataTable.ext.errMode = 'none';
-            $('#example').on('error.dt', function () {
-                    bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-        }).DataTable();
-        $('#example').DataTable().destroy();
-        $('#example tbody').empty();
-        var dTable = $('#example').DataTable({
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'EMPLOYEE LEAVE REPORT',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf'
-                }
-            ],
-            'columnDefs': [
-                {
-                    'searchable': false,
-                    'targets': [0, 1, 2]
-                }
-            ],
-
-            sDom: '<"myexport"B>ifrtlp',
-            lengthMenu: [
-                [10, 25, -1],
-                ['10', '25', 'All']
-            ],
-            ajax: {
-                "url":'@Url.Action("LeaveCredits", "Leave")?LocationId='+c,
-                "type": "POST",
-                "datatype": "json",
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LeaveCredits", "Leave")?LocationId=' + c,
+            beforeSend: function () {
+                $('ajax-loader').css("visibility", "visible");
             },
-            "columns": [
-                {
-                    "data": null,"name":"Person.Location.LocationName", "autoWidth": true, render: function (row) {
-                        return row.Person.Location.LocationName;
-                    }
-                },
-                {
-                    "data": null,"name":"Person.FullName", "autoWidth": true, render: function (row) {
-                        return row.Person.FullName;
-                    }
-                },
-                {
-                    "data": "LeaveType","name":"LeaveType", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    "data": "ValidFrom","name":"ValidFrom", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                {
-                    "data": "ValidTo","name":"ValidTo", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                {
-                    "data": "AllotedDays","name":"AllotedDays" ,"autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    "data": "Available", "name": "Available", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        var value = row.IsActive;
-                        if (value == true) {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + row.Id + ');">Edit</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
-                        } else {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
-                        }
-                    }
+            success: function (data) {
+                var array = [];
+                var action;
+                for (var i = 0; i < data.length; i++) {
+                    var activeStatus = data[i].ActiveStatus;
+                    var validFrom = moment(data[i].ValidFrom).format("DD MMM YYYY");
+                    var validTo = moment(data[i].ValidTo).format("DD MMM YYYY");
+                    if (activeStatus == true) {
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + data[0].Id + ');">Edit</a></li><li><a class="inactive" id=' + data[0].Id + '>Delete</a></li></ul></div>';
+                    } else {
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[0].Id + '>Activate</a></li></ul></div>';
                 }
-            ]
+                    array.push([data[i].LocationName, data[i].FullName, data[i].LeaveType, validFrom, validTo, data[i].AllotedDays, data[i].Available,action])
+                }
+                $('#example').DataTable().destroy();
+                $('#example').DataTable({
+                    data: array
+                });
+            },
+            complete: function () {
+                $('ajax-loader').css("visibility", "hidden");
+            }
         });
     }
+             
       $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");

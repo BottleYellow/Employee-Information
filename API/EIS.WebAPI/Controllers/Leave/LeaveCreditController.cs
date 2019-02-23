@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using EIS.Entities.Generic;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,17 +24,35 @@ namespace EIS.WebAPI.Controllers.Leave
         }
 
         [DisplayName("leave Credits")]
-        [HttpPost]
-        [Route("GetLeaveCredits")]
-        public ActionResult Get([FromBody]SortGrid sortGrid)
-        {
-        
-            IQueryable<LeaveCredit> credits = sortGrid.LocationId==0? _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.Location.IsActive == true):
-                _repository.LeaveCredit.GetCredits().Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.LocationId == sortGrid.LocationId && x.Person.Location.IsActive == true);
-
-            ArrayList data = string.IsNullOrEmpty(sortGrid.Search)? _repository.LeaveCredit.GetDataByGridCondition(null, sortGrid, credits):
-                _repository.LeaveCredit.GetDataByGridCondition(x => x.Person.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.Person.FullName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, credits);           
-            return Ok(data);
+        [HttpGet]
+        [Route("GetLeaveCredits/{LocationId}")]
+        public ActionResult Get([FromRoute]int LocationId)
+        {        
+            IEnumerable<LeaveCreditViewModel> credits = LocationId==0? _repository.LeaveCredit. FindAll().Include(x=>x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
+            {
+                Id=x.Id,
+                LocationName=x.Person.Location.LocationName,
+                FullName=x.Person.FullName,
+                LeaveType=x.LeaveType,
+                ValidFrom=x.ValidFrom,
+                ValidTo=x.ValidTo,
+                AllotedDays=(int)x.AllotedDays,
+                Available=(int)x.Available,
+                ActiveStatus=x.IsActive
+            }).ToList():
+                _repository.LeaveCredit.FindAll().Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Person.LocationId == LocationId && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
+                {
+                    Id = x.Id,
+                    LocationName = x.Person.Location.LocationName,
+                    FullName = x.Person.FullName,
+                    LeaveType = x.LeaveType,
+                    ValidFrom = x.ValidFrom,
+                    ValidTo = x.ValidTo,
+                    AllotedDays = (int)x.AllotedDays,
+                    Available = (int)x.Available,
+                    ActiveStatus = x.IsActive
+                }).ToList();
+            return Ok(credits);
         }
 
         // GET api/<controller>/5

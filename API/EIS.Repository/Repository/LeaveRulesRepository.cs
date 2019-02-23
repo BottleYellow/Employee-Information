@@ -31,11 +31,6 @@ namespace EIS.Repositories.Repository
         {
             _dbContext.LeaveRules.Update(LeaveType);
             Save();
-        }
-
-        public IQueryable<LeaveRules> GetAllLeaveRules()
-        {
-            return _dbContext.LeaveRules;
-        }
+        }        
     }
 }

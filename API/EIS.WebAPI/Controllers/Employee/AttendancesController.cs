@@ -88,22 +88,6 @@ namespace EIS.WebAPI.Controllers
         #endregion
 
         #region[Attendance Reports]
-        [DisplayName("Attendance Reports")]
-        [HttpGet("GetAllAttendanceMonthly/{month}/{year}/{location}")]
-        public IActionResult GetAllAttendanceMonthly([FromRoute] int month, [FromRoute] int year, [FromRoute]int location)
-        {
-            IList<AttendanceData> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year, location);
-            return Ok(attendanceData);
-        }
-
-        [DisplayName("Attendance Reports")]
-        [HttpGet("GetAllAttendanceYearly/{year}/{location}")]
-        public IActionResult GetAllAttendanceYearly([FromRoute] int year, [FromRoute]int location)
-        {
-            IList<AttendanceData> attendanceData = _repository.Attendances.GetAttendanceYearly(year, location);
-            return Ok(attendanceData);
-        }
-
 
         [DisplayName("Attendance Reports")]
         [HttpGet("GetAllAttendanceEmpCount/{SearchFor}/{InputOne}/{InputTwo}/{locationId}")]

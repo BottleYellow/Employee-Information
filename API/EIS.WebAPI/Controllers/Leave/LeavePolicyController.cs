@@ -1,5 +1,6 @@
 ﻿using EIS.Entities.Generic;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace EIS.WebAPI.Controllers.Leave
         public IEnumerable<LeaveRules> GetLeavePolicies([FromRoute]int PersonId)
         {
             string locationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId.ToString();
-            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId && x.IsActive == true && x.LocationId == Convert.ToInt32(locationId));
+            return _repository.LeaveRules.FindAll().Where(x => x.TenantId == TenantId && x.IsActive == true && x.LocationId == Convert.ToInt32(locationId));
         }
         [Route("GetPolicyById/{Id}")]
         [HttpGet]
@@ -46,20 +47,32 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveRules> GetLeavePolicies()
         {
-            return _repository.LeaveRules.GetAllLeaveRules().Where(x => x.TenantId == TenantId);
+            return _repository.LeaveRules.FindAll().Where(x => x.TenantId == TenantId);
         }
 
         [DisplayName("leave Policies")]
-        [Route("GetLeavePolicies")]
-        [HttpPost]
-        public ActionResult GetLeavePolicies([FromBody]SortGrid sortGrid)
-        {
-          
-            IQueryable<LeaveRules> employeeData = sortGrid.LocationId == 0?  _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true):
-                                                                             _repository.LeaveRules.GetAllLeaveRules().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
-            ArrayList data = string.IsNullOrEmpty(sortGrid.Search)? _repository.LeaveRules.GetDataByGridCondition(null, sortGrid, employeeData):
-                                                                    _repository.LeaveRules.GetDataByGridCondition(x => x.Location.LocationName.ToLower().Contains(sortGrid.Search.ToLower()) || x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()), sortGrid, employeeData);
-            return Ok(data);
+        [Route("GetLeavePolicies/{LocationId}")]
+        public ActionResult LeavePolicies([FromRoute]int LocationId)
+        {          
+            IEnumerable<LeavePolicyViewModel> employeeData = LocationId == 0?  _repository.LeaveRules.FindAll().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true).Select(x=>new LeavePolicyViewModel
+                {Id=x.Id,
+                ActiveStatus=x.IsActive,
+                LeaveType=x.LeaveType,
+                LocationName=x.Location.LocationName,
+                ValidFrom=x.ValidFrom,
+                ValidTo=x.ValidTo,
+                Validity=x.Validity
+            }).ToList():
+            _repository.LeaveRules.FindAll().Include(x => x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Location.IsActive == true && x.LocationId == LocationId).Select(x=>new LeavePolicyViewModel
+            {Id = x.Id,
+            ActiveStatus = x.IsActive,
+            LeaveType = x.LeaveType,
+            LocationName = x.Location.LocationName,
+            ValidFrom = x.ValidFrom,
+            ValidTo = x.ValidTo,
+            Validity = x.Validity
+            }).ToList();
+             return Ok(employeeData);
         }
 
         [DisplayName("Add Leave Rule")]

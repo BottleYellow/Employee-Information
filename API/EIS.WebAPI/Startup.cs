@@ -66,6 +66,7 @@ namespace EIS.WebAPI
                 };
 
             });
+
             services.AddMvc()
               .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling
@@ -92,7 +93,7 @@ namespace EIS.WebAPI
                 app.UseHsts();
             }
             RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
-       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly(1, 10));
+       monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly(1,10));
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();
