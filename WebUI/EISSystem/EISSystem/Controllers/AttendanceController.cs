@@ -80,7 +80,7 @@ namespace EIS.WebApp.Controllers
                                                 Id = e.Id,
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
-            ViewBag.Persons = employees;
+            ViewBag.Persons = employees.OrderBy(x=>x.FirstName);
             ViewBag.Locations = GetLocations();
             return View(employees);
         }
@@ -148,7 +148,7 @@ namespace EIS.WebApp.Controllers
                                                 EmployeeCode = e.EmployeeCode,
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
-            ViewBag.Persons = employees;
+            ViewBag.Persons = employees.OrderBy(x=>x.FullName);
             ViewBag.Locations = GetLocations();
             return View(employees);
         }

@@ -24,6 +24,7 @@
     <Compile Remove="Migrations\20190208062910_FinalData.cs" />
     <Compile Remove="Migrations\20190208063206_FinalData.cs" />
     <Compile Remove="Migrations\20190208063436_FinalChanges.cs" />
+    <Compile Remove="Migrations\20190225095419_PersonTableChanges.cs" />
   </ItemGroup>
 
   <ItemGroup>
