@@ -26,9 +26,6 @@ namespace EIS.WebAPI.Filters
             }
             try
             {
-                //filterContext.HttpContext.Request.Cookies.TryGetValue("CookieData", out string val);
-                //var Cookies = JsonConvert.DeserializeObject<CookieModel>(val);
-                //string token = filterContext.HttpContext.Request.Headers["Token"].ToString();
                 string token = "abcd";
                 if (token == null)
                 {

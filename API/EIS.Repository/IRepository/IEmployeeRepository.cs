@@ -16,5 +16,6 @@ namespace EIS.Repositories.IRepository
         Person ActivatePerson(string EmployeeCode);
         string GetEmployeeCode(int PersonId);
         List<GetAdminHrManager> getAdminHrManager();
+        List<SP_GetEmployee> getEmployees(int location);
     }
 }

@@ -2,6 +2,7 @@
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using EIS.WebApp.IServices;
 using System;
@@ -38,6 +39,7 @@ namespace EIS.WebApp.Services
         private IEISService<Holiday> _holiday;
 
         private IEISService<PastLeaves> _pastLeaves;
+        private IEISService<SP_GetEmployee> _getEmployee;
 
         public IEISService<Person> Employee
         {
@@ -189,6 +191,16 @@ namespace EIS.WebApp.Services
                     _pastLeaves = new EISService<PastLeaves>();
                 }
                 return _pastLeaves;
+            }
+        }
+
+        public IEISService<SP_GetEmployee> SP_GetEmployee {
+            get {
+                if (_getEmployee == null)
+                {
+                    _getEmployee = new EISService<SP_GetEmployee>();
+                }
+                return _getEmployee;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Filters;
@@ -109,7 +110,6 @@ namespace EIS.WebAPI.Controllers
         {
             if (id == 0)
             {
-                //person.EmployeeCode = _repository.Employee.GenerateNewIdCardNo(TenantId).ToString();
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -178,10 +178,10 @@ namespace EIS.WebAPI.Controllers
         }
         [Route("PersonDelete/{id}")]
         [HttpPost]
-        public IActionResult Delete([FromRoute]int id)
+        public IActionResult Delete([FromRoute]string id)
         {
-            Person person = _repository.Employee.FindByCondition(x => x.Id == id);
-            Users users = _repository.Users.FindByCondition(x => x.PersonId == id);
+            Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == id);
+            Users users = _repository.Users.FindByCondition(x => x.PersonId == person.Id);
             if (person == null)
             {
                 return NotFound();
@@ -270,31 +270,33 @@ namespace EIS.WebAPI.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("Data")]
+        [HttpGet]
+        [Route("Data/{type}/{locationId}")]
         [AllowAnonymous]
-        public IActionResult GetData([FromBody]SortGrid sortGrid)
+        public IActionResult GetData(bool type,int locationId)
         {
-            ArrayList employeeslist;
-            IQueryable<Person> list = null;
-            if (sortGrid.LocationId == 0)
-            {
-                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
-            }
-            else
-            {
-                list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
-            }
-            if (sortGrid.Search == null)
-            {
-                employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
-            }
-            else
-            {
-                string search = sortGrid.Search.ToLower();
-                employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.Location.LocationName.ToLower().Contains(search)|| x.EmployeeCode == search || x.FirstName.ToLower().Contains(search)||x.MiddleName.ToLower().Contains(search)||x.LastName.ToLower().Contains(search)||x.EmailAddress.ToLower().Contains(search) || x.MobileNumber.Contains(search), sortGrid, list);
-            }
-            return Ok(employeeslist);
+            //ArrayList employeeslist;
+            List<SP_GetEmployee> list = null;
+            //if (sortGrid.LocationId == 0)
+            //{
+            list = _repository.Employee.getEmployees(locationId).Where(x => x.IsActive == type).ToList();
+
+            //}
+            //else
+            //{
+            //    list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
+            //}
+            //if (sortGrid.Search == null)
+            //{
+            //    employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
+            //}
+            //else
+            //{
+            //    string search = sortGrid.Search.ToLower();
+            //    employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.Location.LocationName.ToLower().Contains(search)|| x.EmployeeCode == search || x.FirstName.ToLower().Contains(search)||x.MiddleName.ToLower().Contains(search)||x.LastName.ToLower().Contains(search)||x.EmailAddress.ToLower().Contains(search) || x.MobileNumber.Contains(search), sortGrid, list);
+            //}
+            //return Ok(employeeslist);
+            return Ok(list);
         }
         public string GetTitle(Gender gender)
         {

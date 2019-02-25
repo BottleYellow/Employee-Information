@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
@@ -74,6 +75,15 @@ namespace EIS.Repositories.Repository
                 code = emp.EmployeeCode;
             }
             return code;
+        }
+
+        public List<SP_GetEmployee> getEmployees(int location)
+        {
+            List<SP_GetEmployee> _GetEmployee = new List<SP_GetEmployee>();
+            var LId= new SqlParameter("@LId", location);
+            string usp = "LMS.usp_GetEmployeeDetails @LId";
+            _GetEmployee = _dbContext._sp_GetEmployee.FromSql(usp,LId).ToList();
+            return _GetEmployee;
         }
 
         public Person GetProfile(string EmployeeCode)

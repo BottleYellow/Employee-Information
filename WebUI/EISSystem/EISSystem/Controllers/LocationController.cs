@@ -40,14 +40,7 @@ namespace EIS.WebApp.Controllers
             return LoadData<Locations>(ApiUrl + "/api/Location/data", type, LocationId);
 
         }
-        //[DisplayName("Manage Locations")]
-        //public IActionResult Index()
-        //{
-        //    HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Location");
-        //    string stringData = response.Content.ReadAsStringAsync().Result;
-        //    List<Locations> data = JsonConvert.DeserializeObject<List<Locations>>(stringData);
-        //    return View(data);
-        //}
+        
         [DisplayName("Add Location")]
         public IActionResult AddLocation()
         {

@@ -13,18 +13,7 @@ namespace EIS.WebAPI.Controllers
         {
             _repository = repository;
 
-            //TenantId = Convert.ToInt32(Cache.GetStringValue("TenantId"));
             TenantId = 1;
-            //try
-            //{
-            //    Request.Cookies.TryGetValue("CookieData", out string val);
-            //    var Cookies = JsonConvert.DeserializeObject<CookieModel>(val);
-            //    TenantId = Convert.ToInt32(Cookies.TenantId);
-            //}
-            //catch (NullReferenceException)
-            //{
-            //    TenantId = 0;
-            //}
         }
 
         public string Personid = "";

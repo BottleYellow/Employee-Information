@@ -50,7 +50,6 @@ namespace EIS.WebAPI
             {
                 options.Filters.Add(typeof(Authorization));
                 options.Filters.Add(typeof(CustomFilter));
-                //options.Filters.Add(typeof(MyExceptionFilter));
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -99,8 +98,6 @@ namespace EIS.WebAPI
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
-
-            //SeedDatabase.Initialize(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider).Wait();
         }
     }
     

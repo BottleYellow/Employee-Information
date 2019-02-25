@@ -1,5 +1,6 @@
-﻿@model IEnumerable<EIS.Entities.Employee.Person>
-@using EIS.WebApp.Services
+﻿@using EIS.WebApp.Services
+@model IEnumerable<EIS.Entities.Employee.Person>
+
 
 <head>
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
@@ -10,10 +11,11 @@
         li:hover {
             cursor: pointer;
         }
-        
+
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -43,9 +45,9 @@
         ViewBag.Message = null;
     }
 }
-        <div class="ajax-loader">
-            <img src="~/gif/Spinner.gif" />
-        </div>
+<div class="ajax-loader">
+    <img src="~/gif/Spinner.gif" />
+</div>
 <div class="container-fluid">
     <div class="block-header">
         <div class="row">
@@ -71,31 +73,31 @@
                 </div>
 
             </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="body">
-                        <table id="example" class="table table-striped table-bordered dt-responsive" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Location</th>
-                                    <th>Employee Code</th>
-                                    <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Gender</th>
-                                    <th>DOB</th>
-                                    <th>Mobile Number</th>
-                                    <th>Email Address</th>
-                                    <th>Joining Date</th>
-                                    <th>Created By</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+                    <table id="example" class="table table-striped table-bordered dt-responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Employee Code</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Gender</th>
+                                <th>DOB</th>
+                                <th>Mobile Number</th>
+                                <th>Email Address</th>
+                                <th>Joining Date</th>
+                                <th>Created By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 
 <script>
@@ -113,7 +115,7 @@
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "Do you want to delete this record ?"
+        var message = "Do you want to delete this record ?";
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
@@ -152,7 +154,7 @@
                     },
                     error: function () {
                         bootbox.alert("Unable to Activate Data");
-                    }                    
+                    }
                 });
             }
         });
@@ -180,119 +182,54 @@
             b = false;
             generateReport(b,c);
         }
-    });  
+    });
     function generateReport(b,c) {
-        $.fn.dataTable.ext.errMode = 'none';
-        $('#example').on('error.dt', function () {
-            bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-        }).DataTable();
-        $('#example').DataTable().destroy();
-        $('#example tbody').empty();
-
-        var dTable = $('#example').DataTable({
-            sDom: '<"myexport"B>ifrtlp',
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'EMPLOYEE REPORT',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf',
-                    exportOptions: {
-                        columns: [0,1,2,4,5,6,7,8]
-                    }
-                }
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [3], "bSortable": false },
-                { "aTargets": [6], "bSortable": false },
-                {"aTargets":[9],"bSortable":false},
-                { "aTargets": ['_all'], "bSortable": true }
-            ],
-            lengthMenu: [
-                [5, 10, 25, -1],
-                ['5', '10', '25', 'All']
-            ],
-            ajax: {
-                "url": '@Url.Action("Index", "People")?type='+b+'&LocationId='+c,
-                "type": "POST",
-                "datatype": "json",
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                }
-
+        $.ajax({
+            "url": '@Url.Action("LoadData", "People")?type=' + b + '&LocationId=' + c,
+            "type": "POST",
+            "datatype": "json",
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
             },
-            "columns": [
-                {
-                    "data": "Location.LocationName", "name": "Location.LocationName", "autoWidth": true, "render": function (data, type, row) {
-                        return row.Location.LocationName;
+            success: function (data) {
+                var array = [];
+                var action;
+                var activeStatus;
+                for (var i = 0; i < data.length; i++) {
+                    var image = data[i].Image;
+                    activeStatus = data[i].IsActive;
+                    var dob = moment(data[i].DateOfBirth).format("DD MMM YYYY");
+                    var joinDate = moment(data[i].JoinDate).format("DD MMM YYYY");
+                    if (activeStatus == true) {
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + data[i].EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + data[i].EmployeeCode + '>Delete</a></li></ul></div>';
+                    } else {
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
                     }
-                },
-                { "data": "EmployeeCode", "name": "EmployeeCode", "autoWidth": true },
-                {
-                    "data": "FirstName", "name": "FirstName", "autoWidth": true, "render": function (data, type, row) {
-                        return row.FullName;
-                    }
-                },
-                {
-                    "data": "Image", "name": "Image", "autoWidth": true, "render": function (data, type, row) {
-                        return '<img  src="@MyHttpContext.AppBaseUrl/EmployeeData/' + row.TenantId + row.EmployeeCode + '/Image/' + data + '" style="height:40px; width:40px">';
-                    }
-                },
-                {
-                    "data": "Gender", "name": "Gender", "autoWidth": true, "render": function (data) {
-                        if (data == "0") {
-                            return "Male";
-                        } else { return "Female"; }
-
-                    }
-                },
-                {
-                    "data": "DateOfBirth", "name": "DateOfBirth", "autoWidth": true, "render": function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                { "data": "MobileNumber", "name": "MobileNumber", "autoWidth": true },
-                { "data": "EmailAddress", "name": "EmailAddress", "autoWidth": true },
-                {
-                    "data": "JoinDate", "name": "JoinDate", "autoWidth": true, "render": function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
-                    }
-                },
-                {
-                    "data": "CreatedBy", "name": "CreatedBy", "autoWidth": true, "render": function (data, type, row) {
-                        var v = getCreatedname(result, data);
-                        return v;                    
-                    }
-                },
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        var value = row.IsActive;
-                        if (value == true) {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + row.EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + row.Id + '>Delete</a></li></ul></div>';
-                        } else {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + row.EmployeeCode + '>Activate</a></li></ul></div>';
-                        }
-                    }
+                    image = '<img  src="@MyHttpContext.AppBaseUrl/EmployeeData/1' + data[i].EmployeeCode + '/Image/' + image + '" style="height:40px; width:40px">';
+                    array.push([data[i].LocationName, data[i].EmployeeCode, data[i].FullName, image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy, action]);
                 }
-            ],
-            "initComplete": function () {
-                var $searchInput = $('div.dataTables_filter input');
-                $searchInput.unbind();
-                $searchInput.bind('keyup', function (e) {
-                    if (this.value.length >= 3 || this.value.length == 0) {
-                        dTable.search(this.value).draw();
-                    }
+                $('#example').DataTable().destroy();
+                $('#example').DataTable({
+                    sDom: '<"myexport"B>ifrtlp',
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'EMPLOYEE REPORT',
+                            text: 'Export',
+                            titleAttr: 'Export to Pdf',
+                            exportOptions: {
+                                columns: [0, 1, 2, 4, 5, 6, 7, 8, 9]
+                            }
+                        }
+                    ],
+                    data: array
                 });
             },
-        });
-    };
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
+            }
+        });          
+    }
     function getCreatedBy() {
         var result = null;
         $.ajax({
@@ -302,7 +239,7 @@
                     data: null,
             success: function (data) {
                         result = data;
-                    }                   
+                    }
         });
         return result;
     }

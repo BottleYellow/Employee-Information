@@ -45,12 +45,6 @@ namespace EIS.Repositories.Repository
             usp = "LMS.usp_GetAdminDashboardLeaveDetails @locationId";
             Model.sp_AdminDashboardLeaves = _dbContext._sp_AdminDashboardLeave.FromSql(usp, param).ToList();
 
-
-            //foreach (var x in results)
-            //{
-            //    x.p.Attendance = x.Attendances.ToList();
-            //}
-            //var result = results.Select(x => x.p).ToList();
             if (attendanceStatus == "Present")
             {
                 Model.sP_AdminDashboards = Model.sP_AdminDashboards.Where(x => x.TimeIn != null).ToList();

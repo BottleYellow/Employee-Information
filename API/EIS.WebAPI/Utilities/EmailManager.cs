@@ -46,12 +46,12 @@ namespace EIS.WebAPI.Utilities
         {
             Attachment data = new Attachment(fileAttachment, MediaTypeNames.Application.Octet);
             mail.Attachments.Add(data);
-            smtp.Send(mail);
+            smtp.SendAsync(mail,"test");
             data.Dispose();
         }
         else
         { 
-            smtp.Send(mail);
+            smtp.SendAsync(mail,"test");
         }
         }
 
