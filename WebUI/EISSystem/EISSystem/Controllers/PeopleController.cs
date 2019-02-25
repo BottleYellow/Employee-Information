@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.OtherEntities;
+using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -59,7 +60,11 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult LoadData(bool type, int LocationId)
         {
-            return LoadData<Person>(ApiUrl + "/api/employee/data", type, LocationId);
+            HttpResponseMessage response = _services.SP_GetEmployee.GetResponse(ApiUrl + "/api/employee/Data/"+type+"/"+LocationId);
+            //return LoadData<Person>(ApiUrl + "/api/employee/data", type, LocationId);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<SP_GetEmployee> sP_GetEmployee = JsonConvert.DeserializeObject<List<SP_GetEmployee>>(stringData);
+            return Json(sP_GetEmployee);
 
         }
         public IActionResult Profile(string PersonId)
@@ -218,7 +223,6 @@ namespace EIS.WebApp.Controllers
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
             var tId = GetSession().TenantId;
-            //var tId = Cache.GetStringValue("TenantId");
             if (id != person.Id)
             {
                 return NotFound();
@@ -334,12 +338,11 @@ namespace EIS.WebApp.Controllers
             return data;
         }
         [DisplayName("Delete Employee")]
-        public void DeleteConfirmed(int id)
+        public void DeleteConfirmed(string id)
         {
             Person person = new Person();
             HttpClient client = _services.Employee.GetService();
             HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/api/Employee/PersonDelete/" + id,null);
-            //response = _services.Employee.PostResponse(ApiUrl + "/api/employee/Delete/" + id + "/" + op, person);
             if (response!=null)
             {
 

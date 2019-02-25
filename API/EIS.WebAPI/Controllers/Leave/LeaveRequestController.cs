@@ -183,7 +183,6 @@ namespace EIS.WebAPI.Controllers
             leave.TenantId = TenantId;
             _repository.LeaveRequest.CreateAndSave(leave);
 
-            //string to = person.Select(x => x.EmailAddress).ToString();
             string msg = null;
             if (type == "Future")
             {
@@ -267,7 +266,6 @@ namespace EIS.WebAPI.Controllers
                 {
                     new EmailManager(_configuration,_repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
                 }
-                //new EmailManager(_configuration).SendEmail(subject,body,)
             }
             new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
             _repository.LeaveCredit.Dispose();

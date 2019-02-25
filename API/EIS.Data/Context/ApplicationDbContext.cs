@@ -54,6 +54,8 @@ namespace EIS.Data.Context
         public virtual DbSet<GetAdminHrManager> _sp_GetAdminHrManager { get; set; }
         [NotMapped]
         public virtual DbSet<MailConfiguration> _sp_MailConfigurations { get; set; }
+        [NotMapped]
+        public virtual DbSet<SP_GetEmployee> _sp_GetEmployee { get; set; }
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }

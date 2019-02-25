@@ -55,7 +55,6 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
         {
-            //int pId = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pId = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceByIdData(date, type, pId);
             HttpResponseMessage response = _service.GetResponse(url);
@@ -68,7 +67,6 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult GetAttendanceSummary(string date, string type)
         {
-            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int id = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
@@ -98,10 +96,6 @@ namespace EIS.WebApp.Controllers
             return View(employees);
         }
 
-        //public IActionResult GetEmployeeLocationWise()
-        //{
-
-        //}
 
         [ActionName("AttendanceSummary")]
         [HttpPost]
@@ -110,9 +104,7 @@ namespace EIS.WebApp.Controllers
             if (id == null)
             {
                 id = Convert.ToInt32(GetSession().PersonId);
-                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
-            //date = Convert.ToDateTime(date).ToShortDateString();
             string url = GetAttendanceByIdData(date, type, id);
 
             HttpResponseMessage response = _service.GetResponse(url);
@@ -155,7 +147,6 @@ namespace EIS.WebApp.Controllers
         public IActionResult AttendanceInOut(int id, Attendance attendance)
         {
             id = Convert.ToInt32(GetSession().PersonId);
-            //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
                 HttpClient client = _service.GetService();
@@ -177,7 +168,6 @@ namespace EIS.WebApp.Controllers
             if (id == null)
             {
                 id = Convert.ToInt32(GetSession().PersonId);
-                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
 
             string url = "";
@@ -218,16 +208,6 @@ namespace EIS.WebApp.Controllers
             string[] monthYear = new string[3];
             string[] week = new string[2];
             ViewBag.type = type;
-            //if(location=="All") {
-            //    loc = 0;
-            //}else if (location == "Kondhwa")
-            //{
-            //    loc = 1;
-            //}
-            //else if (location == "Baner")
-            //{
-            //    loc = 6;
-            //}
             if (date.Contains('-'))
             {
                 week = date.Split('-');
@@ -325,21 +305,6 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-
-        //public IActionResult GetEmployeeAttendance()
-        //{
-        //    HttpResponseMessage response = _service.GetResponse(ApiUrl+"/api/Employee");
-        //    string stringData = response.Content.ReadAsStringAsync().Result;
-        //    IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-        //    IEnumerable<Person> employees = from e in employeesdata
-        //                    select new Person
-        //                    {
-        //                        Id = e.Id,
-        //                        FirstName = e.FirstName + " " + e.LastName
-        //                    };
-        //    ViewBag.Persons = employees;
-        //    return View(employees);
-        //}
 
     }
 }

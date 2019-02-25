@@ -34,21 +34,6 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Requests
-        //[DisplayName("View all requests")]
-        //public IActionResult EmployeeLeaveRequests()
-        //{
-        //    ViewBag.Locations = GetLocations();
-        //    return View();
-        //}
-
-        //[ActionName("EmployeeLeaveRequests")]
-        //[HttpPost]
-        //public IActionResult GetEmployeeLeaveRequests(int LocationId)
-        //{
-        //    ArrayList arrayData = new ArrayList();
-        //    return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/GetLeaveRequests/", null, LocationId);
-        //}
-
         [DisplayName("View All Requests")]
         public IActionResult EmployeeLeaveHistory()
         {
@@ -107,7 +92,6 @@ namespace EIS.WebApp.Controllers
         [ActionName("ShowMyLeaves")]
         public IActionResult GetMyLeaves()
         {
-            //int pid = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int pid = Convert.ToInt32(GetSession().PersonId);
             ArrayList arrayData = new ArrayList();
             return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/Employee/" + pid + "", null, null);
@@ -176,25 +160,6 @@ namespace EIS.WebApp.Controllers
             }
             return View("RequestLeave", request);
         }
-        //[DisplayName("Past Leaves")]
-        //public IActionResult PastLeaves()
-        //{
-        //    ViewBag.Locations = GetLocations();
-        //    return View();
-        //}
-
-        //[ActionName("PastLeaves")]
-        //[HttpPost]
-        //public IActionResult GetPastLeaves(int LocationId)
-        //{
-        //    int PersonId = 0;
-        //    if(GetSession().Role=="Employee")
-        //    {
-        //        PersonId = Convert.ToInt32(GetSession().PersonId);
-        //    }
-        //    return LoadData<PastLeaves>(ApiUrl + "/api/LeaveRequest/PastLeaves/" + PersonId, null, LocationId);
-
-        //}
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {
@@ -230,24 +195,6 @@ namespace EIS.WebApp.Controllers
             }
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("AddPastLeave", request);
-            //Leave.CreatedDate = DateTime.Now;
-            //Leave.UpdatedDate = DateTime.Now;
-            //if (ModelState.IsValid)
-            //{
-            //    Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
-            //    Leave.RequestedDays = Convert.ToInt32((Leave.ToDate - Leave.FromDate).TotalDays) + 1;
-            //    Leave.IsActive = true;
-            //    Leave.PersonId = Convert.ToInt32(GetSession().PersonId);
-            //    HttpResponseMessage response = _services.PastLeave.PostResponse(ApiUrl+"/api/LeaveRequest/AddPastLeave", Leave);
-            //    string stringData = response.Content.ReadAsStringAsync().Result;
-            //    LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
-            //    if (response.IsSuccessStatusCode == true)
-            //    {
-            //        return View();
-            //    }
-            //}
-            //else Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //return PartialView("AddPastLeave", Leave);
 
         }
 
@@ -327,11 +274,7 @@ namespace EIS.WebApp.Controllers
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    //HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeaveCredit/AddCredits", LeaveRules);
-                    //if (response2.IsSuccessStatusCode == true)
-                    //{
                         return View();
-                    //}
                 }
             }
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -343,7 +286,6 @@ namespace EIS.WebApp.Controllers
         {
             HttpClient client = _services.LeaveRules.GetService();
             HttpResponseMessage response = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeavePolicy/PolicyDelete/" + id, null);
-            //response = _services.Employee.PostResponse(ApiUrl + "/api/employee/Delete/" + id + "/" + op, person);
             if (response != null)
             {
 
@@ -433,11 +375,7 @@ namespace EIS.WebApp.Controllers
                 LeaveCredit LeaveRules = JsonConvert.DeserializeObject<LeaveCredit>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    //HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl + "/api/LeaveCredit/AddCredits", LeaveRules);
-                    //if (response2.IsSuccessStatusCode == true)
-                    //{
                     return View();
-                    //}
                 }
             }
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -449,7 +387,6 @@ namespace EIS.WebApp.Controllers
         {
             HttpClient client = _services.LeaveCredit.GetService();
             HttpResponseMessage response = _services.LeaveCredit.PostResponse(ApiUrl + "/api/LeaveCredit/CreditDelete/" + id, null);
-            //response = _services.Employee.PostResponse(ApiUrl + "/api/employee/Delete/" + id + "/" + op, person);
             if (response != null)
             {
 

@@ -10,7 +10,7 @@ namespace EIS.Entities.SP
     {
         public List<SP_AdminDashboard> sP_AdminDashboards { get; set; }
         public SP_AdminDashboardCount sP_AdminDashboardCount { get; set; }
-        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; }
+        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; } 
     }
 
     public class SP_AdminDashboard
@@ -75,6 +75,25 @@ namespace EIS.Entities.SP
         [Key]
         public string EmailAddress { get; set; }
         public string Name { get; set; }
+    }
+
+    public class SP_GetEmployee
+    {
+        [Key]
+        public string EmployeeCode { get; set; }
+        public string FullName { get; set; }
+        public string Image { get; set; }
+        public string Gender { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
+        public string MobileNumber { get; set; }
+        public string EmailAddress { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime JoinDate { get; set; }
+        public string CreatedBy { get; set; }
+        public string LocationName { get; set; }
+        public string Role { get; set; }
+        public bool IsActive { get; set; }
     }
 
 

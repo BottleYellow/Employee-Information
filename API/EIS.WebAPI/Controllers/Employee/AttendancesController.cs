@@ -58,7 +58,6 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Create Attendance")]
         [HttpPost("{id}")]
-        //[Route("ClockIn/{id}")]
         public IActionResult PostAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
             if (!ModelState.IsValid)
@@ -88,21 +87,7 @@ namespace EIS.WebAPI.Controllers
         #endregion
 
         #region[Attendance Reports]
-        [DisplayName("Attendance Reports")]
-        [HttpGet("GetAllAttendanceMonthly/{month}/{year}/{location}")]
-        public IActionResult GetAllAttendanceMonthly([FromRoute] int month, [FromRoute] int year, [FromRoute]int location)
-        {
-            IList<AttendanceData> attendanceData = _repository.Attendances.GetAttendanceMonthly(month, year, location);
-            return Ok(attendanceData);
-        }
-
-        [DisplayName("Attendance Reports")]
-        [HttpGet("GetAllAttendanceYearly/{year}/{location}")]
-        public IActionResult GetAllAttendanceYearly([FromRoute] int year, [FromRoute]int location)
-        {
-            IList<AttendanceData> attendanceData = _repository.Attendances.GetAttendanceYearly(year, location);
-            return Ok(attendanceData);
-        }
+        
 
 
         [DisplayName("Attendance Reports")]
@@ -167,8 +152,6 @@ namespace EIS.WebAPI.Controllers
         {
             string Code = _repository.Employee.GetEmployeeCode(id);
             int? locationId = _repository.Employee.FindByCondition(x => x.EmployeeCode == Code).LocationId;
-            //IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
-            //List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData,Code,null);
             DateTime sDate = Convert.ToDateTime(startDate);
             DateTime eDate = Convert.ToDateTime(endDate);
             DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
@@ -188,10 +171,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            //IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.PersonId == id).Where(x => x.TimeOut != null);
-            //int TotalWorkingDays = 0;
-            //int TotalDays = DateTime.IsLeapYear(year) ? 366 : 365;
-            //TotalWorkingDays = TotalDays - 24;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year",id,year,1);
             return Ok(attendanceReport);
         }
@@ -201,19 +180,6 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetMonthlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
         {
             AttendanceReport attendanceReport = new AttendanceReport();
-            //IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Year == year && x.DateIn.Month == month && x.PersonId == id);
-
-            //int TotalWorkingDays = 0;
-            //int TotalDays = DateTime.DaysInMonth(year, month);
-            //for (int i = 1; i <= TotalDays; i++)
-            //{
-            //    DateTime thisDay = new DateTime(year, month, i);
-            //    if (thisDay.DayOfWeek != DayOfWeek.Sunday)
-            //    {
-            //        TotalWorkingDays += 1;
-            //    }
-            //}
-            //TotalWorkingDays = TotalWorkingDays - 2;
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Month", id, year, month);
             return Ok(attendanceReport);
         }
@@ -249,18 +215,6 @@ namespace EIS.WebAPI.Controllers
                 IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId).Include(x => x.Person);
                 attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate), attendanceData, id, LocationId);
             }
-        //[HttpGet("GetDateWiseAttendance/{id}/{startDate}/{endDate}")]
-        //public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]string startDate, [FromRoute]string endDate)
-        //{
-        //    DateTime sDate = Convert.ToDateTime(startDate);
-        //    DateTime eDate = Convert.ToDateTime(endDate);
-        //    if (eDate > DateTime.Now.Date)
-        //    {
-        //        eDate = DateTime.Now.Date;
-        //    }
-        //    int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
-        //    IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= sDate && x.DateIn.Date <= eDate && x.PersonId == PersonId);
-        //    List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate.AddDays(1), attendanceData);
             return Ok(attendancelist);
         }
     }

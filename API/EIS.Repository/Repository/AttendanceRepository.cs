@@ -19,15 +19,6 @@ namespace EIS.Repositories.Repository
 
         public Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId)
         {
-            // Month  Year Week
-            //InputOne : 01 InputTwo : 2019 -- Month
-            //InputOne : 2019 InputTwo : 0 -- Year
-            //InputOne : 'dd-mm-yyy' -FromDate  InputTwo : 'dd-mm-yyy' -Todate -- Year
-            //locationId = 0;
-            //InputOne = "2019";
-            //InputTwo = "0";
-            //SearchFor = "Year";
-
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
             InputTwo = InputTwo.ToString();
