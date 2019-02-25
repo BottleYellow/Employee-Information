@@ -55,24 +55,13 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
         {
-            int pId = Convert.ToInt32(GetSession().PersonId);
-            string url = GetAttendanceByIdData(date, type, pId);
-            HttpResponseMessage response = _service.GetResponse(url);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<AttendanceReportByDate> attendances = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
-            return Json(attendances);
-
-        }
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult GetAttendanceSummary(string date, string type)
-        {
+            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             int id = Convert.ToInt32(GetSession().PersonId);
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AttendanceReport attendanceReport = new AttendanceReport();
-            attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
+            EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
+            attendanceReport = JsonConvert.DeserializeObject<EmployeeAttendanceReport>(stringData);
             return Json(attendanceReport);
         }
         #endregion
@@ -95,32 +84,13 @@ namespace EIS.WebApp.Controllers
             ViewBag.Locations = GetLocations();
             return View(employees);
         }
-
-
-        [ActionName("AttendanceSummary")]
         [HttpPost]
-        public IActionResult EmployeeReportsById(string date, string type, int? id)
-        {
-            if (id == null)
-            {
-                id = Convert.ToInt32(GetSession().PersonId);
-            }
-            string url = GetAttendanceByIdData(date, type, id);
-
-            HttpResponseMessage response = _service.GetResponse(url);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
-            return Json(attendanceReport);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public JsonResult AttendanceSummaryById(string date, string type, int? id)
+        public JsonResult AttendanceSummary(string date, string type, int? id)
         {
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            AttendanceReport attendanceReport = JsonConvert.DeserializeObject<AttendanceReport>(stringData);
+            EmployeeAttendanceReport attendanceReport = JsonConvert.DeserializeObject<EmployeeAttendanceReport>(stringData);
             return Json(attendanceReport);
         }
         #endregion
@@ -147,6 +117,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult AttendanceInOut(int id, Attendance attendance)
         {
             id = Convert.ToInt32(GetSession().PersonId);
+            //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             if (ModelState.IsValid)
             {
                 HttpClient client = _service.GetService();
@@ -161,13 +132,51 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-        #region[Method]
+        #region Datewise Attendance
+        [DisplayName("Attendance Datewise")]
+        [HttpGet]
+        public IActionResult DateWiseAttendance()
+        {
+            int id = Convert.ToInt32(GetSession().PersonId);
+            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
+                                            select new Person
+                                            {
+                                                EmployeeCode = e.EmployeeCode,
+                                                FirstName = e.FirstName + " " + e.LastName
+                                            };
+            ViewBag.Persons = employees;
+            ViewBag.Locations = GetLocations();
+            return View(employees);
+        }
+
+        [ActionName("DateWiseAttendance")]
+        [HttpPost]
+        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id,int LocationId) 
+        {
+            string url = "";
+            if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))
+            {
+                url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + LocationId + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
+            }
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
+            return Json(attendanceReport);
+        }
+        #endregion
+
+        #region[Methods]
         [NonAction]
         public string GetAttendanceSummaryData(string date, string type, int? id)
         {
             if (id == null)
             {
                 id = Convert.ToInt32(GetSession().PersonId);
+                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
             }
 
             string url = "";
@@ -228,7 +237,7 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/"+ monthYear[0] + "/" + monthYear[1] + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
             }
             return url;
         }
@@ -267,44 +276,5 @@ namespace EIS.WebApp.Controllers
             return url;
         }
         #endregion
-
-        #region Datewise Attendance
-        [DisplayName("Attendance Datewise")]
-        [HttpGet]
-        public IActionResult DateWiseAttendance()
-        {
-            int id = Convert.ToInt32(GetSession().PersonId);
-            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
-                                            select new Person
-                                            {
-                                                EmployeeCode = e.EmployeeCode,
-                                                FirstName = e.FirstName + " " + e.LastName
-                                            };
-            ViewBag.Persons = employees;
-            ViewBag.Locations = GetLocations();
-            return View(employees);
-        }
-
-        [ActionName("DateWiseAttendance")]
-        [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id,int LocationId) 
-        {
-            string url = "";
-            if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))
-            {
-                url = ApiUrl + "/api/Attendances/GetDateWiseAttendance/" + id + "/" + LocationId + "/" + Convert.ToDateTime(fromdate).ToString("MMM-dd-yyyy") + "/" + Convert.ToDateTime(todate).ToString("MMM-dd-yyyy");
-            }
-            HttpResponseMessage response = _service.GetResponse(url);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
-            return Json(attendanceReport);
-        }
-        #endregion
-
-
     }
 }

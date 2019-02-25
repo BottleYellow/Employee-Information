@@ -1,10 +1,9 @@
-﻿@using EIS.Entities.Enums;
-@using EIS.WebApp.Services
+﻿@using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
 
 @using Microsoft.AspNetCore.Http;
-@model EIS.Entities.Leave.LeaveRequest;
+@model EIS.Entities.Leave.LeaveRequest
 @{
     string APIURL = MyHttpContext.APIBaseURL;
     string cookiesdata = Context.Session.GetString("CookieData");

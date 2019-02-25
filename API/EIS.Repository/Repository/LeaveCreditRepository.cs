@@ -44,28 +44,10 @@ namespace EIS.Repositories.Repository
                 AddCreditAndSave(Credit);
             }
         }
-
-
         public float GetAvailableLeaves(int PersonId, int LeaveId)
         {
             float n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.LeaveId == LeaveId).Select(x => x.Available).FirstOrDefault();
             return n;
-        }
-
-        public IQueryable<LeaveCredit> GetCredits()
-        {
-            var results = _dbContext.LeaveCredit
-                .Select(l => new
-                {
-                    l,
-                    person = l.Person
-                });
-            foreach (var x in results)
-            {
-                x.l.Person = x.person;
-            }
-            var result = results.Select(x => x.l);
-            return result;
         }
 
     }

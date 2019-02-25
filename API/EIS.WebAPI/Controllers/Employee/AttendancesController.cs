@@ -58,6 +58,7 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Create Attendance")]
         [HttpPost("{id}")]
+        //[Route("ClockIn/{id}")]
         public IActionResult PostAttendance([FromRoute] int id, [FromBody] Attendance attendance)
         {
             if (!ModelState.IsValid)
@@ -87,8 +88,6 @@ namespace EIS.WebAPI.Controllers
         #endregion
 
         #region[Attendance Reports]
-        
-
 
         [DisplayName("Attendance Reports")]
         [HttpGet("GetAllAttendanceEmpCount/{SearchFor}/{InputOne}/{InputTwo}/{locationId}")]
@@ -152,6 +151,8 @@ namespace EIS.WebAPI.Controllers
         {
             string Code = _repository.Employee.GetEmployeeCode(id);
             int? locationId = _repository.Employee.FindByCondition(x => x.EmployeeCode == Code).LocationId;
+            //IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
+            //List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate).AddDays(1), attendanceData,Code,null);
             DateTime sDate = Convert.ToDateTime(startDate);
             DateTime eDate = Convert.ToDateTime(endDate);
             DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
@@ -170,7 +171,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("GetYearlyAttendanceSummaryById/{id}/{year}")]
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id)
         {
-            AttendanceReport attendanceReport = new AttendanceReport();
+            EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year",id,year,1);
             return Ok(attendanceReport);
         }
@@ -179,7 +180,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("GetMonthlyAttendanceSummaryById/{id}/{year}/{month}")]
         public IActionResult GetMonthlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id, [FromRoute]int month)
         {
-            AttendanceReport attendanceReport = new AttendanceReport();
+            EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
             attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Month", id, year, month);
             return Ok(attendanceReport);
         }
@@ -190,12 +191,11 @@ namespace EIS.WebAPI.Controllers
         {
             AttendanceReport attendanceReport = new AttendanceReport();
             IQueryable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == id);
-           // attendanceReport = _repository.Attendances.GetAttendanceReportSummary(7, 6, attendanceData.AsEnumerable());
             return Ok(attendanceReport);
         }
         #endregion
 
-        
+        #region Datewise Attendance
         [HttpGet("GetDateWiseAttendance/{id}/{LocationId}/{startDate}/{endDate}")]
         public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]int LocationId, [FromRoute]string startDate, [FromRoute]string endDate)
         {
@@ -217,5 +217,6 @@ namespace EIS.WebAPI.Controllers
             }
             return Ok(attendancelist);
         }
+        #endregion
     }
 }

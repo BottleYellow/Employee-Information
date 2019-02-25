@@ -68,85 +68,97 @@ namespace EIS.WebAPI.Services
                 .Select(p => new
                 {
                     FullName = p.FullName,
+                    LocationId=p.LocationId,
+                    LocationName=p.Location.LocationName,
                     EmployeeCode = p.EmployeeCode,
                     EmailAddress = p.EmailAddress,
-                    Gender = p.Gender,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
                 }).ToList();
             foreach (var p in results)
             {
-                string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
-
-                if (File.Exists(attendanceReportPath))
+                if (p.EmailAddress== "ud.soni2009@gmail.com")
                 {
-                    File.Delete(attendanceReportPath);
-                }
+                    string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
 
-                using (StreamWriter sw = File.CreateText(attendanceReportPath))
-                {
-                    sw.WriteLine("Employee Name:-" + p.FullName);
-                    sw.WriteLine("Employee Code:-" + p.EmployeeCode);
-                    sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);
-                    DateTime startDate = new DateTime(year, month, 1);
-                    DateTime endDate = startDate.AddMonths(1);
-                    StringBuilder newlist = new StringBuilder();
-                    newlist.AppendLine("   DATE     STATUS   TIME IN   TIME OUT   TOTAL HOURS");
-                    int counter = 0;
-                    for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
+                    if (File.Exists(attendanceReportPath))
                     {
-                        newlist.Append(date.ToShortDateString() + "   ");
-                        var attendance = p.Attendances.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                        if (attendance == null || attendance.TimeIn == attendance.TimeOut)
+                        File.Delete(attendanceReportPath);
+                    }
+
+                    using (StreamWriter sw = File.CreateText(attendanceReportPath))
+                    {
+                        sw.WriteLine("Employee Name:-" + p.FullName);
+                        sw.WriteLine("Employee Code:-" + p.EmployeeCode);
+                        sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);
+                        DateTime startDate = new DateTime(year, month, 1);
+                        DateTime endDate = startDate.AddMonths(1);
+                        StringBuilder newlist = new StringBuilder();
+                        newlist.AppendLine("   DATE         STATUS      TIME IN      TIME OUT      TOTAL HOURS");
+                        int counter = 0;
+                        for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
                         {
-                            if (date.DayOfWeek == DayOfWeek.Sunday)
+                            newlist.Append(date.ToShortDateString() + "   ");
+                            var attendance = p.Attendances.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
+                            if (attendance == null || attendance.TimeIn == attendance.TimeOut)
                             {
-                                newlist.Append("WeeklyOff ");
+                                var holiday = _dbContext.Holidays.Where(x => x.LocationId == p.LocationId && x.Date == date).FirstOrDefault();
+                                if (holiday != null)
+                                {
+                                    newlist.Append("   " + holiday.Vacation);
+                                }
+                                else
+                                {
+                                    if (date.DayOfWeek == DayOfWeek.Sunday)
+                                    {
+                                        newlist.Append("   WeeklyOff");
+                                    }
+                                    else if (p.LocationName.ToUpper() == "BANER")
+                                    {
+                                        string alternateSaturday = _repository.Attendances.CalculateDate(date);
+                                        if (!string.IsNullOrEmpty(alternateSaturday))
+                                        {
+                                            newlist.Append("   " + alternateSaturday);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        newlist.Append("   OnLeave  ");
+                                    }
+                                }
+                                newlist.Append("             ");
+                                newlist.Append("      -      ");
+                                newlist.Append("             ");
                             }
                             else
                             {
-                                newlist.Append("Absent   ");
+                                newlist.Append("   Present  ");
+                                newlist.Append("   " + attendance.TimeIn.ToString() + "   ");
+                                newlist.Append("   " + attendance.TimeOut.ToString() + "   ");
+                                newlist.Append("   " + attendance.TotalHours.ToString() + "   ");
+                                counter++;
+
                             }
-                            newlist.Append("   -      ");
-                            newlist.Append("   -      ");
-                            newlist.Append("   -      ");
+                            newlist.AppendLine();
                         }
-                        else
-                        {
-                            newlist.Append("Present  ");
-                            newlist.Append(attendance.TimeIn.ToString() + "   ");
-                            newlist.Append(attendance.TimeOut.ToString() + "   ");
-                            newlist.Append(attendance.TotalHours.ToString() + "   ");
-                            counter++;
-
-                        }
-                        newlist.AppendLine();
+                        sw.WriteLine(newlist);
+                        sw.WriteLine("File created: {0}", DateTime.Now.ToString());
+                        sw.WriteLine("Total No of Days:-" + TotalDays);
+                        sw.WriteLine("No of Days Present:-" + counter);
+                        sw.WriteLine("For any assistance please contact HR department");
+                        sw.Flush();
+                        sw.Close();
                     }
-                    sw.WriteLine(newlist);
-                    sw.WriteLine("File created: {0}", DateTime.Now.ToString());
-                    sw.WriteLine("Total No of Days:-" + TotalDays);
-                    sw.WriteLine("No of Days Present:-" + counter);
-                    sw.WriteLine("For any assistance please contact accounts department");
-                    sw.Flush();
-                    sw.Close();
+
+                    string To = p.EmailAddress;
+                    string subject = "Monthly Attendance Report";
+                    string body = "Dear " + p.FullName + "\n" +
+                        "Kindly find monthly attendance report in attachment.\n" +
+                        "Your Code Number: " + p.EmployeeCode + "\n" +
+                        "User Name: " + p.EmailAddress;
+                    new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
                 }
-
-                string To = p.EmailAddress;
-                string subject = "Monthly Attendance Report";
-                string body = "Hello " + GetTitle(p.Gender) + " " + p.FullName + "\n" +
-                    "Monthly report is attached. : \n" +
-                    "Your Code Number: " + p.EmployeeCode + "\n" +
-                    "User Name: " + p.EmailAddress;
-                new EmailManager(_configuration,_repository).SendEmail(subject, body, To, attendanceReportPath);
             }
-        }
-
-        public string GetTitle(Gender gender)
-        {
-            string Title = "";
-            if (gender == Gender.Male) Title = "Mr.";
-            else if (gender == Gender.Female) Title = "Ms.";
-            return Title;
-        }
+        }     
 
     }
 }
