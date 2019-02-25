@@ -53,7 +53,7 @@ namespace EIS.Repositories.Repository
             string usp = "LMS.usp_GetEmployeewiseAttendanceCount @PersonId, @SelectType, @InputOne, @InputTwo";
             Model._SP_ReportCount = _dbContext._sp_GetEmployeeAttendanceCount.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).FirstOrDefault();
             usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
-            Model._SP_AttendanceData=_dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            Model._SP_AttendanceData = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
 
             return Model;
         }
