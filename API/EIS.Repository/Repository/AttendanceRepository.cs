@@ -67,7 +67,7 @@ namespace EIS.Repositories.Repository
                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                 {
 
-                    List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Include(x => x.LeaveRequests).Where(x => x.Role.Name == "Employee").ToList() : _dbContext.Person.Include(x => x.Role).Include(x => x.LeaveRequests).Where(x => x.Role.Name == "Employee" && x.LocationId == loc).ToList();
+                    List<Person> Emps = loc == 0 ? _dbContext.Person.Include(x => x.Role).Include(x => x.LeaveRequests).Where(x => x.Role.Name != "Admin").ToList() : _dbContext.Person.Include(x => x.Role).Include(x => x.LeaveRequests).Where(x => x.Role.Name != "Admin" && x.LocationId == loc).ToList();
                     foreach (var person in Emps)
                     {
 

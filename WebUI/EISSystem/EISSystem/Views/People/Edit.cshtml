@@ -318,11 +318,12 @@
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
     }
+   var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
     $(document).ready(function () {
         var d1 = document.getElementById("dob").value;
         var d2 = document.getElementById("doj").value;
-        var dob = moment(d1).format("DD/MMM/YYYY");
-        var doj = moment(d2).format("DD/MMM/YYYY");
+        var dob = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+        var doj = moment(d2, cultureInfo).format("DD/MMM/YYYY");
         $('#dob').datetimepicker({
             format: "DD/MMM/YYYY"
         });

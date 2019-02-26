@@ -128,32 +128,36 @@ namespace EIS.Repositories.Repository
             int count = 0;
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
-                LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate == date).FirstOrDefault();
-                if (leaveRequest != null)
+                List<LeaveRequest> leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).ToList();
+
+                if (leaveRequest.Count > 0)
                 {
-                    CalendarData calendarData = new CalendarData();
-                    calendarData.Title = leaveRequest.EmployeeName + " (Leave " + leaveRequest.Status + ")";
-                    calendarData.Description = "Leave Status " + leaveRequest.Status;
-                    calendarData.StartDate = leaveRequest.FromDate;
-                    calendarData.EndDate = leaveRequest.ToDate;
-                    if (leaveRequest.Status == "Pending")
+                    foreach (var leave in leaveRequest)
                     {
-                        calendarData.Color = "Light Blue";
+                        CalendarData calendarData = new CalendarData();
+                        calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
+                        calendarData.Description = "Leave Status " + leave.Status;
+                        calendarData.StartDate = date;
+                        calendarData.EndDate = date;
+                        if (leave.Status == "Pending")
+                        {
+                            calendarData.Color = "Light Blue";
+                        }
+                        else if (leave.Status == "Approved")
+                        {
+                            calendarData.Color = "Orange";
+                        }
+                        else if (leave.Status == "Rejected")
+                        {
+                            calendarData.Color = "Red";
+                        }
+                        else
+                        {
+                            calendarData.Color = "Violet";
+                        }
+                        calendarData.IsFullDay = true;
+                        calendarDataList.Add(calendarData);
                     }
-                    else if (leaveRequest.Status == "Approved")
-                    {
-                        calendarData.Color = "Orange";
-                    }
-                    else if (leaveRequest.Status == "Rejected")
-                    {
-                        calendarData.Color = "Red";
-                    }
-                    else
-                    {
-                        calendarData.Color = "Violet";
-                    }
-                    calendarData.IsFullDay = true;
-                    calendarDataList.Add(calendarData);
                 }
 
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();

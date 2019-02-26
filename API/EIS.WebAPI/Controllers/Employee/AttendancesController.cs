@@ -218,7 +218,13 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                int PersonId = _repository.Employee.FindByCondition(x => x.EmployeeCode == id).Id;
+                Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == id);
+                int PersonId = person.Id;
+                DateTime joinDate = person.JoinDate;
+                if (Convert.ToDateTime(startDate) < joinDate)
+                {
+                    startDate = joinDate.ToString();
+                }
                 IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= Convert.ToDateTime(startDate) && x.DateIn.Date <= Convert.ToDateTime(endDate) && x.PersonId == PersonId).Include(x => x.Person);
                 attendancelist = _repository.Attendances.GetAttendanceReportByDate(Convert.ToDateTime(startDate), Convert.ToDateTime(endDate), attendanceData, id, LocationId);
             }

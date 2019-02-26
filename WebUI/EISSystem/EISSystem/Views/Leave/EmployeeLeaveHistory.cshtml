@@ -86,7 +86,7 @@
                                                 <option value="0">All</option>
                                             </select>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                 </div>
                                 <div class="col-md-8 col-lg-8">
                                     <div class="row">
@@ -143,7 +143,7 @@
                                         <th>Days</th>
                                         <th>Requested Date</th>
                                         <th>Status</th>
-                                        <th>Approved By</th>
+                                        <th>Updated By</th>
                                         <th>Leave Reason</th>
                                     </tr>
                                 </thead>
@@ -168,14 +168,16 @@
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     $(document).ready(function () {
-        var locationValue = $('#locations').val();
+
         var employeeValue = $('#selectEmployee').val();
-        var type = $('#selectReport').val(); 
+        var type = $('#selectReport').val();
         var leaveType = $('#leaveOption').val();
+        var locationValue = $('#locations').val();
         $.ajax({
             type: 'GET',
-            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + locationValue,
+                  url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + locationValue,
             success: function (data) {
+                $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                 $.each(data, function (data, value) {
                     $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
                 });
@@ -183,7 +185,8 @@
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
             }
-        });
+           });
+
         var value="";
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
@@ -201,7 +204,7 @@
         });
         value = $('#inputmonth').val();
         GenerateReport(locationValue, employeeValue, type, value, leaveType);
-       
+
     });
 
     $('#selectReport').on('change', function () {
@@ -215,7 +218,7 @@
                 $('#inputmonthdiv').show();
             }
     });
-  
+
     $('#inputyear').on('change', function () {
         value = $('#inputyear').val();
     });
@@ -228,13 +231,13 @@
         var locationValue = $('#locations').val();
         var employeeValue = $('#selectEmployee').val();
         var leaveType = $('#leaveOption').val();
-        var type = $('#selectReport').val();       
+        var type = $('#selectReport').val();
         if (type == 'month') {
             value = $('#inputmonth').val();
         } else {
             value = $('#inputyear').val();
         }
-    
+
         GenerateReport(locationValue,employeeValue, type, value, leaveType);
     });
 
@@ -248,33 +251,44 @@
             },
             success: function (data) {
                 var array = [];
-                var action;        
+                var action;
                 for (var i = 0; i < data.length; i++) {
                     var status = data[i].Status;
                     var fromDate = moment(data[i].FromDate).format("DD MMM YYYY");
                     var toDate = moment(data[i].ToDate).format("DD MMM YYYY");
                     var appliedDate = moment(data[i].AppliedDate).format("DD MMM YYYY");
+                    var approvedBy= data[i].ApprovedName;
                     if (status == "Pending") {
+                        approvedBy = data[i].EmployeeName + "(Requested)";
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     }
                     else if (status == "Approved") {
+                        approvedBy = data[i].ApprovedName + "(" + status + ")";
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     }
-                    else if (status == "Rejected" || status == "Cancelled") {
+                    else if (status == "Rejected") {
+                        approvedBy = data[i].ApprovedName + "(" + status + ")";
+                        status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
+                        action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
+                    } else if(status == "Cancelled")
+                    {
+                        approvedBy = data[i].EmployeeName + "(" + status + ")";
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
                     }
                     else if (status == "Requested For Cancel") {
+                        approvedBy = data[i].EmployeeName + "(" + status + ")";
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                     }
                     else {
+                        approvedBy = data[i].ApprovedName + "(" + status + ")";
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                     }
-                    array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays,  appliedDate, status, data[i].ApprovedName, data[i].Reason])
+                    array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, appliedDate, status, approvedBy, data[i].Reason])
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
@@ -285,7 +299,7 @@
             complete: function () {
                 $('ajax-loader').css("visibility", "hidden");
             }
-        });         
+        });
     }
     function UpdateStatus(RequestId, Status) {
         var pid=@cookies.PersonId;
@@ -320,6 +334,7 @@
                 type: 'GET',
                 url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
                 success: function (data) {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     $.each(data, function (data, value) {
                         $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
                     });
