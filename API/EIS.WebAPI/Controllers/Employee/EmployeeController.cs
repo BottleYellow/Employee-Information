@@ -34,11 +34,11 @@ namespace EIS.WebAPI.Controllers
             IQueryable<Person> employees;
             if (loc == 0)
             {
-                employees = _repository.Employee.FindAllByCondition(e => e.Role.Name != "Admin");
+                employees = _repository.Employee.FindAllByCondition(e => e.Role.Name != "Admin").OrderBy(x=>x.FullName);
             }
             else
             {
-                employees = _repository.Employee.FindAllByCondition(e => e.LocationId == loc && e.Role.Name != "Admin");               
+                employees = _repository.Employee.FindAllByCondition(e => e.LocationId == loc && e.Role.Name != "Admin").OrderBy(x => x.FullName);               
             }
             return Ok(employees);
 
