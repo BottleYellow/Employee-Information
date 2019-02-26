@@ -239,6 +239,7 @@
                                 $("#btnSubmit").prop("disabled", true);
                             }
                             else {
+                                $("#trd").val(days);
                                 var form = $("#cp");
                                 $.validator.unobtrusive.parse(form);
                                 if (form.valid()) {
