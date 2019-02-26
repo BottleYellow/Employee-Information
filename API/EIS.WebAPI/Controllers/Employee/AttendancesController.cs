@@ -199,6 +199,13 @@ namespace EIS.WebAPI.Controllers
         [HttpGet("GetDateWiseAttendance/{id}/{LocationId}/{startDate}/{endDate}")]
         public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]int LocationId, [FromRoute]string startDate, [FromRoute]string endDate)
         {
+            DateTime minDate = DateTime.Now;
+            try { minDate = _repository.Attendances.FindAll().Min(x => x.DateIn); } catch (Exception) { }
+
+            if (Convert.ToDateTime(startDate) < minDate)
+            {
+                startDate = minDate.ToString();
+            }
             if (Convert.ToDateTime(endDate) > DateTime.Now.Date)
             {
                 endDate = DateTime.Now.Date.ToString();

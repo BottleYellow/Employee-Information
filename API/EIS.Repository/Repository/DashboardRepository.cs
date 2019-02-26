@@ -14,6 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -45,6 +46,12 @@ namespace EIS.Repositories.Repository
             usp = "LMS.usp_GetAdminDashboardLeaveDetails @locationId";
             Model.sp_AdminDashboardLeaves = _dbContext._sp_AdminDashboardLeave.FromSql(usp, param).ToList();
 
+
+            //foreach (var x in results)
+            //{
+            //    x.p.Attendance = x.Attendances.ToList();
+            //}
+            //var result = results.Select(x => x.p).ToList();
             if (attendanceStatus == "Present")
             {
                 Model.sP_AdminDashboards = Model.sP_AdminDashboards.Where(x => x.TimeIn != null).ToList();
@@ -105,7 +112,7 @@ namespace EIS.Repositories.Repository
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
-
+            string LocationName = "";
             if (location == 0)
             {
                 holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true).ToList();
@@ -114,6 +121,7 @@ namespace EIS.Repositories.Repository
             else
             {
                 holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true).ToList();
+                LocationName = _dbContext.Locations.Where(x => x.Id == location).FirstOrDefault().LocationName.ToUpper();
                 leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
 
@@ -156,7 +164,7 @@ namespace EIS.Repositories.Repository
                     holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
                     holidayCalanderData.StartDate = holiday.Date;
                     holidayCalanderData.EndDate = holiday.Date;
-                    holidayCalanderData.Color = "Red";
+                    holidayCalanderData.Color = "Orange";
                     holidayCalanderData.IsFullDay = true;
 
                     calendarDataList.Add(holidayCalanderData);
@@ -177,7 +185,7 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-                if (location == 2 || location == 0)
+                if (LocationName == "BANER" || LocationName == "")
                 {
                     if (date.DayOfWeek == DayOfWeek.Saturday)
                     {
@@ -223,15 +231,38 @@ namespace EIS.Repositories.Repository
                     presentCalanderData.IsFullDay = true;
                     StringBuilder sb1 = new StringBuilder();
                     int presentNumber = 1;
+                    sb1.AppendLine("<br/>");
+                    sb1.AppendLine("<table class='table' style='height:200px; overflow-y:auto; display:block;'>");
+                    sb1.AppendLine("<thead>");
+                    sb1.AppendLine("<tr>");
+                    sb1.AppendLine("<th>S.No</th><th>NAME</th><th>ClockIn</th><th>ClockOut</th>");
+                    sb1.AppendLine("</tr>");
+                    sb1.AppendLine("</thead>");
+                    sb1.AppendLine("<tbody>");
                     foreach (var d in resultPresent)
                     {
+                        sb1.AppendLine("<tr>");
+                        sb1.AppendLine("<td>" + presentNumber + ")</td>");
+                        sb1.AppendLine("<td>" + d.FullName + "</td>");
                         if (d != null)
                         {
-                            sb1.AppendLine("<br/>");
-                            sb1.AppendLine(presentNumber + ") " + d.FullName + " (" + d.Attendance.FirstOrDefault().TimeIn.ToString(@"hh\:mm") + "-" + d.Attendance.FirstOrDefault().TimeOut.GetValueOrDefault(new TimeSpan()).ToString(@"hh\:mm") + ")");
+                            DateTime timeIn = DateTime.ParseExact(d.Attendance.FirstOrDefault().TimeIn.ToString(), "HH:mm:ss", CultureInfo.InvariantCulture);
+                            sb1.AppendLine("<td>" + timeIn.ToString("hh:mm tt") + "</td>");
+                            if (d.Attendance.FirstOrDefault().TimeOut != null)
+                            {
+                                DateTime timeOut = DateTime.ParseExact(d.Attendance.FirstOrDefault().TimeOut.ToString(), "HH:mm:ss", CultureInfo.InvariantCulture);
+                                sb1.AppendLine("<td>" + timeOut.ToString("hh:mm tt") + "</td>");
+                            }
+                            else
+                            {
+                                sb1.AppendLine("<td>-</td>");
+                            }
                             presentNumber++;
                         }
+                        sb1.AppendLine("<tr>");
                     }
+                    sb1.AppendLine("</tbody>");
+                    sb1.AppendLine("</table>");
                     presentCalanderData.Description = sb1.ToString();
                     calendarDataList.Add(presentCalanderData);
 
@@ -239,22 +270,34 @@ namespace EIS.Repositories.Repository
                     absentCount = resultAbsent.Count();
 
                     CalendarData absentCalanderData = new CalendarData();
-                    absentCalanderData.Title = "Absent Count : " + absentCount;
+                    absentCalanderData.Title = "OnLeave Count : " + absentCount;
                     absentCalanderData.StartDate = date;
                     absentCalanderData.EndDate = date;
                     absentCalanderData.Color = "Red";
                     absentCalanderData.IsFullDay = true;
                     StringBuilder sb2 = new StringBuilder();
                     int absentNumber = 1;
+                    sb2.AppendLine("<br/>");
+                    sb2.AppendLine("<table class='table' style='height:200px; overflow-y:auto; display:block;'>");
+                    sb2.AppendLine("<thead>");
+                    sb2.AppendLine("<tr>");
+                    sb2.AppendLine("<th>S.No</th><th>NAME</th>");
+                    sb2.AppendLine("</tr>");
+                    sb2.AppendLine("</thead>");
+                    sb2.AppendLine("<tbody>");
                     foreach (var d in resultAbsent)
                     {
                         if (d != null)
                         {
-                            sb2.AppendLine("<br/>");
-                            sb2.AppendLine(absentNumber + ") " + d.FullName);
+                            sb2.AppendLine("<td>" + absentNumber + ")</td>");
+                            sb2.AppendLine("<td>" + d.FullName + "</td>");
                             absentNumber++;
                         }
+                        sb2.AppendLine("<tr>");
                     }
+
+                    sb2.AppendLine("</tbody>");
+                    sb2.AppendLine("</table>");
                     absentCalanderData.Description = sb2.ToString();
                     calendarDataList.Add(absentCalanderData);
                 }
@@ -267,18 +310,18 @@ namespace EIS.Repositories.Repository
             List<CalendarData> calendarDataList = new List<CalendarData>();
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
-            IEnumerable<Attendance> attendances= new  List<Attendance>();
+            IEnumerable<Attendance> attendances = new List<Attendance>();
             int? locationId = _dbContext.Person.Where(x => x.Id == personId).FirstOrDefault().LocationId;
-            
+
             attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
-            if(locationId!=null)
+            if (locationId != null)
             {
                 holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId);
             }
-           
+
             leaveList = _dbContext.LeaveRequests.Where(x => x.PersonId == personId);
             int count = 0;
-          
+
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
 
@@ -294,9 +337,11 @@ namespace EIS.Repositories.Repository
                     {
                         calendarData.Color = "Light Blue";
                     }
-                    else if (leaveRequest.Status == "Approved"){
+                    else if (leaveRequest.Status == "Approved")
+                    {
                         calendarData.Color = "Orange";
-                    }else if(leaveRequest.Status == "Rejected")
+                    }
+                    else if (leaveRequest.Status == "Rejected")
                     {
                         calendarData.Color = "Red";
                     }
@@ -304,8 +349,8 @@ namespace EIS.Repositories.Repository
                     {
                         calendarData.Color = "Violet";
                     }
-                            
-                    
+
+
                     calendarData.IsFullDay = true;
                     calendarDataList.Add(calendarData);
                 }
@@ -316,7 +361,7 @@ namespace EIS.Repositories.Repository
                 {
                     CalendarData attendanceCalendarData = new CalendarData();
                     string timeout = attendance.TimeOut == null ? "nil" : attendance.TimeOut.ToString();
-                    attendanceCalendarData.Title = "Present ("+DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt")+"-"+ timeout + ")";
+                    attendanceCalendarData.Title = "Present (" + DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt") + "-" + timeout + ")";
                     attendanceCalendarData.Description = "TotalWorkingHours " + attendance.TotalHours;
                     attendanceCalendarData.Color = "Green";
                     attendanceCalendarData.StartDate = date;
@@ -324,7 +369,7 @@ namespace EIS.Repositories.Repository
                     attendanceCalendarData.IsFullDay = true;
                     calendarDataList.Add(attendanceCalendarData);
                 }
-               
+
 
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
@@ -355,26 +400,27 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-                if (locationId == 2) { 
-                if (date.DayOfWeek == DayOfWeek.Saturday)
+                if (locationId == 2)
                 {
-                    count++;
-                    if (count % 2 == 0)
+                    if (date.DayOfWeek == DayOfWeek.Saturday)
                     {
-                        CalendarData holidayCalanderData = new CalendarData();
-                        holidayCalanderData.Title = count + "nd Saturday Weekly Off";
-                        holidayCalanderData.Description = "Holiday";
-                        holidayCalanderData.StartDate = date;
-                        holidayCalanderData.EndDate = date;
-                        holidayCalanderData.Color = "Orange";
-                        holidayCalanderData.IsFullDay = true;
-                        calendarDataList.Add(holidayCalanderData);
+                        count++;
+                        if (count % 2 == 0)
+                        {
+                            CalendarData holidayCalanderData = new CalendarData();
+                            holidayCalanderData.Title = count + "nd Saturday Weekly Off";
+                            holidayCalanderData.Description = "Holiday";
+                            holidayCalanderData.StartDate = date;
+                            holidayCalanderData.EndDate = date;
+                            holidayCalanderData.Color = "Orange";
+                            holidayCalanderData.IsFullDay = true;
+                            calendarDataList.Add(holidayCalanderData);
+                        }
                     }
-                }
                 }
             }
 
             return calendarDataList;
         }
-    }        
+    }
 }

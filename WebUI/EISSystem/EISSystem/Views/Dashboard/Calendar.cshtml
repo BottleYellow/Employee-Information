@@ -127,7 +127,7 @@
                     if (calEvent.end != null) {
                         $description.append($('<p/>').html('<b>End Date : </b>' + calEvent.end.format("DD-MMM-YYYY")));
                 }
-                if (calEvent.title.includes("Present")||calEvent.title.includes("Absent")) {
+                if (calEvent.title.includes("Present")||calEvent.title.includes("OnLeave")) {
                     $description.append($('<p/>').html('<b>Employees : </b>' + calEvent.description));
                 } else {
                     $description.append($('<p/>').html('<b>Description : </b>' + calEvent.description));
