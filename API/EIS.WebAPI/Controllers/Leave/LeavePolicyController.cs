@@ -102,7 +102,7 @@ namespace EIS.WebAPI.Controllers.Leave
                     Credit.ValidFrom = policy.ValidFrom;
                     Credit.ValidTo = policy.ValidTo;
                     Credit.AllotedDays = policy.Validity;
-                    Credit.Available = Credit.AllotedDays - diff;
+                    Credit.Available = Credit.AllotedDays - _repository.LeaveRules.GetLeaveCount(Credit.PersonId, Credit.LeaveId);
                     Credit.UpdatedDate = policy.UpdatedDate;
                     Credit.UpdatedBy = policy.UpdatedBy;
                     _repository.LeaveCredit.UpdateAndSave(Credit);

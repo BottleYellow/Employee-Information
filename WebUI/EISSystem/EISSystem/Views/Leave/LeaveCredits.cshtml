@@ -101,9 +101,9 @@
                     var validFrom = moment(data[i].ValidFrom).format("DD MMM YYYY");
                     var validTo = moment(data[i].ValidTo).format("DD MMM YYYY");
                     if (activeStatus == true) {
-                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + data[0].Id + ');">Edit</a></li><li><a class="inactive" id=' + data[0].Id + '>Delete</a></li></ul></div>';
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="fun(' + data[i].Id + ');">Edit</a></li><li><a class="inactive" id=' + data[i].Id + '>Delete</a></li></ul></div>';
                     } else {
-                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[0].Id + '>Activate</a></li></ul></div>';
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[i].Id + '>Activate</a></li></ul></div>';
                 }
                     array.push([data[i].LocationName, data[i].FullName, data[i].LeaveType, validFrom, validTo, data[i].AllotedDays, data[i].Available,action])
                 }

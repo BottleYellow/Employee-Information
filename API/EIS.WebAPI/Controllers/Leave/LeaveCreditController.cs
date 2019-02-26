@@ -98,7 +98,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 LeaveCredit leaveCredit = _repository.LeaveCredit.FindByCondition(x => x.Id == Credit.Id);
                 float diff = leaveCredit.AllotedDays - leaveCredit.Available;
                 Credit.TenantId = TenantId;
-                Credit.Available = Credit.AllotedDays - diff;
+                Credit.Available = Credit.AllotedDays - _repository.LeaveRules.GetLeaveCount(Credit.PersonId, Credit.LeaveId);
                 _repository.LeaveCredit.UpdateAndSave(Credit);
                 return Ok(Credit);
             }
