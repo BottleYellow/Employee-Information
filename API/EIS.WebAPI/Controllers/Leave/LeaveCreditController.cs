@@ -28,7 +28,7 @@ namespace EIS.WebAPI.Controllers.Leave
         [Route("GetLeaveCredits/{LocationId}")]
         public ActionResult Get([FromRoute]int LocationId)
         {        
-            IEnumerable<LeaveCreditViewModel> credits = LocationId==0? _repository.LeaveCredit. FindAll().Include(x=>x.Person).Include(x=>x.Person.Role).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Role.Name!="Admin" && x.IsActive == true && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
+            IEnumerable<LeaveCreditViewModel> credits = LocationId==0? _repository.LeaveCredit. FindAll().Include(x=>x.Person).Include(x=>x.Person.Role).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Role.Name!="Admin" && x.IsActive == true &&x.Person.IsActive==true && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
             {
                 Id=x.Id,
                 LocationName=x.Person.Location.LocationName,
@@ -40,7 +40,7 @@ namespace EIS.WebAPI.Controllers.Leave
                 Available=(int)x.Available,
                 ActiveStatus=x.IsActive
             }).ToList():
-                _repository.LeaveCredit.FindAll().Include(x => x.Person).Include(x => x.Person.Role).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Role.Name != "Admin" && x.IsActive == true && x.Person.LocationId == LocationId && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
+                _repository.LeaveCredit.FindAll().Include(x => x.Person).Include(x => x.Person.Role).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Role.Name != "Admin" && x.IsActive == true && x.Person.LocationId == LocationId &&x.Person.IsActive==true && x.Person.Location.IsActive == true).Select(x=>new LeaveCreditViewModel
                 {
                     Id = x.Id,
                     LocationName = x.Person.Location.LocationName,

@@ -15,7 +15,7 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.Country).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.PinCode).Matches("^[0-9]*$").NotNull();
             RuleFor(x => x.Relation).Matches("^[a-zA-Z ]*$").NotNull();
-            RuleFor(x => x.MobileNumber).Matches("^[0-9]*$").NotNull();
+            RuleFor(x => x.MobileNumber).Length(10).Matches("^[0-9]*$").NotNull();
             RuleFor(x => x.PhoneNumber).Matches("^[0-9]*$");
         }
     }
