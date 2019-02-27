@@ -376,7 +376,7 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Role> data = JsonConvert.DeserializeObject<List<Role>>(stringData);
             ViewBag.Designations = data;
-            ViewData["Controllers"] = _controllerService.GetControllers();
+            ViewData["Controllers"] = _controllerService.GetControllers().OrderBy(x=>x.DisplayName);
             return View();
         }
         [HttpPost]
@@ -385,7 +385,7 @@ namespace EIS.WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Controllers"] = _controllerService.GetControllers();
+                ViewData["Controllers"] = _controllerService.GetControllers().OrderBy(x => x.DisplayName);
                 return View(viewModel);
             }
             var role = new Role
@@ -448,7 +448,7 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Role")]
         public ActionResult EditRole(int id)
         {
-            ViewData["Controllers"] = _controllerService.GetControllers();
+            ViewData["Controllers"] = _controllerService.GetControllers().OrderBy(x => x.DisplayName);
             HttpResponseMessage response = _services.Roles.GetResponse(ApiUrl+"/api/Employee/Designations/" + id + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Role role = JsonConvert.DeserializeObject<Role>(stringData);
@@ -470,7 +470,7 @@ namespace EIS.WebApp.Controllers
             HttpClient client = _services.Roles.GetService();
             if (!ModelState.IsValid)
             {
-                ViewData["Controllers"] = _controllerService.GetControllers();
+                ViewData["Controllers"] = _controllerService.GetControllers().OrderBy(x => x.DisplayName);
                 return View(viewModel);
             }
             string stringData = _services.Roles.GetResponse(ApiUrl+"api/Employee/Designations/" + id + "" ).Content.ReadAsStringAsync().Result;

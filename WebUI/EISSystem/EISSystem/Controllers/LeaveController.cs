@@ -110,7 +110,7 @@ namespace EIS.WebApp.Controllers
             }
             else
                 ViewBag.ListOfPolicy = data;
-            return View();
+            return PartialView("RequestLeave");
         }
 
         [HttpPost]
@@ -130,7 +130,8 @@ namespace EIS.WebApp.Controllers
                     return View();
                 }
             }
-            return View("RequestLeave", request);
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("RequestLeave", request);
         }
         [DisplayName("Edit Leave Request")]
         public IActionResult EditLeaveRequest(int id)

@@ -35,6 +35,9 @@
                                         Date
                                     </th>
                                     <th>
+                                        Day
+                                    </th>
+                                    <th>
                                         Holiday
                                     </th>
                                 </tr>
@@ -42,13 +45,17 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @item.Date.ToString("dd MMM yyyy")
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Vacation)
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>
+                                        @item.Date.ToString("dd MMM yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date.DayOfWeek)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Vacation)
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -61,12 +68,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable({
-            "aoColumns": [
-                { "sType": "date" },
-                null
-            ],
-        });
+        $('#example').DataTable();
     });
 </script>
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>

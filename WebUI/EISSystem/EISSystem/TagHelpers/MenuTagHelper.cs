@@ -34,7 +34,6 @@ namespace EIS.WebApp.TagHelpers
             String[] SubMenus = { "List Of Employees", "Leave Policies", "View All Requests", "Leave Credits", "Show My Leaves", "List Of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List Of Holidays","Attendance Datewise","Manage Locations","Show Holidays" };
             if (Role == "Admin" || Role=="HR" || Role == "Manager")
                 ParentMenus.SetValue("Employee Management", 4);
-
             foreach (var menu in AccessList)
             {
                 if (ParentMenus.Contains(menu.Name))
@@ -43,20 +42,40 @@ namespace EIS.WebApp.TagHelpers
                     output.TagMode = TagMode.StartTagAndEndTag;
                     if (menu.ParentId == 0)
                     {
-                        output.Content.AppendHtml("<a class='menu-toggle'><span>" + menu.Name + "</span></a>");
-                        output.Content.AppendHtml("<ul class='ml-menu'>");
-                        IEnumerable<Navigation> subMenuList = from i in AccessList
-                                          where i.ParentId == menu.Id
-                                          select i;
+                        List<Navigation> subMenuList = (from i in AccessList
+                                                              where i.ParentId == menu.Id
+                                                              select i).ToList();
+                        List<Navigation> NewList = new List<Navigation>();
                         foreach (var submenu in subMenuList)
-                        {
                             if (SubMenus.Contains(submenu.Name))
+                                NewList.Add(submenu);
+                        if (NewList.Count() == 1)
+                        {
+                            var submenu = NewList.FirstOrDefault();
+                            output.Content.AppendHtml("<a href=" + appBaseUrl+submenu.URL + "><span>" + submenu.Name + "</span></a>");
+                        }
+                        else
+                        {
+                            int cnt = 0;
+                            foreach (var submenu in subMenuList)
+                                if (SubMenus.Contains(submenu.Name))
+                                    cnt++;
+                            if (cnt > 0)
                             {
-                                string href = appBaseUrl + submenu.URL;
-                                output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
+                                output.Content.AppendHtml("<a class='menu-toggle'><span>" + menu.Name + "</span></a>");
+                                output.Content.AppendHtml("<ul class='ml-menu'>");
+
+                                foreach (var submenu in subMenuList)
+                                {
+                                    if (SubMenus.Contains(submenu.Name))
+                                    {
+                                        string href = appBaseUrl + submenu.URL;
+                                        output.Content.AppendHtml("<li><a href=" + href + ">" + submenu.Name + "</a></li>");
+                                    }
+                                }
+                                output.Content.AppendHtml("</ul>");
                             }
                         }
-                        output.Content.AppendHtml("</ul>");
                     }
                 }
             }

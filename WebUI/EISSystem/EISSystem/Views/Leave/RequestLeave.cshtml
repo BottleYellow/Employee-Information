@@ -15,331 +15,298 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
-<html>
-<head>
-    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-    <style>
-        .dataTables_wrapper .myexport .dt-buttons {
-            float: right;
-        }
+<!-- Modal -->
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+    }
 
-        .ajax-loader {
-            visibility: hidden;
-            position: absolute;
-            z-index: +100 !important;
-            width: 80%;
-            height: 80%;
-        }
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
 
-            .ajax-loader img {
-                position: relative;
-                top: 45%;
-                left: 45%;
-            }
-        table, td, th {
-            border: 1px solid #ddd;
-            text-align: left;
+        .ajax-loader img {
+            position: relative;
+            top: 45%;
+            left: 45%;
         }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-        }
-    </style>
-    @**@<!-- Bootstrap Material Datetime Picker Css -->
-    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
-    <!-- Bootstrap DatePicker Css -->
-    <link href="~/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
-</head>
-<body>
+</style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+<div id="md" class="modal-dialog" role="document">
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
-    <div class="container-fluid">
-        <div class="block-header">
-            <HeaderWithButton header-name="Request For Leave"></HeaderWithButton>
+    <div class="modal-content">
+        <div class="modal-header">
+            <HeaderWithButton class="modal-title" header-name="Add Future Leave"></HeaderWithButton>
         </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+        <div class="modal-body">
+            <form id="cp" method="post">
+                @if (ViewBag.ListOfPolicy != null)
+    {
+            <div class="form-group" id="LeaveType">
+                <label asp-for="LeaveType">Leave Type : </label>
+                <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                    <option value="0">-- Select Leave Type --</option>
+                </select>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
+            </div>
+}
 
-                    <div class="body">
-                        <form id="cp" method="post">
-                            @if (ViewBag.ListOfPolicy != null)
-                            {
-                                <div class="form-group" id="LType">
-                                    <label asp-for="LeaveType">Leave Type : </label>
-                                    <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                                        <option value="0">-- Select Leave Type --</option>
-                                    </select>
-                                    <span asp-validation-for="LeaveType" class="text-danger"></span>
-                                </div>
-                            }
-
-                            <label>Dates Requested : </label>
-                            <div class="row clearfix">
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <div style="width:125px;" class="form-line">
-                                            <input class="form-control" type="text" id="date1" asp-for="FromDate" autocomplete="off" disabled />
-                                            @*<input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control" disabled>*@
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="col-sm-1"><label>To</label></span>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <div style="width:125px;" class="form-line">
-                                            <input class="form-control" type="text" id="date2" asp-for="ToDate" autocomplete="off" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                            </div>
-                            <div class="form-group">
-                                <label>Reason For Requested Leave :</label>
-                                <div class="form-line">
-                                    <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..." disabled></textarea>
-                                </div>
-                                <span asp-validation-for="Reason" class="text-danger"></span>
-                            </div>
-                            <input type="hidden" asp-for="LeaveType" id="tp" />
-                            <input type="hidden" asp-for="RequestedDays" id="trd" />
-                            <input type="hidden" asp-for="Available" id="av" />
-                            <input type="hidden" asp-for="TypeId" id="typeid" />
-                            <input type="hidden" asp-for="PersonId" id="psid" />
-                            <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Submit Request</button>
-                        </form>
+                <div class="form-group">
+                    <label>Dates Requested : </label>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="FromDate" value="" id="dateFrom" placeholder="select Date" autocomplete="off" disabled />
+                    </div>
+                    <span class="col-sm-1"><label>To</label></span>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="ToDate" value="" id="dateTo" placeholder="select Date" autocomplete="off" disabled />
                     </div>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label>Reason For Requested Leave :</label>
+                    <div class="form-line">
+                        <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..."></textarea>
+                    </div>
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="LeaveType" id="tp" />
+                <input type="hidden" asp-for="RequestedDays" id="trd" />
+                <input type="hidden" asp-for="Available" id="av" />
+                <input type="hidden" asp-for="TypeId" id="typeid" />
+                <input type="hidden" asp-for="PersonId" id="psid" />
+                <div class="modal-footer">
+                    <button id="btnAddLeave" name="btnAddLeave" type="button" class="btn btn-link waves-effect">Submit</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
         </div>
+
     </div>
+</div>
 
 
 
-    <!-- Autosize Plugin Js -->
-    <script src="~/plugins/autosize/autosize.js"></script>
-    <script src="~/js/pages/forms/basic-form-elements.js"></script>
 
-    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
-    <script src="~/plugins/momentjs/moment.js"></script>
-    <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 
-    <script src="~/js/pages/ui/modals.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
 
-    <script src="~/plugins/bootbox/bootbox.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-</body>
-</html>
-
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
-    var availableLeaves = null;
-    var d = new Date();
-    d.setDate(d.getDate());
-    $('#date1').datetimepicker({
-        format: "DD/MMM/YYYY",
-        defaultDate: d
-    });
-    $('#date2').datetimepicker({
-        format: "DD/MMM/YYYY",
-        defaultDate: d
-    });
-    $(document).ready(function () {
-        if ('@ViewBag.Status'=='NoData')
-        {
-            bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
-                location.href = '@Url.Action("ShowMyLeaves", "Leave")';
-            });
-        }
-          else {
-             var firstDate = moment(document.getElementById("date1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-             var secondDate = moment(document.getElementById("date2").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-             var diff = new Date(new Date(secondDate) - new Date(firstDate));
-             var days = diff / 1000 / 60 / 60 / 24 + 1;
-             $("#trd").val(days);
-         }
-        $("#btnSubmit").prop("disabled", true);
-    })
-    $('#date1').on('dp.change', function (e) {
-        var x = document.getElementById("date1").value;
-        var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var availableLeaves = null;
         var d = new Date();
-        d.setDate(d.getDate() - 1);
-        $("#date2").val('');
-        $("#btnSubmit").prop("disabled", true);
-        if (new Date(firstDate) <= d) {
-            bootbox.alert({
-                message: "Please select valid date."
-            });
-            $("#date1").val('');
-            $("#date2").val('');
-        }
-    });
-    $('#date2').on('dp.change', function (e) {
-        var fd = document.getElementById("date1").value;
-        var sd = document.getElementById("date2").value;
-        var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
-        var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
-        var diff = new Date(new Date(d2) - new Date(d1));
-        var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (new Date(d1) > new Date(d2)) {
-            bootbox.alert({
-                message: "Please select valid date"
-            });
-            $("#date2").val('');
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else if (parseInt(days) > parseInt(availableLeaves)) {
-            bootbox.alert({
-                message: "You can request leave for only " + availableLeaves + " days."
-            });
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else {
-            $("#trd").val(days);
-            $("#btnSubmit").removeAttr('disabled');
-        }
-    });
-    $('#btnSubmit').click(function () {
-        var trd = document.getElementById("trd").value;
-        availableLeaves = availableLeaves - trd;
-        $("#av").val(availableLeaves);
-
-        var d1 = moment(document.getElementById("date1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-        var d2 = moment(document.getElementById("date2").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-        var diff = new Date(new Date(d2) - new Date(d1));
-        var days = diff / 1000 / 60 / 60 / 24 + 1;
-        var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
-        var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
-        var result = null;
-        var pid = @cookies.PersonId;
-        $.ajax({
-            url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + x + "/" + y,
-            type: 'GET',
-            success: function (data) {
-                if (data == 'success') {
-                    $.ajax({
-                        url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
-                        type: 'GET',
-                        success: function (data) {
-                            days = data;
-                            if (days == 0) {
-                                bootbox.alert({
-                                    message: "Plese select working days"
-                                });
-                                $("#btnSubmit").prop("disabled", true);
-                            }
-                            else {
-                                $("#trd").val(days);
-                                var form = $("#cp");
-                                $.validator.unobtrusive.parse(form);
-                                if (form.valid()) {
-                                    var d = form.serialize();
-                                    $.ajax({
-                                        url: '@Url.Action("RequestLeave", "Leave")',
-                                        type: 'POST',
-                                        data: d,
-                                        beforeSend: function () {
-                                            $('.ajax-loader').css("visibility", "visible");
-                                        },
-                                        success: function (data) {
-                                            bootbox.alert({
-                                                message: "Request Submitted Successfully!",
-                                                callback: function () {
-                                                    window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
-                                                }
-                                            });
-                                        },
-                                        complete: function () {
-                                            $('.ajax-loader').css("visibility", "hidden");
-                                        },
-                                        error: function (data) {
-                                            alert(data.responseText);
-                                        }
-                                    });
-                                }
-                                return false;
-                            }
-                        },
-                        error: function (data) {
-                        }
-                    });
-                }
-                else {
-                    bootbox.alert({
-                        message: data
-                    });
-                    $("#btnSubmit").prop("disabled", true);
-                }
-            },
-            error: function (data) {
-
+        d.setDate(d.getDate());
+        $('#dateFrom').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: d
+        });
+        $('#dateTo').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: d
+        });
+        $(document).ready(function () {
+            if ('@ViewBag.Status'=='NoData')
+            {
+                bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
+                    location.href = '@Url.Action("ShowMyLeaves", "Leave")';
+                });
+            }
+              else {
+                 var firstDate = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+                 var secondDate = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+                 var diff = new Date(new Date(secondDate) - new Date(firstDate));
+                 var days = diff / 1000 / 60 / 60 / 24 + 1;
+                 $("#trd").val(days);
+             }
+            $("#btnAddLeave").prop("disabled", true);
+        })
+        $('#dateFrom').on('dp.hide', function (e) {
+            var x = document.getElementById("dateFrom").value;
+            var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d = new Date();
+            d.setDate(d.getDate() - 1);
+            $("#dateTo").val('');
+            $("#btnAddLeave").prop("disabled", true);
+            if (new Date(firstDate) <= d) {
+                bootbox.alert({
+                    message: "Please select valid date."
+                });
+                $("#dateFrom").val('');
+                $("#dateTo").val('');
             }
         });
+        $('#dateTo').on('dp.hide', function (e) {
+            var fd = document.getElementById("dateFrom").value;
+            var sd = document.getElementById("dateTo").value;
+            var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(d2) - new Date(d1));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            if (new Date(d1) > new Date(d2)) {
+                bootbox.alert({
+                    message: "Please select valid date"
+                });
+                $("#dateTo").val('');
+                $("#btnAddLeave").prop("disabled", true);
+            }
+            else if (parseInt(days) > parseInt(availableLeaves)) {
+                bootbox.alert({
+                    message: "You can request leave for only " + availableLeaves + " days."
+                });
+                $("#btnAddLeave").prop("disabled", true);
+            }
+            else {
+                $("#trd").val(days);
+                $("#btnAddLeave").removeAttr('disabled');
+            }
+        });
+        $('#btnAddLeave').click(function () {
+            var trd = document.getElementById("trd").value;
+            availableLeaves = availableLeaves - trd;
+            $("#av").val(availableLeaves);
 
-    });
-
-    function myFunction() {
-        $("#msg").remove();
-        var x = document.getElementById("type").value;
-        if (x == 0) {
-            $("#date1").prop("disabled", true);
-            $("#date2").prop("disabled", true);
-            $("#reason").prop("disabled", true);
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else {
+            var d1 = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d2 = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(d2) - new Date(d1));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            var x = moment(document.getElementById("dateFrom").value).format('DD-MMM-YYYY');
+            var y = moment(document.getElementById("dateTo").value).format('DD-MMM-YYYY');
+            var result = null;
             var pid = @cookies.PersonId;
-            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-                availableLeaves = data;
-                if (data == 0) {
-                    $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
-                }
-                else if (data == -1) {
-                    bootbox.alert({
-                        message: "Leaves are not credited in your account."
-                    });
-                }
-                else {
-                    var t = $("#type option:selected").text();
-                    $("#tp").val(t);
-                    $("#psid").val(pid);
-                    $("#typeid").val(x);
-                    $("#LType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
-                    $("#date1").removeAttr('disabled');
-                    $("#date2").removeAttr('disabled');
-                    $("#reason").removeAttr('disabled');
-                    $("#btnSubmit").removeAttr('disabled');
+            $.ajax({
+                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + x + "/" + y,
+                type: 'GET',
+                success: function (data) {
+                    if (data == 'success') {
+                        $.ajax({
+                            url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
+                            type: 'GET',
+                            success: function (data) {
+                                days = data;
+                                if (days == 0) {
+                                    bootbox.alert({
+                                        message: "Plese select working days"
+                                    });
+                                    $("#btnAddLeave").prop("disabled", true);
+                                }
+                                else {
+                                    $("#trd").val(days);
+                                    var form = $("#cp");
+                                    $.validator.unobtrusive.parse(form);
+                                    if (form.valid()) {
+                                        var d = form.serialize();
+                                        $.ajax({
+                                            url: '@Url.Action("RequestLeave", "Leave")',
+                                            type: 'POST',
+                                            data: d,
+                                            beforeSend: function () {
+                                                $('.ajax-loader').css("visibility", "visible");
+                                            },
+                                            success: function (data) {
+                                                bootbox.alert({
+                                                    message: "Request Submitted Successfully!",
+                                                    callback: function () {
+                                                        window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
+                                                    }
+                                                });
+                                            },
+                                            complete: function () {
+                                                $('.ajax-loader').css("visibility", "hidden");
+                                            },
+                                            error: function (data) {
+                                                alert(data.responseText);
+                                            }
+                                        });
+                                    }
+                                    return false;
+                                }
+                            },
+                            error: function (data) {
+                            }
+                        });
+                    }
+                    else {
+                        bootbox.alert({
+                            message: data
+                        });
+                        $("#btnAddLeave").prop("disabled", true);
+                    }
+                },
+                error: function (data) {
+
                 }
             });
-        }
-    }
-    $("#btnModal").click(function () {
-        var url = $("#modal-placeholder").data('url');
-        $.get(url, function (data) {
-            $("#modal-placeholder").html(data);
-            $("#modal-placeholder").modal('show');
-            $('#date1').datetimepicker({
-                format: "DD/MMM/YYYY"
-            });
-            $('#date2').datetimepicker({
-                format: "DD/MMM/YYYY"
-            });
-        }).fail(function (xhr, status, error) {
-            if (xhr.status == 401) {
-                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
-            } else {
-                bootbox.alert("<h4>Unable to add the Record</h4>");
-            }
+
         });
-    });
+
+        function myFunction() {
+            debugger;
+            $("#msg").remove();
+            var x = document.getElementById("type").value;
+            if (x == 0) {
+                $("#dateFrom").prop("disabled", true);
+                $("#dateTo").prop("disabled", true);
+                $("#reason").prop("disabled", true);
+                $("#btnAddLeave").prop("disabled", true);
+            }
+            else {
+                var pid = @cookies.PersonId;
+                $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+                    availableLeaves = data;
+                    if (data == 0) {
+                        $("#LeaveType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
+                    }
+                    else if (data == -1) {
+                        bootbox.alert({
+                            message: "Leaves are not credited in your account."
+                        });
+                    }
+                    else {
+                        var t = $("#type option:selected").text();
+                        $("#tp").val(t);
+                        $("#psid").val(pid);
+                        $("#typeid").val(x);
+                        $("#LeaveType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
+                        $("#dateFrom").removeAttr('disabled');
+                        $("#dateTo").removeAttr('disabled');
+                        $("#reason").removeAttr('disabled');
+                        $("#btnAddLeave").removeAttr('disabled');
+                    }
+                });
+            }
+        }
+        $("#btnModal").click(function () {
+            var url = $("#modal-placeholder").data('url');
+            $.get(url, function (data) {
+                $("#modal-placeholder").html(data);
+                $("#modal-placeholder").modal('show');
+                $('#dateFrom').datetimepicker({
+                    format: "DD/MMM/YYYY"
+                });
+                $('#dateTo').datetimepicker({
+                    format: "DD/MMM/YYYY"
+                });
+            }).fail(function (xhr, status, error) {
+                if (xhr.status == 401) {
+                    bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+                } else {
+                    bootbox.alert("<h4>Unable to add the Record</h4>");
+                }
+            });
+        });
 </script>
