@@ -145,11 +145,17 @@
     var availableLeaves = null;
     var d = new Date();
     d.setDate(d.getDate());
+    var minDate = moment().add(-1, 'seconds').toDate();
+    var defaultDate = moment().toDate();
     $('#date1').datetimepicker({
+        useCurrent: false,
+        minDate: minDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
     $('#date2').datetimepicker({
+        useCurrent: false,
+        minDate: minDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });

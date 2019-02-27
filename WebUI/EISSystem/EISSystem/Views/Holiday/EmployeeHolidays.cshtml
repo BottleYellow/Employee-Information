@@ -35,6 +35,9 @@
                                         Date
                                     </th>
                                     <th>
+                                        Day
+                                    </th>
+                                    <th>
                                         Holiday
                                     </th>
                                 </tr>
@@ -45,6 +48,10 @@
                                     <tr>
                                         <td>
                                             @item.Date.ToString("dd MMM yyyy")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date.DayOfWeek)
+                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Vacation)
                                         </td>
@@ -61,12 +68,13 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable({
-            "aoColumns": [
-                { "sType": "date" },
-                null
-            ],
-        });
+        $('#example').DataTable();
+        //{
+        //    //"aoColumns": [
+        //    //    { "sType": "date" },
+        //    //    null
+        //    //],
+        //});
     });
 </script>
 <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>

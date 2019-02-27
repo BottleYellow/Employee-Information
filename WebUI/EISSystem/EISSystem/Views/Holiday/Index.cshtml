@@ -51,6 +51,7 @@
                                     <tr>
                                         <th>Location</th>
                                         <th>Date</th>
+                                        <th>Day</th>
                                         <th>Holiday</th>
                                     </tr>
                                 </thead>
@@ -128,6 +129,15 @@
                     "data": "Date", "name": "Date" ,"autoWidth": true, render: function (data) {
                         data = moment(data).format('DD MMM YYYY');
                         return data;
+                    }
+                },
+                {
+                    "data": "Date", "name": "Date", "autoWidth": true, render: function (data) {
+                        debugger;
+                        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        var d = new Date(data);
+                        var dayName = days[d.getDay()];
+                        return dayName;
                     }
                 },
                 {

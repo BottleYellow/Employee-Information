@@ -103,12 +103,18 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     var d = new Date();
-    d.setDate(d.getDate()-1);
+    d.setDate(d.getDate() - 1);
+    var maxDate = moment().add(1, 'seconds').toDate();
+    var defaultDate = moment().toDate();
     $('#date1').datetimepicker({
+        useCurrent: false,
+        maxDate: maxDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
     $('#date2').datetimepicker({
+        useCurrent: false,
+        maxDate: maxDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
@@ -182,7 +188,8 @@
         var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
         var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
         var result = null;
-        var pid = @cookies.PersonId;
+         var pid = @cookies.PersonId;
+         
         $.ajax({
             url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + x + "/" + y,
             type: 'GET',
@@ -206,28 +213,48 @@
                                 if (form.valid()) {
                                     var d = form.serialize();
                                     //var url1 = "/Leave/RequestLeave";
-                                    $.ajax({
-                                        url: '@Url.Action("AddPastLeave", "Leave")',
-                                        type: 'POST',
-                                        data: d,
-                                        beforeSend: function () {
-                                            $('.ajax-loader').css("visibility", "visible");
+                                    var res = true;
+                                    debugger;
+                                    bootbox.confirm({
+                                        message: "Are you sure you want to add Past Leave?",
+                                        buttons: {
+                                            confirm: {
+                                                label: 'Yes',
+                                                className: 'btn-success'
+                                            },
+                                            cancel: {
+                                                label: 'No',
+                                                className: 'btn-danger'
+                                            }
                                         },
-                                        success: function (data) {
-                                            bootbox.alert({
-                                                message: "Past Leave Added Successfully",
-                                                callback: function () {
-                                                    window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
-                                                }
-                                            });
-                                        },
-                                        complete: function () {
-                                            $('.ajax-loader').css("visibility", "hidden");
-                                        },
-                                        error: function () {
-                                            bootbox.alert("Something went wrong..Please try after sometime");
+                                        callback: function (result) {
+                                            if (result == true) {
+                                                $.ajax({
+                                                    url: '@Url.Action("AddPastLeave", "Leave")',
+                                                    type: 'POST',
+                                                    data: d,
+                                                    beforeSend: function () {
+                                                        $('.ajax-loader').css("visibility", "visible");
+                                                    },
+                                                    success: function (data) {
+                                                        bootbox.alert({
+                                                            message: "Past Leave Added Successfully",
+                                                            callback: function () {
+                                                                window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
+                                                            }
+                                                        });
+                                                    },
+                                                    complete: function () {
+                                                        $('.ajax-loader').css("visibility", "hidden");
+                                                    },
+                                                    error: function () {
+                                                        bootbox.alert("Something went wrong..Please try after sometime");
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
+                                    
                                 }
                                 return false;
                             }

@@ -327,8 +327,14 @@
         $('#dob').datetimepicker({
             format: "DD/MMM/YYYY"
         });
+        var maxDate = moment().add(1, 'seconds').toDate();
+        var defaultDate = moment().toDate();
+        var d = new Date();
         $('#doj').datetimepicker({
-            format: "DD/MMM/YYYY"
+            useCurrent: false,
+            maxDate: maxDate,
+            defaultDate: d,
+            format: 'DD/MMM/YYYY'
         });
         $('#dob').val(dob);
         $('#doj').val(doj);

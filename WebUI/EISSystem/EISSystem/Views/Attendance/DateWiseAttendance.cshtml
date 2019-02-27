@@ -150,12 +150,18 @@
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         var d = new Date();
         d.setDate(d.getDate());
+        var maxDate = moment().add(1, 'seconds').toDate();
+        var defaultDate = moment().toDate();
         $("#fromdate").datetimepicker({
             format: "DD-MMM-YYYY",
-            defaultDate: d
+            useCurrent: false,
+            maxDate: maxDate,
+            defaultDate: d           
         });
         $("#todate").datetimepicker({
             format: "DD-MMM-YYYY",
+            useCurrent: false,
+            maxDate: maxDate,
             defaultDate: d
         });
 

@@ -214,8 +214,13 @@
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
+        var date = new Date();
+        var cMonth = date.getMonth();
+        var cDate = date.getDate();
+        var cYear = date.getFullYear();
         $('#inputmonth').datetimepicker({
-            format: "MM/YYYY"
+            format: "MM/YYYY",
+            maxDate: new Date(cYear, cMonth, cDate)
         });
         $('#inputmonth').val(m + '/' + y);
         generateReport(m + '/' + y, 'month');
@@ -223,20 +228,30 @@
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
+                var date = new Date();
+                var cMonth = date.getMonth();
+                var cDate = date.getDate();
+                var cYear = date.getFullYear();
                 $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
                 $('#inputweekdiv').hide();
                 $('#inputyear').datetimepicker({
-                    format: "YYYY"
+                    format: "YYYY",
+                    maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
             else if (v == 'month') {
+                var date = new Date();
+                var cMonth = date.getMonth();
+                var cDate = date.getDate();
+                var cYear = date.getFullYear();
                 $('#inputmonthdiv').show();
                 $('#inputyeardiv').hide();
                 $('#inputweekdiv').hide();
                 $('#inputmonth').datetimepicker({
-                    format: "MM/YYYY"
+                    format: "MM/YYYY",
+                    maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
             else if (v == 'week') {
@@ -306,8 +321,8 @@
                 url: '@Url.Action("EmployeeReports", "Attendance")?date=' + value + '&type=' + type,
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data._SP_ReportCount.AverageHours;
-                    document.getElementById("averageTimeIn").innerHTML = data._SP_ReportCount.AverageTimeIn;
-                    document.getElementById("averageTimeOut").innerHTML = data._SP_ReportCount.AverageTimeOut;
+                    document.getElementById("averageTimeIn").innerHTML = moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('hh:mm A');
+                    document.getElementById("averageTimeOut").innerHTML = moment(data._SP_ReportCount.AverageTimeOut, 'HH:mm:ss').format('hh:mm A');
                     document.getElementById("presentDays").innerHTML = data._SP_ReportCount.PresentDays;
                     document.getElementById("absentDays").innerHTML = data._SP_ReportCount.LeaveDays;
                     document.getElementById("totalWorkingDays").innerHTML = data._SP_ReportCount.TotalWorkingDays;
