@@ -37,7 +37,7 @@
 </style>
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-<div id="md" class="modal-dialog" role="document">
+<div id="md2" class="modal-dialog" role="document">
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
@@ -129,6 +129,8 @@
              });
          }
          else {
+             $("#msg2").remove();
+             $("#type").prop("selectedIndex", 1).change();
              var firstDate = moment(document.getElementById("date1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
              var secondDate = moment(document.getElementById("date2").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
              var diff = new Date(new Date(secondDate) - new Date(firstDate));
@@ -281,7 +283,7 @@
         });
     });
     function myFunction() {
-        $("#msg").remove();
+        
         var x = document.getElementById("type").value;
         if (x == 0) {
             $("#date1").prop("disabled", true);
@@ -291,12 +293,12 @@
         }
         else {
             var pid = @cookies.PersonId;
-            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-                availableLeaves = data;
-                if (data == 0) {
-                    $("#LType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
+            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data1) {
+                availableLeaves = data1;
+                if (data1 == 0) {
+                    $("#LType").append('<span id="msg2" class="text-danger">' + data1 + ' days are available</span>');
                 }
-                else if (data == -1) {
+                else if (data1 == -1) {
                     bootbox.alert({
                         message: "Leaves are not credited in your account."
                     });
@@ -306,7 +308,7 @@
                     $("#tp").val(t);
                     $("#psid").val(pid);
                     $("#typeid").val(x);
-                    $("#LType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
+                    $("#LType").append('<span id="msg2" class="text-success">' + data1 + ' days are available</span>');
                     $("#date1").removeAttr('disabled');
                     $("#date2").removeAttr('disabled');
                     $("#reason").removeAttr('disabled');

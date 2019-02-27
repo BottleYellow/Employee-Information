@@ -39,7 +39,7 @@
 </style>
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-<div id="md" class="modal-dialog" role="document">
+<div id="md1" class="modal-dialog" role="document">
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
@@ -48,12 +48,12 @@
             <HeaderWithButton class="modal-title" header-name="Add Future Leave"></HeaderWithButton>
         </div>
         <div class="modal-body">
-            <form id="cp" method="post">
+            <form id="cp1" method="post">
                 @if (ViewBag.ListOfPolicy != null)
     {
             <div class="form-group" id="LeaveType">
                 <label asp-for="LeaveType">Leave Type : </label>
-                <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                <select id="type1" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction1();">
                     <option value="0">-- Select Leave Type --</option>
                 </select>
                 <span asp-validation-for="LeaveType" class="text-danger"></span>
@@ -78,11 +78,11 @@
                     </div>
                     <span asp-validation-for="Reason" class="text-danger"></span>
                 </div>
-                <input type="hidden" asp-for="LeaveType" id="tp" />
-                <input type="hidden" asp-for="RequestedDays" id="trd" />
-                <input type="hidden" asp-for="Available" id="av" />
-                <input type="hidden" asp-for="TypeId" id="typeid" />
-                <input type="hidden" asp-for="PersonId" id="psid" />
+                <input type="hidden" asp-for="LeaveType" id="tp1" />
+                <input type="hidden" asp-for="RequestedDays" id="trd1" />
+                <input type="hidden" asp-for="Available" id="av1" />
+                <input type="hidden" asp-for="TypeId" id="typeid1" />
+                <input type="hidden" asp-for="PersonId" id="psid1" />
                 <div class="modal-footer">
                     <button id="btnAddLeave" name="btnAddLeave" type="button" class="btn btn-link waves-effect">Submit</button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
@@ -126,12 +126,14 @@
                     location.href = '@Url.Action("ShowMyLeaves", "Leave")';
                 });
             }
-              else {
+            else {
+                $("#msg1").remove();
+                $("#type1").prop("selectedIndex", 1).change();
                  var firstDate = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
                  var secondDate = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
                  var diff = new Date(new Date(secondDate) - new Date(firstDate));
                  var days = diff / 1000 / 60 / 60 / 24 + 1;
-                 $("#trd").val(days);
+                 $("#trd1").val(days);
              }
             $("#btnAddLeave").prop("disabled", true);
         })
@@ -171,14 +173,14 @@
                 $("#btnAddLeave").prop("disabled", true);
             }
             else {
-                $("#trd").val(days);
+                $("#trd1").val(days);
                 $("#btnAddLeave").removeAttr('disabled');
             }
         });
         $('#btnAddLeave').click(function () {
-            var trd = document.getElementById("trd").value;
-            availableLeaves = availableLeaves - trd;
-            $("#av").val(availableLeaves);
+            var trd1 = document.getElementById("trd1").value;
+            availableLeaves = availableLeaves - trd1;
+            $("#av1").val(availableLeaves);
 
             var d1 = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
             var d2 = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
@@ -205,8 +207,8 @@
                                     $("#btnAddLeave").prop("disabled", true);
                                 }
                                 else {
-                                    $("#trd").val(days);
-                                    var form = $("#cp");
+                                    $("#trd1").val(days);
+                                    var form = $("#cp1");
                                     $.validator.unobtrusive.parse(form);
                                     if (form.valid()) {
                                         var d = form.serialize();
@@ -254,10 +256,9 @@
 
         });
 
-        function myFunction() {
-            debugger;
-            $("#msg").remove();
-            var x = document.getElementById("type").value;
+        function myFunction1() {
+            $("#msg1").remove();
+            var x = document.getElementById("type1").value;
             if (x == 0) {
                 $("#dateFrom").prop("disabled", true);
                 $("#dateTo").prop("disabled", true);
@@ -269,7 +270,7 @@
                 $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
                     availableLeaves = data;
                     if (data == 0) {
-                        $("#LeaveType").append('<span id="msg" class="text-danger">' + data + ' days are available</span>');
+                        $("#LeaveType").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
                     }
                     else if (data == -1) {
                         bootbox.alert({
@@ -277,11 +278,11 @@
                         });
                     }
                     else {
-                        var t = $("#type option:selected").text();
-                        $("#tp").val(t);
-                        $("#psid").val(pid);
-                        $("#typeid").val(x);
-                        $("#LeaveType").append('<span id="msg" class="text-success">' + data + ' days are available</span>');
+                        var t = $("#type1 option:selected").text();
+                        $("#tp1").val(t);
+                        $("#psid1").val(pid);
+                        $("#typeid1").val(x);
+                        $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
                         $("#dateFrom").removeAttr('disabled');
                         $("#dateTo").removeAttr('disabled');
                         $("#reason").removeAttr('disabled');
@@ -290,23 +291,4 @@
                 });
             }
         }
-        $("#btnModal").click(function () {
-            var url = $("#modal-placeholder").data('url');
-            $.get(url, function (data) {
-                $("#modal-placeholder").html(data);
-                $("#modal-placeholder").modal('show');
-                $('#dateFrom').datetimepicker({
-                    format: "DD/MMM/YYYY"
-                });
-                $('#dateTo').datetimepicker({
-                    format: "DD/MMM/YYYY"
-                });
-            }).fail(function (xhr, status, error) {
-                if (xhr.status == 401) {
-                    bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
-                } else {
-                    bootbox.alert("<h4>Unable to add the Record</h4>");
-                }
-            });
-        });
 </script>

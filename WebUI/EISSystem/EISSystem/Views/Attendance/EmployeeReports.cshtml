@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div class="panel-heading">Total Working Days</div>
+                                            <div id="wd" class="panel-heading">Working Days (Till Now)</div>
                                             <div id="totalWorkingDays" class="panel-body"></div>
                                         </div>
                                     </div>
@@ -293,6 +293,12 @@
                 else {
                     totalDays = 365;
                 }
+                if (value == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Now)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 generateReport(value, 'year');
             }
 
@@ -302,6 +308,12 @@
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
+                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Now)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 totalDays = new Date(y, m, 0).getDate()
                 generateReport(value, 'month');
             }
