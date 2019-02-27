@@ -364,9 +364,10 @@ namespace EIS.Repositories.Repository
                 if (attendance != null)
                 {
                     CalendarData attendanceCalendarData = new CalendarData();
-                    string timeout = attendance.TimeOut == null ? "nil" : attendance.TimeOut.ToString();
-                    attendanceCalendarData.Title = "Present (" + DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt") + "-" + timeout + ")";
-                    attendanceCalendarData.Description = "TotalWorkingHours " + attendance.TotalHours;
+                    string timeout = attendance.TimeOut == null ? "Nil" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
+                    string totalHours = attendance.TotalHours == null ? "Nil" : attendance.TotalHours.ToString();
+                    attendanceCalendarData.Title = "Present (" + DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt") + " - " + timeout + ")";
+                    attendanceCalendarData.Description = "Total Working Hours " + totalHours;
                     attendanceCalendarData.Color = "Green";
                     attendanceCalendarData.StartDate = date;
                     attendanceCalendarData.EndDate = date;

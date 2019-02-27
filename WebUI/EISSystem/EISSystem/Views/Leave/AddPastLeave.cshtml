@@ -48,15 +48,15 @@
         <div class="modal-body">
             <form id="cp" method="post">
                 @if (ViewBag.ListOfPolicy != null)
-                {
-                    <div class="form-group" id="LType">
-                        <label asp-for="LeaveType">Leave Type : </label>
-                        <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                            <option value="0">-- Select Leave Type --</option>
-                        </select>
-                        <span asp-validation-for="LeaveType" class="text-danger"></span>
-                    </div>
-                }
+    {
+            <div class="form-group" id="LType">
+                <label asp-for="LeaveType">Leave Type : </label>
+                <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                    <option value="0">-- Select Leave Type --</option>
+                </select>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
+            </div>
+}
                 <div class="form-group">
                     <label>Dates Requested : </label>
                     <div class="form-line">
@@ -64,7 +64,7 @@
                     </div>
                     <span class="col-sm-1"><label>To</label></span>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="ToDate" value="" id="date2" placeholder="select Date" autocomplete="off" disabled/>
+                        <input class="form-control" type="text" asp-for="ToDate" value="" id="date2" placeholder="select Date" autocomplete="off" disabled />
                     </div>
                 </div>
 
@@ -80,7 +80,11 @@
                 <input type="hidden" asp-for="Available" id="av" />
                 <input type="hidden" asp-for="TypeId" id="typeid" />
                 <input type="hidden" asp-for="PersonId" id="psid" />
-                <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Submit</button>
+                
+                <div class="modal-footer">
+                    <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Submit</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
             </form>
         </div>
 
@@ -133,7 +137,7 @@
          }
         $("#btnSubmit").prop("disabled", true);
     })
-     $("#date1").on("dp.change", function () {
+     $("#date1").on("dp.hide", function () {
         var d1 = document.getElementById("date1").value;
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d = new Date();
@@ -147,7 +151,7 @@
         $("#date2").val('');
         $("#btnSubmit").prop("disabled", true);
     })
-     $("#date2").on("dp.change", function () {
+     $("#date2").on("dp.hide", function () {
         var d1 = document.getElementById("date1").value;
         var d2 = document.getElementById("date2").value;
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");

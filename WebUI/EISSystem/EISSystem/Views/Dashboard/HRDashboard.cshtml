@@ -120,14 +120,14 @@
         <div id="attendanceData">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header">
+                    <div class="header" style="background-color:aliceblue;">
                         <h2>BANER</h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="active">
                                         <th>Name</th>
                                         <th>Status</th>
                                         <th>ClockIn</th>
@@ -146,14 +146,14 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header">
+                    <div class="header" style="background-color:aliceblue;">
                         <h2>KONDHWA</h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="active">
                                         <th>Name</th>
                                         <th>Status</th>
                                         <th>ClockIn</th>
@@ -176,14 +176,14 @@
         <div id="leavesData" hidden>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header">
+                    <div class="header" style="background-color:aliceblue;">
                         <h2>BANER</h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="active">
                                         <th>Actions</th>
                                         <th>Employee Name</th>
                                         <th>Leave Type</th>
@@ -206,14 +206,14 @@
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header">
+                    <div class="header" style="background-color:aliceblue;">
                         <h2>KONDHWA</h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="active">
                                         <th>Actions</th>
                                         <th>Employee Name</th>
                                         <th>Leave Type</th>
@@ -336,12 +336,28 @@
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
             data: banerAttendanceArray,
-            "order":[2,"desc"]
+            "order": [2, "desc"],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData[1].includes("Present")) {
+                    $('td', nRow).addClass('success');
+                }
+                else {
+                    $('td', nRow).addClass('warning');
+                }
+            }
         });
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
             data: KondhwaAttendanceArray,
-            "order":[2,"desc"]
+            "order": [2, "desc"],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData[1].includes("Present")) {
+                    $('td', nRow).addClass('success');
+                }
+                else {
+                    $('td', nRow).addClass('warning');
+                }
+            }
         });
     }
 
@@ -395,7 +411,18 @@
             ],
             "order": [[7, "desc"], [6 , "desc"]],
             data: banerArrayLeaves,
-
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData[7].includes("Pending")) {
+                    $('td', nRow).addClass('warning');
+                }
+                else if (aData[7].includes("Cancelled")) {
+                    $('td', nRow).addClass('danger');
+                } else if (aData[7].includes("Approved")) {
+                    $('td', nRow).addClass('success');
+                } else {
+                    $('td', nRow).addClass('info');
+                }
+            }
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
@@ -413,6 +440,18 @@
             ],
             "order": [[7, "desc"], [6, "desc"]],
             data: kondhwaArrayLeaves,
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData[7].includes("Pending")) {
+                    $('td', nRow).addClass('warning');
+                }
+                else if (aData[7].includes("Cancelled")) {
+                    $('td', nRow).addClass('danger');
+                } else if (aData[7].includes("Approved")) {
+                    $('td', nRow).addClass('success');
+                } else {
+                    $('td', nRow).addClass('info');
+                }
+            }
 
         });
     }
