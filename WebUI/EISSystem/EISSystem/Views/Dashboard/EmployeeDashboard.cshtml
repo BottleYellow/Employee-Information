@@ -1,11 +1,10 @@
 ﻿@using EIS.WebApp.Services
-@model EIS.Entities.Dashboard.EmployeeDashboard
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http;
-
+@model EIS.Entities.Dashboard.EmployeeDashboard
 @{
-
+    string APIURL = MyHttpContext.APIBaseURL;
     string cookiesdata = Context.Session.GetString("CookieData");
 
     CookieModel cookies = new CookieModel();
@@ -108,6 +107,7 @@
                                     <th>To Date</th>
                                     <th>Days</th>
                                     <th>Status</th>
+                                    <th>ApprovedBy</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -123,7 +123,9 @@
 <script>
     var buttonSelected = "All";
     var selectOpt;
+    var result = "";
     $(document).ready(function () {
+       result= getCreatedBy();
         $('#tableName').html('Attendance');
         generateReport(buttonSelected);
     });
@@ -159,30 +161,40 @@
                         $('#attendanceTable').hide();
                         $('#LeaveTable').show();
                         getData(data.leaveRequests, buttonSelected);
-                        
+
                     } else {
                         $('#LeaveTable').hide();
-                        $('#attendanceTable').show();                     
+                        $('#attendanceTable').show();
                         getData(data.SP_EmployeeDashboards, buttonSelected);
                     }
-                  
+
                 }
             }
         });
     }
     function getData(Employees, buttonSelected) {
-
+        debugger;
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
+            var approvedName = "-";
             if (buttonSelected == "totalLeave") {
                 var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
                 var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
                 var Status = Employees[i].Status;
+
+
                 if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
                 else if (Status == "Approved") {
+                    if (Employees[i].LeaveType.includes("Past")) {
+                        approvedName = "Past Leave Auto Approved";
+                    } else {
+                        approvedName = getCreatedname(result, Employees[i].ApprovedBy) ;
+                    }
+
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+
                 }
                 else if (Status == "Rejected" || Status == "Cancelled") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
@@ -193,7 +205,7 @@
                 else {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
-                array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status])
+                array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
             } else
             {
                 var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
@@ -233,13 +245,16 @@
         }
         $('#LeaveTable').DataTable().destroy();
         $('#attendanceTable').DataTable().destroy();
-        if (buttonSelected == "totalLeave") {        
+        if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
                 data: array
             });
         } else {
-           
+
             $('#attendanceTable').DataTable({
+                "columnDefs": [
+                    { "width": "20%", "targets": 0 }
+                ],
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -251,5 +266,28 @@
                 data: array
             });
         }
+    }
+
+     function getCreatedBy() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+                    url: '@APIURL/api/Employee/CreatedBy',
+                    data: null,
+            success: function (data) {
+                        result = data;
+                    }
+        });
+        return result;
+    }
+
+    function getCreatedname(result,pid) {
+        $.each(result, function (i, item){
+            if (result[i].key == pid) {
+               value= result[i].value;
+            }
+        })
+        return value;
     }
 </script>

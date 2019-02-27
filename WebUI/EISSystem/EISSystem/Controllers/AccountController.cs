@@ -31,7 +31,6 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult Login(Users user)
         {
-            string EmployeeCode = "";
             HttpResponseMessage response = _service.PostResponse(ApiUrl+"/api/account/login", user ); 
             if (response.IsSuccessStatusCode == false)
             {
@@ -50,28 +49,8 @@ namespace EIS.WebApp.Controllers
                 HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
                 HttpContext.Session.SetString("ImagePath", "EmployeeData/" + CookiesData.Person.TenantId + CookiesData.Person.EmployeeCode + "/Image/" + CookiesData.Person.Image);
                 string role = CookiesData.Cookies.Role;
-              
-                if (role == "Admin")
-                {
-                    return RedirectToAction("AdminDashboard", "Dashboard");
-                }
-                else if (role == "Employee")
-                {
-                    return RedirectToAction("EmployeeDashboard", "Dashboard");
-                }
-                else if (role == "Manager")
-                {
-                    return RedirectToAction("ManagerDashboard", "Dashboard");
-                }
-                else if (role == "HR")
-                {
-                    return RedirectToAction("HRDashboard", "Dashboard");
-                }
-            }
-           
-
-
-            return RedirectToAction("Profile","People",new { PersonId=EmployeeCode});
+                return RedirectToAction(role + "Dashboard", "Dashboard");
+            }         
         }
 
         [DisplayName("Logout")]

@@ -320,20 +320,32 @@
     }
    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
     $(document).ready(function () {
+
         var d1 = document.getElementById("dob").value;
         var d2 = document.getElementById("doj").value;
         var dob = moment(d1, cultureInfo).format("DD/MMM/YYYY");
         var doj = moment(d2, cultureInfo).format("DD/MMM/YYYY");
+        if (dob == "Invalid date") {
+            $('#dob').val(d1);
+        } else {
+            $('#dob').val(dob);
+        }
+
+        if (doj == "Invalid date") {
+            $('#doj').val(d2);
+        } else {
+            $('#doj').val(doj);
+        }
+       
         $('#dob').datetimepicker({
             format: "DD/MMM/YYYY"
         });
         $('#doj').datetimepicker({
             format: "DD/MMM/YYYY"
         });
-        $('#dob').val(dob);
-        $('#doj').val(doj);
-    })
-    $(document).ready(function () {
+
+     
+
         $('#my-button').click(function () {
             $('#my-file').click();
         });

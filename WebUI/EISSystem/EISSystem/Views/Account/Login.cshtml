@@ -2,7 +2,7 @@
 @model EIS.Entities.User.Users
 @{
     Layout = null;
-    
+
 }
 
 <!DOCTYPE html>
@@ -37,7 +37,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
-    
+
 </head>
 <body>
     <div class="limiter">
@@ -78,13 +78,24 @@
             </div>
         </div>
     </div>
-    
+
     <script src="~/vendor/animsition/js/animsition.min.js"></script>
     <!--===============================================================================================-->
     <script src="~/vendor/bootstrap/js/popper.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
 
 </body>
+
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (document.URL.indexOf("#") == -1) {
+            url = document.URL + "#";
+            location = "#";
+            location.reload(true);
+        }
+    });
+</script>
 
 
