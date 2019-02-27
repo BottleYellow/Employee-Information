@@ -50,15 +50,15 @@
         <div class="modal-body">
             <form id="cp" method="post">
                 @if (ViewBag.ListOfPolicy != null)
-    {
-            <div class="form-group" id="LeaveType">
-                <label asp-for="LeaveType">Leave Type : </label>
-                <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                    <option value="0">-- Select Leave Type --</option>
-                </select>
-                <span asp-validation-for="LeaveType" class="text-danger"></span>
-            </div>
-}
+                {
+                    <div class="form-group" id="LeaveType">
+                        <label asp-for="LeaveType">Leave Type : </label>
+                        <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                            <option value="0">-- Select Leave Type --</option>
+                        </select>
+                        <span asp-validation-for="LeaveType" class="text-danger"></span>
+                    </div>
+                }
 
                 <div class="form-group">
                     <label>Dates Requested : </label>
@@ -110,12 +110,18 @@
 <script>
         var availableLeaves = null;
         var d = new Date();
-        d.setDate(d.getDate());
-        $('#dateFrom').datetimepicker({
+    d.setDate(d.getDate());
+    var minDate = moment().add(-1, 'seconds').toDate();
+    var defaultDate = moment().toDate();
+    $('#dateFrom').datetimepicker({
+        useCurrent: false,
+        minDate: minDate,
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
-        $('#dateTo').datetimepicker({
+    $('#dateTo').datetimepicker({
+        useCurrent: false,
+        minDate: minDate,
             format: "DD/MMM/YYYY",
             defaultDate: d
         });
@@ -179,7 +185,6 @@
             var trd = document.getElementById("trd").value;
             availableLeaves = availableLeaves - trd;
             $("#av").val(availableLeaves);
-
             var d1 = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
             var d2 = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
             var diff = new Date(new Date(d2) - new Date(d1));
@@ -210,29 +215,47 @@
                                     $.validator.unobtrusive.parse(form);
                                     if (form.valid()) {
                                         var d = form.serialize();
-                                        $.ajax({
-                                            url: '@Url.Action("RequestLeave", "Leave")',
-                                            type: 'POST',
-                                            data: d,
-                                            beforeSend: function () {
-                                                $('.ajax-loader').css("visibility", "visible");
+                                        bootbox.confirm({
+                                            message: "Are you sure you want to add Leave?",
+                                            buttons: {
+                                                confirm: {
+                                                    label: 'Yes',
+                                                    className: 'btn-success'
+                                                },
+                                                cancel: {
+                                                    label: 'No',
+                                                    className: 'btn-danger'
+                                                }
                                             },
-                                            success: function (data) {
-                                                bootbox.alert({
-                                                    message: "Request Submitted Successfully!",
-                                                    callback: function () {
-                                                        window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
-                                                    }
-                                                });
-                                            },
-                                            complete: function () {
-                                                $('.ajax-loader').css("visibility", "hidden");
-                                            },
-                                            error: function (data) {
-                                                alert(data.responseText);
+                                            callback: function (result) {
+                                                if (result == true) {
+                                                    $.ajax({
+                                                        url: '@Url.Action("RequestLeave", "Leave")',
+                                                        type: 'POST',
+                                                        data: d,
+                                                        beforeSend: function () {
+                                                            $('.ajax-loader').css("visibility", "visible");
+                                                        },
+                                                        success: function (data) {
+                                                            bootbox.alert({
+                                                                message: "Request Submitted Successfully!",
+                                                                callback: function () {
+                                                                    window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
+                                                                }
+                                                            });
+                                                        },
+                                                        complete: function () {
+                                                            $('.ajax-loader').css("visibility", "hidden");
+                                                        },
+                                                        error: function (data) {
+                                                            alert(data.responseText);
+                                                        }
+                                                    });
+                                                }
                                             }
                                         });
                                     }
+                                    
                                     return false;
                                 }
                             },
@@ -248,12 +271,9 @@
                     }
                 },
                 error: function (data) {
-
                 }
             });
-
         });
-
         function myFunction() {
             debugger;
             $("#msg").remove();
