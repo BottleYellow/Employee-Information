@@ -222,8 +222,8 @@ namespace EIS.WebAPI.Controllers
             if (status == "Pending")
             {
                 body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
-                body += "Date From:" + leave.FromDate + "\n";
-                body += "Date To:" + leave.ToDate + "\n";
+                body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
                 body += "Requested Days:" + leave.RequestedDays;
                 bodyforadmin= person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
             }

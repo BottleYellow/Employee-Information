@@ -48,15 +48,15 @@
         <div class="modal-body">
             <form id="cp" method="post">
                 @if (ViewBag.ListOfPolicy != null)
-                {
-                    <div class="form-group" id="LType">
-                        <label asp-for="LeaveType">Leave Type : </label>
-                        <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
-                            <option value="0">-- Select Leave Type --</option>
-                        </select>
-                        <span asp-validation-for="LeaveType" class="text-danger"></span>
-                    </div>
-                }
+    {
+            <div class="form-group" id="LType">
+                <label asp-for="LeaveType">Leave Type : </label>
+                <select id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" onchange="myFunction();">
+                    <option value="0">-- Select Leave Type --</option>
+                </select>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
+            </div>
+}
                 <div class="form-group">
                     <label>Dates Requested : </label>
                     <div class="form-line">
@@ -64,7 +64,7 @@
                     </div>
                     <span class="col-sm-1"><label>To</label></span>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="ToDate" value="" id="date2" placeholder="select Date" autocomplete="off" disabled/>
+                        <input class="form-control" type="text" asp-for="ToDate" value="" id="date2" placeholder="select Date" autocomplete="off" disabled />
                     </div>
                 </div>
 
@@ -80,7 +80,11 @@
                 <input type="hidden" asp-for="Available" id="av" />
                 <input type="hidden" asp-for="TypeId" id="typeid" />
                 <input type="hidden" asp-for="PersonId" id="psid" />
-                <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Submit</button>
+                
+                <div class="modal-footer">
+                    <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Submit</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
             </form>
         </div>
 
@@ -103,12 +107,18 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     var d = new Date();
-    d.setDate(d.getDate()-1);
+    d.setDate(d.getDate() - 1);
+    var maxDate = moment().add(1, 'seconds').toDate();
+    var defaultDate = moment().toDate();
     $('#date1').datetimepicker({
+        useCurrent: false,
+        maxDate: maxDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
     $('#date2').datetimepicker({
+        useCurrent: false,
+        maxDate: maxDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
@@ -127,7 +137,7 @@
          }
         $("#btnSubmit").prop("disabled", true);
     })
-     $("#date1").on("dp.change", function () {
+     $("#date1").on("dp.hide", function () {
         var d1 = document.getElementById("date1").value;
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
         var d = new Date();
@@ -141,7 +151,7 @@
         $("#date2").val('');
         $("#btnSubmit").prop("disabled", true);
     })
-     $("#date2").on("dp.change", function () {
+     $("#date2").on("dp.hide", function () {
         var d1 = document.getElementById("date1").value;
         var d2 = document.getElementById("date2").value;
         var firstDate = moment(d1, "DD/MMM/YYYY").format("MM/DD/YYYY");
@@ -182,7 +192,8 @@
         var x = moment(document.getElementById("date1").value).format('DD-MMM-YYYY');
         var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
         var result = null;
-        var pid = @cookies.PersonId;
+         var pid = @cookies.PersonId;
+         
         $.ajax({
             url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + x + "/" + y,
             type: 'GET',
@@ -206,28 +217,48 @@
                                 if (form.valid()) {
                                     var d = form.serialize();
                                     //var url1 = "/Leave/RequestLeave";
-                                    $.ajax({
-                                        url: '@Url.Action("AddPastLeave", "Leave")',
-                                        type: 'POST',
-                                        data: d,
-                                        beforeSend: function () {
-                                            $('.ajax-loader').css("visibility", "visible");
+                                    var res = true;
+                                    debugger;
+                                    bootbox.confirm({
+                                        message: "Are you sure you want to add Past Leave?",
+                                        buttons: {
+                                            confirm: {
+                                                label: 'Yes',
+                                                className: 'btn-success'
+                                            },
+                                            cancel: {
+                                                label: 'No',
+                                                className: 'btn-danger'
+                                            }
                                         },
-                                        success: function (data) {
-                                            bootbox.alert({
-                                                message: "Past Leave Added Successfully",
-                                                callback: function () {
-                                                    window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
-                                                }
-                                            });
-                                        },
-                                        complete: function () {
-                                            $('.ajax-loader').css("visibility", "hidden");
-                                        },
-                                        error: function () {
-                                            bootbox.alert("Something went wrong..Please try after sometime");
+                                        callback: function (result) {
+                                            if (result == true) {
+                                                $.ajax({
+                                                    url: '@Url.Action("AddPastLeave", "Leave")',
+                                                    type: 'POST',
+                                                    data: d,
+                                                    beforeSend: function () {
+                                                        $('.ajax-loader').css("visibility", "visible");
+                                                    },
+                                                    success: function (data) {
+                                                        bootbox.alert({
+                                                            message: "Past Leave Added Successfully",
+                                                            callback: function () {
+                                                                window.location.href = '@Url.Action("ShowMyLeaves","Leave")';
+                                                            }
+                                                        });
+                                                    },
+                                                    complete: function () {
+                                                        $('.ajax-loader').css("visibility", "hidden");
+                                                    },
+                                                    error: function () {
+                                                        bootbox.alert("Something went wrong..Please try after sometime");
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
+                                    
                                 }
                                 return false;
                             }

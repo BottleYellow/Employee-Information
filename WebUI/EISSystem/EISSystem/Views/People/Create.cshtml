@@ -272,9 +272,14 @@
             format: "DD/MMM/YYYY",
             defaultDate: new Date(1990,0,1)
         });
+        var maxDate = moment().add(1, 'seconds').toDate();
+        var defaultDate = moment().toDate();
+
         $('#doj').datetimepicker({
-            format: "DD/MMM/YYYY",
-            defaultDate: d
+            useCurrent: false,
+            maxDate: maxDate,
+            defaultDate: d,
+            format: 'DD/MMM/YYYY'
         });
     })
   
