@@ -94,6 +94,7 @@
                                         <th>To Date</th>
                                         <th>Requested Days</th>
                                         <th>Status</th>
+                                        <th>Approved By</th>
                                         <th>Leave Reason</th>
                                         <th>Actions</th>
                                     </tr>
@@ -113,7 +114,9 @@
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
-        $(document).ready(function () {
+    var result = "";
+    $(document).ready(function () {
+        result=getCreatedBy();
             $.fn.dataTable.ext.errMode = 'none';
             $('#example').on('error.dt', function () {
                 bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
@@ -178,18 +181,29 @@
                     "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Rejected" || data=="Cancelled") {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
-                        } else {
+                        } else if (data == "Approved") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
+                        } else {
+                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
                         }
+                    }
+                },
+                {
+                    "data": "ApprovedBy", "name": "Reason", "autoWidth": true, render: function (data,type,row) {
+                        var x = "-";
+                        if (row.LeaveType.includes("Past")) {
+                            x = "Past Leave Auto Approved"
+                        } else if (row.Status == "Approved") {
+                            x = getCreatedname(result, data)
+                        }                                     
+                        return x;
                     }
                 },
                 {
                     "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
                         return data;
                     }
-                },
+                },              
                 {
                     data: null, "autoWidth": true, render: function (data, type, row) {
                         if (row.Status == "Rejected" || row.Status == "Cancelled" || row.Status == "Requested For Cancel" || row.Status =="Approved(Rejected Cancel Request)") {
@@ -258,6 +272,29 @@
             }
         });
     });
+
+     function getCreatedBy() {
+        var result = null;
+        $.ajax({
+            type: "GET",
+            async: false,
+                    url: '@APIURL/api/Employee/CreatedBy',
+                    data: null,
+            success: function (data) {
+                        result = data;
+                    }
+        });
+        return result;
+    }
+
+    function getCreatedname(result,pid) {
+        $.each(result, function (i, item){
+            if (result[i].key == pid) {
+               value= result[i].value;
+            }
+        })
+        return value;
+    }
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
