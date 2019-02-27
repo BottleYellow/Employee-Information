@@ -18,8 +18,6 @@
 <head>
     <title>Leave History</title>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
-    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <style>
@@ -130,8 +128,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-striped table-bordered  nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Actions</th>
@@ -264,7 +262,12 @@
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     }
                     else if (status == "Approved") {
-                        approvedBy = data[i].ApprovedName + "(" + status + ")";
+                        if (data[i].LeaveType.includes("Past")) {
+                            approvedBy = "(Past Leave Auto Approved)";
+                        } else {
+                            approvedBy = data[i].ApprovedName + "(" + status + ")";
+                        }
+                        
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     }
@@ -378,4 +381,4 @@
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
-<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+
