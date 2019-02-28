@@ -264,7 +264,7 @@
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     }
-                    else if (status == "Approved") {
+                    else if (status.startsWith("Approved")) {
                         if (data[i].LeaveType.includes("Past")) {
                             approvedBy = "(Past Leave Auto Approved)";
                         } else {
