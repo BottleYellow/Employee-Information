@@ -311,18 +311,26 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
         [AllowAnonymous]
-        [Route("CheckDates/{type}/{PersonId}/{FromDate}/{ToDate}")]
+        [Route("CheckDates/{type}/{PersonId}/{LeaveId}/{FromDate}/{ToDate}")]
         [HttpGet]
-        public IActionResult CheckForScheduledLeave([FromRoute]string type,[FromRoute]int PersonId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
+        public IActionResult CheckForScheduledLeave([FromRoute]string type, [FromRoute]int PersonId, [FromRoute]int LeaveId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
         {
             string result = null;
-            if (type == "Future")
+            var credit = _repository.LeaveCredit.FindByCondition(x => x.PersonId == PersonId && x.LeaveId == LeaveId);
+            if (credit.ValidFrom <= FromDate.Date && FromDate.Date <= credit.ValidTo)
             {
-                result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+                if (type == "Future")
+                {
+                    result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+                }
+                else if (type == "Past")
+                {
+                    result = _repository.LeaveRequest.CheckForScheduledPastLeave(PersonId, FromDate, ToDate);
+                }
             }
-            else if (type == "Past")
+            else
             {
-               result = _repository.LeaveRequest.CheckForScheduledPastLeave(PersonId, FromDate, ToDate);
+                result = "You can only request for "+ credit.LeaveType +" leave between "+credit.ValidFrom.ToString("dd/MM/yyyy").ToString() +" to "+credit.ValidTo.ToString("dd/MM/yyyy").ToString();
             }
             return Ok(result);
         }

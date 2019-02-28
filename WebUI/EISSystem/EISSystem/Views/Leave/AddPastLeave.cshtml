@@ -183,6 +183,7 @@
         }
     })
      $('#btnSubmit').click(function () {
+         var typeid = document.getElementById("type").value;
         var trd = document.getElementById("trd").value;
         availableLeaves = availableLeaves - trd;
         $("#av").val(availableLeaves);
@@ -197,12 +198,12 @@
          var pid = @cookies.PersonId;
          
         $.ajax({
-            url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + x + "/" + y,
+            url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + typeid + "/" + x + "/" + y,
             type: 'GET',
             success: function (data) {
                 if (data == 'success') {
                     $.ajax({
-                        url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
+                        url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid +"/" + days + "/" + x + "/" + y,
                         type: 'GET',
                         success: function (data) {
                             days = data;

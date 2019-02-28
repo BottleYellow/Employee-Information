@@ -103,7 +103,7 @@ namespace EIS.WebApp.Controllers
         {
             response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
+            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
             if (data.Count == 0) { 
                 ViewBag.Status = "NoData";
                 ViewBag.ListOfPolicy = data;

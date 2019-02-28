@@ -181,7 +181,7 @@
                     "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
                         if (data == "Pending") {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Approved") {
+                        } else if (data == "Approved" || data.startsWith('Approved')) {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
                         } else {
                             return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';

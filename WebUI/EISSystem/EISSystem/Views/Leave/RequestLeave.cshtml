@@ -184,6 +184,7 @@
             }
         });
         $('#btnAddLeave').click(function () {
+            var typeid = document.getElementById("type1").value;
             var trd1 = document.getElementById("trd1").value;
             availableLeaves = availableLeaves - trd1;
             $("#av1").val(availableLeaves);
@@ -197,7 +198,7 @@
             var result = null;
             var pid = @cookies.PersonId;
             $.ajax({
-                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + x + "/" + y,
+                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y,
                 type: 'GET',
                 success: function (data) {
                     if (data == 'success') {

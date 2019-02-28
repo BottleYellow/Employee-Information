@@ -1,11 +1,14 @@
 ﻿using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Entities.Enums;
+using EIS.Entities.Models;
 using EIS.Repositories.IRepository;
 using EIS.WebAPI.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -35,18 +38,19 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
-
-            int year = DateTime.Now.Year;
-            int month = DateTime.Now.Month;
-            if (month != 1)
-            {
-                month = month - 1;
-            }
-            else
-            {
-                year = year - 1;
-                month = 12;
-            }
+            DateTime d = DateTime.Now;
+            d = d.AddMonths(-1);
+            int year = d.Year;
+            int month = d.Month;
+            //if (month != 1)
+            //{
+            //    month = month - 1;
+            //}
+            //else
+            //{
+            //    year = year - 1;
+            //    month = 12;
+            //}
             string monthName = new DateTime(2000, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
             int TotalDays = DateTime.DaysInMonth(year, month);
 
@@ -67,96 +71,69 @@ namespace EIS.WebAPI.Services
             var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true).Include(x => x.LeaveRequests)
                 .Select(p => new
                 {
+                    p.Id,
                     FullName = p.FullName,
-                    LocationId=p.LocationId,
-                    LocationName=p.Location.LocationName,
                     EmployeeCode = p.EmployeeCode,
                     EmailAddress = p.EmailAddress,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
                 }).ToList();
             foreach (var p in results)
             {
-                if (p.EmailAddress== "ud.soni2009@gmail.com")
+                string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
+
+                if (File.Exists(attendanceReportPath))
                 {
-                    string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
-
-                    if (File.Exists(attendanceReportPath))
-                    {
-                        File.Delete(attendanceReportPath);
-                    }
-
-                    using (StreamWriter sw = File.CreateText(attendanceReportPath))
-                    {
-                        sw.WriteLine("Employee Name:-" + p.FullName);
-                        sw.WriteLine("Employee Code:-" + p.EmployeeCode);
-                        sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);
-                        DateTime startDate = new DateTime(year, month, 1);
-                        DateTime endDate = startDate.AddMonths(1);
-                        StringBuilder newlist = new StringBuilder();
-                        newlist.AppendLine("   DATE         STATUS      TIME IN      TIME OUT      TOTAL HOURS");
-                        int counter = 0;
-                        for (DateTime date = startDate; date < endDate; date = date.AddDays(1))
-                        {
-                            newlist.Append(date.ToShortDateString() + "   ");
-                            var attendance = p.Attendances.Where(x => x.DateIn == date).Select(x => new { x.TimeIn, x.TimeOut, x.TotalHours }).FirstOrDefault();
-                            if (attendance == null || attendance.TimeIn == attendance.TimeOut)
-                            {
-                                var holiday = _dbContext.Holidays.Where(x => x.LocationId == p.LocationId && x.Date == date).FirstOrDefault();
-                                if (holiday != null)
-                                {
-                                    newlist.Append("   " + holiday.Vacation);
-                                }
-                                else
-                                {
-                                    if (date.DayOfWeek == DayOfWeek.Sunday)
-                                    {
-                                        newlist.Append("   WeeklyOff");
-                                    }
-                                    else if (p.LocationName.ToUpper() == "BANER")
-                                    {
-                                        string alternateSaturday = _repository.Attendances.CalculateDate(date);
-                                        if (!string.IsNullOrEmpty(alternateSaturday))
-                                        {
-                                            newlist.Append("   " + alternateSaturday);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        newlist.Append("   OnLeave  ");
-                                    }
-                                }
-                                newlist.Append("             ");
-                                newlist.Append("      -      ");
-                                newlist.Append("             ");
-                            }
-                            else
-                            {
-                                newlist.Append("   Present  ");
-                                newlist.Append("   " + attendance.TimeIn.ToString() + "   ");
-                                newlist.Append("   " + attendance.TimeOut.ToString() + "   ");
-                                newlist.Append("   " + attendance.TotalHours.ToString() + "   ");
-                                counter++;
-
-                            }
-                            newlist.AppendLine();
-                        }
-                        sw.WriteLine(newlist);
-                        sw.WriteLine("File created: {0}", DateTime.Now.ToString());
-                        sw.WriteLine("Total No of Days:-" + TotalDays);
-                        sw.WriteLine("No of Days Present:-" + counter);
-                        sw.WriteLine("For any assistance please contact HR department");
-                        sw.Flush();
-                        sw.Close();
-                    }
-
-                    string To = p.EmailAddress;
-                    string subject = "Monthly Attendance Report";
-                    string body = "Dear " + p.FullName + "\n" +
-                        "Kindly find monthly attendance report in attachment.\n" +
-                        "Your Code Number: " + p.EmployeeCode + "\n" +
-                        "User Name: " + p.EmailAddress;
-                    new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
+                    File.Delete(attendanceReportPath);
                 }
+
+                using (StreamWriter sw = File.CreateText(attendanceReportPath))
+                {
+                    string InputOne = year.ToString();
+                    char c = '0';
+                    string InputTwo = month.ToString().PadLeft(2, c);
+
+                    List<EmployeeAttendanceData> data = new List<EmployeeAttendanceData>();
+                    var SP_SelectType = new SqlParameter("@SelectType", "Month");
+                    var SP_PersonId = new SqlParameter("@PersonId", p.Id);
+                    var SP_InputOne = new SqlParameter("@InputOne", InputOne);
+                    var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
+                    string usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
+                    data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+
+
+
+                    sw.WriteLine("Employee Name:-" + p.FullName);
+                    sw.WriteLine("Employee Code:-" + p.EmployeeCode);
+                    sw.WriteLine("Monthly Attendance Report:-" + month + "/" + year);
+
+                    StringBuilder newlist = new StringBuilder();
+                    newlist.AppendLine("  DATE          STATUS     TIME IN      TIME OUT      TOTAL HOURS");
+                    foreach (var attendance in data)
+                    {
+                        //DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt")
+                        newlist.Append(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString() + "   ");
+                        newlist.Append("   " + attendance.Status);
+                        newlist.Append(attendance.TimeIn == null ? "" : "   " + DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt") + "   ");
+                        newlist.Append(attendance.TimeOut == null ? "" : "   " + DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt") + "   ");
+                        newlist.Append(attendance.TotalHours == null ? "" : "   " + attendance.TotalHours.ToString() + "   ");
+                        newlist.AppendLine();
+                    }
+                    sw.WriteLine(newlist);
+                    sw.WriteLine("File created: {0}", DateTime.Now.ToString());
+                    sw.WriteLine("Total No of Days:-" + TotalDays);
+                    sw.WriteLine("No of Days Present:-" + data.Where(x => x.Status == "Present").Count());
+                    sw.WriteLine("For any assistance please contact HR department");
+                    sw.Flush();
+                    sw.Close();
+                }
+
+                string To = p.EmailAddress;
+                string subject = "Monthly Attendance Report";
+                string body = "Dear " + p.FullName + "\n" +
+                    "Kindly find monthly attendance report in attachment.\n" +
+                    "Your Code Number: " + p.EmployeeCode + "\n" +
+                    "User Name: " + p.EmailAddress;
+                new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
             }
         }     
 

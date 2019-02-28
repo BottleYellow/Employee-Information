@@ -186,7 +186,7 @@
                 if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
-                else if (Status == "Approved") {
+                else if (Status == "Approved" || Status.startsWith('Approved')) {
                     if (Employees[i].LeaveType.includes("Past")) {
                         approvedName = "Past Leave Auto Approved";
                     } else {

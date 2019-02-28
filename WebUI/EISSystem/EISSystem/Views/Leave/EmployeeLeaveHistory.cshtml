@@ -18,6 +18,8 @@
 <head>
     <title>Leave History</title>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <style>
@@ -128,8 +130,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered  nowrap" style="width:100%">
+                        <div>
+                            <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Actions</th>
@@ -166,7 +168,6 @@
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     $(document).ready(function () {
-
         var employeeValue = $('#selectEmployee').val();
         var type = $('#selectReport').val();
         var leaveType = $('#leaveOption').val();
@@ -184,7 +185,6 @@
                 bootbox.alert("Something went wrong..Please try after sometime");
             }
            });
-
         var value="";
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
@@ -202,9 +202,7 @@
         });
         value = $('#inputmonth').val();
         GenerateReport(locationValue, employeeValue, type, value, leaveType);
-
     });
-
     $('#selectReport').on('change', function () {
         var v = $('#selectReport').val();
         if (v == 'year') {
@@ -216,15 +214,12 @@
                 $('#inputmonthdiv').show();
             }
     });
-
     $('#inputyear').on('change', function () {
         value = $('#inputyear').val();
     });
-
     $('#inputmonth').on('change', function () {
         value = $('#inputmonth').val();
     });
-
     $('#generateReport').on('click', function () {
         var locationValue = $('#locations').val();
         var employeeValue = $('#selectEmployee').val();
@@ -235,10 +230,8 @@
         } else {
             value = $('#inputyear').val();
         }
-
         GenerateReport(locationValue,employeeValue, type, value, leaveType);
     });
-
     function GenerateReport(locationId,employeeId,type,value,leaveType) {
         $.ajax({
             type: 'POST',
@@ -261,13 +254,8 @@
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     }
-                    else if (status == "Approved") {
-                        if (data[i].LeaveType.includes("Past")) {
-                            approvedBy = "(Past Leave Auto Approved)";
-                        } else {
-                            approvedBy = data[i].ApprovedName + "(" + status + ")";
-                        }
-                        
+                    else if (status == "Approved" || status.startsWith('Approved')) {
+                        approvedBy = data[i].ApprovedName + "(" + status + ")";
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     }
@@ -304,7 +292,7 @@
             }
         });
     }
-    function UpdateStatus(RequestId, Status) {
+  function UpdateStatus(RequestId, Status) {
         var msg;
         if (Status == "Approve") { msg="Are you sure you want to Approve Leave?"}
         else if (Status == "Reject") { msg = "Are you sure you want to Reject Leave?" }
@@ -329,7 +317,7 @@
                 }
             }
         });
-        
+
     }
     function UpDate(RequestId, Status) {
         var pid=@cookies.PersonId;
@@ -371,7 +359,6 @@
                 error: function () {
                     bootbox.alert("Something went wrong..Please try after sometime");
                 }
-
             });
         });
 </script>
@@ -381,4 +368,4 @@
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
-
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
