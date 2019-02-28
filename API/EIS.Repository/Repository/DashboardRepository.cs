@@ -136,7 +136,7 @@ namespace EIS.Repositories.Repository
                     {
                         CalendarData calendarData = new CalendarData();
                         calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
-                        calendarData.Description = "<br/>Status : " + leave.Status+"<br/>Reason :"+leave.Reason;
+                        calendarData.Description = "<br/>Leave Status : " + leave.Status+"<br/>Leave Reason :"+leave.Reason;
                         calendarData.StartDate = date;
                         calendarData.EndDate = date;
                         if (leave.Status == "Pending")
@@ -165,7 +165,7 @@ namespace EIS.Repositories.Repository
                 {
                     CalendarData holidayCalanderData = new CalendarData();
                     holidayCalanderData.Title = holiday.Vacation;
-                    holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
+                    holidayCalanderData.Description = "Holiday on occasion of " + holiday.Vacation;
                     holidayCalanderData.StartDate = holiday.Date;
                     holidayCalanderData.EndDate = holiday.Date;
                     holidayCalanderData.Color = "darkviolet";
@@ -315,7 +315,9 @@ namespace EIS.Repositories.Repository
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
             IEnumerable<Attendance> attendances = new List<Attendance>();
-            int? locationId = _dbContext.Person.Where(x => x.Id == personId).FirstOrDefault().LocationId;
+            Person person = _dbContext.Person.Include(x=>x.Location).Where(x => x.Id == personId).FirstOrDefault();
+            int? locationId = person.LocationId;
+            string locationName = person.Location.LocationName;
 
             attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
             if (locationId != null)
@@ -334,7 +336,7 @@ namespace EIS.Repositories.Repository
                 {
                     CalendarData calendarData = new CalendarData();
                     calendarData.Title = "Leave Status (" + leaveRequest.Status + ")";
-                    calendarData.Description = "<br/>Status : " + leaveRequest.Status + "<br/>Reason :" + leaveRequest.Reason;
+                    calendarData.Description = "<br/>Leave Status : " + leaveRequest.Status + "<br/>Leave Reason :" + leaveRequest.Reason;
                     calendarData.StartDate = date;
                     calendarData.EndDate = date;
                     if (leaveRequest.Status == "Pending")
@@ -367,7 +369,7 @@ namespace EIS.Repositories.Repository
                     string timeout = attendance.TimeOut == null ? "Nil" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
                     string totalHours = attendance.TotalHours == null ? "Nil" : attendance.TotalHours.ToString();
                     attendanceCalendarData.Title = "Present (" + DateTime.Today.Add(attendance.TimeIn).ToString("hh:mm tt") + " - " + timeout + ")";
-                    attendanceCalendarData.Description = "Total Working Hours " + totalHours;
+                    attendanceCalendarData.Description = "Total Working Hours : " + totalHours;
                     attendanceCalendarData.Color = "Green";
                     attendanceCalendarData.StartDate = date;
                     attendanceCalendarData.EndDate = date;
@@ -381,7 +383,7 @@ namespace EIS.Repositories.Repository
                 {
                     CalendarData holidayCalanderData = new CalendarData();
                     holidayCalanderData.Title = holiday.Vacation;
-                    holidayCalanderData.Description = "Holiday due to " + holiday.Vacation;
+                    holidayCalanderData.Description = "Holiday on occasion of " + holiday.Vacation;
                     holidayCalanderData.StartDate = holiday.Date;
                     holidayCalanderData.EndDate = holiday.Date;
                     holidayCalanderData.Color = "darkviolet";
@@ -405,7 +407,7 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-                if (locationId == 2)
+                if (locationName.ToUpper() == "BANER")
                 {
                     if (date.DayOfWeek == DayOfWeek.Saturday)
                     {

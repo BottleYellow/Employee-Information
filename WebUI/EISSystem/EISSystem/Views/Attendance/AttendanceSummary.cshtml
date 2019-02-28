@@ -414,8 +414,16 @@
                 },
                 success: function (data) {
                     document.getElementById("averageHours").innerHTML = data._SP_ReportCount.AverageHours;
-                    document.getElementById("averageTimeIn").innerHTML = moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('hh:mm A');
-                    document.getElementById("averageTimeOut").innerHTML = moment(data._SP_ReportCount.AverageTimeOut, 'HH:mm:ss').format('hh:mm A');
+                    var avgTimeIn=moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('hh:mm A');
+                    if (avgTimeIn == "Invalid date") {
+                        avgTimeIn = "-";
+                    }
+                    var avgTimeOut = moment(data._SP_ReportCount.AverageTimeOut, 'HH:mm:ss').format('hh:mm A');
+                    if (avgTimeOut == "Invalid date") {
+                        avgTimeOut = "-";
+                    }
+                    document.getElementById("averageTimeIn").innerHTML = avgTimeIn;
+                    document.getElementById("averageTimeOut").innerHTML = avgTimeOut;
                     document.getElementById("presentDays").innerHTML = data._SP_ReportCount.PresentDays;
                     document.getElementById("absentDays").innerHTML = data._SP_ReportCount.LeaveDays;
                     document.getElementById("totalWorkingDays").innerHTML = data._SP_ReportCount.TotalWorkingDays;

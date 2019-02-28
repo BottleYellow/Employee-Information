@@ -245,6 +245,7 @@
 <script src="~/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
 <script>
     var buttonSelected = "All";
     $(document).ready(function () {
@@ -396,6 +397,7 @@
             }
 
         $('#BanerLeavesTable').DataTable().destroy();
+        var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
             "aoColumns": [
                 null,
@@ -408,7 +410,10 @@
                 null,
                 null
             ],
-            "order": [[7, "desc"], [6 , "desc"]],
+            "order": [[7, "desc"], [6, "desc"]],
+            columnDefs: [
+                { targets: 7, type:nameType }
+            ],
             data: banerArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {
@@ -425,6 +430,7 @@
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
+        var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
             "aoColumns": [
                 null,
@@ -438,6 +444,9 @@
                 null
             ],
             "order": [[7, "desc"], [6, "desc"]],
+            columnDefs: [
+                { targets: 7, type: nameType2 }
+            ],
             data: kondhwaArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {

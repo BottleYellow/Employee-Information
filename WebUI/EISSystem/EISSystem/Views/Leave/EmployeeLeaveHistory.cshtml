@@ -69,7 +69,7 @@
                 <div class="card">
                     <div class="body">
                         <div>
-                            <div class="row col-md-12">
+                            <div class="row">
                                 <div class="col-md-4 col-lg-4">
                                     <div class="row">
                                         <div class="col-md-6 col-lg-6">
@@ -128,26 +128,27 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered  nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Actions</th>
-                                        <th>Location</th>
-                                        <th>Employee Name</th>
-                                        <th>Leave Type</th>
-                                        <th>From Date</th>
-                                        <th>To Date</th>
-                                        <th>Days</th>
-                                        <th>Requested Date</th>
-                                        <th>Status</th>
-                                        <th>Updated By</th>
-                                        <th>Leave Reason</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered  nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Actions</th>
+                                            <th>Location</th>
+                                            <th>Employee Name</th>
+                                            <th>Leave Type</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Days</th>
+                                            <th>Requested Date</th>
+                                            <th>Status</th>
+                                            <th>Updated By</th>
+                                            <th>Leave Reason</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -187,18 +188,20 @@
 
         var value="";
         var currentDate = new Date();
+        var cMonth = currentDate.getMonth();
+        var cDate = currentDate.getDate();
+        var cYear = currentDate.getFullYear();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
-        $('#inputmonth').datetimepicker({
-            format: "MM/YYYY"
-        });
         $('#inputmonth').val(m + '/' + y);
         $('#inputyear').val(y);
         $('#inputmonth').datetimepicker({
-            format: "MM/YYYY"
+            format: "MM/YYYY",
+            maxDate: new Date(cYear, cMonth, cDate)
         });
         $('#inputyear').datetimepicker({
-            format: "YYYY"
+            format: "YYYY",
+            maxDate: new Date(cYear, cMonth, cDate)
         });
         value = $('#inputmonth').val();
         GenerateReport(locationValue, employeeValue, type, value, leaveType);
@@ -267,7 +270,7 @@
                         } else {
                             approvedBy = data[i].ApprovedName + "(" + status + ")";
                         }
-                        
+
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     }
@@ -294,8 +297,12 @@
                     array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, appliedDate, status, approvedBy, data[i].Reason])
                 }
                 $('#example').DataTable().destroy();
+                var nameType = $.fn.dataTable.absoluteOrder('Pending');
                 $('#example').DataTable({
-                    order:[[9,'desc'],[8,'desc']],
+                    order: [[8, 'desc'],[7,'desc']],
+                    columnDefs: [
+                        { targets: 8, type: nameType }
+                    ],
                     data:array
                 });
             },
@@ -329,7 +336,7 @@
                 }
             }
         });
-        
+
     }
     function UpDate(RequestId, Status) {
         var pid=@cookies.PersonId;
@@ -381,4 +388,5 @@
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
 
