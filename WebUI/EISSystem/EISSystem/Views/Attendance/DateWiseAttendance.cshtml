@@ -81,7 +81,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FullName"))">
                                             <option value="0">All</option>
                                         </select>
                                     </div>
@@ -110,10 +110,10 @@
                                         <tr>
                                             <th>Employee Code</th>
                                             <th>Name</th>
+                                            <th>Status</th>
                                             <th>Date</th>
                                             <th>Clock In</th>
                                             <th>Clock Out</th>
-                                            <th>Status</th>
                                             <th>Total Working Hours</th>
                                         </tr>
                                     </thead>
@@ -173,7 +173,7 @@
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
                     });
                 },
                 error: function () {
@@ -210,7 +210,7 @@
                         var Status = data[i].Status;
                         var timeIn;
                         var timeOut;
-                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
+                        var date = moment(data[i].date, cultureInfo).format("DD MMM YYYY");
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                             timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
@@ -231,15 +231,15 @@
                                 timeIn = '-';
                                 timeOut = '-';
                             }
-                        array.push([data[i].EmployeeCode, data[i].EmployeeName, date, timeIn, timeOut, Status, data[i].TotalHours]);
+                        array.push([data[i].EmployeeCode, data[i].FullName, Status, date, timeIn, timeOut, data[i].TotalHours]);
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         "aoColumns": [
                             null,
                             null,
-                            { "sType": "date" },
                             null,
+                            { "sType": "date" },
                             null,
                             null,
                             null

@@ -145,6 +145,7 @@ namespace EIS.WebApp.Controllers
             IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
                                             select new Person
                                             {
+                                                Id=e.Id,
                                                 EmployeeCode = e.EmployeeCode,
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
@@ -164,8 +165,8 @@ namespace EIS.WebApp.Controllers
             }
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            List<AttendanceReportByDate> attendanceReport = JsonConvert.DeserializeObject<List<AttendanceReportByDate>>(stringData);
-            return Json(attendanceReport);
+            List<SP_GetDateWiseAttendance> attendance = JsonConvert.DeserializeObject<List<SP_GetDateWiseAttendance>>(stringData);
+            return Json(attendance);
         }
         #endregion
 
