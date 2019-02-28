@@ -96,5 +96,17 @@ namespace EIS.Entities.SP
         public bool IsActive { get; set; }
     }
 
+    public class SP_GetDateWiseAttendance
+    {
+        [Key]
+        public Nullable<long> SrId { get; set; }
+        public string EmployeeCode { get; set; }
+        public string FullName { get; set; }
+        public Nullable<System.DateTime> date { get; set; }
+        public Nullable<System.TimeSpan> TimeIn { get; set; }
+        public Nullable<System.TimeSpan> TimeOut { get; set; }
+        public Nullable<System.TimeSpan> TotalHours { get; set; }
+        public string Status { get; set; }
+    }
 
 }
