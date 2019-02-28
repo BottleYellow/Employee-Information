@@ -247,6 +247,7 @@
         $('#attendanceTable').DataTable().destroy();
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
+                "order":[1,'desc'],
                 data: array
             });
         } else {

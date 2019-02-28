@@ -40,6 +40,7 @@ namespace EIS.WebApp.Services
 
         private IEISService<PastLeaves> _pastLeaves;
         private IEISService<SP_GetEmployee> _getEmployee;
+        private IEISService<SP_GetDateWiseAttendance> _getAttendance;
 
         public IEISService<Person> Employee
         {
@@ -201,6 +202,17 @@ namespace EIS.WebApp.Services
                     _getEmployee = new EISService<SP_GetEmployee>();
                 }
                 return _getEmployee;
+            }
+        }
+        public IEISService<SP_GetDateWiseAttendance> SP_GetDateWiseAttendance
+        {
+            get
+            {
+                if (_getAttendance == null)
+                {
+                    _getAttendance = new EISService<SP_GetDateWiseAttendance>();
+                }
+                return _getAttendance;
             }
         }
     }

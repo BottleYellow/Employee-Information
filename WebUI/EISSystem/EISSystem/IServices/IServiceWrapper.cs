@@ -28,5 +28,6 @@ namespace EIS.WebApp.IServices
         IEISService<Holiday> Holidays { get; }
         IEISService<PastLeaves> PastLeave { get; }
         IEISService<SP_GetEmployee> SP_GetEmployee { get; }
+        IEISService<SP_GetDateWiseAttendance> SP_GetDateWiseAttendance { get; }
     }
 }

@@ -105,7 +105,7 @@
 </div>
 
 <script>
-    var result=null;
+    var result = null;
      $(document).ready(function () {
         if ('@TempData["success"]' != '') {
             bootbox.alert({
@@ -198,7 +198,7 @@
             success: function (data) {
                 debugger;
                 var array = [];
-                var action;
+                var action;             
                 var activeStatus;
                 for (var i = 0; i < data.length; i++) {
                     var image = data[i].Image;
@@ -208,19 +208,7 @@
                     var path = '@MyHttpContext.AppBaseUrl/EmployeeData/1' + data[i].EmployeeCode + '/Image/' + image;
                     var defaultPath = '@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';
                     image = '<img src="' + path + '" style="height:40px; width:40px">';
-
-                    $('<img>').on('error', function () {
-                        alert("hi");
-                    });
-                    //$('<img>').load(path, function (response, status, xhr) {
-                    //    if (status == "success")
-                    //        image = '<img src="' + path + '" style="height:40px; width:40px">';
-                    //    else
-                    //        image = '<img src="' + defaultPath + '" style="height:40px; width:40px">';
-                    //});
-                  
-                    if (activeStatus == true) {
-                       
+                    if (activeStatus == true) {                       
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + data[i].EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + data[i].EmployeeCode + '>Delete</a></li></ul></div>';
                     } else {
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
@@ -228,11 +216,9 @@
 
                     array.push([data[i].LocationName, data[i].EmployeeCode, data[i].FullName, image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy, action]);
                 }
+
                 $('#example').DataTable().destroy();
-                $('#example').DataTable({
-                    "columnDefs": [
-                        { "width": "20%", "targets": 5 }
-                    ],
+                $('#example').DataTable({                  
                     sDom: '<"myexport"B>ifrtlp',
                     buttons: [
                         {

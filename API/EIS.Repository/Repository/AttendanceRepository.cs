@@ -309,5 +309,19 @@ namespace EIS.Repositories.Repository
             }
             return data;
         }
+
+        public List<SP_GetDateWiseAttendance> dateWiseAttendances(int PersonId, int LocationId, string fromDate, string toDate)
+        {
+            List<SP_GetDateWiseAttendance> Model = new List<SP_GetDateWiseAttendance>();
+            string sDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd").ToString();
+            string eDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd").ToString();
+            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            var SP_LocationId = new SqlParameter("@LId", LocationId);
+            var SP_InputOne = new SqlParameter("@InputOne", sDate);
+            var SP_InputTwo = new SqlParameter("@InputTwo", eDate);
+            string usp = "LMS.usp_GetDateWiseAttendance @PersonId, @LId, @InputOne, @InputTwo";
+            Model = _dbContext._sp_GetDateWiseAttendances.FromSql(usp, SP_PersonId, SP_LocationId, SP_InputOne, SP_InputTwo).ToList();
+            return Model;
+        }
     }
 }
