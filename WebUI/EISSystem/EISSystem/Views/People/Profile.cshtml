@@ -74,7 +74,7 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img src="@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="AdminBSB - Profile Image" class="img img-circle" />
+                            <img  src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" class="img img-circle" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" />
                         </div>
                         <div class="content-area">
                             <h3>@ViewBag.Name</h3>
