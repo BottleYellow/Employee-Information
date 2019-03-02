@@ -85,7 +85,7 @@ namespace EIS.WebAPI.Services
                 {
                     File.Delete(attendanceReportPath);
                 }
-
+                
                 using (StreamWriter sw = File.CreateText(attendanceReportPath))
                 {
                     string InputOne = year.ToString();
@@ -99,8 +99,6 @@ namespace EIS.WebAPI.Services
                     var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
                     string usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
                     data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
-
-
 
                     sw.WriteLine("Employee Name:-" + p.FullName);
                     sw.WriteLine("Employee Code:-" + p.EmployeeCode);
