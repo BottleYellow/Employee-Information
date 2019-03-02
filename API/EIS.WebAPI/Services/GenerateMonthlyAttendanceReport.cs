@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
@@ -77,29 +78,29 @@ namespace EIS.WebAPI.Services
                     EmailAddress = p.EmailAddress,
                     Attendances = p.Attendance.Where(a => a.DateIn.Year == year && a.DateIn.Month == month)
                 }).ToList();
+            List<EmployeeAttendanceData> data = new List<EmployeeAttendanceData>();
+            List<List<EmployeeAttendanceData>> dataList = new List<List<EmployeeAttendanceData>>();
             foreach (var p in results)
             {
+                SqlParameter SP_PersonId;
                 string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.txt";
 
                 if (File.Exists(attendanceReportPath))
                 {
                     File.Delete(attendanceReportPath);
                 }
-
+                string InputOne = year.ToString();
+                char c = '0';
+                string InputTwo = month.ToString().PadLeft(2, c); 
+                
+                SqlParameter SP_SelectType = new SqlParameter("@SelectType", "Month");
+                SP_PersonId = new SqlParameter("@PersonId", p.Id);
+                SqlParameter SP_InputOne = new SqlParameter("@InputOne", InputOne);
+                SqlParameter SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
+                string usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
+                data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
                 using (StreamWriter sw = File.CreateText(attendanceReportPath))
                 {
-                    string InputOne = year.ToString();
-                    char c = '0';
-                    string InputTwo = month.ToString().PadLeft(2, c);
-
-                    List<EmployeeAttendanceData> data = new List<EmployeeAttendanceData>();
-                    var SP_SelectType = new SqlParameter("@SelectType", "Month");
-                    var SP_PersonId = new SqlParameter("@PersonId", p.Id);
-                    var SP_InputOne = new SqlParameter("@InputOne", InputOne);
-                    var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-                    string usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
-                    data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
-
 
 
                     sw.WriteLine("Employee Name:-" + p.FullName);
@@ -126,14 +127,14 @@ namespace EIS.WebAPI.Services
                     sw.Flush();
                     sw.Close();
                 }
-
+                _dbContext.SaveChanges();
                 string To = p.EmailAddress;
                 string subject = "Monthly Attendance Report";
                 string body = "Dear " + p.FullName + "\n" +
                     "Kindly find monthly attendance report in attachment.\n" +
                     "Your Code Number: " + p.EmployeeCode + "\n" +
                     "User Name: " + p.EmailAddress;
-                new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
+                //new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
             }
         }     
 

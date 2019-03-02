@@ -52,6 +52,7 @@ namespace EIS.WebApp
             services.AddTransient<IValidator<Attendance>, AttendanceValidator>();
             services.AddTransient<IValidator<LeaveRequest>, LeaveRequestValidator>();
             services.AddTransient<IValidator<LeaveRules>, LeaveRulesValidator>();
+            services.AddTransient<IValidator<LeaveCredit>, LeaveCreditValidator>();
             services.AddTransient<IValidator<Permanent>, PermanentAddressValidator>();
             services.AddTransient<IValidator<Current>, CurrentAddressValidator>();
             services.AddTransient<IValidator<Emergency>, EmergencyAddressValidator>();

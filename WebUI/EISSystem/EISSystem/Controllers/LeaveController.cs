@@ -344,6 +344,8 @@ namespace EIS.WebApp.Controllers
             Credit.CreatedDate = DateTime.Now;
             Credit.UpdatedDate = DateTime.Now;
             Credit.Available = Credit.AllotedDays;
+            if (Credit.PersonId == 0) ModelState.AddModelError("PersonId", "Please select Employee");
+            if (Credit.LeaveId == 0) ModelState.AddModelError("LeaveType", "Please select leave type");
             if (ModelState.IsValid)
             {
                 Credit.CreatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -354,7 +356,8 @@ namespace EIS.WebApp.Controllers
                     return RedirectToAction("LeaveCredits", "Leave");
                 }
             }
-            return View("AddCredit", Credit);
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("AddCredit", Credit);
 
         }
         [DisplayName("Edit Leave Credit")]
