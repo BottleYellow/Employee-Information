@@ -76,30 +76,47 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-                $.ajax({
-                    url: '@Url.Action("EditCredit", "Leave")',
-                    type: 'POST',
-                    data: d,
-                    success: function (data) {
-                        bootbox.alert({
-                            message: "Leave Credit updated Successfully!",
-                            callback: function () {
-                                window.parent.location.reload();
-                            }
-                        });
+            bootbox.confirm({
+                message: "Are you sure to Edit Leave Creadit?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
                     },
-                    error: function (data) {
-                        bootbox.alert({
-                            message: 'Error',
-                            callback: function () {
-                                window.parent.location.reload();
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("EditCredit", "Leave")',
+                            type: 'POST',
+                            data: d,
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Leave Credit updated Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                bootbox.alert({
+                                    message: 'Error',
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+
                             }
                         });
-
                     }
-                });
-            }
-            return false;
+                }
+            });
+        }
+        return false;
     });
 </script>

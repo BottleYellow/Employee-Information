@@ -63,26 +63,44 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-            $.ajax({
-                url: '@Url.Action("AddHoliday", "Holiday")',
-                type: 'POST',
-                data: d,
-                success: function (data) {
-                    bootbox.alert({
-                        message: "Holiday Added Successfully!",
-                        callback: function () {
-                            window.parent.location.reload();
-                        }
-                    });
+            bootbox.confirm({
+                message: "Are you sure to add new Holiday?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
                 },
-                error: function (data) {
-                    $("#md").replaceWith(data.responseText);
-                    $('#inputdate').datetimepicker({
-                        format: "DD-MMM-YYYY"
-                    });
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("AddHoliday", "Holiday")',
+                            type: 'POST',
+                            data: d,
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Holiday Added Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                                $('#inputdate').datetimepicker({
+                                    format: "DD-MMM-YYYY"
+                                });
+                            }
+                        });
+                    }
                 }
             });
+            
         }
         return false;
     });
