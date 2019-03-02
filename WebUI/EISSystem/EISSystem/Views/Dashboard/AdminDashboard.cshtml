@@ -474,6 +474,33 @@
         });
     }
     function UpdateStatus(RequestId, Status) {
+        var msg;
+        if (Status == "Approve") { msg = "Are you sure you want to Approve Leave?" }
+        else if (Status == "Reject") { msg = "Are you sure you want to Reject Leave?" }
+        else if (Status == "Pending") { msg = "Are you sure you want to make Leave Pending?" }
+        else if (Status == "Accept Cancel") { msg = "Are you sure you want to Approve Cancel Leave request?" }
+        else if (Status == "Reject Cancel") { msg = "Are you sure you want to Reject Cancel Leave request?" }
+        bootbox.confirm({
+            message: msg,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    UpDate(RequestId, Status);
+                }
+            }
+        });
+    }
+
+    function UpDate(RequestId, Status) {
         var pid=@cookies.PersonId;
         var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
         $.ajax({
