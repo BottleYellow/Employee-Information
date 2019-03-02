@@ -111,32 +111,49 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-            $.ajax({
-                /**/
-                url: '@Url.Action("AddPolicy", "Leave")',
-    /**/
-    type: 'POST',
-    data: d,
-    beforeSend: function () {
-        $('.ajax-loader').css("visibility", "visible");
-    },
-    success: function (data) {
-        bootbox.alert({
-            message: "Policy Added Successfully!",
-            callback: function () {
-                window.parent.location.reload();
-            }
-        });
-    },
-    error: function (data) {
-        $("#md").replaceWith(data.responseText);
-    },
-    complete: function () {
-        $('.ajax-loader').css("visibility", "hidden");
-    }
-});
-}
-return false;
-});
+            bootbox.confirm({
+                message: "Are you sure to add new Leave Policy?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            /**/
+                            url: '@Url.Action("AddPolicy", "Leave")',
+                            /**/
+                            type: 'POST',
+                            data: d,
+                            beforeSend: function () {
+                                $('.ajax-loader').css("visibility", "visible");
+                            },
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Policy Added Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                            },
+                            complete: function () {
+                                $('.ajax-loader').css("visibility", "hidden");
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        return false;
+    });
 </script>

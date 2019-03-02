@@ -170,42 +170,59 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-                $.ajax({
-                    url: '@Url.Action("AddCredit", "Leave")',
-                    type: 'POST',
-                    data: d,
-                    beforeSend: function () {
-                        $('.ajax-loader').css("visibility", "visible");
+            bootbox.confirm({
+                message: "Are you sure to add Leave Creadit?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
                     },
-                    success: function (data) {
-                        bootbox.alert({
-                            message: "Leave Credited Successfully!",
-                            callback: function () {
-                                window.parent.location.reload();
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("AddCredit", "Leave")',
+                            type: 'POST',
+                            data: d,
+                            beforeSend: function () {
+                                $('.ajax-loader').css("visibility", "visible");
+                            },
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Leave Credited Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                                if (loc == 0) {
+                                    $("#msg").html("Please select location");
+                                }
+                                else {
+                                    $('#locations').val(loc);
+                                    debugger;
+                                    loadLeave(loc, type);
+
+
+                                    loadEmployees(loc, emp);
+
+                                }
+                            },
+                            complete: function () {
+                                $('.ajax-loader').css("visibility", "hidden");
                             }
                         });
-                    },
-                    error: function (data) {
-                        $("#md").replaceWith(data.responseText);
-                        if (loc == 0) {
-                            $("#msg").html("Please select location");
-                        }
-                        else {
-                           $('#locations').val(loc);
-                        debugger;
-                                loadLeave(loc,type);
-                            
-                           
-                                loadEmployees(loc,emp);
-                            
-                        }
-                    },
-                    complete: function () {
-                        $('.ajax-loader').css("visibility", "hidden");
                     }
-                });
-            }
-            return false;
+                }
+            });
+        }
+        return false;
     });
 </script>
