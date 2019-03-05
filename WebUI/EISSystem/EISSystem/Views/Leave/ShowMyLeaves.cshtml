@@ -232,29 +232,48 @@
       
     });
     function UpdateStatus(RequestId, Status) {
-        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/"+@cookies.PersonId;
-        $.ajax({
-            url: url1,
-            type: 'POST',
-            data: {},
-            beforeSend: function () {
-                $('.ajax-loader').css("visibility", "visible");
+        bootbox.confirm({
+            title: "Cancel Leave Request?",
+            message: "Do you want to cancel your Leave Request?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
             },
-            success: function (data) {
-                bootbox.alert({
-                    message: data,
-                    callback: function () {
-                        window.location.reload();
-                    }
-                });
-            },
-            error: function (data) {
-                alert(data.responseText);
-            },
-            complete: function () {
-                $('.ajax-loader').css("visibility", "hidden");
+            callback: function (result) {
+                if (result == true) {
+                    var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/"+@cookies.PersonId;
+                    $.ajax({
+                        url: url1,
+                        type: 'POST',
+                        data: {},
+                        beforeSend: function () {
+                            $('.ajax-loader').css("visibility", "visible");
+                        },
+                        success: function (data) {
+                            bootbox.alert({
+                                message: data,
+                                callback: function () {
+                                    window.location.reload();
+                                }
+                            });
+                        },
+                        error: function (data) {
+                            alert(data.responseText);
+                        },
+                        complete: function () {
+                            $('.ajax-loader').css("visibility", "hidden");
+                        }
+                    });
+                }
             }
         });
+
     }
     $("#btnModal").click(function () {
         var url = $("#modal-placeholder").data('url');

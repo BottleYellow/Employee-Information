@@ -21,17 +21,17 @@ namespace EIS.WebAPI.Controllers.Holidays
         }
         [Route("GetHolidays")]
         [HttpPost]
-        public IActionResult GetPastLeaves([FromBody]SortGrid sortGrid)
+        public IActionResult GetHolidays([FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
             IQueryable<Holiday> holidays = null;
             if (sortGrid.LocationId == 0)
             {
-                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true);
+                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true && x.IsActive==true);
             }
             else
             {
-                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true && x.LocationId == sortGrid.LocationId);
+                holidays = _repository.Holidays.FindAll().Include(x => x.Location).Where(x => x.Location.IsActive == true && x.LocationId == sortGrid.LocationId && x.IsActive == true);
             }
 
             if (string.IsNullOrEmpty(sortGrid.Search))
@@ -50,27 +50,61 @@ namespace EIS.WebAPI.Controllers.Holidays
         [HttpGet]
         public IEnumerable<Holiday> GetHolidays()
         {
-            return _repository.Holidays.FindAll().Include(x=>x.Location);
+            return _repository.Holidays.FindAll().Include(x=>x.Location).Where(x=>x.IsActive==true);
         }
         [HttpGet("{PersonId}")]
         public IEnumerable<Holiday> GetHolidaysForEmployee([FromRoute]int PersonId)
         {
             int? LocationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId;
-            return _repository.Holidays.FindAll().Where(x=>x.LocationId==LocationId);
+            return _repository.Holidays.FindAll().Where(x => x.LocationId == LocationId && x.IsActive==true);
         }
-        [HttpPost]
-        public IActionResult Create([FromBody]Holiday holiday)
+        [Route("GetHolidayById/{HolidayId}")]
+        [HttpGet]
+        public IActionResult GetHolidaysById([FromRoute]int HolidayId)
         {
-            if (!ModelState.IsValid)
+            Holiday holiday = _repository.Holidays.FindByCondition(x => x.Id == HolidayId);
+            if (holiday == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
-            holiday.TenantId = TenantId;
-            _repository.Holidays.CreateAndSave(holiday);
+            return Ok(holiday);
+        }
+        [HttpPost("{HolidayId}")]
+        public IActionResult Create([FromRoute]int HolidayId, [FromBody]Holiday holiday)
+        {
+            if (HolidayId == 0)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                holiday.TenantId = TenantId;
+                _repository.Holidays.CreateAndSave(holiday);
+                _repository.Holidays.Dispose();
+                return Ok(holiday);
+            }
+            else
+            {
+                holiday.TenantId = TenantId;
+                _repository.Holidays.UpdateAndSave(holiday);
+                _repository.Holidays.Dispose();
+                return Ok(holiday);
+            }
+        }
+        [Route("DeleteHoliday/{id}")]
+        [HttpPost]
+        public IActionResult Delete([FromRoute]int id)
+        {
+            Holiday holiday = _repository.Holidays.FindByCondition(x => x.Id == id);
+            if (holiday == null)
+            {
+                return NotFound();
+            }
+            holiday.IsActive = false;
+            _repository.Holidays.UpdateAndSave(holiday);
             _repository.Holidays.Dispose();
             return Ok(holiday);
         }
-
         [HttpGet("{date}/{loc}")]
         public IEnumerable<Holiday> GetHoliday([FromRoute] string date, [FromRoute] int loc)
         {

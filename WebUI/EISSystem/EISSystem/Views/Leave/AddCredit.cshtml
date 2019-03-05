@@ -8,13 +8,32 @@
         content: "*";
         position: relative;
     }
+
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+        .ajax-loader img {
+            position: relative;
+            top: 40%;
+            left: 40%;
+        }
 </style>
-<div class="modal-dialog" role="document">
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+<div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <HeaderWithButton class="modal-title" header-name="Add Leave Credit"></HeaderWithButton>
         </div>
         <div class="modal-body">
+            <div class="ajax-loader">
+                <img src="~/gif/Spinner.gif" />
+            </div>
             <form name="cp" id="cp" asp-action="AddCredit" asp-controller="Leave" method="post">
                 <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
@@ -22,19 +41,20 @@
                     <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                         <option value="0">-- Select Location --</option>
                     </select>
+                    <span id="msg" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" asp-for="PersonId">Select Employee</label>
                     <select id="emp" asp-for="PersonId" class="form-control show-tick">
-                        <option>-- Select --</option>
+                        <option value="0">-- Select Employee --</option>
                     </select>
                     <span asp-validation-for="PersonId" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" asp-for="LeaveType">Leave Type</label>
-                    <select id="type" asp-for="LeaveId" class="form-control show-tick" onchange="myFunction();">
+                    <select id="type" asp-for="LeaveId" class="form-control show-tick">
                         <option value="0">-- Select Leave Type --</option>
-                    </select> 
+                    </select>
                     <span asp-validation-for="LeaveType" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -47,17 +67,32 @@
                 <div class="form-group required">
                     <label class="control-label">Valid From</label>
                     <div class="form-line">
-                        <input type="date" value="01/01/2018" asp-for="ValidFrom" class="form-control" autocomplete="off"/>
+                        <input class="form-control" type="text" asp-for="ValidFrom" value="" id="validFrom" placeholder="select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidFrom" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Valid To</label>
                     <div class="form-line">
-                        <input type="date" value="01/01/2018" asp-for="ValidTo" class="form-control" autocomplete="off"/>
+                        <input class="form-control" type="text" asp-for="ValidTo" value="" id="validTo" placeholder="select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidTo" class="text-danger"></span>
                 </div>
+
+                @*<div class="form-group required">
+                        <label class="control-label">Valid From</label>
+                        <div class="form-line">
+                            <input type="date" value="01/01/2018" asp-for="ValidFrom" class="form-control" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ValidFrom" class="text-danger"></span>
+                    </div>
+                    <div class="form-group required">
+                        <label class="control-label">Valid To</label>
+                        <div class="form-line">
+                            <input type="date" value="01/01/2018" asp-for="ValidTo" class="form-control" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ValidTo" class="text-danger"></span>
+                    </div>*@
                 <input id="tp" type="hidden" asp-for="LeaveType" />
                 <div class="modal-footer">
                     <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Add Credit</button>
@@ -68,73 +103,126 @@
 
     </div>
 </div>
-
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>
 
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
-    $('#locations').on('change', function () {
-        var loc = $('#locations').val();
-            $.ajax({
+    var d = new Date();
+    d.setDate(d.getDate());
+    var defaultDate = moment().toDate();
+    $('#validFrom').datetimepicker({
+        format: "DD/MMM/YYYY",
+        defaultDate: d
+    });
+    $('#validTo').datetimepicker({
+        format: "DD/MMM/YYYY",
+        defaultDate: d
+    });
+    function loadEmployees(loc,eid){
+         $.ajax({
                 type: 'GET',
                 url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
                 success: function (data) {
-                    $('#emp').empty().append('<option selected="selected" value="0">-- Select --</option>');
+                    $('#emp').empty().append('<option value="0">-- Select Employee --</option>');
                     $.each(data, function (data, value) {
                         $('#emp').append($("<option></option>").val(this.id).html(this.fullName));
                     });
+                    $('#emp').val(eid);
+
                 },
                 error: function () {
                     bootbox.alert("Something went wrong..Please try after sometime");
                 }
         });
+    }
+    function loadLeave(loc,lid){
          $.ajax({
                 type: 'GET',
                 url: '@MyHttpContext.APIBaseURL/api/LeavePolicy/GetPolicies/' + loc,
                 success: function (data) {
-                    $('#type').empty().append('<option selected="selected" value="0">-- Select Leave Type --</option>');
+                    $('#type').empty().append('<option value="0">-- Select Leave Type --</option>');
                     $.each(data, function (data, value) {
                         $('#type').append($("<option></option>").val(this.id).html(this.leaveType));
                     });
+                     $('#type').val(lid);
                 },
                 error: function () {
                     bootbox.alert("Something went wrong..Please try after sometime");
                 }
             });
+    }
+    $('#locations').on('change', function () {
+        var loc = $('#locations').val();
+        loadEmployees(loc,0);
+        loadLeave(loc,0);
     });
 
     $('#btnSubmit').click(function () {
+        var loc = $('#locations').val();
+        var type = $('#type').val();
+        var emp = $('#emp').val();
         var t = $("#type option:selected").text();
         $("#tp").val(t);
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-                $.ajax({
-                    url: '@Url.Action("AddCredit", "Leave")',
-                    type: 'POST',
-                    data: d,
-                    success: function (data) {
-                        bootbox.alert({
-                            message: "Leave Credited Successfully!",
-                            callback: function () {
-                                window.parent.location.reload();
-                            }
-                        });
+            bootbox.confirm({
+                message: "Are you sure to add Leave Creadit?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
                     },
-                    error: function (data) {
-                        bootbox.alert({
-                            message: 'Error',
-                            callback: function () {
-                                window.parent.location.reload();
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("AddCredit", "Leave")',
+                            type: 'POST',
+                            data: d,
+                            beforeSend: function () {
+                                $('.ajax-loader').css("visibility", "visible");
+                            },
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Leave Credited Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                                if (loc == 0) {
+                                    $("#msg").html("Please select location");
+                                }
+                                else {
+                                    $('#locations').val(loc);
+                                    debugger;
+                                    loadLeave(loc, type);
+
+
+                                    loadEmployees(loc, emp);
+
+                                }
+                            },
+                            complete: function () {
+                                $('.ajax-loader').css("visibility", "hidden");
                             }
                         });
-
                     }
-                });
-            }
-            return false;
+                }
+            });
+        }
+        return false;
     });
 </script>

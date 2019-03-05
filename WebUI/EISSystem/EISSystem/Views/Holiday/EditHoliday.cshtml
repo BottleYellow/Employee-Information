@@ -1,5 +1,6 @@
 ﻿@using EIS.Entities.Hoildays
 @using EIS.Entities.Enums;
+@using System.Globalization;
 @model Holiday
 <!-- Modal -->
 <style type="text/css">
@@ -13,12 +14,15 @@
 <div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <HeaderWithButton class="modal-title" header-name="Add Holiday"></HeaderWithButton>
+            <HeaderWithButton class="modal-title" header-name="Update Holiday"></HeaderWithButton>
         </div>
         <div class="modal-body">
-            <form name="cp" id="cp" asp-action="AddHoliday" asp-controller="Holiday" method="post">
+            <form name="cp" id="cp" asp-action="EditHoliday" asp-controller="Holiday" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="RowVersion" />
 
-                <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
                     <label class="control-label" asp-for="LocationId">Location : </label>
                     <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
@@ -29,8 +33,8 @@
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" autocomplete="off" />
-                     </div>
+                        <input class="form-control" type="text" asp-for="Date" id="inputdate1" placeholder="select Date" autocomplete="off" />
+                    </div>
                     <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -59,12 +63,23 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    $(document).ready(function () {
+        var d1 = document.getElementById("inputdate1").value;
+        var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+        var dt = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+
+        if (dt == "Invalid date") {
+            $("#inputdate1").val(d1);
+        } else {
+            $("#inputdate1").val(dt);
+        }
+    })
     $('#btnSubmit').click(function () {
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
             bootbox.confirm({
-                message: "Are you sure to add new Holiday?",
+                message: "Are you sure to update Holiday?",
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -79,12 +94,12 @@
                     if (result == true) {
                         var d = form.serialize();
                         $.ajax({
-                            url: '@Url.Action("AddHoliday", "Holiday")',
+                            url: '@Url.Action("EditHoliday", "Holiday")',
                             type: 'POST',
                             data: d,
                             success: function (data) {
                                 bootbox.alert({
-                                    message: "Holiday Added Successfully!",
+                                    message: "Holiday Updated Successfully!",
                                     callback: function () {
                                         window.parent.location.reload();
                                     }
@@ -92,7 +107,7 @@
                             },
                             error: function (data) {
                                 $("#md").replaceWith(data.responseText);
-                                $('#inputdate').datetimepicker({
+                                $('#inputdate1').datetimepicker({
                                     format: "DD-MMM-YYYY"
                                 });
                             }
@@ -100,7 +115,7 @@
                     }
                 }
             });
-            
+
         }
         return false;
     });

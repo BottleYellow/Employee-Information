@@ -108,6 +108,7 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    var avl = null;
         var availableLeaves = null;
         var d = new Date();
     d.setDate(d.getDate());
@@ -172,12 +173,6 @@
                 $("#dateTo").val('');
                 $("#btnAddLeave").prop("disabled", true);
             }
-            else if (parseInt(days) > parseInt(availableLeaves)) {
-                bootbox.alert({
-                    message: "You can request leave for only " + availableLeaves + " days."
-                });
-                $("#btnAddLeave").prop("disabled", true);
-            }
             else {
                 $("#trd1").val(days);
                 $("#btnAddLeave").removeAttr('disabled');
@@ -206,15 +201,22 @@
                             url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
                             type: 'GET',
                             success: function (data) {
-                                days = data;
-                                if (days == 0) {
+                                //days = data;
+                                if (data == 0) {
                                     bootbox.alert({
                                         message: "Plese select working days"
                                     });
                                     $("#btnAddLeave").prop("disabled", true);
                                 }
+                                else if (data > avl){
+                                    bootbox.alert({
+                                        message: "You can request leave for only " + avl + " days."
+                                    });
+                                    $("#btnAddLeave").prop("disabled", true);
+                                }
                                 else {
-                                    $("#trd1").val(days);
+                                    $("#trd1").val(data);
+                                    $("#av1").val(avl - data);
                                     var form = $("#cp1");
                                     $.validator.unobtrusive.parse(form);
                                     if (form.valid()) {
@@ -292,6 +294,7 @@
                 var pid = @cookies.PersonId;
                 $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
                     availableLeaves = data;
+                    avl = data;
                     if (data == 0) {
                         $("#LeaveType").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
                     }

@@ -16,6 +16,7 @@
     }
 }
 <style>
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -30,8 +31,12 @@
             left: 45%;
         }
 
-    a {
+    .info-box {
         cursor: pointer;
+    }
+
+    a:hover, a:focus {
+        text-decoration: none;
     }
 
     .disabledLink {
@@ -39,6 +44,12 @@
         cursor: not-allowed;
         opacity: 0.5;
         text-decoration: none;
+    }
+
+    table.dataTable td {
+        padding: 3px 10px;
+        width: 1px;
+        white-space: nowrap;
     }
 </style>
 <head>
@@ -58,61 +69,61 @@
     </div>
     <div class="row clearfix">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box bg-pink hover-expand-effect">
-                <a role="button" id="allEmployee">
+            <a role="button" id="allEmployee">
+                <div class="info-box bg-pink hover-expand-effect">
+
                     <div class="icon">
                         <i class="material-icons">supervisor_account</i>
                     </div>
-                </a>
-                <div class="content">
-                    <div class="text">TOTAL EMPLOYEES</div>
-                    <div id="totalEmployeeCount" class="number count-to"></div>
-                </div>
-            </div>
 
+                    <div class="content">
+                        <div class="text">TOTAL EMPLOYEES</div>
+                        <div id="totalEmployeeCount" class="number count-to"></div>
+                    </div>
+                </div>
+            </a>
 
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class=" info-box bg-light-green hover-expand-effect">
-                <a role="button" id="employeePresent">
+            <a role="button" id="employeePresent">
+                <div class=" info-box bg-light-green hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons">assignment_ind</i>
                     </div>
-                </a>
-                <div class="content">
-                    <div class="text">EMPLOYEE PRESENT</div>
-                    <div id="employeePresentCount" class="number count-to"></div>
+                    <div class="content">
+                        <div class="text">EMPLOYEE PRESENT</div>
+                        <div id="employeePresentCount" class="number count-to"></div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-            <div class="info-box bg-cyan hover-expand-effect">
-                <a role="button" id="employeeAbsent">
+            <a role="button" id="employeeAbsent">
+                <div class="info-box bg-cyan hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons"> assignment_late</i>
                     </div>
-                </a>
-                <div class="content">
-                    <div class="text">ABSENT / ON LEAVE</div>
-                    <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="content">
+                        <div class="text">ABSENT / ON LEAVE</div>
+                        <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box bg-orange hover-expand-effect">
-                <a id="pendingLeaveButton" role="button">
+            <a id="pendingLeaveButton" role="button">
+                <div class="info-box bg-orange hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons">
                             account_circle
                         </i>
                     </div>
-                </a>
-                <div class="content">
-                    <div class="text">PENDING LEAVES</div>
-                    <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    <div class="content">
+                        <div class="text">MONTHLY LEAVES</div>
+                        <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
     <div class="row clearfix">
@@ -246,6 +257,7 @@
 <script src="~/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
 <script>
     var buttonSelected = "All";
     $(document).ready(function () {
@@ -397,6 +409,7 @@
             }
 
         $('#BanerLeavesTable').DataTable().destroy();
+        var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
             "aoColumns": [
                 null,
@@ -409,7 +422,10 @@
                 null,
                 null
             ],
-            "order": [[7, "desc"], [6 , "desc"]],
+            "order": [[7, "desc"], [6, "desc"]],
+            columnDefs: [
+                { targets: 7, type:nameType }
+            ],
             data: banerArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {
@@ -426,6 +442,7 @@
         });
 
         $('#KondhwaLeavesTable').DataTable().destroy();
+        var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
             "aoColumns": [
                 null,
@@ -439,6 +456,9 @@
                 null
             ],
             "order": [[7, "desc"], [6, "desc"]],
+            columnDefs: [
+                { targets: 7, type: nameType2 }
+            ],
             data: kondhwaArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {

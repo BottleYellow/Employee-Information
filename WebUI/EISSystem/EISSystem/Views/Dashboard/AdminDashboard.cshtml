@@ -16,7 +16,7 @@
     }
 }
 <style>
-   
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -61,7 +61,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/Calendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>                 
+                <HeaderWithButton header-name="DASHBOARD" btn-href="location.href='@rootPath/Dashboard/Calendar'" btn-text="Calendar" icon-name="assignment"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -169,7 +169,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table  class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
                                 <thead>
                                     <tr class="active">
                                         <th>Name</th>
@@ -258,7 +258,7 @@
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
                                 <thead>
                                     <tr class="active">
-                                        <th >Actions</th>
+                                        <th>Actions</th>
                                         <th>Employee Name</th>
                                         <th>Leave Type</th>
                                         <th>From Date</th>
@@ -347,8 +347,8 @@
                     document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
                     document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
                     document.getElementById("employeePendingLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
-                    document.getElementById("employeeApprovedLeavesCount").innerHTML = "4";
-                    document.getElementById("employeeRejectedLeavesCount").innerHTML = "2";
+                    document.getElementById("employeeApprovedLeavesCount").innerHTML = data.sP_AdminDashboardCount.ApprovedLeavesCount;
+                    document.getElementById("employeeRejectedLeavesCount").innerHTML = data.sP_AdminDashboardCount.RejectedLeavesCount;
                     if (buttonSelected == "PendingLeaves" || buttonSelected == "ApprovedLeaves" || buttonSelected == "RejectedLeaves") {
                         getLeavesData(data.sp_AdminDashboardLeaves);
                     } else {
@@ -458,9 +458,14 @@
                     }
                 }
             }
+
+
         }
-                     
-                  
+
+
+
+
+
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
@@ -475,7 +480,7 @@
                 null,
                 null
             ],
-            "order": [[7, "desc"], [6, "desc"]],
+            "order": [[3, "asc"], [6, "desc"]],
             columnDefs: [
                 { targets: 7, type:nameType }
             ],
@@ -507,7 +512,7 @@
                 null,
                 null
             ],
-            "order": [[7, "desc"], [6, "desc"]],
+            "order": [[3, "asc"], [6, "desc"]],
             columnDefs: [
                 { targets: 7, type: nameType2 }
             ],

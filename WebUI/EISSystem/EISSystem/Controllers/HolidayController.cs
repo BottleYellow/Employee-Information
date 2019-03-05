@@ -69,7 +69,7 @@ namespace EIS.WebApp.Controllers
                 holiday.CreatedDate = DateTime.Now.Date;
                 holiday.UpdatedDate = DateTime.Now.Date;
                 holiday.IsActive = true;
-                HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Holiday", holiday);
+                HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Holiday/"+0, holiday);
                 string stringData = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode == true)
@@ -90,5 +90,67 @@ namespace EIS.WebApp.Controllers
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("AddHoliday", holiday);
         }
+        [DisplayName("Update Holiday")]
+        public IActionResult EditHoliday(int HolidayId)
+        {
+            ViewBag.Locations = GetLocations();
+            string stringData = _service.GetResponse(ApiUrl + "/api/Holiday/GetHolidayById/" + HolidayId + "").Content.ReadAsStringAsync().Result;
+            Holiday holiday = JsonConvert.DeserializeObject<Holiday>(stringData);
+            return PartialView("EditHoliday", holiday);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditHoliday(Holiday holiday)
+        {
+            ViewBag.Locations = GetLocations();
+            if (holiday.LocationId == 0)
+            {
+                ModelState.AddModelError("LocationId", "Please select location");
+            }
+            if (ModelState.IsValid)
+            {
+                holiday.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
+                ViewBag.Locations = GetLocations();
+                holiday.UpdatedDate = DateTime.Now.Date;
+                holiday.IsActive = true;
+                HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Holiday/"+holiday.Id, holiday);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode == true)
+                {
+                    return View();
+                }
+                else
+                {
+                    dynamic data = JObject.Parse(stringData);
+                    var Message = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+                    string error = data.Date.ToString();
+                    error = error.Replace("[", null); error = error.Replace("]", null);
+
+                    ModelState.AddModelError("Date", error);
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
+            }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("EditHoliday", holiday);
+        }
+        [DisplayName("Delete Holiday")]
+        public void Delete(int id)
+        {
+            HttpResponseMessage response = _service.PostResponse(ApiUrl + "/api/Holiday/DeleteHoliday/" + id, null);
+            if (response != null)
+            {
+
+            }
+
+        }
+        //[DisplayName("Activate Holiday")]
+        //public IActionResult ActivateLocation(int id)
+        //{
+        //    HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Location/ActivateLocation/" + id + "");
+        //    if (response.IsSuccessStatusCode)
+        //        ViewBag.Message = "Location activated successfully!";
+        //    return RedirectToAction("Index", "Location");
+        //}
     }
 }

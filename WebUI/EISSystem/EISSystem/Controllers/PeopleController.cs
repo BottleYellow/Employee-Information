@@ -209,6 +209,7 @@ namespace EIS.WebApp.Controllers
             ViewBag.Designations = rolesList;
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
+                        where p.EmployeeCode!=EmployeeCode
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
             ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;

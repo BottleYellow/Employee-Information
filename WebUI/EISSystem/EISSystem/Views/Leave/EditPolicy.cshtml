@@ -100,30 +100,48 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-                $.ajax({
-                    url: '@Url.Action("EditPolicy", "Leave")',
-                    type: 'POST',
-                    data: d,
-                    beforeSend: function () {
-                        $('.ajax-loader').css("visibility", "visible");
+            bootbox.confirm({
+                message: "Are you sure to Edit Leave Policy?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
                     },
-                    success: function (data) {
-                        bootbox.alert({
-                            message: "Policy Updated Successfully!",
-                            callback: function () {
-                                window.parent.location.reload();
-                            }
-                        });                    
-                    },
-                    error: function (data) {
-                        $("#md").replaceWith(data.responseText);
-                    },
-                    complete: function () {
-                        $('.ajax-loader').css("visibility", "hidden");
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
                     }
-                });
-            }
-            return false;
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("EditPolicy", "Leave")',
+                            type: 'POST',
+                            data: d,
+                            beforeSend: function () {
+                                $('.ajax-loader').css("visibility", "visible");
+                            },
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Policy Updated Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                            },
+                            complete: function () {
+                                $('.ajax-loader').css("visibility", "hidden");
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+        return false;
     });
 </script>

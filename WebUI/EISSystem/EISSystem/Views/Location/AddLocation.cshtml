@@ -48,24 +48,42 @@
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {
-            var d = form.serialize();
-            //var url1 = "/Holiday/AddHoliday";
-            $.ajax({
-                url: '@Url.Action("AddLocation", "Location")',
-                type: 'POST',
-                data: d,
-                success: function (data) {
-                    bootbox.alert({
-                        message: "Location Added Successfully!",
-                        callback: function () {
-                            window.parent.location.reload();
-                        }
-                    });
+            bootbox.confirm({
+                message: "Do you want to add new Location?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
                 },
-                error: function (data) {
-                    $("#md").replaceWith(data.responseText);
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+            //var url1 = "/Holiday/AddHoliday";
+                        $.ajax({
+                            url: '@Url.Action("AddLocation", "Location")',
+                            type: 'POST',
+                            data: d,
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Location Added Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                            }
+                        });
+                    }
                 }
             });
+            
         }
         return false;
     });
