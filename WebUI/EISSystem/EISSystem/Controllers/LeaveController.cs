@@ -8,6 +8,7 @@ using System.Net.Http;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -98,8 +99,10 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetMyLeaves()
         {
             int pid = Convert.ToInt32(GetSession().PersonId);
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/Employee/" + pid + "", null, null);
+            HttpResponseMessage response = _services.LeaveRequest.GetResponse(ApiUrl + "/api/LeaveRequest/Employee/" + pid);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<SP_EmployeeLeaveRequest> leaveData = JsonConvert.DeserializeObject<List<SP_EmployeeLeaveRequest>>(stringData);
+                return Json(leaveData);
 
         }
 

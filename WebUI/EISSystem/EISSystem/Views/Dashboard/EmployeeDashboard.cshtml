@@ -96,7 +96,7 @@
                 </div>
                 <div class="body" id="attendanceCard">
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -109,7 +109,7 @@
                             </thead>
                             <tbody></tbody>
                         </table>
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden>
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" style="width:100%" hidden>
                             <thead>
                                 <tr>
                                     <th>Leave Type</th>
@@ -133,9 +133,9 @@
 <script>
     var buttonSelected = "All";
     var selectOpt;
-    var result = "";
+
     $(document).ready(function () {
-       result= getCreatedBy();
+
         $('#tableName').html('Monthly Attendance');
         generateReport(buttonSelected);
     });
@@ -170,7 +170,7 @@
                     if (buttonSelected == "totalLeave") {
                         $('#attendanceTable').hide();
                         $('#LeaveTable').show();
-                        getData(data.leaveRequests, buttonSelected);
+                        getData(data.SP_EmployeeLeaveRequest, buttonSelected);
 
                     } else {
                         $('#LeaveTable').hide();
@@ -200,15 +200,19 @@
                     if (Employees[i].LeaveType.includes("Past")) {
                         approvedName = "Past Leave Auto Approved";
                     } else {
-                        approvedName = getCreatedname(result, Employees[i].ApprovedBy) ;
+                        approvedName = Employees[i].ApprovedBy;
                     }
 
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
 
                 }
-                else if (Status == "Rejected" || Status == "Cancelled") {
+                else if (Status == "Rejected"){
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                }
+                    approvedName =Employees[i].ApprovedBy;
+                } else if (Status == "Cancelled") {
+                    approvedName = "-";
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                }                                             
                 else if (Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
@@ -280,28 +284,5 @@
                 data: array
             });
         }
-    }
-
-     function getCreatedBy() {
-        var result = null;
-        $.ajax({
-            type: "GET",
-            async: false,
-                    url: '@APIURL/api/Employee/CreatedBy',
-                    data: null,
-            success: function (data) {
-                        result = data;
-                    }
-        });
-        return result;
-    }
-
-    function getCreatedname(result,pid) {
-        $.each(result, function (i, item){
-            if (result[i].key == pid) {
-               value= result[i].value;
-            }
-        })
-        return value;
     }
 </script>

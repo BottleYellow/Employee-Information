@@ -120,115 +120,70 @@
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
-    var result = "";
+
     $(document).ready(function () {
-        debugger;
         if ('@ViewBag.AvailableCount' != null) {
             var data = 'Available : @ViewBag.AvailableCount';
             $("#availableLeave").html(data);
         }
-        result=getCreatedBy();
-            $.fn.dataTable.ext.errMode = 'none';
-            $('#example').on('error.dt', function () {
-                bootbox.alert('<h4>Unable to load data from Server. Please try after sometime</h4>');
-            }).DataTable();
-            $('#example').DataTable().destroy();
-            $('#example tbody').empty();
-        var dTable = $('#example').DataTable({
-            "processing": true, // for show progress bar
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            order:[1,'desc'],   
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Employee Report',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf',
-                    orientation: 'landscape',
-                    pageSize: 'LEGAL'
-                }
-            ],
-            sDom: '<"myexport"B>ifrtlp',
-            lengthMenu: [
-                [10, 25, -1],
-                ['10', '25', 'All']
-            ],
-            ajax: {
-                "url":'@Url.Action("ShowMyLeaves", "Leave")',
-                "type": "POST",
-                "datatype": "json",
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                }
+        $.ajax({
+            url: '@Url.Action("ShowMyLeaves","Leave")',
+            type: "POST",
+            datatype: "json",
+            beforeSend: function () {
+                $('.ajax-loader').css('visibility', "visible");
             },
-            "columns": [
+            complete: function () {
+                $('.ajax-loader').css('visibility', 'hidden');
+            },
+            success: function (data) {
+                debugger;
+            var array = [];
+                for (var i = 0; i < data.length; i++)
                 {
-                    "data": "LeaveType", "name": "LeaveType", "autoWidth": true, render: function (data) {
-                        return data;
+                    var action = "";
+                    var status = data[i].Status;
+                    var statusView = "";
+                    var fromDate = moment(data[i].fromDate).format("DD MMM YYYY");
+                    var toDate = moment(data[i].toDate).format("DD MMM YYYY");
+                    if (status == "Pending") {
+                        statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
+                    } else if (status == "Approved" || status.startsWith('Approved')) {
+                        statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
+                    } else {
+                        statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                     }
-                },
-                {
-                    "data": "FromDate",   "name": "FromDate", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
+                    if (status == "Rejected" || status == "Cancelled" || status == "Requested For Cancel" || status == "Approved(Rejected Cancel Request)") {
+                        action= '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Cancel Request</a></li></ul></div>';
                     }
-                },
-                {
-                    "data": "ToDate", "name": "ToDate", "autoWidth": true, render: function (data) {
-                        data = moment(data).format('DD MMM YYYY');
-                        return data;
+                    else {
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
                     }
-                },
-                {
-                    "data": "RequestedDays", "name": "RequestedDays", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },
-                
-                {
-                    "data": "Status", "name": "Status", "autoWidth": true, render: function (data) {
-                        if (data == "Pending") {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + data + '</span>';
-                        } else if (data == "Approved" || data.startsWith('Approved')) {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data + '</span>';
-                        } else {
-                            return '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + data + '</span>';
-                        }
-                    }
-                },
-                {
-                    "data": "ApprovedBy", "name": "Reason", "autoWidth": true, render: function (data,type,row) {
-                        var x = "-";
-                        if (row.LeaveType.includes("Past")) {
-                            x = "Past Leave Auto Approved"
-                        } else if (row.Status == "Approved") {
-                            x = getCreatedname(result, data)
-                        }                                     
-                        return x;
-                    }
-                },
-                {
-                    "data": "Reason", "name": "Reason", "autoWidth": true, render: function (data) {
-                        return data;
-                    }
-                },              
-                {
-                    data: null, "autoWidth": true, render: function (data, type, row) {
-                        if (row.Status == "Rejected" || row.Status == "Cancelled" || row.Status == "Requested For Cancel" || row.Status =="Approved(Rejected Cancel Request)") {
-                            return '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Cancel Request</a></li></ul></div>';
-                        }
-                        else {
-                            return '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a onclick="javascript: UpdateStatus(' + row.Id + ',\'Cancel\')">Cancel Request</a></li></ul></div>';
-                        }
-
-                    }
+                    array.push([data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, statusView, data[i].ApprovedBy, data[i].Reason, action])
                 }
-            ]
+                $('#example').DataTable().destroy();
+                $('#example').DataTable({
+                    sDom: '<"myexport"B>ifrtlp',
+                    order: [1, 'asc'],
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'EMPLOYEE REPORT',
+                            text: 'Export',
+                            titleAttr: 'Export to Pdf',
+                            exportOptions: {
+                                columns: [0, 1, 2, 4, 5]
+                            }
+                        }
+                    ],
+                    data: array
+                });
+            }
         });
+
+      
+
+      
       
     });
     function UpdateStatus(RequestId, Status) {
@@ -303,29 +258,6 @@
             }
         });
     });
-
-     function getCreatedBy() {
-        var result = null;
-        $.ajax({
-            type: "GET",
-            async: false,
-                    url: '@APIURL/api/Employee/CreatedBy',
-                    data: null,
-            success: function (data) {
-                        result = data;
-                    }
-        });
-        return result;
-    }
-
-    function getCreatedname(result,pid) {
-        $.each(result, function (i, item){
-            if (result[i].key == pid) {
-               value= result[i].value;
-            }
-        })
-        return value;
-    }
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>

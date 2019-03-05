@@ -43,7 +43,7 @@
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
-    <div class="modal-content">
+    <div class="modal-content" id="requestDiv">
         <div class="modal-header">
             <HeaderWithButton class="modal-title" header-name="Add Future Leave"></HeaderWithButton>
         </div>
@@ -129,6 +129,7 @@
         $(document).ready(function () {
             if ('@ViewBag.Status'=='NoData')
             {
+                $('#requestDiv').hide();
                 bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
                     location.href = '@Url.Action("ShowMyLeaves", "Leave")';
                 });

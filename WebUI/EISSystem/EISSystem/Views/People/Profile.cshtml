@@ -92,7 +92,7 @@
                                     </tr>
                                     <tr>
                                         <th>Join Date</th>
-                                        <td>@Html.DisplayFor(model => model.JoinDate)</td>
+                                        <td>@Model.JoinDate.ToString("dd MMM yyyy")</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
@@ -104,7 +104,7 @@
                                     </tr>
                                     <tr>
                                         <th>DOB</th>
-                                        <td>@Html.DisplayFor(model => model.DateOfBirth)</td>
+                                        <td>@Model.DateOfBirth.ToString("dd MMM yyyy")</td>
                                     </tr>
                                     <tr>
                                         <th>Gender</th>

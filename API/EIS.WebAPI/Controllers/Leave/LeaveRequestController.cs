@@ -102,29 +102,12 @@ namespace EIS.WebAPI.Controllers
         }
 
         [DisplayName("Show my leaves")]
-        [HttpPost]
+        [HttpGet]
         [Route("Employee/{id}")]
-        public IActionResult GetLeaveRequestsByEmployee([FromBody]SortGrid sortGrid, [FromRoute] int id)
+        public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
-            ArrayList data = new ArrayList();
-            IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
-
-            if (leaveData == null)
-            {
-                return NotFound();
-            }
-
-            if (string.IsNullOrEmpty(sortGrid.Search))
-            {
-
-                data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
-            }
-            else
-            {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()) || x.Status.Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
-            }
-            return Ok(data);
-
+           List <SP_EmployeeLeaveRequest> leaveData= _repository.LeaveRequest.GetEmployeeLeaveData(id);
+            return Ok(leaveData);
         }
 
 
