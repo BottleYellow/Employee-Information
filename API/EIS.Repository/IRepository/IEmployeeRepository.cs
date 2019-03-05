@@ -1,4 +1,5 @@
 ﻿using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.SP;
 using System.Collections.Generic;
 
@@ -17,5 +18,6 @@ namespace EIS.Repositories.IRepository
         string GetEmployeeCode(int PersonId);
         List<GetAdminHrManager> getAdminHrManager();
         List<SP_GetEmployee> getEmployees(int location);
+        List<WeeklyOffs> GetWeeklyOffs();
     }
 }

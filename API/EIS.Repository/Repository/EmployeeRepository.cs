@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
+using EIS.Entities.Hoildays;
 using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,10 @@ namespace EIS.Repositories.Repository
             var MaxId = _dbContext.Person.Where(x=>x.TenantId==TenantId).Max(x => x.EmployeeCode);
             return Convert.ToInt32(MaxId) + 1;
         }
+        public List<WeeklyOffs> GetWeeklyOffs()
+        {
+            return _dbContext.WeeklyOffs.Where(x=>x.IsActive==true).ToList();
+        }
 
         public List<GetAdminHrManager> getAdminHrManager()
         {
@@ -88,7 +93,7 @@ namespace EIS.Repositories.Repository
 
         public Person GetProfile(string EmployeeCode)
         {
-            return _dbContext.Person.Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
+            return _dbContext.Person.Include(x=>x.WeeklyOff).Include(x => x.PermanentAddress).Include(x => x.CurrentAddress).Include(x => x.EmergencyAddress).Include(x=>x.OtherAddress).Include(x=>x.Role).Include(x=>x.Attendance).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
         }
 
         public void UpdateDesignationAndSave(Role designation)
