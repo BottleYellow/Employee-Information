@@ -136,22 +136,22 @@
     var result = "";
     $(document).ready(function () {
        result= getCreatedBy();
-        $('#tableName').html('Attendance');
+        $('#tableName').html('Monthly Attendance');
         generateReport(buttonSelected);
     });
     $('#presentButton').click(function () {
         buttonSelected = "Present";
-        $('#tableName').html('Present Attendance');
+        $('#tableName').html('Monthly Present Attendance');
         generateReport(buttonSelected);
     });
     $("#leaveButton").click(function () {
         buttonSelected = "Leave";
-        $('#tableName').html('Leave Attendance');
+        $('#tableName').html('Monthly Leave Attendance');
         generateReport(buttonSelected);
     });
     $('#totalLeaveButton').click(function () {
         buttonSelected = "totalLeave";
-        $('#tableName').html('Total Leaves');
+        $('#tableName').html('Total Leaves Availed');
         generateReport(buttonSelected);
     });
 
@@ -213,7 +213,7 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
                 else {
-                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                 }
                 array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
             } else
@@ -245,9 +245,12 @@
                     } else {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                        } else if (Status == "Absent") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        }
+                        } 
+
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
                 }

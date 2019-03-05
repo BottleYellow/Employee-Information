@@ -13,7 +13,7 @@ namespace EIS.Repositories.IRepository
         bool VerifyPassword(int Id, string Password);
         void ChangePasswordAndSave(int Id, string NewPassword);
         void CreateUserAndSave(Users users);
-        List<MailConfiguration> GetMailConfiguration();
+        MailConfiguration GetMailConfiguration();
     }
 }
  

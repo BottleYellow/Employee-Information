@@ -28,6 +28,8 @@
                 left: 45%;
             }
         table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
@@ -58,21 +60,22 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <table id="example" class="table table-bordered table-striped table-hover dt-responsive js-basic-example dataTable" style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th>Location</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>Valid From</th>
-                                    <th>Valid To</th>
-                                    <th>Days</th>
-                                    <th>Available</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered table-striped table-hover " style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Location</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
+                                        <th>Days</th>
+                                        <th>Available</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,6 +118,7 @@
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
+                    order:[4,'asc'],
                     data: array
                 });
             },

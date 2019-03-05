@@ -85,6 +85,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Show My Leaves")]
         public IActionResult ShowMyLeaves()
         {
+            int pid = Convert.ToInt32(GetSession().PersonId);
+            HttpResponseMessage response = _services.LeaveRequest.GetResponse(ApiUrl + "/api/LeaveRequest/GetAvailableCount/" + pid);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            int value = JsonConvert.DeserializeObject<int>(stringData);
+            ViewBag.AvailableCount = value;
             return View();
         }
         

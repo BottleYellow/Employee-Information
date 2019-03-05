@@ -28,7 +28,7 @@ namespace EIS.WebAPI.Controllers
     {
 
         private readonly IConfiguration _configuration;
-        public LeaveRequestController(IRepositoryWrapper repository, IConfiguration configuration):base(repository)
+        public LeaveRequestController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _configuration = configuration;
         }
@@ -41,16 +41,16 @@ namespace EIS.WebAPI.Controllers
             ArrayList data = new ArrayList();
             IEnumerable<LeaveRequest> leaveData = null;
 
-            if (sortGrid.LocationId==0)
+            if (sortGrid.LocationId == 0)
             {
-                leaveData = _repository.LeaveRequest.FindAll().Where(x=>x.Status=="Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();
+                leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status == "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();
             }
             else
             {
                 leaveData = _repository.LeaveRequest.FindAll().Where(x => x.Status == "Pending").Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == sortGrid.LocationId).ToList();
             }
-            
-           
+
+
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
 
@@ -59,7 +59,7 @@ namespace EIS.WebAPI.Controllers
             else
             {
                 string search = sortGrid.Search.ToLower();
-                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search)||x.Reason.ToLower().Contains(search) || x.Status.ToLower().Contains(search), sortGrid, leaveData.AsQueryable());
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.EmployeeName.ToLower().Contains(search) || x.LeaveType.ToLower().Contains(search) || x.Reason.ToLower().Contains(search) || x.Status.ToLower().Contains(search), sortGrid, leaveData.AsQueryable());
             }
             return Ok(data);
 
@@ -67,9 +67,9 @@ namespace EIS.WebAPI.Controllers
 
         [Route("GetLeaveHistory/{locationId}/{employeeId}/{month}/{year}/{leaveType}")]
         [HttpGet]
-        public IActionResult GetLeaveHistory([FromRoute]int locationId, [FromRoute]int employeeId, [FromRoute]int month,[FromRoute]int year,[FromRoute]string leaveType)
+        public IActionResult GetLeaveHistory([FromRoute]int locationId, [FromRoute]int employeeId, [FromRoute]int month, [FromRoute]int year, [FromRoute]string leaveType)
         {
-            List<LeaveRequestViewModel> leaveData = _repository.LeaveRequest.GetLeaveData(locationId, employeeId, month, year,TenantId,leaveType);
+            List<LeaveRequestViewModel> leaveData = _repository.LeaveRequest.GetLeaveData(locationId, employeeId, month, year, TenantId, leaveType);
             return Ok(leaveData);
 
         }
@@ -77,7 +77,7 @@ namespace EIS.WebAPI.Controllers
         [Route("RequestsUnderMe/{PersonId}")]
         [DisplayName("Leave Requests of employees under me")]
         [HttpPost]
-        public ActionResult GetLeaveRequestsUnderMe([FromRoute]int PersonId , [FromBody]SortGrid sortGrid)
+        public ActionResult GetLeaveRequestsUnderMe([FromRoute]int PersonId, [FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
             IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.GetLeaveRequestUnderMe(Convert.ToInt32(PersonId), TenantId);
@@ -108,7 +108,7 @@ namespace EIS.WebAPI.Controllers
         {
             ArrayList data = new ArrayList();
             IQueryable<LeaveRequest> leaveData = _repository.LeaveRequest.FindAllByCondition(x => x.PersonId == id);
-        
+
             if (leaveData == null)
             {
                 return NotFound();
@@ -116,12 +116,12 @@ namespace EIS.WebAPI.Controllers
 
             if (string.IsNullOrEmpty(sortGrid.Search))
             {
-               
+
                 data = _repository.LeaveRequest.GetDataByGridCondition(null, sortGrid, leaveData);
             }
             else
             {
-                data = _repository.LeaveRequest.GetDataByGridCondition(x=>x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower())||x.Status.Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
+                data = _repository.LeaveRequest.GetDataByGridCondition(x => x.LeaveType.ToLower().Contains(sortGrid.Search.ToLower()) || x.Status.Contains(sortGrid.Search.ToLower()), sortGrid, leaveData);
             }
             return Ok(data);
 
@@ -148,7 +148,7 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
-                string messsege =_repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
+                string messsege = _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
                 SendMail(RequestId, Status);
                 return Ok(messsege);
             }
@@ -164,16 +164,16 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.LeaveRequest.UpdateAndSave(leave);
-            string msg =_repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
+            string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
             return Ok(msg);
         }
 
 
         [DisplayName("Request for leave")]
         [HttpPost("{type}")]
-        public IActionResult PostLeaveRequest([FromRoute]string type,[FromBody] LeaveRequest leave)
+        public IActionResult PostLeaveRequest([FromRoute]string type, [FromBody] LeaveRequest leave)
         {
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -193,7 +193,7 @@ namespace EIS.WebAPI.Controllers
             {
                 msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
             }
-           
+
             SendMail(leave.Id, "Pending");
             return Ok(msg);
         }
@@ -211,7 +211,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(leave);
         }
 
-        public void SendMail(int RequestId,string status)
+        public void SendMail(int RequestId, string status)
         {
             LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
             Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
@@ -226,11 +226,11 @@ namespace EIS.WebAPI.Controllers
                 body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
                 body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
                 body += "Requested Days:" + leave.RequestedDays;
-                bodyforadmin= person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
+                bodyforadmin = person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
             }
             else if (status == "Reject")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") +" to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected";
+                body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected";
                 bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
             else if (status == "Approve")
@@ -247,35 +247,35 @@ namespace EIS.WebAPI.Controllers
                 else
                 {
                     body += "Your cancelling request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " is submitted successfully.";
-                    bodyforadmin = person.FullName + " has send a request to cancel the leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy");   
+                    bodyforadmin = person.FullName + " has send a request to cancel the leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy");
                 }
             }
             else if (status == "Accept Cancel")
             {
                 body += "Your cancelling leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.";
-                bodyforadmin = "The leave approved for " + person.FullName + " from " +leave.FromDate.ToString("dd/MM/yyyy") +" to "+ leave.ToDate.ToString("dd/MM/yyyy") +" has been cancelled by his/her request.";
+                bodyforadmin = "The leave approved for " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been cancelled by his/her request.";
             }
             else if (status == "Reject Cancel")
             {
                 body += "Your cancelling leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected.";
-                bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";              
+                bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
-            
+
             if (bodyforadmin != null)
             {
-                foreach(var pers in p)
+                foreach (var pers in p)
                 {
-                    new EmailManager(_configuration,_repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+                    new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
                 }
             }
-            new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
+            new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
             _repository.LeaveCredit.Dispose();
         }
 
         [DisplayName("PastLeaves")]
         [Route("PastLeaves/{id}")]
         [HttpPost]
-        public IActionResult GetPastLeaves([FromRoute]int id,[FromBody]SortGrid sortGrid)
+        public IActionResult GetPastLeaves([FromRoute]int id, [FromBody]SortGrid sortGrid)
         {
             ArrayList data = new ArrayList();
             IQueryable<PastLeaves> leaveData = _repository.LeaveRequest.GetPastLeaves(id, TenantId, sortGrid.LocationId);
@@ -288,7 +288,7 @@ namespace EIS.WebAPI.Controllers
             else
             {
                 string search = sortGrid.Search.ToLower();
-                data = _repository.PastLeaves.GetDataByGridCondition(x => x.Person.Location.LocationName.Contains(search)|| x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
+                data = _repository.PastLeaves.GetDataByGridCondition(x => x.Person.Location.LocationName.Contains(search) || x.EmployeeName.ToLower().Contains(search) || x.Reason.ToLower().Contains(search), sortGrid, leaveData);
             }
             return Ok(data);
 
@@ -331,7 +331,7 @@ namespace EIS.WebAPI.Controllers
             }
             else
             {
-                result = "You can only request for "+ credit.LeaveType +" leave between "+credit.ValidFrom.ToString("dd/MM/yyyy").ToString() +" to "+credit.ValidTo.ToString("dd/MM/yyyy").ToString();
+                result = "You can only request for " + credit.LeaveType + " leave between " + credit.ValidFrom.ToString("dd/MM/yyyy").ToString() + " to " + credit.ValidTo.ToString("dd/MM/yyyy").ToString();
             }
             return Ok(result);
         }
@@ -343,7 +343,7 @@ namespace EIS.WebAPI.Controllers
             int requestedDays = days;
             int? LocationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId;
             int count = 0;
-            for (var d = FromDate; d <= ToDate; d=d.AddDays(1))
+            for (var d = FromDate; d <= ToDate; d = d.AddDays(1))
             {
                 Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId && x.IsActive==true);
                 if (holiday != null)
@@ -386,8 +386,19 @@ namespace EIS.WebAPI.Controllers
 
             }
             requestedDays = requestedDays - count;
-          
+
             return Ok(requestedDays);
-        } 
+        }
+
+        [AllowAnonymous]
+        [Route("GetAvailableCount/{personId}")]
+        [HttpGet]
+        public IActionResult GetAvailableCount([FromRoute]int personId)
+        {
+            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.LeaveRule.LeaveType != "Unpaid").Sum(x => x.Available);
+           int value= Convert.ToInt32(leave);
+            return Ok(value);
+        }
+
     }
 }

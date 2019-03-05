@@ -84,7 +84,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a href="@rootPath/People/Profile?PersonId=@idcard" class="navbar-brand" style="color:white"><b>Employee System</b></a>
+                <a href="@rootPath/People/Profile?PersonId=@idcard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -121,8 +121,8 @@
             <div class="user-info" style="background: url('@MyHttpContext.AppBaseUrl/images/emp-img-background.jpg') no-repeat no-repeat;">
                 <div style="height:2px;"></div>
                 <div class="image">
-                    @*<img src="~/images/user.png" alt="User" />*@
-                    <img src="@MyHttpContext.AppBaseUrl/@imagepath" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:50px; width:50px;" alt="User" />
+
+                <img src="@MyHttpContext.AppBaseUrl/@imagepath" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:50px; width:50px;" alt="User" />
                 </div>
                 <div class="info-container">
                     <div class="idno">@idcard</div>

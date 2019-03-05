@@ -72,8 +72,6 @@ namespace EIS.WebApp.Controllers
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
-            ViewBag.ImagePath = data.Image;
-            ViewBag.Name = data.FullName;
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             if (attendance != null)
             {
@@ -84,10 +82,10 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
-                ViewBag.TimeIn = new TimeSpan(0, 0, 0);
-                ViewBag.TimeOut = new TimeSpan(0, 0, 0);
-                ViewBag.TotalHrs = new TimeSpan(0, 0, 0);
-                ViewBag.EstimatedTimeOut = new TimeSpan(0, 0, 0);
+                ViewBag.TimeIn = new TimeSpan();
+                ViewBag.TimeOut = new TimeSpan();
+                ViewBag.TotalHrs = new TimeSpan();
+                ViewBag.EstimatedTimeOut = new TimeSpan();
             }
             if (data.PermanentAddress == null)
                 data.PermanentAddress = new Permanent() { PersonId = data.Id };

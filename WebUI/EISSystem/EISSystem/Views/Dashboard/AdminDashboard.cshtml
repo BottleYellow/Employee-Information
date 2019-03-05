@@ -24,29 +24,27 @@
         width: 80%;
         height: 80%;
     }
-
         .ajax-loader img {
             position: relative;
             top: 45%;
             left: 45%;
         }
-
     .info-box {
         cursor: pointer;
+        
     }
-
     a:hover, a:focus {
         text-decoration: none;
     }
-
     .disabledLink {
         color: currentColor;
         cursor: not-allowed;
         opacity: 0.5;
         text-decoration: none;
     }
-
     table.dataTable td {
+        margin-left: 0;
+        margin-right: auto;
         padding: 3px 10px;
         width: 1px;
         white-space: nowrap;
@@ -69,7 +67,7 @@
     </div>
     <div class="row clearfix">
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="allEmployee">
                     <div class="info-box bg-pink hover-expand-effect">
 
@@ -85,7 +83,7 @@
                 </a>
 
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="employeePresent">
                     <div class=" info-box bg-light-green hover-expand-effect">
                         <div class="icon">
@@ -98,7 +96,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="employeeAbsent">
                     <div class="info-box bg-cyan hover-expand-effect">
                         <div class="icon">
@@ -113,7 +111,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a id="pendingLeaveButton" role="button">
                     <div class="info-box bg-orange hover-expand-effect">
                         <div class="icon">
@@ -128,7 +126,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a id="approvedLeaveButton" role="button">
                     <div class="info-box bg-green hover-expand-effect">
                         <div class="icon">
@@ -143,7 +141,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a id="rejectedLeaveButton" role="button">
                     <div class="info-box bg-red hover-expand-effect">
                         <div class="icon">
@@ -152,14 +150,14 @@
                             </i>
                         </div>
                         <div class="content">
-                            <div class="text">MONTHLY REJECTED/CANCELLED LEAVES</div>
+                            <div class="text">MONTHLY REJECTED/ CANCELLED LEAVES</div>
                             <div id="employeeRejectedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-
+         
     </div>
     <div class="row clearfix">
         <!-- Attendance Data-->
@@ -167,7 +165,7 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>BANER</h2>
+                        <h2>BANER <span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -193,11 +191,11 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>KONDHWA</h2>
+                        <h2>KONDHWA<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
+                            <table  class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
                                 <thead>
                                     <tr class="active">
                                         <th>Name</th>
@@ -378,7 +376,10 @@
             }
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-            } else {
+            }else if (Status == "Absent") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+            }
+            else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName == "Baner") {
