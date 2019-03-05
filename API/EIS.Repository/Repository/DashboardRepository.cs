@@ -124,7 +124,7 @@ namespace EIS.Repositories.Repository
                 LocationName = _dbContext.Locations.Where(x => x.Id == location).FirstOrDefault().LocationName.ToUpper();
                 leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
-
+            string leaveLocation = "";
             int count = 0;
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
@@ -134,31 +134,130 @@ namespace EIS.Repositories.Repository
                 {
                     foreach (var leave in leaveRequest)
                     {
-                        CalendarData calendarData = new CalendarData();
-                        calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
-                        calendarData.Description = "<br/>Leave Status : " + leave.Status+"<br/>Leave Reason :"+leave.Reason;
-                        calendarData.StartDate = date;
-                        calendarData.EndDate = date;
-                        if (leave.Status == "Pending")
+                        if (date.DayOfWeek != DayOfWeek.Sunday)
                         {
-                            calendarData.Color = "Violet";
+                            if (date.DayOfWeek == DayOfWeek.Saturday && LocationName.ToUpper() == "BANER")
+                            {
+                                string alternateDateStatus = CalculateDate(date);
+                                if (string.IsNullOrEmpty(alternateDateStatus))
+                                {
+                                    CalendarData calendarData = new CalendarData();
+                                    calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
+                                    calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
+                                    calendarData.StartDate = date;
+                                    calendarData.EndDate = date;
+                                    if (leave.Status == "Pending")
+                                    {
+                                        calendarData.Color = "Violet";
+                                    }
+                                    else if (leave.Status == "Approved")
+                                    {
+                                        calendarData.Color = "dodgerblue";
+                                    }
+                                    else if (leave.Status == "Rejected")
+                                    {
+                                        calendarData.Color = "crimson";
+                                    }
+                                    else
+                                    {
+                                        calendarData.Color = "palevioletred";
+                                    }
+                                    calendarData.IsFullDay = true;
+                                    calendarDataList.Add(calendarData);
+                                }
+                            }
+                            else if (date.DayOfWeek == DayOfWeek.Saturday && LocationName == "")
+                            {
+                                leaveLocation = leave.Person.Location.LocationName;
+                                if(leaveLocation.ToUpper()=="BANER")
+                                {
+                                    string alternateDateStatus = CalculateDate(date);
+                                    if (string.IsNullOrEmpty(alternateDateStatus))
+                                    {
+                                        CalendarData calendarData = new CalendarData();
+                                        calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
+                                        calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
+                                        calendarData.StartDate = date;
+                                        calendarData.EndDate = date;
+                                        if (leave.Status == "Pending")
+                                        {
+                                            calendarData.Color = "Violet";
+                                        }
+                                        else if (leave.Status == "Approved")
+                                        {
+                                            calendarData.Color = "dodgerblue";
+                                        }
+                                        else if (leave.Status == "Rejected")
+                                        {
+                                            calendarData.Color = "crimson";
+                                        }
+                                        else
+                                        {
+                                            calendarData.Color = "palevioletred";
+                                        }
+                                        calendarData.IsFullDay = true;
+                                        calendarDataList.Add(calendarData);
+                                    }
+                                }
+                                else
+                                {
+                                    CalendarData calendarData = new CalendarData();
+                                    calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
+                                    calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
+                                    calendarData.StartDate = date;
+                                    calendarData.EndDate = date;
+                                    if (leave.Status == "Pending")
+                                    {
+                                        calendarData.Color = "Violet";
+                                    }
+                                    else if (leave.Status == "Approved")
+                                    {
+                                        calendarData.Color = "dodgerblue";
+                                    }
+                                    else if (leave.Status == "Rejected")
+                                    {
+                                        calendarData.Color = "crimson";
+                                    }
+                                    else
+                                    {
+                                        calendarData.Color = "palevioletred";
+                                    }
+                                    calendarData.IsFullDay = true;
+                                    calendarDataList.Add(calendarData);
+                                }
+                            }
+                            else
+                            {
+                                CalendarData calendarData = new CalendarData();
+                                calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
+                                calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
+                                calendarData.StartDate = date;
+                                calendarData.EndDate = date;
+                                if (leave.Status == "Pending")
+                                {
+                                    calendarData.Color = "Violet";
+                                }
+                                else if (leave.Status == "Approved")
+                                {
+                                    calendarData.Color = "dodgerblue";
+                                }
+                                else if (leave.Status == "Rejected")
+                                {
+                                    calendarData.Color = "crimson";
+                                }
+                                else
+                                {
+                                    calendarData.Color = "palevioletred";
+                                }
+                                calendarData.IsFullDay = true;
+                                calendarDataList.Add(calendarData);
+                            }
+
                         }
-                        else if (leave.Status == "Approved")
-                        {
-                            calendarData.Color = "dodgerblue";
-                        }
-                        else if (leave.Status == "Rejected")
-                        {
-                            calendarData.Color = "crimson";
-                        }
-                        else
-                        {
-                            calendarData.Color = "palevioletred";
-                        }
-                        calendarData.IsFullDay = true;
-                        calendarDataList.Add(calendarData);
+
                     }
                 }
+            
 
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
@@ -172,10 +271,6 @@ namespace EIS.Repositories.Repository
                     holidayCalanderData.IsFullDay = true;
 
                     calendarDataList.Add(holidayCalanderData);
-                }
-                if (date.Day == 1)
-                {
-                    count = 0;
                 }
                 if (date.DayOfWeek == DayOfWeek.Sunday)
                 {
@@ -193,12 +288,12 @@ namespace EIS.Repositories.Repository
                 {
                     if (date.DayOfWeek == DayOfWeek.Saturday)
                     {
-                        count++;
-                        if (count % 2 == 0)
+                        string alternateDateStatus = CalculateDate(date);
+                        if (!string.IsNullOrEmpty(alternateDateStatus))
                         {
                             CalendarData holidayCalanderData = new CalendarData();
                             holidayCalanderData.Title = count + "nd Saturday Weekly Off";
-                            holidayCalanderData.Description = "Holiday";
+                            holidayCalanderData.Description = "Weekly Off";
                             holidayCalanderData.StartDate = date;
                             holidayCalanderData.EndDate = date;
                             holidayCalanderData.Color = "royalblue";
@@ -416,7 +511,7 @@ namespace EIS.Repositories.Repository
                         {
                             CalendarData holidayCalanderData = new CalendarData();
                             holidayCalanderData.Title = count + "nd Saturday Weekly Off";
-                            holidayCalanderData.Description = "Holiday";
+                            holidayCalanderData.Description = "Weekly Off";
                             holidayCalanderData.StartDate = date;
                             holidayCalanderData.EndDate = date;
                             holidayCalanderData.Color = "royalblue";
@@ -428,6 +523,60 @@ namespace EIS.Repositories.Repository
             }
 
             return calendarDataList;
+        }
+
+        public string CalculateDate(DateTime date)
+        {
+            string data = "";
+            int mon = date.Month;
+            int yea = date.Year;
+            var dat = 1;
+            DateTime myDate = new DateTime(yea, mon, dat);
+            string first = myDate.DayOfWeek.ToString();
+            DateTime secnd = new DateTime();
+            DateTime forth = new DateTime();
+
+            switch (first)
+            {
+                case "Sunday":
+                    secnd = new DateTime(yea, mon, 14);
+                    forth = new DateTime(yea, mon, 28);
+                    break;
+                case "Monday":
+                    secnd = new DateTime(yea, mon, 13);
+                    forth = new DateTime(yea, mon, 27);
+                    break;
+                case "Tuesday":
+                    secnd = new DateTime(yea, mon, 12);
+                    forth = new DateTime(yea, mon, 26);
+                    break;
+                case "Wednesday":
+                    secnd = new DateTime(yea, mon, 11);
+                    forth = new DateTime(yea, mon, 25);
+                    break;
+                case "Thursday":
+                    secnd = new DateTime(yea, mon, 10);
+                    forth = new DateTime(yea, mon, 24);
+                    break;
+                case "Friday":
+                    secnd = new DateTime(yea, mon, 9);
+                    forth = new DateTime(yea, mon, 23);
+                    break;
+                case "Saturday":
+                    secnd = new DateTime(yea, mon, 8);
+                    forth = new DateTime(yea, mon, 22);
+                    break;
+                default: break;
+            }
+            if (date == secnd)
+            {
+                data = "2nd Saturday Weekly Off";
+            }
+            else if (date == forth)
+            {
+                data = "4th Saturday Weekly Off";
+            }
+            return data;
         }
     }
 }

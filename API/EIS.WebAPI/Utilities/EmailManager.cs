@@ -3,7 +3,6 @@ using EIS.Repositories.IRepository;
 using EIS.WebAPI.Controllers;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -20,26 +19,17 @@ namespace EIS.WebAPI.Utilities
 
         public void SendEmail(string Subject, string Body, string To, string fileAttachment)
         {
-            string  UserID=null, Password=null, SMTPPort=null, Host=null;
-            List<MailConfiguration> mailConfiguration = _repository.Users.GetMailConfiguration();
-            foreach(var v in mailConfiguration)
-            {
-                UserID = v.UserId;
-                Password = v.Password;
-                SMTPPort = v.SMTPPort;
-                Host = v.Host;
-            }
-            
-            MailMessage mail = new System.Net.Mail.MailMessage();
+            MailConfiguration mailConfiguration = _repository.Users.GetMailConfiguration();           
+            MailMessage mail = new MailMessage();
             mail.To.Add(To);
-            mail.From = new MailAddress(UserID);
+            mail.From = new MailAddress(mailConfiguration.UserId);
             mail.Subject = Subject;
             mail.Body = Body;
             SmtpClient smtp = new SmtpClient
             {
-                Host = Host,
-                Port = Convert.ToInt16(SMTPPort),
-                Credentials = new NetworkCredential(UserID, Password),
+                Host = mailConfiguration.Host,
+                Port = Convert.ToInt16(mailConfiguration.SMTPPort),
+                Credentials = new NetworkCredential(mailConfiguration.UserId, mailConfiguration.Password),
                 EnableSsl = true
             };
         if(!string.IsNullOrEmpty(fileAttachment))

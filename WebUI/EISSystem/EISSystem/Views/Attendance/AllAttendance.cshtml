@@ -35,20 +35,14 @@
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        .dataTables_wrapper .myexport .dt-buttons {
-            float: right;
+        table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
         }
-
-        td {
-            width: 200px;
-            text-align: center
-        }
-
-        th {
-            font-size: medium;
-            text-align: center
-        }
-
+       
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -162,8 +156,8 @@
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <div>
-                                <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Location</th>
@@ -502,7 +496,8 @@
                             array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName, data.sP_GetAttendanceCountReports[i].PresentDays, data.sP_GetAttendanceCountReports[i].NoLeave, data.sP_GetAttendanceCountReports[i].WorkingDay]);
                         }
                         $('#example').DataTable().destroy();
-                        $('#example').DataTable({
+                    $('#example').DataTable({
+                       order:[1,'asc'],
                         data: array
                 });
                 },

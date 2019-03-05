@@ -106,9 +106,9 @@ namespace EIS.Repositories.Repository
             Save();
         }
 
-        public List<MailConfiguration> GetMailConfiguration()
+        public MailConfiguration GetMailConfiguration()
         {
-            return _dbContext._sp_MailConfigurations.FromSql("LMS.usp_MailConfiguration").ToList();
+            return _dbContext._sp_MailConfigurations.FromSql("LMS.usp_MailConfiguration").FirstOrDefault();
         }
     }
 }

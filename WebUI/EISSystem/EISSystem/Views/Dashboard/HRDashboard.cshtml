@@ -15,6 +15,7 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
+
 <style>
 
     .ajax-loader {
@@ -250,6 +251,10 @@
 <script>
     var buttonSelected = "All";
     $(document).ready(function () {
+        debugger;
+        if ('@TempData["BirhdayAlert"]' != '') {
+            bootbox.alert('<h4 class="info">@TempData["BirhdayAlert"]</h4>');
+    }
         selectOpt = $('#select option:selected').val();
         generateReport("All", 0);
     });
@@ -284,202 +289,202 @@
     function generateReport(buttonSelected, location) {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("HRDashboard","Dashboard")',
+            url: '@Url.Action("HRDashboard", "Dashboard")',
             data: { "attendanceStatus": buttonSelected, "location": location },
             beforeSend: function () {
-                $('.ajax-loader').css("visibility", "visible");
+            $('.ajax-loader').css("visibility", "visible");
             },
             success: function (data) {
-                if (data != null) {
-                    document.getElementById("totalEmployeeCount").innerHTML = data.sP_AdminDashboardCount.AllEmployeesCount ;
-                    document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
-                    document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
-                    document.getElementById("employeeLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
-                    if (buttonSelected == "Leaves") {
-                        getLeavesData(data.sp_AdminDashboardLeaves);
-                    } else {
-                        getData(data.sP_AdminDashboards);
-                    }
-                }
+            if (data != null) {
+            document.getElementById("totalEmployeeCount").innerHTML = data.sP_AdminDashboardCount.AllEmployeesCount ;
+            document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
+            document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
+            document.getElementById("employeeLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
+            if (buttonSelected == "Leaves") {
+            getLeavesData(data.sp_AdminDashboardLeaves);
+            } else {
+            getData(data.sP_AdminDashboards);
+            }
+            }
             },
             complete: function () {
-                $('.ajax-loader').css("visibility", "hidden");
+            $('.ajax-loader').css("visibility", "hidden");
             }
-        });
-    }
+            });
+            }
 
-    function getData(Employees) {
-        var banerAttendanceArray = [];
-        var KondhwaAttendanceArray=[];
-        for (var i = 0; i < Employees.length; i++) {
+            function getData(Employees) {
+            var banerAttendanceArray = [];
+            var KondhwaAttendanceArray=[];
+            for (var i = 0; i < Employees.length; i++) {
 
             var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var Status = Employees[i].Status;
             if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
-                var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
-                TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+            var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+            TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
             } else {
-                TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+            TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
             }
 
             if (Status == "Present") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
             } else {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName == "Baner") {
-                banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+            banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
             } else {
-                KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+            KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
             }
-        }
-        $('#BanerAttendanceTable').DataTable().destroy();
-        $('#BanerAttendanceTable').DataTable({
+            }
+            $('#BanerAttendanceTable').DataTable().destroy();
+            $('#BanerAttendanceTable').DataTable({
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[1].includes("Present")) {
-                    $('td', nRow).addClass('success');
-                }
-                else {
-                    $('td', nRow).addClass('warning');
-                }
+            if (aData[1].includes("Present")) {
+            $('td', nRow).addClass('success');
             }
-        });
-        $('#KondhwaAttendanceTable').DataTable().destroy();
-        $('#KondhwaAttendanceTable').DataTable({
+            else {
+            $('td', nRow).addClass('warning');
+            }
+            }
+            });
+            $('#KondhwaAttendanceTable').DataTable().destroy();
+            $('#KondhwaAttendanceTable').DataTable({
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[1].includes("Present")) {
-                    $('td', nRow).addClass('success');
-                }
-                else {
-                    $('td', nRow).addClass('warning');
-                }
+            if (aData[1].includes("Present")) {
+            $('td', nRow).addClass('success');
             }
-        });
-    }
+            else {
+            $('td', nRow).addClass('warning');
+            }
+            }
+            });
+            }
 
-    function getLeavesData(Leaves) {
-        var banerArrayLeaves = [];
-        var kondhwaArrayLeaves = [];
-        for (var i = 0; i < Leaves.length; i++) {
+            function getLeavesData(Leaves) {
+            var banerArrayLeaves = [];
+            var kondhwaArrayLeaves = [];
+            for (var i = 0; i < Leaves.length; i++) {
             var dateFrom = moment(Leaves[i].FromDate).format("DD MMM YYYY");
             var toDate = moment(Leaves[i].ToDate).format("DD MMM YYYY");
             var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY");
             var Status = Leaves[i].Status;
             var actionButton;
             if (Status == "Pending") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
             else if (Status == "Approved" || Status.startsWith('Approved')) {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+            actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
             }
             else if (Status == "Rejected" || Status == "Cancelled") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+            actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
             }
             else if (Status == "Requested For Cancel") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
             }
             else {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
+            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+            actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
             }
             if (Leaves[i].LocationName == "Baner") {
-                banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+            banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             } else
-                kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate , Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+            kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate , Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
             }
 
-        $('#BanerLeavesTable').DataTable().destroy();
-        $('#BanerLeavesTable').DataTable({
+            $('#BanerLeavesTable').DataTable().destroy();
+            $('#BanerLeavesTable').DataTable({
             "aoColumns": [
-                null,
-                null,
-                null,
-                { "sType": "date" },
-                { "sType": "date" },
-                null,
-                { "sType": "date" },
-                null,
-                null
+            null,
+            null,
+            null,
+            { "sType": "date" },
+            { "sType": "date" },
+            null,
+            { "sType": "date" },
+            null,
+            null
             ],
             "order": [[7, "desc"], [6 , "desc"]],
             data: banerArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[7].includes("Pending")) {
-                    $('td', nRow).addClass('warning');
-                }
-                else if (aData[7].includes("Cancelled")) {
-                    $('td', nRow).addClass('danger');
-                } else if (aData[7].includes("Approved")) {
-                    $('td', nRow).addClass('success');
-                } else {
-                    $('td', nRow).addClass('info');
-                }
+            if (aData[7].includes("Pending")) {
+            $('td', nRow).addClass('warning');
             }
-        });
+            else if (aData[7].includes("Cancelled")) {
+            $('td', nRow).addClass('danger');
+            } else if (aData[7].includes("Approved")) {
+            $('td', nRow).addClass('success');
+            } else {
+            $('td', nRow).addClass('info');
+            }
+            }
+            });
 
-        $('#KondhwaLeavesTable').DataTable().destroy();
-        $('#KondhwaLeavesTable').DataTable({
+            $('#KondhwaLeavesTable').DataTable().destroy();
+            $('#KondhwaLeavesTable').DataTable({
             "aoColumns": [
-                null,
-                null,
-                null,
-                { "sType": "date" },
-                { "sType": "date" },
-                null,
-                { "sType": "date" },
-                null,
-                null
+            null,
+            null,
+            null,
+            { "sType": "date" },
+            { "sType": "date" },
+            null,
+            { "sType": "date" },
+            null,
+            null
             ],
             "order": [[7, "desc"], [6, "desc"]],
             data: kondhwaArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[7].includes("Pending")) {
-                    $('td', nRow).addClass('warning');
-                }
-                else if (aData[7].includes("Cancelled")) {
-                    $('td', nRow).addClass('danger');
-                } else if (aData[7].includes("Approved")) {
-                    $('td', nRow).addClass('success');
-                } else {
-                    $('td', nRow).addClass('info');
-                }
+            if (aData[7].includes("Pending")) {
+            $('td', nRow).addClass('warning');
+            }
+            else if (aData[7].includes("Cancelled")) {
+            $('td', nRow).addClass('danger');
+            } else if (aData[7].includes("Approved")) {
+            $('td', nRow).addClass('success');
+            } else {
+            $('td', nRow).addClass('info');
+            }
             }
 
-        });
-    }
-    function UpdateStatus(RequestId, Status) {
-        var pid=@cookies.PersonId;
-        var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
-        $.ajax({
+            });
+            }
+            function UpdateStatus(RequestId, Status) {
+            var pid=@cookies.PersonId;
+            var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
+            $.ajax({
             url: url1,
             type: 'POST',
             data: {},
             beforeSend: function () {
-                $('.ajax-loader').css("visibility", "visible");
+            $('.ajax-loader').css("visibility", "visible");
             },
             success: function (data) {
-                bootbox.alert(
-                    data,
-                    function () {
-                        window.location.reload();
-                    }
-                );
+            bootbox.alert(
+            data,
+            function () {
+            window.location.reload();
+            }
+            );
             },
             error: function () {
-                bootbox.alert("Something went wrong..Please try after sometime");
+            bootbox.alert("Something went wrong..Please try after sometime");
             },
             complete: function () {
-                $('.ajax-loader').css("visibility", "hidden");
+            $('.ajax-loader').css("visibility", "hidden");
             }
-        });
-    }
-</script>
+            });
+            }
+            </script>

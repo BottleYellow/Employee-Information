@@ -93,8 +93,8 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required" id="Imagediv">
-                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
-
+                                            
+                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:80px; width:80px;"/>
                                             <div class="middle">
                                                 <input type="button" class="text" id="my-button" value="Edit Image" />
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="my-file" onchange="return ValidateFileUpload()" />

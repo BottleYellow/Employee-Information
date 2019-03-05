@@ -24,21 +24,30 @@
         width: 80%;
         height: 80%;
     }
-
         .ajax-loader img {
             position: relative;
             top: 45%;
             left: 45%;
         }
-
-    a {
+    .info-box {
         cursor: pointer;
+        
+    }
+    a:hover, a:focus {
+        text-decoration: none;
     }
     .disabledLink {
         color: currentColor;
         cursor: not-allowed;
         opacity: 0.5;
         text-decoration: none;
+    }
+    table.dataTable td {
+        margin-left: 0;
+        margin-right: auto;
+        padding: 3px 10px;
+        width: 1px;
+        white-space: nowrap;
     }
 </style>
 <head>
@@ -57,63 +66,98 @@
         </div>
     </div>
     <div class="row clearfix">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box bg-pink hover-expand-effect">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="allEmployee">
-                    <div class="icon">
-                        <i class="material-icons">supervisor_account</i>
+                    <div class="info-box bg-pink hover-expand-effect">
+
+                        <div class="icon">
+                            <i class="material-icons">supervisor_account</i>
+                        </div>
+
+                        <div class="content">
+                            <div class="text">TOTAL EMPLOYEES</div>
+                            <div id="totalEmployeeCount" class="number count-to"></div>
+                        </div>
                     </div>
                 </a>
-                <div class="content">
-                    <div class="text">TOTAL EMPLOYEES</div>
-                    <div id="totalEmployeeCount" class="number count-to"></div>
-                </div>
+
             </div>
-
-
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class=" info-box bg-light-green hover-expand-effect">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="employeePresent">
-                    <div class="icon">
-                        <i class="material-icons">assignment_ind</i>
+                    <div class=" info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">assignment_ind</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">EMPLOYEE PRESENT</div>
+                            <div id="employeePresentCount" class="number count-to"></div>
+                        </div>
                     </div>
                 </a>
-                <div class="content">
-                    <div class="text">EMPLOYEE PRESENT</div>
-                    <div id="employeePresentCount" class="number count-to"></div>
-                </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-            <div class="info-box bg-cyan hover-expand-effect">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a role="button" id="employeeAbsent">
-                    <div class="icon">
-                        <i class="material-icons"> assignment_late</i>
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons"> assignment_late</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">ABSENT / ON LEAVE</div>
+                            <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
                     </div>
                 </a>
-                <div class="content">
-                    <div class="text">ABSENT / ON LEAVE</div>
-                    <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box bg-orange hover-expand-effect">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <a id="pendingLeaveButton" role="button">
-                    <div class="icon">
-                        <i class="material-icons">
-                            account_circle
-                        </i>
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">
+                                account_circle
+                            </i>
+                        </div>
+                        <div class="content">
+                            <div class="text">TOTAL PENDING LEAVES</div>
+                            <div id="employeePendingLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
                     </div>
                 </a>
-                <div class="content">
-                    <div class="text">PENDING LEAVES</div>
-                    <div id="employeeLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <a id="approvedLeaveButton" role="button">
+                    <div class="info-box bg-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">
+                                account_circle
+                            </i>
+                        </div>
+                        <div class="content">
+                            <div class="text">MONTHLY APPROVED LEAVES</div>
+                            <div id="employeeApprovedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <a id="rejectedLeaveButton" role="button">
+                    <div class="info-box bg-red hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">
+                                account_circle
+                            </i>
+                        </div>
+                        <div class="content">
+                            <div class="text">MONTHLY REJECTED/ CANCELLED LEAVES</div>
+                            <div id="employeeRejectedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
+         
     </div>
     <div class="row clearfix">
         <!-- Attendance Data-->
@@ -121,7 +165,7 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>BANER</h2>
+                        <h2>BANER <span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -147,7 +191,7 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>KONDHWA</h2>
+                        <h2>KONDHWA<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -264,7 +308,6 @@
         $('#attendanceData').show();
         buttonSelected = "Present";
         generateReport(buttonSelected, 0);
-
     });
     $('#employeeAbsent').on('click', function () {
         $('#leavesData').hide();
@@ -272,15 +315,24 @@
         buttonSelected = "Absent";
         generateReport(buttonSelected, 0);
     });
-
     $('#pendingLeaveButton').on('click', function () {
         $('#attendanceData').hide();
         $('#leavesData').show();
-        buttonSelected = "Leaves";
+        buttonSelected = "PendingLeaves";
         generateReport(buttonSelected, 0);
     });
-
-
+    $('#approvedLeaveButton').on('click', function () {
+        $('#attendanceData').hide();
+        $('#leavesData').show();
+        buttonSelected = "ApprovedLeaves";
+        generateReport(buttonSelected, 0);
+    });
+    $('#rejectedLeaveButton').on('click', function () {
+        $('#attendanceData').hide();
+        $('#leavesData').show();
+        buttonSelected = "RejectedLeaves";
+        generateReport(buttonSelected, 0);
+    });
     function generateReport(buttonSelected, location) {
         $.ajax({
             type: 'POST',
@@ -294,8 +346,10 @@
                     document.getElementById("totalEmployeeCount").innerHTML = data.sP_AdminDashboardCount.AllEmployeesCount ;
                     document.getElementById("employeePresentCount").innerHTML = data.sP_AdminDashboardCount.PresentEmployees;
                     document.getElementById("employeeAbsentCount").innerHTML = data.sP_AdminDashboardCount.AbsentEmployees;
-                    document.getElementById("employeeLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
-                    if (buttonSelected == "Leaves") {
+                    document.getElementById("employeePendingLeavesCount").innerHTML = data.sP_AdminDashboardCount.PendingLeavesCount;
+                    document.getElementById("employeeApprovedLeavesCount").innerHTML = "4";
+                    document.getElementById("employeeRejectedLeavesCount").innerHTML = "2";
+                    if (buttonSelected == "PendingLeaves" || buttonSelected == "ApprovedLeaves" || buttonSelected == "RejectedLeaves") {
                         getLeavesData(data.sp_AdminDashboardLeaves);
                     } else {
                         getData(data.sP_AdminDashboards);
@@ -307,12 +361,10 @@
             }
         });
     }
-
     function getData(Employees) {
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-
             var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var Status = Employees[i].Status;
@@ -322,10 +374,12 @@
             } else {
                 TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
             }
-
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-            } else {
+            }else if (Status == "Absent") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+            }
+            else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName == "Baner") {
@@ -361,7 +415,6 @@
             }
         });
     }
-
     function getLeavesData(Leaves) {
         var banerArrayLeaves = [];
         var kondhwaArrayLeaves = [];
@@ -371,32 +424,43 @@
             var appliedDate = moment(Leaves[i].AppliedDate).format("DD MMM YYYY");
             var Status = Leaves[i].Status;
             var actionButton;
-            if (Status == "Pending") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
-            }
-            else if (Status == "Approved" || Status.startsWith('Approved')) {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
-            }
-            else if (Status == "Rejected" || Status == "Cancelled") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
-            }
-            else if (Status == "Requested For Cancel") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-            }
-            else {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li></ul></div>';
-            }
-            if (Leaves[i].LocationName == "Baner") {
-                banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-            } else
-                kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate , Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-            }
+            if (buttonSelected == "PendingLeaves") {
+                if (Status == "Pending") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
 
+                    if (Leaves[i].LocationName == "Baner") {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    }
+                }
+            } else if (buttonSelected == "ApprovedLeaves") {
+                if (Status == "Approved" || Status.startsWith('Approved')) {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+
+                    if (Leaves[i].LocationName == "Baner") {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    }
+                }
+            } else {
+                if (Status == "Rejected" || Status == "Cancelled") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
+
+                    if (Leaves[i].LocationName == "Baner") {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    }
+                }
+            }
+        }
+                     
+                  
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
@@ -429,7 +493,6 @@
                 }
             }
         });
-
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
@@ -461,10 +524,35 @@
                     $('td', nRow).addClass('info');
                 }
             }
-
         });
     }
     function UpdateStatus(RequestId, Status) {
+        var msg;
+        if (Status == "Approve") { msg = "Are you sure you want to Approve Leave?" }
+        else if (Status == "Reject") { msg = "Are you sure you want to Reject Leave?" }
+        else if (Status == "Pending") { msg = "Are you sure you want to make Leave Pending?" }
+        else if (Status == "Accept Cancel") { msg = "Are you sure you want to Approve Cancel Leave request?" }
+        else if (Status == "Reject Cancel") { msg = "Are you sure you want to Reject Cancel Leave request?" }
+        bootbox.confirm({
+            message: msg,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    UpDate(RequestId, Status);
+                }
+            }
+        });
+    }
+    function UpDate(RequestId, Status) {
         var pid=@cookies.PersonId;
         var url1 = "@APIURL/api/LeaveRequest/UpdateStatus/" + RequestId + "/" + Status + "/" + pid + "";
         $.ajax({

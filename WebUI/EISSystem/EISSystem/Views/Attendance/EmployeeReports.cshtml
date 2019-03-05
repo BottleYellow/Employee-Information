@@ -2,17 +2,7 @@
 @model IEnumerable<EIS.Entities.Employee.Attendance>
 
 <style type="text/css">
-    td {
-        width: 200px;
-        text-align: center
-    }
-
-    th {
-        font-size: medium;
-        text-align: center
-    }
-
-    div .panel-primary {
+   div .panel-primary {
         text-align: center
     }
 
@@ -48,6 +38,11 @@
             top: 70%;
             left: 40%;
         }
+    table.dataTable td {
+        padding: 3px 10px;
+        width: 1px;
+        white-space: nowrap;
+    }
 </style>
 <head>
     <title>Attendance History</title>
@@ -171,8 +166,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -365,10 +360,14 @@
                                 timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                             }
                         }
-                        else {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        else if (Status == "Absent") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
+                        } else{
+                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                             timeIn = '-';
+                             timeOut = '-';
                         }
 
                         array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
@@ -391,57 +390,7 @@
                 }
             });
 
-            @*$.ajax({
-                type: 'POST',
-                url: '@Url.Action("EmployeeReports","Attendance")?date=' + value + '&type=' + type,
-                datatype: 'JSON',
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                success: function (data) {
-                    var array = [];
-                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
-                    for (var i = 0; i < data.length; i++)
-                    {
-                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
-                        var timeIn = data[i].TimeIn;
-                        if (timeIn == "-") {
-
-                        } else {
-                            timeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
-                        }
-
-                        var timeOut = data[i].TimeOut;
-                        if (timeOut == "-") {
-
-                        } else {
-                            timeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
-                        }
-
-                        var Status = data[i].Status;
-                        if (Status == "Present") {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                        } else {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        }
-                        array.push([date,Status,timeIn,timeOut,data[i].TotalHours])
-                    }
-                    $('#example').DataTable().destroy();
-                    $('#example').DataTable({
-                        "aoColumns": [
-                            { "sType": "date" },
-                            null,
-                            null,
-                            null,
-                            null
-                        ],
-                        data: array
-                    });
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
-                }
-            });*@
+           
         }
     });
     function calculate(date) {
