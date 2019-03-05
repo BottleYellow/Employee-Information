@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EIS.Entities.Employee;
 using EIS.Entities.Generic;
+using EIS.Entities.Hoildays;
 using EIS.Entities.OtherEntities;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -51,6 +52,14 @@ namespace EIS.WebApp.Controllers
             string stringData = response.Content.ReadAsStringAsync().Result;
             List<Locations> locations = JsonConvert.DeserializeObject<List<Locations>>(stringData);
             return locations;
+        }
+        [NonAction]
+        public List<WeeklyOffs> GetWeeklyOffs()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee/GetWeeklyOffs");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<WeeklyOffs> WeeklyOffs = JsonConvert.DeserializeObject<List<WeeklyOffs>>(stringData);
+            return WeeklyOffs;
         }
         public IActionResult LoadData<T1>(string Url,bool? type,int? LocationId)
         {

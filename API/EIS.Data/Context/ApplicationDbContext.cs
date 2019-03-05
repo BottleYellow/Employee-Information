@@ -79,6 +79,7 @@ namespace EIS.Data.Context
         public DbSet<Holiday> Holidays { get; set; }
         public DbSet<PastLeaves> PastLeaves { get; set; }
         public DbSet<Locations> Locations { get; set; }
+        public DbSet<WeeklyOffs> WeeklyOffs { get; set; }
         #endregion
     }
 }

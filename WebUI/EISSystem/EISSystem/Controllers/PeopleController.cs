@@ -101,6 +101,7 @@ namespace EIS.WebApp.Controllers
         public IActionResult Create()
         {
             ViewBag.Locations = GetLocations();
+            ViewBag.WeeklyOffs = GetWeeklyOffs();
             ViewBag.Designations = rolesList;
             var data = from p in EmployeeData()
                        where p.Role.Name != "Employee"
@@ -112,7 +113,7 @@ namespace EIS.WebApp.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id,LocationId")]Person person, IFormFile file)
+        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id,LocationId,WeeklyOffId,WorkingHours,IsOnProbation,PropbationPeriodInMonth")]Person person, IFormFile file)
         {
             if (person.DateOfBirth != null)
             {
@@ -121,8 +122,10 @@ namespace EIS.WebApp.Controllers
             }
             if (person.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");
             if (person.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
+            if (person.WeeklyOffId == 0) ModelState.AddModelError("WeeklyOffId", "Please Select Weekly Off Type");
             var tId = GetSession().TenantId;
             ViewBag.Locations = GetLocations();
+            ViewBag.WeeklyOffs = GetWeeklyOffs();
             //var tId = Cache.GetStringValue("TenantId");
             ViewBag.Designations = rolesList;
 
@@ -209,6 +212,7 @@ namespace EIS.WebApp.Controllers
         {
             ViewBag.EmployeeCode = EmployeeCode;
             ViewBag.Designations = rolesList;
+            ViewBag.WeeklyOffs = GetWeeklyOffs();
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
                         where p.EmployeeCode!=EmployeeCode
@@ -228,6 +232,7 @@ namespace EIS.WebApp.Controllers
             {
                 return NotFound();
             }
+            ViewBag.WeeklyOffs = GetWeeklyOffs();
             ViewBag.Designations = rolesList;
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()

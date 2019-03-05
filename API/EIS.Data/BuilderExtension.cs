@@ -3,7 +3,9 @@ using EIS.Entities.Address;
 using EIS.Entities.Employee;
 using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
+using EIS.Entities.Models;
 using EIS.Entities.OtherEntities;
+using EIS.Entities.SP;
 using EIS.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -204,6 +206,10 @@ namespace EIS.Data
                 modelBuilder.Entity<PastLeaves>().Property(p => p.Reason).HasColumnType("nvarchar(200)");
                 #endregion
 
+                #region [WeeklyOffs]
+                modelBuilder.Entity<WeeklyOffs>().Property(p => p.Type).HasColumnType("nvarchar(450)");
+                #endregion
+
                 #region Constraints
                 modelBuilder.Entity<Person>()
                     .HasIndex(p => p.MobileNumber)
@@ -326,7 +332,22 @@ namespace EIS.Data
                 modelBuilder.Entity<Holiday>().ToTable("tblHolidays", "LMS");
                 modelBuilder.Entity<PastLeaves>().ToTable("tblPastLeaves", "LMS");
                 modelBuilder.Entity<Locations>().ToTable("tblLocations", "LMS");
+                modelBuilder.Entity<WeeklyOffs>().ToTable("tblWeeklyOffs", "LMS");
                 #endregion
+
+                modelBuilder.Ignore<SP_AdminDashboard>();
+                modelBuilder.Ignore<SP_AdminDashboardCount>();
+                modelBuilder.Ignore<Sp_AdminDashboardLeave>();
+                modelBuilder.Ignore<SP_EmployeeDashboard>();
+                modelBuilder.Ignore<SP_EmployeeDashboardCount>();
+                modelBuilder.Ignore<SP_GetAttendanceCountReport>();
+                modelBuilder.Ignore<AttendanceReport>();
+                modelBuilder.Ignore<EmployeeAttendanceData>();
+                modelBuilder.Ignore<GetAdminHrManager>();
+                modelBuilder.Ignore<MailConfiguration>();
+                modelBuilder.Ignore<SP_GetEmployee>();
+                modelBuilder.Ignore<ActualLeaveCount>();
+                modelBuilder.Ignore<SP_GetDateWiseAttendance>();
             }
             catch (System.Exception ex)
             {
