@@ -46,7 +46,7 @@ namespace EIS.Repositories.Repository
         }
         public float GetAvailableLeaves(int PersonId, int LeaveId)
         {
-            float n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.LeaveId == LeaveId).Select(x => x.Available).FirstOrDefault();
+            float n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.Id == LeaveId).Select(x => x.Available).FirstOrDefault();
             return n;
         }
 

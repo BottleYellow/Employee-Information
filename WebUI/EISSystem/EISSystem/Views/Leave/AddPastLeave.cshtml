@@ -106,6 +106,7 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    var avl = null;
     var d = new Date();
     d.setDate(d.getDate() - 1);
     var maxDate = moment().add(1, 'seconds').toDate();
@@ -213,8 +214,15 @@
                                 });
                                 $("#btnSubmit").prop("disabled", true);
                             }
+                            else if (data > avl) {
+                                bootbox.alert({
+                                    message: "You can request leave for only " + avl + " days."
+                                });
+                                $("#btnSubmit").prop("disabled", true);
+                            }
                             else {
                                 $("#trd").val(days);
+                                $("#av").val(avl - data);
                                 var form = $("#cp");
                                 $.validator.unobtrusive.parse(form);
                                 if (form.valid()) {
@@ -282,7 +290,7 @@
         });
     });
     function myFunction() {
-        
+        $("#msg2").remove();
         var x = document.getElementById("type").value;
         if (x == 0) {
             $("#date1").prop("disabled", true);
@@ -294,6 +302,7 @@
             var pid = @cookies.PersonId;
             $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data1) {
                 availableLeaves = data1;
+                avl = data1;
                 if (data1 == 0) {
                     $("#LType").append('<span id="msg2" class="text-danger">' + data1 + ' days are available</span>');
                 }

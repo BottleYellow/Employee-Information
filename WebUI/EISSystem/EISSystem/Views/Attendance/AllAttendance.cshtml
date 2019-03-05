@@ -169,8 +169,8 @@
                                             <th>Location</th>
                                             <th>Name</th>
                                             <th>Present Days</th>
-                                            <th>On Leave</th>
-                                            <th id="wd">Working Days (Till Now)</th>
+                                            <th>Proposed Leaves</th>
+                                            <th>Total Working Days</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -319,12 +319,12 @@
             var location = $('#locations').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
-                if (value == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
-                }
-                else { 
-                    $("#wd").html("Total Working Days");
-                }
+                //if (value == new Date().getFullYear()) {
+                //    $("#wd").html("Working Days (Till Now)");
+                //}
+                //else { 
+                //    $("#wd").html("Total Working Days");
+                //}
                 if (location == 0) {
                     $('#all').show();
                     $('#baner').hide();

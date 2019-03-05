@@ -181,6 +181,7 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FullName;
             leave.TenantId = TenantId;
+            leave.TypeId = _repository.LeaveCredit.FindByCondition(x => x.Id==leave.TypeId).LeaveId;
             _repository.LeaveRequest.CreateAndSave(leave);
 
             string msg = null;
@@ -316,7 +317,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult CheckForScheduledLeave([FromRoute]string type, [FromRoute]int PersonId, [FromRoute]int LeaveId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
         {
             string result = null;
-            var credit = _repository.LeaveCredit.FindByCondition(x => x.PersonId == PersonId && x.LeaveId == LeaveId);
+            var credit = _repository.LeaveCredit.FindByCondition(x => x.PersonId == PersonId && x.Id == LeaveId);
             if (credit.ValidFrom <= FromDate.Date && FromDate.Date <= credit.ValidTo)
             {
                 if (type == "Future")
@@ -344,7 +345,7 @@ namespace EIS.WebAPI.Controllers
             int count = 0;
             for (var d = FromDate; d <= ToDate; d=d.AddDays(1))
             {
-                Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId);
+                Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId && x.IsActive==true);
                 if (holiday != null)
                 {
                     if (holiday.Date.DayOfWeek == DayOfWeek.Sunday && d.DayOfWeek == DayOfWeek.Sunday)

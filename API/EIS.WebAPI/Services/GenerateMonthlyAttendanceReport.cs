@@ -43,15 +43,7 @@ namespace EIS.WebAPI.Services
             d = d.AddMonths(-1);
             int year = d.Year;
             int month = d.Month;
-            //if (month != 1)
-            //{
-            //    month = month - 1;
-            //}
-            //else
-            //{
-            //    year = year - 1;
-            //    month = 12;
-            //}
+
             string monthName = new DateTime(2000, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
             int TotalDays = DateTime.DaysInMonth(year, month);
 

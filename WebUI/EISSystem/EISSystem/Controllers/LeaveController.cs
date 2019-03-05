@@ -22,7 +22,7 @@ namespace EIS.WebApp.Controllers
     {
         #region Declarations
         HttpResponseMessage response;
-        List<LeaveRules> data;
+        List<LeaveCredit> data;
         private IServiceWrapper _services;
         #endregion
         
@@ -101,9 +101,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Request For Leave")]
         public IActionResult RequestLeave()
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
+            response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeaveCredit/GetCreditsByPerson/" + GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
             if (data.Count == 0) { 
                 ViewBag.Status = "NoData";
                 ViewBag.ListOfPolicy = data;
@@ -133,17 +133,17 @@ namespace EIS.WebApp.Controllers
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("RequestLeave", request);
         }
-        [DisplayName("Edit Leave Request")]
-        public IActionResult EditLeaveRequest(int id)
-        {
-            response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
-            string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
-            ViewBag.ListOfPolicy = data;
-            string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
-            LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
-            return View(leave);
-        }
+        //[DisplayName("Edit Leave Request")]
+        //public IActionResult EditLeaveRequest(int id)
+        //{
+        //    response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
+        //    string stringData1 = response.Content.ReadAsStringAsync().Result;
+        //    data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+        //    ViewBag.ListOfPolicy = data;
+        //    string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
+        //    LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
+        //    return View(leave);
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditLeaveRequest(int id,LeaveRequest request)
@@ -164,9 +164,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyByLocation/" + GetSession().PersonId);
+            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeaveCredit/GetCreditsByPerson/" + GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData);
             if (data.Count == 0)
             {
                 ViewBag.Status = "NoData";
@@ -323,7 +323,7 @@ namespace EIS.WebApp.Controllers
             ViewBag.Locations = GetLocations();
             response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            List<LeaveRules> data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             if (data.Count == 0)
                 ViewBag.ListOfPolicy = new List<LeaveRules>();
             else

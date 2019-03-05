@@ -1,0 +1,122 @@
+﻿@using EIS.Entities.Hoildays
+@using EIS.Entities.Enums;
+@using System.Globalization;
+@model Holiday
+<!-- Modal -->
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+    }
+</style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<div id="md" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <HeaderWithButton class="modal-title" header-name="Update Holiday"></HeaderWithButton>
+        </div>
+        <div class="modal-body">
+            <form name="cp" id="cp" asp-action="EditHoliday" asp-controller="Holiday" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="RowVersion" />
+
+                <div class="form-group required">
+                    <label class="control-label" asp-for="LocationId">Location : </label>
+                    <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                        <option value="0">-- Select Location --</option>
+                    </select>
+                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label" asp-for="Date">Holiday Date</label>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="Date" id="inputdate1" placeholder="select Date" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group required">
+                    <label class="control-label">Holiday</label>
+                    <div class="form-line">
+                        <input asp-for="Vacation" class="form-control" />
+                    </div>
+
+                    <span asp-validation-for="Vacation" class="text-danger"></span>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-link waves-effect">Save</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var d1 = document.getElementById("inputdate1").value;
+        var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+        var dt = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+
+        if (dt == "Invalid date") {
+            $("#inputdate1").val(d1);
+        } else {
+            $("#inputdate1").val(dt);
+        }
+    })
+    $('#btnSubmit').click(function () {
+        var form = $("#cp");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            bootbox.confirm({
+                message: "Are you sure to update Holiday?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        var d = form.serialize();
+                        $.ajax({
+                            url: '@Url.Action("EditHoliday", "Holiday")',
+                            type: 'POST',
+                            data: d,
+                            success: function (data) {
+                                bootbox.alert({
+                                    message: "Holiday Updated Successfully!",
+                                    callback: function () {
+                                        window.parent.location.reload();
+                                    }
+                                });
+                            },
+                            error: function (data) {
+                                $("#md").replaceWith(data.responseText);
+                                $('#inputdate1').datetimepicker({
+                                    format: "DD-MMM-YYYY"
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+        return false;
+    });
+</script>

@@ -18,7 +18,7 @@ namespace EIS.Validations.FluentValidations
         }
         public bool UniqueForLocation(Holiday obj,DateTime date)
         {
-            var holiday = _repositoryWrapper.Holidays.FindByCondition(x => x.Date == date.Date && x.LocationId == obj.LocationId);
+            var holiday = _repositoryWrapper.Holidays.FindByCondition(x => x.Date == date.Date && x.LocationId == obj.LocationId && x.IsActive==true);
             if (holiday == null)
             {
                 return true;

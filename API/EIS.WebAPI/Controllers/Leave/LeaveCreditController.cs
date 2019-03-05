@@ -22,7 +22,12 @@ namespace EIS.WebAPI.Controllers.Leave
         {
 
         }
-
+        [Route("GetCreditsByPerson/{PersonId}")]
+        [HttpGet]
+        public IEnumerable<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
+        {
+            return _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0);
+        }
         [DisplayName("leave Credits")]
         [HttpGet]
         [Route("GetLeaveCredits/{LocationId}")]
