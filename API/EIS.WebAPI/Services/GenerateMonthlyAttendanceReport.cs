@@ -199,7 +199,7 @@ namespace EIS.WebAPI.Services
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))
-            {
+            { 
                 File.Delete(attendanceReportPath);
             }
             var memory = new MemoryStream();
