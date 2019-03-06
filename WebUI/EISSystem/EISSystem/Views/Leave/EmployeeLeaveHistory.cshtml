@@ -53,12 +53,17 @@
         a {
             cursor: pointer;
         }
+        * {
+            font-family: Arial;
+            font-style: normal
+        }
     </style>
 </head>
 <body>
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
+    <div id="addLeaveModal" class="modal fade" role="dialog" data-url="@Url.Action("AddLeaveByHr")"></div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Leave History"></HeaderWithButton>
@@ -127,6 +132,11 @@
 
                                 </div>
                             </div>
+                            <div class="row" id="addLeave" hidden>
+                                <div class="col-md-3">
+                                    <input type="button" id="addLeaveByHr" class="form-control" value="Add Employee Leave" style="font-weight:bold; font-size:16px; width:180px; background-color:#3399ff; color:white;" />
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="table-responsive">
@@ -167,7 +177,10 @@
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     $(document).ready(function () {
-
+        var addLeave ="@cookies.Role";
+        if (addLeave == "HR") {
+            $('#addLeave').show();
+        }
         var employeeValue = $('#selectEmployee').val();
         var type = $('#selectReport').val();
         var leaveType = $('#leaveOption').val();
@@ -380,7 +393,23 @@
                 }
 
             });
+    });
+    
+    $('#addLeaveByHr').click(function () {
+        var url = $("#addLeaveModal").data('url');
+        $.get(url, function (data) {
+            $("#addLeaveModal").html(data);
+            $("#addLeaveModal").modal({ backdrop: 'static', keyboard: false }, 'show');
+
+        })
+         .fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to add the Record</h4>");
+            }
         });
+    });
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>

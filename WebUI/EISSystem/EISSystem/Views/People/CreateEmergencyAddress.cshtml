@@ -1,4 +1,10 @@
 ﻿@model EIS.Entities.Address.Emergency
+<style>
+    * {
+        font-family: Arial;
+        font-style: normal
+    }
+</style>
 <div class="form-group form-float">
     <div class="form-line">
         <input asp-for="@Model.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
