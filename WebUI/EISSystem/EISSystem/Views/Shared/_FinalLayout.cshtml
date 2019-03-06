@@ -90,7 +90,23 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a href="@rootPath/People/Profile?PersonId=@idcard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                @if (cookies.Role == "Admin")
+                {
+                    <a href="@rootPath/Dashboard/AdminDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                }
+                else if (cookies.Role == "Manager")
+                {
+                    <a href="@rootPath/Dashboard/ManagerDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                }
+                else if (cookies.Role == "Employee")
+                {
+                    <a href="@rootPath/Dashboard/EmployeeDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                }
+                else if (cookies.Role == "HR")
+                {
+                    <a href="@rootPath/Dashboard/HRDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                }
+
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
