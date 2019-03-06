@@ -64,7 +64,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <table id="example" class="table table-bordered table-striped table-hover ">
+                        <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Location</th>
@@ -161,6 +161,12 @@
         $.get(url, function (data) {
             $("#modal-placeholder-editcredit").html(data);
             $("#modal-placeholder-editcredit").modal('show');
+            $('#validFrom').datetimepicker({
+                format: "DD/MMM/YYYY"
+            });
+            $('#validTo').datetimepicker({
+                format: "DD/MMM/YYYY"
+            });
         }).fail(function (xhr, status, error) {
             if (xhr.status == 401) {
                 bootbox.alert("<h4>Access denied..Unable to Edit the Record</h4>");

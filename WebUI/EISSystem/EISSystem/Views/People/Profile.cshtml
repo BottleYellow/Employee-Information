@@ -98,6 +98,15 @@
                                         <th>Join Date</th>
                                         <td>@Model.JoinDate.ToString("dd MMM yyyy")</td>
                                     </tr>
+                                     @{
+                                        if (@Model.IsOnProbation == true)
+                                        {
+                                            <tr>
+                                                <th>Probation Period</th>
+                                                <td>@Html.DisplayFor(model => model.PropbationPeriodInMonth) Months</td>
+                                            </tr>
+                                        }
+                                    }
                                     <tr>
                                         <th>Email</th>
                                         <td>@Html.DisplayFor(model => model.EmailAddress)</td>
