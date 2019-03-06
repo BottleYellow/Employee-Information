@@ -24,24 +24,28 @@
         width: 80%;
         height: 80%;
     }
+
         .ajax-loader img {
             position: relative;
             top: 45%;
             left: 45%;
         }
+
     .info-box {
         cursor: pointer;
-        
     }
+
     a:hover, a:focus {
         text-decoration: none;
     }
+
     .disabledLink {
         color: currentColor;
         cursor: not-allowed;
         opacity: 0.5;
         text-decoration: none;
     }
+
     table.dataTable td {
         margin-left: 0;
         margin-right: auto;
@@ -157,7 +161,7 @@
                 </a>
             </div>
         </div>
-         
+
     </div>
     <div class="row clearfix">
         <!-- Attendance Data-->
@@ -168,20 +172,20 @@
                         <h2>BANER <span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
-                                <thead>
-                                    <tr class="active">
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>ClockIn</th>
-                                        <th>ClockOut</th>
-                                        <th>WorkingHours</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable">
+                            <thead>
+                                <tr class="active">
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>ClockIn</th>
+                                    <th>ClockOut</th>
+                                    <th>WorkingHours</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
                     </div>
                 </div>
 
@@ -194,20 +198,20 @@
                         <h2>KONDHWA<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
                     </div>
                     <div class="body">
-                        <div class="table-responsive">
-                            <table  class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
-                                <thead>
-                                    <tr class="active">
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>ClockIn</th>
-                                        <th>ClockOut</th>
-                                        <th>WorkingHours</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
+                            <thead>
+                                <tr class="active">
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>ClockIn</th>
+                                    <th>ClockOut</th>
+                                    <th>WorkingHours</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
                     </div>
                 </div>
 
@@ -224,23 +228,23 @@
                         <h2>BANER</h2>
                     </div>
                     <div class="body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
-                                <thead>
-                                    <tr class="active">
-                                        <th>Actions</th>
-                                        <th>Employee Name</th>
-                                        <th>Leave Type</th>
-                                        <th>From Date</th>
-                                        <th>To Date</th>
-                                        <th>Days</th>
-                                        <th>Requested Date</th>
-                                        <th>Status</th>
-                                        <th>Leave Reason</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
+                            <thead>
+                                <tr class="active">
+                                    <th>Actions</th>
+                                    <th>Employee Name</th>
+                                    <th>Leave Type</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Days</th>
+                                    <th>Requested Date</th>
+                                    <th>Status</th>
+                                    <th>Leave Reason</th>
+                                </tr>
+                            </thead>
+                        </table>
+
 
 
 
@@ -254,24 +258,24 @@
                         <h2>KONDHWA</h2>
                     </div>
                     <div class="body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
-                                <thead>
-                                    <tr class="active">
-                                        <th>Actions</th>
-                                        <th>Employee Name</th>
-                                        <th>Leave Type</th>
-                                        <th>From Date</th>
-                                        <th>To Date</th>
-                                        <th>Days</th>
-                                        <th>Requested Date</th>
-                                        <th>Status</th>
-                                        <th>Leave Reason</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
+                            <thead>
+                                <tr class="active">
+                                    <th>Actions</th>
+                                    <th>Employee Name</th>
+                                    <th>Leave Type</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Days</th>
+                                    <th>Requested Date</th>
+                                    <th>Status</th>
+                                    <th>Leave Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
 
 
 
@@ -390,6 +394,7 @@
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
+            scrollX: true,
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -403,6 +408,7 @@
         });
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
+            scrollX: true,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -469,6 +475,7 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
+            scrollX:true,
             "aoColumns": [
                 null,
                 null,
@@ -501,6 +508,7 @@
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
+            scrollX: true,
             "aoColumns": [
                 null,
                 null,

@@ -42,7 +42,6 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
-            SendAttendanceReportToAdminHRManager();
             DateTime d = DateTime.Now;
             d = d.AddMonths(-1);
             int year = d.Year;

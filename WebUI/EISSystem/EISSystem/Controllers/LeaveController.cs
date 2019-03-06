@@ -189,7 +189,7 @@ namespace EIS.WebApp.Controllers
         {
             response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData1);
             ViewBag.ListOfPolicy = data;
             string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
             LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
