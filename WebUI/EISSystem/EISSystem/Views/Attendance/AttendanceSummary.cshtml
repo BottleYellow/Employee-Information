@@ -13,15 +13,7 @@
     }
 }
 <style type="text/css">
-    td {
-        width: 200px;
-        text-align: center
-    }
 
-    th {
-        font-size: medium;
-        text-align: center
-    }
 
     div .panel-primary {
         text-align: center
@@ -63,9 +55,10 @@
             top: 45%;
             left: 45%;
         }
-    * {
-        font-family: Arial;
-        font-style: normal
+    table.dataTable td {
+        padding: 3px 10px;
+        width: 1px;
+        white-space: nowrap;
     }
 </style>
 <head>
@@ -146,26 +139,26 @@
                                 </div>
                                 <div class="row">
 
-                                    <div class="col-md-3 col-sm-2">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeIn</div>
                                             <div id="averageTimeIn" class="panel-body"></div>
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
                                             <div id="averageTimeOut" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-2">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average Working Hours</div>
                                             <div id="averageHours" class="panel-body"><span></span></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Additional Working Hours</div>
                                             <div id="addtionalWorkingHours" class="panel-body"></div>
@@ -176,25 +169,25 @@
                                 </div>
                                 <div class="row">
 
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Present Days</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div class="panel-heading">Leave Availed</div>
+                                            <div class="panel-heading">On Leave Days</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div id="wd" class="panel-heading">Working Days (Till Now)</div>
+                                            <div id="wd" class="panel-heading">Working Days (Till Today)</div>
                                             <div id="totalWorkingDays" class="panel-body"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Total Number Of Days</div>
                                             <div id="totalNoOfDays" class="panel-body"></div>
@@ -203,17 +196,19 @@
                                 </div>
                             </div>
                             <div id="tblExample" style="display:none;">
-                                <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Time In</th>
-                                            <th>Time Out</th>
-                                            <th>Total Hours</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                <div class="table-responsive">
+                                    <table id="example" class="table table-hover table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Time In</th>
+                                                <th>Time Out</th>
+                                                <th>Total Hours</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
 
                         </div>
@@ -376,7 +371,7 @@
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
                 if (value == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
+                    $("#wd").html("Working Days (Till Today)");
                 }
                 else {
                     $("#wd").html("Total Working Days");
@@ -391,7 +386,7 @@
                 var y = monthYear[1];
                 var m = monthYear[0];
                 if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
+                    $("#wd").html("Working Days (Till Today)");
                 }
                 else {
                     $("#wd").html("Total Working Days");
@@ -449,7 +444,13 @@
                                 timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                             }
                         }
-                        else {
+                        else if (Status == "Absent") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                            timeIn = '-';
+                            timeOut = '-';
+                        }
+                        else
+                        {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
@@ -461,7 +462,7 @@
 
                     $('#example').DataTable({
                         "aoColumns": [
-                            { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
+                            { "sType": "date" }, 
                             null,
                             null,
                             null,
@@ -476,52 +477,7 @@
                 complete: function () {
                     $('.ajax-loader').css("visibility", "hidden");
                 }
-            });
-
-            @*$.ajax({
-                "url": '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
-                "type": "POST",
-                "datatype": "json",
-                success: function (data) {
-                    var array = [];
-                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
-                    for (var i = 0; i < data.length; i++) {
-                        var date = moment(data[i].Date, cultureInfo).format("DD MMM YYYY");
-                        var timeIn;
-                        var timeOut;
-                        var Status = data[i].Status;
-                        if (Status == "Present") {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                            timeIn = data[i].TimeIn == null ? '-' : moment(data[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
-                            if (data[i].TimeOut == '-') {
-                                timeOut = data[i].TimeOut;
-                            } else {
-                                timeOut = data[i].TimeOut == null ? '-' : moment(data[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
-                            }
-                        }
-                        else {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                            timeIn = '-';
-                            timeOut = '-';
-                        }
-
-                        array.push([date, Status, timeIn, timeOut, data[i].TotalHours])
-                    }
-                    $('#example').DataTable().destroy();
-
-                    $('#example').DataTable({
-                        "aoColumns": [
-                            { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
-                            null,
-                            null,
-                            null,
-                            null
-                        ],
-                        data: array
-                    });
-                },
-
-            });*@
+            });           
         }
 
 </script>

@@ -10,7 +10,8 @@ namespace EIS.Entities.SP
     {
         public List<SP_EmployeeDashboard> SP_EmployeeDashboards { get; set; }
         public SP_EmployeeDashboardCount SP_EmployeeDashboardCount { get; set; }
-        public List<LeaveRequest> leaveRequests { get; set; }
+        
+        public List<SP_EmployeeLeaveRequest> SP_EmployeeLeaveRequest { get; set; }
     }
     public class SP_EmployeeDashboard
     {
@@ -29,6 +30,20 @@ namespace EIS.Entities.SP
         public int OnLeaveDays { get; set; }
         public int TotalLeavesTaken { get; set; }
         public int AvailableLeaves { get; set; }
+    }
+
+    public class SP_EmployeeLeaveRequest
+    {
+        [Key]
+        public int Id { get; set; }
+        public string LeaveType { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public Double RequestedDays { get; set; }
+        public string Status { get; set; }
+        public string Reason { get; set; }
+        public DateTime AppliedDate { get; set; }
+        public string ApprovedBy { get; set; }
 
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using EIS.Entities.Dashboard;
+using EIS.Entities.Employee;
 using EIS.Entities.Models;
 using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
@@ -58,6 +59,14 @@ namespace EIS.WebAPI.Controllers.Dashboard
         {
             List<CalendarData> calendarDataList = _repository.Dashboard.GetEmployeeCalendarDetails(personId, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
             return Ok(calendarDataList);
+        }
+
+        [Route("BirthdayData/{day}/{month}")]
+        [HttpGet]
+        public IActionResult GetBirthdayPerson([FromRoute]int day,[FromRoute]int month)
+        {
+            List<Person> person = _repository.Employee.FindAllByCondition(x => x.DateOfBirth.Day == day && x.DateOfBirth.Month==month).ToList();
+            return Ok(person);
         }
     }
 }

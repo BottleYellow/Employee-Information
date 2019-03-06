@@ -97,8 +97,8 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required" id="Imagediv">
-                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl/EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" style="height:80px; width:80px;" class="img-circle" />
-
+                                            
+                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:80px; width:80px;"/>
                                             <div class="middle">
                                                 <input type="button" class="text" id="my-button" value="Edit Image" />
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="my-file" onchange="return ValidateFileUpload()" />
@@ -235,6 +235,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="JoinDate">Joining Date : </label>
+                                            <div class="form-line">
+                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" autocomplete="off" />
+                                            </div>
+                                            <span asp-validation-for="JoinDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
                                             <div class="form-line">
@@ -246,17 +255,17 @@
                                     </div>
                                 </div>
                             </div>
+                             }
+                             else
+                             {
+                                <input type="hidden" asp-for="RoleId" />
+                                <input type="hidden" asp-for="JoinDate" />
+                                <input type="hidden" asp-for="ReportingPersonId" />
+                             }
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="JoinDate">Joining Date : </label>
-                                            <div class="form-line">
-                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" autocomplete="off"/>
-                                            </div>
-                                            <span asp-validation-for="JoinDate" class="text-danger"></span>
-                                        </div>
-                                    </div>
+                                     @if (cookies.Role == "Admin" || cookies.Role == "HR")
+                                     {
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label" asp-for="Salary">Salary : </label>
@@ -266,16 +275,11 @@
                                             <span asp-validation-for="Salary" class="text-danger"></span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                             }
-                             else
-                             {
-                                <input type="hidden" asp-for="RoleId" />
-                                <input type="hidden" asp-for="ReportingPersonId" />
-                             }
-                            <div class="row">
-                                <div class="col-md-9" style="height:80px">
+                                     }
+                                     else
+                                     { 
+                                        <input type="hidden" asp-for="Salary" />
+                                     }
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label" asp-for="PanCard">PAN Card No. : </label>
@@ -294,11 +298,61 @@
                                             <span asp-validation-for="AadharCard" class="text-danger"></span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                           @if (cookies.Role == "Admin" || cookies.Role == "HR")
+                           {
+                            <div class="row">
+                                <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="WeeklyOffId">Weekly Off Type : </label>
+                                            <select id="wid" asp-for="WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs, "Id", "Type"))" class="form-control show-tick">
+                                                <option value="0">-- Select Type --</option>
+                                            </select>
+                                            <span asp-validation-for="WeeklyOffId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="WorkingHours">Daily Working Hours : </label>
+                                            <div class="form-line">
+                                                <input asp-for="WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
+                                            </div>
+                                            <span asp-validation-for="WorkingHours" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="IsOnProbation">Is On Probation? : </label>
+                                            <div class="form-line">
+                                                <select id="ip" asp-for="IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
+                                                    <option value="false" selected>No</option>
+                                                    <option value="true">Yes</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="period" class="col-md-3" hidden>
+                                    <div class="col-md-11 col-sm-9 col-xs-9">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
+                                            <div class="form-line">
+                                                <input id="ppm" asp-for="PropbationPeriodInMonth" type="text" pattern="[1-9]" maxlength="1" class="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                           }
+                           else
+                           {
+                                <input type="hidden" asp-for="WeeklyOffId" />
+                                <input type="hidden" asp-for="WorkingHours" />
+                                <input type="hidden" asp-for="IsOnProbation" />
+                                <input type="hidden" asp-for="PropbationPeriodInMonth" />
+                           }
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -341,12 +395,29 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+    function showPeriod(x) {
+        if (x == "true") {
+            $("#period").removeAttr('hidden');
+        }
+        else if (x == "false") {
+            $("#period").prop("hidden", true);
+            $("#ppm").val('');
+        }
+    }
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
     }
    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
     $(document).ready(function () {
-
+        if (document.getElementById("wh") != null) {
+            var m = document.getElementById("wh").value;
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                useCurrent:false
+            });
+        }
+       
         var d1 = document.getElementById("dob").value;
         var dob = moment(d1, cultureInfo).format("DD/MMM/YYYY");
 
@@ -377,10 +448,17 @@
                 format: 'DD/MMM/YYYY'
             });
         }
-        
+       
+        if (document.getElementById("ip") != null) {
+            var m = document.getElementById("ip").value;
+            if (m == "true") {
+                $("#period").removeAttr('hidden');
+            }
+        }
         $('#my-button').click(function () {
             $('#my-file').click();
         });
+
     });
 
     function ValidateFileUpload() {

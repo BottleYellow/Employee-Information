@@ -78,19 +78,58 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img  src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" class="img img-circle" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" />
+
+                            <img src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" class="img img-circle" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';"/>
                         </div>
                         <div class="content-area">
-                            <h3>@ViewBag.Name</h3>
-                            <div class="profile"><label class="profilelable">Designation : </label> @Html.DisplayFor(model => model.Role.Name)</div>
-                            <div class="profile"><label class="profilelable">Email :</label> @Html.DisplayFor(model => model.EmailAddress)</div>
-                            <div class="profile"><label class="profilelable">DOB :</label> @Html.DisplayFor(model => model.DateOfBirth)</div>
-                            <div class="profile"><label class="profilelable">Mobile No. :</label> @Html.DisplayFor(model => model.MobileNumber)</div>
-                            <div class="profile"><label class="profilelable">Gender :</label> @Html.DisplayFor(model => model.Gender)</div>
-                            <div class="profile"><label class="profilelable">Aadhar No. :</label> @Html.DisplayFor(model => model.AadharCard)</div>
-                            <div class="profile"><label class="profilelable">PAN No. :</label> @Html.DisplayFor(model => model.PanCard)</div>
-                            <div class="profile"><label class="profilelable">Salary :</label> @Html.DisplayFor(model => model.Salary)</div>
+                            <h3>@Html.DisplayFor(model => model.FullName)</h3>
                             <div class="profile"><a href="@Url.Action("Edit", "People")?EmployeeCode=@Model.EmployeeCode">Edit Profile</a></div>
+                            <div class="body table-responsive">
+                                <table name="profiletable" class="table table-bordered table-hover">
+                                    <tr>
+                                        <th>Employee Code</th>
+                                        <td>@Html.DisplayFor(model => model.EmployeeCode)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Designation</th>
+                                        <td>@Html.DisplayFor(model => model.Role.Name)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Join Date</th>
+                                        <td>@Model.JoinDate.ToString("dd MMM yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>@Html.DisplayFor(model => model.Role.Name)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile No</th>
+                                        <td>@Html.DisplayFor(model => model.MobileNumber)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>DOB</th>
+                                        <td>@Model.DateOfBirth.ToString("dd MMM yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td>@Html.DisplayFor(model => model.Gender)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Aadhar No</th>
+                                        <td> @Html.DisplayFor(model => model.AadharCard)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>PAN No</th>
+                                        <td>@Html.DisplayFor(model => model.PanCard)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Salary</th>
+                                        <td>@Html.DisplayFor(model => model.Salary)</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
                         </div>
                     </div>
 

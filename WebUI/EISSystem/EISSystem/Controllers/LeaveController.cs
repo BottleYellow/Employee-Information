@@ -8,6 +8,7 @@ using System.Net.Http;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.WebApp.Filters;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
@@ -22,7 +23,7 @@ namespace EIS.WebApp.Controllers
     {
         #region Declarations
         HttpResponseMessage response;
-        List<LeaveRules> data;
+        List<LeaveCredit> data;
         private IServiceWrapper _services;
         #endregion
         
@@ -85,6 +86,11 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Show My Leaves")]
         public IActionResult ShowMyLeaves()
         {
+            int pid = Convert.ToInt32(GetSession().PersonId);
+            HttpResponseMessage response = _services.LeaveRequest.GetResponse(ApiUrl + "/api/LeaveRequest/GetAvailableCount/" + pid);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            int value = JsonConvert.DeserializeObject<int>(stringData);
+            ViewBag.AvailableCount = value;
             return View();
         }
         
@@ -93,17 +99,19 @@ namespace EIS.WebApp.Controllers
         public IActionResult GetMyLeaves()
         {
             int pid = Convert.ToInt32(GetSession().PersonId);
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/Employee/" + pid + "", null, null);
+            HttpResponseMessage response = _services.LeaveRequest.GetResponse(ApiUrl + "/api/LeaveRequest/Employee/" + pid);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            List<SP_EmployeeLeaveRequest> leaveData = JsonConvert.DeserializeObject<List<SP_EmployeeLeaveRequest>>(stringData);
+                return Json(leaveData);
 
         }
 
         [DisplayName("Request For Leave")]
         public IActionResult RequestLeave()
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeavePolicy/GetPolicyByLocation/"+GetSession().PersonId);
+            response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeaveCredit/GetCreditsByPerson/" + GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
             if (data.Count == 0) { 
                 ViewBag.Status = "NoData";
                 ViewBag.ListOfPolicy = data;
@@ -207,9 +215,9 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyByLocation/" + GetSession().PersonId);
+            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeaveCredit/GetCreditsByPerson/" + GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData);
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData);
             if (data.Count == 0)
             {
                 ViewBag.Status = "NoData";
@@ -366,7 +374,7 @@ namespace EIS.WebApp.Controllers
             ViewBag.Locations = GetLocations();
             response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            List<LeaveRules> data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
             if (data.Count == 0)
                 ViewBag.ListOfPolicy = new List<LeaveRules>();
             else

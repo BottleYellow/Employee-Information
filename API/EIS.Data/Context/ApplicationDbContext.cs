@@ -46,6 +46,10 @@ namespace EIS.Data.Context
         public virtual DbSet<SP_EmployeeDashboard> _sp_EmployeeDashboard { get; set; }
         [NotMapped]
         public virtual DbSet<SP_EmployeeDashboardCount> _sp_EmployeeDashboardcount { get; set; }
+
+        [NotMapped]
+        public virtual DbSet<SP_EmployeeLeaveRequest> _sp_EmployeeLeaveRequest { get; set; }
+
         [NotMapped]
         public virtual DbSet<SP_GetAttendanceCountReport> _sp_GetAttendanceCountReport { get; set; }
         [NotMapped]
@@ -79,6 +83,7 @@ namespace EIS.Data.Context
         public DbSet<Holiday> Holidays { get; set; }
         public DbSet<PastLeaves> PastLeaves { get; set; }
         public DbSet<Locations> Locations { get; set; }
+        public DbSet<WeeklyOffs> WeeklyOffs { get; set; }
         #endregion
     }
 }

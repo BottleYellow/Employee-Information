@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Address;
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
+using EIS.Entities.Hoildays;
 using EIS.Entities.Leave;
 using EIS.Entities.User;
 using System;
@@ -37,10 +38,15 @@ namespace EIS.Entities.Employee
         public string Description { get; set; }
         public int RoleId { get; set; }
         public int ReportingPersonId { get; set; }
+        public TimeSpan? WorkingHours { get; set; }
+        public int? WeeklyOffId { get; set; }
+        public bool? IsOnProbation { get; set; }
+        public int? PropbationPeriodInMonth { get; set; }
         #endregion
 
         #region [Relations]
         public virtual Users User { get; set; }
+        public virtual WeeklyOffs WeeklyOff { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual Role Role { get; set; }
         public virtual ICollection<LeaveRequest> LeaveRequests { get; set; }

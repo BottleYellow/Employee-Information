@@ -1,6 +1,7 @@
 ﻿using EIS.Entities.Employee;
 using EIS.Entities.Enums;
 using EIS.Entities.Generic;
+using EIS.Entities.Hoildays;
 using EIS.Entities.SP;
 using EIS.Entities.User;
 using EIS.Repositories.IRepository;
@@ -47,6 +48,13 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetAllEmployee()
         {
             IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
+            return Ok(employees);
+        }
+        [Route("GetWeeklyOffs")]
+        [HttpGet]
+        public IActionResult GetWeeklyOffs()
+        {
+            IQueryable<WeeklyOffs> employees = _repository.Employee.GetWeeklyOffs().AsQueryable();
             return Ok(employees);
         }
 

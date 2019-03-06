@@ -25,6 +25,9 @@
     <Compile Remove="Migrations\20190208063206_FinalData.cs" />
     <Compile Remove="Migrations\20190208063436_FinalChanges.cs" />
     <Compile Remove="Migrations\20190225095419_PersonTableChanges.cs" />
+    <Compile Remove="Migrations\20190305062053_Changes.cs" />
+    <Compile Remove="Migrations\20190305062500_Changes.cs" />
+    <Compile Remove="Migrations\20190305070836_DbChanges.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,10 +40,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EIS.Entities\EIS.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

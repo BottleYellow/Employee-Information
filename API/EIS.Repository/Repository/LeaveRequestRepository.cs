@@ -5,6 +5,7 @@ using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Entities.Models;
+using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -274,6 +275,14 @@ namespace EIS.Repositories.Repository
             }
             return leaveDataView;
         }
-      
+
+        public List<SP_EmployeeLeaveRequest> GetEmployeeLeaveData(int PersonId)
+        {
+            List<SP_EmployeeLeaveRequest> sP_EmployeeLeave = new List<SP_EmployeeLeaveRequest>();
+           string usp = "LMS.usp_GetEmployeeLeavesData @PersonId";
+            sP_EmployeeLeave = _dbContext._sp_EmployeeLeaveRequest.FromSql(usp, PersonId).ToList();
+            return sP_EmployeeLeave;
+
+        }
     }
 }

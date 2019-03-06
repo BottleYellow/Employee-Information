@@ -43,7 +43,29 @@ namespace EIS.WebApp.Controllers
 
         public IActionResult HRDashboard()
         {
-            ViewBag.Locations = GetLocations();
+            ViewBag.Locations = GetLocations();            
+            if(TempData["BirhdayAlert"]!=null)
+            {
+                int day = DateTime.Now.Day;
+                int month = DateTime.Now.Month;
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/BirthdayData/" + day + "/" + month);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                List<Person> birthDayperson = JsonConvert.DeserializeObject<List<Person>>(stringData);
+                string person = Convert.ToString(TempData["BirhdayAlert"]);
+                if (birthDayperson.Count > 0)
+                {
+                    foreach (var p in birthDayperson)
+                    {
+                        person += p.FullName + ",";
+                    }
+                    person= person.Remove(person.Length - 1, 1) + ".";
+                    TempData["BirhdayAlert"] = person;
+                }
+                else
+                {
+                    TempData["BirhdayAlert"] = null;
+                }            
+            }            
             return View();
         }
 

@@ -30,6 +30,8 @@
                 left: 45%;
             }
         table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
@@ -88,7 +90,7 @@
             <div class="card">
                 <div class="body">
                     <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered table-hover">
+                        <table id="example" class="table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Location</th>
@@ -96,7 +98,7 @@
                                     <th>Name</th>
                                     <th>Image</th>
                                     <th>Gender</th>
-                                    <th>DOB</th>
+                                    <th>Birth Date</th>
                                     <th>Mobile Number</th>
                                     <th>Email Address</th>
                                     <th>Joining Date</th>
@@ -206,7 +208,7 @@
             success: function (data) {
                 debugger;
                 var array = [];
-                var action;
+                var action;             
                 var activeStatus;
                 for (var i = 0; i < data.length; i++) {
                     var image = data[i].Image;
@@ -215,9 +217,9 @@
                     var joinDate = moment(data[i].JoinDate).format("DD MMM YYYY");
                     var path = '@MyHttpContext.AppBaseUrl/EmployeeData/1' + data[i].EmployeeCode + '/Image/' + image;
                     var defaultPath = '@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';
-                    image = '<img  src="' + path + '" alt="Image" style="height:40px; width:40px" onerror="if (this.src!=\'' + defaultPath + '\') this.src=\'' + defaultPath + '\';" />'
-                    //image = '<img src="' + path + '" style="height:40px; width:40px">';
-                    if (activeStatus == true) {
+                    image = '<img src="' + path + '" onerror="if (this.src!=\'' + defaultPath + '\') this.src=\'' + defaultPath +'\';" style="height:40px; width:40px">';
+              
+                    if (activeStatus == true) {                       
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + data[i].EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + data[i].EmployeeCode + '>Delete</a></li></ul></div>';
                     } else {
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
@@ -227,8 +229,9 @@
                 }
 
                 $('#example').DataTable().destroy();
-                $('#example').DataTable({
+                $('#example').DataTable({                  
                     sDom: '<"myexport"B>ifrtlp',
+                    order:[1,'asc'],
                     buttons: [
                         {
                             extend: 'pdfHtml5',
@@ -236,7 +239,7 @@
                             text: 'Export',
                             titleAttr: 'Export to Pdf',
                             exportOptions: {
-                                columns: [0, 1, 2, 4, 5, 6, 7, 8, 9]
+                                columns: [0, 1, 2, 4, 5, 6, 7, 8]
                             }
                         }
                     ],
@@ -246,7 +249,7 @@
             complete: function () {
                 $('.ajax-loader').css("visibility", "hidden");
             }
-        });
+        });          
     }
     function getCreatedBy() {
         var result = null;

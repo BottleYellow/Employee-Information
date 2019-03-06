@@ -380,6 +380,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<bool?>("IsOnProbation");
+
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("date");
 
@@ -401,6 +403,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("PanCard")
                         .HasColumnType("varchar(10)");
+
+                    b.Property<int?>("PropbationPeriodInMonth");
 
                     b.Property<int>("ReportingPersonId");
 
@@ -424,6 +428,10 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("WeeklyOffId");
+
+                    b.Property<TimeSpan?>("WorkingHours");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmailAddress")
@@ -435,6 +443,8 @@ namespace EIS.Data.Migrations
                         .IsUnique();
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("WeeklyOffId");
 
                     b.HasIndex("TenantId", "EmployeeCode")
                         .IsUnique();
@@ -505,6 +515,30 @@ namespace EIS.Data.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("tblHolidays","LMS");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Hoildays.WeeklyOffs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("UpdatedBy");
+
+                    b.Property<DateTime?>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblWeeklyOffs","LMS");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
@@ -906,6 +940,10 @@ namespace EIS.Data.Migrations
                         .WithMany("Persons")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.Hoildays.WeeklyOffs", "WeeklyOff")
+                        .WithMany("Employees")
+                        .HasForeignKey("WeeklyOffId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Hoildays.Holiday", b =>

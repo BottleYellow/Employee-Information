@@ -35,6 +35,8 @@ namespace EIS.Entities.SP
         public int OnLeaveEmployee { get; set; }
         public int PendingLeavesCount { get; set; }
         public int AbsentEmployees { get; set; }
+        public int ApprovedLeavesCount { get; set; }
+        public int RejectedLeavesCount { get; set; }
 
     }
     public class Sp_AdminDashboardLeave
