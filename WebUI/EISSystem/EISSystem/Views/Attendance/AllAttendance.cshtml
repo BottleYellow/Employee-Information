@@ -155,9 +155,8 @@
                                     </div>
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
-                            </div>
-                            <div class="table-responsive">
-                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            </div>                 
+                                <table id="example" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Location</th>
@@ -170,7 +169,6 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -313,12 +311,6 @@
             var location = $('#locations').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
-                //if (value == new Date().getFullYear()) {
-                //    $("#wd").html("Working Days (Till Now)");
-                //}
-                //else { 
-                //    $("#wd").html("Total Working Days");
-                //}
                 if (location == 0) {
                     $('#all').show();
                     $('#baner').hide();
@@ -497,6 +489,7 @@
                         }
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
+                        scrollX:true,
                        order:[1,'asc'],
                         data: array
                 });
