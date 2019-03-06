@@ -150,7 +150,7 @@ namespace EIS.Repositories.Repository
                                     {
                                         calendarData.Color = "Violet";
                                     }
-                                    else if (leave.Status == "Approved")
+                                    else if (leave.Status.Contains("Approved"))
                                     {
                                         calendarData.Color = "dodgerblue";
                                     }
@@ -169,7 +169,7 @@ namespace EIS.Repositories.Repository
                             else if (date.DayOfWeek == DayOfWeek.Saturday && LocationName == "")
                             {
                                 leaveLocation = leave.Person.Location.LocationName;
-                                if(leaveLocation.ToUpper()=="BANER")
+                                if (leaveLocation.ToUpper() == "BANER")
                                 {
                                     string alternateDateStatus = CalculateDate(date);
                                     if (string.IsNullOrEmpty(alternateDateStatus))
@@ -183,7 +183,7 @@ namespace EIS.Repositories.Repository
                                         {
                                             calendarData.Color = "Violet";
                                         }
-                                        else if (leave.Status == "Approved")
+                                        else if (leave.Status.Contains("Approved"))
                                         {
                                             calendarData.Color = "dodgerblue";
                                         }
@@ -210,7 +210,7 @@ namespace EIS.Repositories.Repository
                                     {
                                         calendarData.Color = "Violet";
                                     }
-                                    else if (leave.Status == "Approved")
+                                    else if (leave.Status.Contains("Approved"))
                                     {
                                         calendarData.Color = "dodgerblue";
                                     }
@@ -237,7 +237,7 @@ namespace EIS.Repositories.Repository
                                 {
                                     calendarData.Color = "Violet";
                                 }
-                                else if (leave.Status == "Approved")
+                                else if (leave.Status.Contains("Approved"))
                                 {
                                     calendarData.Color = "dodgerblue";
                                 }
@@ -257,7 +257,7 @@ namespace EIS.Repositories.Repository
 
                     }
                 }
-            
+
 
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
@@ -292,7 +292,7 @@ namespace EIS.Repositories.Repository
                         if (!string.IsNullOrEmpty(alternateDateStatus))
                         {
                             CalendarData holidayCalanderData = new CalendarData();
-                            holidayCalanderData.Title = count + "nd Saturday Weekly Off";
+                            holidayCalanderData.Title = alternateDateStatus;
                             holidayCalanderData.Description = "Weekly Off";
                             holidayCalanderData.StartDate = date;
                             holidayCalanderData.EndDate = date;
@@ -303,7 +303,7 @@ namespace EIS.Repositories.Repository
                     }
                 }
 
-                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" &&x.IsActive==true &&x.Location.IsActive == true)
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true && x.Location.IsActive == true)
                            .Select(p => new
                            {
                                p,
@@ -410,7 +410,7 @@ namespace EIS.Repositories.Repository
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
             IEnumerable<Attendance> attendances = new List<Attendance>();
-            Person person = _dbContext.Person.Include(x=>x.Location).Where(x => x.Id == personId).FirstOrDefault();
+            Person person = _dbContext.Person.Include(x => x.Location).Where(x => x.Id == personId).FirstOrDefault();
             int? locationId = person.LocationId;
             string locationName = person.Location.LocationName;
 
@@ -438,7 +438,7 @@ namespace EIS.Repositories.Repository
                     {
                         calendarData.Color = "Violet";
                     }
-                    else if (leaveRequest.Status == "Approved")
+                    else if (leaveRequest.Status.Contains("Approved"))
                     {
                         calendarData.Color = "dodgerblue";
                     }

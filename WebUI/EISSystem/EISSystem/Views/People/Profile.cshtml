@@ -100,7 +100,7 @@
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td>@Html.DisplayFor(model => model.Role.Name)</td>
+                                        <td>@Html.DisplayFor(model => model.EmailAddress)</td>
                                     </tr>
                                     <tr>
                                         <th>Mobile No</th>
@@ -445,7 +445,7 @@
         }
         else if (other.AddressType == "Emergency Address")
         {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td>@other.PhoneNumber</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
             @:$("#etable").append(tblRow);
         }
     }
