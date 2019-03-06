@@ -42,6 +42,7 @@
         font-style: normal
     }
 </style>
+<link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <div id="md1" class="modal-dialog" role="document">
@@ -56,17 +57,17 @@
             <form id="cp1" method="post">
                 <div class="form-group">
                     <label>Select Employee</label>
-                    <select class="form-control" id="selectEmployee" name="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))" style="width:200px">
+                    <select class="form-control" id="selectEmployee" name="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))">
                         <option value="0">-- Select Employee --</option>
                     </select>
                 </div>
                 <div class="form-group" id="LeaveType">
                     <label asp-for="LeaveType">Leave Type : </label>
                     <select id="selectType" name="selectType" class="form-control" onchange="myFunction1();">
-                        <option >-- Select Leave Type --</option>
+                        <option value="0">-- Select Leave Type --</option>
                     </select>
                     <span asp-validation-for="LeaveType" class="text-danger"></span>
-                </div>    
+                </div>
 
                 <div class="form-group">
                     <label>Dates Requested : </label>
@@ -86,6 +87,11 @@
                     </div>
                     <span asp-validation-for="Reason" class="text-danger"></span>
                 </div>
+                <input type="hidden" asp-for="LeaveType" id="tp1" />
+                <input type="hidden" asp-for="RequestedDays" id="trd1" />
+                <input type="hidden" asp-for="Available" id="av1" />
+                <input type="hidden" asp-for="TypeId" id="typeid1" />
+                <input type="hidden" asp-for="PersonId" id="psid1" />
                 <div class="modal-footer">
                     <button id="btnAddLeave" name="btnAddLeave" type="button" class="btn btn-link waves-effect">Submit</button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
@@ -99,7 +105,7 @@
 
 
 
-<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
 
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
@@ -111,6 +117,7 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    var avl = null;
     var availableLeaves = null;
     var d = new Date();
     d.setDate(d.getDate());
@@ -127,14 +134,16 @@
         minDate: minDate,
         format: "DD/MMM/YYYY",
         defaultDate: d
-    }); 
+    });
 
     $('#selectEmployee').on('change', function () {
+        $("#msg1").remove();
         var id = $('#selectEmployee').val();
         $.ajax({
             type: 'GET',
-            url: "@APIURL/api/LeavePolicy/GetPolicyByLocation/" + parseInt(id),
+            url: "@APIURL/api/LeaveCredit/GetCreditsByPerson/" + parseInt(id),
             success: function (data) {
+                $('#selectType').empty().append('<option value="0">-- Select Leave Type --</option>');
                     $.each(data, function (data, value) {
                         $('#selectType').append($("<option></option>").val(this.id).html(this.leaveType));
                     });
@@ -146,7 +155,40 @@
             });
 
     });
-
+    $('#dateFrom').on('dp.hide', function (e) {
+        var x = document.getElementById("dateFrom").value;
+        var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var d = new Date();
+        d.setDate(d.getDate() - 1);
+        $("#dateTo").val('');
+        $("#btnAddLeave").prop("disabled", true);
+        if (new Date(firstDate) <= d) {
+            bootbox.alert({
+                message: "Please select valid date."
+            });
+            $("#dateFrom").val('');
+            $("#dateTo").val('');
+        }
+    });
+    $('#dateTo').on('dp.hide', function (e) {
+        var fd = document.getElementById("dateFrom").value;
+        var sd = document.getElementById("dateTo").value;
+        var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+        var diff = new Date(new Date(d2) - new Date(d1));
+        var days = diff / 1000 / 60 / 60 / 24 + 1;
+        if (new Date(d1) > new Date(d2)) {
+            bootbox.alert({
+                message: "Please select valid date"
+            });
+            $("#dateTo").val('');
+            $("#btnAddLeave").prop("disabled", true);
+        }
+        else {
+            $("#trd1").val(days);
+            $("#btnAddLeave").removeAttr('disabled');
+        }
+    });
     function myFunction1() {
         var id = $('#selectEmployee').val();
             $("#msg1").remove();
@@ -160,6 +202,8 @@
             else {
                 var pid = id;
                 $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+                    availableLeaves = data;
+                    avl = data;
                     if (data == 0) {
                         $("#LeaveType").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
                     }
@@ -169,20 +213,25 @@
                         });
                     }
                     else {
-                        $("#dateFrom").prop("disabled", false);
-                        $("#dateTo").prop("disabled", false);
+                        var t = $("#selectType option:selected").text();
+                        $("#tp1").val(t);
+                        $("#psid1").val(pid);
+                        $("#typeid1").val(x);
                         $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
+                        $("#dateFrom").removeAttr('disabled');
+                        $("#dateTo").removeAttr('disabled');
+                        $("#reason").removeAttr('disabled');
+                        $("#btnAddLeave").removeAttr('disabled');
                     }
                 });
             }
     }
+            $('#btnAddLeave').click(function () {
+                var typeid = document.getElementById("selectType").value;
+            var trd1 = document.getElementById("trd1").value;
+            availableLeaves = availableLeaves - trd1;
+            $("#av1").val(availableLeaves);
 
-    $('#btnAddLeave').click(function () {
-
-        var typeid = document.getElementById("selectType").value;
-            //availableLeaves = availableLeaves - trd1;
-        //$("#av1").val(availableLeaves);
-        var PersonId = $('#selectEmployee').val();
             var d1 = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
             var d2 = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
             var diff = new Date(new Date(d2) - new Date(d1));
@@ -190,7 +239,7 @@
             var x = moment(document.getElementById("dateFrom").value).format('DD-MMM-YYYY');
             var y = moment(document.getElementById("dateTo").value).format('DD-MMM-YYYY');
             var result = null;
-            var pid = PersonId;
+            var pid =$('#selectEmployee').val();
             $.ajax({
                 url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y,
                 type: 'GET',
@@ -200,14 +249,22 @@
                             url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
                             type: 'GET',
                             success: function (data) {
-                                days = data;
-                                if (days == 0) {
+                                //days = data;
+                                if (data == 0) {
                                     bootbox.alert({
                                         message: "Plese select working days"
                                     });
                                     $("#btnAddLeave").prop("disabled", true);
                                 }
+                                else if (data > avl){
+                                    bootbox.alert({
+                                        message: "You can request leave for only " + avl + " days."
+                                    });
+                                    $("#btnAddLeave").prop("disabled", true);
+                                }
                                 else {
+                                    $("#trd1").val(data);
+                                    $("#av1").val(avl - data);
                                     var form = $("#cp1");
                                     $.validator.unobtrusive.parse(form);
                                     if (form.valid()) {
@@ -226,7 +283,6 @@
                                             },
                                             callback: function (result) {
                                                 if (result == true) {
-                                                    
                                                     $.ajax({
                                                         url: '@Url.Action("AddLeaveByHr", "Leave")',
                                                         type: 'POST',
@@ -238,7 +294,7 @@
                                                             bootbox.alert({
                                                                 message: "Request Submitted Successfully!",
                                                                 callback: function () {
-                                                                    window.location.href = '@Url.Action("EmployeeLeaveHistory","Leave")';
+                                                                    window.location.href = '@Url.Action("EmployeeLeaveHistory", "Leave")';
                                                                 }
                                                             });
                                                         },
@@ -253,7 +309,7 @@
                                             }
                                         });
                                     }
-                                    
+
                                     return false;
                                 }
                             },
