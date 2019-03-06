@@ -150,7 +150,7 @@ namespace EIS.Repositories.Repository
                                     {
                                         calendarData.Color = "Violet";
                                     }
-                                    else if (leave.Status == "Approved")
+                                    else if (leave.Status.Contains("Approved"))
                                     {
                                         calendarData.Color = "dodgerblue";
                                     }
@@ -183,7 +183,7 @@ namespace EIS.Repositories.Repository
                                         {
                                             calendarData.Color = "Violet";
                                         }
-                                        else if (leave.Status == "Approved")
+                                        else if (leave.Status.Contains("Approved"))
                                         {
                                             calendarData.Color = "dodgerblue";
                                         }
@@ -210,7 +210,7 @@ namespace EIS.Repositories.Repository
                                     {
                                         calendarData.Color = "Violet";
                                     }
-                                    else if (leave.Status == "Approved")
+                                    else if (leave.Status.Contains("Approved"))
                                     {
                                         calendarData.Color = "dodgerblue";
                                     }
@@ -237,7 +237,7 @@ namespace EIS.Repositories.Repository
                                 {
                                     calendarData.Color = "Violet";
                                 }
-                                else if (leave.Status == "Approved")
+                                else if (leave.Status.Contains("Approved"))
                                 {
                                     calendarData.Color = "dodgerblue";
                                 }
@@ -292,7 +292,7 @@ namespace EIS.Repositories.Repository
                         if (!string.IsNullOrEmpty(alternateDateStatus))
                         {
                             CalendarData holidayCalanderData = new CalendarData();
-                            holidayCalanderData.Title = count + "nd Saturday Weekly Off";
+                            holidayCalanderData.Title = alternateDateStatus;
                             holidayCalanderData.Description = "Weekly Off";
                             holidayCalanderData.StartDate = date;
                             holidayCalanderData.EndDate = date;
@@ -438,7 +438,7 @@ namespace EIS.Repositories.Repository
                     {
                         calendarData.Color = "Violet";
                     }
-                    else if (leaveRequest.Status == "Approved")
+                    else if (leaveRequest.Status.Contains("Approved"))
                     {
                         calendarData.Color = "dodgerblue";
                     }
