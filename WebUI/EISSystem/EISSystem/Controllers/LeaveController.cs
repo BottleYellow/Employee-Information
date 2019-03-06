@@ -144,27 +144,14 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave By Hr")]
         public IActionResult AddLeaveByHr()
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
-            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
-                                            select new Person
-                                            {
-                                                Id = e.Id,
-                                                FirstName = e.FirstName + " " + e.LastName
-                                            };
-            ViewBag.Persons = employees.OrderBy(x => x.FirstName);
+            ViewBag.Persons = GetPersons();
             return PartialView("AddLeaveByHr");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddLeaveByHr(LeaveRequest request, int? selectEmployee, int? selectType)
+        public IActionResult AddLeaveByHr(LeaveRequest request)
         {
-            int typeid = Convert.ToInt32(selectType);
-            HttpResponseMessage res = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyById/" + typeid);
-            string strData= res.Content.ReadAsStringAsync().Result;
-            LeaveRules leaveRules = JsonConvert.DeserializeObject<LeaveRules>(strData);
-            
+            ViewBag.Persons = GetPersons();
             request.CreatedDate = DateTime.Now;
             request.AppliedDate = DateTime.Now;
             if (ModelState.IsValid)
@@ -172,9 +159,6 @@ namespace EIS.WebApp.Controllers
                 request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 request.Id = 0;
-                request.PersonId = Convert.ToInt32(selectEmployee);
-                request.LeaveType = leaveRules.LeaveType;
-                request.TypeId = typeid;
                 HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/Future", request);
                 if (response.IsSuccessStatusCode == true)
                 {
@@ -189,7 +173,7 @@ namespace EIS.WebApp.Controllers
         {
             response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
             string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData1);
             ViewBag.ListOfPolicy = data;
             string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
             LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);

@@ -61,6 +61,20 @@ namespace EIS.WebApp.Controllers
             List<WeeklyOffs> WeeklyOffs = JsonConvert.DeserializeObject<List<WeeklyOffs>>(stringData);
             return WeeklyOffs;
         }
+        [NonAction]
+        public List<Person> GetPersons()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
+                                            select new Person
+                                            {
+                                                Id = e.Id,
+                                                FirstName = e.FirstName + " " + e.LastName
+                                            };
+            return  employees.OrderBy(x => x.FirstName).ToList();
+        }
         public IActionResult LoadData<T1>(string Url,bool? type,int? LocationId)
         {
             SortGrid sortEmployee = new SortGrid();
