@@ -378,7 +378,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAvailableCount([FromRoute]int personId)
         {
-            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.LeaveRule.LeaveType != "Unpaid").Sum(x => x.Available);
+            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive==true).Sum(x => x.Available);
            int value= Convert.ToInt32(leave);
             return Ok(value);
         }

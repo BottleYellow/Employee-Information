@@ -143,8 +143,8 @@
                     var status = data[i].Status;
                     var statusView = "";
                     var approvedBy = data[i].ApprovedBy;
-                    var fromDate = moment(data[i].fromDate).format("DD MMM YYYY");
-                    var toDate = moment(data[i].toDate).format("DD MMM YYYY");
+                    var fromDate = moment(data[i].FromDate).format("DD MMM YYYY");
+                    var toDate = moment(data[i].ToDate).format("DD MMM YYYY");
                     if (status == "Pending") {
                         statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     } else if (status == "Approved" || status.startsWith('Approved')) {
