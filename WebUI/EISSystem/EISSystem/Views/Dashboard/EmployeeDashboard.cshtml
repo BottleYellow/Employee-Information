@@ -23,7 +23,10 @@
         a:hover, a:focus {
             text-decoration: none;
         }
-
+        * {
+            font-family: Arial;
+            font-style: normal
+        }
     </style>
 </head>
 <div class="container-fluid">
@@ -56,7 +59,7 @@
                         <i class="material-icons">assignment_ind</i>
                     </div>
                     <div class="content">
-                        <div class="text">Leave Days</div>
+                        <div class="text">Leaves Availed</div>
                         <div class="number count-to" id="AbsentDays"></div>
                     </div>
                 </div>
@@ -69,7 +72,7 @@
                         <i class="material-icons">assignment_late</i>
                     </div>
                     <div class="content">
-                        <div class="text">Total Leaves Taken</div>
+                        <div class="text">Total Leaves Approved</div>
                         <div class="number count-to" id="TotalLeavesTaken"></div>
                     </div>
                 </div>
@@ -93,7 +96,11 @@
             <div class="card">
                 <div class="header">
                     <h2 id="tableName"></h2>
+                    <div class="align-right">
+                        @DateTime.Now.ToString("MMM/yyyy")
+                    </div>
                 </div>
+                
                 <div class="body" id="attendanceCard">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">

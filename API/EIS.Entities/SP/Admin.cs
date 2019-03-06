@@ -66,6 +66,7 @@ namespace EIS.Entities.SP
         public Nullable<int> PresentDays { get; set; }
         public Nullable<int> WorkingDay { get; set; }
         public Nullable<int> NoLeave { get; set; }
+        public Nullable<int> AbsentDay { get; set; }
     }
     public class Attendance_Report
     {

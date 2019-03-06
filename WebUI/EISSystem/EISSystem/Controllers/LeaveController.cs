@@ -141,17 +141,60 @@ namespace EIS.WebApp.Controllers
             else Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return PartialView("RequestLeave", request);
         }
-        //[DisplayName("Edit Leave Request")]
-        //public IActionResult EditLeaveRequest(int id)
-        //{
-        //    response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
-        //    string stringData1 = response.Content.ReadAsStringAsync().Result;
-        //    data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
-        //    ViewBag.ListOfPolicy = data;
-        //    string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
-        //    LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
-        //    return View(leave);
-        //}
+        [DisplayName("Add Leave By Hr")]
+        public IActionResult AddLeaveByHr()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+            IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
+                                            select new Person
+                                            {
+                                                Id = e.Id,
+                                                FirstName = e.FirstName + " " + e.LastName
+                                            };
+            ViewBag.Persons = employees.OrderBy(x => x.FirstName);
+            return PartialView("AddLeaveByHr");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddLeaveByHr(LeaveRequest request, int? selectEmployee, int? selectType)
+        {
+            int typeid = Convert.ToInt32(selectType);
+            HttpResponseMessage res = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeavePolicy/GetPolicyById/" + typeid);
+            string strData= res.Content.ReadAsStringAsync().Result;
+            LeaveRules leaveRules = JsonConvert.DeserializeObject<LeaveRules>(strData);
+            
+            request.CreatedDate = DateTime.Now;
+            request.AppliedDate = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+                request.IsActive = true;
+                request.Id = 0;
+                request.PersonId = Convert.ToInt32(selectEmployee);
+                request.LeaveType = leaveRules.LeaveType;
+                request.TypeId = typeid;
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/Future", request);
+                if (response.IsSuccessStatusCode == true)
+                {
+                    return View();
+                }
+            }
+            else Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return PartialView("RequestLeave", request);
+        }
+        [DisplayName("Edit Leave Request")]
+        public IActionResult EditLeaveRequest(int id)
+        {
+            response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
+            string stringData1 = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            ViewBag.ListOfPolicy = data;
+            string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
+            LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
+            return View(leave);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditLeaveRequest(int id,LeaveRequest request)
