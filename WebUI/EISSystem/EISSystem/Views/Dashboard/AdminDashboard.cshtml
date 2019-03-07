@@ -120,7 +120,7 @@
                     <div class="info-box bg-orange hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                do_not_disturb_on
                             </i>
                         </div>
                         <div class="content">
@@ -135,7 +135,7 @@
                     <div class="info-box bg-green hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                check_circle
                             </i>
                         </div>
                         <div class="content">
@@ -150,7 +150,7 @@
                     <div class="info-box bg-red hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                do_not_disturb_off
                             </i>
                         </div>
                         <div class="content">
@@ -372,8 +372,18 @@
             var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var Status = Employees[i].Status;
+            var expectedTimeOutDate = null;
             if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
-                var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+                if (Employees[i].WorkingHours != null) {
+                    var workingValue = Employees[i].WorkingHours;
+                    var hr = workingValue.slice(0, 2);
+                    var min = workingValue.slice(3, 5);
+                    expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');                   
+                }
+                else {
+                    expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
+                }
                 TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
             } else {
                 TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
