@@ -137,7 +137,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="Gender">Gender : </label>
                                             <select asp-for="Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick">
-                                                <option value="">-- Select Gender --</option>
+                                                <option value="Select">-- Select Gender --</option>
                                             </select>
                                             <span asp-validation-for="Gender" class="text-danger"></span>
                                         </div>
@@ -250,8 +250,9 @@
                                         <div class="form-group">
                                             <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
                                             <div class="form-line">
-                                                <input id="ppm" asp-for="PropbationPeriodInMonth" type="text" pattern="[1-9]" maxlength="1" class="form-control" />
+                                                <input id="ppm" asp-for="PropbationPeriodInMonth" class="form-control" />
                                             </div>
+                                            <span asp-validation-for="PropbationPeriodInMonth" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -308,12 +309,21 @@
         }
     }
     $(document).ready(function () {
-        
-        $('#wh').datetimepicker({
-            format: "HH:mm",
-            enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-            useCurrent: false
-        });
+        var m = document.getElementById("wh").value;
+        if (m == "") {
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+            });
+        }
+        else { 
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                useCurrent: false
+            });
+        }
+     
         var d = new Date();
         $('#dob').datetimepicker({
             format: "DD/MMM/YYYY",

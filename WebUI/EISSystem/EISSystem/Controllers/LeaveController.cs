@@ -67,21 +67,21 @@ namespace EIS.WebApp.Controllers
             return Json(leave);
         }
 
-        [DisplayName("Show Employees Requests")]
-        public IActionResult LeaveRequestsUnderMe()
-        {
+        //[DisplayName("Show Employees Requests")]
+        //public IActionResult LeaveRequestsUnderMe()
+        //{
       
-            return View();
-        }
+        //    return View();
+        //}
 
-        [HttpPost]
-        [ActionName("LeaveRequestsUnderMe")]
-        public IActionResult GetLeaveRequestsUnderMe()
-        {
-            int pid = Convert.ToInt32(GetSession().PersonId);
-            ArrayList arrayData = new ArrayList();
-            return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null, null);
-        }
+        //[HttpPost]
+        //[ActionName("LeaveRequestsUnderMe")]
+        //public IActionResult GetLeaveRequestsUnderMe()
+        //{
+        //    int pid = Convert.ToInt32(GetSession().PersonId);
+        //    ArrayList arrayData = new ArrayList();
+        //    return LoadData<LeaveRequest>(ApiUrl + "/api/LeaveRequest/RequestsUnderMe/" + pid + "", null, null);
+        //}
 
         [DisplayName("Show My Leaves")]
         public IActionResult ShowMyLeaves()

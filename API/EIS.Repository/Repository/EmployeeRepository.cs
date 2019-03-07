@@ -101,5 +101,16 @@ namespace EIS.Repositories.Repository
             _dbContext.Roles.Update(designation);
             Save();
         }
+
+        public string GetWeeklyOffByPerson(int PersonId)
+        {
+            Person person = _dbContext.Person.Include(x => x.WeeklyOff).Where(x => x.Id == PersonId).FirstOrDefault();
+            string type = "NoSaturday";
+            if (person.WeeklyOff != null)
+            {
+                type = person.WeeklyOff.Type;
+            }
+            return type;
+        }
     }
 }
