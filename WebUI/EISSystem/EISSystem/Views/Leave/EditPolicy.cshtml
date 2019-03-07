@@ -1,4 +1,5 @@
 ﻿@using EIS.Entities.Leave
+@using System.Globalization;
 @model LeaveRules
 <!-- Modal -->
 <style type="text/css">
@@ -7,6 +8,7 @@
         content: "*";
         position: relative;
     }
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -20,11 +22,14 @@
             top: 40%;
             left: 40%;
         }
+
     * {
         font-family: Arial;
         font-style: normal
     }
 </style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -73,14 +78,14 @@
                 <div class="form-group required">
                     <label class="control-label">Valid From</label>
                     <div class="form-line">
-                        <input type="date" asp-for="ValidFrom" class="form-control" />
+                        <input class="form-control" type="text" asp-for="ValidFrom" id="validFrom" placeholder="select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidFrom" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Valid To</label>
                     <div class="form-line">
-                        <input type="date" asp-for="ValidTo" class="form-control" />
+                        <input class="form-control" type="text" asp-for="ValidTo" id="validTo" placeholder="select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidTo" class="text-danger"></span>
                 </div>
@@ -93,13 +98,32 @@
 
     </div>
 </div>
-
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/js/pages/ui/modals.js"></script>
 
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+     $(document).ready(function () {
+        var d1 = document.getElementById("validFrom").value;
+        var d2 = document.getElementById("validTo").value;
+        var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+        var fd = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+        var ld = moment(d2, cultureInfo).format("DD/MMM/YYYY");
+        if (fd == "Invalid date") {
+            $("#validFrom").val(d1);
+        } else {
+            $("#validFrom").val(fd);
+        }
+
+        if (ld == "Invalid date") {
+            $("#validTo").val(d2);
+        } else {
+            $("#validTo").val(ld);
+        }
+    })
     $('#btnSubmit').click(function () {
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);

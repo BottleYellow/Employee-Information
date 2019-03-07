@@ -14,6 +14,9 @@
         li:hover {
             cursor: pointer;
         }
+        th, td {
+            white-space: nowrap;
+        }
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -98,7 +101,8 @@
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
             sDom: '<"myexport"B>ifrtlp',
-            scrollX:true,
+            scrollX: true,
+            fixedColumns: true,
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
             "filter": true, // this is for disable filter (search box)

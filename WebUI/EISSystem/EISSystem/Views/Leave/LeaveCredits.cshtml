@@ -161,6 +161,12 @@
         $.get(url, function (data) {
             $("#modal-placeholder-editcredit").html(data);
             $("#modal-placeholder-editcredit").modal('show');
+            $('#validFrom').datetimepicker({
+                format: "DD/MMM/YYYY"
+            });
+            $('#validTo').datetimepicker({
+                format: "DD/MMM/YYYY"
+            });
         }).fail(function (xhr, status, error) {
             if (xhr.status == 401) {
                 bootbox.alert("<h4>Access denied..Unable to Edit the Record</h4>");
