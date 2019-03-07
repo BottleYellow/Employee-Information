@@ -25,6 +25,7 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.EmailAddress).EmailAddress().NotNull().Must(UniqueEmail).WithMessage("Email Id already exists");
             RuleFor(x => x.AadharCard).Must(UniqueAadhar).WithMessage("Aadhar No already exists");
             RuleFor(x => x.PanCard).Must(UniquePan).WithMessage("Pan Card No already exists");
+            RuleFor(x => x.PropbationPeriodInMonth).Must(Valid).WithMessage("Period should between 1 to 9").When(x => x.IsOnProbation == true);
         }
 
         public bool UniqueCode(Person obj, string EmployeeCode)
@@ -37,6 +38,17 @@ namespace EIS.Validations.FluentValidations
             else
             {
                 return person.Id == obj.Id;
+            }
+        }
+        public bool Valid(int? ppm)
+        {
+            if (1 <= ppm && ppm <= 9)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         public bool UniqueEmail(Person obj,string email)

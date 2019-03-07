@@ -152,13 +152,13 @@
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div class="panel-heading">Leaves Availed</div>
+                                            <div class="panel-heading">Leaves with Approval</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div id="wd" class="panel-heading">Working Days (Till Now)</div>
+                                            <div id="wd" class="panel-heading">Working Days (Till Date)</div>
                                             <div id="totalWorkingDays" class="panel-body"></div>
                                         </div>
                                     </div>
@@ -291,7 +291,7 @@
                     totalDays = 365;
                 }
                 if (value == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
+                    $("#wd").html("Working Days (Till Date)");
                 }
                 else {
                     $("#wd").html("Total Working Days");
@@ -306,7 +306,7 @@
                 var y = monthYear[1];
                 var m = monthYear[0];
                 if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
+                    $("#wd").html("Working Days (Till Date)");
                 }
                 else {
                     $("#wd").html("Total Working Days");

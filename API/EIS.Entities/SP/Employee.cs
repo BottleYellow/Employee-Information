@@ -21,6 +21,7 @@ namespace EIS.Entities.SP
         public Nullable<System.TimeSpan> TimeOut { get; set; }
         public Nullable<System.TimeSpan> TotalHours { get; set; }
         public string Status { get; set; }
+        public Nullable<TimeSpan> WorkingHours { get; set; }
     }
     public class SP_EmployeeDashboardCount
     {

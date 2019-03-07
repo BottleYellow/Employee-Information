@@ -74,7 +74,7 @@ namespace EIS.WebAPI.Services
                     EmailAddress = p.EmailAddress
                 }).ToList();
 
-
+            int SrId = 0;
             foreach (var p in results)
             {
                 string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.xlsx";
@@ -85,9 +85,11 @@ namespace EIS.WebAPI.Services
                 }
                 string InputOne = year.ToString();
                 char c = '0';
+            
                 string InputTwo = month.ToString().PadLeft(2, c);
                 List<EmployeeAttendanceData> data1 = new List<EmployeeAttendanceData>();
-                List<EmployeeAttendanceData> data = Data("Month", p.Id, InputOne, InputTwo, data1);
+                List<EmployeeAttendanceData> data = Data(SrId,"Month", p.Id, InputOne, InputTwo, data1);
+                SrId = SrId+data.Count() + 4;
                 var memory = new MemoryStream();
                 using (var sw = new FileStream(attendanceReportPath, FileMode.Create, FileAccess.Write))
                 {
@@ -97,6 +99,26 @@ namespace EIS.WebAPI.Services
                     workbook = new XSSFWorkbook();
                     ISheet sheet = workbook.CreateSheet("demo");
                     IRow row = sheet.CreateRow(0);
+                    ICellStyle headerStyle = workbook.CreateCellStyle();
+                    headerStyle.BorderBottom = BorderStyle.Medium;
+                    headerStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
+                    headerStyle.FillPattern = FillPattern.SolidForeground;
+
+                    ICellStyle presentStyle = workbook.CreateCellStyle();
+                    presentStyle.BorderBottom = BorderStyle.Medium;
+                    presentStyle.FillForegroundColor = IndexedColors.LightGreen.Index;
+                    presentStyle.FillPattern = FillPattern.SolidForeground;
+
+                    ICellStyle absentStyle = workbook.CreateCellStyle();
+                    absentStyle.BorderBottom = BorderStyle.Medium;
+                    absentStyle.FillForegroundColor = IndexedColors.LightOrange.Index;
+                    absentStyle.FillPattern = FillPattern.SolidForeground;
+
+                    ICellStyle dateStyle = workbook.CreateCellStyle();
+                    dateStyle.BorderBottom = BorderStyle.Medium;
+                    dateStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
+                    dateStyle.FillPattern = FillPattern.SolidForeground;
+
                     row = sheet.CreateRow(i++);
                     row.CreateCell(0).SetCellValue("Employee Name:-");
                     row.CreateCell(1).SetCellValue(p.FullName);
@@ -108,20 +130,64 @@ namespace EIS.WebAPI.Services
                     row.CreateCell(1).SetCellValue(month + "/" + year);
                     row = sheet.CreateRow(i++);
                     row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("DATE");
-                    row.CreateCell(1).SetCellValue("STATUS");
-                    row.CreateCell(2).SetCellValue("TIME IN");
-                    row.CreateCell(3).SetCellValue("TIME OUT");
-                    row.CreateCell(4).SetCellValue("TOTAL HOURS");
+                    ICell cell0 = row.CreateCell(0);
+                    cell0.CellStyle = headerStyle;
+                    cell0.SetCellValue("DATE");
+                    ICell cell1 = row.CreateCell(1);
+                    cell1.SetCellValue("STATUS");
+                    cell1.CellStyle = headerStyle;
+                    ICell cell2 = row.CreateCell(2);
+                    cell2.CellStyle = headerStyle;
+                    cell2.SetCellValue("TIME IN");
+                    ICell cell3 = row.CreateCell(3);
+                    cell3.CellStyle = headerStyle;
+                    cell3.SetCellValue("TIME OUT");
+                    ICell cell4 = row.CreateCell(4);
+                    cell4.CellStyle = headerStyle;
+                    cell4.SetCellValue("TOTAL HOURS");
+
                     foreach (var attendance in data)
                     {
                         row = sheet.CreateRow(i);
                         DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
-                        row.CreateCell(0).SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
-                        row.CreateCell(1).SetCellValue(attendance.Status);
-                        row.CreateCell(2).SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
-                        row.CreateCell(3).SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
-                        row.CreateCell(4).SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
+          
+                        if (attendance.Status == "Present")
+                        {
+                            ICell cell00 = row.CreateCell(0);
+                            cell00.CellStyle = presentStyle;
+                            cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
+                            ICell cell01 = row.CreateCell(1);
+                            cell01.SetCellValue(attendance.Status);
+                            cell01.CellStyle = presentStyle;
+                            ICell cell02 = row.CreateCell(2);
+                            cell02.CellStyle = presentStyle;
+                            cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
+                            ICell cell03 = row.CreateCell(3);
+                            cell03.CellStyle = presentStyle;
+                            cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
+                            ICell cell04 = row.CreateCell(4);
+                            cell04.CellStyle = presentStyle;
+                            cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
+                        }
+                        else
+                        {
+                            ICell cell00 = row.CreateCell(0);
+                            cell00.CellStyle = absentStyle;
+                            cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
+                            ICell cell01 = row.CreateCell(1);
+                            cell01.SetCellValue(attendance.Status);
+                            cell01.CellStyle = absentStyle;
+                            ICell cell02 = row.CreateCell(2);
+                            cell02.CellStyle = absentStyle;
+                            cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
+                            ICell cell03 = row.CreateCell(3);
+                            cell03.CellStyle = absentStyle;
+                            cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
+                            ICell cell04 = row.CreateCell(4);
+                            cell04.CellStyle = absentStyle;
+                            cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
+                        }
+
                         i++;
                     }
                     row = sheet.CreateRow(i++);
@@ -150,14 +216,15 @@ namespace EIS.WebAPI.Services
             }
         }
 
-        public List<EmployeeAttendanceData> Data(string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
+        public List<EmployeeAttendanceData> Data(int SrId,string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
         {
+            var SP_SrId = new SqlParameter("@SrId", SrId);
             var SP_SelectType = new SqlParameter("@SelectType", "Month");
             var SP_PersonId = new SqlParameter("@PersonId", PersonId);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetEmployeewiseAttendanceData @PersonId, @SelectType, @InputOne, @InputTwo";
-            data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @PersonId, @SelectType, @InputOne, @InputTwo";
+            data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();         
             return data;
         }
 

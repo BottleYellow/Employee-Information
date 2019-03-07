@@ -326,6 +326,7 @@ namespace EIS.WebAPI.Controllers
             int requestedDays = days;
             int? LocationId = _repository.Employee.FindByCondition(x => x.Id == PersonId).LocationId;
             int count = 0;
+            string WeeklyOffType = _repository.Employee.GetWeeklyOffByPerson(PersonId);
             for (var d = FromDate; d <= ToDate; d = d.AddDays(1))
             {
                 Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId && x.IsActive==true);
@@ -335,7 +336,7 @@ namespace EIS.WebAPI.Controllers
                     {
                         count++;
                     }
-                    else if (holiday.Date.DayOfWeek == DayOfWeek.Saturday && d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    else if (holiday.Date.DayOfWeek == DayOfWeek.Saturday && d.DayOfWeek == DayOfWeek.Saturday && WeeklyOffType == "AlternateSaturday")
                     {
                         string check = _repository.Attendances.CalculateDate(d);
                         count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;
@@ -348,7 +349,7 @@ namespace EIS.WebAPI.Controllers
                     {
                         count++;
                     }
-                    else if (d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    else if (d.DayOfWeek == DayOfWeek.Saturday && WeeklyOffType == "AlternateSaturday")
                     {
                         string check = _repository.Attendances.CalculateDate(d);
                         count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;
@@ -360,7 +361,7 @@ namespace EIS.WebAPI.Controllers
                     {
                         count++;
                     }
-                    else if (d.DayOfWeek == DayOfWeek.Saturday && LocationId == 2)
+                    else if (d.DayOfWeek == DayOfWeek.Saturday && WeeklyOffType == "AlternateSaturday")
                     {
                         string check = _repository.Attendances.CalculateDate(d);
                         count = (check == "2nd Saturday Weekly Off" || check == "4th Saturday Weekly Off") ? count + 1 : count;

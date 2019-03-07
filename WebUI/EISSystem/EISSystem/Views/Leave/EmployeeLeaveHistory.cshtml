@@ -73,7 +73,14 @@
     <div id="addLeaveModal" class="modal fade" role="dialog" data-url="@Url.Action("AddLeaveByHr")"></div>
     <div class="container-fluid">
         <div class="block-header">
-            <HeaderWithButton header-name="Leave History"></HeaderWithButton>
+            @if (cookies.Role == "HR")
+            { 
+                <HeaderWithButton btn-id="addLeaveByHr" header-name="Leave History" btn-text="Add Employee Leave" icon-name="add"></HeaderWithButton>
+            }
+            else
+            {
+                <HeaderWithButton header-name="Leave History"></HeaderWithButton>
+            }
         </div>
         <div class="row clearfix">
 
@@ -139,11 +146,11 @@
 
                                 </div>
                             </div>
-                            <div class="row" id="addLeave" hidden>
+                            @*<div class="row" id="addLeave" hidden>
                                 <div class="col-md-3">
                                     <input type="button" id="addLeaveByHr" class="form-control" value="Add Employee Leave" style="font-weight:bold; font-size:16px; width:180px; background-color:#3399ff; color:white;" />
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="row">
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -214,12 +221,11 @@
         $('#inputmonth').val(m + '/' + y);
         $('#inputyear').val(y);
         $('#inputmonth').datetimepicker({
-            format: "MM/YYYY",
-            maxDate: new Date(cYear, cMonth, cDate)
+            format: "MM/YYYY"
         });
         $('#inputyear').datetimepicker({
             format: "YYYY",
-            maxDate: new Date(cYear, cMonth, cDate)
+            maxDate: new Date(cYear+1, cMonth, cDate)
         });
         value = $('#inputmonth').val();
         GenerateReport(locationValue, employeeValue, type, value, leaveType);

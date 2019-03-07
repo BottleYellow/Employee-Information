@@ -235,8 +235,18 @@
                 var todayDate = moment(new Date()).format("DD-MMM-YYYY");
                 var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
                 if (todayDate == dateInData) {
+                    var expectedTimeOutDate = null;
                     if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
-                        var expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+                        if (Employees[i].WorkingHours != null) {
+                            var workingValue = Employees[i].WorkingHours;
+                            var hr = workingValue.slice(0, 2);
+                            var min = workingValue.slice(3, 5);
+                            expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+                            expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+                         }
+                        else {
+                            expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+                        }
                         TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-primary">Expected: ' + expectedTimeOutDate + '</span>';
                     }
                 }
