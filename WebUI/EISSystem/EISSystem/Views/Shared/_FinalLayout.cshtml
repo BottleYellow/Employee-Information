@@ -21,7 +21,7 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
-
+    string DashboardName = cookies.Role + "Dashboard";
 }
 
 <html>
@@ -90,22 +90,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                 @if (cookies.Role == "Admin")
-                {
-                    <a href="@rootPath/Dashboard/AdminDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
-                }
-                else if (cookies.Role == "Manager")
-                {
-                    <a href="@rootPath/Dashboard/ManagerDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
-                }
-                else if (cookies.Role == "Employee")
-                {
-                    <a href="@rootPath/Dashboard/EmployeeDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
-                }
-                else if (cookies.Role == "HR")
-                {
-                    <a href="@rootPath/Dashboard/HRDashboard" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
-                }
+                <a href="@rootPath/Dashboard/@DashboardName" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -163,23 +148,9 @@
             <!-- Menu -->
             <div class="menu" style="height:auto;">
                 <ul class="list">
-
-                    @if (cookies.Role == "Admin")
-                    {
-                        <li><a href="@rootPath/Dashboard/AdminDashboard"><span>Dashboard</span></a></li>
-                    }
-                    else if (cookies.Role == "Manager")
-                    {
-                        <li><a href="@rootPath/Dashboard/ManagerDashboard"><span>Dashboard</span></a></li>
-                    }
-                    else if (cookies.Role == "Employee")
-                    {
-                        <li><a href="@rootPath/Dashboard/EmployeeDashboard"><span>Dashboard</span></a></li>
-                    }
-                    else if (cookies.Role == "HR")
-                    {
-                        <li><a href="@rootPath/Dashboard/HRDashboard"><span>Dashboard</span></a></li>
-                    }
+                   
+                        <li><a href="@rootPath/Dashboard/@DashboardName"><span>Dashboard</span></a></li>
+                    
                     <DynamicMenu access="@cookies.Access" role="@cookies.Role"></DynamicMenu>
                 </ul>
             </div>

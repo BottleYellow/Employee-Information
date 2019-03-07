@@ -23,7 +23,6 @@
         <li><button type="button" class="btn btn-primary" id="clockIn"><b>Clock In</b><br /></button></li>
         <li><button type="button" class="btn btn-primary" id="clockOut" hidden><b>Clock Out</b><br /></button></li>
         <li><button type="button" class="btn btn-primary" id="tWHrs"><b>Total Working Hrs</b><br /></button></li>
-
     }
     @section EstimatedTimeOut
         {  <div id="eTOut" style="color:white;">Estimated Time Out</div>
@@ -98,7 +97,7 @@
                                         <th>Join Date</th>
                                         <td>@Model.JoinDate.ToString("dd MMM yyyy")</td>
                                     </tr>
-                                     @{
+                                    @{
                                         if (@Model.IsOnProbation == true)
                                         {
                                             <tr>
@@ -357,11 +356,7 @@
                                                                         </button>
                                                                     </div>
                                                                 </div>
-
-
-
                                                             </td>
-
                                                         </tr>
                                                     }
                                                 </table>
@@ -454,7 +449,7 @@
         }
         else if (other.AddressType == "Emergency Address")
         {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td></td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td>@other.PhoneNumber </td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
             @:$("#etable").append(tblRow);
         }
     }

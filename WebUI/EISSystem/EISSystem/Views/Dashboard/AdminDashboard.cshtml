@@ -120,7 +120,7 @@
                     <div class="info-box bg-orange hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                do_not_disturb_on
                             </i>
                         </div>
                         <div class="content">
@@ -135,7 +135,7 @@
                     <div class="info-box bg-green hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                check_circle
                             </i>
                         </div>
                         <div class="content">
@@ -150,7 +150,7 @@
                     <div class="info-box bg-red hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">
-                                account_circle
+                                do_not_disturb_off
                             </i>
                         </div>
                         <div class="content">
@@ -379,7 +379,7 @@
                     var hr = workingValue.slice(0, 2);
                     var min = workingValue.slice(3, 5);
                     expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
-                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');                   
                 }
                 else {
                     expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
@@ -390,10 +390,10 @@
             }
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-            } else if (Status == "Absent") {
+            }else if (Status == "Absent") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
             }
-            else {
+            else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName == "Baner") {

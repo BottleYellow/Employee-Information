@@ -19,6 +19,7 @@ namespace EIS.Entities.Models
     public class EmployeeAttendanceData
     {
         [Key]
+        public Nullable<long> SrId { get; set; }
         public Nullable<System.DateTime> DateIn { get; set; }
         public Nullable<System.TimeSpan> TimeIn { get; set; }
         public Nullable<System.TimeSpan> TimeOut { get; set; }
