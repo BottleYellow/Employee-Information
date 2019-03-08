@@ -218,7 +218,15 @@ namespace EIS.WebAPI.Controllers
             }
             else if (status == "Approve")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + leave.Available.ToString() + " days";
+                LeaveCredit credit = _repository.LeaveCredit.FindByCondition(x => x.LeaveId == leave.TypeId && x.PersonId == leave.PersonId);
+                if (credit != null)
+                {
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + credit.Available.ToString() + " days";
+                }
+                else
+                {
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.";
+                }
                 bodyforadmin = "The leave request of " + person.FullName + " for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved successfully.";
             }
             else if (status == "Cancel")
@@ -244,14 +252,14 @@ namespace EIS.WebAPI.Controllers
                 bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
 
-            if (bodyforadmin != null)
-            {
-                foreach (var pers in p)
-                {
-                    new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
-                }
-            }
-            new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
+            //if (bodyforadmin != null)
+            //{
+            //    foreach (var pers in p)
+            //    {
+            //        new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+            //    }
+            //}
+            //new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
             _repository.LeaveCredit.Dispose();
         }
 

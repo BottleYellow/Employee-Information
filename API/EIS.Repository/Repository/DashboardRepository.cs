@@ -120,7 +120,7 @@ namespace EIS.Repositories.Repository
             }
             else
             {
-                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true && x.IsActive==true).ToList();
                 LocationName = _dbContext.Locations.Where(x => x.Id == location).FirstOrDefault().LocationName.ToUpper();
                 leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Include(x => x.Person.WeeklyOff).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
@@ -349,7 +349,7 @@ namespace EIS.Repositories.Repository
             attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
             if (locationId != null)
             {
-                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId);
+                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId && x.IsActive==true);
             }
 
             leaveList = _dbContext.LeaveRequests.Where(x => x.PersonId == personId);
@@ -374,7 +374,7 @@ namespace EIS.Repositories.Repository
                 }
 
 
-                Holiday holiday = holidays.Where(x => x.Date == date && x.IsActive == true).FirstOrDefault();
+                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
                 {
                     CalendarData holidayCalanderData = new CalendarData();
