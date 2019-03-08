@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
-	    SendAttendanceReportToAdminHRManager();
+            SendAttendanceReportToAdminHRManager();
             DateTime d = DateTime.Now;
             d = d.AddMonths(-1);
             int year = d.Year;
@@ -267,7 +268,7 @@ namespace EIS.WebAPI.Services
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))
-            {
+            { 
                 File.Delete(attendanceReportPath);
             }
             var memory = new MemoryStream();
@@ -284,9 +285,6 @@ namespace EIS.WebAPI.Services
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
                 cell.SetCellValue("Aadyam Consultant llp.");
-
-
-
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
                 cell.SetCellValue("Employee Management System");
@@ -373,28 +371,36 @@ namespace EIS.WebAPI.Services
                 headerStyle7.FillForegroundColor = IndexedColors.LightGreen.Index;
                 headerStyle7.FillPattern = FillPattern.SolidForeground;
 
+                sheet.SetColumnWidth(0, 5000);
+                sheet.SetColumnWidth(1, 7000);
+                sheet.SetColumnWidth(2, 4000);
+                sheet.SetColumnWidth(3, 5000);
+                sheet.SetColumnWidth(4, 5000);
+                sheet.SetColumnWidth(5, 3000);
+                sheet.SetColumnWidth(6, 3000);
+
                 foreach (var attendance in Model.sP_GetAttendanceCountReports)
                 {
                     row = sheet.CreateRow(i);
-                    cell = row.CreateCell(0);
+                    cell=row.CreateCell(0);
                     cell.CellStyle = headerStyle1;
                     cell.SetCellValue(attendance.EmployeeCode);
-                    cell = row.CreateCell(1);
+                    cell=row.CreateCell(1);
                     cell.CellStyle = headerStyle2;
                     cell.SetCellValue(attendance.EmployeeName);
-                    cell = row.CreateCell(2);
+                    cell=row.CreateCell(2);
                     cell.CellStyle = headerStyle3;
                     cell.SetCellValue(Convert.ToInt32(attendance.WorkingDay));
-                    cell = row.CreateCell(3);
+                    cell=row.CreateCell(3);
                     cell.CellStyle = headerStyle4;
                     cell.SetCellValue(Convert.ToInt32(attendance.AbsentDay));
-                    cell = row.CreateCell(4);
+                    cell=row.CreateCell(4);
                     cell.CellStyle = headerStyle5;
                     cell.SetCellValue(Convert.ToInt32(attendance.NoLeave));
-                    cell = row.CreateCell(5);
+                    cell=row.CreateCell(5);
                     cell.CellStyle = headerStyle6;
                     cell.SetCellValue(Convert.ToInt32(attendance.NoLeave) + Convert.ToInt32(attendance.AbsentDay));
-                    cell = row.CreateCell(6);
+                    cell=row.CreateCell(6);
                     cell.CellStyle = headerStyle7;
                     cell.SetCellValue(Convert.ToInt32(attendance.PresentDays));
                     i++;
