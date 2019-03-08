@@ -96,9 +96,6 @@
             <div class="card">
                 <div class="header">
                     <h2 id="tableName"></h2>
-                    <div class="align-right">
-                        @DateTime.Now.ToString("MMM/yyyy")
-                    </div>
                 </div>
                 
                 <div class="body" id="attendanceCard">
@@ -143,17 +140,17 @@
 
     $(document).ready(function () {
 
-        $('#tableName').html('Monthly Attendance');
+        $('#tableName').html('Monthly Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $('#presentButton').click(function () {
         buttonSelected = "Present";
-        $('#tableName').html('Monthly Present Attendance');
+        $('#tableName').html('Monthly Present Attendance <span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $("#leaveButton").click(function () {
         buttonSelected = "Leave";
-        $('#tableName').html('Monthly Leave Attendance');
+        $('#tableName').html('Monthly Leave Attendance <span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $('#totalLeaveButton').click(function () {
