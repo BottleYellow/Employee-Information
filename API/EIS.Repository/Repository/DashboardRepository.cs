@@ -115,91 +115,69 @@ namespace EIS.Repositories.Repository
             string LocationName = "";
             if (location == 0)
             {
-                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true).ToList();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person.Location).Where(x => x.Person.Location.IsActive == true).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true && x.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person.Location).Include(x => x.Person.WeeklyOff).Where(x => x.Person.Location.IsActive == true).ToList();
             }
             else
             {
-                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true && x.IsActive==true).ToList();
                 LocationName = _dbContext.Locations.Where(x => x.Id == location).FirstOrDefault().LocationName.ToUpper();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Include(x => x.Person.WeeklyOff).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
-            string leaveLocation = "";
-            int count = 0;
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
-                List<LeaveRequest> leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).ToList();
+                Holiday holiday = holidays.Where(x => x.Date == date && x.IsActive == true).FirstOrDefault();
+                if (holiday != null)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = holiday.Vacation;
+                    holidayCalanderData.Description = "Holiday on occasion of " + holiday.Vacation;
+                    holidayCalanderData.StartDate = holiday.Date;
+                    holidayCalanderData.EndDate = holiday.Date;
+                    holidayCalanderData.Color = "darkviolet";
+                    holidayCalanderData.IsFullDay = true;
 
+                    calendarDataList.Add(holidayCalanderData);
+                }
+                if (date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    CalendarData holidayCalanderData = new CalendarData();
+                    holidayCalanderData.Title = "Weekly Off";
+                    holidayCalanderData.Description = "Weekly Off";
+                    holidayCalanderData.StartDate = date;
+                    holidayCalanderData.EndDate = date;
+                    holidayCalanderData.Color = "royalblue";
+                    holidayCalanderData.IsFullDay = true;
+                    calendarDataList.Add(holidayCalanderData);
+
+                }
+                if (date.DayOfWeek == DayOfWeek.Saturday && (LocationName == "BANER" || LocationName == ""))
+                {
+                    string alternateDateStatus = CalculateDate(date);
+                    if (!string.IsNullOrEmpty(alternateDateStatus))
+                    {
+                        CalendarData holidayCalanderData = new CalendarData();
+                        holidayCalanderData.Title = alternateDateStatus;
+                        holidayCalanderData.Description = "Weekly Off";
+                        holidayCalanderData.StartDate = date;
+                        holidayCalanderData.EndDate = date;
+                        holidayCalanderData.Color = "royalblue";
+                        holidayCalanderData.IsFullDay = true;
+                        calendarDataList.Add(holidayCalanderData);
+                    }
+                }
+
+                List<LeaveRequest> leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).ToList();
                 if (leaveRequest.Count > 0)
                 {
                     foreach (var leave in leaveRequest)
                     {
-                        if (date.DayOfWeek != DayOfWeek.Sunday)
+                        if (date.DayOfWeek != DayOfWeek.Sunday && holiday == null)
                         {
-                            if (date.DayOfWeek == DayOfWeek.Saturday && LocationName.ToUpper() == "BANER")
+                            if (date.DayOfWeek == DayOfWeek.Saturday && leave.Person.WeeklyOff.Type == "AlternateSaturday")
                             {
                                 string alternateDateStatus = CalculateDate(date);
                                 if (string.IsNullOrEmpty(alternateDateStatus))
-                                {
-                                    CalendarData calendarData = new CalendarData();
-                                    calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
-                                    calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
-                                    calendarData.StartDate = date;
-                                    calendarData.EndDate = date;
-                                    if (leave.Status == "Pending")
-                                    {
-                                        calendarData.Color = "Violet";
-                                    }
-                                    else if (leave.Status.Contains("Approved"))
-                                    {
-                                        calendarData.Color = "dodgerblue";
-                                    }
-                                    else if (leave.Status == "Rejected")
-                                    {
-                                        calendarData.Color = "crimson";
-                                    }
-                                    else
-                                    {
-                                        calendarData.Color = "palevioletred";
-                                    }
-                                    calendarData.IsFullDay = true;
-                                    calendarDataList.Add(calendarData);
-                                }
-                            }
-                            else if (date.DayOfWeek == DayOfWeek.Saturday && LocationName == "")
-                            {
-                                leaveLocation = leave.Person.Location.LocationName;
-                                if (leaveLocation.ToUpper() == "BANER")
-                                {
-                                    string alternateDateStatus = CalculateDate(date);
-                                    if (string.IsNullOrEmpty(alternateDateStatus))
-                                    {
-                                        CalendarData calendarData = new CalendarData();
-                                        calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
-                                        calendarData.Description = "<br/>Leave Status : " + leave.Status + "<br/>Leave Reason :" + leave.Reason;
-                                        calendarData.StartDate = date;
-                                        calendarData.EndDate = date;
-                                        if (leave.Status == "Pending")
-                                        {
-                                            calendarData.Color = "Violet";
-                                        }
-                                        else if (leave.Status.Contains("Approved"))
-                                        {
-                                            calendarData.Color = "dodgerblue";
-                                        }
-                                        else if (leave.Status == "Rejected")
-                                        {
-                                            calendarData.Color = "crimson";
-                                        }
-                                        else
-                                        {
-                                            calendarData.Color = "palevioletred";
-                                        }
-                                        calendarData.IsFullDay = true;
-                                        calendarDataList.Add(calendarData);
-                                    }
-                                }
-                                else
                                 {
                                     CalendarData calendarData = new CalendarData();
                                     calendarData.Title = leave.EmployeeName + " (Leave " + leave.Status + ")";
@@ -258,57 +236,12 @@ namespace EIS.Repositories.Repository
                     }
                 }
 
-
-                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
-                if (holiday != null)
-                {
-                    CalendarData holidayCalanderData = new CalendarData();
-                    holidayCalanderData.Title = holiday.Vacation;
-                    holidayCalanderData.Description = "Holiday on occasion of " + holiday.Vacation;
-                    holidayCalanderData.StartDate = holiday.Date;
-                    holidayCalanderData.EndDate = holiday.Date;
-                    holidayCalanderData.Color = "darkviolet";
-                    holidayCalanderData.IsFullDay = true;
-
-                    calendarDataList.Add(holidayCalanderData);
-                }
-                if (date.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    CalendarData holidayCalanderData = new CalendarData();
-                    holidayCalanderData.Title = "Weekly Off";
-                    holidayCalanderData.Description = "Weekly Off";
-                    holidayCalanderData.StartDate = date;
-                    holidayCalanderData.EndDate = date;
-                    holidayCalanderData.Color = "royalblue";
-                    holidayCalanderData.IsFullDay = true;
-                    calendarDataList.Add(holidayCalanderData);
-
-                }
-                if (LocationName == "BANER" || LocationName == "")
-                {
-                    if (date.DayOfWeek == DayOfWeek.Saturday)
-                    {
-                        string alternateDateStatus = CalculateDate(date);
-                        if (!string.IsNullOrEmpty(alternateDateStatus))
-                        {
-                            CalendarData holidayCalanderData = new CalendarData();
-                            holidayCalanderData.Title = alternateDateStatus;
-                            holidayCalanderData.Description = "Weekly Off";
-                            holidayCalanderData.StartDate = date;
-                            holidayCalanderData.EndDate = date;
-                            holidayCalanderData.Color = "royalblue";
-                            holidayCalanderData.IsFullDay = true;
-                            calendarDataList.Add(holidayCalanderData);
-                        }
-                    }
-                }
-
                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true && x.Location.IsActive == true)
-                           .Select(p => new
-                           {
-                               p,
-                               Attendances = p.Attendance.Where(a => a.DateIn == date)
-                           });
+                          .Select(p => new
+                          {
+                              p,
+                              Attendances = p.Attendance.Where(a => a.DateIn == date)
+                          });
 
                 foreach (var x in results)
                 {
@@ -410,51 +343,19 @@ namespace EIS.Repositories.Repository
             IEnumerable<Holiday> holidays = new List<Holiday>();
             IEnumerable<LeaveRequest> leaveList = new List<LeaveRequest>();
             IEnumerable<Attendance> attendances = new List<Attendance>();
-            Person person = _dbContext.Person.Include(x => x.Location).Where(x => x.Id == personId).FirstOrDefault();
+            Person person = _dbContext.Person.Include(x => x.Location).Include(x => x.WeeklyOff).Where(x => x.Id == personId).FirstOrDefault();
             int? locationId = person.LocationId;
-            string locationName = person.Location.LocationName;
 
             attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
             if (locationId != null)
             {
-                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId);
+                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId && x.IsActive==true);
             }
 
             leaveList = _dbContext.LeaveRequests.Where(x => x.PersonId == personId);
-            int count = 0;
 
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
-
-                LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).FirstOrDefault();
-                if (leaveRequest != null)
-                {
-                    CalendarData calendarData = new CalendarData();
-                    calendarData.Title = "Leave Status (" + leaveRequest.Status + ")";
-                    calendarData.Description = "<br/>Leave Status : " + leaveRequest.Status + "<br/>Leave Reason :" + leaveRequest.Reason;
-                    calendarData.StartDate = date;
-                    calendarData.EndDate = date;
-                    if (leaveRequest.Status == "Pending")
-                    {
-                        calendarData.Color = "Violet";
-                    }
-                    else if (leaveRequest.Status.Contains("Approved"))
-                    {
-                        calendarData.Color = "dodgerblue";
-                    }
-                    else if (leaveRequest.Status == "Rejected")
-                    {
-                        calendarData.Color = "crimson";
-                    }
-                    else
-                    {
-                        calendarData.Color = "palevioletred";
-                    }
-
-
-                    calendarData.IsFullDay = true;
-                    calendarDataList.Add(calendarData);
-                }
 
                 Attendance attendance = attendances.Where(x => x.DateIn == date).FirstOrDefault();
 
@@ -483,12 +384,7 @@ namespace EIS.Repositories.Repository
                     holidayCalanderData.EndDate = holiday.Date;
                     holidayCalanderData.Color = "darkviolet";
                     holidayCalanderData.IsFullDay = true;
-
                     calendarDataList.Add(holidayCalanderData);
-                }
-                if (date.Day == 1)
-                {
-                    count = 0;
                 }
                 if (date.DayOfWeek == DayOfWeek.Sunday)
                 {
@@ -502,26 +398,58 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(holidayCalanderData);
 
                 }
-                if (locationName.ToUpper() == "BANER")
+
+                if (person.WeeklyOff.Type == "AlternateSaturday" && date.DayOfWeek == DayOfWeek.Saturday)
                 {
-                    if (date.DayOfWeek == DayOfWeek.Saturday)
+                    string alternateDateStatus = CalculateDate(date);
+                    if (!string.IsNullOrEmpty(alternateDateStatus))
                     {
-                        count++;
-                        if (count % 2 == 0)
+                        CalendarData holidayCalanderData = new CalendarData();
+                        holidayCalanderData.Title = alternateDateStatus;
+                        holidayCalanderData.Description = "Weekly Off";
+                        holidayCalanderData.StartDate = date;
+                        holidayCalanderData.EndDate = date;
+                        holidayCalanderData.Color = "royalblue";
+                        holidayCalanderData.IsFullDay = true;
+                        calendarDataList.Add(holidayCalanderData);
+                    }
+                }
+                LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).FirstOrDefault();
+                if (holiday != null || date.DayOfWeek == DayOfWeek.Sunday || (person.WeeklyOff.Type == "AlternateSaturday" && date.DayOfWeek == DayOfWeek.Saturday))
+                {
+                }
+                else
+                {
+                    if (leaveRequest != null)
+                    {
+                        CalendarData calendarData = new CalendarData();
+                        calendarData.Title = "Leave Status (" + leaveRequest.Status + ")";
+                        calendarData.Description = "<br/>Leave Status : " + leaveRequest.Status + "<br/>Leave Reason :" + leaveRequest.Reason;
+                        calendarData.StartDate = date;
+                        calendarData.EndDate = date;
+                        if (leaveRequest.Status == "Pending")
                         {
-                            CalendarData holidayCalanderData = new CalendarData();
-                            holidayCalanderData.Title = count + "nd Saturday Weekly Off";
-                            holidayCalanderData.Description = "Weekly Off";
-                            holidayCalanderData.StartDate = date;
-                            holidayCalanderData.EndDate = date;
-                            holidayCalanderData.Color = "royalblue";
-                            holidayCalanderData.IsFullDay = true;
-                            calendarDataList.Add(holidayCalanderData);
+                            calendarData.Color = "Violet";
                         }
+                        else if (leaveRequest.Status.Contains("Approved"))
+                        {
+                            calendarData.Color = "dodgerblue";
+                        }
+                        else if (leaveRequest.Status == "Rejected")
+                        {
+                            calendarData.Color = "crimson";
+                        }
+                        else
+                        {
+                            calendarData.Color = "palevioletred";
+                        }
+                        calendarData.IsFullDay = true;
+                        calendarDataList.Add(calendarData);
+
+
                     }
                 }
             }
-
             return calendarDataList;
         }
 

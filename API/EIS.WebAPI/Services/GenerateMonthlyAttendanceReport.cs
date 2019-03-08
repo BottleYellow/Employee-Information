@@ -42,6 +42,7 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
+	    SendAttendanceReportToAdminHRManager();
             DateTime d = DateTime.Now;
             d = d.AddMonths(-1);
             int year = d.Year;
@@ -266,7 +267,7 @@ namespace EIS.WebAPI.Services
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))
-            { 
+            {
                 File.Delete(attendanceReportPath);
             }
             var memory = new MemoryStream();
@@ -275,35 +276,127 @@ namespace EIS.WebAPI.Services
                 int i = 1;
 
                 IWorkbook workbook;
+                ICell cell;
                 workbook = new XSSFWorkbook();
+                ICellStyle headerStyle = workbook.CreateCellStyle();
                 ISheet sheet = workbook.CreateSheet("Attendance Report");
                 IRow row = sheet.CreateRow(0);
                 row = sheet.CreateRow(i++);
-                row.CreateCell(0).SetCellValue("Aadyam Consultant llp.");
+                cell = row.CreateCell(0);
+                cell.SetCellValue("Aadyam Consultant llp.");
+
+
+
                 row = sheet.CreateRow(i++);
-                row.CreateCell(0).SetCellValue("Employee Management System");
+                cell = row.CreateCell(0);
+                cell.SetCellValue("Employee Management System");
                 row = sheet.CreateRow(i++);
-                row.CreateCell(0).SetCellValue("Monthly Attendance Report:-");
-                row.CreateCell(1).SetCellValue(month + "/" + year);
+                cell = row.CreateCell(0);
+                cell.SetCellValue("Monthly Attendance Report:-");
+                cell = row.CreateCell(1);
+                cell.SetCellValue(month + "/" + year);
                 row = sheet.CreateRow(i++);
                 row = sheet.CreateRow(i++);
-                row.CreateCell(0).SetCellValue("Employee Code");
-                row.CreateCell(1).SetCellValue("Employee Name");
-                row.CreateCell(2).SetCellValue("Present Days");
-                row.CreateCell(3).SetCellValue("Absent Days");
-                row.CreateCell(4).SetCellValue("Leaves Availed");
-                row.CreateCell(5).SetCellValue("Total Leaves Availed");
-                row.CreateCell(6).SetCellValue("Working Days");
+                cell = row.CreateCell(0);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Employee Code");
+                cell = row.CreateCell(1);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Employee Name");
+                cell = row.CreateCell(2);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Working Days");
+                cell = row.CreateCell(3);
+                headerStyle.FillBackgroundColor = IndexedColors.LightYellow.Index;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Leave Without Approval");
+                cell = row.CreateCell(4);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Leave With Approval");
+                cell = row.CreateCell(5);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Total Leaves");
+                cell = row.CreateCell(6);
+                headerStyle.BorderBottom = BorderStyle.Medium;
+                headerStyle.FillForegroundColor = IndexedColors.LightYellow.Index;
+                headerStyle.FillPattern = FillPattern.SolidForeground;
+                cell.CellStyle = headerStyle;
+                cell.SetCellValue("Present Days");
+
+                ICellStyle headerStyle1 = workbook.CreateCellStyle();
+                //headerStyle1.BorderBottom = BorderStyle.Medium;
+                headerStyle1.FillForegroundColor = IndexedColors.LightGreen.Index;
+                headerStyle1.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle2 = workbook.CreateCellStyle();
+                //headerStyle2.BorderBottom = BorderStyle.Medium;
+                headerStyle2.FillForegroundColor = IndexedColors.PaleBlue.Index;
+                headerStyle2.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle3 = workbook.CreateCellStyle();
+                //headerStyle3.BorderBottom = BorderStyle.Medium;
+                headerStyle3.FillForegroundColor = IndexedColors.LightCornflowerBlue.Index;
+                headerStyle3.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle4 = workbook.CreateCellStyle();
+                //headerStyle4.BorderBottom = BorderStyle.Medium;
+                headerStyle4.FillForegroundColor = IndexedColors.Rose.Index;
+                headerStyle4.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle5 = workbook.CreateCellStyle();
+                //headerStyle5.BorderBottom = BorderStyle.Medium;
+                headerStyle5.FillForegroundColor = IndexedColors.LightOrange.Index;
+                headerStyle5.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle6 = workbook.CreateCellStyle();
+                //headerStyle6.BorderBottom = BorderStyle.Medium;
+                headerStyle6.FillForegroundColor = IndexedColors.LemonChiffon.Index;
+                headerStyle6.FillPattern = FillPattern.SolidForeground;
+
+                ICellStyle headerStyle7 = workbook.CreateCellStyle();
+                //headerStyle7.BorderBottom = BorderStyle.Medium;
+                headerStyle7.FillForegroundColor = IndexedColors.LightGreen.Index;
+                headerStyle7.FillPattern = FillPattern.SolidForeground;
+
                 foreach (var attendance in Model.sP_GetAttendanceCountReports)
                 {
                     row = sheet.CreateRow(i);
-                    row.CreateCell(0).SetCellValue(attendance.EmployeeCode);
-                    row.CreateCell(1).SetCellValue(attendance.EmployeeName);
-                    row.CreateCell(2).SetCellValue(Convert.ToInt32(attendance.PresentDays));
-                    row.CreateCell(3).SetCellValue(Convert.ToInt32(attendance.AbsentDay));
-                    row.CreateCell(4).SetCellValue(Convert.ToInt32(attendance.NoLeave));
-                    row.CreateCell(5).SetCellValue(Convert.ToInt32(attendance.NoLeave) + Convert.ToInt32(attendance.AbsentDay));
-                    row.CreateCell(6).SetCellValue(Convert.ToInt32(attendance.WorkingDay));
+                    cell = row.CreateCell(0);
+                    cell.CellStyle = headerStyle1;
+                    cell.SetCellValue(attendance.EmployeeCode);
+                    cell = row.CreateCell(1);
+                    cell.CellStyle = headerStyle2;
+                    cell.SetCellValue(attendance.EmployeeName);
+                    cell = row.CreateCell(2);
+                    cell.CellStyle = headerStyle3;
+                    cell.SetCellValue(Convert.ToInt32(attendance.WorkingDay));
+                    cell = row.CreateCell(3);
+                    cell.CellStyle = headerStyle4;
+                    cell.SetCellValue(Convert.ToInt32(attendance.AbsentDay));
+                    cell = row.CreateCell(4);
+                    cell.CellStyle = headerStyle5;
+                    cell.SetCellValue(Convert.ToInt32(attendance.NoLeave));
+                    cell = row.CreateCell(5);
+                    cell.CellStyle = headerStyle6;
+                    cell.SetCellValue(Convert.ToInt32(attendance.NoLeave) + Convert.ToInt32(attendance.AbsentDay));
+                    cell = row.CreateCell(6);
+                    cell.CellStyle = headerStyle7;
+                    cell.SetCellValue(Convert.ToInt32(attendance.PresentDays));
                     i++;
                 }
                 workbook.Write(sw);
