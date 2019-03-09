@@ -47,7 +47,7 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllEmployee()
         {
-            IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
+            IQueryable<Person> employees = _repository.Employee.FindAllWithNoTracking().Include(x=>x.Location).Where(x => x.TenantId == TenantId && x.IsActive == true && x.Role.Name!="Admin");
             return Ok(employees);
         }
         [Route("GetWeeklyOffs")]

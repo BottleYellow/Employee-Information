@@ -32,6 +32,8 @@ namespace EIS.WebApp.Services
 
         private IEISService<LeaveRules> _leaveRules;
 
+        private IEISService<LeaveRulesWithEmp> _leaveRulesWithEmp;
+
         private IEISService<LeaveRequest> _leaveRequest;
 
         private IEISService<Users> _users;
@@ -41,6 +43,7 @@ namespace EIS.WebApp.Services
         private IEISService<PastLeaves> _pastLeaves;
         private IEISService<SP_GetEmployee> _getEmployee;
         private IEISService<SP_GetDateWiseAttendance> _getAttendance;
+
 
         public IEISService<Person> Employee
         {
@@ -134,6 +137,18 @@ namespace EIS.WebApp.Services
                     _leaveRules = new EISService<LeaveRules>();
                 }
                 return _leaveRules;
+            }
+        }
+
+        public IEISService<LeaveRulesWithEmp> LeaveRulesWithEmp
+        {
+            get
+            {
+                if (_leaveRulesWithEmp == null)
+                {
+                    _leaveRulesWithEmp = new EISService<LeaveRulesWithEmp>();
+                }
+                return _leaveRulesWithEmp;
             }
         }
 

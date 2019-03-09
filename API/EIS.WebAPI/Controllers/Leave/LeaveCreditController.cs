@@ -22,6 +22,23 @@ namespace EIS.WebAPI.Controllers.Leave
         {
 
         }
+        [HttpGet]
+        public IEnumerable<LeaveCreditViewModel> GetLeaveCredits()
+        {
+            IEnumerable<LeaveCreditViewModel> data = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true).Select(x => new LeaveCreditViewModel
+            {
+                Id = x.Id,
+                LocationName = x.Person.Location.LocationName,
+                FullName = x.Person.FullName,
+                LeaveType = x.LeaveType,
+                ValidFrom = x.ValidFrom,
+                ValidTo = x.ValidTo,
+                AllotedDays = (int)x.AllotedDays,
+                Available = (int)x.Available,
+                ActiveStatus = x.IsActive
+            }).ToList(); ;
+            return data;
+        }
         [Route("GetCreditsByPerson/{PersonId}")]
         [HttpGet]
         public IEnumerable<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
@@ -71,7 +88,7 @@ namespace EIS.WebAPI.Controllers.Leave
         [DisplayName("Add Leave Credit")]
         [Route("AddCredits")]
         [HttpPost]
-        public IActionResult PostLeaveCredits([FromBody] LeaveRules Leave)
+        public IActionResult PostLeaveCredits([FromBody] LeaveRulesWithEmp Leave)
         {
             if (!ModelState.IsValid)
             {

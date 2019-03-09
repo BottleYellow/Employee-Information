@@ -431,15 +431,29 @@
     }
    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
     $(document).ready(function () {
-        if (document.getElementById("wh") != null) {
-            var m = document.getElementById("wh").value;
+        //if (document.getElementById("wh") != null) {
+        //    var m = document.getElementById("wh").value;
+        //    $('#wh').datetimepicker({
+        //        format: "HH:mm",
+        //        enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        //        useCurrent:false
+        //    });
+        //}
+        var m = document.getElementById("wh").value;
+        if (m == "") {
             $('#wh').datetimepicker({
                 format: "HH:mm",
                 enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-                useCurrent:false
+                defaultDate: moment(new Date()).hours(9).minutes(0).seconds(0).milliseconds(0) 
             });
         }
-       
+        else { 
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                useCurrent: false
+            });
+        }
         var d1 = document.getElementById("dob").value;
         var dob = moment(d1, cultureInfo).format("DD/MMM/YYYY");
 

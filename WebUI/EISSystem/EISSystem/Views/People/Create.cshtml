@@ -313,7 +313,8 @@
         if (m == "") {
             $('#wh').datetimepicker({
                 format: "HH:mm",
-                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                defaultDate: moment(new Date()).hours(9).minutes(0).seconds(0).milliseconds(0) 
             });
         }
         else { 

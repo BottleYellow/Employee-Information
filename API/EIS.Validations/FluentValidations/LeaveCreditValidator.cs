@@ -34,7 +34,7 @@ namespace EIS.Validations.FluentValidations
             }
             else
             {
-                return false;
+                return credit.Id == obj.Id;
             }
         }
     }

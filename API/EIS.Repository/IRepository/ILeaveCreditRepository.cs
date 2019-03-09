@@ -7,6 +7,6 @@ namespace EIS.Repositories.IRepository
     { 
         float GetAvailableLeaves(int PersonId, int LeaveId);
         void AddCreditAndSave(LeaveCredit Credit);
-        void AddCreditsAndSave(LeaveRules Leave);
+        void AddCreditsAndSave(LeaveRulesWithEmp Leave);
     }
 }

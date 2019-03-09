@@ -21,16 +21,16 @@ namespace EIS.Repositories.Repository
             Save();
         }
 
-        public void AddCreditsAndSave(LeaveRules Leave)
+        public void AddCreditsAndSave(LeaveRulesWithEmp Leave)
         {
             int id = Leave.Id;
             List<Person> List = _dbContext.Person.Where(x => x.TenantId == Leave.TenantId && x.LocationId==Leave.LocationId).ToList();
-            foreach (var item in List)
+            foreach (var item in Leave.Employees)
             {
                 LeaveCredit Credit = new LeaveCredit
                 {
-                    TenantId = item.TenantId,
-                    PersonId = item.Id,
+                    TenantId = 0,
+                    PersonId = item,
                     LeaveType = Leave.LeaveType,
                     AllotedDays = Leave.Validity,
                     Available = Leave.Validity,
