@@ -45,9 +45,19 @@ namespace EIS.WebAPI.Controllers.Leave
         }
         [DisplayName("leave Policies")]
         [HttpGet]
-        public IEnumerable<LeaveRules> GetLeavePolicies()
+        public ActionResult GetLeavePolicies()
         {
-            return _repository.LeaveRules.FindAll().Where(x => x.TenantId == TenantId);
+            IEnumerable<LeavePolicyViewModel> LeavePolicyData = _repository.LeaveRules.FindAll().Where(x => x.TenantId == TenantId && x.IsActive == true).Select(x => new LeavePolicyViewModel
+            {
+                Id = x.Id,
+                ActiveStatus = x.IsActive,
+                LeaveType = x.LeaveType,
+                LocationName = x.Location.LocationName,
+                ValidFrom = x.ValidFrom,
+                ValidTo = x.ValidTo,
+                Validity = x.Validity
+            }).ToList();
+            return Ok(LeavePolicyData);
         }
 
         [DisplayName("leave Policies")]

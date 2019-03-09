@@ -52,7 +52,7 @@
             <HeaderWithButton btn-id="btnModal" header-name="Leave Credits" btn-text="Add Credit" icon-name="add"></HeaderWithButton>
         </div>
         <div class="row clearfix">
-            <div class="row">
+            @*<div class="row">
                 <div class="col-md-9" style="height:50px">
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
@@ -60,7 +60,7 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div>*@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
@@ -89,17 +89,17 @@
 
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script>
-    $('#locations').on('change', function () {
-        var c = $('#locations').val();
-        GenerateReport(c);
-    });
+    //$('#locations').on('change', function () {
+    //    var c = $('#locations').val();
+    //    GenerateReport(c);
+    //});
     $(document).ready(function () {
-        GenerateReport(0);
+        GenerateReport();
     });
-    function GenerateReport(c) {
+    function GenerateReport() {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("LeaveCredits", "Leave")?LocationId=' + c,
+            url: '@Url.Action("LeaveCredits", "Leave")',
             beforeSend: function () {
                 $('ajax-loader').css("visibility", "visible");
             },

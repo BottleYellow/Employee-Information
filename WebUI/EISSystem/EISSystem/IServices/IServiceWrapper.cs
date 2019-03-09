@@ -23,6 +23,7 @@ namespace EIS.WebApp.IServices
         IEISService<Attendance> Attendances { get; }
         IEISService<LeaveCredit> LeaveCredit { get; }
         IEISService<LeaveRules> LeaveRules { get; }
+        IEISService<LeaveRulesWithEmp> LeaveRulesWithEmp { get; }
         IEISService<LeaveRequest> LeaveRequest { get; }
         IEISService<Users> Users { get; }
         IEISService<Holiday> Holidays { get; }

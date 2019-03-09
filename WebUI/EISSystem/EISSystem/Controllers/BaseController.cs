@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EIS.Entities.Employee;
 using EIS.Entities.Generic;
 using EIS.Entities.Hoildays;
+using EIS.Entities.Leave;
 using EIS.Entities.OtherEntities;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Models;
@@ -62,6 +63,17 @@ namespace EIS.WebApp.Controllers
             return WeeklyOffs;
         }
         [NonAction]
+        public List<LeaveRules> GetLeavePolicies()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/LeavePolicy");
+            string stringData1 = response.Content.ReadAsStringAsync().Result;
+            List<LeaveRules> data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
+            if (data.Count == 0)
+                return new List<LeaveRules>();
+            else
+                return data;
+        }
+        [NonAction]
         public List<Person> GetPersons()
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
@@ -74,6 +86,20 @@ namespace EIS.WebApp.Controllers
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
             return  employees.OrderBy(x => x.FirstName).ToList();
+        }
+        [NonAction]
+        public List<Person> GetPersonsForLeavePolicy()
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            IList<Person> employeesdata = JsonConvert.DeserializeObject<IList<Person>>(stringData);
+            IEnumerable<Person> employees = from e in employeesdata
+                                            select new Person
+                                            {
+                                                Id = e.Id,
+                                                FirstName = e.FirstName + " " + e.LastName + "(" + e.Location.LocationName + ")"
+                                            };
+            return employees.OrderBy(x => x.FirstName).ToList();
         }
         public IActionResult LoadData<T1>(string Url,bool? type,int? LocationId)
         {

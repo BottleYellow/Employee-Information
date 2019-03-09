@@ -246,9 +246,10 @@ namespace EIS.WebApp.Controllers
 
         [HttpPost]
         [ActionName("LeavePolicies")]
-        public IActionResult GetLeavePolicy(int LocationId)
+        public IActionResult GetLeavePolicy()
         {
-         HttpResponseMessage responseMessage=_service.GetResponse(ApiUrl + "/api/LeavePolicy/GetLeavePolicies/"+LocationId);
+            //HttpResponseMessage responseMessage=_service.GetResponse(ApiUrl + "/api/LeavePolicy/GetLeavePolicies/"+LocationId);
+            HttpResponseMessage responseMessage = _service.GetResponse(ApiUrl + "/api/LeavePolicy");
             string stringData = responseMessage.Content.ReadAsStringAsync().Result;
             IEnumerable<LeavePolicyViewModel> policy = JsonConvert.DeserializeObject<IEnumerable<LeavePolicyViewModel>>(stringData);
             return Json(policy);
@@ -257,18 +258,19 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Policy")]
         public IActionResult AddPolicy()
         {
-            ViewBag.Locations = GetLocations();
+            ViewBag.Persons = GetPersonsForLeavePolicy();
             LeaveRules leaveRule = new LeaveRules();
             return PartialView("AddPolicy", leaveRule);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPolicy(LeaveRules Leave)
+        public IActionResult AddPolicy(LeaveRules Leave,int[] emps)
         {
+            ViewBag.Persons = GetPersonsForLeavePolicy();
             ViewBag.Locations = GetLocations();
             Leave.CreatedDate = DateTime.Now;
             Leave.UpdatedDate = DateTime.Now;
-            if (Leave.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
+            if (emps.Length == 0) ModelState.AddModelError("LocationId", "Please select at least one employee");
             if (ModelState.IsValid)
             {
                 Leave.CreatedBy = Convert.ToInt32(GetSession().PersonId);
@@ -278,7 +280,16 @@ namespace EIS.WebApp.Controllers
                 LeaveRules LeaveRules = JsonConvert.DeserializeObject<LeaveRules>(stringData);
                 if (response.IsSuccessStatusCode == true)
                 {
-                    HttpResponseMessage response2 = _services.LeaveRules.PostResponse(ApiUrl+"/api/LeaveCredit/AddCredits", LeaveRules );
+                    LeaveRulesWithEmp LeaveEmp = new LeaveRulesWithEmp()
+                    {
+                        Id = LeaveRules.Id,
+                        LeaveType = LeaveRules.LeaveType,
+                        Validity = LeaveRules.Validity,
+                        ValidFrom = LeaveRules.ValidFrom,
+                        ValidTo = LeaveRules.ValidTo,
+                        Employees=emps
+                    };
+                    HttpResponseMessage response2 = _services.LeaveRulesWithEmp.PostResponse(ApiUrl+"/api/LeaveCredit/AddCredits", LeaveEmp );
                     if (response2.IsSuccessStatusCode == true)
                     {
                         return View();
@@ -342,9 +353,9 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("LeaveCredits")]
         [HttpPost]
-        public IActionResult GetLeaveCredits(int LocationId)
+        public IActionResult GetLeaveCredits()
         {
-            HttpResponseMessage httpResponse= _service.GetResponse(ApiUrl + "/api/LeaveCredit/GetLeaveCredits/" + LocationId);
+            HttpResponseMessage httpResponse= _service.GetResponse(ApiUrl + "/api/LeaveCredit");
             string stringData = httpResponse.Content.ReadAsStringAsync().Result;
             IEnumerable<LeaveCreditViewModel> leaveCredits = JsonConvert.DeserializeObject<IEnumerable<LeaveCreditViewModel>>(stringData);
             return Json(leaveCredits);
@@ -355,18 +366,8 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Add Leave Credit")]
         public IActionResult AddCredit()
         {
-            ViewBag.Locations = GetLocations();
-            response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
-            string stringData1 = response.Content.ReadAsStringAsync().Result;
-            List<LeaveRules> data = JsonConvert.DeserializeObject<List<LeaveRules>>(stringData1);
-            if (data.Count == 0)
-                ViewBag.ListOfPolicy = new List<LeaveRules>();
-            else
-                ViewBag.ListOfPolicy = data;
-            HttpResponseMessage response1 = _services.Employee.GetResponse(ApiUrl+"/api/employee" );
-            string stringData = response1.Content.ReadAsStringAsync().Result;
-            List<Person> data1 = JsonConvert.DeserializeObject<List<Person>>(stringData);
-            ViewBag.Persons = data1;
+            ViewBag.Persons = GetPersonsForLeavePolicy();
+            ViewBag.ListOfPolicy = GetLeavePolicies();
             LeaveCredit leaveCredit = new LeaveCredit();
             return PartialView("AddCredit", leaveCredit);
         }
@@ -375,7 +376,8 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddCredit(LeaveCredit Credit)
         {
-            ViewBag.Locations = GetLocations();
+            ViewBag.Persons = GetPersonsForLeavePolicy();
+            ViewBag.ListOfPolicy = GetLeavePolicies();
             Credit.CreatedDate = DateTime.Now;
             Credit.UpdatedDate = DateTime.Now;
             Credit.Available = Credit.AllotedDays;

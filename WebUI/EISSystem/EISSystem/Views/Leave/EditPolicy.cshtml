@@ -41,17 +41,10 @@
             </div>
             <form name="cp" id="cp" asp-action="EditPolicy" asp-controller="Leave" method="post">
                 <input type="hidden" asp-for="RowVersion">
-                <input type="hidden" asp-for="LocationId">
                 <input type="hidden" asp-for="CreatedBy" />
                 <input type="hidden" asp-for="CreatedDate" />
                 <input type="hidden" asp-for="Id" />
-                <div class="form-group required">
-                    <label class="control-label" asp-for="LocationId">Location : </label>
-                    <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick" disabled>
-                        <option value="0">-- Select Location --</option>
-                    </select>
-                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                </div>
+                
                 <div class="form-group required">
                     <label class="control-label" asp-for="LeaveType">Leave Type</label>
                     <div class="form-line">
