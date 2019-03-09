@@ -84,7 +84,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="body">
-                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data" id="edit">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="RowVersion" />
                         <input type="hidden" asp-for="TenantId" />
@@ -373,7 +373,7 @@
                                 </div>
                             </div>
                         </div><br /><br />
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-primary" onclick="javascript: return SubmitForm();">Save</button>
                         @if (cookies.Role == "Admin" || cookies.Role == "HR")
                         {
                             <button type="submit" formmethod="get" asp-action="Index" asp-controller="People" class="btn btn-primary">Cancel</button>
@@ -395,6 +395,28 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+    function SubmitForm() {
+
+        bootbox.confirm({
+            message: "Are you sure you want to submit?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                debugger;
+                if (result == true) {
+                    $('#edit').submit();
+                }
+            }
+        });
+    }
     function showPeriod(x) {
         if (x == "true") {
             $("#period").removeAttr('hidden');

@@ -162,7 +162,7 @@
                                         <th>Leave Type</th>
                                         <th>From Date</th>
                                         <th>To Date</th>
-                                        <th>Days</th>
+                                        <th>Requested Days</th>
                                         <th>Requested Date</th>
                                         <th>Status</th>
                                         <th>Updated By</th>
@@ -224,8 +224,7 @@
             format: "MM/YYYY"
         });
         $('#inputyear').datetimepicker({
-            format: "YYYY",
-            maxDate: new Date(cYear+1, cMonth, cDate)
+            format: "YYYY"
         });
         value = $('#inputmonth').val();
         GenerateReport(locationValue, employeeValue, type, value, leaveType);
