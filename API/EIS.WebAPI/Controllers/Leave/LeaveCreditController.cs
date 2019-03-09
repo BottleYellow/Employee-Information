@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using EIS.Entities.Employee;
 using EIS.Entities.Generic;
 using EIS.Entities.Leave;
 using EIS.Entities.Models;
@@ -41,9 +42,23 @@ namespace EIS.WebAPI.Controllers.Leave
         }
         [Route("GetCreditsByPerson/{PersonId}")]
         [HttpGet]
-        public IEnumerable<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
+        public List<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
         {
-            return _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0);
+            List<LeaveCredit> credits = new List<LeaveCredit>();
+            bool? p = _repository.Employee.FindByCondition(x => x.Id == PersonId).IsOnProbation;
+            if(p==true)
+            {
+                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.LeaveType == "Unpaid" && x.PersonId == PersonId && x.Available > 0).ToList();
+            }else
+            {
+                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.LeaveType != "Unpaid" && x.PersonId == PersonId && x.Available > 0).ToList();
+                if (credits.Count() == 0)
+                {
+                    credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0).ToList();
+                }
+            }
+
+            return credits;
         }
         [DisplayName("leave Credits")]
         [HttpGet]

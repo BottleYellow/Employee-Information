@@ -41,6 +41,19 @@ namespace EIS.WebAPI.Controllers.Dashboard
         [HttpGet]
         public IActionResult GetEmployeeDashboard([FromRoute]int PersonId)
         {
+            Person person = _repository.Employee.FindByCondition(x => x.Id == PersonId);
+            if(person.IsOnProbation==true)
+            {
+                int probationPeriod = person.PropbationPeriodInMonth.GetValueOrDefault();
+                DateTime joinDate = person.JoinDate;
+                DateTime probationEndDate = joinDate.AddMonths(probationPeriod);
+                if (probationEndDate.Date < DateTime.Now.Date)
+                {
+                    person.IsOnProbation = false;
+                    person.PropbationPeriodInMonth = null;
+                    _repository.Employee.UpdateAndSave(person);
+                }
+            }
             Employee_Dashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
             return Ok(dashboard);
         }
