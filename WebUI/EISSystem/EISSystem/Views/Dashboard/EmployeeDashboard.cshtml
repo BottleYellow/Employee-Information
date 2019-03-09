@@ -23,9 +23,16 @@
         a:hover, a:focus {
             text-decoration: none;
         }
+
         * {
             font-family: Arial;
             font-style: normal
+        }
+
+        table.dataTable td {
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -76,7 +83,7 @@
                         <div class="number count-to" id="TotalLeavesTaken"></div>
                     </div>
                 </div>
-            </a>  
+            </a>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-orange hover-expand-effect">
@@ -94,39 +101,38 @@
         <!-- Task Info -->
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="card">
-                <div class="header">
+                <div class="header" style="background-color:aliceblue;">
                     <h2 id="tableName"></h2>
                 </div>
-                
-                <div class="body" id="attendanceCard">
-        
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
-                                    <th>Working Hours</th>
 
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Status</th>
-                                    <th>ApprovedBy</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-        
+                <div class="body" id="attendanceCard">
+                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
+                        <thead>
+                            <tr class="info">
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Working Hours</th>
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
+                        <thead>
+                            <tr class="info">
+                                <th>Leave Type</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>ApprovedBy</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
@@ -145,12 +151,12 @@
     });
     $('#presentButton').click(function () {
         buttonSelected = "Present";
-        $('#tableName').html('Monthly Present Attendance <span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
+        $('#tableName').html('Monthly Present Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $("#leaveButton").click(function () {
         buttonSelected = "Leave";
-        $('#tableName').html('Monthly Leave Attendance <span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
+        $('#tableName').html('Monthly Leave Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $('#totalLeaveButton').click(function () {
@@ -216,7 +222,7 @@
                 } else if (Status == "Cancelled") {
                     approvedName = "-";
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                }                                             
+                }
                 else if (Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
@@ -267,7 +273,7 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        } 
+                        }
 
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
@@ -279,16 +285,23 @@
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
                 scrollX:true,
-                "order":[1,'desc'],
+                "order": [1, 'desc'],
+                "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                    if (aData[4].includes("Approved")) {
+                        $('td', nRow).addClass('success');
+                    } else if (aData[4].includes("Pending")) {
+                        $('td', nRow).addClass('warning');
+                    }
+                    else {
+                        $('td', nRow).addClass('danger');
+                    }
+                },
                 data: array
             });
         } else {
 
             $('#attendanceTable').DataTable({
                 scrollX:true,
-                "columnDefs": [
-                    { "width": "20%", "targets": 0 }
-                ],
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -297,6 +310,16 @@
                     null
                 ],
                 "order": [0, "desc"],
+                "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                    if (aData[1].includes("Present")) {
+                        $('td', nRow).addClass('success');
+                    } else if (aData[1].includes("Absent")) {
+                        $('td', nRow).addClass('danger');
+                    }
+                    else {
+                        $('td', nRow).addClass('warning');
+                    }
+                },
                 data: array
             });
         }
