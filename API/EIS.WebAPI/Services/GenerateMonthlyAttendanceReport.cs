@@ -95,30 +95,40 @@ namespace EIS.WebAPI.Services
                 {
                     int i = 1;
                     byte[] rgb1 = new byte[3] { 255, 255, 204 };
-                    byte[] rgb2 = new byte[3] { 230, 255, 230 };
-                    byte[] rgb3 = new byte[3] { 255, 230, 230 };
+                    byte[] rgb2 = new byte[3] { 214, 245, 214 };
+                    byte[] rgb3 = new byte[3] { 255, 214, 204 };
+                    byte[] rgb4 = new byte[3] { 255, 240, 179 };
                     IWorkbook workbook;
                     workbook = new XSSFWorkbook();
                     ISheet sheet = workbook.CreateSheet("Attendance Report");
                     IRow row = sheet.CreateRow(0);
                     XSSFCellStyle headerStyle = (XSSFCellStyle)workbook.CreateCellStyle();
                     headerStyle.BorderBottom = BorderStyle.Medium;
+                    headerStyle.BorderTop = BorderStyle.Medium;
+                    headerStyle.BorderLeft = BorderStyle.Medium;
+                    headerStyle.BorderRight = BorderStyle.Medium;
                     headerStyle.SetFillForegroundColor(new XSSFColor(rgb1));
                     headerStyle.FillPattern = FillPattern.SolidForeground;
 
-                    ICellStyle presentStyle = workbook.CreateCellStyle();
+                    XSSFCellStyle presentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
                     presentStyle.BorderBottom = BorderStyle.Medium;
-                    presentStyle.FillForegroundColor = IndexedColors.LightGreen.Index;
+                    presentStyle.BorderLeft = BorderStyle.Medium;
+                    presentStyle.BorderRight = BorderStyle.Medium;
+                    presentStyle.SetFillForegroundColor(new XSSFColor(rgb2));
                     presentStyle.FillPattern = FillPattern.SolidForeground;
 
-                    ICellStyle absentStyle = workbook.CreateCellStyle();
+                    XSSFCellStyle absentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
                     absentStyle.BorderBottom = BorderStyle.Medium;
-                    absentStyle.FillForegroundColor = IndexedColors.LightOrange.Index;
+                    absentStyle.BorderLeft = BorderStyle.Medium;
+                    absentStyle.BorderRight = BorderStyle.Medium;
+                    absentStyle.SetFillForegroundColor(new XSSFColor(rgb3));
                     absentStyle.FillPattern = FillPattern.SolidForeground;
 
-                    ICellStyle dateStyle = workbook.CreateCellStyle();
+                    XSSFCellStyle dateStyle = (XSSFCellStyle)workbook.CreateCellStyle();
                     dateStyle.BorderBottom = BorderStyle.Medium;
-                    dateStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
+                    dateStyle.BorderLeft = BorderStyle.Medium;
+                    dateStyle.BorderRight = BorderStyle.Medium;
+                    dateStyle.SetFillForegroundColor(new XSSFColor(rgb4));
                     dateStyle.FillPattern = FillPattern.SolidForeground;
 
                     row = sheet.CreateRow(i++);
@@ -287,15 +297,12 @@ namespace EIS.WebAPI.Services
                 IWorkbook workbook;
                 ICell cell;
                 workbook = new XSSFWorkbook();
-                //IFont font = null;
-                //font.Boldweight = 10;
                 ICellStyle headerStyle = workbook.CreateCellStyle();
                 ISheet sheet = workbook.CreateSheet("Attendance Report");
                 
                 IRow row = sheet.CreateRow(0);
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
-                //headerStyle.SetFont.
                 cell.SetCellValue("Aadyam Consultant llp.");
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
