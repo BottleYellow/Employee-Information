@@ -27,6 +27,11 @@
             font-family: Arial;
             font-style: normal
         }
+        table.dataTable td {
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <div class="container-fluid">
@@ -94,18 +99,14 @@
         <!-- Task Info -->
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="card">
-                <div class="header">
-                    <h2 id="tableName"></h2>
-                    <div class="align-right">
-                        @DateTime.Now.ToString("MMM/yyyy")
-                    </div>
+                <div class="header" style="background-color:aliceblue;">
+               <h2 id="tableName"></h2>
                 </div>
                 
-                <div class="body" id="attendanceCard">
-        
+                <div class="body" id="attendanceCard">        
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
                             <thead>
-                                <tr>
+                                <tr class="info">
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Clock In</th>
@@ -118,7 +119,7 @@
                         </table>
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
                             <thead>
-                                <tr>
+                                <tr class="info">
                                     <th>Leave Type</th>
                                     <th>From Date</th>
                                     <th>To Date</th>
@@ -143,17 +144,17 @@
 
     $(document).ready(function () {
 
-        $('#tableName').html('Monthly Attendance');
+        $('#tableName').html('Monthly Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $('#presentButton').click(function () {
         buttonSelected = "Present";
-        $('#tableName').html('Monthly Present Attendance');
+        $('#tableName').html('Monthly Present Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $("#leaveButton").click(function () {
         buttonSelected = "Leave";
-        $('#tableName').html('Monthly Leave Attendance');
+        $('#tableName').html('Monthly Leave Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });
     $('#totalLeaveButton').click(function () {
@@ -282,16 +283,23 @@
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
                 scrollX:true,
-                "order":[1,'desc'],
+                "order": [1, 'desc'],    
+                "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                    if (aData[4].includes("Approved")) {
+                        $('td', nRow).addClass('success');
+                    } else if (aData[4].includes("Pending")) {
+                        $('td', nRow).addClass('warning');
+                    }
+                    else {
+                        $('td', nRow).addClass('danger');
+                    }
+                },
                 data: array
             });
         } else {
 
             $('#attendanceTable').DataTable({
-                scrollX:true,
-                "columnDefs": [
-                    { "width": "20%", "targets": 0 }
-                ],
+                scrollX:true,               
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -300,6 +308,16 @@
                     null
                 ],
                 "order": [0, "desc"],
+                "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                    if (aData[1].includes("Present")) {
+                        $('td', nRow).addClass('success');
+                    } else if (aData[1].includes("Absent")) {
+                        $('td', nRow).addClass('danger');
+                    }
+                    else {
+                        $('td', nRow).addClass('warning');
+                    }
+                },
                 data: array
             });
         }

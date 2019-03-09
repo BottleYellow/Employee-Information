@@ -311,7 +311,7 @@
                     else if (status == "Requested For Cancel") {
                         approvedBy = data[i].EmployeeName + "(" + status + ")";
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-                        status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
+                        status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
                     }
                     else {
                         approvedBy = data[i].ApprovedName + "(" + status + ")";

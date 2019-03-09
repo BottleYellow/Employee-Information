@@ -16,6 +16,5 @@ namespace EIS.WebAPI.Controllers
             TenantId = 1;
         }
 
-        public string Personid = "";
     }
 }
