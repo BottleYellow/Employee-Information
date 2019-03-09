@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
@@ -181,7 +182,6 @@ namespace EIS.Repositories.Repository
         {
             List<LeaveRequestViewModel> leaveDataView = new List<LeaveRequestViewModel>();
             IEnumerable<LeaveRequest> leaveData= new List<LeaveRequest>();
-      ;
 
             if (locationId == 0)
             {
@@ -192,6 +192,15 @@ namespace EIS.Repositories.Repository
                         leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList() :
                                                                         FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();
 
+                    }else if(leaveType == "Pending")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList() :
+                                                FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && (x.Status == leaveType ||x.Status== "Requested For Cancel")).ToList();
+                    }
+                    else if (leaveType == "Approved")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Status.StartsWith(leaveType)).ToList() :
+                                                FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Status.StartsWith(leaveType)).ToList();
                     }
                     else
                     {
@@ -206,6 +215,16 @@ namespace EIS.Repositories.Repository
                     {
                         leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList() :
                                                 FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true).ToList();
+                    }
+                    else if (leaveType == "Pending")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList() :
+                                                FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList();
+                    }
+                    else if (leaveType == "Approved")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Status.StartsWith(leaveType)).ToList() :
+                                                FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Status.StartsWith(leaveType)).ToList();
                     }
                     else
                     {
@@ -224,6 +243,16 @@ namespace EIS.Repositories.Repository
                         leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId).ToList() :
                                                        FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId).ToList();
                     }
+                    else if (leaveType == "Pending")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList() :
+                                                      FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList();
+                    }
+                    else if (leaveType == "Approved")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status.StartsWith(leaveType)).ToList() :
+                                                      FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status.StartsWith(leaveType)).ToList();
+                    }
                     else
                     {
                         leaveData = employeeId == 0 ? FindAllByCondition(x => x.FromDate.Year == year || x.ToDate.Year == year).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status == leaveType).ToList() :
@@ -236,7 +265,18 @@ namespace EIS.Repositories.Repository
                     {
                         leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId).ToList() :
                                                   FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId).ToList();
-                    }else
+                    }
+                    else if (leaveType == "Pending")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList() :
+                                                  FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && (x.Status == leaveType || x.Status == "Requested For Cancel")).ToList();
+                    }
+                    else if (leaveType == "Approved")
+                    {
+                        leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status.StartsWith(leaveType)).ToList() :
+                                                  FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status.StartsWith(leaveType)).ToList();
+                    }
+                    else
                     {
                         leaveData = employeeId == 0 ? FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId &&x.Status==leaveType).ToList() :
                                                   FindAllByCondition(x => (x.FromDate.Month == month || x.ToDate.Month == month) && (x.FromDate.Year == year || x.ToDate.Year == year)).Include(x => x.Person).Include(x => x.Person.Location).Where(x => x.Person.Id == employeeId && x.TenantId == TenantId && x.Person.Location.IsActive == true && x.Person.LocationId == locationId && x.Status==leaveType).ToList();
@@ -279,8 +319,9 @@ namespace EIS.Repositories.Repository
         public List<SP_EmployeeLeaveRequest> GetEmployeeLeaveData(int PersonId)
         {
             List<SP_EmployeeLeaveRequest> sP_EmployeeLeave = new List<SP_EmployeeLeaveRequest>();
-           string usp = "LMS.usp_GetEmployeeLeavesData @PersonId";
-            sP_EmployeeLeave = _dbContext._sp_EmployeeLeaveRequest.FromSql(usp, PersonId).ToList();
+            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            string usp = "LMS.usp_GetEmployeeLeavesData @PersonId";
+            sP_EmployeeLeave = _dbContext._sp_EmployeeLeaveRequest.FromSql(usp, SP_PersonId).ToList();
             return sP_EmployeeLeave;
 
         }

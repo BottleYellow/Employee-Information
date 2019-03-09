@@ -85,11 +85,11 @@ namespace EIS.WebAPI.Services
                 }
                 string InputOne = year.ToString();
                 char c = '0';
-            
+
                 string InputTwo = month.ToString().PadLeft(2, c);
                 List<EmployeeAttendanceData> data1 = new List<EmployeeAttendanceData>();
-                List<EmployeeAttendanceData> data = Data(SrId,"Month", p.Id, InputOne, InputTwo, data1);
-                SrId = SrId+data.Count() + 4;
+                List<EmployeeAttendanceData> data = Data(SrId, "Month", p.Id, InputOne, InputTwo, data1);
+                SrId = SrId + data.Count() + 4;
                 var memory = new MemoryStream();
                 using (var sw = new FileStream(attendanceReportPath, FileMode.Create, FileAccess.Write))
                 {
@@ -158,7 +158,7 @@ namespace EIS.WebAPI.Services
                     {
                         row = sheet.CreateRow(i);
                         DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
-          
+
                         if (attendance.Status == "Present")
                         {
                             ICell cell00 = row.CreateCell(0);
@@ -224,7 +224,7 @@ namespace EIS.WebAPI.Services
             }
         }
 
-        public List<EmployeeAttendanceData> Data(int SrId,string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
+        public List<EmployeeAttendanceData> Data(int SrId, string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
         {
             var SP_SrId = new SqlParameter("@SrId", SrId);
             var SP_SelectType = new SqlParameter("@SelectType", "Month");
@@ -232,7 +232,7 @@ namespace EIS.WebAPI.Services
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
             string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @PersonId, @SelectType, @InputOne, @InputTwo";
-            data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();         
+            data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
             return data;
         }
 
@@ -276,7 +276,7 @@ namespace EIS.WebAPI.Services
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))
-            { 
+            {
                 File.Delete(attendanceReportPath);
             }
             var memory = new MemoryStream();
@@ -287,12 +287,15 @@ namespace EIS.WebAPI.Services
                 IWorkbook workbook;
                 ICell cell;
                 workbook = new XSSFWorkbook();
+                //IFont font = null;
+                //font.Boldweight = 10;
                 ICellStyle headerStyle = workbook.CreateCellStyle();
                 ISheet sheet = workbook.CreateSheet("Attendance Report");
                 
                 IRow row = sheet.CreateRow(0);
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
+                //headerStyle.SetFont.
                 cell.SetCellValue("Aadyam Consultant llp.");
                 row = sheet.CreateRow(i++);
                 cell = row.CreateCell(0);
@@ -431,25 +434,25 @@ namespace EIS.WebAPI.Services
                 foreach (var attendance in Model.sP_GetAttendanceCountReports)
                 {
                     row = sheet.CreateRow(i);
-                    cell=row.CreateCell(0);
+                    cell = row.CreateCell(0);
                     cell.CellStyle = headerStyle1;
                     cell.SetCellValue(attendance.EmployeeCode);
-                    cell=row.CreateCell(1);
+                    cell = row.CreateCell(1);
                     cell.CellStyle = headerStyle2;
                     cell.SetCellValue(attendance.EmployeeName);
-                    cell=row.CreateCell(2);
+                    cell = row.CreateCell(2);
                     cell.CellStyle = headerStyle3;
                     cell.SetCellValue(Convert.ToInt32(attendance.WorkingDay));
-                    cell=row.CreateCell(3);
+                    cell = row.CreateCell(3);
                     cell.CellStyle = headerStyle4;
                     cell.SetCellValue(Convert.ToInt32(attendance.AbsentDay));
-                    cell=row.CreateCell(4);
+                    cell = row.CreateCell(4);
                     cell.CellStyle = headerStyle5;
                     cell.SetCellValue(Convert.ToInt32(attendance.NoLeave));
-                    cell=row.CreateCell(5);
+                    cell = row.CreateCell(5);
                     cell.CellStyle = headerStyle6;
                     cell.SetCellValue(Convert.ToInt32(attendance.NoLeave) + Convert.ToInt32(attendance.AbsentDay));
-                    cell=row.CreateCell(6);
+                    cell = row.CreateCell(6);
                     cell.CellStyle = headerStyle7;
                     cell.SetCellValue(Convert.ToInt32(attendance.PresentDays));
                     i++;

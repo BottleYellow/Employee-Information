@@ -88,7 +88,8 @@
             else
             {
                 <HeaderWithButton header-name="My Leave Requests" btn-id="btnModalFuture" btn-text="Future Leave" icon-name="add" btn-id2="btnModal" btn-text2="Past Leave" icon-name2="add"></HeaderWithButton>
-                <label class="success" style="color:green" id="availableLeave"></label>
+                <label style="font-size:14px; font-weight:normal;" class="label label-success" id="availableLeave"></label>
+
             }
 
         </div>
@@ -147,6 +148,12 @@
                     var status = data[i].Status;
                     var statusView = "";
                     var approvedBy = data[i].ApprovedBy;
+                    if (approvedBy == null) {
+                        approvedBy = "-";
+                    }else
+                    if (approvedBy.includes("Employee")) {
+                        approvedBy = "-";
+                    }
                     var fromDate = moment(data[i].FromDate).format("DD MMM YYYY");
                     var toDate = moment(data[i].ToDate).format("DD MMM YYYY");
                     if (status == "Pending") {
@@ -154,9 +161,7 @@
                     } else if (status == "Approved" || status.startsWith('Approved')) {
                         if (data[i].LeaveType.includes("Past")) {
                             approvedBy = "Past Leave Auto Approved";
-                        } else {
-                            approvedBy = data[i].ApprovedBy;
-                        }
+                        } 
                         statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                     } else {
                         statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';

@@ -37,7 +37,6 @@ namespace EIS.WebAPI.Controllers
         {
             if (!(string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password)))
             {
-
                 string status = _repository.Users.ValidateUser(user);
                 if (status == "success")
                 {
@@ -68,7 +67,6 @@ namespace EIS.WebAPI.Controllers
                         Person = person,
                         Cookies = CookiesData
                     };
-                    Personid = pid.ToString();
                     _repository.Employee.Dispose();
                     return Ok(pc);
                 }

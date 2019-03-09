@@ -173,13 +173,13 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>BANER <span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
+                        <h2 id="banerAttendanceHeader"></h2>
                     </div>
                     <div class="body">
 
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
                             <thead>
-                                <tr class="active">
+                                <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
                                     <th>ClockIn</th>
@@ -199,13 +199,13 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>KONDHWA<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span></h2>
+                        <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>
                     <div class="body">
 
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
                             <thead>
-                                <tr class="active">
+                                <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
                                     <th>ClockIn</th>
@@ -229,26 +229,26 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>BANER</h2>
+                        <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
-
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
-                            <thead>
-                                <tr class="active">
-                                    <th>Actions</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Requested Date</th>
-                                    <th>Status</th>
-                                    <th>Leave Reason</th>
-                                </tr>
-                            </thead>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
 
 
 
@@ -259,13 +259,13 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2>KONDHWA</h2>
+                        <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
 
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
                             <thead>
-                                <tr class="active">
+                                <tr class="info">
                                     <th>Actions</th>
                                     <th>Employee Name</th>
                                     <th>Leave Type</th>
@@ -301,7 +301,16 @@
 <script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
 <script>
     var buttonSelected = "All";
+    var locationNameBaner = "";
+    var locationNameKondhwa = "";
     $(document).ready(function () {
+        var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
+        locationNameBaner = data[1].LocationName.toUpperCase();
+        locationNameKondhwa = data[0].LocationName.toUpperCase();
+        $('#banerAttendanceHeader').html(locationNameBaner + '<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span>');
+        $('#banerLeaveHeader').html(locationNameBaner);
+        $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
         generateReport("All", 0);
     });
@@ -400,7 +409,7 @@
             else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
-            if (Employees[i].LocationName == "Baner") {
+            if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
             } else {
                 KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
@@ -414,6 +423,8 @@
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("Present")) {
                     $('td', nRow).addClass('success');
+                } else if (aData[1].includes("Absent")) {
+                    $('td', nRow).addClass('danger');
                 }
                 else {
                     $('td', nRow).addClass('warning');
@@ -428,6 +439,8 @@
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("Present")) {
                     $('td', nRow).addClass('success');
+                } else if (aData[1].includes("Absent")) {
+                    $('td', nRow).addClass('danger');
                 }
                 else {
                     $('td', nRow).addClass('warning');
@@ -436,6 +449,7 @@
         });
     }
     function getLeavesData(Leaves) {
+        debugger;
         var banerArrayLeaves = [];
         var kondhwaArrayLeaves = [];
         for (var i = 0; i < Leaves.length; i++) {
@@ -445,11 +459,11 @@
             var Status = Leaves[i].Status;
             var actionButton;
             if (buttonSelected == "PendingLeaves") {
-                if (Status == "Pending") {
+                if (Status == "Pending" || Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
 
-                    if (Leaves[i].LocationName == "Baner") {
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
                         kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
@@ -460,7 +474,7 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
 
-                    if (Leaves[i].LocationName == "Baner") {
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
                         kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
@@ -471,25 +485,19 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
 
-                    if (Leaves[i].LocationName == "Baner") {
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
                         kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
             }
-
-
         }
-
-
-
 
 
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
-            scrollX:true,
             "aoColumns": [
                 null,
                 null,
@@ -508,10 +516,7 @@
             data: banerArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {
-                    $('td', nRow).addClass('warning');
-                }
-                else if (aData[7].includes("Cancelled")) {
-                    $('td', nRow).addClass('danger');
+                    $('td', nRow).addClass('warning');               
                 } else if (aData[7].includes("Approved")) {
                     $('td', nRow).addClass('success');
                 } else {
@@ -542,9 +547,6 @@
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {
                     $('td', nRow).addClass('warning');
-                }
-                else if (aData[7].includes("Cancelled")) {
-                    $('td', nRow).addClass('danger');
                 } else if (aData[7].includes("Approved")) {
                     $('td', nRow).addClass('success');
                 } else {

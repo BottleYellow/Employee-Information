@@ -115,18 +115,18 @@ namespace EIS.Repositories.Repository
             string LocationName = "";
             if (location == 0)
             {
-                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true && x.IsActive == true).ToList();
+                holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.Location.IsActive == true &&x.IsActive==true).ToList();
                 leaveList = _dbContext.LeaveRequests.Include(x => x.Person.Location).Include(x => x.Person.WeeklyOff).Where(x => x.Person.Location.IsActive == true).ToList();
             }
             else
             {
                 holidays = _dbContext.Holidays.Include(x => x.Location).Where(x => x.LocationId == location && x.Location.IsActive == true && x.IsActive==true).ToList();
                 LocationName = _dbContext.Locations.Where(x => x.Id == location).FirstOrDefault().LocationName.ToUpper();
-                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Include(x => x.Person.WeeklyOff).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
+                leaveList = _dbContext.LeaveRequests.Include(x => x.Person).Include(x => x.Person.Location).Include(x=>x.Person.WeeklyOff).Where(x => x.Person.Location.Id == location && x.Person.Location.IsActive == true).ToList();
             }
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
-                Holiday holiday = holidays.Where(x => x.Date == date && x.IsActive == true).FirstOrDefault();
+                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
                 {
                     CalendarData holidayCalanderData = new CalendarData();
@@ -172,7 +172,7 @@ namespace EIS.Repositories.Repository
                 {
                     foreach (var leave in leaveRequest)
                     {
-                        if (date.DayOfWeek != DayOfWeek.Sunday && holiday == null)
+                        if (date.DayOfWeek != DayOfWeek.Sunday && holiday==null)
                         {
                             if (date.DayOfWeek == DayOfWeek.Saturday && leave.Person.WeeklyOff.Type == "AlternateSaturday")
                             {
@@ -236,12 +236,12 @@ namespace EIS.Repositories.Repository
                     }
                 }
 
-                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true && x.Location.IsActive == true)
-                          .Select(p => new
-                          {
-                              p,
-                              Attendances = p.Attendance.Where(a => a.DateIn == date)
-                          });
+                 var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.IsActive == true && x.Location.IsActive == true)
+                           .Select(p => new
+                           {
+                               p,
+                               Attendances = p.Attendance.Where(a => a.DateIn == date)
+                           });
 
                 foreach (var x in results)
                 {
@@ -450,7 +450,7 @@ namespace EIS.Repositories.Repository
                     }
                 }
             }
-            return calendarDataList;
+                return calendarDataList;
         }
 
         public string CalculateDate(DateTime date)
