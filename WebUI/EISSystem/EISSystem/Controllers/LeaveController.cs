@@ -111,7 +111,7 @@ namespace EIS.WebApp.Controllers
         {
             response = _services.LeaveRules.GetResponse(ApiUrl+ "/api/LeaveCredit/GetCreditsByPerson/" + GetSession().PersonId);
             string stringData = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData).Where(x=> x.ValidFrom <= DateTime.Now.Date && DateTime.Now.Date <= x.ValidTo).ToList();
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData).ToList();
             if (data.Count == 0) { 
                 ViewBag.Status = "NoData";
                 ViewBag.ListOfPolicy = data;

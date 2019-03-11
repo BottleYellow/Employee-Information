@@ -45,19 +45,8 @@ namespace EIS.WebAPI.Controllers.Leave
         public List<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
         {
             List<LeaveCredit> credits = new List<LeaveCredit>();
-            bool? p = _repository.Employee.FindByCondition(x => x.Id == PersonId).IsOnProbation;
-            if(p==true)
-            {
-                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.LeaveType == "Unpaid" && x.PersonId == PersonId && x.Available > 0).ToList();
-            }else
-            {
-                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.LeaveType != "Unpaid" && x.PersonId == PersonId && x.Available > 0).ToList();
-                if (credits.Count() == 0)
-                {
-                    credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0).ToList();
-                }
-            }
-
+                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0).ToList();
+           
             return credits;
         }
         [DisplayName("leave Credits")]
