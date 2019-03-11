@@ -42,7 +42,7 @@
             width: 1px;
             white-space: nowrap;
         }
-       
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -56,6 +56,7 @@
                 top: 45%;
                 left: 45%;
             }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -98,10 +99,6 @@
                                     <label>Select Month</label><br />
                                     <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
                                 </div>
-                                <div id="inputweekdiv" hidden="hidden">
-                                    <label>Select Week</label><br />
-                                    <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off" />
-                                </div>
                             </div>
                             <div class="col-md-3">
                                 <br />
@@ -111,19 +108,22 @@
                         <div>
                             <div>
                                 <div class="row">
-                                    <div id="all" hidden>
+                                    <div id="baner" hidden>
                                         <div class="col-md-3">
                                             <div id="pnlBaner" class="panel panel-primary">
-                                                <div class="panel-heading">Baner</div>
+                                                <div id="banerPanelHeading" class="panel-heading"></div>
                                                 <div id="twoff1" class="panel-body">
                                                     <label id="alltwoffb"></label><br />
                                                     <label id="allthb"></label>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div id="kondhwa" hidden>
                                         <div class="col-md-3">
                                             <div id="pnlKondhwa" class="panel panel-primary">
-                                                <div class="panel-heading">Kondhwa</div>
+                                                <div id="kondhwaPanelHeading" class="panel-heading"></div>
                                                 <div id="twoff1" class="panel-body">
                                                     <label id="alltwoffk"></label><br />
                                                     <label id="allthk"></label>
@@ -132,47 +132,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div id="baner" hidden>
-                                        <div class="col-md-3">
-                                            <div id="pnlBaner" class="panel panel-primary">
-                                                <div class="panel-heading">Baner</div>
-                                                <div id="twoff1" class="panel-body">
-                                                    <label id="twoffb"></label><br />
-                                                    <label id="thb"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div id="kondhwa" hidden>
-                                        <div class="col-md-3">
-                                            <div id="pnlKondhwa" class="panel panel-primary">
-                                                <div class="panel-heading">Kondhwa</div>
-                                                <div id="twoff1" class="panel-body">
-                                                    <label id="twoffk"></label><br />
-                                                    <label id="thk"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <h4 id="report">Attendance Report</h4>
-                            </div>                 
-                                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Location</th>
-                                            <th>Name</th>
-                                            <th>Present Days</th>
-                                            <th>Proposed Leaves</th>
-                                            <th>Total Working Days</th>
-                                        </tr>
-                                    </thead>
-                                </table>
                             </div>
+                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Location</th>
+                                        <th>Name</th>
+                                        <th>Present Days</th>
+                                        <th>Proposed Leaves</th>
+                                        <th>Total Working Days</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -198,10 +172,11 @@
 
 
 <script type="text/javascript">
-    var totalDays = 0;
-    var totalDaysb = 0;
-    var totalDaysk = 0;
+    
     $(document).ready(function () {
+        var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
+        $('#banerPanelHeading').html(data[1].LocationName);
+        $('#kondhwaPanelHeading').html(data[0].LocationName);
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var date = new Date();
@@ -214,12 +189,13 @@
         });
         var y = new Date().getFullYear();
         var ld = new Date(y, m, 0).getDate();
-        
+
         $('#inputmonth').val(m + '/' + y);
         var location = $('#locations').val();
         var alltwoffk = calWeeklyOffMonthly(m, y);
         var alltwoffb = calWeeklyOffMonthly(m, y);
-        $('#all').show();
+        $('#baner').show();
+        $('#kondhwa').show();
         $('#alltwoffk').text('Weekly Off : ' + alltwoffk);
         $('#alltwoffb').text('Weekly Off : ' + (alltwoffb + 2));
         $.ajax({
@@ -233,13 +209,10 @@
                 $.each(data, function (i, item) {
                     if (item.location.locationName.startsWith("B")) {
                         b = b + 1;
-                        totalDaysb = ld - (b + 6);
                     }
                     else if (item.location.locationName.startsWith("K")) {
                         k = k + 1;
-                        totalDaysk = ld - (b + 4);
                     }
-                    //totalDays = ld - (b + 6);
                 });
                 $('#allthb').html('Holidays : ' + b);
                 $('#allthk').html('Holidays : ' + k);
@@ -252,7 +225,6 @@
 
 
         $('#select').on('change', function () {
-
             var v = $('#select').val();
             if (v == 'year') {
                 var date = new Date();
@@ -262,12 +234,10 @@
                 $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
-                $('#inputweekdiv').hide();
                 $('#inputyear').datetimepicker({
                     format: "YYYY",
                     maxDate: new Date(cYear, cMonth, cDate)
                 });
-
             }
             else if (v == 'month') {
                 var date = new Date();
@@ -276,70 +246,33 @@
                 var cYear = date.getFullYear();
                 $('#inputmonthdiv').show();
                 $('#inputyeardiv').hide();
-                $('#inputweekdiv').hide();
                 $('#inputmonth').datetimepicker({
                     format: "MM/YYYY",
                     maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
-            else if (v == 'week') {
-                var fd = getSunday(new Date());
-                var ld = new Date();
-                ld.setDate(fd.getDate() + 6);
-                var firstDate = moment(fd, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(ld, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                var weekstring = firstDate + '-' + lastDate;
-                $("#inputweek").val(weekstring);
-                $('#inputmonthdiv').hide();
-                $('#inputyeardiv').hide();
-                $('#inputweekdiv').show();
-                $("#inputweek").datetimepicker({
-                    format: "MMM/DD/YYYY"
-                });
-            }
         });
-        function getSunday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day; 
-            return new Date(d.setDate(diff));
-        }
-        $('#inputweek').on('dp.change', function (e) {
-            var value = $("#inputweek").val();
-            var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-            var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-            $("#inputweek").val(firstDate + " - " + lastDate);
-        });
+        
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
             var location = $('#locations').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 if (location == 0) {
-                    $('#all').show();
-                    $('#baner').hide();
-                    $('#kondhwa').hide();
-                    var weeklyoff = calWeeklyOffYearly(value);
-                    $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
-                    $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
+                    $('#baner').show();
+                    $('#kondhwa').show();               
                 }
                 else if (location == 1) {
-                    $('#all').hide();
                     $('#baner').hide();
                     $('#kondhwa').show();
-                    var weeklyoff = calWeeklyOffYearly(value);
-                    $('#twoffk').text('Weekly Off : ' + weeklyoff[0]);
                 }
                 else if (location == 2) {
-                    $('#all').hide();
-                    $('#baner').show();
                     $('#kondhwa').hide();
-                    var weeklyoff = calWeeklyOffYearly(value);
-                    $('#twoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+                    $('#baner').show();                  
                 }
-                
-                $("#inputyear").val(value);
-                
+                var weeklyoff = calWeeklyOffYearly(value);
+                $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+                $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
 
                 $.ajax({
                     type: "GET",
@@ -356,8 +289,6 @@
                                 k = k + 1;
                             }
                         });
-                        $('#thb').html('Holidays : ' + b);
-                        $('#thk').html('Holidays : ' + k);
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
 
@@ -375,38 +306,22 @@
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
-                var ld = new Date(y, m, 0).getDate();
-                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Now)");
-                }
-                else {
-                    $("#wd").html("Total Working Days");
-                }
-                var days = workingDaysBetweenDates(y + '-' + m + '-01', y + '-' + m + '-' + ld);
-                totalDays = days;
                 var location = $('#locations').val();
                 if (location == 0) {
-                    $('#all').show();
-                    $('#baner').hide();
-                    $('#kondhwa').hide();
-                    var weeklyoff = calWeeklyOffMonthly(m, y);
-                    $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
-                    $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
+                    $('#baner').show();
+                    $('#kondhwa').show();            
                 }
                 else if (location == 1) {
-                    $('#all').hide();
                     $('#baner').hide();
                     $('#kondhwa').show();
-                    var weeklyoff = calWeeklyOffMonthly(m, y);
-                    $('#twoffk').text('Weekly Off : ' + weeklyoff);
                 }
                 else if (location == 2) {
-                    $('#all').hide();
                     $('#baner').show();
                     $('#kondhwa').hide();
-                    var weeklyoff = calWeeklyOffMonthly(m, y);
-                    $('#twoffb').text('Weekly Off : ' + (weeklyoff + 2));
                 }
+                var weeklyoff = calWeeklyOffMonthly(m, y);
+                $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
+                $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
                 $.ajax({
                     type: "GET",
                     url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/" + y + "/" + location,
@@ -414,7 +329,7 @@
                     dataType: "json",
                     success: function (data) {
                         var k = 0, b = 0;
-                        
+
                         $.each(data, function (i, item) {
                             if (item.location.locationName.startsWith("B")) {
                                 b = b + 1;
@@ -423,11 +338,8 @@
                                 k = k + 1;
                             }
                         });
-                        $('#thb').html('Holidays : ' + b);
-                        $('#thk').html('Holidays : ' + k);
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
-                        totalDays = totalDays - (b + 6);
                         generateReport(value, 'month', location);
                     },
                     error: function () {
@@ -436,47 +348,8 @@
                 });
 
             }
-            else if (v == 'week') {
-                var value = $("#inputweek").val();
-                var location = $('#locations').val();
-                var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                var fdate = moment(value, "MMM-DD-YYYY").day(0).format("MMM-DD-YYYY");
-                var ldate = moment(value, "MMM-DD-YYYY").day(6).format("MMM-DD-YYYY");
-                $("#inputweek").val(firstDate + " - " + lastDate);
-                var url = "@MyHttpContext.APIBaseURL/api/Holiday/" + fdate + "/" + ldate + "/" + v + "/" + location;
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        $.each(data, function (i, item) {
-                            if (item.location.locationName.startsWith("B")) {
-                                b = b + 1;
-                                $('#twoffb').html('Weekly Off : ' + 1);
-                                $('#thb').html('Holidays : ' + b);
-                            }
-                            else if (item.location.locationName.startsWith("K")) {
-                                k = k + 1;
-                                $('#twoffk').html('Weekly Off : ' + 1);
-                                $('#thk').html('Holidays : ' + k);
-                            }
-                        });
-                        $('#alltwoffb').html('Weekly Off : ' + 1);
-                        $('#alltwoffk').html('Weekly Off : ' + 1);
-                        $('#allthb').html('Holidays : ' + b);
-                        $('#allthk').html('Holidays : ' + k);
-                        generateReport(firstDate + " - " + lastDate, 'week', location);
-                    },
-                    error: function () {
-                        bootbox.alert("Something went wrong..Please try after sometime");
-                    }
-                });
-
-            }
         });
-        
+
         function generateReport(value, type, location) {
             $.ajax({
                 url: '@Url.Action("AllAttendance","Attendance")',
@@ -503,43 +376,6 @@
                 }
 
             });
-        }
-
-    function workingDaysBetweenDates(d0, d1) {
-        var startDate = parseDate(d0);
-        var endDate = parseDate(d1);
-        // Validate input
-        if (endDate < startDate) {
-            return 0;
-        }
-        // Calculate days between dates
-        var millisecondsPerDay = 86400 * 1000; // Day in milliseconds
-        startDate.setHours(0, 0, 0, 1);  // Start just after midnight
-        endDate.setHours(23, 59, 59, 999);  // End just before midnight
-        var diff = endDate - startDate;  // Milliseconds between datetime objects
-        var days = Math.ceil(diff / millisecondsPerDay);
-
-        // Subtract two weekend days for every week in between
-        var weeks = Math.floor(days / 7);
-        days -= weeks * 1;
-
-        // Handle special cases
-        var startDay = startDate.getDay();
-        var endDay = endDate.getDay();
-
-        // Remove weekend not previously removed.
-        if (startDay - endDay > 1) {
-            days -= 2;
-        }
-        
-        return days;
-    }
-
-    function parseDate(input) {
-        // Transform date from text to date
-        var parts = input.match(/(\d+)/g);
-        // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-        return new Date(parts[0], parts[1] - 1, parts[2]); // months are 0-based
         }
     });
 </script>

@@ -90,10 +90,6 @@
                                                 <label>Select Month</label><br />
                                                 <input class="form-control" type="text" id="inputmonth" placeholder="select month" style="width:200px" autocomplete="off"/>
                                             </div>
-                                            <div id="inputweekdiv" hidden="hidden">
-                                                <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" style="width:200px" autocomplete="off"/>
-                                            </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6">
                                             <br />
@@ -203,17 +199,17 @@
 
 
 <script type="text/javascript">
-
+    var date = new Date();
+    var cMonth = date.getMonth();
+    var cDate = date.getDate();
+    var cYear = date.getFullYear();
     $(document).ready(function () {
 
         var totalDays = 0;
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
-        var date = new Date();
-        var cMonth = date.getMonth();
-        var cDate = date.getDate();
-        var cYear = date.getFullYear();
+        
         $('#inputmonth').datetimepicker({
             format: "MM/YYYY",
             maxDate: new Date(cYear, cMonth, cDate)
@@ -224,104 +220,40 @@
         $('#select').on('change', function () {
             var v = $('#select').val();
             if (v == 'year') {
-                var date = new Date();
-                var cMonth = date.getMonth();
-                var cDate = date.getDate();
-                var cYear = date.getFullYear();
                 $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
-                $('#inputweekdiv').hide();
+
                 $('#inputyear').datetimepicker({
                     format: "YYYY",
                     maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
             else if (v == 'month') {
-                var date = new Date();
-                var cMonth = date.getMonth();
-                var cDate = date.getDate();
-                var cYear = date.getFullYear();
                 $('#inputmonthdiv').show();
                 $('#inputyeardiv').hide();
-                $('#inputweekdiv').hide();
+
                 $('#inputmonth').datetimepicker({
                     maxDate: new Date(cYear, cMonth, cDate),
                     format: "MM/YYYY"
                     
                 });
             }
-            else if (v == 'week') {
-                var fd = getSunday(new Date());
-                var ld = new Date();
-                ld.setDate(fd.getDate() + 6);
-                var firstDate = moment(fd, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(ld, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                var weekstring = firstDate + '-' + lastDate;
-                $("#inputweek").val(weekstring);
-                $('#inputmonthdiv').hide();
-                $('#inputyeardiv').hide();
-                $('#inputweekdiv').show();
-                $("#inputweek").datetimepicker({
-                    format: "MMM/DD/YYYY"
-                });
-            }
         });
-        function getSunday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day /*+ (day == 0 ? -6 : 1)*/; // adjust when day is sunday
-            return new Date(d.setDate(diff));
-        }
-        $('#inputweek').on('dp.change', function (e) {
-            var value = $("#inputweek").val();
-            var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-            var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-            $("#inputweek").val(firstDate + " - " + lastDate);
-        });
+        
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
-                if (value % 4 == 0) {
-                    totalDays = 366;
-                }
-                else {
-                    totalDays = 365;
-                }
-                if (value == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Date)");
-                }
-                else {
-                    $("#wd").html("Total Working Days");
-                }
                 generateReport(value, 'year');
             }
-
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
-                var monthYear = value.split('/');
-                var y = monthYear[1];
-                var m = monthYear[0];
-                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Date)");
-                }
-                else {
-                    $("#wd").html("Total Working Days");
-                }
-                totalDays = new Date(y, m, 0).getDate()
                 generateReport(value, 'month');
             }
-            else if (v == 'week') {
-                var value = $("#inputweek").val();
-                var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week');
-                totalDays = 7;
-            }
+            
         });
 
         function generateReport(value, type) {
@@ -394,56 +326,4 @@
            
         }
     });
-    function calculate(date) {
-        var d = new Date(date);
-        var mon = d.toLocaleString('en-us', { month: 'long' });
-        var yea = d.getFullYear();
-        var dat = 1;
-        myDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        myDate = new Date(eval('"' + dat + ',' + mon + ',' + yea + '"'))
-        var first = myDays[myDate.getDay()];
-        //alert(first);
-        var secnd;
-        var forth;
-        switch (first) {
-            case "Sunday":
-                secnd = yea + '-' + mon + '-' + 14;
-                forth = yea + '-' + mon + '-' + 28;
-                break;
-            case "Monday":
-                secnd = yea + '-' + mon + '-' + 13;
-                forth = yea + '-' + mon + '-' + 27;
-                break;
-            case "Tuesday":
-                secnd = yea + '-' + mon + '-' + 12;
-                forth = yea + '-' + mon + '-' + 26;
-                break;
-            case "Wednesday":
-                secnd = yea + '-' + mon + '-' + 11;
-                forth = yea + '-' + mon + '-' + 25;
-                break;
-            case "Thursday":
-                secnd = yea + '-' + mon + '-' + 10;
-                forth = yea + '-' + mon + '-' + 24;
-                break;
-            case "Friday":
-                secnd = yea + '-' + mon + '-' + 9;
-                forth = yea + '-' + mon + '-' + 23;
-                break;
-            case "Saturday":
-                secnd = yea + '-' + mon + '-' + 8;
-                forth = yea + '-' + mon + '-' + 22;
-                break;
-            default: break;
-        }
-        if (d.getDate() == new Date(secnd).getDate()) {
-            return "2nd Saturday";
-        }
-        else if (d.getDate() == new Date(forth).getDate()) {
-            return "4th Saturday";
-        }
-        else {
-            return "NotFound";
-        }
-    }
 </script>
