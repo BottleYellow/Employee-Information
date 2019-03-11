@@ -109,7 +109,6 @@
                                             <select class="form-control" id="select">
                                                 <option value="month" id="month">Month</option>
                                                 <option value="year" id="year">Year</option>
-                                                @*<option value="week" id="week">Week</option>*@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -121,10 +120,7 @@
                                                 <label>Select Month</label><br />
                                                 <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off"/>
                                             </div>
-                                            <div id="inputweekdiv" hidden="hidden">
-                                                <label>Select Week</label><br />
-                                                <input class="form-control" type="text" id="inputweek" placeholder="select week" autocomplete="off"/>
-                                            </div>
+                                            
                                         </div>
                                         <div class="col-md-3">
                                             <br />
@@ -274,7 +270,6 @@
             maxDate: new Date(cYear, cMonth, cDate)
         });
         $('#inputmonth').val(m + '/' + y);
-        //generateReport(m + '/' + y, 'month', id);
         $("#generateReport").prop("disabled", true);
 
         $('#selectEmployee').on('change', function () {
@@ -317,7 +312,6 @@
                 $('#inputyear').val(y);
                 $('#inputyeardiv').show();
                 $('#inputmonthdiv').hide();
-                $('#inputweekdiv').hide();
                 $('#inputyear').datetimepicker({
                     format: "YYYY",
                     maxDate: new Date(cYear, cMonth, cDate)
@@ -330,40 +324,13 @@
                 var cYear = date.getFullYear();
                 $('#inputmonthdiv').show();
                 $('#inputyeardiv').hide();
-                $('#inputweekdiv').hide();
                 $('#inputmonth').datetimepicker({
                     format: "MM/YYYY",
                     maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
-            else if (v == 'week') {
-                var fd = getSunday(new Date());
-                var ld = new Date();
-                ld.setDate(fd.getDate() + 6);
-                var firstDate = moment(fd, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(ld, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                var weekstring = firstDate + '-' + lastDate;
-                $("#inputweek").val(weekstring);
-                $('#inputmonthdiv').hide();
-                $('#inputyeardiv').hide();
-                $('#inputweekdiv').show();
-                $("#inputweek").datetimepicker({
-                    format: "MMM/DD/YYYY"
-                });
-            }
         });
-        function getSunday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day /*+ (day == 0 ? -6 : 1)*/; // adjust when day is sunday
-            return new Date(d.setDate(diff));
-        }
-        $('#inputweek').on('dp.change', function (e) {
-            var value = $("#inputweek").val();
-            var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-            var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-            $("#inputweek").val(firstDate + " - " + lastDate);
-        });
+
         $('#generateReport').on('click', function () {
             $('#attendanceReport').show();
             $('#tblExample').show();
@@ -372,35 +339,13 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
-                if (value == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Date)");
-                }
-                else {
-                    $("#wd").html("Total Working Days");
-                }
                 generateReport(value, 'year', id);
             }
 
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
-                var monthYear = value.split('/');
-                var y = monthYear[1];
-                var m = monthYear[0];
-                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
-                    $("#wd").html("Working Days (Till Date)");
-                }
-                else {
-                    $("#wd").html("Total Working Days");
-                }
                 generateReport(value, 'month', id);
-            }
-            else if (v == 'week') {
-                var value = $("#inputweek").val();
-                var firstDate = moment(value, "MMM/DD/YYYY").day(0).format("MMM/DD/YYYY");
-                var lastDate = moment(value, "MMM/DD/YYYY").day(6).format("MMM/DD/YYYY");
-                $("#inputweek").val(firstDate + " - " + lastDate);
-                generateReport(firstDate + " - " + lastDate, 'week', id);
             }
         });
     });
@@ -409,7 +354,7 @@
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
-                //data: { "date": value, "type": type, "id": id },
+                
                 beforeSend: function () {
                     $('.ajax-loader').css("visibility", "visible");
                 },
