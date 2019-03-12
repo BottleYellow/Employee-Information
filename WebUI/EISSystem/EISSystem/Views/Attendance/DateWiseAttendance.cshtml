@@ -112,6 +112,7 @@
                                             <th>Name</th>
                                             <th>Status</th>
                                             <th>Date</th>
+                                            <th>Day</th>
                                             <th>Clock In</th>
                                             <th>Clock Out</th>
                                             <th>Total Working Hours</th>
@@ -203,6 +204,14 @@
                     $('.ajax-loader').css("visibility", "visible");
                 },
                 success: function (data) {
+                    var weekday = new Array(7);
+                    weekday[0] = "Sunday";
+                    weekday[1] = "Monday";
+                    weekday[2] = "Tuesday";
+                    weekday[3] = "Wednesday";
+                    weekday[4] = "Thursday";
+                    weekday[5] = "Friday";
+                    weekday[6] = "Saturday";
                     var array = [];
                     var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
                     for (var i = 0; i < data.length; i++) {
@@ -230,7 +239,7 @@
                                 timeIn = '-';
                                 timeOut = '-';
                             }
-                        array.push([data[i].EmployeeCode, data[i].FullName, Status, date, timeIn, timeOut, data[i].TotalHours]);
+                        array.push([data[i].EmployeeCode, data[i].FullName, Status, date,weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
@@ -241,6 +250,7 @@
                             null,
                             null,
                             { "sType": "date" },
+                            null,
                             null,
                             null,
                             null

@@ -57,14 +57,13 @@
             <form id="cp1" method="post">
                 <div class="form-group">
                     <label>Select Employee</label>
-                    <select class="form-control" id="selectEmployee" name="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))">
-                        <option value="0">-- Select Employee --</option>
+                    <select data-size="5" class="form-control" id="selectEmployee" name="selectEmployee" data-live-search="true" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))">
+                       
                     </select>
                 </div>
                 <div class="form-group" id="LeaveType">
                     <label asp-for="LeaveType">Leave Type : </label>
-                    <select id="selectType" name="selectType" class="form-control" onchange="myFunction1();">
-                        <option value="0">-- Select Leave Type --</option>
+                    <select title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction1();"> 
                     </select>
                     <span asp-validation-for="LeaveType" class="text-danger"></span>
                 </div>
@@ -102,14 +101,10 @@
     </div>
 </div>
 
-
-
-
-
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-
 
 <script src="~/js/pages/ui/modals.js"></script>
 
@@ -117,6 +112,8 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    $('#selectEmployee').selectpicker();
+    $('#selectType').selectpicker();
     var avl = null;
     var availableLeaves = null;
     var d = new Date();
@@ -143,16 +140,17 @@
             type: 'GET',
             url: "@APIURL/api/LeaveCredit/GetCreditsByPerson/" + parseInt(id),
             success: function (data) {
-                $('#selectType').empty().append('<option value="0">-- Select Leave Type --</option>');
-                    $.each(data, function (data, value) {
-                        $('#selectType').append($("<option></option>").val(this.id).html(this.leaveType));
-                    });
-                },
-                error: function () {
-                   bootbox.alert("Something went wrong..Please try after sometime");
-                }
+                $('#selectType').empty();
+                $.each(data, function (data, value) {
+                    $('#selectType').append($("<option></option>").val(this.id).html(this.leaveType));
+                    $('#selectType').selectpicker('refresh');
+                });
+            },
+            error: function () {
+                bootbox.alert("Something went wrong..Please try after sometime");
+            }
 
-            });
+        });
 
     });
     $('#dateFrom').on('dp.hide', function (e) {

@@ -213,8 +213,8 @@ namespace EIS.WebApp.Controllers
             ViewBag.WeeklyOffs = GetWeeklyOffs();
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
-                        where p.EmployeeCode!=EmployeeCode
-                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+                        where p.EmployeeCode!=EmployeeCode && p.Role.Name!="Employee"
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data1;
             string stringData = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Person>(stringData);
@@ -234,7 +234,8 @@ namespace EIS.WebApp.Controllers
             ViewBag.Designations = rolesList;
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
-                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName };
+                        where p.EmployeeCode != person.EmployeeCode && p.Role.Name != "Employee"
+                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data1;
             person.UpdatedDate = DateTime.Now.Date;
             if (person.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");

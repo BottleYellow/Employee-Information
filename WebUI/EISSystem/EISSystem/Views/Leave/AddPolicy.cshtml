@@ -15,7 +15,7 @@
         width: 80%;
         height: 80%;
     }
-
+   
         .ajax-loader img {
             position: relative;
             top: 40%;
@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Credited to : </label>
-                    <select title="Select Employee" id="emps" name="emps" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="selectpicker form-control show-tick" data-live-search="true" multiple></select>
+                    <select title="Select Employee" id="emps" data-size="5" name="emps" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="selectpicker form-control show-tick" data-live-search="true" multiple></select>
                     <span asp-validation-for="LocationId" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -73,14 +73,14 @@
                 <div class="form-group required">
                     <label class="control-label">Valid From</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="ValidFrom" value="" id="validFrom" placeholder="select Date" autocomplete="off" />
+                        <input class="form-control" type="text" asp-for="ValidFrom" value="" id="validFrom" placeholder="Select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidFrom" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label">Valid To</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="ValidTo" value="" id="validTo" placeholder="select Date" autocomplete="off" />
+                        <input class="form-control" type="text" asp-for="ValidTo" value="" id="validTo" placeholder="Select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ValidTo" class="text-danger"></span>
                 </div>

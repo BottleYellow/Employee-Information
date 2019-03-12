@@ -8,12 +8,15 @@
         content: "*";
         position: relative;
     }
+
     * {
         font-family: Arial;
         font-style: normal
     }
 </style>
+<link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -25,7 +28,7 @@
                 <input type="hidden" asp-for="Id" value="0" />
                 <div class="form-group required">
                     <label class="control-label" asp-for="LocationId">Location : </label>
-                    <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                    <select id="did" data-size="5" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                         <option value="0">-- Select Location --</option>
                     </select>
                     <span asp-validation-for="LocationId" class="text-danger"></span>
@@ -33,8 +36,8 @@
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="Date" value="@DateTime.Now" id="inputdate" placeholder="select Date" autocomplete="off" />
-                     </div>
+                        <input class="form-control" type="text" asp-for="Date" id="inputdate"  placeholder="Select Date" autocomplete="off" />
+                    </div>
                     <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
@@ -54,15 +57,25 @@
 
     </div>
 </div>
+
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
 <script src="~/plugins/momentjs/moment.js"></script>
-<script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    $('#did').selectpicker();
+    var d = new Date();
+    d.setDate(d.getDate());
+    var defaultDate = moment().toDate();
+    $('#inputdate').datetimepicker({
+        format: "DD/MMM/YYYY",
+        defaultDate: d
+    });
     $('#btnSubmit').click(function () {
         var form = $("#cp");
         $.validator.unobtrusive.parse(form);
@@ -97,14 +110,14 @@
                             error: function (data) {
                                 $("#md").replaceWith(data.responseText);
                                 $('#inputdate').datetimepicker({
-                                    format: "DD-MMM-YYYY"
+                                    format: "DD/MMM/YYYY"
                                 });
                             }
                         });
                     }
                 }
             });
-            
+
         }
         return false;
     });

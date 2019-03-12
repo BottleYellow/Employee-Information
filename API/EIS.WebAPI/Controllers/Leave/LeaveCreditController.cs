@@ -26,7 +26,7 @@ namespace EIS.WebAPI.Controllers.Leave
         [HttpGet]
         public IEnumerable<LeaveCreditViewModel> GetLeaveCredits()
         {
-            IEnumerable<LeaveCreditViewModel> data = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true).Select(x => new LeaveCreditViewModel
+            IEnumerable<LeaveCreditViewModel> data = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.Person.IsActive==true).Select(x => new LeaveCreditViewModel
             {
                 Id = x.Id,
                 LocationName = x.Person.Location.LocationName,

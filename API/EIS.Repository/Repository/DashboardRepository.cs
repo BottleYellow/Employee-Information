@@ -349,7 +349,7 @@ namespace EIS.Repositories.Repository
             attendances = _dbContext.Attendances.Where(x => x.PersonId == personId);
             if (locationId != null)
             {
-                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId && x.IsActive==true);
+                holidays = _dbContext.Holidays.Where(x => x.LocationId == locationId && x.IsActive == true);
             }
 
             leaveList = _dbContext.LeaveRequests.Where(x => x.PersonId == personId);
@@ -358,7 +358,7 @@ namespace EIS.Repositories.Repository
             {
 
                 Attendance attendance = attendances.Where(x => x.DateIn == date).FirstOrDefault();
-
+                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (attendance != null)
                 {
                     CalendarData attendanceCalendarData = new CalendarData();
@@ -373,8 +373,6 @@ namespace EIS.Repositories.Repository
                     calendarDataList.Add(attendanceCalendarData);
                 }
 
-
-                Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (holiday != null)
                 {
                     CalendarData holidayCalanderData = new CalendarData();
@@ -415,7 +413,7 @@ namespace EIS.Repositories.Repository
                     }
                 }
                 LeaveRequest leaveRequest = leaveList.Where(x => x.FromDate <= date && x.ToDate >= date).FirstOrDefault();
-                if (holiday != null || date.DayOfWeek == DayOfWeek.Sunday || (person.WeeklyOff.Type == "AlternateSaturday" && date.DayOfWeek == DayOfWeek.Saturday))
+                if (attendance != null || holiday != null || date.DayOfWeek == DayOfWeek.Sunday || (person.WeeklyOff.Type == "AlternateSaturday" && date.DayOfWeek == DayOfWeek.Saturday))
                 {
                 }
                 else
@@ -445,12 +443,25 @@ namespace EIS.Repositories.Repository
                         }
                         calendarData.IsFullDay = true;
                         calendarDataList.Add(calendarData);
-
+                    }
+                    else
+                    {
+                        if (date.Date <= DateTime.Now.Date)
+                        {
+                            CalendarData absentCalanderData = new CalendarData();
+                            absentCalanderData.Title = "Absent";
+                            absentCalanderData.Description = "Absent";
+                            absentCalanderData.StartDate = date;
+                            absentCalanderData.EndDate = date;
+                            absentCalanderData.Color = "orangered";
+                            absentCalanderData.IsFullDay = true;
+                            calendarDataList.Add(absentCalanderData);
+                        }
 
                     }
                 }
             }
-                return calendarDataList;
+            return calendarDataList;
         }
 
         public string CalculateDate(DateTime date)
