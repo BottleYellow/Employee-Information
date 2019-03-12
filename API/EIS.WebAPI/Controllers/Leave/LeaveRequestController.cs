@@ -252,14 +252,29 @@ namespace EIS.WebAPI.Controllers
                 bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
 
-            //if (bodyforadmin != null)
-            //{
-            //    foreach (var pers in p)
-            //    {
-            //        new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
-            //    }
-            //}
-            //new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
+            if (bodyforadmin != null)
+            {
+                if (person.RoleId==4)
+                {
+                    foreach (var pers in p)
+                    {
+                        while(pers.Name!="HR")
+                        {
+                            new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    foreach (var pers in p)
+                    {
+                        new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+                    }
+                }
+                
+            }
+            new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
             _repository.LeaveCredit.Dispose();
         }
 
