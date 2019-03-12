@@ -169,7 +169,7 @@
                                         <div class="form-group">
                                             <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
                                             <div class="form-line">
-                                                <select asp-for="ReportingPersonId" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                                                <select asp-for="ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
                                                     <option value="0">-- Select --</option>
                                                 </select>
                                             </div>
@@ -225,7 +225,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="WorkingHours">Daily Working Hours : </label>
                                             <div class="form-line">
                                                 <input asp-for="WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
@@ -234,7 +234,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="IsOnProbation">Is On Probation? : </label>
                                             <div class="form-line">
                                                 <select id="ip" asp-for="IsOnProbation"  class="form-control show-tick" onchange="showPeriod(this.value);">
@@ -247,7 +247,7 @@
                                 </div>
                                 <div id="period" class="col-md-3" hidden>
                                     <div class="col-md-11 col-sm-9 col-xs-9">
-                                        <div class="form-group">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
                                             <div class="form-line">
                                                 <input id="ppm" asp-for="PropbationPeriodInMonth" class="form-control" />
