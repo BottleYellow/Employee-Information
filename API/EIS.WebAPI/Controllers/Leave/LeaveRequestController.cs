@@ -198,6 +198,9 @@ namespace EIS.WebAPI.Controllers
         {
             LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
             Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+            string Role = null;
+            if (person != null)
+                Role = _repository.Employee.GetDesignationById(person.RoleId).Name;
             List<GetAdminHrManager> p = _repository.Employee.getAdminHrManager();
             string To = person.EmailAddress;
             string subject = "EMS Leave Request";
@@ -252,14 +255,15 @@ namespace EIS.WebAPI.Controllers
                 bodyforadmin = "The request for 'cancelling the leave request' send by " + person.FullName + " from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been rejected successfully.";
             }
 
-            //if (bodyforadmin != null)
-            //{
-            //    foreach (var pers in p)
-            //    {
-            //        new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
-            //    }
-            //}
-            //new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
+            if (bodyforadmin != null)
+            {
+                foreach (var pers in p)
+                {
+                    if(pers.Name!=Role)
+                        new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
+                }
+            }
+            new EmailManager(_configuration, _repository).SendEmail(subject, body, To, null);
             _repository.LeaveCredit.Dispose();
         }
 

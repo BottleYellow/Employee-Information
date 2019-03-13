@@ -56,16 +56,14 @@
         <div class="modal-body">
             <form id="cp1" method="post">
                 <div class="form-group">
-                    <label>Select Employee</label>
-                    <select data-size="5" class="form-control" id="selectEmployee" name="selectEmployee" data-live-search="true" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))">
-                       
-                    </select>
+                    <label asp-for="PersonId">Select Employee</label>
+                    <select  title="Select Employee" data-size="5" class="form-control" id="selectEmployee" name="selectEmployee"  data-live-search="true" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))"></select>
+                    <span asp-validation-for="PersonId" class="text-danger"></span>
                 </div>
-                <div class="form-group" id="LeaveType">
-                    <label asp-for="LeaveType">Leave Type : </label>
-                    <select title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction1();"> 
-                    </select>
-                    <span asp-validation-for="LeaveType" class="text-danger"></span>
+                <div class="form-group" id="LeaveType" hidden>
+                    <label asp-for="TypeId">Leave Type : </label>
+                    <select  title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction1();"></select>
+                    <span asp-validation-for="TypeId" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -89,8 +87,8 @@
                 <input type="hidden" asp-for="LeaveType" id="tp1" />
                 <input type="hidden" asp-for="RequestedDays" id="trd1" />
                 <input type="hidden" asp-for="Available" id="av1" />
-                <input type="hidden" asp-for="TypeId" id="typeid1" />
-                <input type="hidden" asp-for="PersonId" id="psid1" />
+                <input type="hidden" asp-for="TypeId"  id="typeid1" />
+                <input type="hidden" asp-for="PersonId"   id="psid1" />
                 <div class="modal-footer">
                     <button id="btnAddLeave" name="btnAddLeave" type="button" class="btn btn-link waves-effect">Submit</button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
@@ -113,7 +111,6 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     $('#selectEmployee').selectpicker();
-    $('#selectType').selectpicker();
     var avl = null;
     var availableLeaves = null;
     var d = new Date();
@@ -132,8 +129,12 @@
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
-
+    $(document).ready(function () {
+        $("#btnAddLeave").prop("disabled", true);
+    });
+   
     $('#selectEmployee').on('change', function () {
+        $("#btnAddLeave").prop("disabled", true);
         $("#msg1").remove();
         var id = $('#selectEmployee').val();
         $.ajax({
@@ -145,6 +146,8 @@
                     $('#selectType').append($("<option></option>").val(this.id).html(this.leaveType));
                     $('#selectType').selectpicker('refresh');
                 });
+                $('#selectType').selectpicker();
+                $('#LeaveType').show();
             },
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
@@ -189,43 +192,48 @@
     });
     function myFunction1() {
         var id = $('#selectEmployee').val();
-            $("#msg1").remove();
+        $("#msg1").remove();
         var x = document.getElementById("selectType").value;
-            if (x == 0) {
-                $("#dateFrom").prop("disabled", true);
-                $("#dateTo").prop("disabled", true);
-                $("#reason").prop("disabled", true);
-                $("#btnAddLeave").prop("disabled", true);
-            }
-            else {
-                var pid = id;
-                $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-                    availableLeaves = data;
-                    avl = data;
-                    if (data == 0) {
-                        $("#LeaveType").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
-                    }
-                    else if (data == -1) {
-                        bootbox.alert({
-                            message: "Leaves are not credited in your account."
-                        });
-                    }
-                    else {
-                        var t = $("#selectType option:selected").text();
-                        $("#tp1").val(t);
-                        $("#psid1").val(pid);
-                        $("#typeid1").val(x);
-                        $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
-                        $("#dateFrom").removeAttr('disabled');
-                        $("#dateTo").removeAttr('disabled');
-                        $("#reason").removeAttr('disabled');
-                        $("#btnAddLeave").removeAttr('disabled');
-                    }
-                });
-            }
+        if (x == 0) {
+            $("#dateFrom").prop("disabled", true);
+            $("#dateTo").prop("disabled", true);
+            $("#reason").prop("disabled", true);
+            $("#btnAddLeave").prop("disabled", true);
+        }
+        else {
+            var pid = id;
+            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+                availableLeaves = data;
+                avl = data;
+                if (data == 0) {
+                    $("#LeaveType").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
+                }
+                else if (data == -1) {
+                    bootbox.alert({
+                        message: "Leaves are not credited in your account."
+                    });
+                }
+                else {
+                    var t = $("#selectType option:selected").text();
+                    $("#tp1").val(t);
+                    $("#psid1").val(pid);
+                    $("#typeid1").val(x);
+                    $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
+                    $("#dateFrom").removeAttr('disabled');
+                    $("#dateTo").removeAttr('disabled');
+                    $("#reason").removeAttr('disabled');
+                    $("#btnAddLeave").removeAttr('disabled');
+                }
+            });
+        }
     }
-            $('#btnAddLeave').click(function () {
-                var typeid = document.getElementById("selectType").value;
+    $('#btnAddLeave').click(function () {
+       
+        var form = $("#cp1");
+        $.validator.unobtrusive.parse(form);
+        if (form.valid()) {
+            var pid = $('#psid1').val();
+            var typeid = $("#selectType").val();
             var trd1 = document.getElementById("trd1").value;
             availableLeaves = availableLeaves - trd1;
             $("#av1").val(availableLeaves);
@@ -237,7 +245,7 @@
             var x = moment(document.getElementById("dateFrom").value).format('DD-MMM-YYYY');
             var y = moment(document.getElementById("dateTo").value).format('DD-MMM-YYYY');
             var result = null;
-            var pid =$('#selectEmployee').val();
+
             $.ajax({
                 url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y,
                 type: 'GET',
@@ -254,7 +262,7 @@
                                     });
                                     $("#btnAddLeave").prop("disabled", true);
                                 }
-                                else if (data > avl){
+                                else if (data > avl) {
                                     bootbox.alert({
                                         message: "You can request leave for only " + avl + " days."
                                     });
@@ -263,52 +271,48 @@
                                 else {
                                     $("#trd1").val(data);
                                     $("#av1").val(avl - data);
-                                    var form = $("#cp1");
-                                    $.validator.unobtrusive.parse(form);
-                                    if (form.valid()) {
-                                        var d = form.serialize();
-                                        bootbox.confirm({
-                                            message: "Are you sure you want to add Leave?",
-                                            buttons: {
-                                                confirm: {
-                                                    label: 'Yes',
-                                                    className: 'btn-success'
-                                                },
-                                                cancel: {
-                                                    label: 'No',
-                                                    className: 'btn-danger'
-                                                }
-                                            },
-                                            callback: function (result) {
-                                                if (result == true) {
-                                                    $.ajax({
-                                                        url: '@Url.Action("AddLeaveByHr", "Leave")',
-                                                        type: 'POST',
-                                                        data: d,
-                                                        beforeSend: function () {
-                                                            $('.ajax-loader').css("visibility", "visible");
-                                                        },
-                                                        success: function (data) {
-                                                            bootbox.alert({
-                                                                message: "Request Submitted Successfully!",
-                                                                callback: function () {
-                                                                    window.location.href = '@Url.Action("EmployeeLeaveHistory", "Leave")';
-                                                                }
-                                                            });
-                                                        },
-                                                        complete: function () {
-                                                            $('.ajax-loader').css("visibility", "hidden");
-                                                        },
-                                                        error: function (data) {
-                                                            alert(data.responseText);
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
 
-                                    return false;
+                                    var d = form.serialize();
+                                    bootbox.confirm({
+                                        message: "Are you sure you want to add Leave?",
+                                        buttons: {
+                                            confirm: {
+                                                label: 'Yes',
+                                                className: 'btn-success'
+                                            },
+                                            cancel: {
+                                                label: 'No',
+                                                className: 'btn-danger'
+                                            }
+                                        },
+                                        callback: function (result) {
+                                            if (result == true) {
+                                                $.ajax({
+                                                    url: '@Url.Action("AddLeaveByHr", "Leave")',
+                                                    type: 'POST',
+                                                    data: d,
+                                                    beforeSend: function () {
+                                                        $('.ajax-loader').css("visibility", "visible");
+                                                    },
+                                                    success: function (data) {
+                                                        bootbox.alert({
+                                                            message: "Request Submitted Successfully!",
+                                                            callback: function () {
+                                                                window.location.href = '@Url.Action("EmployeeLeaveHistory", "Leave")';
+                                                            }
+                                                        });
+                                                    },
+                                                    complete: function () {
+                                                        $('.ajax-loader').css("visibility", "hidden");
+                                                    },
+                                                    error: function (data) {
+                                                        alert(data.responseText);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+
                                 }
                             },
                             error: function (data) {
@@ -325,5 +329,7 @@
                 error: function (data) {
                 }
             });
-        });
+        }
+        return false;
+    });
 </script>

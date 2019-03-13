@@ -124,28 +124,27 @@
     $('#dateTo').datetimepicker({
         useCurrent: false,
         minDate: minDate,
-            format: "DD/MMM/YYYY",
-            defaultDate: d
-        });
-        $(document).ready(function () {
-            if ('@ViewBag.Status'=='NoData')
-            {
-                $('#requestDiv').hide();
-                bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
-                    location.href = '@Url.Action("ShowMyLeaves", "Leave")';
-                });
-            }
-            else {
-                $("#msg1").remove();
-                $("#type1").prop("selectedIndex", 1).change();
-                 var firstDate = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-                 var secondDate = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
-                 var diff = new Date(new Date(secondDate) - new Date(firstDate));
-                 var days = diff / 1000 / 60 / 60 / 24 + 1;
-                 $("#trd1").val(days);
-             }
-            $("#btnAddLeave").prop("disabled", true);
-        })
+        format: "DD/MMM/YYYY",
+        defaultDate: d
+    });
+    $(document).ready(function () {
+        if ('@ViewBag.Status' == 'NoData') {
+            $('#requestDiv').hide();
+            bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
+                location.href = '@Url.Action("ShowMyLeaves", "Leave")';
+            });
+        }
+        else {
+            $("#msg1").remove();
+            $("#type1").prop("selectedIndex", 1).change();
+            var firstDate = moment(document.getElementById("dateFrom").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var secondDate = moment(document.getElementById("dateTo").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(secondDate) - new Date(firstDate));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            $("#trd1").val(days);
+        }
+        $("#btnAddLeave").prop("disabled", true);
+    });
         $('#dateFrom').on('dp.hide', function (e) {
             var x = document.getElementById("dateFrom").value;
             var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");

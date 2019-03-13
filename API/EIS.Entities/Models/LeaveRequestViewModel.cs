@@ -8,7 +8,9 @@ namespace EIS.Entities.Models
     {
         public int Id { get; set; }
         public string LocationName { get; set; }
+        public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
+        public string EmployeeRole { get; set; }
         public string LeaveType { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

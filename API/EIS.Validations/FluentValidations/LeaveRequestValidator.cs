@@ -14,5 +14,7 @@ namespace EIS.Validations.FluentValidations
             _repositoryWrapper = repositoryWrapper;
             RuleFor(x => x.Reason).NotNull().WithMessage("Please give reason for leave");
         }
+      
     }
+
 }
