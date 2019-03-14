@@ -309,8 +309,11 @@
     var locationNameBaner = "";
     var locationNameKondhwa = "";
     $(document).ready(function () {
-        if ('@TempData["BirhdayAlert"]' != '') {
-            bootbox.alert('<h4>@TempData["BirhdayAlert"]</h4>');
+        if ('@TempData["BirthdayAlert"]' != '') {
+            bootbox.alert('<h4>@TempData["BirthdayAlert"]</h4>');
+        }
+        if ('@TempData["EmployeeBirthdayAlert"]' != '') {
+         bootbox.alert('<h4>@TempData["EmployeeBirthdayAlert"]</h4><img src="@MyHttpContext.AppBaseUrl/gif/birthday.jpg" style="width:400px" /> ');
         }
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();

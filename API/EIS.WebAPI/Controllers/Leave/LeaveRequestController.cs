@@ -131,8 +131,9 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
+                string OldStatus = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId).Status;
                 string messsege = _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
-                SendMail(RequestId, Status);
+                SendMail(RequestId, Status,OldStatus);
                 return Ok(messsege);
             }
             return NotFound();
@@ -177,7 +178,7 @@ namespace EIS.WebAPI.Controllers
                 msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
             }
 
-            SendMail(leave.Id, "Pending");
+            SendMail(leave.Id, "Pending",null);
             return Ok(msg);
         }
 
@@ -194,7 +195,7 @@ namespace EIS.WebAPI.Controllers
             return Ok(leave);
         }
 
-        public void SendMail(int RequestId, string status)
+        public void SendMail(int RequestId, string status,string OldStatus)
         {
             LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
             Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
@@ -208,11 +209,26 @@ namespace EIS.WebAPI.Controllers
             string bodyforadmin = null;
             if (status == "Pending")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
-                body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
-                body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
-                body += "Requested Days:" + leave.RequestedDays;
-                bodyforadmin = person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
+                if (OldStatus == "Approved")
+                {
+                    body += "Your Approved leave request is currently on hold and current status is Pending.\n";
+                    body += "Date From :" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Date To :" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Requested Days :" + leave.RequestedDays;
+                    bodyforadmin = "Approved leave request of " + person.FullName + " is currently on hold and curent status is Pending.\n";
+                    bodyforadmin += "Leave Details : \n";
+                    bodyforadmin += "Date From :" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    bodyforadmin += "Date To :" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    bodyforadmin += "Requested Days :" + leave.RequestedDays;
+                }
+                else
+                {
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
+                    body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Requested Days:" + leave.RequestedDays;
+                    bodyforadmin = person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
+                }
             }
             else if (status == "Reject")
             {
@@ -234,7 +250,7 @@ namespace EIS.WebAPI.Controllers
             }
             else if (status == "Cancel")
             {
-                if (leave.Status == "Pending")
+                if (OldStatus == "Pending")
                 {
                     body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been cancelled";
                 }

@@ -73,6 +73,7 @@ namespace EIS.WebAPI
             services.AddHangfire(config =>
                 config.UseSqlServerStorage(Configuration.GetConnectionString("HangFireConnection")));
             services.AddScoped<IGenerateMonthlyAttendanceReport, GenerateMonthlyAttendanceReport>();
+            services.AddScoped<ICheckEmployeeBirthday, CheckEmployeeBirthday>();
 
         }
 
@@ -93,6 +94,8 @@ namespace EIS.WebAPI
             }
             RecurringJob.AddOrUpdate<IGenerateMonthlyAttendanceReport>(
        monthlyReport => monthlyReport.EmailSentToAllEmployee(), Cron.Monthly(1,11,11),TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<ICheckEmployeeBirthday>(
+       birthdayCheck => birthdayCheck.EmailSentForBirthday(), Cron.Daily(10), TimeZoneInfo.Local);
             loggerFactory.AddSerilog();
             app.UseWebApiExceptionHandler();
             app.UseAuthentication();
