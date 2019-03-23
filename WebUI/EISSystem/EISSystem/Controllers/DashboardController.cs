@@ -44,14 +44,14 @@ namespace EIS.WebApp.Controllers
         public IActionResult HRDashboard()
         {
             ViewBag.Locations = GetLocations();            
-            if(TempData["BirhdayAlert"]!=null)
+            if(TempData["BirthdayAlert"]!=null)
             {
                 int day = DateTime.Now.Day;
                 int month = DateTime.Now.Month;
                 HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/BirthdayData/" + day + "/" + month);
                 string stringData = response.Content.ReadAsStringAsync().Result;
                 List<Person> birthDayperson = JsonConvert.DeserializeObject<List<Person>>(stringData);
-                string person = Convert.ToString(TempData["BirhdayAlert"]);
+                string person = Convert.ToString(TempData["BirthdayAlert"]);
                 if (birthDayperson.Count > 0)
                 {
                     foreach (var p in birthDayperson)
@@ -59,12 +59,24 @@ namespace EIS.WebApp.Controllers
                         person += p.FullName + ",";
                     }
                     person= person.Remove(person.Length - 1, 1) + ".";
-                    TempData["BirhdayAlert"] = person;
+                    TempData["BirthdayAlert"] = person;
                 }
                 else
                 {
-                    TempData["BirhdayAlert"] = null;
-                }            
+                    TempData["BirthdayAlert"] = null;
+                }
+                string id = GetSession().PersonId;
+                HttpResponseMessage httpResponse = _service.GetResponse(ApiUrl + "api/Dashboard/EmployeeBirthday/" + day + "/" + month+"/"+id);
+                string stringEmployeeData = httpResponse.Content.ReadAsStringAsync().Result;
+                string employeeBirthdayperson = JsonConvert.DeserializeObject<string>(stringEmployeeData);
+                if(!string.IsNullOrEmpty(employeeBirthdayperson))
+                {
+                    TempData["EmployeeBirthdayAlert"] = "Birthday wishes from Aadyam Consultant";
+                }
+                else
+                {
+                    TempData["EmployeeBirthdayAlert"] = null;
+                }
             }            
             return View();
         }
@@ -80,6 +92,23 @@ namespace EIS.WebApp.Controllers
         public IActionResult ManagerDashboard()
         {
             ViewBag.Locations = GetLocations();
+            if (TempData["BirthdayAlert"] != null)
+            {
+                int day = DateTime.Now.Day;
+                int month = DateTime.Now.Month;
+                string id = GetSession().PersonId;
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/EmployeeBirthday/" + day + "/" + month+"/"+id);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                string birthDayperson = JsonConvert.DeserializeObject<string>(stringData);
+                if (!string.IsNullOrEmpty(birthDayperson))
+                {
+                    TempData["BirthdayAlert"] = "Happy Birthday "+birthDayperson;
+                }
+                else
+                {
+                    TempData["BirthdayAlert"] = null;
+                }
+            }
             return View();
         }
         [HttpPost]
@@ -92,6 +121,23 @@ namespace EIS.WebApp.Controllers
         }
         public IActionResult EmployeeDashboard()
         {
+            if (TempData["BirthdayAlert"] != null)
+            {
+                int day = DateTime.Now.Day;
+                int month = DateTime.Now.Month;
+                string id = GetSession().PersonId;
+                HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/EmployeeBirthday/" + day + "/" + month+"/"+id);
+                string stringData = response.Content.ReadAsStringAsync().Result;
+                string birthDayperson = JsonConvert.DeserializeObject<string>(stringData);
+                if (!string.IsNullOrEmpty(birthDayperson))
+                {
+                    TempData["BirthdayAlert"] = "Birthday wishes from Aadyam Consultant";
+                }
+                else
+                {
+                    TempData["BirthdayAlert"] = null;
+                }
+            }
             return View();
         }
 

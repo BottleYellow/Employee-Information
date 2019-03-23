@@ -309,6 +309,9 @@
     var locationNameBaner = "";
     var locationNameKondhwa = "";
     $(document).ready(function () {
+         if ('@TempData["BirthdayAlert"]' != '') {
+             bootbox.alert('<h4>@TempData["BirthdayAlert"]</h4><img src="@MyHttpContext.AppBaseUrl/gif/birthday.jpg" style="width:400px" /> ');
+        }
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();

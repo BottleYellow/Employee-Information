@@ -28,11 +28,9 @@ namespace EIS.WebAPI.Services
     public class GenerateMonthlyAttendanceReport : IGenerateMonthlyAttendanceReport
     {
         private readonly IRepositoryWrapper _repository;
-
         internal int TenantId = 0;
         protected ApplicationDbContext _dbContext;
         public readonly IConfiguration _configuration;
-        private static object Lock = new object();
 
         public GenerateMonthlyAttendanceReport(IRepositoryWrapper repository, ApplicationDbContext dbContext, IConfiguration configuration)
         {
