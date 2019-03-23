@@ -86,6 +86,22 @@ namespace EIS.Entities.SP
         public Nullable<int> AdjustedLeaves { get; set; }
         public Nullable<int> LeavesWithoutPay { get; set; }
     }
+    //New Implementation
+    public class SP_GetAttendanceCountReport_New
+    {
+        [Key]
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<int> WorkingDay { get; set; }
+        public Nullable<int> PresentDays { get; set; }
+        public Nullable<int> TotalGrantedLeaves { get; set; }
+        public Nullable<int> TotalLeavesTaken { get; set; }
+        public Nullable<int> ProposedLeaves { get; set; }
+        public string BalanceLeaves { get; set; } 
+        public Nullable<int> AdjustedLeaves { get; set; }
+        public Nullable<int> LeavesWithoutPay { get; set; }
+    }
     public class Attendance_Report
     {
         public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
