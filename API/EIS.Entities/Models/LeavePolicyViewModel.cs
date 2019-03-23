@@ -9,6 +9,7 @@ namespace EIS.Entities.Models
         public string LocationName { get; set; }
         public string LeaveType { get; set; }
         public int Validity { get; set; }
+        public bool IsPaid { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
         public bool ActiveStatus { get; set; }

@@ -94,6 +94,7 @@
                                 <tr>
                                     @*<th>Location</th>*@
                                     <th>Leave type</th>
+                                    <th>Paid/Unpaid</th>
                                     <th>Validity</th>
                                     <th>Valid From</th>
                                     <th>Valid To</th>
@@ -133,8 +134,13 @@
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu "><li><a onclick="fun(' + data[i].Id + ');">Edit</a></li></ul></div>';
                     } else {
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu "><li><a class="active" id=' + data[i].Id + '>Activate</a></li></ul></div>';
-                }
-                    array.push([data[i].LeaveType, data[i].Validity,validFrom, validTo, action])
+                    }
+                    var isPaid = null;
+                    if (data[i].IsPaid == true)
+                        isPaid = "Paid";
+                    else
+                        isPaid = "Unpaid";
+                    array.push([data[i].LeaveType, isPaid, data[i].Validity, validFrom, validTo, action])
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({

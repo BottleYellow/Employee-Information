@@ -10,7 +10,7 @@ namespace EIS.Entities.SP
     {
         public List<SP_AdminDashboard> sP_AdminDashboards { get; set; }
         public SP_AdminDashboardCount sP_AdminDashboardCount { get; set; }
-        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; } 
+        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; }
     }
 
     public class SP_AdminDashboard
@@ -68,11 +68,34 @@ namespace EIS.Entities.SP
         public Nullable<int> WorkingDay { get; set; }
         public Nullable<int> NoLeave { get; set; }
         public Nullable<int> AbsentDay { get; set; }
+        public Nullable<int> ExtraWorkingDays { get; set; }
+    }
+    
+    //New Implementation
+    public class SP_GetAttendanceCountReport_New
+    {
+        [Key]
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<int> WorkingDay { get; set; }
+        public Nullable<int> PresentDays { get; set; }
+        public Nullable<int> TotalGrantedLeaves { get; set; }
+        public Nullable<int> TotalLeavesTaken { get; set; }
+        public Nullable<int> ProposedLeaves { get; set; }
+        public string BalanceLeaves { get; set; } 
+        public Nullable<int> AdjustedLeaves { get; set; }
+        public Nullable<int> LeavesWithoutPay { get; set; }
     }
     public class Attendance_Report
     {
         public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
     }
+    public class Attendance_Report_New
+    {
+        public List<SP_GetAttendanceCountReport_New> sP_GetAttendanceCountReportsNew { get; set; }
+    }
+
 
     public class GetAdminHrManager
     {

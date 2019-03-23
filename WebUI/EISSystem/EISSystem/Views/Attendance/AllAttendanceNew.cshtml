@@ -61,13 +61,6 @@
             font-family: Arial;
             font-style: normal
         }
-        .body #headeropt {
-            padding: 10px;
-        }
-
-        #headerPnl {
-            padding: 10px;
-        }
     </style>
 </head>
 <body>
@@ -82,7 +75,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <div class="row col-md-12" id="headeropt">
+                        <div class="row col-md-12">
                             <div class="col-md-3">
                                 <label>Select Location</label>
                                 <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
@@ -92,8 +85,8 @@
                             <div class="col-md-3">
                                 <label>Select Type Of Reports</label>
                                 <select class="form-control" id="select">
-                                    <option value="year" id="year">Year</option>
-                                    <option selected value="month" id="month">Month</option>
+                                    <option selected value="year" id="year">Year</option>
+                                    @*<option value="month" id="month">Month</option>*@
                                     @*<option value="week" id="week">Week</option>*@
                                 </select>
                             </div>
@@ -114,7 +107,7 @@
                         </div>
                         <div>
                             <div>
-                                <div class="row" id="headerPnl">
+                                <div class="row">
                                     <div id="baner" hidden>
                                         <div class="col-md-3">
                                             <div id="pnlBaner" class="panel panel-primary">
@@ -146,9 +139,14 @@
                                     <tr>
                                         <th>Location</th>
                                         <th>Name</th>
-                                        <th>Present Days</th>
-                                        <th>Proposed Leaves</th>
                                         <th>Total Working Days</th>
+                                        <th>Present Days</th>
+                                        <th>Total Granted Leaves</th>
+                                        <th>Total Leaves Taken</th>
+                                        <th>Proposed Leaves</th>
+                                        <th>Balance Leaves</th>
+                                        <th>Adjusted Leaves</th>
+                                        <th>Leaves without pay</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -186,28 +184,42 @@
         $('#kondhwaPanelHeading').html(data[0].LocationName);
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
+        //var date = new Date();
+        //var cMonth = date.getMonth();
+        //var cDate = date.getDate();
+        //var cYear = date.getFullYear();
+        //$('#inputmonth').datetimepicker({
+        //    format: "MM/YYYY",
+        //    maxDate: new Date(cYear, cMonth, cDate)
+        //});
+        var y = new Date().getFullYear();
+        //var ld = new Date(y, m, 0).getDate();
+
+        //$('#inputmonth').val(m + '/' + y);
         var date = new Date();
         var cMonth = date.getMonth();
         var cDate = date.getDate();
         var cYear = date.getFullYear();
-        $('#inputmonth').datetimepicker({
-            format: "MM/YYYY",
+        $('#inputyear').val(y);
+        $('#inputyeardiv').show();
+        $('#inputmonthdiv').hide();
+        $('#inputyear').datetimepicker({
+            format: "YYYY",
             maxDate: new Date(cYear, cMonth, cDate)
         });
-        var y = new Date().getFullYear();
-        var ld = new Date(y, m, 0).getDate();
-
-        $('#inputmonth').val(m + '/' + y);
         var location = $('#locations').val();
-        var alltwoffk = calWeeklyOffMonthly(m, y);
-        var alltwoffb = calWeeklyOffMonthly(m, y);
+        //var alltwoffk = calWeeklyOffMonthly(m, y);
+        //var alltwoffb = calWeeklyOffMonthly(m, y);
         $('#baner').show();
         $('#kondhwa').show();
-        $('#alltwoffk').text('Weekly Off : ' + alltwoffk);
-        $('#alltwoffb').text('Weekly Off : ' + (alltwoffb + 2));
+        var weeklyoff = calWeeklyOffYearly(y);
+        $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+        $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
+        //$('#alltwoffk').text('Weekly Off : ' + alltwoffk);
+        //$('#alltwoffb').text('Weekly Off : ' + (alltwoffb + 2));
         $.ajax({
             type: "GET",
-            url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/" + y + "/" + location,
+            url: "@MyHttpContext.APIBaseURL/api/Holiday/" + y + "/" + location,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -223,7 +235,7 @@
                 });
                 $('#allthb').html('Holidays : ' + b);
                 $('#allthk').html('Holidays : ' + k);
-                generateReport(m + '/' + y, 'month', location);
+                generateReport(y, 'year', location);
             },
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
@@ -359,7 +371,7 @@
 
         function generateReport(value, type, location) {
             $.ajax({
-                url: '@Url.Action("AllAttendance","Attendance")',
+                url: '@Url.Action("AllAttendanceNew","Attendance")',
                 type: "POST",
                 datatype: "json",
                 data: { "date": value, "type": type, "location": location },
@@ -368,8 +380,8 @@
                 },
                 success: function (data) {
                     var array = [];
-                        for (var i = 0; i < data.sP_GetAttendanceCountReports.length; i++) {
-                            array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName, data.sP_GetAttendanceCountReports[i].PresentDays, data.sP_GetAttendanceCountReports[i].NoLeave, data.sP_GetAttendanceCountReports[i].WorkingDay]);
+                        for (var i = 0; i < data.sP_GetAttendanceCountReportsNew.length; i++) {
+                            array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken, data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190211051925_EmployeeData")]
+    [Migration("20190323060403_EmployeeData")]
     partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,6 +276,9 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime?>("DateOut")
                         .HasColumnType("date");
 
+                    b.Property<string>("EmployeeCode")
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<int?>("PersonId")
@@ -382,6 +385,8 @@ namespace EIS.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<bool?>("IsOnProbation");
+
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("date");
 
@@ -403,6 +408,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("PanCard")
                         .HasColumnType("varchar(10)");
+
+                    b.Property<int?>("PropbationPeriodInMonth");
 
                     b.Property<int>("ReportingPersonId");
 
@@ -426,6 +433,10 @@ namespace EIS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("WeeklyOffId");
+
+                    b.Property<TimeSpan?>("WorkingHours");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmailAddress")
@@ -437,6 +448,8 @@ namespace EIS.Data.Migrations
                         .IsUnique();
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("WeeklyOffId");
 
                     b.HasIndex("TenantId", "EmployeeCode")
                         .IsUnique();
@@ -507,6 +520,30 @@ namespace EIS.Data.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("tblHolidays","LMS");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Hoildays.WeeklyOffs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("UpdatedBy");
+
+                    b.Property<DateTime?>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblWeeklyOffs","LMS");
                 });
 
             modelBuilder.Entity("EIS.Entities.Leave.EmployeeLeaves", b =>
@@ -700,6 +737,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<bool>("IsPaid");
+
                     b.Property<string>("LeaveType")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
@@ -811,6 +850,63 @@ namespace EIS.Data.Migrations
                     b.ToTable("tblConfiguration","LMS");
                 });
 
+            modelBuilder.Entity("EIS.Entities.SP.SP_EmployeeLeaveRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AppliedDate");
+
+                    b.Property<string>("ApprovedBy");
+
+                    b.Property<DateTime>("FromDate");
+
+                    b.Property<string>("LeaveType");
+
+                    b.Property<string>("Reason");
+
+                    b.Property<double>("RequestedDays");
+
+                    b.Property<string>("Status");
+
+                    b.Property<DateTime>("ToDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_EmployeeLeaveRequest");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetAttendanceCountReport_New", b =>
+                {
+                    b.Property<string>("EmployeeCode")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AdjustedLeaves");
+
+                    b.Property<string>("BalanceLeaves");
+
+                    b.Property<string>("EmployeeName");
+
+                    b.Property<int?>("LeavesWithoutPay");
+
+                    b.Property<string>("LocationName");
+
+                    b.Property<int?>("PresentDays");
+
+                    b.Property<int?>("ProposedLeaves");
+
+                    b.Property<int?>("TotalGrantedLeaves");
+
+                    b.Property<int?>("TotalLeavesTaken");
+
+                    b.Property<int?>("WorkingDay");
+
+                    b.HasKey("EmployeeCode");
+
+                    b.ToTable("_sp_GetAttendanceCountReportNew");
+                });
+
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -908,6 +1004,10 @@ namespace EIS.Data.Migrations
                         .WithMany("Persons")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EIS.Entities.Hoildays.WeeklyOffs", "WeeklyOff")
+                        .WithMany("Employees")
+                        .HasForeignKey("WeeklyOffId");
                 });
 
             modelBuilder.Entity("EIS.Entities.Hoildays.Holiday", b =>

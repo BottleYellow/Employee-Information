@@ -42,10 +42,14 @@ namespace EIS.WebAPI.Controllers.Leave
         }
         [Route("GetCreditsByPerson/{PersonId}")]
         [HttpGet]
-        public List<LeaveCredit> GetLeaveCredits([FromRoute]int PersonId)
+        public List<LeaveCredit> GetLeaveCreditsByPerson([FromRoute]int PersonId)
         {
             List<LeaveCredit> credits = new List<LeaveCredit>();
-                credits = _repository.LeaveCredit.FindAll().Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0).ToList();
+            credits = _repository.LeaveCredit.FindAll().Include(x=>x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available>0 && x.LeaveRule.IsPaid==true).ToList();
+            if (credits.Count == 0)
+            {
+                credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+            }
            
             return credits;
         }

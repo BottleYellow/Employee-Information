@@ -14,6 +14,7 @@
         .label-OnLeave {
             background-color: violet;
         }
+
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
@@ -38,7 +39,7 @@
             float: right;
         }
 
-       
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -52,11 +53,13 @@
                 top: 45%;
                 left: 45%;
             }
+
         table.dataTable td {
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -86,17 +89,17 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FullName"))">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
                                             <option value="0">All</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                            <label>From Date</label>
-                                            <input class="form-control" type="text" id="fromdate" autocomplete="off"/>                                      
+                                        <label>From Date</label>
+                                        <input class="form-control" type="text" id="fromdate" autocomplete="off" />
                                     </div>
-                                    <div class="col-md-3">                                        
-                                            <label>To Date</label>
-                                            <input class="form-control" type="text" id="todate" autocomplete="off"/>
+                                    <div class="col-md-3">
+                                        <label>To Date</label>
+                                        <input class="form-control" type="text" id="todate" autocomplete="off" />
                                     </div>
                                     <div class="col-md-3">
                                         <br />
@@ -109,27 +112,27 @@
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                                <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Employee Code</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                            <th>Day</th>
-                                            <th>Clock In</th>
-                                            <th>Clock Out</th>
-                                            <th>Total Working Hours</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                            <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Code</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Clock In</th>
+                                        <th>Clock Out</th>
+                                        <th>Total Working Hours</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body> 
+</body>
 
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
@@ -160,7 +163,7 @@
             format: "DD-MMM-YYYY",
             useCurrent: false,
             maxDate: maxDate,
-            defaultDate: d           
+            defaultDate: d
         });
         $("#todate").datetimepicker({
             format: "DD-MMM-YYYY",
@@ -176,7 +179,7 @@
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
                 },
                 error: function () {
@@ -188,7 +191,7 @@
         var fromValue = $("#fromdate").val();
         var toValue = $("#todate").val();
         generateReport(fromValue, toValue, 0, 0);
-        
+
         $('#generateReport').on('click', function () {
             var loc = $('#locations').val();
             var id = $('#selectEmployee').val();
@@ -271,7 +274,7 @@
                     $('.ajax-loader').css("visibility", "hidden");
                 }
             });
-        }      
+        }
     });
 
 

@@ -43,6 +43,13 @@ namespace EIS.WebAPI.Controllers.Leave
         {
             return _repository.LeaveRules.FindByCondition(x => x.Id == Id);
         }
+        [Route("GetPaidStatus/{Id}")]
+        [HttpGet]
+        public IActionResult GetPaidStatus([FromRoute]int Id)
+        {
+            bool isPaid = _repository.LeaveRules.FindByCondition(x => x.Id == Id).IsPaid;
+            return Ok(isPaid);
+        }
         [DisplayName("leave Policies")]
         [HttpGet]
         public ActionResult GetLeavePolicies()
@@ -55,7 +62,8 @@ namespace EIS.WebAPI.Controllers.Leave
                 LocationName = x.Location.LocationName,
                 ValidFrom = x.ValidFrom,
                 ValidTo = x.ValidTo,
-                Validity = x.Validity
+                Validity = x.Validity,
+                IsPaid = x.IsPaid
             }).ToList();
             return Ok(LeavePolicyData);
         }
@@ -104,18 +112,21 @@ namespace EIS.WebAPI.Controllers.Leave
             {
                 policy.TenantId = TenantId;
                 _repository.LeaveRules.UpdateAndSave(policy);
-                List<LeaveCredit> Credits = _repository.LeaveCredit.FindAllByCondition(x => x.LeaveId == policy.Id).ToList();
-                foreach (var Credit in Credits)
+                if (policy.IsPaid == true)
                 {
-                    float diff = Credit.AllotedDays - Credit.Available;
-                    Credit.LeaveType = policy.LeaveType;
-                    Credit.ValidFrom = policy.ValidFrom;
-                    Credit.ValidTo = policy.ValidTo;
-                    Credit.AllotedDays = policy.Validity;
-                    Credit.Available = Credit.AllotedDays - _repository.LeaveRules.GetLeaveCount(Credit.PersonId, Credit.LeaveId);
-                    Credit.UpdatedDate = policy.UpdatedDate;
-                    Credit.UpdatedBy = policy.UpdatedBy;
-                    _repository.LeaveCredit.UpdateAndSave(Credit);
+                    List<LeaveCredit> Credits = _repository.LeaveCredit.FindAllByCondition(x => x.LeaveId == policy.Id).ToList();
+                    foreach (var Credit in Credits)
+                    {
+                        float diff = Credit.AllotedDays - Credit.Available;
+                        Credit.LeaveType = policy.LeaveType;
+                        Credit.ValidFrom = policy.ValidFrom;
+                        Credit.ValidTo = policy.ValidTo;
+                        Credit.AllotedDays = policy.Validity;
+                        Credit.Available = Credit.AllotedDays - _repository.LeaveRules.GetLeaveCount(Credit.PersonId, Credit.LeaveId);
+                        Credit.UpdatedDate = policy.UpdatedDate;
+                        Credit.UpdatedBy = policy.UpdatedBy;
+                        _repository.LeaveCredit.UpdateAndSave(Credit);
+                    }
                 }
                 _repository.LeaveRules.Dispose();
                 return Ok(policy);

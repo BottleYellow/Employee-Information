@@ -2,7 +2,7 @@
 @model IEnumerable<EIS.Entities.Employee.Attendance>
 
 <style type="text/css">
-   div .panel-primary {
+    div .panel-primary {
         text-align: center
     }
 
@@ -28,6 +28,7 @@
     #inputyear, #inputmonth, #inputweek {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -41,14 +42,24 @@
             top: 70%;
             left: 40%;
         }
+
     * {
         font-family: Arial;
         font-style: normal
     }
+
     table.dataTable td {
         padding: 3px 10px;
         width: 1px;
         white-space: nowrap;
+    }
+
+    .row #headeropt {
+        padding: 0px;
+    }
+
+    .body #report {
+        margin-left: 15px;
     }
 </style>
 <head>
@@ -76,10 +87,10 @@
                         <div>
                             <div class="row col-md-12">
                                 <div class="col-md-9">
-                                    <div class="row">
+                                    <div class="row" id="headeropt">
                                         <div class="col-md-4 col-sm-6">
                                             <label>Select Type Of Reports</label>
-                                            <select class="form-control" id="select" style="width:200px">
+                                            <select class="form-control" id="select">
                                                 <option value="year" id="year">Year</option>
                                                 <option value="month" selected id="month">Month</option>
                                             </select>
@@ -87,11 +98,11 @@
                                         <div class="col-md-4 col-sm-6">
                                             <div id="inputyeardiv" hidden="hidden">
                                                 <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" style="width:200px" autocomplete="off" />
+                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
                                             </div>
                                             <div id="inputmonthdiv">
                                                 <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" style="width:200px" autocomplete="off"/>
+                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6">
@@ -169,17 +180,17 @@
                                     </div>
                                 </div>
                             </div>
-                                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Time In</th>
-                                            <th>Time Out</th>
-                                            <th>Total Hours</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Time In</th>
+                                        <th>Time Out</th>
+                                        <th>Total Hours</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -212,7 +223,7 @@
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
         var y = new Date().getFullYear();
-        
+
         $('#inputmonth').datetimepicker({
             format: "MM/YYYY",
             maxDate: new Date(cYear, cMonth, cDate)
@@ -239,11 +250,11 @@
                 $('#inputmonth').datetimepicker({
                     maxDate: new Date(cYear, cMonth, cDate),
                     format: "MM/YYYY"
-                    
+
                 });
             }
         });
-        
+
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
             if (v == 'year') {
@@ -256,7 +267,7 @@
                 $("#inputmonth").val(value);
                 generateReport(value, 'month');
             }
-            
+
         });
 
         function generateReport(value, type) {
@@ -330,7 +341,7 @@
                 }
             });
 
-           
+
         }
     });
 </script>

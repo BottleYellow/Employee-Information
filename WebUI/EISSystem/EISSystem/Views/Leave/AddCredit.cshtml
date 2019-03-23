@@ -1,6 +1,21 @@
-﻿@using EIS.WebApp.Services
+﻿@using EIS.Entities.Enums;
+@using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
 @using EIS.Entities.Leave
 @model LeaveCredit
+@{
+    string APIURL = MyHttpContext.APIBaseURL;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
+}
 <!-- Modal -->
 <style type="text/css">
     .form-group.required .control-label:after {
@@ -22,6 +37,7 @@
             top: 40%;
             left: 40%;
         }
+
     * {
         font-family: Arial;
         font-style: normal
@@ -43,21 +59,20 @@
             <form name="cp" id="cp" asp-action="AddCredit" asp-controller="Leave" method="post">
                 <input type="hidden" asp-for="Id" value="0" />
                 @*<div class="form-group required">
-                    <label class="control-label">Location : </label>
-                    <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
-                        <option value="0">-- Select Location --</option>
-                    </select>
-                    <span id="msg" class="text-danger"></span>
-                </div>*@
+                        <label class="control-label">Location : </label>
+                        <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                            <option value="0">-- Select Location --</option>
+                        </select>
+                        <span id="msg" class="text-danger"></span>
+                    </div>*@
                 <div class="form-group required">
                     <label class="control-label" asp-for="PersonId">Select Employee</label>
-                    <select id="emp" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" asp-for="PersonId" class="form-control show-tick" data-live-search="true">
-                    </select>
+                    <select id="emp" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" asp-for="PersonId" class="form-control show-tick" data-live-search="true"></select>
                     <span asp-validation-for="PersonId" class="text-danger"></span>
                 </div>
                 <div class="form-group required">
                     <label class="control-label" asp-for="LeaveId">Leave Type</label>
-                    <select id="type" data-size="5" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" asp-for="LeaveId" class="form-control show-tick">
+                    <select id="type" data-size="5" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" asp-for="LeaveId" class="form-control show-tick" onchange="GetStatus();">
                         <option value="0">-- Select Leave Type --</option>
                     </select>
                     <span asp-validation-for="LeaveId" class="text-danger"></span>
@@ -65,7 +80,7 @@
                 <div class="form-group required">
                     <label class="control-label">Days to be alloted</label>
                     <div class="form-line">
-                        <input asp-for="AllotedDays" maxlength="2" class="form-control" />
+                        <input id="val" asp-for="AllotedDays" maxlength="2" class="form-control" />
                     </div>
                     <span asp-validation-for="AllotedDays" class="text-danger"></span>
                 </div>
@@ -115,6 +130,24 @@
         format: "DD/MMM/YYYY",
         defaultDate: d
     });
+    function GetStatus() {
+        var type = $('#type').val();
+        $.ajax({
+            url: "@APIURL/api/LeavePolicy/GetPaidStatus/" + type,
+            type: 'GET',
+            success: function (data) {
+                if (data == false) {
+                    $("#val").prop("disabled", true);
+                    $("#val").val("0");
+                 }
+                else {
+                    $("#val").removeAttr('disabled');
+                 }
+            },
+            error: function (data) {
+            }
+        });
+    }
     @*function loadEmployees(loc,eid){
          $.ajax({
                 type: 'GET',

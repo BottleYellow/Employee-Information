@@ -12,6 +12,47 @@ namespace EIS.Data.Migrations
                 name: "LMS");
 
             migrationBuilder.CreateTable(
+                name: "_sp_EmployeeLeaveRequest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    LeaveType = table.Column<string>(nullable: true),
+                    FromDate = table.Column<DateTime>(nullable: false),
+                    ToDate = table.Column<DateTime>(nullable: false),
+                    RequestedDays = table.Column<double>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
+                    Reason = table.Column<string>(nullable: true),
+                    AppliedDate = table.Column<DateTime>(nullable: false),
+                    ApprovedBy = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__sp_EmployeeLeaveRequest", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "_sp_GetAttendanceCountReportNew",
+                columns: table => new
+                {
+                    EmployeeCode = table.Column<string>(nullable: false),
+                    EmployeeName = table.Column<string>(nullable: true),
+                    LocationName = table.Column<string>(nullable: true),
+                    WorkingDay = table.Column<int>(nullable: true),
+                    PresentDays = table.Column<int>(nullable: true),
+                    TotalGrantedLeaves = table.Column<int>(nullable: true),
+                    TotalLeavesTaken = table.Column<int>(nullable: true),
+                    ProposedLeaves = table.Column<int>(nullable: true),
+                    BalanceLeaves = table.Column<string>(nullable: true),
+                    AdjustedLeaves = table.Column<int>(nullable: true),
+                    LeavesWithoutPay = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__sp_GetAttendanceCountReportNew", x => x.EmployeeCode);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblConfiguration",
                 schema: "LMS",
                 columns: table => new
@@ -76,6 +117,25 @@ namespace EIS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblWeeklyOffs",
+                schema: "LMS",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblWeeklyOffs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblHolidays",
                 schema: "LMS",
                 columns: table => new
@@ -123,6 +183,7 @@ namespace EIS.Data.Migrations
                     Description = table.Column<string>(type: "varchar(200)", nullable: true),
                     ValidFrom = table.Column<DateTime>(type: "date", nullable: false),
                     ValidTo = table.Column<DateTime>(type: "date", nullable: false),
+                    IsPaid = table.Column<bool>(nullable: false),
                     Validity = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -169,6 +230,10 @@ namespace EIS.Data.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     RoleId = table.Column<int>(nullable: false),
                     ReportingPersonId = table.Column<int>(nullable: false),
+                    WorkingHours = table.Column<TimeSpan>(nullable: true),
+                    WeeklyOffId = table.Column<int>(nullable: true),
+                    IsOnProbation = table.Column<bool>(nullable: true),
+                    PropbationPeriodInMonth = table.Column<int>(nullable: true),
                     Gender = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>
@@ -188,6 +253,13 @@ namespace EIS.Data.Migrations
                         principalTable: "tblRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tblPerson_tblWeeklyOffs_WeeklyOffId",
+                        column: x => x.WeeklyOffId,
+                        principalSchema: "LMS",
+                        principalTable: "tblWeeklyOffs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,6 +277,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     PersonId = table.Column<int>(type: "int", nullable: true),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: true),
                     DateIn = table.Column<DateTime>(nullable: false),
                     TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateOut = table.Column<DateTime>(type: "date", nullable: true),
@@ -672,6 +745,12 @@ namespace EIS.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tblPerson_WeeklyOffId",
+                schema: "LMS",
+                table: "tblPerson",
+                column: "WeeklyOffId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tblPerson_TenantId_EmployeeCode",
                 schema: "LMS",
                 table: "tblPerson",
@@ -703,6 +782,12 @@ namespace EIS.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "_sp_EmployeeLeaveRequest");
+
+            migrationBuilder.DropTable(
+                name: "_sp_GetAttendanceCountReportNew");
+
             migrationBuilder.DropTable(
                 name: "tblAttendance",
                 schema: "LMS");
@@ -765,6 +850,10 @@ namespace EIS.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "tblRoles",
+                schema: "LMS");
+
+            migrationBuilder.DropTable(
+                name: "tblWeeklyOffs",
                 schema: "LMS");
         }
     }

@@ -102,9 +102,10 @@ namespace EIS.Repositories.Repository
             var leaveCredit = new LeaveCredit();
             LeaveRequest leaveRequest = _dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.Id == RequestId).FirstOrDefault();
             leaveRequest.UpdatedDate = DateTime.Now;
+            bool isPaid = _dbContext.LeaveRequests.Include(x => x.TypeOfLeave).Where(x => x.Id == RequestId).FirstOrDefault().TypeOfLeave.IsPaid;
             if (Status == "Approve")
             {
-                if (leaveRequest.FromDate <= DateTime.Now.Date || leaveRequest.ToDate<=DateTime.Now.Date)
+                if ((leaveRequest.FromDate <= DateTime.Now.Date || leaveRequest.ToDate <= DateTime.Now.Date)&&leaveRequest.LeaveType.Contains("Past"))
                 {
                     leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
                     leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
@@ -120,9 +121,12 @@ namespace EIS.Repositories.Repository
             {
                 leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Rejected";
-                leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
-                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                if (isPaid == true)
+                {
+                    leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                }
                 messege = "Request of " + leaveRequest.Person.FirstName + " is rejected for " + leaveRequest.RequestedDays + " days";
             }
             else if (Status == "Pending")
@@ -131,7 +135,8 @@ namespace EIS.Repositories.Repository
                 if (leaveRequest.Status == null || leaveRequest.Status == "Rejected")
                 {
                     leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
+                    if(isPaid==true)
+                        leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
                 }
                 leaveRequest.Status = "Pending";
                 messege = "Request of " + leaveRequest.Person.FirstName + " marked as pending";
@@ -141,10 +146,13 @@ namespace EIS.Repositories.Repository
                 leaveRequest.UpdatedBy = PersonId;
                 if (leaveRequest.Status == "Pending")
                 {
-                    leaveRequest.Status = "Cancelled";
-                    leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
-                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                    leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                    if (isPaid == true)
+                    {
+                        leaveRequest.Status = "Cancelled";
+                        leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
+                        leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                        leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                    }
                     messege = "Your request has been cancelled";
                 }
                 else if (leaveRequest.Status == "Approved")
@@ -157,9 +165,12 @@ namespace EIS.Repositories.Repository
             {
                 leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Cancelled";
-                leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
-                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                if (isPaid == true)
+                {
+                    leaveRequest.Available = leaveRequest.Available + leaveRequest.RequestedDays;
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available + leaveRequest.RequestedDays;
+                }
                 messege = "Request is cancelled";
             }
             else if (Status == "Reject Cancel")
@@ -171,9 +182,12 @@ namespace EIS.Repositories.Repository
             else if (Status == null)
             {
                 leaveRequest.UpdatedBy = PersonId;
-                leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                leaveCredit.Available = leaveRequest.Available - leaveRequest.RequestedDays;
-                leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
+                if (isPaid == true)
+                {
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveRequest.Available - leaveRequest.RequestedDays;
+                    leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
+                }
             }
             Save();
             return messege;

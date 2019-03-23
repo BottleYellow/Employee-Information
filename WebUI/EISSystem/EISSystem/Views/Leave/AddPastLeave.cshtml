@@ -217,7 +217,7 @@
                                 });
                                 $("#btnSubmit").prop("disabled", true);
                             }
-                            else if (data > avl) {
+                            else if (data > avl && avl != -2) {
                                 bootbox.alert({
                                     message: "You can request leave for only " + avl + " days."
                                 });
@@ -225,7 +225,12 @@
                             }
                             else {
                                 $("#trd").val(days);
-                                $("#av").val(avl - data);
+                                if (avl == -2) {
+                                    $("#av").val(0);
+                                }
+                                else {
+                                    $("#av").val(avl - data);
+                                }
                                 var form = $("#cp");
                                 $.validator.unobtrusive.parse(form);
                                 if (form.valid()) {
@@ -319,7 +324,12 @@
                     $("#tp").val(t);
                     $("#psid").val(pid);
                     $("#typeid").val(x);
-                    $("#LType").append('<span id="msg2" class="text-success">' + data1 + ' days are available</span>');
+                    if (data1 == -2) {
+                        $("#LType").append('<span title="This leave will be treated as unpaid leave" id="msg1" class="text-success">Unpaid Leaves</span>');
+                    }
+                    else {
+                        $("#LType").append('<span id="msg2" class="text-success">' + data1 + ' days are available</span>');
+                    }
                     $("#date1").removeAttr('disabled');
                     $("#date2").removeAttr('disabled');
                     $("#reason").removeAttr('disabled');

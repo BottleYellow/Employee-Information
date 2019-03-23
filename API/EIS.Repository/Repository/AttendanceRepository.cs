@@ -22,8 +22,7 @@ namespace EIS.Repositories.Repository
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
             InputTwo = InputTwo.ToString();
-
-            IList<AttendanceData> attendanceData = new List<AttendanceData>();
+            
             Attendance_Report Model = new Attendance_Report();
             Model.sP_GetAttendanceCountReports = new List<SP_GetAttendanceCountReport>();
 
@@ -36,8 +35,25 @@ namespace EIS.Repositories.Repository
 
             return Model;
         }
+        public Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId)
+        {
+            SearchFor = SearchFor.ToString();
+            InputOne = InputOne.ToString();
+            InputTwo = InputTwo.ToString();
 
-        public EmployeeAttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month)
+            Attendance_Report_New Model = new Attendance_Report_New();
+            Model.sP_GetAttendanceCountReportsNew = new List<SP_GetAttendanceCountReport_New>();
+
+            var SP_locationId = new SqlParameter("@locationId", locationId);
+            var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
+            var SP_InputOne = new SqlParameter("@InputOne", InputOne);
+            var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
+            string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo";
+            Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+
+            return Model;
+        }
+        public EmployeeAttendanceReport GetAttendanceReportSummary(string type, string PersonId, int year, int? month)
         {
             string InputOne = year.ToString();
             char c = '0';
@@ -48,16 +64,16 @@ namespace EIS.Repositories.Repository
             Model._SP_AttendanceData = new List<EmployeeAttendanceData>();
             var SP_SrId = new SqlParameter("@SrId", SrId);
             var SP_SelectType = new SqlParameter("@SelectType", type);
-            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            var SP_PersonId = new SqlParameter("@EmployeeCode", PersonId);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetEmployeewiseAttendanceCount @PersonId, @SelectType, @InputOne, @InputTwo";
+            string usp = "LMS.usp_GetEmployeewiseAttendanceCount @EmployeeCode, @SelectType, @InputOne, @InputTwo";
             Model._SP_ReportCount = _dbContext._sp_GetEmployeeAttendanceCount.FromSql(usp, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).FirstOrDefault();
-            usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @PersonId,@SelectType, @InputOne, @InputTwo";
+            usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @EmployeeCode,@SelectType, @InputOne, @InputTwo";
             Model._SP_AttendanceData = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
             
             return Model;
-        }
+        } 
 
         public List<AttendanceReportByDate> GetAttendanceReportByDate(DateTime startDate, DateTime endDate, IEnumerable<Attendance> attendanceData, string id, int? loc)
         {
@@ -311,16 +327,16 @@ namespace EIS.Repositories.Repository
             return data;
         }
 
-        public List<SP_GetDateWiseAttendance> dateWiseAttendances(int PersonId, int LocationId, string fromDate, string toDate)
+        public List<SP_GetDateWiseAttendance> dateWiseAttendances(string EmployeeCode, int LocationId, string fromDate, string toDate)
         {
             List<SP_GetDateWiseAttendance> Model = new List<SP_GetDateWiseAttendance>();
             string sDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd").ToString();
             string eDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd").ToString();
-            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            var SP_PersonId = new SqlParameter("@EmployeeCode", EmployeeCode);
             var SP_LocationId = new SqlParameter("@LId", LocationId);
             var SP_InputOne = new SqlParameter("@InputOne", sDate);
             var SP_InputTwo = new SqlParameter("@InputTwo", eDate);
-            string usp = "LMS.usp_GetDateWiseAttendance @PersonId, @LId, @InputOne, @InputTwo";
+            string usp = "LMS.usp_GetDateWiseAttendance @EmployeeCode, @LId, @InputOne, @InputTwo";
             Model = _dbContext._sp_GetDateWiseAttendances.FromSql(usp, SP_PersonId, SP_LocationId, SP_InputOne, SP_InputTwo).ToList();
             return Model;
         }

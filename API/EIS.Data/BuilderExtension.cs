@@ -123,6 +123,7 @@ namespace EIS.Data
                 modelBuilder.Entity<Attendance>().Property(p => p.TotalHours).HasColumnType("time");
                 modelBuilder.Entity<Attendance>().Property(p => p.CreatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Attendance>().Property(p => p.UpdatedDate).HasColumnType("datetime");
+                modelBuilder.Entity<Attendance>().Property(p => p.EmployeeCode).HasColumnType("nvarchar(30)");
                 modelBuilder.Entity<Attendance>().Property(p => p.RowVersion).HasColumnType("rowversion").IsRowVersion();
                 #endregion
 
