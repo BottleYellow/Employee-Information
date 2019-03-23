@@ -10,6 +10,10 @@
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style type="text/css">
+
+        .label-OnLeave {
+            background-color: violet;
+        }
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
@@ -125,7 +129,7 @@
             </div>
         </div>
     </div>
-</body>
+</body> 
 
 @*for datetimepicker*@
 <script src="~/plugins/momentjs/moment.js"></script>
@@ -164,7 +168,6 @@
             maxDate: maxDate,
             defaultDate: d
         });
-
         $('#locations').on('change', function () {
             var loc = $('#locations').val();
             $.ajax({
@@ -234,7 +237,13 @@
                                 timeIn = '-';
                                 timeOut = '-';
                             }
-                            else {
+                        else
+                            if (Status == "OnLeave") {
+                                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                    timeIn = '-';
+                                    timeOut = '-';
+                            }
+                       else {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                                 timeIn = '-';
                                 timeOut = '-';
@@ -264,6 +273,7 @@
             });
         }      
     });
+
 
 </script>
 

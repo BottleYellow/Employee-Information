@@ -17,6 +17,9 @@ namespace EIS.Entities.Employee
         [DataType(DataType.Time)]
         public TimeSpan? TimeOut { get; set; }
         public TimeSpan? TotalHours { get; set; }
+        public string Message { get; set; }
+        public bool? HrStatus { get; set; }
+
         #endregion
         public virtual Person Person { get; set; }
     }

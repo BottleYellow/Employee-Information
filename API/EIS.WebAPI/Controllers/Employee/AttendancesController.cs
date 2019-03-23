@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 
 namespace EIS.WebAPI.Controllers
@@ -141,7 +142,7 @@ namespace EIS.WebAPI.Controllers
                 endDate = startDate.AddMonths(1).AddDays(-1);
             }
             List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData, Code, locationId);
-     
+
             return Ok(attendancelist);
         }
 
@@ -156,12 +157,12 @@ namespace EIS.WebAPI.Controllers
             DateTime sDate = Convert.ToDateTime(startDate);
             DateTime eDate = Convert.ToDateTime(endDate);
             DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
-            if (startOfWeek<=sDate)
+            if (startOfWeek <= sDate)
             {
                 eDate = DateTime.Now.Date;
             }
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= sDate && x.DateIn.Date <= eDate && x.PersonId == id);
-            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate, attendanceData,Code, locationId);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate, attendanceData, Code, locationId);
             return Ok(attendancelist);
         }
         #endregion
@@ -172,7 +173,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]int id)
         {
             EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
-            attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year",id,year,1);
+            attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year", id, year, 1);
             return Ok(attendanceReport);
         }
 
@@ -200,8 +201,52 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]int LocationId, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             List<SP_GetDateWiseAttendance> sP_GetDateWiseAttendance = new List<SP_GetDateWiseAttendance>();
-            sP_GetDateWiseAttendance = _repository.Attendances.dateWiseAttendances(Convert.ToInt16(id), LocationId,startDate, endDate);
+            sP_GetDateWiseAttendance = _repository.Attendances.dateWiseAttendances(Convert.ToInt16(id), LocationId, startDate, endDate);
             return Ok(sP_GetDateWiseAttendance);
+        }
+
+        [HttpGet]
+        [Route("GetAttendanceUpdateData/{status}")]
+        public IActionResult GetAttendanceUpdateData([FromRoute]bool status)
+        {
+            List<AttendanceUpdateData> attendances = new List<AttendanceUpdateData>();
+            attendances = _repository.Attendances.GetattendanceUpdateData(status);
+            return Ok(attendances);
+        }
+
+        [HttpGet]
+        [Route("AttendanceUpdate/{personId}/{message}/{requestedDate}/{timeIn}/{timeOut}")]
+        public IActionResult AttendanceUpdate([FromRoute]string personId,[FromRoute]string message,[FromRoute]string requestedDate,[FromRoute]string timeIn,[FromRoute]string timeOut)
+        {
+            string status = "";
+            int id = Convert.ToInt32(personId);
+            DateTime date = Convert.ToDateTime(requestedDate);
+            Attendance attendance = _repository.Attendances.FindByCondition(x => x.PersonId == id && x.DateIn== date);
+            if(attendance!=null)
+            {
+                if (message == "Approve")
+                {
+                    DateTime inDate = DateTime.ParseExact(timeIn, "hh:mm tt", CultureInfo.InvariantCulture);
+                    TimeSpan inTime = inDate.TimeOfDay;
+                    DateTime outDate = DateTime.ParseExact(timeOut, "hh:mm tt", CultureInfo.InvariantCulture);
+                    TimeSpan outTime = outDate.TimeOfDay;
+                    attendance.TimeIn= inTime;
+                    attendance.TimeOut = outTime;
+                    attendance.TotalHours = outTime - inTime;
+                    attendance.IsActive = true;
+                    attendance.HrStatus = true;
+                    _repository.Attendances.UpdateAndSave(attendance);
+                    status = "success";
+                }
+                else
+                {
+                    attendance.Message ="HR MESSAGE: "+ message;
+                    attendance.HrStatus = true;
+                    _repository.Attendances.UpdateAndSave(attendance);
+                    status = "success";
+                }
+            }
+            return Ok(status);
         }
         #endregion
     }

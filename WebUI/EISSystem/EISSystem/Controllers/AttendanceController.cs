@@ -168,7 +168,31 @@ namespace EIS.WebApp.Controllers
             List<SP_GetDateWiseAttendance> attendance = JsonConvert.DeserializeObject<List<SP_GetDateWiseAttendance>>(stringData);
             return Json(attendance);
         }
+
+        [DisplayName("AttendanceUpdate")]
+        [HttpGet]
+        public IActionResult AttendanceUpdate()
+        {
+            return View();
+        }
+
+        [ActionName("AttendanceUpdate")]
+        [HttpPost]
+        public IActionResult AttendanceUpdate(string personId, string message,string requestedDate, string timeIn, string timeOut)
+        {
+            string url = "";
+            if (!string.IsNullOrEmpty(requestedDate))
+            {
+                url = ApiUrl + "/api/Attendances/AttendanceUpdate/" + personId + "/" + message + "/" + Convert.ToDateTime(requestedDate).ToString("MMM-dd-yyyy") + "/" + timeIn + "/"+ timeOut;
+            }
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            string data = JsonConvert.DeserializeObject<string>(stringData);
+            return Json(data);
+        }
         #endregion
+
+
 
         #region[Methods]
         [NonAction]

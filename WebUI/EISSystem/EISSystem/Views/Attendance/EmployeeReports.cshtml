@@ -10,6 +10,9 @@
         float: right;
     }
 
+    .label-OnLeave {
+        background-color: violet;
+    }
     .bootstrap-datetimepicker-widget tr:hover {
         background-color: #808080;
     }
@@ -295,6 +298,10 @@
                         }
                         else if (Status == "Absent") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                            timeIn = '-';
+                            timeOut = '-';
+                        } else if (Status == "OnLeave") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
                         } else{

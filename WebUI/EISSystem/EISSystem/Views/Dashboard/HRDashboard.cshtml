@@ -15,6 +15,8 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <style>
 
     .ajax-loader {
@@ -33,6 +35,10 @@
 
     .info-box {
         cursor: pointer;
+    }
+
+    .label-OnLeave {
+        background-color: violet;
     }
 
     a:hover, a:focus {
@@ -284,15 +290,8 @@
                             </thead>
                             <tbody></tbody>
                         </table>
-
-
-
-
                     </div>
                 </div>
-
-
-
             </div>
         </div>
         <!-- #END# Leave Data -->
@@ -304,12 +303,16 @@
 <script src="~/js/pages/ui/modals.js"></script>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script>
     var buttonSelected = "All";
     var locationNameBaner = "";
     var locationNameKondhwa = "";
+    var dateSelected = $('#banerDate').val();
     $(document).ready(function () {
-        if ('@TempData["BirthdayAlert"]' != '') {
+          if ('@TempData["BirthdayAlert"]' != '') {
             bootbox.alert('<h4>@TempData["BirthdayAlert"]</h4>');
         }
         if ('@TempData["EmployeeBirthdayAlert"]' != '') {
@@ -318,54 +321,86 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner + '<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span>');
-        $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right">@DateTime.Now.ToString("ddd dd-MMM")</span>');
+        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="text" id="banerDate" autocomplete="off"/>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right" id="kondhwaDate"></span> ');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
-        generateReport("All", 0);
+        var d = new Date();
+        d.setDate(d.getDate());
+        var defaultDate = moment().toDate();
+        $("#banerDate").datetimepicker({
+            format: "DD-MMM-YYYY",
+            useCurrent: false,
+            defaultDate: d,
+
+        });
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
+
+        $('#banerDate').on('dp.change', function () {
+            dateSelected = $("#banerDate").val();
+            $('#kondhwaDate').html(dateSelected);
+            generateReport(buttonSelected, 0, dateSelected);
+        });
+        generateReport("All", 0, dateSelected);
     });
+
+
+
     $('#allEmployee').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#leavesData').hide();
         $('#attendanceData').show();
         buttonSelected = "All";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
     $('#employeePresent').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#leavesData').hide();
         $('#attendanceData').show();
         buttonSelected = "Present";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
     $('#employeeAbsent').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#leavesData').hide();
         $('#attendanceData').show();
         buttonSelected = "Absent";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
     $('#pendingLeaveButton').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#attendanceData').hide();
         $('#leavesData').show();
         buttonSelected = "PendingLeaves";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
     $('#approvedLeaveButton').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#attendanceData').hide();
         $('#leavesData').show();
         buttonSelected = "ApprovedLeaves";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
     $('#rejectedLeaveButton').on('click', function () {
+        dateSelected = $("#banerDate").val();
+        $('#kondhwaDate').html(dateSelected);
         $('#attendanceData').hide();
         $('#leavesData').show();
         buttonSelected = "RejectedLeaves";
-        generateReport(buttonSelected, 0);
+        generateReport(buttonSelected, 0, dateSelected);
     });
-    function generateReport(buttonSelected, location) {
+    function generateReport(buttonSelected, location, dateSelected) {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("HRDashboard","Dashboard")',
-            data: { "attendanceStatus": buttonSelected, "location": location },
+            data: { "attendanceStatus": buttonSelected, "location": location, "date": dateSelected },
             beforeSend: function () {
                 $('.ajax-loader').css("visibility", "visible");
             },
@@ -380,7 +415,7 @@
                     if (buttonSelected == "PendingLeaves" || buttonSelected == "ApprovedLeaves" || buttonSelected == "RejectedLeaves") {
                         getLeavesData(data.sp_AdminDashboardLeaves);
                     } else {
-                        getData(data.sP_AdminDashboards);
+                        getData(data.sP_AdminDashboards, dateSelected);
                     }
                 }
             },
@@ -389,33 +424,38 @@
             }
         });
     }
-    function getData(Employees) {
+    function getData(Employees, dateSelected) {
+        debugger;
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
             var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
+            var todayDate = moment(new Date()).format("DD-MMM-YYYY");
+            var selectedDate = moment(dateSelected).format("DD-MMM-YYYY");
             var Status = Employees[i].Status;
             var expectedTimeOutDate = null;
-            if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
-                if (Employees[i].WorkingHours != null) {
-                    var workingValue = Employees[i].WorkingHours;
-                    var hr = workingValue.slice(0, 2);
-                    var min = workingValue.slice(3, 5);
-                    expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
-                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+                if (Employees[i].TimeIn != null && Employees[i].TimeOut == null && todayDate == selectedDate) {
+                    if (Employees[i].WorkingHours != null) {
+                        var workingValue = Employees[i].WorkingHours;
+                        var hr = workingValue.slice(0, 2);
+                        var min = workingValue.slice(3, 5);
+                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+                    }
+                    else {
+                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
+                    }
+                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+                } else {
+                    TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                 }
-                else {
-                    expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
-                }
-                TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
-            } else {
-                TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
-            }
             if (Status == "Present") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
             }else if (Status == "Absent") {
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+            } else if (Status == "OnLeave") {
+                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
             }
             else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
@@ -460,7 +500,6 @@
         });
     }
     function getLeavesData(Leaves) {
-         var ecode='@cookies.EmployeeCode';
         var banerArrayLeaves = [];
         var kondhwaArrayLeaves = [];
         for (var i = 0; i < Leaves.length; i++) {
@@ -471,25 +510,13 @@
             var actionButton;
             if (buttonSelected == "PendingLeaves") {
                 if (Status == "Pending" || Status == "Requested For Cancel") {
-                    if (Leaves[i].EmployeeCode != ecode) {
-                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
 
-                        if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                            banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                        } else {
-                            kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                        }
-                    }
-                    else {
-                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Reject</a></li></ul></div>';
-
-                        if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                            banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                        } else {
-                            kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                        }
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
             } else if (buttonSelected == "ApprovedLeaves") {

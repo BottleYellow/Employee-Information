@@ -13,7 +13,12 @@
     }
 }
 <style type="text/css">
-
+    .clickType{
+        cursor:pointer;
+    }
+    .label-OnLeave {
+        background-color: violet;
+    }
 
     div .panel-primary {
         text-align: center
@@ -124,8 +129,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <br />
-                                            <input type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;" />
-                                        </div>
+                                            <button class="clickType" type="button" id="generateReport" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;">Generate</button>                                        </div>
                                     </div>
 
                                 </div>
@@ -171,13 +175,13 @@
 
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div class="panel-heading">Present Days</div>
+                                            <div class="panel-heading clickType">Present</div>
                                             <div id="presentDays" class="panel-body"></div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
-                                            <div class="panel-heading">Leaves with Approval</div>
+                                            <div class="panel-heading clickType">OnLeave</div>
                                             <div id="absentDays" class="panel-body"></div>
                                         </div>
                                     </div>
@@ -237,7 +241,7 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 
 <script type="text/javascript">
-
+    var status = "Generate";
     $(document).ready(function () {
         var loc = $('#locations').val();
         $.ajax({
@@ -331,7 +335,8 @@
             }
         });
 
-        $('#generateReport').on('click', function () {
+        $('.clickType').on('click', function () {
+            status = $(this).html();
             $('#attendanceReport').show();
             $('#tblExample').show();
             var id = $('#selectEmployee').val();
@@ -339,18 +344,20 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
-                generateReport(value, 'year', id);
+                generateReport(value, 'year', id, status);
             }
 
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
-                generateReport(value, 'month', id);
+                generateReport(value, 'month', id, status);
             }
         });
     });
 
-        function generateReport(value, type, id) {
+
+
+        function generateReport(value, type, id,status) {
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
@@ -382,28 +389,51 @@
                         var timeIn;
                         var timeOut;
                         var Status = data._SP_AttendanceData[i].Status;
-                        if (Status == "Present") {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
-                            if (data._SP_AttendanceData[i].TimeOut == '-') {
-                                timeOut = data._SP_AttendanceData[i].TimeOut;
-                            } else {
-                                timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
-                            }
-                        }
-                        else if (Status == "Absent") {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                            timeIn = '-';
-                            timeOut = '-';
-                        }
-                        else
+                        if (status == Status)
                         {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            if (Status == "Present") {
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                                if (data._SP_AttendanceData[i].TimeOut == '-') {
+                                    timeOut = data._SP_AttendanceData[i].TimeOut;
+                                } else {
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                                }
+                            }
+                            else if (Status == "OnLeave") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
                             timeIn = '-';
                             timeOut = '-';
                         }
-
-                        array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                                array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                            }
+                        if (status == "Generate") {
+                            if (Status == "Present") {
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                                if (data._SP_AttendanceData[i].TimeOut == '-') {
+                                    timeOut = data._SP_AttendanceData[i].TimeOut;
+                                } else {
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                                }
+                            }
+                            else if (Status == "Absent") {
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                                timeIn = '-';
+                                timeOut = '-';
+                            }
+                            else if (Status == "OnLeave") {
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                timeIn = '-';
+                                timeOut = '-';
+                            }
+                            else {
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                                timeIn = '-';
+                                timeOut = '-';
+                            }
+                            array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                        }
                     }
                     $('#example').DataTable().destroy();
 

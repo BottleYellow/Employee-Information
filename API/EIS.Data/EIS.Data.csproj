@@ -28,6 +28,9 @@
     <Compile Remove="Migrations\20190305062053_Changes.cs" />
     <Compile Remove="Migrations\20190305062500_Changes.cs" />
     <Compile Remove="Migrations\20190305070836_DbChanges.cs" />
+    <Compile Remove="Migrations\20190320120222_AddedAttendanceMessage.cs" />
+    <Compile Remove="Migrations\20190322072230_attendancemessage.cs" />
+    <Compile Remove="Migrations\20190322072634_attendancemessage.cs" />
   </ItemGroup>
 
   <ItemGroup>

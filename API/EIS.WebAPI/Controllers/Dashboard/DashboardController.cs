@@ -19,13 +19,13 @@ namespace EIS.WebAPI.Controllers.Dashboard
     public class DashboardController : BaseController
     {
         public DashboardController(IRepositoryWrapper repository) : base(repository)
-        {        }
+        { }
 
-        [Route("Admin/{attendanceStatus}/{location}")]
+        [Route("Admin/{attendanceStatus}/{location}/{date}")]
         [HttpGet]
-        public IActionResult GetAdminDashboard(string attendanceStatus, int location)
+        public IActionResult GetAdminDashboard(string attendanceStatus, int location, string date)
         {
-            Admin_Dashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus, location, TenantId);
+            Admin_Dashboard dashboard = _repository.Dashboard.GetAdminDashboard(attendanceStatus, location, TenantId, date);
             return Ok(dashboard);
         }
 
@@ -42,7 +42,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
         public IActionResult GetEmployeeDashboard([FromRoute]int PersonId)
         {
             Person person = _repository.Employee.FindByCondition(x => x.Id == PersonId);
-            if(person.IsOnProbation==true)
+            if (person.IsOnProbation == true)
             {
                 int probationPeriod = person.PropbationPeriodInMonth.GetValueOrDefault();
                 DateTime joinDate = person.JoinDate;
@@ -54,15 +54,15 @@ namespace EIS.WebAPI.Controllers.Dashboard
                     _repository.Employee.UpdateAndSave(person);
                 }
             }
-            Employee_Dashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId,PersonId);
+            Employee_Dashboard dashboard = _repository.Dashboard.GetEmployeeDashboard(TenantId, PersonId);
             return Ok(dashboard);
         }
 
         [Route("AdminCalendarData/{location}/{startDate}/{endDate}")]
         [HttpGet]
-        public IActionResult GetAdminCalendarData([FromRoute]int location,[FromRoute]string startDate, [FromRoute]string endDate)
+        public IActionResult GetAdminCalendarData([FromRoute]int location, [FromRoute]string startDate, [FromRoute]string endDate)
         {
-            List<CalendarData> calendarDataList = _repository.Dashboard.GetAdminCalendarDetails(location,Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
+            List<CalendarData> calendarDataList = _repository.Dashboard.GetAdminCalendarDetails(location, Convert.ToDateTime(startDate), Convert.ToDateTime(endDate));
             return Ok(calendarDataList);
         }
 
@@ -76,19 +76,50 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("BirthdayData/{day}/{month}")]
         [HttpGet]
-        public IActionResult GetAllEmployeeBirthday([FromRoute]int day,[FromRoute]int month)
+        public IActionResult GetAllEmployeeBirthday([FromRoute]int day, [FromRoute]int month)
         {
-            List<Person> person = _repository.Employee.FindAllByCondition(x => x.DateOfBirth.Day == day && x.DateOfBirth.Month==month).ToList();
+            List<Person> person = _repository.Employee.FindAllByCondition(x => x.DateOfBirth.Day == day && x.DateOfBirth.Month == month).ToList();
             return Ok(person);
         }
 
         [Route("EmployeeBirthday/{day}/{month}/{id}")]
-        public IActionResult GetEmployeeBirthday([FromRoute]int day,[FromRoute]int month,[FromRoute]string id)
+        public IActionResult GetEmployeeBirthday([FromRoute]int day, [FromRoute]int month, [FromRoute]string id)
         {
             int personId = Convert.ToInt32(id);
 
-            string birthdayEmployeeName=_repository.Employee.FindByCondition(x => x.Id==personId && x.DateOfBirth.Day == day && x.DateOfBirth.Month == month)?.FullName;
+            string birthdayEmployeeName = _repository.Employee.FindByCondition(x => x.Id == personId && x.DateOfBirth.Day == day && x.DateOfBirth.Month == month)?.FullName;
             return Ok(birthdayEmployeeName);
+        }
+
+        [Route("AttendanceRequest/{personId}/{dateSelected}/{message}")]
+        public IActionResult AttendanceRequest([FromRoute]string personId,[FromRoute]string dateSelected,[FromRoute]string message)
+        {            
+            int pId = Convert.ToInt32(personId);
+            DateTime date = Convert.ToDateTime(dateSelected);
+            Attendance attendance=_repository.Attendances.FindByCondition(x => x.PersonId == pId && x.DateIn == date);
+            if(attendance==null)
+            {
+                Attendance newAttendance = new Attendance();
+                newAttendance.DateIn = date;
+                newAttendance.TimeIn = new TimeSpan();
+                newAttendance.IsActive = false;
+                newAttendance.Message = message;
+                newAttendance.HrStatus = false;
+                newAttendance.CreatedDate = DateTime.Now;
+                newAttendance.UpdatedDate = DateTime.Now;
+                newAttendance.TenantId = TenantId;
+                newAttendance.PersonId = pId;
+                _repository.Attendances.CreateAndSave(newAttendance);               
+            }
+            else
+            {
+                attendance.Message = message;
+                attendance.HrStatus = false;
+                _repository.Attendances.UpdateAndSave(attendance);
+            }
+
+            string status = "success";
+            return Ok(status);
         }
     }
 }

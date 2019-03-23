@@ -324,5 +324,22 @@ namespace EIS.Repositories.Repository
             Model = _dbContext._sp_GetDateWiseAttendances.FromSql(usp, SP_PersonId, SP_LocationId, SP_InputOne, SP_InputTwo).ToList();
             return Model;
         }
+
+        public List<AttendanceUpdateData> GetattendanceUpdateData(bool status)
+        {
+            AttendanceUpdateData attendance = new AttendanceUpdateData();
+            List<AttendanceUpdateData> attendanceUpdates = new List<AttendanceUpdateData>();
+            attendanceUpdates = _dbContext.Attendances.Include(x => x.Person).Where(x => x.HrStatus == status).Select(x => new AttendanceUpdateData
+            {
+                EmployeeName = x.Person.FullName,
+                personId=x.PersonId.GetValueOrDefault(),
+                DateIn=x.DateIn,
+                Message=x.Message,
+                WorkingHours=x.TotalHours.GetValueOrDefault(),
+                TimeIn=x.TimeIn,
+                TimeOut=x.TimeOut.GetValueOrDefault()
+            }).ToList();
+            return attendanceUpdates;
+        }
     }
 }

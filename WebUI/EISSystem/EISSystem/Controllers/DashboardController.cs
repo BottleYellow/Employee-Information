@@ -33,9 +33,9 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminDashboard(string attendanceStatus, int location)
-        {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
+        public IActionResult AdminDashboard(string attendanceStatus, int location,string date)
+        {            
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location+"/"+date);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
@@ -82,9 +82,9 @@ namespace EIS.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult HRDashboard(string attendanceStatus, int location)
+        public IActionResult HRDashboard(string attendanceStatus, int location, string date)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location + "/" + date);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
@@ -112,9 +112,9 @@ namespace EIS.WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ManagerDashboard(string attendanceStatus, int location)
+        public IActionResult ManagerDashboard(string attendanceStatus, int location, string date)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "api/Dashboard/Admin/" + attendanceStatus + "/" + location + "/" + date);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
@@ -195,6 +195,16 @@ namespace EIS.WebApp.Controllers
 
                 data = JsonConvert.DeserializeObject<List<CalendarData>>(stringData);
             }
+            return Json(data);
+        }
+
+        [HttpPost]
+        public IActionResult AttendanceRequest(string personId,string message,string dateSelected)
+        {
+            DateTime date = Convert.ToDateTime(dateSelected);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Dashboard/AttendanceRequest/" + personId + "/" + date.ToString("MMM-dd-yyyy") + "/" +message);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);
         }
     }

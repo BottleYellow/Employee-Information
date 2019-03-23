@@ -20,18 +20,25 @@
             cursor: pointer;
         }
 
+        .label-OnLeave {
+            background-color: violet;
+        }
+
         a:hover, a:focus {
             text-decoration: none;
         }
+
         * {
             font-family: Arial;
             font-style: normal
         }
+
         table.dataTable td {
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
         }
+
         a {
             cursor: pointer;
         }
@@ -84,7 +91,7 @@
                         <div class="number count-to" id="TotalLeavesTaken"></div>
                     </div>
                 </div>
-            </a>  
+            </a>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="info-box bg-orange hover-expand-effect">
@@ -103,49 +110,78 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="card">
                 <div class="header" style="background-color:aliceblue;">
-               <h2 id="tableName"></h2>
+                    <h2 id="tableName"></h2>
                 </div>
-                
-                <div class="body" id="attendanceCard">        
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
-                            <thead>
-                                <tr class="info">
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
-                                    <th>Working Hours</th>
 
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
-                            <thead>
-                                <tr class="info">
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Status</th>
-                                    <th>ApprovedBy</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-        
+                <div class="body" id="attendanceCard">
+                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
+                        <thead>
+                            <tr class="info">
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Working Hours</th>
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
+                        <thead>
+                            <tr class="info">
+                                <th>Leave Type</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>ApprovedBy</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
     </div>
-
 </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Date:<span id="eventTitle"></span></h4>
+            </div>
+            <div class="modal-body" >
+                <div class="form-group">
+                    <label>Request Message</label>
+                    <div class="form-line">
+                        <textarea style="width:300px; height:250px" id="textData"></textarea>
+                    </div>
+                    <span id="textDataSpan" class="text-danger"></span>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="submitRequest" >Submit</button>               
+                <button type="button" class="btn btn-default" id="closeRequest" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script>
     var buttonSelected = "All";
     var selectOpt;
-
+    var datetest;
     $(document).ready(function () {
+
      if ('@TempData["BirthdayAlert"]' != '') {
              bootbox.alert('<h4>@TempData["BirthdayAlert"]</h4><img src="@MyHttpContext.AppBaseUrl/gif/birthday.jpg" style="width:400px" /> ');
         }
@@ -166,6 +202,61 @@
         buttonSelected = "totalLeave";
         $('#tableName').html('Total Leaves Availed');
         generateReport(buttonSelected);
+    });
+
+    $('#submitRequest').on('click', function () {
+        debugger;
+        var pid =@cookies.PersonId;
+        var message = $('#textData').val();
+        var date = $("#eventTitle").html();
+        if (message != "") {
+            bootbox.confirm({
+                message: "Are you sure you want to send the request",
+                buttons: {
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    },
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success',
+                    }                    
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("AttendanceRequest","Dashboard")',
+                            data: { "personId": pid, "message": message, "dateSelected": date },
+                            success: function (data) {
+                                if (data == "success") {
+                                    bootbox.alert({
+                                        message: "Request sent successfully",
+                                        callback: function () {
+                                            window.parent.location.reload();
+                                        }
+                                    });
+                                } else {
+                                    bootbox.alert("Something went wrong. Please try again later.");
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error Occurred. Please try again later.");
+                            }
+                        });
+                        $('#myModal').modal('hide');
+                    }                                  
+                }
+            });
+           
+        } else
+        {
+            $('#textDataSpan').html("Please fill request message");
+        }           
+    });
+
+    $('#closeRequest').click(function () {
+        window.location.reload();
     });
 
     function generateReport(buttonSelected) {
@@ -196,7 +287,6 @@
         });
     }
     function getData(Employees, buttonSelected) {
-        debugger;
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
             var approvedName = "-";
@@ -225,7 +315,7 @@
                 } else if (Status == "Cancelled") {
                     approvedName = "-";
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                }                                             
+                }
                 else if (Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
@@ -240,7 +330,7 @@
                 var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
                 var todayDate = moment(new Date()).format("DD-MMM-YYYY");
                 var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
-                if (todayDate == dateInData) {
+                if (todayDate == dateInData && Employees[i].Status=="Present") {
                     var expectedTimeOutDate = null;
                     if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
                         if (Employees[i].WorkingHours != null) {
@@ -267,16 +357,85 @@
                     if (buttonSelected == "Present") {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                            if (TimeOut == "-" && TotalHours == "-") {
+                                if (todayDate != dateInData) {
+                                    if (Employees[i].Message != null) {
+                                        if (Employees[i].Message.includes("HR MESSAGE")) {
+                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                        } else {
+                                            TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+                                        } 
+                                    }
+                                    else {
+                                        TotalHours = 'No Data<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Clock Out Request</button>';
+                                    }
+                                }
+                            }
                             array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                         }
                     } else {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                                if (TimeOut == "-" && TotalHours == "-") {
+                                    if (Employees[i].Message != null) {
+                                        if (Employees[i].Message.includes("HR MESSAGE")) {
+                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                        } else {
+                                            TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+                                        } 
+                                    }
+                                    else {
+                                        TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY")+ '\')">Send Clock Out Request</button>';
+                                }
+                            }
                         } else if (Status == "Absent") {
+                            if (todayDate == dateInData) {
+                                if (Employees[i].Message != null) {
+                                    if (Employees[i].Message.includes("HR MESSAGE")) {
+                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                    } else {
+                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+                                    } 
+                                }
+                                else {
+                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+                                }
+                            }
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                        }
+                        else if (Status == "OnLeave") {
+                            if (todayDate == dateInData) {
+                                if (Employees[i].Message != null) {
+                                    if (Employees[i].Message.includes("HR MESSAGE")) {
+                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                    } else {
+                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+                                    } 
+                                }
+                                else {
+                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+                                }
+                            }
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
                         } else {
+                            if (todayDate == dateInData) {
+                                if (Employees[i].Message != null) {
+                                    if (Employees[i].Message.includes("HR MESSAGE")) {
+                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                    } else {
+                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+                                    } 
+                                }
+                                else {
+                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+                                }
+                            }
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                        } 
+                        }
+                        if (Employees[i].Status != "Present") {
+                            TimeIn = "-";
+                        }
+
 
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
@@ -288,7 +447,7 @@
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
                 scrollX:true,
-                "order": [1, 'desc'],    
+                "order": [1, 'desc'],
                 "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                     if (aData[4].includes("Approved")) {
                         $('td', nRow).addClass('success');
@@ -304,7 +463,7 @@
         } else {
 
             $('#attendanceTable').DataTable({
-                scrollX:true,               
+                scrollX:true,
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -326,5 +485,9 @@
                 data: array
             });
         }
+    }
+    function sendRequest(date) {
+        $("#myModal #eventTitle").text(date);
+        $("#myModal").modal();
     }
 </script>

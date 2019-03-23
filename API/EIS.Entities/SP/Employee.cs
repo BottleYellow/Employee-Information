@@ -20,6 +20,7 @@ namespace EIS.Entities.SP
         public Nullable<System.TimeSpan> TimeIn { get; set; }
         public Nullable<System.TimeSpan> TimeOut { get; set; }
         public Nullable<System.TimeSpan> TotalHours { get; set; }
+        public string Message { get; set; }
         public string Status { get; set; }
         public Nullable<TimeSpan> WorkingHours { get; set; }
     }

@@ -28,19 +28,20 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId)
+        public Admin_Dashboard GetAdminDashboard(string attendanceStatus, int location, int TenantId,string date)
         {
-
+            DateTime date1 = Convert.ToDateTime(date);
+            string date2 = date1.ToString("yyyy-MM-dd");
             Admin_Dashboard Model = new Admin_Dashboard();
             Model.sP_AdminDashboardCount = new SP_AdminDashboardCount();
-            Model.sP_AdminDashboards = new List<SP_AdminDashboard>();
-
+            Model.sP_AdminDashboards = new List<SP_AdminDashboard>();            
             var param = new SqlParameter("@locationId", location);
-            string usp = "LMS.usp_GetAdminDashboardDetails @locationId";
-            Model.sP_AdminDashboards = _dbContext._sp_AdminDashboard.FromSql(usp, param).ToList();
+            var param2 = new SqlParameter("@date", date2);
+            string usp = "LMS.usp_GetAdminDashboardDetails @locationId, @date";
+            Model.sP_AdminDashboards = _dbContext._sp_AdminDashboard.FromSql(usp, param,param2).ToList();
 
-            usp = "LMS.usp_GetAdminDashboardCountDetails @locationId";
-            Model.sP_AdminDashboardCount = _dbContext._sp_AdminDashboardcount.FromSql(usp, param).FirstOrDefault();
+            usp = "LMS.usp_GetAdminDashboardCountDetails @locationId,@date";
+            Model.sP_AdminDashboardCount = _dbContext._sp_AdminDashboardcount.FromSql(usp, param,param2).FirstOrDefault();
 
 
             usp = "LMS.usp_GetAdminDashboardLeaveDetails @locationId";

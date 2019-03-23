@@ -1,0 +1,317 @@
+﻿@using EIS.WebApp.Services
+@using System.Globalization
+@model EIS.Entities.Employee.Attendance
+@{
+    ViewData["Title"] = "AttendanceUpdate";
+}
+<head>
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+</head>
+<style>
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+    .disabledLink {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
+
+    .ajax-loader img {
+        position: relative;
+        top: 45%;
+        left: 45%;
+    }
+
+    a {
+        cursor: pointer;
+    }
+</style>
+<body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
+    <div class="container-fluid">
+        <div class="block-header">
+            <HeaderWithButton header-name="Attendance Update"></HeaderWithButton>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row col-md-12">
+                            <div class="col-md-3">
+                                <label>Select Status</label>
+                                <select id="status" class="form-control show-tick">
+                                    <option value="false">Pending Request</option>
+                                    <option value="true">Request Updated</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <h4 id="report">Attendance Details</h4>
+                            </div>
+                            <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ACTION</th>
+                                        <th>NAME</th>
+                                        <th>MESSAGE</th>
+                                        <th>REQUESTED DATE</th>
+                                        <th>TIME IN</th>
+                                        <th>TIME OUT</th>
+                                        <th>WORKING HOURS</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="eventTitle"></h4>
+                </div>
+              
+                <div class="modal-body">
+                    <form id="cp" method="post">
+                        <div class="form-group" id="LType">
+                            <label>Employee Name </label>
+                            <p id="employeeName"></p>
+                            <input id="personId" type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Requested Date</label>
+                            <p id="requestedDate"></p>
+                        </div>
+                        <div class="form-group" id="timeIn">
+                            <label>Time In </label>
+                            <div class="form-line">
+                                <input class="form-control" type="text" id="timeInData" autocomplete="off" />
+                            </div>
+
+                        </div>
+                        <div class="form-group" id="timeOut">
+                            <label>Time Out </label>
+                            <div class="form-line">
+                                <input class="form-control" type="text" id="timeOutData" autocomplete="off" />
+                            </div>
+                             <span id="outTimeAlert" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" id="messageData">
+                            <label>Message:</label>
+                            <div class="form-line">
+                                <textarea id="textData" rows="2" class="form-control no-resize" placeholder="Reason..."></textarea>
+                            </div>
+                            <span id="textDataAlert" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-success waves-effect">Submit</button>
+                            <button type="button" id="btnCancel" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script>
+    var timeIn="";
+    var timeOut = "";
+    $(document).ready(function () {
+        getData(false);
+        timeIn = $('#timeInData').html();
+        timeOut = $('#timeOutData').html();
+        $('#timeInData').datetimepicker({
+            format: "hh:mm A",
+            defaultDate: timeIn
+        });
+        $('#timeOutData').datetimepicker({
+            format: "hh:mm A",
+            defaultDate: timeOut
+        });
+    });
+
+    $('#status').on('change', function () {
+        var status = $('#status').val();
+        getData(status);
+    });
+
+    $('#btnSubmit').on('click', function () {
+        debugger;
+         var pid = $("#personId").val();;
+        var message = $('#textData').val();
+         var date = $("#requestedDate").html();
+        var inTime = $('#timeInData').val();
+        var outTime = $('#timeOutData').val();
+        var startTime = moment(inTime, "hh:mm A");
+        var endTime = moment(outTime, "hh:mm A");
+        var duration = moment.duration(endTime.diff(startTime));
+        var hours = parseInt(duration.asHours());
+        if (message != "") {
+            if (message == "Approve" && hours <= 2) {
+                $('#outTimeAlert').html("Please enter valid clock out");
+            } else {
+                bootbox.confirm({
+                    message: "Are you sure you want to submit the form",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        },
+                    },
+                    callback: function (result) {
+                        if (result == true) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("AttendanceUpdate", "Attendance")',
+                                data: { "personId": pid, "message": message, "requestedDate": date, "timeIn": inTime, "timeOut": outTime },
+                                success: function (data) {
+                                    alert(data);
+                                    if (data == "success") {
+                                        bootbox.alert({
+                                            message: "Data updated successfully",
+                                            callback: function () {
+                                                window.location.reload();
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        bootbox.alert("Something went wrong");
+                                    }
+
+                                },
+                                error: function () {
+                                    alert("Error");
+                                }
+                            });
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                });
+            }                         
+        } else {
+            $('#textDataAlert').html("Please fill reject message");
+        }
+         
+    });
+
+    $('#btnCancel').on('click', function () {
+        window.location.reload();
+    });
+
+    function getData(status) {
+        $.ajax({
+            type: 'GET',
+            url: '@MyHttpContext.APIBaseURL/api/Attendances/GetAttendanceUpdateData/' + status,
+            "datatype": "json",
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            success: function (data) {
+                var array = [];
+                var actionButton;
+                var timeIn;
+                var timeOut;
+                var workingHours;
+                for (var i = 0; i < data.length; i++) {
+                    if (status == "true") {
+                        if (data[i].message != null) {
+                            if (data[i].message.includes("HR MESSAGE")) {
+                                actionButton = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">Rejected</span>';
+                            } else {
+                                actionButton = '<span style="font-size:14px; font-weight:normal;" class="label label-success">Approved</span>';
+                            }
+                        } else {
+                            actionButton = "-";}
+
+                    } else {
+                        actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a onclick="javascript:requestButton(\'' + data[i].personId + '\',\'' + moment(data[i].dateIn).format("DD MMM YYYY") + '\',\'' + data[i].employeeName + '\',\'request\',\'' + moment(data[i].timeIn, 'HH:mm:ss').format('hh:mm A') + '\',\'' + moment(data[i].timeOut, 'HH:mm:ss').format('hh:mm A') + '\')">Update</a></li><li><a onclick="javascript:requestButton(\'' + data[i].personId + '\',\'' + moment(data[i].dateIn).format("DD MMM YYYY") + '\',\'' + data[i].employeeName + '\',\'cancel\')">Reject</a></li></ul></div>';
+                    }
+                    if (data[i].timeIn == "00:00:00") {
+                        timeIn = "-";
+                    } else {
+                        timeIn = moment(data[i].timeIn,'HH:mm:ss').format('hh:mm A');
+                    }
+                    if (data[i].timeOut == "00:00:00") {
+                        timeOut = "-";
+                    } else {
+                        timeOut = moment(data[i].timeOut, 'HH:mm:ss').format('hh:mm A');
+                    }
+                    if (data[i].workingHours == "00:00:00") {
+                        workingHours = "-";
+                    } else {
+                        workingHours = data[i].workingHours;
+                    }
+
+                    array.push([actionButton, data[i].employeeName, data[i].message, moment(data[i].dateIn).format("DD MMM YYYY"), timeIn, timeOut,workingHours]);
+                    }
+                    $('#example').DataTable().destroy();
+                    $('#example').DataTable({
+                        data: array
+                    });
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
+        });
+    }
+
+
+    function requestButton(personId, date, name, status, inTime, outTime) {
+        if (status == "cancel") {
+            $('#timeIn').hide();
+            $('#timeOut').hide();
+            $('#workingHours').hide();
+            $('#messageData').show();
+            $('#timeInData').val("10:00 AM");
+            $('#timeOutData').val("12:00 AM");
+            $('#textData').val("");
+            $("#myModal #eventTitle").text("Rejected Message");
+
+        } else {
+            $('#messageData').hide();
+            $('#timeIn').show();
+            $('#timeOut').show();
+            $('#workingHours').show();
+            $('#timeInData').val(inTime);
+            $('#timeOutData').val(outTime);
+            $('#textData').val("Approve");
+            $("#myModal #eventTitle").text("Update Details");
+        }
+        $("#myModal #personId").val(personId);
+        $('#employeeName').text(name);
+        $('#requestedDate').text(date); 
+        $("#myModal").modal({ backdrop: 'static', keyboard: false }, 'show');
+    }
+</script>
