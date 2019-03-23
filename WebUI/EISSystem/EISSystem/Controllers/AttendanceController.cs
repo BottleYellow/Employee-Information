@@ -43,6 +43,22 @@ namespace EIS.WebApp.Controllers
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
             return Json(attendanceData);
         }
+        [HttpGet]
+        [DisplayName("Attendance Reports New")]
+        public IActionResult AllAttendanceNew()
+        {
+            ViewBag.Locations = GetLocations();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AllAttendanceNew(string date, string type, int location)
+        {
+            string url = GetAllAttendanceNewData(date, type, location);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Attendance_Report_New attendanceData = JsonConvert.DeserializeObject<Attendance_Report_New>(stringData);
+            return Json(attendanceData);
+        }
         #endregion
         [HttpGet]
         [DisplayName("Attendance Summary")]
@@ -255,6 +271,37 @@ namespace EIS.WebApp.Controllers
             else
             {
                 url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
+            }
+            return url;
+        }
+        [NonAction]
+        public string GetAllAttendanceNewData(string date, string type, int location)
+        {
+            string url = "";
+            string[] monthYear = new string[3];
+            string[] week = new string[2];
+            ViewBag.type = type;
+            if (date.Contains('-'))
+            {
+                week = date.Split('-');
+            }
+            else
+            {
+                monthYear = date.Split('/');
+            }
+            if (type == "year")
+            {
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Year/" + monthYear[0] + "/0/" + location;
+            }
+            else if (type == "week")
+            {
+                DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
+                DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location;
+            }
+            else
+            {
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
             }
             return url;
         }

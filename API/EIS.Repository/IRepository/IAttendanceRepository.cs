@@ -13,6 +13,7 @@ namespace EIS.Repositories.IRepository
         Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId);
         string CalculateDate(DateTime date);
         List<SP_GetDateWiseAttendance> dateWiseAttendances(int PersonId, int LocationId, string fromDate, string toDate);
+        Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId);
     }
 
 

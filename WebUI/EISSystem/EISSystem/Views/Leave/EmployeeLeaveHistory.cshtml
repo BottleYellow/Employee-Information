@@ -270,7 +270,9 @@
         GenerateReport(locationValue,employeeValue, type, value, leaveType);
     });
 
-    function GenerateReport(locationId,employeeId,type,value,leaveType) {
+    function GenerateReport(locationId, employeeId, type, value, leaveType) {
+        var Role = '@cookies.Role';
+        var ecode = '@cookies.EmployeeCode';
         $.ajax({
             type: 'POST',
             url: '@Url.Action("EmployeeLeaveHistory", "Leave")?value=' + value + '&type=' + type + '&leaveType=' + leaveType + '&employeeId=' + employeeId + '&locationId=' + locationId,
@@ -279,6 +281,7 @@
                 $('ajax-loader').css("visibility", "visible");
             },
             success: function (data) {
+                var Role = '@cookies.Role';
                 var array = [];
                 var action;
                 for (var i = 0; i < data.length; i++) {
@@ -289,8 +292,18 @@
                     var approvedBy= data[i].ApprovedName;
                     if (status == "Pending") {
                         approvedBy = data[i].EmployeeName + "(Requested)";
-                        action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
+                        if (data[i].EmployeeCode != ecode) {
+                            if (Role == "HR" && data[i].EmployeeRole == "Manager") {
+                                action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Reject</a></li></ul></div>';
+                             }
+                            else {
+                                action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+                            }
+                        }
+                        else { 
+                            action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Reject</a></li></ul></div>';
+                        }
                     }
                     else if (status.startsWith("Approved")) {
                         if (data[i].LeaveType.includes("Past")) {
@@ -314,8 +327,14 @@
                     }
                     else if (status == "Requested For Cancel") {
                         approvedBy = data[i].EmployeeName + "(" + status + ")";
-                        action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-                        status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
+                        if (data[i].EmployeeCode != ecode) {
+                            action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + data[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
+                            status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
+                        }
+                        else {
+                            action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Accept Cancel</a></li><li><a class="disabledLink">Reject Cancel</a></li></ul></div>';
+                            status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + status + '</span>';
+                        }
                     }
                     else {
                         approvedBy = data[i].ApprovedName + "(" + status + ")";
@@ -423,7 +442,7 @@
 
             });
     });
-    
+
     $('#addLeaveByHr').click(function () {
         var url = $("#addLeaveModal").data('url');
         $.get(url, function (data) {

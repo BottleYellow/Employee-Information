@@ -157,7 +157,9 @@
     var selectOpt;
 
     $(document).ready(function () {
-
+     if ('@TempData["BirthdayAlert"]' != '') {
+             bootbox.alert('<h4>@TempData["BirthdayAlert"]</h4><img src="@MyHttpContext.AppBaseUrl/gif/birthday.jpg" style="width:400px" /> ');
+        }
         $('#tableName').html('Monthly Attendance<span style="float:right"> @DateTime.Now.ToString("MMM yyyy")</span>');
         generateReport(buttonSelected);
     });

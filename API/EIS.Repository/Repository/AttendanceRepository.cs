@@ -22,8 +22,7 @@ namespace EIS.Repositories.Repository
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
             InputTwo = InputTwo.ToString();
-
-            IList<AttendanceData> attendanceData = new List<AttendanceData>();
+            
             Attendance_Report Model = new Attendance_Report();
             Model.sP_GetAttendanceCountReports = new List<SP_GetAttendanceCountReport>();
 
@@ -36,7 +35,24 @@ namespace EIS.Repositories.Repository
 
             return Model;
         }
+        public Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId)
+        {
+            SearchFor = SearchFor.ToString();
+            InputOne = InputOne.ToString();
+            InputTwo = InputTwo.ToString();
 
+            Attendance_Report_New Model = new Attendance_Report_New();
+            Model.sP_GetAttendanceCountReportsNew = new List<SP_GetAttendanceCountReport_New>();
+
+            var SP_locationId = new SqlParameter("@locationId", locationId);
+            var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
+            var SP_InputOne = new SqlParameter("@InputOne", InputOne);
+            var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
+            string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo";
+            Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+
+            return Model;
+        }
         public EmployeeAttendanceReport GetAttendanceReportSummary(string type, int PersonId, int year, int? month)
         {
             string InputOne = year.ToString();

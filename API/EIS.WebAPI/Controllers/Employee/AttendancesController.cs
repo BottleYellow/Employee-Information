@@ -96,6 +96,12 @@ namespace EIS.WebAPI.Controllers
             Attendance_Report attendanceData = _repository.Attendances.GetAttendanceCountReport(SearchFor, InputOne, InputTwo, locationId);
             return Ok(attendanceData);
         }
+        [HttpGet("GetAllAttendanceNew/{SearchFor}/{InputOne}/{InputTwo}/{locationId}")]
+        public IActionResult GetAllAttendanceNew([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId)
+        {
+            Attendance_Report_New attendanceData = _repository.Attendances.GetAttendanceCountReportNew(SearchFor, InputOne, InputTwo, locationId);
+            return Ok(attendanceData);
+        }
         #endregion
 
         #region[My Attendance History]

@@ -76,10 +76,19 @@ namespace EIS.WebAPI.Controllers.Dashboard
 
         [Route("BirthdayData/{day}/{month}")]
         [HttpGet]
-        public IActionResult GetBirthdayPerson([FromRoute]int day,[FromRoute]int month)
+        public IActionResult GetAllEmployeeBirthday([FromRoute]int day,[FromRoute]int month)
         {
             List<Person> person = _repository.Employee.FindAllByCondition(x => x.DateOfBirth.Day == day && x.DateOfBirth.Month==month).ToList();
             return Ok(person);
+        }
+
+        [Route("EmployeeBirthday/{day}/{month}/{id}")]
+        public IActionResult GetEmployeeBirthday([FromRoute]int day,[FromRoute]int month,[FromRoute]string id)
+        {
+            int personId = Convert.ToInt32(id);
+
+            string birthdayEmployeeName=_repository.Employee.FindByCondition(x => x.Id==personId && x.DateOfBirth.Day == day && x.DateOfBirth.Month == month)?.FullName;
+            return Ok(birthdayEmployeeName);
         }
     }
 }

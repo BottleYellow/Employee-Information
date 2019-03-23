@@ -49,7 +49,7 @@ namespace EIS.WebApp.Controllers
                 HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
                 HttpContext.Session.SetString("ImagePath", "EmployeeData/" + CookiesData.Person.TenantId + CookiesData.Person.EmployeeCode + "/Image/" + CookiesData.Person.Image);
                 string role = CookiesData.Cookies.Role;
-                TempData["BirhdayAlert"] = "Today is Birthday of ";
+                TempData["BirthdayAlert"] = "Today is Birthday of ";
                 return RedirectToAction(role + "Dashboard", "Dashboard");
             }         
         }
