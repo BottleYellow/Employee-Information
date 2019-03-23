@@ -45,9 +45,11 @@
         opacity: 0.5;
         text-decoration: none;
     }
+
     a {
         cursor: pointer;
     }
+
     table.dataTable td {
         margin-left: 0;
         margin-right: auto;
@@ -55,9 +57,28 @@
         width: 1px;
         white-space: nowrap;
     }
-    .*{
-        font-family:Arial;
-        font-style:normal;
+
+    .* {
+        font-family: Arial;
+        font-style: normal;
+    }
+
+    .row {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .card .body {
+        padding: 0px;
+    }
+
+    label {
+        padding: 15px;
     }
 </style>
 <head>
@@ -394,7 +415,7 @@
                     var hr = workingValue.slice(0, 2);
                     var min = workingValue.slice(3, 5);
                     expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
-                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');                   
+                    expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
                 }
                 else {
                     expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
@@ -518,7 +539,7 @@
             data: banerArrayLeaves,
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[7].includes("Pending")) {
-                    $('td', nRow).addClass('warning');               
+                    $('td', nRow).addClass('warning');
                 } else if (aData[7].includes("Approved")) {
                     $('td', nRow).addClass('success');
                 } else {

@@ -1,0 +1,393 @@
+﻿@using EIS.WebApp.Services
+@model IEnumerable<EIS.Entities.Employee.Person>
+<head>
+    <title>All Attendance</title>
+    <link href="~/Ems/css/toastr.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    @*for pdf*@
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        div .panel-primary {
+            text-align: center
+        }
+
+        #locations {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
+
+        * {
+            font-family: Arial;
+            font-style: normal
+        }
+
+        .body #headeropt {
+            padding: 10px;
+        }
+
+        #headerPnl {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
+    <div class="container-fluid">
+        <div class="block-header">
+            <HeaderWithButton header-name="Attendance Summary"></HeaderWithButton>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row col-md-12" id="headeropt">
+                            <div class="col-md-3">
+                                <label>Select Location</label>
+                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Select Type Of Reports</label>
+                                <select class="form-control" id="select">
+                                    <option value="year" id="year">Year</option>
+                                    <option selected value="month" id="month">Month</option>
+                                    @*<option value="week" id="week">Week</option>*@
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <div id="inputyeardiv" hidden="hidden">
+                                    <label>Select Year</label><br />
+                                    <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
+                                </div>
+                                <div id="inputmonthdiv">
+                                    <label>Select Month</label><br />
+                                    <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div class="row" id="headerPnl">
+                                    <div id="baner" hidden>
+                                        <div class="col-md-3">
+                                            <div id="pnlBaner" class="panel panel-primary">
+                                                <div id="banerPanelHeading" class="panel-heading"></div>
+                                                <div id="twoff1" class="panel-body">
+                                                    <label id="alltwoffb"></label><br />
+                                                    <label id="allthb"></label>
+                                                    <label id="twdb"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="kondhwa" hidden>
+                                        <div class="col-md-3">
+                                            <div id="pnlKondhwa" class="panel panel-primary">
+                                                <div id="kondhwaPanelHeading" class="panel-heading"></div>
+                                                <div id="twoff1" class="panel-body">
+                                                    <label id="alltwoffk"></label><br />
+                                                    <label id="allthk"></label>
+                                                    <label id="twdk"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 id="report">Attendance Report</h4>
+                            </div>
+                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Location</th>
+                                        <th>Name</th>
+                                        <th>Total Working Days</th>
+                                        <th>Present Days</th>
+                                        <th>Proposed Leaves</th>
+                                        <th>Absent Days</th>
+                                        <th>Extra Working Days</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+@*for datetimepicker*@
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+@*for pdf*@
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/toastr.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/js/TWeeklyOffCount.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
+        $('#banerPanelHeading').html(data[1].LocationName);
+        $('#kondhwaPanelHeading').html(data[0].LocationName);
+        var currentDate = new Date();
+        var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
+        var date = new Date();
+        var cMonth = date.getMonth();
+        var cDate = date.getDate();
+        var cYear = date.getFullYear();
+
+        $('#inputmonth').datetimepicker({
+            format: "MM/YYYY",
+            maxDate: new Date(cYear, cMonth, cDate)
+        });
+        var y = new Date().getFullYear();
+        var ld = new Date(y, m, 0).getDate();
+
+        $('#inputmonth').val(m + '/' + y);
+        var location = $('#locations').val();
+        var alltwoffk = calWeeklyOffMonthly(m, y);
+        var alltwoffb = calWeeklyOffMonthly(m, y);
+        $('#baner').show();
+        $('#kondhwa').show();
+        $('#alltwoffk').text('Weekly Off : ' + alltwoffk);
+        $('#alltwoffb').text('Weekly Off : ' + (alltwoffb + 2));
+        $.ajax({
+            type: "GET",
+            url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/" + y + "/" + location,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var k = 0, b = 0;
+
+                $.each(data, function (i, item) {
+                    if (item.location.locationName.startsWith("B")) {
+                        b = b + 1;
+                    }
+                    else if (item.location.locationName.startsWith("K")) {
+                        k = k + 1;
+                    }
+                });
+                $('#allthb').html('Holidays : ' + b);
+                $('#allthk').html('Holidays : ' + k);
+                generateReport(m + '/' + y, 'month', location);
+            },
+            error: function () {
+                bootbox.alert("Something went wrong..Please try after sometime");
+            }
+        });
+
+
+        $('#select').on('change', function () {
+            var v = $('#select').val();
+            if (v == 'year') {
+                var date = new Date();
+                var cMonth = date.getMonth();
+                var cDate = date.getDate();
+                var cYear = date.getFullYear();
+                $('#inputyear').val(y);
+                $('#inputyeardiv').show();
+                $('#inputmonthdiv').hide();
+                $('#inputyear').datetimepicker({
+                    format: "YYYY",
+                    maxDate: new Date(cYear, cMonth, cDate)
+                });
+            }
+            else if (v == 'month') {
+                var date = new Date();
+                var cMonth = date.getMonth();
+                var cDate = date.getDate();
+                var cYear = date.getFullYear();
+                $('#inputmonthdiv').show();
+                $('#inputyeardiv').hide();
+                $('#inputmonth').datetimepicker({
+                    format: "MM/YYYY",
+                    maxDate: new Date(cYear, cMonth, cDate)
+                });
+            }
+        });
+
+        $('#generateReport').on('click', function () {
+            var v = $('#select').val();
+            var location = $('#locations').val();
+            if (v == 'year') {
+                var value = $("#inputyear").val();
+                if (location == 0) {
+                    $('#baner').show();
+                    $('#kondhwa').show();
+                }
+                else if (location == 1) {
+                    $('#baner').hide();
+                    $('#kondhwa').show();
+                }
+                else if (location == 2) {
+                    $('#kondhwa').hide();
+                    $('#baner').show();
+                }
+                var weeklyoff = calWeeklyOffYearly(value);
+                $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
+                $('#alltwoffk').text('Weekly Off : ' + weeklyoff[0]);
+
+                $.ajax({
+                    type: "GET",
+                    url: "@MyHttpContext.APIBaseURL/api/Holiday/" + value + "/" + location,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var k = 0, b = 0;
+                        $.each(data, function (i, item) {
+                            if (item.location.locationName.startsWith("B")) {
+                                b = b + 1;
+                             }
+                            else if (item.location.locationName.startsWith("K")) {
+                                k = k + 1;
+                            }
+                        });
+                        $('#allthb').html('Holidays : ' + b);
+                        $('#allthk').html('Holidays : ' + k);
+
+                        generateReport(value, 'year', location);
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong..Please try after sometime");
+                    }
+                });
+
+            }
+            else if (v == 'month') {
+                var value = $("#inputmonth").val();
+                $("#inputmonth").val(value);
+                var monthYear = value.split('/');
+                var y = monthYear[1];
+                var m = monthYear[0];
+                var location = $('#locations').val();
+                if (location == 0) {
+                    $('#baner').show();
+                    $('#kondhwa').show();
+                }
+                else if (location == 1) {
+                    $('#baner').hide();
+                    $('#kondhwa').show();
+                }
+                else if (location == 2) {
+                    $('#baner').show();
+                    $('#kondhwa').hide();
+                }
+                var weeklyoff = calWeeklyOffMonthly(m, y);
+                $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
+                $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
+                $.ajax({
+                    type: "GET",
+                    url: "@MyHttpContext.APIBaseURL/api/Holiday/" + m + "/" + y + "/" + location,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var k = 0, b = 0;
+
+                        $.each(data, function (i, item) {
+                            if (item.location.locationName.startsWith("B")) {
+                                b = b + 1;
+                            }
+                            else if (item.location.locationName.startsWith("K")) {
+                                k = k + 1;
+                            }
+                        });
+                        $('#allthb').html('Holidays : ' + b);
+                        $('#allthk').html('Holidays : ' + k);
+                        generateReport(value, 'month', location);
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong..Please try after sometime");
+                    }
+                });
+
+            }
+        });
+
+        function generateReport(value, type, location) {
+            $.ajax({
+                url: '@Url.Action("AllAttendance","Attendance")',
+                type: "POST",
+                datatype: "json",
+                data: { "date": value, "type": type, "location": location },
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                success: function (data) {
+                    var array = [];
+                        for (var i = 0; i < data.sP_GetAttendanceCountReports.length; i++) {
+                            array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName, data.sP_GetAttendanceCountReports[i].WorkingDay, data.sP_GetAttendanceCountReports[i].PresentDays, data.sP_GetAttendanceCountReports[i].NoLeave, data.sP_GetAttendanceCountReports[i].AbsentDay, data.sP_GetAttendanceCountReports[i].ExtraWorkingDays]);
+                        }
+                        $('#example').DataTable().destroy();
+                    $('#example').DataTable({
+                        scrollX:true,
+                       order:[1,'asc'],
+                        data: array
+                });
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
+
+            });
+        }
+    });
+</script>

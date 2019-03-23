@@ -44,6 +44,22 @@ namespace EIS.WebApp.Controllers
             return Json(attendanceData);
         }
         #endregion
+        [HttpGet]
+        [DisplayName("Attendance Summary")]
+        public IActionResult AllAttendanceReport()
+        {
+            ViewBag.Locations = GetLocations();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AllAttendanceReport(string date, string type, int location)
+        {
+            string url = GetAllAttendanceData(date, type, location);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
+            return Json(attendanceData);
+        }
 
         #region[Attendance History]
         [DisplayName("My Attendance History")]
@@ -80,7 +96,7 @@ namespace EIS.WebApp.Controllers
                                                 Id = e.Id,
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
-            ViewBag.Persons = employees.OrderBy(x=>x.FirstName);
+            ViewBag.Persons = employees.OrderBy(x => x.FirstName);
             ViewBag.Locations = GetLocations();
             return View(employees);
         }
@@ -145,18 +161,18 @@ namespace EIS.WebApp.Controllers
             IEnumerable<Person> employees = from e in employeesdata.Where(x => x.EmployeeCode != GetSession().EmployeeCode)
                                             select new Person
                                             {
-                                                Id=e.Id,
+                                                Id = e.Id,
                                                 EmployeeCode = e.EmployeeCode,
                                                 FirstName = e.FirstName + " " + e.LastName
                                             };
-            ViewBag.Persons = employees.OrderBy(x=>x.FullName);
+            ViewBag.Persons = employees.OrderBy(x => x.FullName);
             ViewBag.Locations = GetLocations();
             return View(employees);
         }
 
         [ActionName("DateWiseAttendance")]
         [HttpPost]
-        public IActionResult GetDateWiseAttendance(string fromdate,string todate,string id,int LocationId) 
+        public IActionResult GetDateWiseAttendance(string fromdate, string todate, string id, int LocationId)
         {
             string url = "";
             if (!string.IsNullOrEmpty(fromdate) && !string.IsNullOrEmpty(todate))

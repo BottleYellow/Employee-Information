@@ -10,6 +10,11 @@
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style type="text/css">
+
+        .label-OnLeave {
+            background-color: violet;
+        }
+
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
@@ -34,7 +39,7 @@
             float: right;
         }
 
-       
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -48,11 +53,13 @@
                 top: 45%;
                 left: 45%;
             }
+
         table.dataTable td {
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -87,12 +94,12 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                            <label>From Date</label>
-                                            <input class="form-control" type="text" id="fromdate" autocomplete="off"/>                                      
+                                        <label>From Date</label>
+                                        <input class="form-control" type="text" id="fromdate" autocomplete="off" />
                                     </div>
-                                    <div class="col-md-3">                                        
-                                            <label>To Date</label>
-                                            <input class="form-control" type="text" id="todate" autocomplete="off"/>
+                                    <div class="col-md-3">
+                                        <label>To Date</label>
+                                        <input class="form-control" type="text" id="todate" autocomplete="off" />
                                     </div>
                                     <div class="col-md-3">
                                         <br />
@@ -105,20 +112,20 @@
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                                <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Employee Code</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                            <th>Day</th>
-                                            <th>Clock In</th>
-                                            <th>Clock Out</th>
-                                            <th>Total Working Hours</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                            <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Code</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Clock In</th>
+                                        <th>Clock Out</th>
+                                        <th>Total Working Hours</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -156,7 +163,7 @@
             format: "DD-MMM-YYYY",
             useCurrent: false,
             maxDate: maxDate,
-            defaultDate: d           
+            defaultDate: d
         });
         $("#todate").datetimepicker({
             format: "DD-MMM-YYYY",
@@ -164,7 +171,6 @@
             maxDate: maxDate,
             defaultDate: d
         });
-
         $('#locations').on('change', function () {
             var loc = $('#locations').val();
             $.ajax({
@@ -185,7 +191,7 @@
         var fromValue = $("#fromdate").val();
         var toValue = $("#todate").val();
         generateReport(fromValue, toValue, 0, 0);
-        
+
         $('#generateReport').on('click', function () {
             var loc = $('#locations').val();
             var id = $('#selectEmployee').val();
@@ -234,7 +240,13 @@
                                 timeIn = '-';
                                 timeOut = '-';
                             }
-                            else {
+                        else
+                            if (Status == "OnLeave") {
+                                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                    timeIn = '-';
+                                    timeOut = '-';
+                            }
+                       else {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                                 timeIn = '-';
                                 timeOut = '-';
@@ -262,8 +274,9 @@
                     $('.ajax-loader').css("visibility", "hidden");
                 }
             });
-        }      
+        }
     });
+
 
 </script>
 
