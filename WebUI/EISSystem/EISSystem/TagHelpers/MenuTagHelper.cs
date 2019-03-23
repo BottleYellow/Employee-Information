@@ -30,8 +30,9 @@ namespace EIS.WebApp.TagHelpers
             if (ac != null)
                 AccessList = JsonConvert.DeserializeObject<List<Navigation>>(ac);
             string appBaseUrl = MyHttpContext.AppBaseUrl;
+
             String[] ParentMenus = new String[8] { "Attendance Management", "Role Management", "Leave Management", "User Management", "", "Task", "Holidays","Locations" };
-            String[] SubMenus = { "List Of Employees", "Leave Policies", "View All Requests", "Leave Credits", "Show My Leaves", "List Of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "Attendance Reports New", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List Of Holidays","Attendance Datewise","Manage Locations","Show Holidays" };
+            String[] SubMenus = { "List Of Employees", "Leave Policies", "View All Requests", "Leave Credits", "Show My Leaves", "List Of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "Attendance Reports New", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List Of Holidays","Attendance Datewise","Manage Locations","Show Holidays", "Attendance Summary" };
             if (Role == "Admin" || Role=="HR" || Role == "Manager")
                 ParentMenus.SetValue("Employee Management", 4);
             foreach (var menu in AccessList)
@@ -43,8 +44,8 @@ namespace EIS.WebApp.TagHelpers
                     if (menu.ParentId == 0)
                     {
                         List<Navigation> subMenuList = (from i in AccessList
-                                                              where i.ParentId == menu.Id
-                                                              select i).ToList();
+                                                        where i.ParentId == menu.Id
+                                                        select i).ToList();
                         List<Navigation> NewList = new List<Navigation>();
                         foreach (var submenu in subMenuList)
                             if (SubMenus.Contains(submenu.Name))
@@ -52,7 +53,7 @@ namespace EIS.WebApp.TagHelpers
                         if (NewList.Count() == 1)
                         {
                             var submenu = NewList.FirstOrDefault();
-                            output.Content.AppendHtml("<a href=" + appBaseUrl+submenu.URL + "><span>" + submenu.Name + "</span></a>");
+                            output.Content.AppendHtml("<a href=" + appBaseUrl + submenu.URL + "><span>" + submenu.Name + "</span></a>");
                         }
                         else
                         {

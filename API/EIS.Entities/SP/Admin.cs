@@ -10,7 +10,7 @@ namespace EIS.Entities.SP
     {
         public List<SP_AdminDashboard> sP_AdminDashboards { get; set; }
         public SP_AdminDashboardCount sP_AdminDashboardCount { get; set; }
-        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; } 
+        public List<Sp_AdminDashboardLeave> sp_AdminDashboardLeaves { get; set; }
     }
 
     public class SP_AdminDashboard
@@ -68,7 +68,9 @@ namespace EIS.Entities.SP
         public Nullable<int> WorkingDay { get; set; }
         public Nullable<int> NoLeave { get; set; }
         public Nullable<int> AbsentDay { get; set; }
+        public Nullable<int> ExtraWorkingDays { get; set; }
     }
+    
     //New Implementation
     public class SP_GetAttendanceCountReport_New
     {
