@@ -218,7 +218,12 @@
                     $("#tp1").val(t);
                     $("#psid1").val(pid);
                     $("#typeid1").val(x);
-                    $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
+                    if (data == -2) {
+                        $("#LeaveType").append('<span title="This leave will be treated as unpaid leave" id="msg1" class="text-success">Unpaid Leaves</span>');
+                    }
+                    else {
+                        $("#LeaveType").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
+                    }
                     $("#dateFrom").removeAttr('disabled');
                     $("#dateTo").removeAttr('disabled');
                     $("#reason").removeAttr('disabled');
@@ -262,7 +267,7 @@
                                     });
                                     $("#btnAddLeave").prop("disabled", true);
                                 }
-                                else if (data > avl) {
+                                else if (data > avl && avl != -2) {
                                     bootbox.alert({
                                         message: "You can request leave for only " + avl + " days."
                                     });
@@ -270,7 +275,12 @@
                                 }
                                 else {
                                     $("#trd1").val(data);
-                                    $("#av1").val(avl - data);
+                                    if (avl == -2) {
+                                        $("#av1").val(0);
+                                    }
+                                    else {
+                                        $("#av1").val(avl - data);
+                                    }
 
                                     var d = form.serialize();
                                     bootbox.confirm({

@@ -5,6 +5,7 @@ using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
 using EIS.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace EIS.Repositories.Repository
 {
@@ -46,7 +47,16 @@ namespace EIS.Repositories.Repository
         }
         public float GetAvailableLeaves(int PersonId, int LeaveId)
         {
-            float n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.Id == LeaveId).Select(x => x.Available).FirstOrDefault();
+            float n;
+            bool isPaid = _dbContext.LeaveCredit.Include(x => x.LeaveRule).Where(x => x.Id == LeaveId).FirstOrDefault().LeaveRule.IsPaid;
+            if (isPaid == true)
+            {
+                n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.Id == LeaveId).Select(x => x.Available).FirstOrDefault();
+            }
+            else
+            {
+                n = -2;
+            }
             return n;
         }
 

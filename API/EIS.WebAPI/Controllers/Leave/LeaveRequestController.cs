@@ -106,7 +106,7 @@ namespace EIS.WebAPI.Controllers
         [Route("Employee/{id}")]
         public IActionResult GetLeaveRequestsByEmployee([FromRoute] int id)
         {
-           List <SP_EmployeeLeaveRequest> leaveData= _repository.LeaveRequest.GetEmployeeLeaveData(id);
+            List<SP_EmployeeLeaveRequest> leaveData = _repository.LeaveRequest.GetEmployeeLeaveData(id);
             return Ok(leaveData);
         }
 
@@ -131,8 +131,9 @@ namespace EIS.WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(Status))
             {
+                string OldStatus = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId).Status;
                 string messsege = _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
-                SendMail(RequestId, Status);
+                SendMail(RequestId, Status, OldStatus);
                 return Ok(messsege);
             }
             return NotFound();
@@ -164,7 +165,7 @@ namespace EIS.WebAPI.Controllers
             Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             leave.EmployeeName = p.FullName;
             leave.TenantId = TenantId;
-            leave.TypeId = _repository.LeaveCredit.FindByCondition(x => x.Id==leave.TypeId).LeaveId;
+            leave.TypeId = _repository.LeaveCredit.FindByCondition(x => x.Id == leave.TypeId).LeaveId;
             _repository.LeaveRequest.CreateAndSave(leave);
 
             string msg = null;
@@ -177,7 +178,7 @@ namespace EIS.WebAPI.Controllers
                 msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
             }
 
-            SendMail(leave.Id, "Pending");
+            SendMail(leave.Id, "Pending", null);
             return Ok(msg);
         }
 
@@ -194,9 +195,10 @@ namespace EIS.WebAPI.Controllers
             return Ok(leave);
         }
 
-        public void SendMail(int RequestId, string status)
+        public void SendMail(int RequestId, string status, string OldStatus)
         {
             LeaveRequest leave = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId);
+            bool isPaid = _repository.LeaveRequest.FindAll().Include(x => x.TypeOfLeave).Where(x => x.Id == RequestId).FirstOrDefault().TypeOfLeave.IsPaid;
             Person person = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
             string Role = null;
             if (person != null)
@@ -208,11 +210,26 @@ namespace EIS.WebAPI.Controllers
             string bodyforadmin = null;
             if (status == "Pending")
             {
-                body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
-                body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
-                body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
-                body += "Requested Days:" + leave.RequestedDays;
-                bodyforadmin = person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
+                if (OldStatus == "Approved")
+                {
+                    body += "Your Approved leave request is currently on hold and current status is Pending.\n";
+                    body += "Date From :" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Date To :" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Requested Days :" + leave.RequestedDays;
+                    bodyforadmin = "Approved leave request of " + person.FullName + " is currently on hold and curent status is Pending.\n";
+                    bodyforadmin += "Leave Details : \n";
+                    bodyforadmin += "Date From :" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    bodyforadmin += "Date To :" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    bodyforadmin += "Requested Days :" + leave.RequestedDays;
+                }
+                else
+                {
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days is submitted successfully.\n";
+                    body += "Date From:" + leave.FromDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Date To:" + leave.ToDate.ToString("dd/MM/yyyy") + "\n";
+                    body += "Requested Days:" + leave.RequestedDays;
+                    bodyforadmin = person.FullName + " has send a request for " + leave.LeaveType + " leave from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + ".";
+                }
             }
             else if (status == "Reject")
             {
@@ -222,7 +239,7 @@ namespace EIS.WebAPI.Controllers
             else if (status == "Approve")
             {
                 LeaveCredit credit = _repository.LeaveCredit.FindByCondition(x => x.LeaveId == leave.TypeId && x.PersonId == leave.PersonId);
-                if (credit != null)
+                if (credit != null && isPaid==true)
                 {
                     body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + credit.Available.ToString() + " days";
                 }
@@ -234,7 +251,7 @@ namespace EIS.WebAPI.Controllers
             }
             else if (status == "Cancel")
             {
-                if (leave.Status == "Pending")
+                if (OldStatus == "Pending")
                 {
                     body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been cancelled";
                 }
@@ -259,7 +276,7 @@ namespace EIS.WebAPI.Controllers
             {
                 foreach (var pers in p)
                 {
-                    if(pers.Name!=Role)
+                    if (pers.Name != Role)
                         new EmailManager(_configuration, _repository).SendEmail(subject, bodyforadmin, pers.EmailAddress, null);
                 }
             }
@@ -341,7 +358,7 @@ namespace EIS.WebAPI.Controllers
             string WeeklyOffType = _repository.Employee.GetWeeklyOffByPerson(PersonId);
             for (var d = FromDate; d <= ToDate; d = d.AddDays(1))
             {
-                Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId && x.IsActive==true);
+                Holiday holiday = _repository.Holidays.FindByCondition(x => x.Date == d && x.LocationId == LocationId && x.IsActive == true);
                 if (holiday != null)
                 {
                     if (holiday.Date.DayOfWeek == DayOfWeek.Sunday && d.DayOfWeek == DayOfWeek.Sunday)
@@ -391,8 +408,8 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAvailableCount([FromRoute]int personId)
         {
-            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive==true).Sum(x => x.Available);
-           int value= Convert.ToInt32(leave);
+            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive == true).Sum(x => x.Available);
+            int value = Convert.ToInt32(leave);
             return Ok(value);
         }
 
