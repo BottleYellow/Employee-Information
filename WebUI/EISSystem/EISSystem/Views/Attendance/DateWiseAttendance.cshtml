@@ -82,7 +82,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"Id","FullName"))">
+                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
                                             <option value="0">All</option>
                                         </select>
                                     </div>
@@ -173,7 +173,7 @@
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
                 },
                 error: function () {

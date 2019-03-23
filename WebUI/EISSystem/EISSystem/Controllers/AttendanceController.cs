@@ -71,9 +71,9 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult EmployeeReports(string date, string type)
         {
-            //int id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            int id = Convert.ToInt32(GetSession().PersonId);
-            string url = GetAttendanceSummaryData(date, type, id);
+            //int id = Convert.ToInt32(GetSession().PersonId);
+            string EmployeeCode = GetSession().EmployeeCode;
+            string url = GetAttendanceSummaryData(date, type, EmployeeCode);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
@@ -101,7 +101,7 @@ namespace EIS.WebApp.Controllers
             return View(employees);
         }
         [HttpPost]
-        public JsonResult AttendanceSummary(string date, string type, int? id)
+        public JsonResult AttendanceSummary(string date, string type, string id)
         {
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
@@ -188,13 +188,8 @@ namespace EIS.WebApp.Controllers
 
         #region[Methods]
         [NonAction]
-        public string GetAttendanceSummaryData(string date, string type, int? id)
+        public string GetAttendanceSummaryData(string date, string type, string id)
         {
-            if (id == null)
-            {
-                id = Convert.ToInt32(GetSession().PersonId);
-                //id = Convert.ToInt32(Cache.GetStringValue("PersonId"));
-            }
 
             string url = "";
             string[] monthYear = new string[3];

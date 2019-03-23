@@ -105,11 +105,11 @@ namespace EIS.Repositories.Repository
             bool isPaid = _dbContext.LeaveRequests.Include(x => x.TypeOfLeave).Where(x => x.Id == RequestId).FirstOrDefault().TypeOfLeave.IsPaid;
             if (Status == "Approve")
             {
-                //if (leaveRequest.FromDate <= DateTime.Now.Date || leaveRequest.ToDate<=DateTime.Now.Date)
-                //{
-                //    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                //    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
-                //}
+                if ((leaveRequest.FromDate <= DateTime.Now.Date || leaveRequest.ToDate <= DateTime.Now.Date)&&leaveRequest.LeaveType.Contains("Past"))
+                {
+                    leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
+                    leaveCredit.Available = leaveCredit.Available - leaveRequest.RequestedDays;
+                }
                 leaveRequest.ApprovedBy = PersonId;
                 leaveRequest.UpdatedBy = PersonId;
                 leaveRequest.Status = "Approved";

@@ -246,7 +246,7 @@
             success: function (data) {
                 $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                 $.each(data, function (data, value) {
-                    $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                 });
             },
             error: function () {
@@ -292,7 +292,7 @@
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
                 },
                 error: function () {

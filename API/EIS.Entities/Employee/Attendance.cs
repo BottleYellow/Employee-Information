@@ -8,6 +8,7 @@ namespace EIS.Entities.Employee
     {
         #region[Attendance]
         public int? PersonId { get; set; }
+        public string EmployeeCode { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateIn { get; set; }
         [DataType(DataType.Time)]

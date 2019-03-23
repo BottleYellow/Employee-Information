@@ -12,101 +12,6 @@ namespace EIS.Data.Migrations
                 name: "LMS");
 
             migrationBuilder.CreateTable(
-                name: "_sp_AdminDashboard",
-                columns: table => new
-                {
-                    EmployeeCode = table.Column<string>(nullable: false),
-                    EmployeeName = table.Column<string>(nullable: true),
-                    LocationName = table.Column<string>(nullable: true),
-                    DateIn = table.Column<DateTime>(nullable: true),
-                    DateOut = table.Column<DateTime>(nullable: true),
-                    TimeIn = table.Column<TimeSpan>(nullable: true),
-                    TimeOut = table.Column<TimeSpan>(nullable: true),
-                    TotalHours = table.Column<TimeSpan>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    WorkingHours = table.Column<TimeSpan>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_AdminDashboard", x => x.EmployeeCode);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_AdminDashboardcount",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AllEmployeesCount = table.Column<int>(nullable: false),
-                    PresentEmployees = table.Column<int>(nullable: false),
-                    OnLeaveEmployee = table.Column<int>(nullable: false),
-                    PendingLeavesCount = table.Column<int>(nullable: false),
-                    AbsentEmployees = table.Column<int>(nullable: false),
-                    ApprovedLeavesCount = table.Column<int>(nullable: false),
-                    RejectedLeavesCount = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_AdminDashboardcount", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_AdminDashboardLeave",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmployeeCode = table.Column<string>(nullable: true),
-                    EmployeeName = table.Column<string>(nullable: true),
-                    LeaveType = table.Column<string>(nullable: true),
-                    FromDate = table.Column<DateTime>(nullable: false),
-                    ToDate = table.Column<DateTime>(nullable: false),
-                    RequestedDays = table.Column<double>(nullable: false),
-                    ApprovedBy = table.Column<string>(nullable: true),
-                    AppliedDate = table.Column<DateTime>(nullable: false),
-                    LocationName = table.Column<string>(nullable: true),
-                    ApprovedDays = table.Column<double>(nullable: false),
-                    Reason = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_AdminDashboardLeave", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_EmployeeDashboard",
-                columns: table => new
-                {
-                    DateIn = table.Column<DateTime>(nullable: false),
-                    TimeIn = table.Column<TimeSpan>(nullable: true),
-                    TimeOut = table.Column<TimeSpan>(nullable: true),
-                    TotalHours = table.Column<TimeSpan>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
-                    WorkingHours = table.Column<TimeSpan>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_EmployeeDashboard", x => x.DateIn);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_EmployeeDashboardcount",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PresentDays = table.Column<int>(nullable: false),
-                    OnLeaveDays = table.Column<int>(nullable: false),
-                    TotalLeavesTaken = table.Column<int>(nullable: false),
-                    AvailableLeaves = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_EmployeeDashboardcount", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "_sp_EmployeeLeaveRequest",
                 columns: table => new
                 {
@@ -124,35 +29,6 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__sp_EmployeeLeaveRequest", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetAdminHrManager",
-                columns: table => new
-                {
-                    EmailAddress = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetAdminHrManager", x => x.EmailAddress);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetAttendanceCountReport",
-                columns: table => new
-                {
-                    EmployeeCode = table.Column<string>(nullable: false),
-                    EmployeeName = table.Column<string>(nullable: true),
-                    LocationName = table.Column<string>(nullable: true),
-                    PresentDays = table.Column<int>(nullable: true),
-                    WorkingDay = table.Column<int>(nullable: true),
-                    NoLeave = table.Column<int>(nullable: true),
-                    AbsentDay = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetAttendanceCountReport", x => x.EmployeeCode);
                 });
 
             migrationBuilder.CreateTable(
@@ -174,108 +50,6 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__sp_GetAttendanceCountReportNew", x => x.EmployeeCode);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetDateWiseAttendances",
-                columns: table => new
-                {
-                    SrId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmployeeCode = table.Column<string>(nullable: true),
-                    FullName = table.Column<string>(nullable: true),
-                    date = table.Column<DateTime>(nullable: true),
-                    TimeIn = table.Column<TimeSpan>(nullable: true),
-                    TimeOut = table.Column<TimeSpan>(nullable: true),
-                    TotalHours = table.Column<TimeSpan>(nullable: true),
-                    Status = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetDateWiseAttendances", x => x.SrId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetEmployee",
-                columns: table => new
-                {
-                    EmployeeCode = table.Column<string>(nullable: false),
-                    FullName = table.Column<string>(nullable: true),
-                    Image = table.Column<string>(nullable: true),
-                    Gender = table.Column<string>(nullable: true),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    MobileNumber = table.Column<string>(nullable: true),
-                    EmailAddress = table.Column<string>(nullable: true),
-                    JoinDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    LocationName = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetEmployee", x => x.EmployeeCode);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetEmployeeAttendanceCount",
-                columns: table => new
-                {
-                    AverageTimeIn = table.Column<string>(nullable: false),
-                    AverageTimeOut = table.Column<string>(nullable: true),
-                    AverageHours = table.Column<string>(nullable: true),
-                    AdditionalWorkingHours = table.Column<string>(nullable: true),
-                    PresentDays = table.Column<int>(nullable: false),
-                    LeaveDays = table.Column<int>(nullable: false),
-                    TotalWorkingDays = table.Column<int>(nullable: false),
-                    TotalDays = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetEmployeeAttendanceCount", x => x.AverageTimeIn);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetEmployeeAttendanceData",
-                columns: table => new
-                {
-                    SrId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DateIn = table.Column<DateTime>(nullable: true),
-                    TimeIn = table.Column<TimeSpan>(nullable: true),
-                    TimeOut = table.Column<TimeSpan>(nullable: true),
-                    TotalHours = table.Column<TimeSpan>(nullable: true),
-                    Status = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetEmployeeAttendanceData", x => x.SrId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_GetLeaveCount",
-                columns: table => new
-                {
-                    LeaveCount = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_GetLeaveCount", x => x.LeaveCount);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "_sp_MailConfigurations",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: true),
-                    SMTPPort = table.Column<string>(nullable: true),
-                    Host = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__sp_MailConfigurations", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -503,6 +277,7 @@ namespace EIS.Data.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     PersonId = table.Column<int>(type: "int", nullable: true),
+                    EmployeeCode = table.Column<string>(type: "nvarchar(30)", nullable: true),
                     DateIn = table.Column<DateTime>(nullable: false),
                     TimeIn = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateOut = table.Column<DateTime>(type: "date", nullable: true),
@@ -1008,49 +783,10 @@ namespace EIS.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "_sp_AdminDashboard");
-
-            migrationBuilder.DropTable(
-                name: "_sp_AdminDashboardcount");
-
-            migrationBuilder.DropTable(
-                name: "_sp_AdminDashboardLeave");
-
-            migrationBuilder.DropTable(
-                name: "_sp_EmployeeDashboard");
-
-            migrationBuilder.DropTable(
-                name: "_sp_EmployeeDashboardcount");
-
-            migrationBuilder.DropTable(
                 name: "_sp_EmployeeLeaveRequest");
 
             migrationBuilder.DropTable(
-                name: "_sp_GetAdminHrManager");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetAttendanceCountReport");
-
-            migrationBuilder.DropTable(
                 name: "_sp_GetAttendanceCountReportNew");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetDateWiseAttendances");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetEmployee");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetEmployeeAttendanceCount");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetEmployeeAttendanceData");
-
-            migrationBuilder.DropTable(
-                name: "_sp_GetLeaveCount");
-
-            migrationBuilder.DropTable(
-                name: "_sp_MailConfigurations");
 
             migrationBuilder.DropTable(
                 name: "tblAttendance",
