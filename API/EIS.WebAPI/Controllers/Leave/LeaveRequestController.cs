@@ -410,6 +410,8 @@ namespace EIS.WebAPI.Controllers
         {
             float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive == true).Sum(x => x.Available);
             int value = Convert.ToInt32(leave);
+            if (value < 0) { value = 0; }
+                
             return Ok(value);
         }
 
