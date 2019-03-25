@@ -96,10 +96,13 @@ namespace EIS.WebAPI.Controllers.Dashboard
         {            
             int pId = Convert.ToInt32(personId);
             DateTime date = Convert.ToDateTime(dateSelected);
+
             Attendance attendance=_repository.Attendances.FindByCondition(x => x.PersonId == pId && x.DateIn == date);
             if(attendance==null)
             {
+                string employeeCode = _repository.Employee.FindByCondition(x => x.Id == pId).EmployeeCode;
                 Attendance newAttendance = new Attendance();
+                newAttendance.EmployeeCode = employeeCode;
                 newAttendance.DateIn = date;
                 newAttendance.TimeIn = new TimeSpan();
                 newAttendance.IsActive = false;

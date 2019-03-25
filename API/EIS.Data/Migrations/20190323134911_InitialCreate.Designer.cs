@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190323060403_EmployeeData")]
-    partial class EmployeeData
+    [Migration("20190323134911_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -279,7 +279,11 @@ namespace EIS.Data.Migrations
                     b.Property<string>("EmployeeCode")
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<bool?>("HrStatus");
+
                     b.Property<bool>("IsActive");
+
+                    b.Property<string>("Message");
 
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
@@ -819,6 +823,51 @@ namespace EIS.Data.Migrations
                     b.ToTable("tblPastLeaves","LMS");
                 });
 
+            modelBuilder.Entity("EIS.Entities.Models.AttendanceReport", b =>
+                {
+                    b.Property<string>("AverageTimeIn")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AdditionalWorkingHours");
+
+                    b.Property<string>("AverageHours");
+
+                    b.Property<string>("AverageTimeOut");
+
+                    b.Property<int>("LeaveDays");
+
+                    b.Property<int>("PresentDays");
+
+                    b.Property<int>("TotalDays");
+
+                    b.Property<int>("TotalWorkingDays");
+
+                    b.HasKey("AverageTimeIn");
+
+                    b.ToTable("_sp_GetEmployeeAttendanceCount");
+                });
+
+            modelBuilder.Entity("EIS.Entities.Models.EmployeeAttendanceData", b =>
+                {
+                    b.Property<long?>("SrId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("DateIn");
+
+                    b.Property<string>("Status");
+
+                    b.Property<TimeSpan?>("TimeIn");
+
+                    b.Property<TimeSpan?>("TimeOut");
+
+                    b.Property<TimeSpan?>("TotalHours");
+
+                    b.HasKey("SrId");
+
+                    b.ToTable("_sp_GetEmployeeAttendanceData");
+                });
+
             modelBuilder.Entity("EIS.Entities.OtherEntities.Configuration", b =>
                 {
                     b.Property<int>("Id")
@@ -850,6 +899,138 @@ namespace EIS.Data.Migrations
                     b.ToTable("tblConfiguration","LMS");
                 });
 
+            modelBuilder.Entity("EIS.Entities.SP.ActualLeaveCount", b =>
+                {
+                    b.Property<int>("LeaveCount")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("LeaveCount");
+
+                    b.ToTable("_sp_GetLeaveCount");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.GetAdminHrManager", b =>
+                {
+                    b.Property<string>("EmailAddress")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("EmailAddress");
+
+                    b.ToTable("_sp_GetAdminHrManager");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.MailConfiguration", b =>
+                {
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Host");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("SMTPPort");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("_sp_MailConfigurations");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_AdminDashboard", b =>
+                {
+                    b.Property<string>("EmployeeCode")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("DateIn");
+
+                    b.Property<DateTime?>("DateOut");
+
+                    b.Property<string>("EmployeeName");
+
+                    b.Property<string>("LocationName");
+
+                    b.Property<string>("Status");
+
+                    b.Property<TimeSpan?>("TimeIn");
+
+                    b.Property<TimeSpan?>("TimeOut");
+
+                    b.Property<TimeSpan?>("TotalHours");
+
+                    b.Property<TimeSpan?>("WorkingHours");
+
+                    b.HasKey("EmployeeCode");
+
+                    b.ToTable("_sp_AdminDashboard");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_AdminDashboardCount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AbsentEmployees");
+
+                    b.Property<int>("AllEmployeesCount");
+
+                    b.Property<int>("ApprovedLeavesCount");
+
+                    b.Property<int>("OnLeaveEmployee");
+
+                    b.Property<int>("PendingLeavesCount");
+
+                    b.Property<int>("PresentEmployees");
+
+                    b.Property<int>("RejectedLeavesCount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_AdminDashboardcount");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_EmployeeDashboard", b =>
+                {
+                    b.Property<DateTime?>("DateIn");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Status");
+
+                    b.Property<TimeSpan?>("TimeIn");
+
+                    b.Property<TimeSpan?>("TimeOut");
+
+                    b.Property<TimeSpan?>("TotalHours");
+
+                    b.Property<TimeSpan?>("WorkingHours");
+
+                    b.HasKey("DateIn");
+
+                    b.ToTable("_sp_EmployeeDashboard");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_EmployeeDashboardCount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AvailableLeaves");
+
+                    b.Property<int>("OnLeaveDays");
+
+                    b.Property<int>("PresentDays");
+
+                    b.Property<int>("TotalLeavesTaken");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_EmployeeDashboardcount");
+                });
+
             modelBuilder.Entity("EIS.Entities.SP.SP_EmployeeLeaveRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -875,6 +1056,30 @@ namespace EIS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("_sp_EmployeeLeaveRequest");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetAttendanceCountReport", b =>
+                {
+                    b.Property<string>("EmployeeCode")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AbsentDay");
+
+                    b.Property<string>("EmployeeName");
+
+                    b.Property<int?>("ExtraWorkingDays");
+
+                    b.Property<string>("LocationName");
+
+                    b.Property<int?>("NoLeave");
+
+                    b.Property<int?>("PresentDays");
+
+                    b.Property<int?>("WorkingDay");
+
+                    b.HasKey("EmployeeCode");
+
+                    b.ToTable("_sp_GetAttendanceCountReport");
                 });
 
             modelBuilder.Entity("EIS.Entities.SP.SP_GetAttendanceCountReport_New", b =>
@@ -905,6 +1110,98 @@ namespace EIS.Data.Migrations
                     b.HasKey("EmployeeCode");
 
                     b.ToTable("_sp_GetAttendanceCountReportNew");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetDateWiseAttendance", b =>
+                {
+                    b.Property<long?>("SrId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("EmployeeCode");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<string>("Status");
+
+                    b.Property<TimeSpan?>("TimeIn");
+
+                    b.Property<TimeSpan?>("TimeOut");
+
+                    b.Property<TimeSpan?>("TotalHours");
+
+                    b.Property<DateTime?>("date");
+
+                    b.HasKey("SrId");
+
+                    b.ToTable("_sp_GetDateWiseAttendances");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetEmployee", b =>
+                {
+                    b.Property<string>("EmployeeCode")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("DateOfBirth");
+
+                    b.Property<string>("EmailAddress");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<string>("Gender");
+
+                    b.Property<string>("Image");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTime>("JoinDate");
+
+                    b.Property<string>("LocationName");
+
+                    b.Property<string>("MobileNumber");
+
+                    b.Property<string>("Role");
+
+                    b.HasKey("EmployeeCode");
+
+                    b.ToTable("_sp_GetEmployee");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.Sp_AdminDashboardLeave", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AppliedDate");
+
+                    b.Property<string>("ApprovedBy");
+
+                    b.Property<double>("ApprovedDays");
+
+                    b.Property<string>("EmployeeCode");
+
+                    b.Property<string>("EmployeeName");
+
+                    b.Property<DateTime>("FromDate");
+
+                    b.Property<string>("LeaveType");
+
+                    b.Property<string>("LocationName");
+
+                    b.Property<string>("Reason");
+
+                    b.Property<double>("RequestedDays");
+
+                    b.Property<string>("Status");
+
+                    b.Property<DateTime>("ToDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_AdminDashboardLeave");
                 });
 
             modelBuilder.Entity("EIS.Entities.User.Users", b =>
