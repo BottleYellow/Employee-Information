@@ -21,7 +21,7 @@
         }
 
         .label-OnLeave {
-            background-color: violet;
+            background-color: mediumslateblue;
         }
 
         a:hover, a:focus {
@@ -267,6 +267,12 @@
         window.location.reload();
     });
 
+    $('#textData').on('focus',function() {
+        $('#textDataSpan').html("");
+    });
+
+
+
     function generateReport(buttonSelected) {
         var pid=@cookies.PersonId;
         $.ajax({
@@ -294,6 +300,131 @@
             }
         });
     }
+    //function getData(Employees, buttonSelected) {
+    //    debugger;
+    //    var array = [];
+    //    for (var i = 0; i < Employees.length; i++) {
+    //        var approvedName = "-";
+    //        if (buttonSelected == "totalLeave") {
+    //            var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
+    //            var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
+    //            var Status = Employees[i].Status;
+    //            if (Status == "Pending") {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //            }
+    //            else if (Status == "Approved" || Status.startsWith('Approved')) {
+    //                if (Employees[i].LeaveType.includes("Past")) {
+    //                    approvedName = "Past Leave Auto Approved";
+    //                } else {
+    //                    approvedName = Employees[i].ApprovedBy;
+    //                }
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+    //            }
+    //            else if (Status == "Rejected") {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //                approvedName = Employees[i].ApprovedBy;
+    //            } else if (Status == "Cancelled") {
+    //                approvedName = "-";
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //            }
+    //            else if (Status == "Requested For Cancel") {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //            }
+    //            else {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //            }
+    //            array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
+    //        } else {
+    //            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+    //            var TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+    //            var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
+    //            var todayDate = moment(new Date()).format("DD-MMM-YYYY");
+    //            var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
+    //            if (todayDate == dateInData) {
+    //                var expectedTimeOutDate = null;
+    //                if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
+    //                    if (Employees[i].WorkingHours != null) {
+    //                        var workingValue = Employees[i].WorkingHours;
+    //                        var hr = workingValue.slice(0, 2);
+    //                        var min = workingValue.slice(3, 5);
+    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+    //                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+    //                    }
+    //                    else {
+    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+    //                    }
+    //                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-primary">Expected: ' + expectedTimeOutDate + '</span>';
+    //                }
+    //            }
+    //            var Status = Employees[i].Status;
+    //            if (buttonSelected == "Leave") {
+    //                if (Status == "OnLeave") {
+    //                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                }
+    //            } else {
+    //                if (buttonSelected == "Present") {
+    //                    if (Status == "Present") {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+    //                        array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                    }
+    //                } else {
+    //                    if (Status == "Present") {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+    //                    } else if (Status == "Absent") {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //                    } else {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //                    }
+    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                }
+    //            }
+    //        }
+    //    }
+    //    $('#LeaveTable').DataTable().destroy();
+    //    $('#attendanceTable').DataTable().destroy();
+    //    if (buttonSelected == "totalLeave") {
+    //        $('#LeaveTable').DataTable({
+    //            scrollX: true,
+    //            "order": [1, 'desc'],
+    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+    //                if (aData[4].includes("Approved")) {
+    //                    $('td', nRow).addClass('success');
+    //                } else if (aData[4].includes("Pending")) {
+    //                    $('td', nRow).addClass('warning');
+    //                }
+    //                else {
+    //                    $('td', nRow).addClass('danger');
+    //                }
+    //            },
+    //            data: array
+    //        });
+    //    } else {
+    //        $('#attendanceTable').DataTable({
+    //            scrollX: true,
+    //            "aoColumns": [
+    //                { "sType": "date" },
+    //                null,
+    //                null,
+    //                null,
+    //                null
+    //            ],
+    //            "order": [0, "desc"],
+    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+    //                if (aData[1].includes("Present")) {
+    //                    $('td', nRow).addClass('success');
+    //                } else if (aData[1].includes("Absent")) {
+    //                    $('td', nRow).addClass('danger');
+    //                }
+    //                else {
+    //                    $('td', nRow).addClass('warning');
+    //                }
+    //            },
+    //            data: array
+    //        });
+    //    }
+    //}
+
     function getData(Employees, buttonSelected) {
         var array=[];
         for (var i = 0; i < Employees.length; i++) {
@@ -387,7 +518,7 @@
                                 if (TimeOut == "-" && TotalHours == "-") {
                                     if (Employees[i].Message != null) {
                                         if (Employees[i].Message.includes("HR MESSAGE")) {
-                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button></br>' + Employees[i].Message;
                                         } else {
                                             TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
                                         } 
@@ -494,8 +625,10 @@
             });
         }
     }
+
     function sendRequest(date) {
         $("#myModal #eventTitle").text(date);
         $("#myModal").modal();
+        $('#textDataSpan').html("");
     }
 </script>

@@ -38,7 +38,7 @@
     }
 
     .label-OnLeave {
-        background-color: violet;
+        background-color: mediumslateblue;
     }
 
     a:hover, a:focus {
@@ -337,7 +337,7 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="text" id="banerDate" autocomplete="off"/>');
+        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="button" id="banerDate" autocomplete="off"/>');
         $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right" id="kondhwaDate"></span> ');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);

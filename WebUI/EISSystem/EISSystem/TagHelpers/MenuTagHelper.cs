@@ -32,7 +32,7 @@ namespace EIS.WebApp.TagHelpers
             string appBaseUrl = MyHttpContext.AppBaseUrl;
 
             String[] ParentMenus = new String[8] { "Attendance Management", "Role Management", "Leave Management", "User Management", "", "Task", "Holidays","Locations" };
-            String[] SubMenus = { "List Of Employees", "Leave Policies", "View All Requests", "Leave Credits", "Show My Leaves", "List Of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "Attendance Reports New", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List Of Holidays","Attendance Datewise","Manage Locations","Show Holidays", "Attendance Summary" };
+            String[] SubMenus = { "List Of Employees", "Leave Policies", "View All Requests", "Leave Credits", "Show My Leaves", "List Of Roles", "Create New Attendance", "List Of Users", "Manage Roles", "Attendance Reports", "Brief Attendance Report", "My Attendance History", "Show Employees Requests", "Employee Attendance History", "Add Task", "List Of Holidays","Attendance Datewise","Manage Locations","Show Holidays", "Attendance Summary", "Attendance Modify" };
             if (Role == "Admin" || Role=="HR" || Role == "Manager")
                 ParentMenus.SetValue("Employee Management", 4);
             foreach (var menu in AccessList)

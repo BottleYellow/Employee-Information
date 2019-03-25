@@ -44,7 +44,7 @@ namespace EIS.WebApp.Controllers
             return Json(attendanceData);
         }
         [HttpGet]
-        [DisplayName("Attendance Reports New")]
+        [DisplayName("Brief Attendance Report")]
         public IActionResult AllAttendanceNew()
         {
             ViewBag.Locations = GetLocations();
@@ -201,7 +201,7 @@ namespace EIS.WebApp.Controllers
             return Json(attendance);
         }
 
-        [DisplayName("AttendanceUpdate")]
+        [DisplayName("Attendance Modify")]
         [HttpGet]
         public IActionResult AttendanceUpdate()
         {
