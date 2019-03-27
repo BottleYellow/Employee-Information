@@ -1,0 +1,802 @@
+﻿@using EIS.WebApp.Models;
+@using EIS.Entities.Enums;
+@using EIS.Entities.Models;
+@model EIS.WebApp.Models.CreateEmployee
+
+<header>
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <style type="text/css">
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: relative;
+        }
+
+        * {
+            font-family: Arial;
+            font-style: normal
+        }
+
+        #createEmployee, #createPermanent, #createCurrent, #createEmergency {
+            position: relative;
+            top: 35%;
+            font-size: 16px;
+            text-align: center;
+        }
+        .contact1, .contact2 {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            border: 2px solid #e7e7e7;
+        }
+    </style>
+</header>
+<div class="container-fluid">
+    <HeaderWithButton header-name="Create Employee"></HeaderWithButton>
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div id="empPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                                <div id="createEmployee">
+                                    Add Employee
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="permPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                                <div id="createPermanent">
+                                    Add Permanent Address
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="currPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                                <div id="createCurrent">
+                                    Add Current Address
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="emergPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                                <div id="createEmergency">
+                                    Add Emergency Address
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="Create" method="post" enctype="multipart/form-data" id="create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <fieldset id="employee">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.EmployeeCode">Employee Code : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.EmployeeCode" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.LocationId">Location : </label>
+                                                <select id="did" asp-for="@Model.people.LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                                    <option value="0">-- Select Location --</option>
+                                                </select>
+                                                <span asp-validation-for="@Model.people.LocationId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.FirstName">First Name : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label asp-for="@Model.people.MiddleName">Middle Name : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.MiddleName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.MiddleName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.LastName">Last Name : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.LastName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.MobileNumber">Contact Number : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.MobileNumber" class="form-control" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.MobileNumber">Mobile Number : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.MobileNumber" class="form-control" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.EmailAddress">Email Address : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.EmailAddress" type="email" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.EmailAddress">Personal Email Address : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.EmailAddress" type="email" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Choose Image : </label>
+                                                <div class="form-line">
+                                                    <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.Image" class="text-danger"></span>
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.DateOfBirth">Date Of Birth : </label>
+                                                <div class="form-line">
+                                                    <input id="dob" class="form-control" type="text" asp-for="@Model.people.DateOfBirth" autocomplete="off" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.DateOfBirth" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.Gender">Gender : </label>
+                                                <select asp-for="@Model.people.Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick">
+                                                    <option value="Select">-- Select Gender --</option>
+                                                </select>
+                                                <span asp-validation-for="@Model.people.Gender" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.RoleId">Role : </label>
+                                                <select id="did" asp-for="@Model.people.RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
+                                                    <option value="0">-- Select Role --</option>
+                                                </select>
+                                                <span asp-validation-for="@Model.people.RoleId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.JoinDate">Joining Date : </label>
+                                                <div class="form-line">
+                                                    <input id="doj" class="form-control" type="text" asp-for="@Model.people.JoinDate" autocomplete="off" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.JoinDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="@Model.people.ReportingPersonId">Reporting Person : </label>
+                                                <div class="form-line">
+                                                    <select asp-for="@Model.people.ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                                                        <option value="0">-- Select --</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="@Model.people.Salary">Salary : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.Salary" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.Salary" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="@Model.people.PanCard">PAN Card No. : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.PanCard" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.PanCard" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="@Model.people.AadharCard">Aadhar No. : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.AadharCard" class="form-control" />
+
+                                                </div>
+                                                <span asp-validation-for="@Model.people.AadharCard" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.WeeklyOffId">Weekly Off Type : </label>
+                                                <select id="wid" asp-for="@Model.people.WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs,"Id","Type"))" class="form-control show-tick">
+                                                    <option value="0">-- Select Type --</option>
+                                                </select>
+                                                <span asp-validation-for="@Model.people.WeeklyOffId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.WorkingHours">Daily Working Hours : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="@Model.people.WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.WorkingHours" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.IsOnProbation">Is On Probation? : </label>
+                                                <div class="form-line">
+                                                    <select id="ip" asp-for="@Model.people.IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
+                                                        <option value="false" selected>No</option>
+                                                        <option value="true">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="period" class="col-md-3" hidden>
+                                        <div class="col-md-11 col-sm-9 col-xs-9">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="@Model.people.PropbationPeriodInMonth">Probation Period(In Month) : </label>
+                                                <div class="form-line">
+                                                    <input id="ppm" asp-for="@Model.people.PropbationPeriodInMonth" class="form-control" />
+                                                </div>
+                                                <span asp-validation-for="@Model.people.PropbationPeriodInMonth" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label asp-for="@Model.people.Description">Description : </label>
+                                                <div class="form-line">
+                                                    <textarea asp-for="@Model.people.Description" rows="2" class="form-control no-resize" placeholder="About You..."></textarea>
+                                                </div>
+                                                <span asp-validation-for="@Model.people.Description" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary" id="btnEmpNext">Next</button>
+                                                <button type="submit" asp-action="Index" formmethod="get" class="btn btn-primary">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset id="permanentAddress" hidden="hidden">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.Address" class="form-control">
+                                    <label class="form-label">Address</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.City" class="form-control">
+                                    <label class="form-label">City</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.City" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.State" class="form-control">
+                                    <label class="form-label">State</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.State" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.Country" class="form-control">
+                                    <label class="form-label">Country</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.Country" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                    <label class="form-label">Pin Code</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.PinCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.permanent.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                    <label class="form-label">Phone No</label>
+                                </div>
+                                <span asp-validation-for="@Model.permanent.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnPermNext">Next</button>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnPermPrev">Previous</button>
+                        </fieldset>
+                        <fieldset id="currentAddress" hidden="hidden">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.Address" class="form-control">
+                                    <label class="form-label">Address</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.Address" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.City" class="form-control">
+                                    <label class="form-label">City</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.City" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.State" class="form-control">
+                                    <label class="form-label">State</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.State" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.Country" class="form-control">
+                                    <label class="form-label">Country</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.Country" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                    <label class="form-label">Pin Code</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.PinCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.current.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                    <label class="form-label">Phone No</label>
+                                </div>
+                                <span asp-validation-for="@Model.current.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnCurrNext">Next</button>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnCurrPrev">Previous</button>
+                        </fieldset>
+                        <fieldset id="emergencyAddress" hidden="hidden">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="button" class="contact1" value="Contact 1"/> 
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="button" class="contact2" value="Contact 2" />
+                                </div>
+                            </div>
+                            <div id="contact1" hidden="hidden">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                        <label class="form-label">First Name</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                        <label class="form-label">Last Name</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.LastName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.Address" class="form-control">
+                                        <label class="form-label">Address</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.City" class="form-control">
+                                        <label class="form-label">City</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.City" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.State" class="form-control">
+                                        <label class="form-label">State</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.State" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.Country" class="form-control">
+                                        <label class="form-label">Country</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.Country" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                        <label class="form-label">Pin Code</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.PinCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                        <label class="form-label">Phone No</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                        <label class="form-label">Mobile Number</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.MobileNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressFirst.Relation" class="form-control">
+                                        <label class="form-label">Relation</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressFirst.Relation" class="text-danger"></span>
+                                </div>
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="contact1Next">Next</button>
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnEmergPrev">Previous</button>
+                            </div>
+                            <div id="contact2" hidden="hidden">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                        <label class="form-label">First Name</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                        <label class="form-label">Last Name</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.LastName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.Address" class="form-control">
+                                        <label class="form-label">Address</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.City" class="form-control">
+                                        <label class="form-label">City</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.City" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.State" class="form-control">
+                                        <label class="form-label">State</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.State" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.Country" class="form-control">
+                                        <label class="form-label">Country</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.Country" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                        <label class="form-label">Pin Code</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.PinCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                        <label class="form-label">Phone No</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                        <label class="form-label">Mobile Number</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.MobileNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input asp-for="@Model.emergencyAddressSecond.Relation" class="form-control">
+                                        <label class="form-label">Relation</label>
+                                    </div>
+                                    <span asp-validation-for="@Model.emergencyAddressSecond.Relation" class="text-danger"></span>
+                                </div>
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnSubmit">Submit</button>
+                                
+                            </div>
+                            
+                            
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script>
+    $('#btnSubmit').on('click', function () {
+        $('#create').submit();
+    })
+    function showPeriod(x) {
+        if (x == "true") {
+            $("#period").removeAttr('hidden');
+        }
+        else if (x == "false") {
+            $("#period").prop("hidden", true);
+            $("#ppm").val('');
+        }
+    }
+    $(document).ready(function () {
+        var m = document.getElementById("wh").value;
+        if (m == "") {
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                defaultDate: moment(new Date()).hours(9).minutes(0).seconds(0).milliseconds(0)
+            });
+        }
+        else {
+            $('#wh').datetimepicker({
+                format: "HH:mm",
+                enabledHours: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                useCurrent: false
+            });
+        }
+
+        var d = new Date();
+        $('#dob').datetimepicker({
+            format: "DD/MMM/YYYY",
+            defaultDate: new Date(1990, 0, 1)
+        });
+        var maxDate = moment().add(1, 'seconds').toDate();
+        var defaultDate = moment().toDate();
+
+        $('#doj').datetimepicker({
+            useCurrent: false,
+            maxDate: maxDate,
+            defaultDate: d,
+            format: 'DD/MMM/YYYY'
+        });
+        var m = document.getElementById("ip").value;
+        if (m == "true") {
+            $("#period").removeAttr('hidden');
+        }
+        $('#contact1').show();
+        $('.contact1').on('click', function () {
+            $('#contact1').show();
+            $('#contact2').hide();
+        })
+        $('.contact2').on('click', function () {
+            $('#contact2').show();
+            $('#contact1').hide();
+        })
+        $('#contact1Next').on('click', function () {
+            $('#contact2').show();
+            $('#contact1').hide();
+        })
+        $('#empPnl').css("background-color", "#0084ff");
+        $('#btnEmpNext').on('click', function () {
+            $('#empPnl').css("background-color", "#4da9ff");
+            $('#permPnl').css("background-color", "#0084ff");
+            $('#currPnl').css("background-color", "#4da9ff");
+            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#employee').hide();
+            $('#permanentAddress').show();
+            $('#currentAddress').hide();
+            $('#emergencyAddress').hide();
+        });
+        $('#btnPermNext').on('click', function () {
+            $('#empPnl').css("background-color", "#4da9ff");
+            $('#permPnl').css("background-color", "#4da9ff");
+            $('#currPnl').css("background-color", "#0084ff");
+            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#employee').hide();
+            $('#permanentAddress').hide();
+            $('#currentAddress').show();
+            $('#emergencyAddress').hide();
+        });
+        $('#btnCurrNext').on('click', function () {
+            $('#empPnl').css("background-color", "#4da9ff");
+            $('#permPnl').css("background-color", "#4da9ff");
+            $('#currPnl').css("background-color", "#4da9ff");
+            $('#emergPnl').css("background-color", "#0084ff");
+            $('#employee').hide();
+            $('#permanentAddress').hide();
+            $('#currentAddress').hide();
+            $('#emergencyAddress').show();
+        });
+        $('#btnEmergPrev').on('click', function () {
+            $('#empPnl').css("background-color", "#4da9ff");
+            $('#permPnl').css("background-color", "#4da9ff");
+            $('#currPnl').css("background-color", "#0084ff");
+            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#employee').hide();
+            $('#permanentAddress').hide();
+            $('#currentAddress').show();
+            $('#emergencyAddress').hide();
+        })
+        $('#btnCurrPrev').on('click', function () {
+            $('#empPnl').css("background-color", "#4da9ff");
+            $('#permPnl').css("background-color", "#0084ff");
+            $('#currPnl').css("background-color", "#4da9ff");
+            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#employee').hide();
+            $('#permanentAddress').show();
+            $('#currentAddress').hide();
+            $('#emergencyAddress').hide();
+        })
+        $('#btnPermPrev').on('click', function () {
+            $('#empPnl').css("background-color", "#0084ff");
+            $('#permPnl').css("background-color", "#4da9ff");
+            $('#currPnl').css("background-color", "#4da9ff");
+            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#employee').show();
+            $('#permanentAddress').hide();
+            $('#currentAddress').hide();
+            $('#emergencyAddress').hide();
+        })
+    })
+
+    function MakeFirstLetterCapital(control) {
+        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
+    }
+    function ValidateFileUpload() {
+        var fuData = document.getElementById('imageFile');
+        var FileUploadPath = fuData.value;
+        var status = false;
+        if (FileUploadPath == '') {
+            bootbax.alert("<h4>Please upload an image.</h4>");
+
+        }
+        else {
+            var fileLength = fuData.files[0].size;
+
+            var Extension = FileUploadPath.substring(
+                FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+
+            //The file uploaded is an image
+            if (Extension == "gif" || Extension == "png" || Extension == "bmp" || Extension == "jpeg" || Extension == "jpg") {
+                if (fileLength < 500000) {
+                    status = true;
+                }
+                else {
+                    bootbox.alert("<h4>File must be below 500 kb.</h4>");
+                }
+
+            }
+            else {
+                bootbox.alert("<h4>Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.</h4>");
+            }
+        }
+        if (!status) {
+            fuData.value = null;
+        }
+
+    }
+</script>

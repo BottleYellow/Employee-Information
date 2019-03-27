@@ -106,21 +106,21 @@ namespace EIS.WebApp.Controllers
                        select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data;
             ViewBag.Dob = DateTime.Now.ToShortDateString();
-            return View();
+            return View("CreateEmployee");
         }
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeCode,PanCard,AadharCard,FirstName,MiddleName,LastName,JoinDate,LeavingDate,MobileNumber,DateOfBirth,EmailAddress,Salary,Description,Gender,ReportingPersonId,RoleId,Id,LocationId,WeeklyOffId,WorkingHours,IsOnProbation,PropbationPeriodInMonth")]Person person, IFormFile file)
+        public async Task<IActionResult> Create(CreateEmployee createEmployee, IFormFile file)
         {
-            if (person.DateOfBirth != null)
+            if (createEmployee.people.DateOfBirth != null)
             {
-                var d = DateTime.Parse(person.DateOfBirth.ToString());
-                person.DateOfBirth = d;
+                var d = DateTime.Parse(createEmployee.people.DateOfBirth.ToString());
+                createEmployee.people.DateOfBirth = d;
             }
-            if (person.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");
-            if (person.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
-            if (person.WeeklyOffId == 0) ModelState.AddModelError("WeeklyOffId", "Please Select Weekly Off Type");
+            if (createEmployee.people.RoleId == 0) ModelState.AddModelError("RoleId", "Please Select Role");
+            if (createEmployee.people.LocationId == 0) ModelState.AddModelError("LocationId", "Please Select Location");
+            if (createEmployee.people.WeeklyOffId == 0) ModelState.AddModelError("WeeklyOffId", "Please Select Weekly Off Type");
             var tId = GetSession().TenantId;
             ViewBag.Locations = GetLocations();
             ViewBag.WeeklyOffs = GetWeeklyOffs();
@@ -134,9 +134,9 @@ namespace EIS.WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                person.CreatedBy = Convert.ToInt32(GetSession().PersonId);
+                createEmployee.people.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 string rootPath = _environment.WebRootPath;
-                string filePath = "//EmployeeData//" + tId + person.EmployeeCode + "//Image//";
+                string filePath = "//EmployeeData//" + tId + createEmployee.people.EmployeeCode + "//Image//";
                 if (!Directory.Exists(rootPath + "//EmployeeData//"))
                 {
                     Directory.CreateDirectory(rootPath + "//EmployeeData//");
@@ -164,11 +164,11 @@ namespace EIS.WebApp.Controllers
                     if ((fileExtension == ".gif" || fileExtension == ".png" || fileExtension == ".bmp" || fileExtension == ".jpeg" || fileExtension == ".jpg") && file.Length <= 500000)
                     {
 
-                        var fileName = person.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
+                        var fileName = createEmployee.people.FirstName + "_" + Guid.NewGuid().ToString().Substring(0, 4) + fileExtension;
                         using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                         {
                             await file.CopyToAsync(fileStream);
-                            person.Image = fileName;
+                            createEmployee.people.Image = fileName;
                         }
                     }
                     else
@@ -179,17 +179,22 @@ namespace EIS.WebApp.Controllers
                 else
                 {
                     System.IO.File.Copy(rootPath + "//EmployeeData//DefaultImage//Default.png", uploadPath + "Default.png");
-                    person.Image = "Default.png";
+                    createEmployee.people.Image = "Default.png";
 
                 }
-                if (string.IsNullOrEmpty(person.MiddleName))
+                if (string.IsNullOrEmpty(createEmployee.people.MiddleName))
                 {
-                    person.MiddleName = "";
+                    createEmployee.people.MiddleName = "";
                 }
 
-                person.CreatedDate = DateTime.Now.Date;
-                HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/api/employee/" + 0, person);
-                var data1 = response.Content.ReadAsStringAsync().Result;
+                createEmployee.people.CreatedDate = DateTime.Now.Date;
+                HttpResponseMessage response = _services.Employee.PostResponse(ApiUrl + "/api/employee/" + 0, createEmployee.people);
+                string data1 = response.Content.ReadAsStringAsync().Result;
+                Person pdata = JsonConvert.DeserializeObject<Person>(data1);
+                CreatePermanentAddress(pdata.Id,pdata.EmployeeCode,createEmployee.permanent);
+                CreateCurrentAddress(pdata.Id, pdata.EmployeeCode, createEmployee.current);
+                CreateEmergencyAddress(pdata.Id, pdata.EmployeeCode, createEmployee.emergencyAddressFirst);
+                CreateEmergencyAddress(pdata.Id, pdata.EmployeeCode, createEmployee.emergencyAddressSecond);
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";
@@ -202,7 +207,8 @@ namespace EIS.WebApp.Controllers
                 ModelState.AddModelError("Image", "Please upload the file");
                 ViewBag.ImageExist = "Validation failed... Please Upload the file again";
             }
-            return View(person);
+            
+            return View("CreateEmployee");
         }
 
         [DisplayName("Update Employee")]
