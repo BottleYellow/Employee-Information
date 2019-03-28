@@ -32,7 +32,7 @@
         background-color: #808080;
     }
 
-    #locations {
+    #locations,#selectstatus {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
 
@@ -95,44 +95,48 @@
                     <div class="body">
                         <div>
                             <div class="row col-md-12">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label>Select Location</label>
                                     <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                         <option value="0">All</option>
                                     </select>
                                 </div>
-                                <div class="col-md-9">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Select Employee</label>
-                                            <select class="form-control" id="selectEmployee">
-                                                <option>-- Select --</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Select Type Of Reports</label>
-                                            <select class="form-control" id="select">
-                                                <option value="month" id="month">Month</option>
-                                                <option value="year" id="year">Year</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div id="inputyeardiv" hidden="hidden">
-                                                <label>Select Year</label><br />
-                                                <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off"/>
-                                            </div>
-                                            <div id="inputmonthdiv">
-                                                <label>Select Month</label><br />
-                                                <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off"/>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-md-3">
-                                            <br />
-                                            <button class="clickType" type="button" id="generateReport" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;">Generate</button>                                        </div>
+                                <div class="col-md-2">
+                                    <label>Select Status</label>
+                                    <select class="form-control" id="selectstatus">
+                                        <option value="true">Active</option>
+                                        <option value="false">InActive</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Select Employee</label>
+                                    <select class="form-control" id="selectEmployee">
+                                        <option>-- Select --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Select Type Of Reports</label>
+                                    <select class="form-control" id="select">
+                                        <option value="month" id="month">Month</option>
+                                        <option value="year" id="year">Year</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <div id="inputyeardiv" hidden="hidden">
+                                        <label>Select Year</label><br />
+                                        <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
+                                    </div>
+                                    <div id="inputmonthdiv">
+                                        <label>Select Month</label><br />
+                                        <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
                                     </div>
 
                                 </div>
+                                <div class="col-md-2">
+                                    <br />
+                                    <button class="clickType" type="button" id="generateReport" style="font-weight:bold; font-size:16px; width:200px; height:40px; background-color:#3399ff; color:white;">Generate</button>
+                                </div>
+
                             </div>
                         </div>
                         <div>
@@ -244,9 +248,10 @@
     var status = "Generate";
     $(document).ready(function () {
         var loc = $('#locations').val();
+        var employeeStatus = $('#selectstatus').val();
         $.ajax({
             type: 'GET',
-            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + employeeStatus,
             success: function (data) {
                 $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                 $.each(data, function (data, value) {
@@ -287,12 +292,33 @@
         });
 
         $('#locations').on('change', function () {
+            debugger;
                 $("#generateReport").prop("disabled", true);
-
             var loc = $('#locations').val();
+            var employeeStatus = $('#selectstatus').val();
             $.ajax({
                 type: 'GET',
-                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + employeeStatus,
+                success: function (data) {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    });
+                },
+                error: function () {
+                   bootbox.alert("Something went wrong..Please try after sometime");
+                }
+
+            });
+        });
+
+        $('#selectstatus').on('change', function () {
+                $("#generateReport").prop("disabled", true);
+            var loc = $('#locations').val();
+            var employeeStatus = $('#selectstatus').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + employeeStatus,
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                     $.each(data, function (data, value) {

@@ -167,7 +167,7 @@
             </div>
             <div class="modal-body" >
                 <div class="form-group">
-                    <label>Request Message</label>
+                    <label>Work From Home Request Message</label>
                     <div class="form-line">
                         <textarea style="width:300px; height:250px" id="textData"></textarea>
                     </div>
@@ -500,7 +500,7 @@
                                 if (todayDate != dateInData) {
                                     if (Employees[i].Message != null) {
                                         if (Employees[i].Message.includes("HR MESSAGE")) {
-                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+                                            TotalHours = '<button title="' + Employees[i].Message+'" type="button" class="btn btn-danger">Request Cancelled</button>';
                                         } else {
                                             TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
                                         } 
@@ -518,7 +518,7 @@
                                 if (TimeOut == "-" && TotalHours == "-") {
                                     if (Employees[i].Message != null) {
                                         if (Employees[i].Message.includes("HR MESSAGE")) {
-                                            TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button></br>' + Employees[i].Message;
+                                            TotalHours = '<button type="button" title="' + Employees[i].Message +'" class="btn btn-danger">Request Cancelled</button></br>';
                                         } else {
                                             TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
                                         } 

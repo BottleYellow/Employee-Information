@@ -65,11 +65,11 @@ namespace EIS.WebAPI.Controllers
 
         }
 
-        [Route("GetLeaveHistory/{locationId}/{employeeId}/{month}/{year}/{leaveType}")]
+        [Route("GetLeaveHistory/{locationId}/{employeeId}/{month}/{year}/{leaveType}/{status}")]
         [HttpGet]
-        public IActionResult GetLeaveHistory([FromRoute]int locationId, [FromRoute]int employeeId, [FromRoute]int month, [FromRoute]int year, [FromRoute]string leaveType)
+        public IActionResult GetLeaveHistory([FromRoute]int locationId, [FromRoute]string employeeId, [FromRoute]int month, [FromRoute]int year, [FromRoute]string leaveType,[FromRoute]bool status)
         {
-            List<LeaveRequestViewModel> leaveData = _repository.LeaveRequest.GetLeaveData(locationId, employeeId, month, year, TenantId, leaveType);
+            List<LeaveRequestViewModel> leaveData = _repository.LeaveRequest.GetLeaveData(locationId, employeeId, month, year, TenantId, leaveType,status);
             return Ok(leaveData);
 
         }

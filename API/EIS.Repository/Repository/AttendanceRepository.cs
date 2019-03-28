@@ -17,7 +17,7 @@ namespace EIS.Repositories.Repository
         {
         }
 
-        public Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId)
+        public Attendance_Report GetAttendanceCountReport(string SearchFor, string InputOne, string InputTwo, int locationId,bool status)
         {
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
@@ -30,12 +30,13 @@ namespace EIS.Repositories.Repository
             var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo";
-            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            var SP_Status = new SqlParameter("@Status", status);
+            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo,@Status";
+            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
 
             return Model;
         }
-        public Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId)
+        public Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId,bool status)
         {
             SearchFor = SearchFor.ToString();
             InputOne = InputOne.ToString();
@@ -48,9 +49,27 @@ namespace EIS.Repositories.Repository
             var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo";
-            Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            var SP_Status = new SqlParameter("@Status", status);
+            string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo,@Status";
+            Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
 
+            string s= "01/01/"+InputOne;
+            DateTime startDate = Convert.ToDateTime(s);
+            DateTime endDate = DateTime.Now.Date;
+            Model.AttendanceLeaveDatas = new List<AttendanceLeaveData>();
+            for(DateTime date=startDate;date<=endDate;date=date.AddDays(1))
+            {
+                var leaveRequests=_dbContext.LeaveRequests.Include(x=>x.Person).Where(x => x.FromDate <= date && x.ToDate >= date && (x.Status== "Approved"||x.Status== "Pending"|| x.Status== "Approved(Rejected Cancel Request)")).ToList();
+
+                foreach (var data in leaveRequests)
+                {
+                    AttendanceLeaveData attendance = new AttendanceLeaveData();
+                    attendance.EmployeeCode = data.Person.EmployeeCode;
+                    attendance.Reason = data.Reason;
+                    attendance.Date=date.Date;
+                    Model.AttendanceLeaveDatas.Add(attendance);
+                }
+            }
             return Model;
         }
         public EmployeeAttendanceReport GetAttendanceReportSummary(string type, string PersonId, int year, int? month)

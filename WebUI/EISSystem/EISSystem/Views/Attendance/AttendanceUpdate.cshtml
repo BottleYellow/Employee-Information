@@ -5,10 +5,13 @@
     ViewData["Title"] = "AttendanceUpdate";
 }
 <head>
+    <link href="~/Ems/css/toastr.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
-    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    @*for pdf*@
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
 <style>
     .ajax-loader {
@@ -61,19 +64,22 @@
                             <div>
                                 <h4 id="report">Attendance Details</h4>
                             </div>
-                            <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>ACTION</th>
-                                        <th>NAME</th>
-                                        <th>MESSAGE</th>
-                                        <th>REQUESTED DATE</th>
-                                        <th>TIME IN</th>
-                                        <th>TIME OUT</th>
-                                        <th>WORKING HOURS</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>ACTION</th>
+                                            <th>NAME</th>
+                                            <th>MESSAGE</th>
+                                            <th>REQUESTED DATE</th>
+                                            <th>TIME IN</th>
+                                            <th>TIME OUT</th>
+                                            <th>WORKING HOURS</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -90,13 +96,13 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" id="eventTitle"></h4>
                 </div>
-              
+
                 <div class="modal-body">
                     <form id="cp" method="post">
                         <div class="form-group" id="LType">
                             <label>Employee Name </label>
                             <p id="employeeName"></p>
-                            <input id="personId" type="hidden"/>
+                            <input id="personId" type="hidden" />
                         </div>
                         <div class="form-group">
                             <label>Requested Date</label>
@@ -114,7 +120,7 @@
                             <div class="form-line">
                                 <input class="form-control" type="text" id="timeOutData" autocomplete="off" />
                             </div>
-                             <span id="outTimeAlert" class="text-danger"></span>
+                            <span id="outTimeAlert" class="text-danger"></span>
                         </div>
                         <div class="form-group" id="messageData">
                             <label>Message:</label>
@@ -135,12 +141,22 @@
     </div>
 
 </body>
-<script src="~/Ems/js/jquery.dataTables.min.js"></script>
-<script src="~/plugins/momentjs/moment.js"></script>
-<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+@*for pdf*@
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/toastr.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/js/TWeeklyOffCount.js"></script>
 <script>
     var timeIn="";
     var timeOut = "";
@@ -218,11 +234,11 @@
                         }
                     }
                 });
-            }                         
+            }
         } else {
             $('#textDataAlert').html("Please fill reject message");
         }
-         
+
     });
 
     $('#btnCancel').on('click', function () {
@@ -318,7 +334,7 @@
         }
         $("#myModal #personId").val(personId);
         $('#employeeName').text(name);
-        $('#requestedDate').text(date); 
+        $('#requestedDate').text(date);
         $("#myModal").modal({ backdrop: 'static', keyboard: false }, 'show');
     }
 </script>

@@ -44,7 +44,7 @@ namespace EIS.WebApp.Controllers
 
         [ActionName("EmployeeLeaveHistory")]
         [HttpPost]
-        public IActionResult GetEmployeeLeaveHistory(int locationId,int employeeId, string leaveType, string type,string value)
+        public IActionResult GetEmployeeLeaveHistory(int locationId,string employeeId, string leaveType, string type,string value,bool status)
         {
             int month=0;
             int year=0;
@@ -61,7 +61,7 @@ namespace EIS.WebApp.Controllers
             {
                 year = Convert.ToInt32(value);
             }
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/LeaveRequest/GetLeaveHistory/" + locationId + "/" + employeeId + "/" + month + "/" + year+"/"+ leaveType);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/LeaveRequest/GetLeaveHistory/" + locationId + "/" + employeeId + "/" + month + "/" + year+"/"+ leaveType+"/"+status);
            string stringData= response.Content.ReadAsStringAsync().Result;
             List<LeaveRequestViewModel> leave = JsonConvert.DeserializeObject<List<LeaveRequestViewModel>>(stringData);
             return Json(leave);

@@ -94,9 +94,15 @@ namespace EIS.Entities.SP
     public class Attendance_Report_New
     {
         public List<SP_GetAttendanceCountReport_New> sP_GetAttendanceCountReportsNew { get; set; }
+        public List<AttendanceLeaveData> AttendanceLeaveDatas { get; set; }
     }
 
-
+    public class AttendanceLeaveData
+    {
+        public string EmployeeCode { get; set; }
+        public DateTime Date { get; set; }
+        public string Reason { get; set; }
+    }
     public class GetAdminHrManager
     {
         [Key]
