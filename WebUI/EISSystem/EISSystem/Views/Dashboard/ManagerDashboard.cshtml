@@ -33,7 +33,13 @@
             left: 45%;
         }
 
+    div[class^="col"] {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     .info-box {
+        margin-bottom: 15px;
         cursor: pointer;
     }
 
@@ -70,8 +76,13 @@
     }
 
     .row {
-        margin-left: 0px;
-        margin-right: 0px;
+        margin-left: -7px;
+        margin-right: -7px;
+    }
+
+    .card {
+        margin-left: -7px;
+        margin-right: -7px;
     }
 
     .container-fluid {
@@ -105,94 +116,105 @@
     <div class="row clearfix">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a role="button" id="allEmployee">
-                    <div class="info-box bg-pink hover-expand-effect">
+                <div style="width:380px">
+                    <a role="button" id="allEmployee">
+                        <div class="info-box bg-pink hover-expand-effect">
 
-                        <div class="icon">
-                            <i class="material-icons">supervisor_account</i>
+                            <div class="icon">
+                                <i class="material-icons">supervisor_account</i>
+                            </div>
+
+                            <div class="content">
+                                <div class="text">TOTAL EMPLOYEES</div>
+                                <div id="totalEmployeeCount" class="number count-to"></div>
+                            </div>
                         </div>
-
-                        <div class="content">
-                            <div class="text">TOTAL EMPLOYEES</div>
-                            <div id="totalEmployeeCount" class="number count-to"></div>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
+                    </a>
+                </div>
+             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a role="button" id="employeePresent">
-                    <div class=" info-box bg-light-green hover-expand-effect">
-                        <div class="icon">
-                            <i class="material-icons">assignment_ind</i>
+                <div style="width:380px">
+                    <a role="button" id="employeePresent">
+                        <div class=" info-box bg-light-green hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">assignment_ind</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">EMPLOYEE PRESENT</div>
+                                <div id="employeePresentCount" class="number count-to"></div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <div class="text">EMPLOYEE PRESENT</div>
-                            <div id="employeePresentCount" class="number count-to"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a role="button" id="employeeAbsent">
-                    <div class="info-box bg-cyan hover-expand-effect">
-                        <div class="icon">
-                            <i class="material-icons"> assignment_late</i>
+                <div style="width:370px">
+                    <a role="button" id="employeeAbsent">
+                        <div class="info-box bg-cyan hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons"> assignment_late</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">ABSENT / LEAVE AVAILED</div>
+                                <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <div class="text">ABSENT / LEAVE AVAILED</div>
-                            <div id="employeeAbsentCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+             </div>
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a id="pendingLeaveButton" role="button">
-                    <div class="info-box bg-orange hover-expand-effect">
-                        <div class="icon">
-                            <i class="material-icons">
-                                do_not_disturb_on
-                            </i>
+                <div style="width:380px">
+                    <a id="pendingLeaveButton" role="button">
+                        <div class="info-box bg-orange hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">
+                                    do_not_disturb_on
+                                </i>
+                            </div>
+                            <div class="content">
+                                <div class="text">TOTAL PENDING LEAVES</div>
+                                <div id="employeePendingLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <div class="text">TOTAL PENDING LEAVES</div>
-                            <div id="employeePendingLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a id="approvedLeaveButton" role="button">
-                    <div class="info-box bg-green hover-expand-effect">
-                        <div class="icon">
-                            <i class="material-icons">
-                                check_circle
-                            </i>
+                <div style="width:380px">
+                    <a id="approvedLeaveButton" role="button">
+                        <div class="info-box bg-green hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">
+                                    check_circle
+                                </i>
+                            </div>
+                            <div class="content">
+                                <div class="text">MONTHLY APPROVED LEAVES</div>
+                                <div id="employeeApprovedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <div class="text">MONTHLY APPROVED LEAVES</div>
-                            <div id="employeeApprovedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <a id="rejectedLeaveButton" role="button">
-                    <div class="info-box bg-red hover-expand-effect">
-                        <div class="icon">
-                            <i class="material-icons">
-                                do_not_disturb_off
-                            </i>
+                <div style="width:370px">
+                    <a id="rejectedLeaveButton" role="button">
+                        <div class="info-box bg-red hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">
+                                    do_not_disturb_off
+                                </i>
+                            </div>
+                            <div class="content">
+                                <div class="text">MONTHLY REJECTED/ CANCELLED LEAVES</div>
+                                <div id="employeeRejectedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <div class="text">MONTHLY REJECTED/ CANCELLED LEAVES</div>
-                            <div id="employeeRejectedLeavesCount" class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+             </div>
         </div>
 
     </div>

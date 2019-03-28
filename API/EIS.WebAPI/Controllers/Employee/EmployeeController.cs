@@ -144,7 +144,7 @@ namespace EIS.WebAPI.Controllers
                     "Click here http://aclpune.com/ems to login";
                 new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
                 _repository.Users.Dispose();
-                return Ok();
+                return Ok(person);
             }
             else 
             {

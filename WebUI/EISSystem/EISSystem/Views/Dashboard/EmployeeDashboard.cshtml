@@ -16,7 +16,13 @@
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
+        div[class^="col"] {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
         .info-box {
+            margin-bottom: 15px;
             cursor: pointer;
         }
 
@@ -43,12 +49,30 @@
             cursor: pointer;
         }
 
+        .row {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
+
+        .card {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
+
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
         .card .body {
             padding: 0px;
         }
 
         label {
             padding: 15px;
+        }
+        #pnl{
+            margin-left:-15px;
         }
     </style>
 </head>
@@ -61,54 +85,62 @@
             </div>
         </div>
     </div>
-    <div class="row clearfix">
+    <div class="row clearfix" id="pnl">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a role="button" id="presentButton">
-                <div class="info-box bg-pink hover-expand-effect">
-                    <div class="icon">
-                        <i class="material-icons">contacts </i>
+            <div style="width:280px">
+                <a role="button" id="presentButton">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">contacts </i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Present Days</div>
+                            <div class="number count-to" id="PresentDays"></div>
+                        </div>
                     </div>
-                    <div class="content">
-                        <div class="text">Present Days</div>
-                        <div class="number count-to" id="PresentDays"></div>
-                    </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a role="button" id="leaveButton">
-                <div class=" info-box bg-light-green hover-expand-effect">
-                    <div class="icon">
-                        <i class="material-icons">assignment_ind</i>
+            <div style="width:280px">
+                <a role="button" id="leaveButton">
+                    <div class=" info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">assignment_ind</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Leaves Availed</div>
+                            <div class="number count-to" id="AbsentDays"></div>
+                        </div>
                     </div>
-                    <div class="content">
-                        <div class="text">Leaves Availed</div>
-                        <div class="number count-to" id="AbsentDays"></div>
-                    </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a role="button" id="totalLeaveButton">
-                <div class="info-box bg-cyan hover-expand-effect">
+            <div style="width:280px">
+                <a role="button" id="totalLeaveButton">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">assignment_late</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Total Leaves Approved</div>
+                            <div class="number count-to" id="TotalLeavesTaken"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+         </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div style="width:280px">
+                <div class="info-box bg-orange hover-expand-effect">
                     <div class="icon">
-                        <i class="material-icons">assignment_late</i>
+                        <i class="material-icons">account_circle</i>
                     </div>
                     <div class="content">
-                        <div class="text">Total Leaves Approved</div>
-                        <div class="number count-to" id="TotalLeavesTaken"></div>
+                        <div class="text">Available Leaves</div>
+                        <div class="number count-to" id="AvailableLeaves"></div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box bg-orange hover-expand-effect">
-                <div class="icon">
-                    <i class="material-icons">account_circle</i>
-                </div>
-                <div class="content">
-                    <div class="text">Available Leaves</div>
-                    <div class="number count-to" id="AvailableLeaves"></div>
                 </div>
             </div>
         </div>
