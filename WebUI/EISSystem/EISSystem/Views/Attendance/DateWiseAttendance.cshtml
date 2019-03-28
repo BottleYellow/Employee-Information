@@ -19,7 +19,7 @@
             background-color: #808080;
         }
 
-        #locations {
+        #locations, #status {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
@@ -79,34 +79,37 @@
                 <div class="card">
                     <div class="body">
                         <div class="row col-md-12">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label>Select Location</label>
                                 <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                     <option value="0">All</option>
                                 </select>
                             </div>
-                            <div class="col-md-9">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Select Employee</label>
-                                        <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
-                                            <option value="0">All</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>From Date</label>
-                                        <input class="form-control" type="text" id="fromdate" autocomplete="off" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>To Date</label>
-                                        <input class="form-control" type="text" id="todate" autocomplete="off" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <br />
-                                        <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
-                                    </div>
-                                </div>
+                            <div class="col-md-2">
+                                <label>Select Status</label>
+                                <select id="status"  class="form-control show-tick">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
                             </div>
+                            <div class="col-md-2">
+                                <label>Select Employee</label>
+                                <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label>From Date</label>
+                                <input class="form-control" type="text" id="fromdate" autocomplete="off" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>To Date</label>
+                                <input class="form-control" type="text" id="todate" autocomplete="off" />
+                            </div>
+                            <div class="col-md-2">
+                                <br />
+                                <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
+                            </div>                   
                         </div>
                         <div>
                             <div>
@@ -172,12 +175,18 @@
             defaultDate: d
         });
         $('#locations').on('change', function () {
+            debugger;
             var loc = $('#locations').val();
+            var status = $('#status').val();
             $.ajax({
                 type: 'GET',
-                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + status,
                 success: function (data) {
-                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    if (status == "true") {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    } else {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                    }                
                     $.each(data, function (data, value) {
                         $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
@@ -277,6 +286,27 @@
         }
     });
 
+    $('#status').on('change', function () {
+            var loc = $('#locations').val();
+            var status = $('#status').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + status,
+                success: function (data) {
+                    if (status == "true") {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    } else {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                    }   
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    });
+                },
+                error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
+                }
 
+            });
+        });
 </script>
 

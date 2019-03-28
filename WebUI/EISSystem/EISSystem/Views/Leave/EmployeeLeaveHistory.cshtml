@@ -1,4 +1,4 @@
-﻿@using EIS.WebApp.Services
+﻿    @using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
 
@@ -92,15 +92,22 @@
                     <div class="body">
                         <div>
                             <div class="row">
-                                <div class="col-md-4 col-lg-4">
+                                <div class="col-md-5 col-lg-5">
                                     <div class="row">
-                                        <div class="col-md-6 col-lg-6">
+                                        <div class="col-md-4 col-lg-4">
                                             <label>Select Location</label>
                                             <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                                 <option value="0">All</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-6 col-lg-6">
+                                        <div class="col-md-4 col-lg-4">
+                                            <label>Select Status</label>
+                                            <select id="status" class="form-control show-tick">
+                                                <option value="true">Active</option>
+                                                <option value="false">InActive</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4">
                                             <label>Select Employee</label>
                                             <select class="form-control" id="selectEmployee">
                                                 <option value="0">All</option>
@@ -108,7 +115,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-8">
+                                <div class="col-md-7 col-lg-7">
                                     <div class="row">
                                         <div class="col-md-3 col-lg-3">
                                             <label>Select Type</label>
@@ -202,13 +209,18 @@
         var type = $('#selectReport').val();
         var leaveType = $('#leaveOption').val();
         var locationValue = $('#locations').val();
+        var status = $('#status').val();
         $.ajax({
             type: 'GET',
-                  url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + locationValue,
+            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + locationValue + '/' + status,
             success: function (data) {
-                $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                if (status == "true") {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                } else {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                }     
                 $.each(data, function (data, value) {
-                    $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                 });
             },
             error: function () {
@@ -232,7 +244,7 @@
             format: "YYYY"
         });
         value = $('#inputmonth').val();
-        GenerateReport(locationValue, employeeValue, type, value, leaveType);
+        GenerateReport(locationValue, employeeValue, type, value, leaveType, status);
 
     });
 
@@ -259,6 +271,7 @@
     $('#generateReport').on('click', function () {
         var locationValue = $('#locations').val();
         var employeeValue = $('#selectEmployee').val();
+        var status = $('#status').val();
         var leaveType = $('#leaveOption').val();
         var type = $('#selectReport').val();
         if (type == 'month') {
@@ -267,15 +280,38 @@
             value = $('#inputyear').val();
         }
 
-        GenerateReport(locationValue,employeeValue, type, value, leaveType);
+        GenerateReport(locationValue,employeeValue, type, value, leaveType,status);
     });
 
-    function GenerateReport(locationId, employeeId, type, value, leaveType) {
+     $('#status').on('change', function () {
+            var loc = $('#locations').val();
+            var status = $('#status').val();
+            $.ajax({
+                type: 'GET',
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + status,
+                success: function (data) {
+                    if (status == "true") {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    } else {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                    }   
+                    $.each(data, function (data, value) {
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    });
+                },
+                error: function () {
+                    bootbox.alert("Something went wrong..Please try after sometime");
+                }
+
+            });
+        });
+
+    function GenerateReport(locationId, employeeId, type, value, leaveType,status) {
         var Role = '@cookies.Role';
         var ecode = '@cookies.EmployeeCode';
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("EmployeeLeaveHistory", "Leave")?value=' + value + '&type=' + type + '&leaveType=' + leaveType + '&employeeId=' + employeeId + '&locationId=' + locationId,
+            url: '@Url.Action("EmployeeLeaveHistory", "Leave")?value=' + value + '&type=' + type + '&leaveType=' + leaveType + '&employeeId=' + employeeId + '&locationId=' + locationId + '&status=' + status,
             dataType: 'JSON',
             beforeSend: function () {
                 $('ajax-loader').css("visibility", "visible");
@@ -426,14 +462,19 @@
         });
     }
      $('#locations').on('change', function () {
-            var loc = $('#locations').val();
+         var loc = $('#locations').val();
+         var status = $('#status').val();
             $.ajax({
                 type: 'GET',
-                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc,
+                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc+'/'+status,
                 success: function (data) {
-                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    if (status == "true") {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                    } else {
+                        $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                    }     
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.id).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
                 },
                 error: function () {

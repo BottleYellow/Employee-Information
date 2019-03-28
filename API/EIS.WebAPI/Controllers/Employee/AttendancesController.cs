@@ -91,16 +91,16 @@ namespace EIS.WebAPI.Controllers
         #region[Attendance Reports]
 
         [DisplayName("Attendance Reports")]
-        [HttpGet("GetAllAttendanceEmpCount/{SearchFor}/{InputOne}/{InputTwo}/{locationId}")]
-        public IActionResult GetAllAttendance([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId)
+        [HttpGet("GetAllAttendanceEmpCount/{SearchFor}/{InputOne}/{InputTwo}/{locationId}/{status}")]
+        public IActionResult GetAllAttendance([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId,[FromRoute]bool status)
         {
-            Attendance_Report attendanceData = _repository.Attendances.GetAttendanceCountReport(SearchFor, InputOne, InputTwo, locationId);
+            Attendance_Report attendanceData = _repository.Attendances.GetAttendanceCountReport(SearchFor, InputOne, InputTwo, locationId,status);
             return Ok(attendanceData);
         }
-        [HttpGet("GetAllAttendanceNew/{SearchFor}/{InputOne}/{InputTwo}/{locationId}")]
-        public IActionResult GetAllAttendanceNew([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId)
+        [HttpGet("GetAllAttendanceNew/{SearchFor}/{InputOne}/{InputTwo}/{locationId}/{status}")]
+        public IActionResult GetAllAttendanceNew([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId,[FromRoute]bool status)
         {
-            Attendance_Report_New attendanceData = _repository.Attendances.GetAttendanceCountReportNew(SearchFor, InputOne, InputTwo, locationId);
+            Attendance_Report_New attendanceData = _repository.Attendances.GetAttendanceCountReportNew(SearchFor, InputOne, InputTwo, locationId,status);
             return Ok(attendanceData);
         }
         #endregion

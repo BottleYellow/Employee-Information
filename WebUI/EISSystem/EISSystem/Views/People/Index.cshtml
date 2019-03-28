@@ -98,6 +98,7 @@
                     <table id="example" class="table table-striped table-bordered table-hover" style="width:100%">
                         <thead>
                             <tr>
+                                <th>Actions</th>
                                 <th>Location</th>
                                 <th>Employee Code</th>
                                 <th>Name</th>
@@ -108,7 +109,7 @@
                                 <th>Email Address</th>
                                 <th>Joining Date</th>
                                 <th>Created By</th>
-                                <th>Actions</th>
+
                             </tr>
                         </thead>
                     </table>
@@ -224,12 +225,12 @@
                     image = '<img src="' + path + '" onerror="if (this.src!=\'' + defaultPath + '\') this.src=\'' + defaultPath +'\';" style="height:40px; width:40px">';
 
                     if (activeStatus == true) {
-                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a href="@Url.Action("Profile","People")?PersonId=' + data[i].EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + data[i].EmployeeCode + '>Delete</a></li></ul></div>';
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu "><li><a href="@Url.Action("Profile","People")?PersonId=' + data[i].EmployeeCode + '">Profile</a></li><li><a class="inactive" id=' + data[i].EmployeeCode + '>DeActivate</a></li></ul></div>';
                     } else {
-                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu pull-right"><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
+                        action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu "><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
                     }
 
-                    array.push([data[i].LocationName, data[i].EmployeeCode, data[i].FullName, image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy, action]);
+                    array.push([action,data[i].LocationName, data[i].EmployeeCode, data[i].FullName, image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy]);
                 }
 
                 $('#example').DataTable().destroy();
@@ -263,8 +264,8 @@
             async: false,
                     url: '@APIURL/api/Employee/CreatedBy',
                     data: null,
-            success: function (data) {
-                        result = data;
+            success: function (data) {                       
+                result = data;
                     }
         });
         return result;

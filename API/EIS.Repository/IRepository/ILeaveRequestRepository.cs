@@ -15,7 +15,7 @@ namespace EIS.Repositories.IRepository
         IQueryable<LeaveRequest> GetLeaveRequestUnderMe(int PersonId, int TenantId);
         string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate);
         string CheckForScheduledPastLeave(int PersonId, DateTime FromDate, DateTime ToDate);
-        List<LeaveRequestViewModel> GetLeaveData(int locationId, int employeeId, int month, int year,int TenantId,string leaveType);
+        List<LeaveRequestViewModel> GetLeaveData(int locationId, string employeeId, int month, int year,int TenantId,string leaveType,bool status);
         List<SP_EmployeeLeaveRequest> GetEmployeeLeaveData(int PersonId);
     }
 }

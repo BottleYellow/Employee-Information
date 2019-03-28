@@ -97,8 +97,8 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required" id="Imagediv">
-                                            
-                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:80px; width:80px;"/>
+
+                                            <img id="employeeImage" src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:80px; width:80px;" />
                                             <div class="middle">
                                                 <input type="button" class="text" id="my-button" value="Edit Image" />
                                                 <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="my-file" onchange="return ValidateFileUpload()" />
@@ -117,26 +117,26 @@
                             </div>
                             @if (cookies.Role == "Admin" || cookies.Role == "HR")
                             {
-                            <div class="row col-md-9">
-                                <div class="col-md-4">
-                                    <div class="form-group required">
-                                        <label class="control-label" asp-for="EmployeeCode">Employee Code</label>
-                                        <div class="form-line">
-                                            <input asp-for="EmployeeCode" class="form-control" id="EmployeeCode" />
+                                <div class="row col-md-9">
+                                    <div class="col-md-4">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="EmployeeCode">Employee Code</label>
+                                            <div class="form-line">
+                                                <input asp-for="EmployeeCode" class="form-control" id="EmployeeCode" />
+                                            </div>
+                                            <span asp-validation-for="EmployeeCode" class="text-danger"></span>
                                         </div>
-                                        <span asp-validation-for="EmployeeCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="LocationId">Location : </label>
+                                            <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations, "Id", "LocationName"))" class="form-control show-tick">
+                                                <option value="0">-- Select Location --</option>
+                                            </select>
+                                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group required">
-                                        <label class="control-label" asp-for="LocationId">Location : </label>
-                                        <select id="did" asp-for="LocationId" asp-items="@(new SelectList(@ViewBag.Locations, "Id", "LocationName"))" class="form-control show-tick">
-                                            <option value="0">-- Select Location --</option>
-                                        </select>
-                                        <span asp-validation-for="LocationId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
                             }
                             else
                             {
@@ -149,7 +149,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="FirstName">First Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
+                                                <input asp-for="FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
                                             </div>
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
@@ -158,7 +158,7 @@
                                         <div class="form-group">
                                             <label asp-for="MiddleName">Middle Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="MiddleName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
+                                                <input asp-for="MiddleName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
                                             </div>
                                             <span asp-validation-for="MiddleName" class="text-danger"></span>
                                         </div>
@@ -167,7 +167,7 @@
                                         <div class="form-group required">
                                             <label class="control-label" asp-for="LastName">Last Name : </label>
                                             <div class="form-line">
-                                                <input asp-for="LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)"/>
+                                                <input asp-for="LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
                                             </div>
                                             <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
@@ -203,9 +203,35 @@
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group required">
+                                            <label class="control-label" asp-for="ContactNumber">Contact Number : </label>
+                                            <div class="form-line">
+                                                <input asp-for="ContactNumber" class="form-control" />
+                                            </div>
+                                            <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="PersonalEmail">Personal Email Address : </label>
+                                            <div class="form-line">
+                                                <input asp-for="PersonalEmail" type="email" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="PersonalEmail" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9" style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
                                             <label class="control-label" asp-for="DateOfBirth">Date Of Birth : </label>
                                             <div class="form-line">
-                                                <input id="dob" class="form-control" type="text" asp-for="DateOfBirth" autocomplete="off"/>
+                                                <input id="dob" class="form-control" type="text" asp-for="DateOfBirth" autocomplete="off" />
                                             </div>
                                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                         </div>
@@ -224,62 +250,62 @@
                                     </div>
                                 </div>
                             </div>
-                             @if (cookies.Role == "Admin" || cookies.Role == "HR")
-                             {
-                            <div class="row">
-                                <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="RoleId">Designation : </label>
-                                            <select asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations, "Id", "Name"))" class="form-control show-tick"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="JoinDate">Joining Date : </label>
-                                            <div class="form-line">
-                                                <input id="doj" class="form-control" type="text" asp-for="JoinDate" autocomplete="off" />
+                            @if (cookies.Role == "Admin" || cookies.Role == "HR")
+                            {
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="RoleId">Designation : </label>
+                                                <select asp-for="RoleId" asp-items="@(new SelectList(@ViewBag.Designations, "Id", "Name"))" class="form-control show-tick"></select>
                                             </div>
-                                            <span asp-validation-for="JoinDate" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
-                                            <div class="form-line">
-                                                <select asp-for="ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons, "Id", "FirstName"))" class="form-control show-tick">
-                                                    <option value="0">-- Select --</option>
-                                                </select>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="JoinDate">Joining Date : </label>
+                                                <div class="form-line">
+                                                    <input id="doj" class="form-control" type="text" asp-for="JoinDate" autocomplete="off" />
+                                                </div>
+                                                <span asp-validation-for="JoinDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="ReportingPersonId">Reporting Person : </label>
+                                                <div class="form-line">
+                                                    <select asp-for="ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons, "Id", "FirstName"))" class="form-control show-tick">
+                                                        <option value="0">-- Select --</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                             }
-                             else
-                             {
+                            }
+                            else
+                            {
                                 <input type="hidden" asp-for="RoleId" />
                                 <input type="hidden" asp-for="JoinDate" />
                                 <input type="hidden" asp-for="ReportingPersonId" />
-                             }
+                            }
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
-                                     @if (cookies.Role == "Admin" || cookies.Role == "HR")
-                                     {
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label class="control-label" asp-for="Salary">Salary : </label>
-                                            <div class="form-line">
-                                                <input asp-for="Salary" class="form-control" />
+                                    @if (cookies.Role == "Admin" || cookies.Role == "HR")
+                                    {
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" asp-for="Salary">Salary : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="Salary" class="form-control" />
+                                                </div>
+                                                <span asp-validation-for="Salary" class="text-danger"></span>
                                             </div>
-                                            <span asp-validation-for="Salary" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                     }
-                                     else
-                                     { 
+                                    }
+                                    else
+                                    {
                                         <input type="hidden" asp-for="Salary" />
-                                     }
+                                    }
                                     <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label" asp-for="PanCard">PAN Card No. : </label>
@@ -300,59 +326,59 @@
                                     </div>
                                 </div>
                             </div>
-                           @if (cookies.Role == "Admin" || cookies.Role == "HR")
-                           {
-                            <div class="row">
-                                <div class="col-md-9" style="height:80px">
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="WeeklyOffId">Weekly Off Type : </label>
-                                            <select id="wid" asp-for="WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs, "Id", "Type"))" class="form-control show-tick">
-                                                <option value="0">-- Select Type --</option>
-                                            </select>
-                                            <span asp-validation-for="WeeklyOffId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="WorkingHours">Daily Working Hours : </label>
-                                            <div class="form-line">
-                                                <input asp-for="WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
-                                            </div>
-                                            <span asp-validation-for="WorkingHours" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6 col-xs-12">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="IsOnProbation">Is On Probation? : </label>
-                                            <div class="form-line">
-                                                <select id="ip" asp-for="IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
-                                                    <option value="false" selected>No</option>
-                                                    <option value="true">Yes</option>
+                            @if (cookies.Role == "Admin" || cookies.Role == "HR")
+                            {
+                                <div class="row">
+                                    <div class="col-md-9" style="height:80px">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="WeeklyOffId">Weekly Off Type : </label>
+                                                <select id="wid" asp-for="WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs, "Id", "Type"))" class="form-control show-tick">
+                                                    <option value="0">-- Select Type --</option>
                                                 </select>
+                                                <span asp-validation-for="WeeklyOffId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="WorkingHours">Daily Working Hours : </label>
+                                                <div class="form-line">
+                                                    <input asp-for="WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
+                                                </div>
+                                                <span asp-validation-for="WorkingHours" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="IsOnProbation">Is On Probation? : </label>
+                                                <div class="form-line">
+                                                    <select id="ip" asp-for="IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
+                                                        <option value="false" selected>No</option>
+                                                        <option value="true">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="period" class="col-md-3" hidden>
+                                        <div class="col-md-11 col-sm-9 col-xs-9">
+                                            <div class="form-group required">
+                                                <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
+                                                <div class="form-line">
+                                                    <input id="ppm" asp-for="PropbationPeriodInMonth" type="text" pattern="[1-9]" maxlength="1" class="form-control" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="period" class="col-md-3" hidden>
-                                    <div class="col-md-11 col-sm-9 col-xs-9">
-                                        <div class="form-group required">
-                                            <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
-                                            <div class="form-line">
-                                                <input id="ppm" asp-for="PropbationPeriodInMonth" type="text" pattern="[1-9]" maxlength="1" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                           }
-                           else
-                           {
+                            }
+                            else
+                            {
                                 <input type="hidden" asp-for="WeeklyOffId" />
                                 <input type="hidden" asp-for="WorkingHours" />
                                 <input type="hidden" asp-for="IsOnProbation" />
                                 <input type="hidden" asp-for="PropbationPeriodInMonth" />
-                           }
+                            }
                             <div class="row">
                                 <div class="col-md-9" style="height:80px">
                                     <div class="col-md-4 col-sm-6 col-xs-12">

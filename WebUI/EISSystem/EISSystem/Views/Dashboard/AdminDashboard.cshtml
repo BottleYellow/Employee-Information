@@ -79,11 +79,12 @@
         margin-left: -7px;
         margin-right: -7px;
     }
-    
-    .card{
-        margin-left:-7px;
-        margin-right:-7px;
+
+    .card {
+        margin-left: -7px;
+        margin-right: -7px;
     }
+
     .container-fluid {
         padding-left: 0px;
         padding-right: 0px;
@@ -96,7 +97,8 @@
     label {
         padding: 15px;
     }
-    .*{
+
+    .* {
         font-family: Arial;
         font-style: normal;
     }
@@ -116,6 +118,7 @@
             </div>
         </div>
     </div>
+
     <div class="row clearfix">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -224,7 +227,6 @@
         </div>
 
     </div>
-  
     <div class="row clearfix">
         <!-- Attendance Data-->
         <div id="attendanceData">
@@ -492,11 +494,11 @@
                     TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                 }
             if (Status == "Present") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
+                Status = '<span title="Present" style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
             }else if (Status == "Absent") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
+                Status = '<span title="Absent" style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
             } else if (Status == "OnLeave") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
+                Status = '<span title="OnLeave" style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
             }
             else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';

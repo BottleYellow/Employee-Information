@@ -35,9 +35,9 @@ namespace EIS.WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AllAttendance(string date, string type, int location)
+        public IActionResult AllAttendance(string date, string type, int location,bool status)
         {
-            string url = GetAllAttendanceData(date, type, location);
+            string url = GetAllAttendanceData(date, type, location,status);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
@@ -51,9 +51,9 @@ namespace EIS.WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AllAttendanceNew(string date, string type, int location)
+        public IActionResult AllAttendanceNew(string date, string type, int location,bool status)
         {
-            string url = GetAllAttendanceNewData(date, type, location);
+            string url = GetAllAttendanceNewData(date, type, location,status);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Attendance_Report_New attendanceData = JsonConvert.DeserializeObject<Attendance_Report_New>(stringData);
@@ -70,7 +70,8 @@ namespace EIS.WebApp.Controllers
         [HttpPost]
         public IActionResult AllAttendanceReport(string date, string type, int location)
         {
-            string url = GetAllAttendanceData(date, type, location);
+            bool status = true;
+            string url = GetAllAttendanceData(date, type, location,status);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
@@ -263,7 +264,7 @@ namespace EIS.WebApp.Controllers
             return url;
         }
         [NonAction]
-        public string GetAllAttendanceData(string date, string type, int location)
+        public string GetAllAttendanceData(string date, string type, int location,bool status)
         {
             string url = "";
             string[] monthYear = new string[3];
@@ -279,22 +280,22 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Year/" + monthYear[0] + "/0/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Year/" + monthYear[0] + "/0/" + location+"/"+status;
             }
             else if (type == "week")
             {
                 DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location+"/"+status;
             }
             else
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceEmpCount/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location+"/"+status;
             }
             return url;
         }
         [NonAction]
-        public string GetAllAttendanceNewData(string date, string type, int location)
+        public string GetAllAttendanceNewData(string date, string type, int location,bool status)
         {
             string url = "";
             string[] monthYear = new string[3];
@@ -310,17 +311,17 @@ namespace EIS.WebApp.Controllers
             }
             if (type == "year")
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Year/" + monthYear[0] + "/0/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Year/" + monthYear[0] + "/0/" + location+"/"+ status;
             }
             else if (type == "week")
             {
                 DateTime startDate = week[0] == null ? new DateTime(2019, 01, 30) : Convert.ToDateTime(week[0]);
                 DateTime endDate = week[1] == null ? new DateTime(2019, 01, 05) : Convert.ToDateTime(week[1]);
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Week/" + startDate.ToString("MMM-dd-yyyy") + "/" + endDate.ToString("MMM-dd-yyyy") + "/" + location+"/"+ status;
             }
             else
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location+"/"+ status;
             }
             return url;
         }

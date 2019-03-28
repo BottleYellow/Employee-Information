@@ -27,7 +27,7 @@
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        #select {
+        #select,#status {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
@@ -84,21 +84,28 @@
                 <div class="card">
                     <div class="body">
                         <div class="row col-md-12" id="headeropt">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label>Select Location</label>
                                 <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                                     <option value="0">All</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label>Select Type Of Reports</label>
+                            <div class="col-md-2">
+                                <label>Select Status</label>
+                                <select id="status" class="form-control show-tick">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Select Type</label>
                                 <select class="form-control" id="select">
                                     <option value="year" id="year">Year</option>
                                     <option selected value="month" id="month">Month</option>
                                     @*<option value="week" id="week">Week</option>*@
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div id="inputyeardiv" hidden="hidden">
                                     <label>Select Year</label><br />
                                     <input class="form-control" type="text" id="inputyear" placeholder="select year" autocomplete="off" />
@@ -108,7 +115,7 @@
                                     <input class="form-control" type="text" id="inputmonth" placeholder="select month" autocomplete="off" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <br />
                                 <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
                             </div>
@@ -204,6 +211,7 @@
 
         $('#inputmonth').val(m + '/' + y);
         var location = $('#locations').val();
+        var status = $('#status').val();
         var alltwoffk = calWeeklyOffMonthly(m, y);
         var alltwoffb = calWeeklyOffMonthly(m, y);
         $('#baner').show();
@@ -228,7 +236,7 @@
                 });
                 $('#allthb').html('Holidays : ' + b);
                 $('#allthk').html('Holidays : ' + k);
-                generateReport(m + '/' + y, 'month', location);
+                generateReport(m + '/' + y, 'month', location,status);
             },
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
@@ -268,6 +276,7 @@
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
             var location = $('#locations').val();
+            var status = $('#status').val();
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 if (location == 0) {
@@ -304,7 +313,7 @@
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
 
-                        generateReport(value, 'year', location);
+                        generateReport(value, 'year', location,status);
                     },
                     error: function () {
                         bootbox.alert("Something went wrong..Please try after sometime");
@@ -352,7 +361,7 @@
                         });
                         $('#allthb').html('Holidays : ' + b);
                         $('#allthk').html('Holidays : ' + k);
-                        generateReport(value, 'month', location);
+                        generateReport(value, 'month', location,status);
                     },
                     error: function () {
                         bootbox.alert("Something went wrong..Please try after sometime");
@@ -362,12 +371,12 @@
             }
         });
 
-        function generateReport(value, type, location) {
+        function generateReport(value, type, location,status) {
             $.ajax({
                 url: '@Url.Action("AllAttendance","Attendance")',
                 type: "POST",
                 datatype: "json",
-                data: { "date": value, "type": type, "location": location },
+                data: { "date": value, "type": type, "location": location, "status": status },
                 beforeSend: function () {
                     $('.ajax-loader').css("visibility", "visible");
                 },
