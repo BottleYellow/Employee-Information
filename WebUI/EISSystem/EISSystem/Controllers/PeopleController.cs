@@ -208,7 +208,7 @@ namespace EIS.WebApp.Controllers
                 ViewBag.ImageExist = "Validation failed... Please Upload the file again";
             }
             
-            return View("CreateEmployee");
+            return View("CreateEmployee",createEmployee);
         }
 
         [DisplayName("Update Employee")]

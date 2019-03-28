@@ -42,6 +42,8 @@ namespace EIS.Entities.Employee
         public int? WeeklyOffId { get; set; }
         public bool? IsOnProbation { get; set; }
         public int? PropbationPeriodInMonth { get; set; }
+        public string PersonalEmail { get; set; }
+        public string ContactNumber { get; set; }
         #endregion
 
         #region [Relations]

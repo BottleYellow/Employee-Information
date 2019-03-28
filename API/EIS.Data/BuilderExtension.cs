@@ -56,6 +56,8 @@ namespace EIS.Data
                 modelBuilder.Entity<Person>().Property(p => p.CreatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Person>().Property(p => p.UpdatedDate).HasColumnType("datetime");
                 modelBuilder.Entity<Person>().Property(p => p.RowVersion).HasColumnType("rowversion").IsConcurrencyToken().ValueGeneratedOnAddOrUpdate();
+                modelBuilder.Entity<Person>().Property(p => p.PersonalEmail).HasColumnType("nvarchar(150)").IsRequired();
+                modelBuilder.Entity<Person>().Property(p => p.ContactNumber).HasColumnType("varchar(15)").IsRequired();
                 #endregion
 
                 #region[LeaveCredit]

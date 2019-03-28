@@ -25,6 +25,7 @@
             font-size: 16px;
             text-align: center;
         }
+
         .contact1, .contact2 {
             background-color: #4CAF50; /* Green */
             border: none;
@@ -50,38 +51,38 @@
                 <div class="body">
                     <div class="row">
                         <div class="col-md-3">
-                            <div id="empPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                            <div id="empPnl" style="height:50px;">
                                 <div id="createEmployee">
-                                    Add Employee
+                                    Employee Personal Details
                                 </div>
 
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="permPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                            <div id="permPnl" style="height:50px;">
                                 <div id="createPermanent">
-                                    Add Permanent Address
+                                    Permanent Address Details
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="currPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                            <div id="currPnl" style="height:50px;">
                                 <div id="createCurrent">
-                                    Add Current Address
+                                    Current Address Details
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="emergPnl" style="background-color:#4da9ff; color:white; height:50px;">
+                            <div id="emergPnl" style="height:50px;">
                                 <div id="createEmergency">
-                                    Add Emergency Address
+                                    Emergency Contact Details
                                 </div>
                             </div>
                         </div>
                     </div>
                     <form asp-action="Create" method="post" enctype="multipart/form-data" id="create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <fieldset id="employee">
+                        <fieldset id="employee" hidden="hidden">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-9" style="height:80px">
@@ -700,62 +701,64 @@
             $('#contact2').show();
             $('#contact1').hide();
         })
-        $('#empPnl').css("background-color", "#0084ff");
+        $('#employee').show();
+        $('#createEmployee').css({ "color":"blue","font-weight":"bold"});
+
         $('#btnEmpNext').on('click', function () {
-            $('#empPnl').css("background-color", "#4da9ff");
-            $('#permPnl').css("background-color", "#0084ff");
-            $('#currPnl').css("background-color", "#4da9ff");
-            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#createPermanent').css({ "color": "blue", "font-weight": "bold" });
+            $('#createEmployee').css({ "color": "", "font-weight": "" });
+            $('#createCurrent').css({ "color": "", "font-weight": "" });
+            $('#createEmergency').css({ "color": "", "font-weight": "" });
             $('#employee').hide();
             $('#permanentAddress').show();
             $('#currentAddress').hide();
             $('#emergencyAddress').hide();
         });
         $('#btnPermNext').on('click', function () {
-            $('#empPnl').css("background-color", "#4da9ff");
-            $('#permPnl').css("background-color", "#4da9ff");
-            $('#currPnl').css("background-color", "#0084ff");
-            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#createEmployee').css({ "color": "", "font-weight": "" });
+            $('#createPermanent').css({ "color": "", "font-weight": "" });
+            $('#createCurrent').css({ "color": "blue", "font-weight": "bold" });
+            $('#createEmergency').css({ "color": "", "font-weight": "" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').show();
             $('#emergencyAddress').hide();
         });
         $('#btnCurrNext').on('click', function () {
-            $('#empPnl').css("background-color", "#4da9ff");
-            $('#permPnl').css("background-color", "#4da9ff");
-            $('#currPnl').css("background-color", "#4da9ff");
-            $('#emergPnl').css("background-color", "#0084ff");
+            $('#createEmployee').css({ "color": "", "font-weight": "" });
+            $('#createPermanent').css({ "color": "", "font-weight": "" });
+            $('#createCurrent').css({ "color": "", "font-weight": "" });
+            $('#createEmergency').css({ "color": "blue", "font-weight": "bold" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').hide();
             $('#emergencyAddress').show();
         });
         $('#btnEmergPrev').on('click', function () {
-            $('#empPnl').css("background-color", "#4da9ff");
-            $('#permPnl').css("background-color", "#4da9ff");
-            $('#currPnl').css("background-color", "#0084ff");
-            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#createEmployee').css({ "color": "", "font-weight": "" });
+            $('#createPermanent').css({ "color": "", "font-weight": "" });
+            $('#createCurrent').css({ "color": "blue", "font-weight": "bold" });
+            $('#createEmergency').css({ "color": "", "font-weight": "" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').show();
             $('#emergencyAddress').hide();
         })
         $('#btnCurrPrev').on('click', function () {
-            $('#empPnl').css("background-color", "#4da9ff");
-            $('#permPnl').css("background-color", "#0084ff");
-            $('#currPnl').css("background-color", "#4da9ff");
-            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#createEmployee').css({ "color": "", "font-weight": "" });
+            $('#createPermanent').css({ "color": "blue", "font-weight": "bold" });
+            $('#createCurrent').css({ "color": "", "font-weight": "" });
+            $('#createEmergency').css({ "color": "", "font-weight": "" });
             $('#employee').hide();
-            $('#permanentAddress').show();
-            $('#currentAddress').hide();
+            $('#permanentaddress').show();
+            $('#currentaddress').hide();
             $('#emergencyAddress').hide();
         })
         $('#btnPermPrev').on('click', function () {
-            $('#empPnl').css("background-color", "#0084ff");
-            $('#permPnl').css("background-color", "#4da9ff");
-            $('#currPnl').css("background-color", "#4da9ff");
-            $('#emergPnl').css("background-color", "#4da9ff");
+            $('#createEmployee').css({ "color": "blue", "font-weight": "bold" });
+            $('#createPermanent').css({ "color": "", "font-weight": "" });
+            $('#createCurrent').css({ "color": "", "font-weight": "" });
+            $('#createEmergency').css({ "color": "", "font-weight": "" });
             $('#employee').show();
             $('#permanentAddress').hide();
             $('#currentAddress').hide();

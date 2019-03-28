@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -462,6 +462,8 @@ namespace EIS.Data.Migrations
                     WeeklyOffId = table.Column<int>(nullable: true),
                     IsOnProbation = table.Column<bool>(nullable: true),
                     PropbationPeriodInMonth = table.Column<int>(nullable: true),
+                    PersonalEmail = table.Column<string>(type: "nvarchar(150)", nullable: false),
+                    ContactNumber = table.Column<string>(type: "varchar(15)", nullable: false),
                     Gender = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>

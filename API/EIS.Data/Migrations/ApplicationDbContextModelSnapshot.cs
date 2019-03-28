@@ -350,6 +350,10 @@ namespace EIS.Data.Migrations
                     b.Property<string>("AadharCard")
                         .HasColumnType("varchar(12)");
 
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(15)");
+
                     b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate")
@@ -410,6 +414,10 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("PanCard")
                         .HasColumnType("varchar(10)");
+
+                    b.Property<string>("PersonalEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int?>("PropbationPeriodInMonth");
 
