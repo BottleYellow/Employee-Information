@@ -465,7 +465,7 @@
             }
         });
     }
-    function getData(Employees, dateSelected) {
+     function getData(Employees, dateSelected) {
         debugger;
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
@@ -487,16 +487,16 @@
                     else {
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
                     }
-                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-info">Expected: ' + expectedTimeOutDate + '</span>';
+                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
                 } else {
                     TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                 }
             if (Status == "Present") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+                Status = '<span title="Present" style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
             }else if (Status == "Absent") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                Status = '<span title="Absent" style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
             } else if (Status == "OnLeave") {
-                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                Status = '<span title="OnLeave" style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
             }
             else{
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
@@ -513,9 +513,9 @@
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[1].includes("Present")) {
+                if (aData[1].includes("success")) {
                     $('td', nRow).addClass('success');
-                } else if (aData[1].includes("Absent")) {
+                } else if (aData[1].includes("danger")) {
                     $('td', nRow).addClass('danger');
                 }
                 else {
@@ -529,9 +529,9 @@
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[1].includes("Present")) {
+                if (aData[1].includes("success")) {
                     $('td', nRow).addClass('success');
-                } else if (aData[1].includes("Absent")) {
+                } else if (aData[1].includes("danger")) {
                     $('td', nRow).addClass('danger');
                 }
                 else {
@@ -589,6 +589,7 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
+            scrollX: true,
             "aoColumns": [
                 null,
                 null,

@@ -91,18 +91,23 @@ namespace EIS.Entities.SP
     {
         public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
     }
+
+    public class SP_GetAttendanceLeaveData
+    {   [Key]
+        public int Id { get; set; }
+        public string EmployeeCode { get; set; }
+        public Nullable<DateTime> Date { get; set; }
+        public string Reason { get; set; }
+        public string DateStatus { get; set; }
+
+    }
     public class Attendance_Report_New
     {
         public List<SP_GetAttendanceCountReport_New> sP_GetAttendanceCountReportsNew { get; set; }
-        public List<AttendanceLeaveData> AttendanceLeaveDatas { get; set; }
+        public List<SP_GetAttendanceLeaveData> sP_GetAttendanceLeaveDatas { get; set; }
     }
 
-    public class AttendanceLeaveData
-    {
-        public string EmployeeCode { get; set; }
-        public DateTime Date { get; set; }
-        public string Reason { get; set; }
-    }
+
     public class GetAdminHrManager
     {
         [Key]

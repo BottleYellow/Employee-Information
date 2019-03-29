@@ -53,6 +53,8 @@ namespace EIS.Data.Context
         [NotMapped]
         public virtual DbSet<SP_GetAttendanceCountReport> _sp_GetAttendanceCountReport { get; set; }
         [NotMapped]
+        public virtual DbSet<SP_GetAttendanceLeaveData> _sp_GetAttendanceLeaveData { get; set; }
+        [NotMapped]
         public virtual DbSet<SP_GetAttendanceCountReport_New> _sp_GetAttendanceCountReportNew { get; set; }
         [NotMapped]
         public virtual DbSet<AttendanceReport> _sp_GetEmployeeAttendanceCount { get; set; }
