@@ -88,9 +88,9 @@
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" style="padding-right:15px;" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a href="@rootPath/Dashboard/@DashboardName" class="navbar-brand" style="color:white"><b>Employee Management System</b></a>
+                <a href="@rootPath/Dashboard/@DashboardName" class="navbar-brand" style="color:white"><b style="padding-left:10px;">Employee Management System</b></a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -102,7 +102,7 @@
                     @RenderSection("Attendance", required: false)
                     <li>
                         <a href="@rootPath/Account/Logout">
-                            <span style="color:white;font-size:18px;" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
+                            <span style="color:white;font-size:18px; padding-right:5px; padding-bottom:5px;" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
                         </a>
                     </li>
 

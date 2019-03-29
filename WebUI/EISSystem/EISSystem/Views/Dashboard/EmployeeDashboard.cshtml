@@ -87,7 +87,7 @@
     </div>
     <div class="row clearfix" id="pnl">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div style="width:280px">
+            <div>
                 <a role="button" id="presentButton">
                     <div class="info-box bg-pink hover-expand-effect">
                         <div class="icon">
@@ -102,7 +102,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div style="width:280px">
+            <div >
                 <a role="button" id="leaveButton">
                     <div class=" info-box bg-light-green hover-expand-effect">
                         <div class="icon">
@@ -117,7 +117,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div style="width:280px">
+            <div>
                 <a role="button" id="totalLeaveButton">
                     <div class="info-box bg-cyan hover-expand-effect">
                         <div class="icon">
@@ -132,7 +132,7 @@
             </div>
          </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div style="width:280px">
+            <div>
                 <div class="info-box bg-orange hover-expand-effect">
                     <div class="icon">
                         <i class="material-icons">account_circle</i>
@@ -332,141 +332,15 @@
             }
         });
     }
-    //function getData(Employees, buttonSelected) {
-    //    debugger;
-    //    var array = [];
-    //    for (var i = 0; i < Employees.length; i++) {
-    //        var approvedName = "-";
-    //        if (buttonSelected == "totalLeave") {
-    //            var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
-    //            var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
-    //            var Status = Employees[i].Status;
-    //            if (Status == "Pending") {
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-    //            }
-    //            else if (Status == "Approved" || Status.startsWith('Approved')) {
-    //                if (Employees[i].LeaveType.includes("Past")) {
-    //                    approvedName = "Past Leave Auto Approved";
-    //                } else {
-    //                    approvedName = Employees[i].ApprovedBy;
-    //                }
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-    //            }
-    //            else if (Status == "Rejected") {
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-    //                approvedName = Employees[i].ApprovedBy;
-    //            } else if (Status == "Cancelled") {
-    //                approvedName = "-";
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-    //            }
-    //            else if (Status == "Requested For Cancel") {
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-    //            }
-    //            else {
-    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-    //            }
-    //            array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
-    //        } else {
-    //            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
-    //            var TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
-    //            var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
-    //            var todayDate = moment(new Date()).format("DD-MMM-YYYY");
-    //            var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
-    //            if (todayDate == dateInData) {
-    //                var expectedTimeOutDate = null;
-    //                if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
-    //                    if (Employees[i].WorkingHours != null) {
-    //                        var workingValue = Employees[i].WorkingHours;
-    //                        var hr = workingValue.slice(0, 2);
-    //                        var min = workingValue.slice(3, 5);
-    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
-    //                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
-    //                    }
-    //                    else {
-    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
-    //                    }
-    //                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-primary">Expected: ' + expectedTimeOutDate + '</span>';
-    //                }
-    //            }
-    //            var Status = Employees[i].Status;
-    //            if (buttonSelected == "Leave") {
-    //                if (Status == "OnLeave") {
-    //                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
-    //                }
-    //            } else {
-    //                if (buttonSelected == "Present") {
-    //                    if (Status == "Present") {
-    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-    //                        array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
-    //                    }
-    //                } else {
-    //                    if (Status == "Present") {
-    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-    //                    } else if (Status == "Absent") {
-    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-    //                    } else {
-    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-    //                    }
-    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
-    //                }
-    //            }
-    //        }
-    //    }
-    //    $('#LeaveTable').DataTable().destroy();
-    //    $('#attendanceTable').DataTable().destroy();
-    //    if (buttonSelected == "totalLeave") {
-    //        $('#LeaveTable').DataTable({
-    //            scrollX: true,
-    //            "order": [1, 'desc'],
-    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-    //                if (aData[4].includes("Approved")) {
-    //                    $('td', nRow).addClass('success');
-    //                } else if (aData[4].includes("Pending")) {
-    //                    $('td', nRow).addClass('warning');
-    //                }
-    //                else {
-    //                    $('td', nRow).addClass('danger');
-    //                }
-    //            },
-    //            data: array
-    //        });
-    //    } else {
-    //        $('#attendanceTable').DataTable({
-    //            scrollX: true,
-    //            "aoColumns": [
-    //                { "sType": "date" },
-    //                null,
-    //                null,
-    //                null,
-    //                null
-    //            ],
-    //            "order": [0, "desc"],
-    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-    //                if (aData[1].includes("Present")) {
-    //                    $('td', nRow).addClass('success');
-    //                } else if (aData[1].includes("Absent")) {
-    //                    $('td', nRow).addClass('danger');
-    //                }
-    //                else {
-    //                    $('td', nRow).addClass('warning');
-    //                }
-    //            },
-    //            data: array
-    //        });
-    //    }
-    //}
-
     function getData(Employees, buttonSelected) {
-        var array=[];
+        debugger;
+        var array = [];
         for (var i = 0; i < Employees.length; i++) {
             var approvedName = "-";
             if (buttonSelected == "totalLeave") {
                 var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
                 var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
                 var Status = Employees[i].Status;
-
-
                 if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                 }
@@ -476,13 +350,11 @@
                     } else {
                         approvedName = Employees[i].ApprovedBy;
                     }
-
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-
                 }
-                else if (Status == "Rejected"){
+                else if (Status == "Rejected") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                    approvedName =Employees[i].ApprovedBy;
+                    approvedName = Employees[i].ApprovedBy;
                 } else if (Status == "Cancelled") {
                     approvedName = "-";
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
@@ -494,14 +366,13 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                 }
                 array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
-            } else
-            {
+            } else {
                 var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
                 var TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
                 var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
                 var todayDate = moment(new Date()).format("DD-MMM-YYYY");
                 var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
-                if (todayDate == dateInData && Employees[i].Status=="Present") {
+                if (todayDate == dateInData) {
                     var expectedTimeOutDate = null;
                     if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
                         if (Employees[i].WorkingHours != null) {
@@ -510,7 +381,7 @@
                             var min = workingValue.slice(3, 5);
                             expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
                             expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
-                         }
+                        }
                         else {
                             expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
                         }
@@ -518,7 +389,6 @@
                     }
                 }
                 var Status = Employees[i].Status;
-
                 if (buttonSelected == "Leave") {
                     if (Status == "OnLeave") {
                         Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
@@ -528,86 +398,16 @@
                     if (buttonSelected == "Present") {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                            if (TimeOut == "-" && TotalHours == "-") {
-                                if (todayDate != dateInData) {
-                                    if (Employees[i].Message != null) {
-                                        if (Employees[i].Message.includes("HR MESSAGE")) {
-                                            TotalHours = '<button title="' + Employees[i].Message+'" type="button" class="btn btn-danger">Request Cancelled</button>';
-                                        } else {
-                                            TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
-                                        } 
-                                    }
-                                    else {
-                                        TotalHours = 'No Data<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Clock Out Request</button>';
-                                    }
-                                }
-                            }
                             array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                         }
                     } else {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                                if (TimeOut == "-" && TotalHours == "-") {
-                                    if (Employees[i].Message != null) {
-                                        if (Employees[i].Message.includes("HR MESSAGE")) {
-                                            TotalHours = '<button type="button" title="' + Employees[i].Message +'" class="btn btn-danger">Request Cancelled</button></br>';
-                                        } else {
-                                            TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
-                                        } 
-                                    }
-                                    else {
-                                        TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY")+ '\')">Send Clock Out Request</button>';
-                                }
-                            }
                         } else if (Status == "Absent") {
-                            if (todayDate == dateInData) {
-                                if (Employees[i].Message != null) {
-                                    if (Employees[i].Message.includes("HR MESSAGE")) {
-                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
-                                    } else {
-                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
-                                    } 
-                                }
-                                else {
-                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
-                                }
-                            }
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                        }
-                        else if (Status == "OnLeave") {
-                            if (todayDate == dateInData) {
-                                if (Employees[i].Message != null) {
-                                    if (Employees[i].Message.includes("HR MESSAGE")) {
-                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
-                                    } else {
-                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
-                                    } 
-                                }
-                                else {
-                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
-                                }
-                            }
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
                         } else {
-                            if (todayDate == dateInData) {
-                                if (Employees[i].Message != null) {
-                                    if (Employees[i].Message.includes("HR MESSAGE")) {
-                                        TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
-                                    } else {
-                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
-                                    } 
-                                }
-                                else {
-                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
-                                }
-                            }
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                         }
-                        if (Employees[i].Status != "Present") {
-                            TimeIn = "-";
-                        }
-
-
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
                 }
@@ -617,7 +417,7 @@
         $('#attendanceTable').DataTable().destroy();
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
-                scrollX:true,
+                scrollX: true,
                 "order": [1, 'desc'],
                 "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                     if (aData[4].includes("Approved")) {
@@ -632,9 +432,8 @@
                 data: array
             });
         } else {
-
             $('#attendanceTable').DataTable({
-                scrollX:true,
+                scrollX: true,
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -657,6 +456,207 @@
             });
         }
     }
+
+    //function getData(Employees, buttonSelected) {
+    //    var array=[];
+    //    for (var i = 0; i < Employees.length; i++) {
+    //        var approvedName = "-";
+    //        if (buttonSelected == "totalLeave") {
+    //            var fromDate = moment(Employees[i].FromDate).format("DD-MMM-YYYY");
+    //            var toDate = moment(Employees[i].ToDate).format("DD-MMM-YYYY");
+    //            var Status = Employees[i].Status;
+
+
+    //            if (Status == "Pending") {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //            }
+    //            else if (Status == "Approved" || Status.startsWith('Approved')) {
+    //                if (Employees[i].LeaveType.includes("Past")) {
+    //                    approvedName = "Past Leave Auto Approved";
+    //                } else {
+    //                    approvedName = Employees[i].ApprovedBy;
+    //                }
+
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+
+    //            }
+    //            else if (Status == "Rejected"){
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //                approvedName =Employees[i].ApprovedBy;
+    //            } else if (Status == "Cancelled") {
+    //                approvedName = "-";
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //            }
+    //            else if (Status == "Requested For Cancel") {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //            }
+    //            else {
+    //                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //            }
+    //            array.push([Employees[i].LeaveType, fromDate, toDate, Employees[i].RequestedDays, Status, approvedName])
+    //        } else
+    //        {
+    //            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+    //            var TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+    //            var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
+    //            var todayDate = moment(new Date()).format("DD-MMM-YYYY");
+    //            var dateInData = moment(new Date(Employees[i].DateIn)).format("DD-MMM-YYYY");
+    //            if (todayDate == dateInData && Employees[i].Status=="Present") {
+    //                var expectedTimeOutDate = null;
+    //                if (Employees[i].TimeIn != null && Employees[i].TimeOut == null) {
+    //                    if (Employees[i].WorkingHours != null) {
+    //                        var workingValue = Employees[i].WorkingHours;
+    //                        var hr = workingValue.slice(0, 2);
+    //                        var min = workingValue.slice(3, 5);
+    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+    //                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+    //                     }
+    //                    else {
+    //                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(9, 'h').format('hh:mm A');
+    //                    }
+    //                    TimeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-primary">Expected: ' + expectedTimeOutDate + '</span>';
+    //                }
+    //            }
+    //            var Status = Employees[i].Status;
+
+    //            if (buttonSelected == "Leave") {
+    //                if (Status == "OnLeave") {
+    //                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                }
+    //            } else {
+    //                if (buttonSelected == "Present") {
+    //                    if (Status == "Present") {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+    //                        if (TimeOut == "-" && TotalHours == "-") {
+    //                            if (todayDate != dateInData) {
+    //                                if (Employees[i].Message != null) {
+    //                                    if (Employees[i].Message.includes("HR MESSAGE")) {
+    //                                        TotalHours = '<button title="' + Employees[i].Message+'" type="button" class="btn btn-danger">Request Cancelled</button>';
+    //                                    } else {
+    //                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+    //                                    } 
+    //                                }
+    //                                else {
+    //                                    TotalHours = 'No Data<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Clock Out Request</button>';
+    //                                }
+    //                            }
+    //                        }
+    //                        array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                    }
+    //                } else {
+    //                    if (Status == "Present") {
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
+    //                            if (TimeOut == "-" && TotalHours == "-") {
+    //                                if (Employees[i].Message != null) {
+    //                                    if (Employees[i].Message.includes("HR MESSAGE")) {
+    //                                        TotalHours = '<button type="button" title="' + Employees[i].Message +'" class="btn btn-danger">Request Cancelled</button></br>';
+    //                                    } else {
+    //                                        TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+    //                                    } 
+    //                                }
+    //                                else {
+    //                                    TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY")+ '\')">Send Clock Out Request</button>';
+    //                            }
+    //                        }
+    //                    } else if (Status == "Absent") {
+    //                        if (todayDate == dateInData) {
+    //                            if (Employees[i].Message != null) {
+    //                                if (Employees[i].Message.includes("HR MESSAGE")) {
+    //                                    TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+    //                                } else {
+    //                                    TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+    //                                } 
+    //                            }
+    //                            else {
+    //                                TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+    //                            }
+    //                        }
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+    //                    }
+    //                    else if (Status == "OnLeave") {
+    //                        if (todayDate == dateInData) {
+    //                            if (Employees[i].Message != null) {
+    //                                if (Employees[i].Message.includes("HR MESSAGE")) {
+    //                                    TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+    //                                } else {
+    //                                    TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+    //                                } 
+    //                            }
+    //                            else {
+    //                                TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+    //                            }
+    //                        }
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+    //                    } else {
+    //                        if (todayDate == dateInData) {
+    //                            if (Employees[i].Message != null) {
+    //                                if (Employees[i].Message.includes("HR MESSAGE")) {
+    //                                    TotalHours = '<button type="button" class="btn btn-danger">Request Cancelled</button>' + Employees[i].Message;
+    //                                } else {
+    //                                    TotalHours = '<button type="button" class="btn btn-warning">Request Sent</button>';
+    //                                } 
+    //                            }
+    //                            else {
+    //                                TotalHours = '<button type="button" class="btn btn-info" onclick="sendRequest(\'' + moment(Employees[i].DateIn).format("DD MMM YYYY") + '\')">Send Work From Home Request</button>';
+    //                            }
+    //                        }
+    //                        Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+    //                    }
+    //                    if (Employees[i].Status != "Present") {
+    //                        TimeIn = "-";
+    //                    }
+
+
+    //                    array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
+    //                }
+    //            }
+    //        }
+    //    }
+    //    $('#LeaveTable').DataTable().destroy();
+    //    $('#attendanceTable').DataTable().destroy();
+    //    if (buttonSelected == "totalLeave") {
+    //        $('#LeaveTable').DataTable({
+    //            scrollX:true,
+    //            "order": [1, 'desc'],
+    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+    //                if (aData[4].includes("Approved")) {
+    //                    $('td', nRow).addClass('success');
+    //                } else if (aData[4].includes("Pending")) {
+    //                    $('td', nRow).addClass('warning');
+    //                }
+    //                else {
+    //                    $('td', nRow).addClass('danger');
+    //                }
+    //            },
+    //            data: array
+    //        });
+    //    } else {
+
+    //        $('#attendanceTable').DataTable({
+    //            scrollX:true,
+    //            "aoColumns": [
+    //                { "sType": "date" },
+    //                null,
+    //                null,
+    //                null,
+    //                null
+    //            ],
+    //            "order": [0, "desc"],
+    //            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+    //                if (aData[1].includes("Present")) {
+    //                    $('td', nRow).addClass('success');
+    //                } else if (aData[1].includes("Absent")) {
+    //                    $('td', nRow).addClass('danger');
+    //                }
+    //                else {
+    //                    $('td', nRow).addClass('warning');
+    //                }
+    //            },
+    //            data: array
+    //        });
+    //    }
+    //}
 
     function sendRequest(date) {
         $("#myModal #eventTitle").text(date);
