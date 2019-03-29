@@ -39,12 +39,12 @@
     }
 
     .info-box {
-        margin-bottom: 15px;
+        margin-bottom: 17px;
         cursor: pointer;
     }
 
     .label-OnLeave {
-        background-color: violet;
+        background-color: mediumslateblue;
     }
 
     a:hover, a:focus {
@@ -75,7 +75,6 @@
         font-style: normal;
     }
 
-    
     .row {
         margin-left: -7px;
         margin-right: -7px;
@@ -98,6 +97,11 @@
     label {
         padding: 15px;
     }
+
+    .* {
+        font-family: Arial;
+        font-style: normal;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -114,10 +118,11 @@
             </div>
         </div>
     </div>
+
     <div class="row clearfix">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:380px">
+                <div>
                     <a role="button" id="allEmployee">
                         <div class="info-box bg-pink hover-expand-effect">
 
@@ -133,8 +138,8 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:380px">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " style="padding-left:0px; padding-right:0px">
+                <div>
                     <a role="button" id="employeePresent">
                         <div class=" info-box bg-light-green hover-expand-effect">
                             <div class="icon">
@@ -149,7 +154,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:370px">
+                <div>
                     <a role="button" id="employeeAbsent">
                         <div class="info-box bg-cyan hover-expand-effect">
                             <div class="icon">
@@ -166,7 +171,7 @@
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:380px">
+                <div>
                     <a id="pendingLeaveButton" role="button">
                         <div class="info-box bg-orange hover-expand-effect">
                             <div class="icon">
@@ -181,9 +186,10 @@
                         </div>
                     </a>
                 </div>
+
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:380px">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-left:0px; padding-right:0px">
+                <div>
                     <a id="approvedLeaveButton" role="button">
                         <div class="info-box bg-green hover-expand-effect">
                             <div class="icon">
@@ -198,9 +204,10 @@
                         </div>
                     </a>
                 </div>
+
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div style="width:370px">
+                <div>
                     <a id="rejectedLeaveButton" role="button">
                         <div class="info-box bg-red hover-expand-effect">
                             <div class="icon">
@@ -215,6 +222,7 @@
                         </div>
                     </a>
                 </div>
+
             </div>
         </div>
 
@@ -234,19 +242,15 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>ClockIn</th>
-                                    <th>ClockOut</th>
-                                    <th>WorkingHours</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Working Hours</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
-
                     </div>
                 </div>
-
-
-
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
@@ -260,9 +264,9 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>ClockIn</th>
-                                    <th>ClockOut</th>
-                                    <th>WorkingHours</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Working Hours</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -348,7 +352,7 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script>
-    var buttonSelected = "All";
+        var buttonSelected = "All";
     var locationNameBaner = "";
     var locationNameKondhwa = "";
     var dateSelected = $('#banerDate').val();
@@ -362,7 +366,7 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="text" id="banerDate" autocomplete="off"/>');
+        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="button" id="banerDate" autocomplete="off"/>');
         $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right" id="kondhwaDate"></span> ');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
@@ -465,7 +469,7 @@
             }
         });
     }
-     function getData(Employees, dateSelected) {
+    function getData(Employees, dateSelected) {
         debugger;
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
