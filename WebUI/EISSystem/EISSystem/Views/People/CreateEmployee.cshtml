@@ -41,6 +41,9 @@
             color: black;
             border: 2px solid #e7e7e7;
         }
+        #create{
+            margin-top:15px;
+        }
     </style>
 </header>
 <div class="container-fluid">
@@ -51,7 +54,7 @@
                 <div class="body">
                     <div class="row">
                         <div class="col-md-3">
-                            <div id="empPnl" style="height:50px;">
+                            <div id="empPnl" height:70px;">
                                 <div id="createEmployee">
                                     Employee Personal Details
                                 </div>
@@ -59,30 +62,30 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="permPnl" style="height:50px;">
+                            <div id="permPnl" height:70px;">
                                 <div id="createPermanent">
                                     Permanent Address Details
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="currPnl" style="height:50px;">
+                            <div id="currPnl"; height:70px;">
                                 <div id="createCurrent">
                                     Current Address Details
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="emergPnl" style="height:50px;">
+                            <div id="emergPnl" height:70px;">
                                 <div id="createEmergency">
-                                    Emergency Contact Details
+                                    Emergency Address Contacts
                                 </div>
                             </div>
                         </div>
                     </div>
                     <form asp-action="Create" method="post" enctype="multipart/form-data" id="create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <fieldset id="employee" hidden="hidden">
+                        <fieldset id="employee">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-9" style="height:80px">
@@ -90,7 +93,7 @@
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="@Model.people.EmployeeCode">Employee Code : </label>
                                                 <div class="form-line">
-                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control" />
+                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control"/>
                                                 </div>
                                                 <span asp-validation-for="@Model.people.EmployeeCode" class="text-danger"></span>
                                             </div>
@@ -146,11 +149,11 @@
                                     <div class="col-md-9" style="height:80px">
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.MobileNumber">Contact Number : </label>
+                                                <label class="control-label" asp-for="@Model.people.ContactNumber">Contact Number : </label>
                                                 <div class="form-line">
-                                                    <input asp-for="@Model.people.MobileNumber" class="form-control" />
+                                                    <input asp-for="@Model.people.ContactNumber" class="form-control" />
                                                 </div>
-                                                <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
+                                                <span asp-validation-for="@Model.people.ContactNumber" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -162,7 +165,7 @@
                                                 <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-4 col-sm-6 col-xs-12">
 
                                         </div>
@@ -182,12 +185,12 @@
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.EmailAddress">Personal Email Address : </label>
+                                                <label class="control-label" asp-for="@Model.people.PersonalEmail">Personal Email Address : </label>
                                                 <div class="form-line">
-                                                    <input asp-for="@Model.people.EmailAddress" type="email" class="form-control" />
+                                                    <input asp-for="@Model.people.PersonalEmail" type="email" class="form-control" />
 
                                                 </div>
-                                                <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
+                                                <span asp-validation-for="@Model.people.PersonalEmail" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -367,7 +370,7 @@
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <div class="form-group">
                                                 <button type="button" class="btn btn-primary" id="btnEmpNext">Next</button>
-                                                <button type="submit" asp-action="Index" formmethod="get" class="btn btn-primary">Cancel</button>
+                                                <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
                                             </div>
                                         </div>
                                     </div>
@@ -469,7 +472,7 @@
                         <fieldset id="emergencyAddress" hidden="hidden">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <input type="button" class="contact1" value="Contact 1"/> 
+                                    <input type="button" class="contact1" value="Contact 1" />
                                 </div>
                                 <div class="col-md-3">
                                     <input type="button" class="contact2" value="Contact 2" />
@@ -621,10 +624,8 @@
                                     <span asp-validation-for="@Model.emergencyAddressSecond.Relation" class="text-danger"></span>
                                 </div>
                                 <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnSubmit">Submit</button>
-                                
+                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnEmergPrev1">Previous</button>
                             </div>
-                            
-                            
                         </fieldset>
 
                     </form>
@@ -641,9 +642,13 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 <script>
+
+    $('#cancel').on('click', function () {
+        location.href = '@Url.Action("Index", "People")';
+    });
     $('#btnSubmit').on('click', function () {
         $('#create').submit();
-    })
+    });
     function showPeriod(x) {
         if (x == "true") {
             $("#period").removeAttr('hidden');
@@ -701,69 +706,83 @@
             $('#contact2').show();
             $('#contact1').hide();
         })
-        $('#employee').show();
-        $('#createEmployee').css({ "color":"blue","font-weight":"bold"});
+        $('#empPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color":"#d9d9d9" });
+        $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+        $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+        $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
 
         $('#btnEmpNext').on('click', function () {
-            $('#createPermanent').css({ "color": "blue", "font-weight": "bold" });
-            $('#createEmployee').css({ "color": "", "font-weight": "" });
-            $('#createCurrent').css({ "color": "", "font-weight": "" });
-            $('#createEmergency').css({ "color": "", "font-weight": "" });
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').hide();
             $('#permanentAddress').show();
             $('#currentAddress').hide();
             $('#emergencyAddress').hide();
         });
         $('#btnPermNext').on('click', function () {
-            $('#createEmployee').css({ "color": "", "font-weight": "" });
-            $('#createPermanent').css({ "color": "", "font-weight": "" });
-            $('#createCurrent').css({ "color": "blue", "font-weight": "bold" });
-            $('#createEmergency').css({ "color": "", "font-weight": "" });
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').show();
             $('#emergencyAddress').hide();
         });
         $('#btnCurrNext').on('click', function () {
-            $('#createEmployee').css({ "color": "", "font-weight": "" });
-            $('#createPermanent').css({ "color": "", "font-weight": "" });
-            $('#createCurrent').css({ "color": "", "font-weight": "" });
-            $('#createEmergency').css({ "color": "blue", "font-weight": "bold" });
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').hide();
             $('#emergencyAddress').show();
+            $('#contact1').show();
+            $('#contact2').hide();
         });
         $('#btnEmergPrev').on('click', function () {
-            $('#createEmployee').css({ "color": "", "font-weight": "" });
-            $('#createPermanent').css({ "color": "", "font-weight": "" });
-            $('#createCurrent').css({ "color": "blue", "font-weight": "bold" });
-            $('#createEmergency').css({ "color": "", "font-weight": "" });
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').hide();
             $('#permanentAddress').hide();
             $('#currentAddress').show();
             $('#emergencyAddress').hide();
         })
         $('#btnCurrPrev').on('click', function () {
-            $('#createEmployee').css({ "color": "", "font-weight": "" });
-            $('#createPermanent').css({ "color": "blue", "font-weight": "bold" });
-            $('#createCurrent').css({ "color": "", "font-weight": "" });
-            $('#createEmergency').css({ "color": "", "font-weight": "" });
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').hide();
-            $('#permanentaddress').show();
-            $('#currentaddress').hide();
+            $('#permanentAddress').show();
+            $('#currentAddress').hide();
             $('#emergencyAddress').hide();
         })
         $('#btnPermPrev').on('click', function () {
-            $('#createEmployee').css({ "color": "blue", "font-weight": "bold" });
-            $('#createPermanent').css({ "color": "", "font-weight": "" });
-            $('#createCurrent').css({ "color": "", "font-weight": "" });
-            $('#createEmergency').css({ "color": "", "font-weight": "" });
+            $('#empPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
             $('#employee').show();
             $('#permanentAddress').hide();
             $('#currentAddress').hide();
             $('#emergencyAddress').hide();
         })
+        $('#btnEmergPrev1').on('click', function () {
+            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
+            $('#employee').hide();
+            $('#permanentAddress').hide();
+            $('#currentAddress').show();
+            $('#emergencyAddress').hide();
+        });
     })
 
     function MakeFirstLetterCapital(control) {
