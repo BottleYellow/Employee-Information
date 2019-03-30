@@ -41,8 +41,9 @@
             color: black;
             border: 2px solid #e7e7e7;
         }
-        #create{
-            margin-top:15px;
+
+        #create {
+            margin-top: 15px;
         }
     </style>
 </header>
@@ -52,37 +53,12 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div id="empPnl" height:70px;">
-                                <div id="createEmployee">
-                                    Employee Personal Details
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div id="permPnl" height:70px;">
-                                <div id="createPermanent">
-                                    Permanent Address Details
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div id="currPnl"; height:70px;">
-                                <div id="createCurrent">
-                                    Current Address Details
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div id="emergPnl" height:70px;">
-                                <div id="createEmergency">
-                                    Emergency Address Contacts
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="nav nav-tabs responsive" role="tablist">
+                        <li role="presentation" class="active" style="margin: 0 80px 0 0;" id="empli"><a  aria-controls="settings" role="tab"  id="aemp">Employee Personal Details</a></li>
+                        <li role="presentation" style="margin: 0 80px 0 0;" id="permli"><a aria-controls="settings" role="tab" id="aperm">Permanent Address</a></li>
+                        <li role="presentation" style="margin: 0 80px 0 0;" id="currli"><a  aria-controls="settings" role="tab"  id="acurr">Current Addresses</a></li>
+                        <li role="presentation" style="margin: 0 80px 0 0;" id="emergli"><a  aria-controls="settings" role="tab"  id="aemerg">Emergency Addresses</a></li>
+                    </ul>
                     <form asp-action="Create" method="post" enctype="multipart/form-data" id="create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset id="employee">
@@ -93,18 +69,19 @@
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="@Model.people.EmployeeCode">Employee Code : </label>
                                                 <div class="form-line">
-                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control"/>
+                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control" id="EmployeeCode" />
                                                 </div>
                                                 <span asp-validation-for="@Model.people.EmployeeCode" class="text-danger"></span>
+                                                <span class="text-danger" id="spanEmployeeCode"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="@Model.people.LocationId">Location : </label>
-                                                <select id="did" asp-for="@Model.people.LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                                <select asp-for="@Model.people.LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick" id="LocName" >
                                                     <option value="0">-- Select Location --</option>
                                                 </select>
-                                                <span asp-validation-for="@Model.people.LocationId" class="text-danger"></span>
+                                                <span asp-validation-for="@Model.people.LocationId" class="text-danger" id="spanLocation"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -163,6 +140,7 @@
                                                     <input asp-for="@Model.people.MobileNumber" class="form-control" />
                                                 </div>
                                                 <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
+                                                <span class="text-danger" id="spanMobileNumber"></span>                                             
                                             </div>
                                         </div>
 
@@ -181,6 +159,7 @@
 
                                                 </div>
                                                 <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
+                                                <span  class="text-danger" id="spanEmail"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -224,10 +203,11 @@
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="@Model.people.Gender">Gender : </label>
-                                                <select asp-for="@Model.people.Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick">
+                                                <select asp-for="@Model.people.Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick" id="selectGender">
                                                     <option value="Select">-- Select Gender --</option>
                                                 </select>
-                                                <span asp-validation-for="@Model.people.Gender" class="text-danger"></span>
+                                                <span asp-validation-for="@Model.people.Gender" class="text-danger" ></span>
+                                                <span class="text-danger" id="spanGender"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -241,6 +221,7 @@
                                                     <option value="0">-- Select Role --</option>
                                                 </select>
                                                 <span asp-validation-for="@Model.people.RoleId" class="text-danger"></span>
+                                                <span  class="text-danger" id="spanRoleId"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -309,7 +290,7 @@
                                                 <select id="wid" asp-for="@Model.people.WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs,"Id","Type"))" class="form-control show-tick">
                                                     <option value="0">-- Select Type --</option>
                                                 </select>
-                                                <span asp-validation-for="@Model.people.WeeklyOffId" class="text-danger"></span>
+                                                <span asp-validation-for="@Model.people.WeeklyOffId" class="text-danger" id="spanWeeklyOff"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -338,9 +319,10 @@
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="@Model.people.PropbationPeriodInMonth">Probation Period(In Month) : </label>
                                                 <div class="form-line">
-                                                    <input id="ppm" asp-for="@Model.people.PropbationPeriodInMonth" class="form-control" />
+                                                    <input id="ppm" min="1" max="12" asp-for="@Model.people.PropbationPeriodInMonth" class="form-control" />
                                                 </div>
                                                 <span asp-validation-for="@Model.people.PropbationPeriodInMonth" class="text-danger"></span>
+                                                <span class="text-danger" id="spanProbation"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -390,7 +372,7 @@
                                     <input asp-for="@Model.permanent.City" class="form-control">
                                     <label class="form-label">City</label>
                                 </div>
-                                <span asp-validation-for="@Model.permanent.City" class="text-danger"></span>
+                                <span asp-validation-for="@Model.permanent.City" class="text-danger" ></span>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
@@ -404,7 +386,7 @@
                                     <input asp-for="@Model.permanent.Country" class="form-control">
                                     <label class="form-label">Country</label>
                                 </div>
-                                <span asp-validation-for="@Model.permanent.Country" class="text-danger"></span>
+                                <span asp-validation-for="@Model.permanent.Country" class="text-danger" ></span>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
@@ -424,44 +406,44 @@
                             <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnPermPrev">Previous</button>
                         </fieldset>
                         <fieldset id="currentAddress" hidden="hidden">
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                              
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.Address" class="form-control">
+                                    <input asp-for="@Model.current.Address" class="form-control" id="currentAddressValue">
                                     <label class="form-label">Address</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.Address" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                              
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.City" class="form-control">
+                                    <input asp-for="@Model.current.City" class="form-control" id="currentCityValue">
                                     <label class="form-label">City</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.City" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                              
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.State" class="form-control">
+                                    <input asp-for="@Model.current.State" class="form-control" id="currentStateValue">
                                     <label class="form-label">State</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.State" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                               
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.Country" class="form-control">
+                                    <input asp-for="@Model.current.Country" class="form-control" id="currentCountryValue">
                                     <label class="form-label">Country</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.Country" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                               
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                    <input asp-for="@Model.current.PinCode" class="form-control" inputmode="numeric" maxlength="6" id="currentPinCodeValue">
                                     <label class="form-label">Pin Code</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.PinCode" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group form-float">                              
                                 <div class="form-line">
-                                    <input asp-for="@Model.current.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                    <input asp-for="@Model.current.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10" id="currentPhoneNumberValue">
                                     <label class="form-label">Phone No</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.PhoneNumber" class="text-danger"></span>
@@ -470,162 +452,79 @@
                             <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnCurrPrev">Previous</button>
                         </fieldset>
                         <fieldset id="emergencyAddress" hidden="hidden">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <input type="button" class="contact1" value="Contact 1" />
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                    <label class="form-label">First Name</label>
                                 </div>
-                                <div class="col-md-3">
-                                    <input type="button" class="contact2" value="Contact 2" />
-                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.FirstName" class="text-danger"></span>
                             </div>
-                            <div id="contact1" hidden="hidden">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
-                                        <label class="form-label">First Name</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.FirstName" class="text-danger"></span>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
+                                    <label class="form-label">Last Name</label>
                                 </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
-                                        <label class="form-label">Last Name</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.LastName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.Address" class="form-control">
-                                        <label class="form-label">Address</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.Address" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.City" class="form-control">
-                                        <label class="form-label">City</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.City" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.State" class="form-control">
-                                        <label class="form-label">State</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.State" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.Country" class="form-control">
-                                        <label class="form-label">Country</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.Country" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.PinCode" class="form-control" inputmode="numeric" maxlength="6">
-                                        <label class="form-label">Pin Code</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.PinCode" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
-                                        <label class="form-label">Phone No</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.PhoneNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
-                                        <label class="form-label">Mobile Number</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.MobileNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressFirst.Relation" class="form-control">
-                                        <label class="form-label">Relation</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressFirst.Relation" class="text-danger"></span>
-                                </div>
-                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="contact1Next">Next</button>
-                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnEmergPrev">Previous</button>
+                                <span asp-validation-for="@Model.emergencyAddress.LastName" class="text-danger"></span>
                             </div>
-                            <div id="contact2" hidden="hidden">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
-                                        <label class="form-label">First Name</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.FirstName" class="text-danger"></span>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.Address" class="form-control">
+                                    <label class="form-label">Address</label>
                                 </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.LastName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)">
-                                        <label class="form-label">Last Name</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.LastName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.Address" class="form-control">
-                                        <label class="form-label">Address</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.Address" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.City" class="form-control">
-                                        <label class="form-label">City</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.City" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.State" class="form-control">
-                                        <label class="form-label">State</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.State" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.Country" class="form-control">
-                                        <label class="form-label">Country</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.Country" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.PinCode" class="form-control" inputmode="numeric" maxlength="6">
-                                        <label class="form-label">Pin Code</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.PinCode" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
-                                        <label class="form-label">Phone No</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.PhoneNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
-                                        <label class="form-label">Mobile Number</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.MobileNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input asp-for="@Model.emergencyAddressSecond.Relation" class="form-control">
-                                        <label class="form-label">Relation</label>
-                                    </div>
-                                    <span asp-validation-for="@Model.emergencyAddressSecond.Relation" class="text-danger"></span>
-                                </div>
-                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnSubmit">Submit</button>
-                                <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnEmergPrev1">Previous</button>
+                                <span asp-validation-for="@Model.emergencyAddress.Address" class="text-danger"></span>
                             </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.City" class="form-control">
+                                    <label class="form-label">City</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.City" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.State" class="form-control">
+                                    <label class="form-label">State</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.State" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.Country" class="form-control">
+                                    <label class="form-label">Country</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.Country" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.PinCode" class="form-control" inputmode="numeric" maxlength="6">
+                                    <label class="form-label">Pin Code</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.PinCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                    <label class="form-label">Phone No</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.MobileNumber" class="form-control" inputmode="numeric" maxlength="10">
+                                    <label class="form-label">Mobile Number</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.MobileNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input asp-for="@Model.emergencyAddress.Relation" class="form-control">
+                                    <label class="form-label">Relation</label>
+                                </div>
+                                <span asp-validation-for="@Model.emergencyAddress.Relation" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect" id="btnSubmit">Submit</button>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnEmergPrev">Previous</button>
+
                         </fieldset>
 
                     </form>
@@ -639,15 +538,15 @@
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/plugins/momentjs/moment.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
 
     $('#cancel').on('click', function () {
         location.href = '@Url.Action("Index", "People")';
     });
     $('#btnSubmit').on('click', function () {
-        $('#create').submit();
+            $('#create').submit();        
     });
     function showPeriod(x) {
         if (x == "true") {
@@ -693,98 +592,182 @@
         if (m == "true") {
             $("#period").removeAttr('hidden');
         }
-        $('#contact1').show();
-        $('.contact1').on('click', function () {
-            $('#contact1').show();
-            $('#contact2').hide();
-        })
-        $('.contact2').on('click', function () {
-            $('#contact2').show();
-            $('#contact1').hide();
-        })
-        $('#contact1Next').on('click', function () {
-            $('#contact2').show();
-            $('#contact1').hide();
-        })
-        $('#empPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color":"#d9d9d9" });
-        $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-        $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-        $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
 
         $('#btnEmpNext').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').show();
-            $('#currentAddress').hide();
-            $('#emergencyAddress').hide();
+            debugger;
+            var gender = $('#selectGender').val();
+            if (gender == "Select") {
+                $('#spanGender').html("Please Select Gender");
+            }
+       
+            var form = $("#create");
+            $.validator.unobtrusive.parse(form);
+            var dataa = $('#create').serialize();
+            $.ajax({
+                url: '@Url.Action("CreateTest","People")',
+                type: 'POST',
+                datatype: 'JSON',
+                data: dataa,
+                success: function (data) {                  
+                    var form = $("#create");
+                    if (data.RoleValidation == "") {
+                        $('#spanRoleId').html("");
+                    } else {
+                        $('#spanRoleId').html(data.RoleValidation);
+                    }  
+                    if (data.LocationValidation  == "") {
+                        $('#spanLocation').html("");
+                    } else {
+                        $('#spanLocation').html(data.LocationValidation);
+                    }  
+                    if (data.WeeklyOffValidation == "") {
+                        $('#spanWeeklyOff').html("");
+                    } else {
+                        $('#spanWeeklyOff').html(data.WeeklyOffValidation);
+                    }  
+                    if (data.EmployeeCodeCheckValidation == "") {
+                        $('#spanEmployeeCode').html("");
+                    } else {
+                        $('#spanEmployeeCode').html(data.EmployeeCodeCheckValidation);
+                    } 
+                    if (data.MobileValidation == "") {
+                        $('#spanMobileNumber').html("");
+                    } else {
+                        $('#spanMobileNumber').html(data.MobileValidation);
+                    } 
+                    if (data.ProbationValidation == "") {
+                        $('#spanProbation').html("");
+                    } else {
+                        $('#spanProbation').html(data.ProbationValidation);
+                    }  
+                    if (data.EmailValidation == "") {
+                        $('#spanEmail').html("");
+                    } else {
+                        $('#spanEmail').html(data.EmailValidation);
+                    }  
+                    
+                    $.validator.unobtrusive.parse(form);
+                    if (form.valid()) {
+                        var d = form.serialize();
+                        if (data.RoleValidation == "" && data.LocationValidation == "" && data.WeeklyOffValidation == "" && data.ProbationValidation == "" && data.EmailValidation == "" && data.EmployeeCodeCheckValidation == "" && data.MobileValidation=="") {
+                            $('#permli').addClass("active");
+                            $('#empli').removeClass("active");
+                            $('#currli').removeClass("active");
+                            $('#emergli').removeClass("active");
+                            $('#employee').hide();
+                            $('#permanentAddress').show();
+                            $('#currentAddress').hide();
+                            $('#emergencyAddress').hide();
+                        }
+
+                    }
+                   
+                }
+            });
+            
+
         });
         $('#btnPermNext').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').hide();
-            $('#currentAddress').show();
-            $('#emergencyAddress').hide();
+            debugger;
+            var form = $("#create");
+            $.validator.unobtrusive.parse(form);
+            if (form.valid()) {
+                var Name = JSON.stringify(form);
+                var d = form.serialize();
+                $('#permli').removeClass("active");
+                $('#empli').removeClass("active");
+                $('#currli').addClass("active");
+                $('#emergli').removeClass("active");
+                $('#employee').hide();
+                $('#permanentAddress').hide();
+                $('#currentAddress').show();
+                $('#emergencyAddress').hide();
+            }
         });
         $('#btnCurrNext').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').hide();
-            $('#currentAddress').hide();
-            $('#emergencyAddress').show();
-            $('#contact1').show();
-            $('#contact2').hide();
+            var CurrentAddressValue = $('#currentAddressValue').val();
+            var CurrentCityValue = $('#currentCityValue').val();
+            var CurrentCountryValue = $('#currentCountryValue').val();
+            var CurrentStateValue = $('#currentStateValue').val();
+            var CurrentPinCodeValue = $('#currentPinCodeValue').val();
+            var CurrentPhoneNumberValue = $('#currentPhoneNumberValue').val();
+            if (CurrentAddressValue == "" && CurrentCityValue == "" && CurrentCountryValue == "" && CurrentStateValue == "" && CurrentPinCodeValue == "" && CurrentPhoneNumberValue == "") {
+                $('#permli').removeClass("active");
+                $('#empli').removeClass("active");
+                $('#currli').removeClass("active");
+                $('#emergli').addClass("active");
+                $('#employee').hide();
+                $('#permanentAddress').hide();
+                $('#currentAddress').hide();
+                $('#emergencyAddress').show();
+            } else {
+                var form = $("#create");
+                $.validator.unobtrusive.parse(form);
+                if (form.valid()) {
+                    var d = form.serialize();
+                    $('#permli').removeClass("active");
+                    $('#empli').removeClass("active");
+                    $('#currli').removeClass("active");
+                    $('#emergli').addClass("active");
+                    $('#employee').hide();
+                    $('#permanentAddress').hide();
+                    $('#currentAddress').hide();
+                    $('#emergencyAddress').show();
+                }}
+            
         });
         $('#btnEmergPrev').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').hide();
-            $('#currentAddress').show();
-            $('#emergencyAddress').hide();
+            $('.text-danger').html("");
+                $('#permli').removeClass("active");
+                $('#empli').removeClass("active");
+                $('#currli').addClass("active");
+                $('#emergli').removeClass("active");
+                $('#employee').hide();
+                $('#permanentAddress').hide();
+                $('#currentAddress').show();
+                $('#emergencyAddress').hide();
+            
         })
         $('#btnCurrPrev').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').show();
-            $('#currentAddress').hide();
-            $('#emergencyAddress').hide();
+
+            $('.text-danger').html("");
+                $('#permli').addClass("active");
+                $('#empli').removeClass("active");
+                $('#currli').removeClass("active");
+                $('#emergli').removeClass("active");
+                $('#employee').hide();
+                $('#permanentAddress').show();
+                $('#currentAddress').hide();
+                $('#emergencyAddress').hide();
+            
         })
         $('#btnPermPrev').on('click', function () {
-            $('#empPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').show();
-            $('#permanentAddress').hide();
-            $('#currentAddress').hide();
-            $('#emergencyAddress').hide();
+            $('.text-danger').html("");
+                $('#permli').removeClass("active");
+                $('#empli').addClass("active");
+                $('#currli').removeClass("active");
+                $('#emergli').removeClass("active");
+                $('#employee').show();
+                $('#permanentAddress').hide();
+                $('#currentAddress').hide();
+                $('#emergencyAddress').hide();
+            
         })
-        $('#btnEmergPrev1').on('click', function () {
-            $('#empPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#permPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#currPnl').css({ "border-top": "", "border-bottom": "2px solid", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#emergPnl').css({ "border-top": "2px solid", "border-bottom": "", "border-left": "2px solid", "border-right": "2px solid", "border-color": "#d9d9d9" });
-            $('#employee').hide();
-            $('#permanentAddress').hide();
-            $('#currentAddress').show();
-            $('#emergencyAddress').hide();
-        });
+            
     })
-
+    $('select').on('change', function () {
+        $('#spanRoleId').html("");
+        $('#spanLocation').html("");
+        $('#spanWeeklyOff').html("");
+        $('#spanGender').html("");
+    });
+    $('input').on('focus', function () {
+        $('#spanEmployeeCode').html("");
+        $('#spanProbation').html("");
+        $('#spanEmail').html("");
+        $('#spanMobileNumber').html("");
+    });
+    input
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
     }
@@ -821,4 +804,6 @@
         }
 
     }
+
+
 </script>

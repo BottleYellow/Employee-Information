@@ -10,11 +10,36 @@
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style type="text/css">
-
+        /* Tooltip */
+        .test + .tooltip > .tooltip-inner {
+            background-color: #73AD21;
+            color: #FFFFFF;
+            border: 1px solid green;
+            padding: 15px;
+            font-size: 20px;
+        }
+        /* Tooltip on top */
+        .test + .tooltip.top > .tooltip-arrow {
+            border-top: 5px solid green;
+        }
+        /* Tooltip on bottom */
+        .test + .tooltip.bottom > .tooltip-arrow {
+            border-bottom: 5px solid blue;
+        }
+        /* Tooltip on left */
+        .test + .tooltip.left > .tooltip-arrow {
+            border-left: 5px solid red;
+        }
+        /* Tooltip on right */
+        .test + .tooltip.right > .tooltip-arrow {
+            border-right: 5px solid black;
+        }
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
-
+        table.datatable > tbody > tr > td a.test[title]{
+        
+        }
         div .panel-primary {
             text-align: center
         }
@@ -159,7 +184,7 @@
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <table id="example" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Location</th>
@@ -210,7 +235,7 @@
         $('#kondhwaPanelHeading').html(data[0].LocationName);
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
-        //$('[data-toggle="popover"]').popover();     
+        $('table.datatable>tbody>tr>td a.test[title]').tooltip();     
         //var date = new Date();
         //var cMonth = date.getMonth();
         //var cDate = date.getDate();
@@ -218,6 +243,7 @@
         //$('#inputmonth').datetimepicker({
         //    format: "MM/YYYY",
         //    maxDate: new Date(cYear, cMonth, cDate)
+        //});
         //});
         var y = new Date().getFullYear();
         //var ld = new Date(y, m, 0).getDate();
@@ -397,7 +423,7 @@
                             }
                         }
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
-                        var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        var totalLeavesTaken = '<div><a  data-toggle="tooltip" data-placement="bottom" class="test" title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         var proposedLeaves = '<div><a title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';                       
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
