@@ -11,7 +11,6 @@ namespace EIS.WebApp.Models
         public Person people { get; set; }
         public Permanent permanent { get; set; }
         public Current current { get; set; }
-        public Emergency emergencyAddressFirst { get; set; }
-        public Emergency emergencyAddressSecond { get; set; }
+        public Emergency emergencyAddress { get; set; }
     }
 }

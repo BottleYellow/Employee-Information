@@ -193,8 +193,7 @@ namespace EIS.WebApp.Controllers
                 Person pdata = JsonConvert.DeserializeObject<Person>(data1);
                 CreatePermanentAddress(pdata.Id,pdata.EmployeeCode,createEmployee.permanent);
                 CreateCurrentAddress(pdata.Id, pdata.EmployeeCode, createEmployee.current);
-                CreateEmergencyAddress(pdata.Id, pdata.EmployeeCode, createEmployee.emergencyAddressFirst);
-                CreateEmergencyAddress(pdata.Id, pdata.EmployeeCode, createEmployee.emergencyAddressSecond);
+                CreateEmergencyAddress(pdata.Id, pdata.EmployeeCode, createEmployee.emergencyAddress);
                 if (response.IsSuccessStatusCode == true)
                 {
                     ViewBag.Message = "Record has been successfully saved.";

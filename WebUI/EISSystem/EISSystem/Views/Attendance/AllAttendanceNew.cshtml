@@ -77,7 +77,24 @@
             padding-left: 0px;
             padding-right: 0px;
         }
-
+        
+        .test + .tooltip > .tooltip-inner {
+            background-color: #73AD21;
+            color: #FFFFFF;
+            border: 1px solid green;
+            font-size: 9px;
+        }
+        .test + .tooltip.right > .tooltip-arrow {
+            border-right: 5px solid black;
+        }
+        .btn{
+            padding:4px 4px;
+            height:20px;
+        }
+        .material-icons{
+            line-height:0;
+            height:4px;
+        }
     </style>
 </head>
 <body>
@@ -159,7 +176,7 @@
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <table id="example" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Location</th>
@@ -205,6 +222,7 @@
 <script type="text/javascript">
     
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();   
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         $('#banerPanelHeading').html(data[1].LocationName);
         $('#kondhwaPanelHeading').html(data[0].LocationName);
@@ -388,30 +406,36 @@
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken") {
-                                    valueTaken = valueTaken + "\n" + moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason;
+                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
-                                    valueProposed = valueProposed + "\n" + moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason;
+                                    valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
                                 } else {
-                                    valueWithOutPay = valueWithOutPay + "\n" + moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason;
+                                    valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
                                 }
                             }
                         }
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
-                        var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
-                        var proposedLeaves = '<div><a title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';                       
+                        //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        var totalLeavesTaken = '<div><a class="test" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        var proposedLeaves = '<div><a class="test"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';                       
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
-                            leaveWithoutPay = '<div class="dropdown"><a title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
+                            leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
                         }                                       
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
-                    $('#example').DataTable({
-                        scrollX:true,
-                       order:[1,'asc'],
-                        data: array
-                });
+                        $('#example').DataTable({
+                            scrollX: true,
+                            order: [1, 'asc'],
+                            data: array,
+                            "drawCallback": function (settings) {
+                                $('[data-toggle="tooltip"]').tooltip({
+                                    container: 'body'
+                                });
+                            }
+                        });
                 },
                 complete: function () {
                     $('.ajax-loader').css("visibility", "hidden");

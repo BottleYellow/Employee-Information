@@ -17,7 +17,8 @@ namespace EIS.Validations.FluentValidations
             RuleFor(x => x.FirstName).MaximumLength(50).Matches("^[a-zA-Z ]*$").NotNull();
             RuleFor(x => x.MiddleName).MaximumLength(50).Matches("^[a-zA-Z ]*$");
             RuleFor(x => x.LastName).MaximumLength(50).Matches("^[a-zA-Z ]*$").NotNull();
-            RuleFor(x => x.JoinDate).LessThanOrEqualTo(DateTime.Now.Date).WithMessage("Join Date must be less than or equal to Today's Date").NotNull();
+            RuleFor(x => x.LocationId).NotEqual(0).WithMessage("Please select Location");
+            //RuleFor(x => x.JoinDate).LessThanOrEqualTo(DateTime.Now.Date).WithMessage("Join Date must be less than or equal to Today's Date").NotNull();
             RuleFor(x => x.Gender).NotNull().WithMessage("Gender must be selected");
             RuleFor(x => x.MobileNumber).Length(10).Matches("^[0-9]*$").NotNull().Must(UniqueMobileNumber).WithMessage("Mobile Number already exists");
             RuleFor(x => x.DateOfBirth).NotNull();
