@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -113,6 +114,30 @@ namespace EIS.WebAPI.Controllers
             return n;
         }
 
+        [Route("Employee/CheckEmployee/{EmployeeCode}/{EmailAddress}/{MobileNumber}")]
+        [HttpGet]
+        public string[] CheckEmployeeCode([FromRoute]string EmployeeCode,[FromRoute]string EmailAddress,[FromRoute]string MobileNumber)
+        {
+            string[] data= new string[3] { "InValid", "InValid", "InValid" };
+            
+           var person = _repository.Employee.FindByCondition(x=>x.EmployeeCode==EmployeeCode);
+            if (person == null)
+            {
+                data[0] = "Valid";
+            }
+            var personEmail = _repository.Employee.FindByCondition(x => x.EmailAddress == EmailAddress);
+            if (personEmail == null)
+            {
+                data[1] = "Valid";
+            }
+            var personMobileNumber = _repository.Employee.FindByCondition(x => x.MobileNumber == MobileNumber);
+            if (personMobileNumber == null)
+            {
+                data[2] = "Valid";
+            }
+            return data;
+        }
+
         [HttpPost("{id}")]
         public IActionResult Create([FromRoute]int id, [FromBody]Person person)
         {
@@ -196,6 +221,8 @@ namespace EIS.WebAPI.Controllers
             }
             person.IsActive = false;
             users.IsActive = false;
+            person.UpdatedDate = DateTime.Now;
+            users.UpdatedDate = DateTime.Now;
             _repository.Employee.UpdateAndSave(person);
             _repository.Users.UpdateAndSave(users);
             _repository.Employee.Dispose();

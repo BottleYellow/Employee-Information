@@ -64,8 +64,8 @@
                             <div>
                                 <h4 id="report">Attendance Details</h4>
                             </div>
-                            <div class="table-responsive">
-                                <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+
+                                <table id="example" class="table table-bordered table-striped table-hover" >
                                     <thead>
                                         <tr>
                                             <th>ACTION</th>
@@ -77,9 +77,7 @@
                                             <th>WORKING HOURS</th>
                                         </tr>
                                     </thead>
-                                </table>
-                            </div>
-                        
+                                </table>                        
                         </div>
                     </div>
                 </div>
@@ -300,7 +298,8 @@
                     array.push([actionButton, data[i].employeeName, data[i].message, moment(data[i].dateIn).format("DD MMM YYYY"), timeIn, timeOut,workingHours]);
                     }
                     $('#example').DataTable().destroy();
-                    $('#example').DataTable({
+                $('#example').DataTable({
+                    scrollX:true,
                         data: array
                     });
                 },

@@ -102,7 +102,7 @@
                     @RenderSection("Attendance", required: false)
                     <li>
                         <a href="@rootPath/Account/Logout">
-                            <span style="color:white;font-size:18px; padding-right:5px; padding-bottom:5px;" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
+                            <span style="color:white;font-size:18px; padding-right:5px; padding-bottom:5px;" data-placement="left" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
                         </a>
                     </li>
 
@@ -125,7 +125,7 @@
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info" style="background: url('@MyHttpContext.AppBaseUrl/images/emp-img-background.jpg') no-repeat no-repeat;">
-                <div style="height:2px;"></div>
+                <div style="height:2px; padding-top:2px;"></div>
                 <div class="image">
 
                 <img src="@MyHttpContext.AppBaseUrl/@imagepath" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';" style="height:50px; width:50px;" alt="User" />
@@ -135,10 +135,10 @@
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@name</div>
                     <div class="email">@email</div>
                     <div class="btn-group user-helper-dropdown">
-                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding-bottom:8px">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li><a href="@rootPath/People/Profile?PersonId=@idcard"><i class="material-icons">person</i>Profile</a></li>
-                            <li><a id="linkModal"><i class="material-icons">security</i>Change Password </a></li>
+                            <li><a id="linkModal" style="padding-right:40px;"><i class="material-icons">security</i>Change Password</a></li>
                         </ul>
                     </div>
                 </div>

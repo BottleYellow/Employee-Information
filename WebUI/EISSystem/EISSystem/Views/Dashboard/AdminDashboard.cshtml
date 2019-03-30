@@ -236,8 +236,7 @@
                         <h2 id="banerAttendanceHeader"></h2>
                     </div>
                     <div class="body">
-
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
                             <thead>
                                 <tr class="info">
                                     <th>Name</th>
@@ -262,8 +261,7 @@
                         <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>
                     <div class="body">
-
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
                             <thead>
                                 <tr class="info">
                                     <th>Name</th>
@@ -292,8 +290,7 @@
                         <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable"style="width:100%;">
                                 <thead>
                                     <tr class="info">
                                         <th>Actions</th>
@@ -308,10 +305,6 @@
                                     </tr>
                                 </thead>
                             </table>
-                        </div>
-
-
-
                     </div>
                 </div>
             </div>
@@ -322,25 +315,24 @@
                         <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
-
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable">
-                            <thead>
-                                <tr class="info">
-                                    <th>Actions</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Requested Date</th>
-                                    <th>Status</th>
-                                    <th>Leave Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                     </div>
-                </div>
+                    </div>
             </div>
         </div>
         <!-- #END# Leave Data -->
@@ -376,7 +368,7 @@
             format: "DD-MMM-YYYY",
             useCurrent: false,
             defaultDate: d,
-
+            maxDate:d
         });
         dateSelected = $("#banerDate").val();
         $('#kondhwaDate').html(dateSelected);

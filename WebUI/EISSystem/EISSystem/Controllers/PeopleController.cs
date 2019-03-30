@@ -213,6 +213,71 @@ namespace EIS.WebApp.Controllers
             return View("CreateEmployee",createEmployee);
         }
 
+        [HttpPost]
+        public IActionResult CreateTest(CreateEmployee createEmployee)
+        {
+            string employeeCode = "";
+            string emailAddress = "";
+            string mobileNumber = "";
+            PersonValidation personValidation = new PersonValidation
+            {
+                RoleValidation = "",
+                LocationValidation = "",
+                WeeklyOffValidation = "",
+                EmployeeCodeCheckValidation = "",
+                MobileValidation = "",
+                ProbationValidation = "",
+                EmailValidation = ""
+            };
+            if (createEmployee.people.RoleId == 0) personValidation.RoleValidation= "Please Select Role";
+            if (createEmployee.people.LocationId == 0) personValidation.LocationValidation= "Please Select Location";
+            if (createEmployee.people.WeeklyOffId == 0) personValidation.WeeklyOffValidation= "Please Select Weekly Off Type";
+            if (createEmployee.people.IsOnProbation == true && createEmployee.people.PropbationPeriodInMonth==null) personValidation.ProbationValidation = "Please Select Probation Period";
+            if (createEmployee.people.EmployeeCode == null)
+            {
+                employeeCode = "0";
+            }
+            else
+            {
+                employeeCode = createEmployee.people.EmployeeCode;
+            }
+            if (createEmployee.people.MobileNumber == null)
+            {
+                mobileNumber = "0";
+            }
+            else
+            {
+                mobileNumber = createEmployee.people.MobileNumber;
+            }
+            if (createEmployee.people.EmailAddress == null)
+            {
+                emailAddress = "w@w.com";
+            }
+            else
+            {
+                emailAddress = createEmployee.people.EmailAddress;
+            }
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/employee/Employee/CheckEmployee/" + employeeCode + "/"+ emailAddress+"/"+mobileNumber);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            string[] data = JsonConvert.DeserializeObject<string[]>(stringData);            
+            if (data[0] == "InValid")
+            {
+                personValidation.EmployeeCodeCheckValidation = "Employee Code already exist";
+                
+            }
+            if (data[1] == "InValid")
+            {
+                personValidation.EmailValidation = "Email Address already exist";
+
+            }
+            if (data[2] == "InValid")
+            {
+                personValidation.MobileValidation = "Mobile Number already exist";
+
+            }
+            return Json(personValidation);
+        }
+
         [DisplayName("Update Employee")]
         public IActionResult Edit(string EmployeeCode)
         {

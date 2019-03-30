@@ -8217,6 +8217,7 @@
       "type": "package",
       "path": "microsoft.netcore.jit/1.0.2",
       "files": [
+        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.jit.1.0.2.nupkg.sha512",
@@ -8246,6 +8247,7 @@
       "type": "package",
       "path": "microsoft.netcore.portable.compatibility/1.0.1",
       "files": [
+        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -8328,6 +8330,7 @@
       "type": "package",
       "path": "microsoft.netcore.runtime.coreclr/1.0.2",
       "files": [
+        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.runtime.coreclr.1.0.2.nupkg.sha512",
@@ -8357,6 +8360,7 @@
       "type": "package",
       "path": "microsoft.netcore.windows.apisets/1.0.1",
       "files": [
+        ".nupkg.metadata",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.windows.apisets.1.0.1.nupkg.sha512",
