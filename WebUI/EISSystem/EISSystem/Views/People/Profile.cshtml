@@ -188,6 +188,7 @@
                                                 <table id="ptable" name="ptable" class="table table-bordered table-hover">
                                                     <tr>
                                                         <th>Address</th>
+                                                        <th>Contact</th>
                                                         <th>Active Status</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -196,6 +197,9 @@
                                                         <tr>
                                                             <td>
                                                                 @Model.PermanentAddress.Address, @Model.PermanentAddress.City, @Model.PermanentAddress.State, @Model.PermanentAddress.Country - @Model.PermanentAddress.PinCode
+                                                            </td>
+                                                            <td>
+                                                                @Model.PermanentAddress.PhoneNumber
                                                             </td>
                                                             <td>
                                                                 @if (Model.PermanentAddress.IsActive == true)
@@ -258,6 +262,7 @@
                                                 <table id="ctable" name="ctable" class="table table-bordered table-hover">
                                                     <tr>
                                                         <th>Address</th>
+                                                        <th>Contact</th>
                                                         <th>Active Status</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -265,6 +270,7 @@
                                                     {
                                                         <tr>
                                                             <td>@Model.CurrentAddress.Address ,@Model.CurrentAddress.City , @Model.CurrentAddress.State , @Model.CurrentAddress.Country - @Model.CurrentAddress.PinCode </td>
+                                                            <td>@Model.CurrentAddress.PhoneNumber</td>
                                                             <td>
                                                                 @if (Model.CurrentAddress.IsActive == true)
                                                                 {
@@ -449,12 +455,12 @@
     {
         if (other.AddressType == "Permanent Address")
         {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td>@other.PhoneNumber</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
             @:$("#ptable").append(tblRow);
         }
         else if (other.AddressType == "Current Address")
         {
-            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
+            @:var tblRow = '<tr><td>@other.Address, @other.City, @other.State, @other.Country - @other.PinCode</td><td>@other.PhoneNumber</td><td><span class="label label-warning">Inactive</span></td><td>Address Has been deleted</td></tr>';
             @:$("#ctable").append(tblRow);
         }
         else if (other.AddressType == "Emergency Address")

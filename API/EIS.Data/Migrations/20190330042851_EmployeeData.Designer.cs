@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190328053452_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190330042851_EmployeeData")]
+    partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1114,6 +1114,25 @@ namespace EIS.Data.Migrations
                     b.HasKey("EmployeeCode");
 
                     b.ToTable("_sp_GetAttendanceCountReportNew");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetAttendanceLeaveData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("DateStatus");
+
+                    b.Property<string>("EmployeeCode");
+
+                    b.Property<string>("Reason");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_GetAttendanceLeaveData");
                 });
 
             modelBuilder.Entity("EIS.Entities.SP.SP_GetDateWiseAttendance", b =>

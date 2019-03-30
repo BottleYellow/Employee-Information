@@ -141,22 +141,22 @@
     $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "Do you want to delete this record ?";
+        var message = "Do you want to DeActivate this record ?";
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
                     type: "GET",
                     url: '@Url.Action("DeleteConfirmed", "People")?id=' + id,
                     success: function () {
-                        bootbox.alert("Record deleted successfully!", function () {
+                        bootbox.alert("Record DeActivated successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },
                     error: function (xhr, status, error) {
                         if (xhr.status == 401) {
-                            bootbox.alert("Access denied..Unable to Delete the Record");
+                            bootbox.alert("Access denied..Unable to DeActivate the Record");
                         } else {
-                            bootbox.alert("Unable to Delete the Record");
+                            bootbox.alert("Unable to DeActivate the Record");
                         }
                     }
                 });
@@ -166,7 +166,7 @@
     $('#example').on('click', 'a.active', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        var message = "Do you want to activate Employee record ?"
+        var message = "Do you want to Activate Employee record ?"
         bootbox.confirm(message, function (result) {
             if (result == true) {
                 $.ajax({
@@ -174,7 +174,7 @@
                     url: '@Url.Action("ActivateEmployee", "People")?EmployeeCode=' + id,
                     data: null,
                     success: function () {
-                        bootbox.alert("Record activated successfully!", function () {
+                        bootbox.alert("Record Activated successfully!", function () {
                             location.href = '@Url.Action("Index", "People")';
                         });
                     },

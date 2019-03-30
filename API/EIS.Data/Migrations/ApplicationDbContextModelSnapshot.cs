@@ -1114,6 +1114,25 @@ namespace EIS.Data.Migrations
                     b.ToTable("_sp_GetAttendanceCountReportNew");
                 });
 
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetAttendanceLeaveData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<string>("DateStatus");
+
+                    b.Property<string>("EmployeeCode");
+
+                    b.Property<string>("Reason");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_sp_GetAttendanceLeaveData");
+                });
+
             modelBuilder.Entity("EIS.Entities.SP.SP_GetDateWiseAttendance", b =>
                 {
                     b.Property<long?>("SrId")

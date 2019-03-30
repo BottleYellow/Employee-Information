@@ -206,7 +206,7 @@ namespace EIS.WebAPI.Controllers
             List<GetAdminHrManager> p = _repository.Employee.getAdminHrManager();
             string To = person.EmailAddress;
             string subject = "EMS Leave Request";
-            string body = "Hello " + person.FirstName + "\n";
+            string body = "Hello " + person.FullName + "\n";
             string bodyforadmin = null;
             if (status == "Pending")
             {
