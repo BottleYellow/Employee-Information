@@ -24,7 +24,7 @@
         padding-right: 0px;
     }
     div .panel-primary {
-        text-align: center
+        text-align: center;
     }
 
     .dataTables_wrapper .myexport .dt-buttons {
@@ -72,6 +72,7 @@
         font-family: Arial;
         font-style: normal
     }
+    
 </style>
 <head>
     <title>Employee wise Reports</title>
@@ -97,7 +98,7 @@
                 <div class="card" style="min-height:100px">
                     <div class="body">
                         <div>
-                            <div class="row col-md-12">
+                            <div class="row col-md-12" id="headeropt">
                                 <div class="col-md-2">
                                     <label>Select Location</label>
                                     <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
@@ -207,7 +208,7 @@
                                 </div>
                             </div>
                             <div id="tblExample" style="display:none;">
-                                    <table id="example" class="table table-hover table-striped table-bordered" style="width:100%">
+                                    <table id="example" class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Date</th>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class EmployeeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,6 +176,22 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__sp_GetAttendanceCountReportNew", x => x.EmployeeCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "_sp_GetAttendanceLeaveData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EmployeeCode = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Reason = table.Column<string>(nullable: true),
+                    DateStatus = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__sp_GetAttendanceLeaveData", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1040,6 +1056,9 @@ namespace EIS.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "_sp_GetAttendanceCountReportNew");
+
+            migrationBuilder.DropTable(
+                name: "_sp_GetAttendanceLeaveData");
 
             migrationBuilder.DropTable(
                 name: "_sp_GetDateWiseAttendances");

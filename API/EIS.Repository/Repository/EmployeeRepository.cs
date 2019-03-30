@@ -23,6 +23,8 @@ namespace EIS.Repositories.Repository
             Person person = _dbContext.Person.Include(x => x.User).Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
             person.IsActive = true;
             person.User.IsActive = true;
+            person.UpdatedDate = DateTime.Now;
+            person.User.UpdatedDate = DateTime.Now;
             Save();
             return (person);
         }

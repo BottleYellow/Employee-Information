@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -113,6 +114,30 @@ namespace EIS.WebAPI.Controllers
             return n;
         }
 
+        [Route("Employee/CheckEmployee/{EmployeeCode}/{EmailAddress}/{MobileNumber}")]
+        [HttpGet]
+        public string[] CheckEmployeeCode([FromRoute]string EmployeeCode,[FromRoute]string EmailAddress,[FromRoute]string MobileNumber)
+        {
+            string[] data= new string[3] { "InValid", "InValid", "InValid" };
+            
+           var person = _repository.Employee.FindByCondition(x=>x.EmployeeCode==EmployeeCode);
+            if (person == null)
+            {
+                data[0] = "Valid";
+            }
+            var personEmail = _repository.Employee.FindByCondition(x => x.EmailAddress == EmailAddress);
+            if (personEmail == null)
+            {
+                data[1] = "Valid";
+            }
+            var personMobileNumber = _repository.Employee.FindByCondition(x => x.MobileNumber == MobileNumber);
+            if (personMobileNumber == null)
+            {
+                data[2] = "Valid";
+            }
+            return data;
+        }
+
         [HttpPost("{id}")]
         public IActionResult Create([FromRoute]int id, [FromBody]Person person)
         {
@@ -136,7 +161,7 @@ namespace EIS.WebAPI.Controllers
                 _repository.Users.CreateUserAndSave(u);
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
-                string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + ",\n" +
+                string body = "Hello " + GetTitle(person.Gender) + " " + person.FullName + ",\n" +
                     "Your information have been successfully registered with Employee Management System.\n" +
                     "Your Code Number: " + person.EmployeeCode + "\n" +
                     "User Name: " + person.EmailAddress + "\n" +
@@ -158,7 +183,7 @@ namespace EIS.WebAPI.Controllers
                 _repository.Users.UpdateAndSave(u);
                 string To = person.EmailAddress;
                 string subject = "Employee Registration";
-                string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + ",\n" +
+                string body = "Dear " + GetTitle(person.Gender) + " " + person.FullName + ",\n" +
                     "Your Information has been successfully updated with Employee Management System.\n" +
                     "User Name: " + person.EmailAddress + "\n";
                 new EmailManager(_configuration,_repository).SendEmail(subject, body, To, null);
@@ -177,7 +202,7 @@ namespace EIS.WebAPI.Controllers
             _repository.Employee.UpdateAndSave(person);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
-            string body = "Dear " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + ",\n" +
+            string body = "Dear " + GetTitle(person.Gender) + " " + person.FullName + ",\n" +
                 "Your Information has been successfully updated with Employee Management System.\n" +
                 "User Name: " + person.EmailAddress + "\n";
             new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
@@ -196,6 +221,8 @@ namespace EIS.WebAPI.Controllers
             }
             person.IsActive = false;
             users.IsActive = false;
+            person.UpdatedDate = DateTime.Now;
+            users.UpdatedDate = DateTime.Now;
             _repository.Employee.UpdateAndSave(person);
             _repository.Users.UpdateAndSave(users);
             _repository.Employee.Dispose();
@@ -321,7 +348,7 @@ namespace EIS.WebAPI.Controllers
             Person person=_repository.Employee.ActivatePerson(EmployeeCode);
             string To = person.EmailAddress;
             string subject = "Employee Registration";
-            string body = "Hello " + GetTitle(person.Gender) + " " + person.FirstName + " " + person.LastName + "\n" +
+            string body = "Hello " + GetTitle(person.Gender) + " " + person.FullName + "\n" +
                 "Your Information has been successfully activated with employee system. : \n" +
                 "User Name: " + person.EmailAddress + "\n"+
                 "Click here http://aclpune.com/ems to login";
