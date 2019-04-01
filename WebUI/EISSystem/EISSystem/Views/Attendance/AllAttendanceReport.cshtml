@@ -365,7 +365,7 @@
 
         function generateReport(value, type, location,status) {
             $.ajax({
-                url: '@Url.Action("AllAttendance","Attendance")',
+                url: '@Url.Action("AllAttendanceSummary","Attendance")',
                 type: "POST",
                 datatype: "json",
                 data: { "date": value, "type": type, "location": location, "status": status },

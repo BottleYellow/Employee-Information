@@ -18,90 +18,107 @@
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
 <style>
-
-    .ajax-loader {
-        visibility: hidden;
-        position: absolute;
-        z-index: +100 !important;
-        width: 80%;
-        height: 80%;
+    @@media only screen and (max-width: 400px) {
+        #testStyle {
+            padding-left: 100px;
+            padding-right: 100px;
+        }
     }
-
-        .ajax-loader img {
-            position: relative;
-            top: 45%;
-            left: 45%;
+    table.dataTable tbody tr .present {
+        background-color: #dff0d8;
+    }
+    .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
+        background-color: #d0e9c6;
+    }
+    table.dataTable tbody tr .absent {
+        background-color: #f2dede;
+    }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
         }
 
-    div[class^="col"] {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
 
-    .info-box {
-        margin-bottom: 17px;
-        cursor: pointer;
-    }
+        div[class^="col"] {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
 
-    .label-OnLeave {
-        background-color: mediumslateblue;
-    }
+        .info-box {
+            padding-left:15px;
+            padding-right:0px;
+            margin-bottom: 17px;
+            cursor: pointer;
+        }
 
-    a:hover, a:focus {
-        text-decoration: none;
-    }
+        .label-OnLeave {
+            background-color: mediumslateblue;
+        }
 
-    .disabledLink {
-        color: currentColor;
-        cursor: not-allowed;
-        opacity: 0.5;
-        text-decoration: none;
-    }
+        a:hover, a:focus {
+            text-decoration: none;
+        }
 
-    a {
-        cursor: pointer;
-    }
+        .disabledLink {
+            color: currentColor;
+            cursor: not-allowed;
+            opacity: 0.5;
+            text-decoration: none;
+        }
 
-    table.dataTable td {
-        margin-left: 0;
-        margin-right: auto;
-        padding: 3px 10px;
-        width: 1px;
-        white-space: nowrap;
-    }
+        a {
+            cursor: pointer;
+        }
 
-    .* {
-        font-family: Arial;
-        font-style: normal;
-    }
+        table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
 
-    .row {
-        margin-left: -7px;
-        margin-right: -7px;
-    }
+        .* {
+            font-family: Arial;
+            font-style: normal;
+        }
 
-    .card {
-        margin-left: -7px;
-        margin-right: -7px;
-    }
+        .row {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
 
-    .container-fluid {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
+        .card {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
 
-    .card .body {
-        padding: 0px;
-    }
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
 
-    label {
-        padding: 15px;
-    }
+        .card .body {
+            padding: 0px;
+        }
 
-    .* {
-        font-family: Arial;
-        font-style: normal;
-    }
+        label {
+            padding: 15px;
+        }
+
+        .* {
+            font-family: Arial;
+            font-style: normal;
+        }
+        
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -138,7 +155,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " style="padding-left:0px; padding-right:0px">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " id="testStyle" style="padding-left:0px; padding-right:0px">
                 <div>
                     <a role="button" id="employeePresent">
                         <div class=" info-box bg-light-green hover-expand-effect">
@@ -241,8 +258,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -266,8 +281,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -460,11 +473,10 @@
         });
     }
     function getData(Employees, dateSelected) {
-        debugger;
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('hh:mm A');;
+            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('HH:mm:ss');
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var todayDate = moment(new Date()).format("DD-MMM-YYYY");
             var selectedDate = moment(dateSelected).format("DD-MMM-YYYY");
@@ -476,16 +488,20 @@
                         var hr = workingValue.slice(0, 2);
                         var min = workingValue.slice(3, 5);
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
-                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('hh:mm A');
+                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('HH:mm:ss');
+                        
                     }
                     else {
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
+                        
                     }
                     TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
                 } else {
-                    TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                    TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('HH:mm:ss');
+                    
                 }
             if (Status == "Present") {
+
                 Status = '<span title="Present" style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
             }else if (Status == "Absent") {
                 Status = '<span title="Absent" style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
@@ -496,14 +512,34 @@
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
-                banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                if (Employees[i].Status == 'Present') {
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else if (Employees[i].Status == 'Absent') {
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else {
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+               
+                //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
-                KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                if (Employees[i].Status == 'Present') {
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else if (Employees[i].Status == 'Absent') {
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else {
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                //KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
             scrollX: true,
+            paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -520,6 +556,7 @@
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
             scrollX: true,
+            paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -532,7 +569,7 @@
                     $('td', nRow).addClass('warning');
                 }
             }
-        });
+        });   
     }
     function getLeavesData(Leaves) {
         var banerArrayLeaves = [];
@@ -583,6 +620,8 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
+            scrollX:true,
+            paging:false,
             "aoColumns": [
                 null,
                 null,
@@ -613,6 +652,7 @@
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
             scrollX: true,
+            paging:false,
             "aoColumns": [
                 null,
                 null,
