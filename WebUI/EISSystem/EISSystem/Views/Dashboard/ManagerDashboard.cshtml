@@ -242,8 +242,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -268,8 +266,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -498,14 +494,15 @@
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
-                banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                banerAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             } else {
-                KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
             scrollX: true,
+            paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -522,6 +519,7 @@
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
             scrollX: true,
+            paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -546,9 +544,19 @@
             var Status = Leaves[i].Status;
             var actionButton;
             if (buttonSelected == "PendingLeaves") {
-                if (Status == "Pending" || Status == "Requested For Cancel") {
+                if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    }
+                }
+                else if (Status == "Requested For Cancel") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
 
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
@@ -585,6 +593,7 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
+            paging:false,
             scrollX: true,
             "aoColumns": [
                 null,
@@ -615,6 +624,7 @@
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
+            paging:false,
             scrollX: true,
             "aoColumns": [
                 null,

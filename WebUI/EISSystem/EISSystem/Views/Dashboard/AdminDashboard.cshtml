@@ -27,8 +27,7 @@
     table.dataTable tbody tr .present {
         background-color: #dff0d8;
     }
-    .table-hover > tbody > tr:hover >
-    table.dataTable tbody tr .present {
+    .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
         background-color: #d0e9c6;
     }
     table.dataTable tbody tr .absent {
@@ -514,19 +513,25 @@
             }
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 if (Employees[i].Status == 'Present') {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table class='table table-hover' style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table  class='table table-hover' style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else {
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                
                 //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
                 if (Employees[i].Status == 'Present') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table  class='table table-hover' style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table  class='table table-hover' style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+                }
+                else {
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 //KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
@@ -576,9 +581,19 @@
             var Status = Leaves[i].Status;
             var actionButton;
             if (buttonSelected == "PendingLeaves") {
-                if (Status == "Pending" || Status == "Requested For Cancel") {
+                if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
+
+                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
+                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    } else {
+                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                    }
+                }
+                else if (Status == "Requested For Cancel") {
+                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
 
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
