@@ -43,6 +43,17 @@ namespace EIS.WebApp.Controllers
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
             return Json(attendanceData);
         }
+
+        [HttpPost]
+        public IActionResult AllAttendanceSummary(string date, string type, int location, bool status)
+        {
+            string url = GetAllAttendanceData(date, type, location, status);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
+            return Json(attendanceData);
+        }
+
         [HttpGet]
         [DisplayName("Brief Attendance Report")]
         public IActionResult AllAttendanceNew()
@@ -77,7 +88,7 @@ namespace EIS.WebApp.Controllers
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
             return Json(attendanceData);
         }
-
+            
         #region[Attendance History]
         [DisplayName("My Attendance History")]
         [HttpGet]

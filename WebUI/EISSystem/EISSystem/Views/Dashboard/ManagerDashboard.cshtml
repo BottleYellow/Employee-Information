@@ -242,8 +242,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -268,8 +266,6 @@
                                 <tr class="info">
                                     <th>Name</th>
                                     <th>Status</th>
-                                    <th>Clock In</th>
-                                    <th>Clock Out</th>
                                     <th>Working Hours</th>
                                 </tr>
                             </thead>
@@ -498,14 +494,15 @@
                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
             }
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
-                banerAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                banerAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             } else {
-                KondhwaAttendanceArray.push([Employees[i].EmployeeName, Status, TimeIn, TimeOut, TotalHours])
+                KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
             scrollX: true,
+            paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -522,6 +519,7 @@
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
             scrollX: true,
+            paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
@@ -595,6 +593,7 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
+            paging:false,
             scrollX: true,
             "aoColumns": [
                 null,
@@ -625,6 +624,7 @@
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
+            paging:false,
             scrollX: true,
             "aoColumns": [
                 null,

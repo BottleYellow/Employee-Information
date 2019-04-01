@@ -279,8 +279,10 @@ namespace EIS.WebAPI.Services
             var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo";
-            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            var Status = true;
+            var SP_Status = new SqlParameter("@Status", Status);
+            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo,@Status";
+            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))
