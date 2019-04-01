@@ -403,6 +403,9 @@
                         var valueTaken = "";
                         var valueProposed = "";
                         var valueWithOutPay = "";
+                        var valueWithOutPayDates = "";
+                        var checkDeducted = "";
+                        var x = "";
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken") {
@@ -410,10 +413,19 @@
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
                                     valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
                                 } else {
-                                    valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
+                                    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
+                                        checkDeducted = "Deducted";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag </i><br />";
+                                    } else {
+                                        checkDeducted = "NotDeducted";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"<br />";
+                                    }
+                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MM-YYYY")+"&";
+
                                 }
                             }
                         }
+                        x = valueWithOutPayDates.slice(0, -1);                       
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         var totalLeavesTaken = '<div><a class="test" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
@@ -421,7 +433,12 @@
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
-                            leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
+                            if (checkDeducted != "Deducted") {
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                            } else {
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                            }
+
                         }                                       
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
@@ -442,6 +459,32 @@
                 }
             });
         }
+    function test(data, count, value) {
+        var message = '';
+        if (count == "1") {
+            message = count + ' day';
+        } else {
+            message = count + ' days';
+        }     
+        
+        var messageText = 'Are you sure you want to deduct ' + message + ' of amount from salary';
+        bootbox.confirm(messageText, function (result) {
+            if (result) {
+                $.ajax({
+                    url: '@Url.Action("DeductFromSalary", "Attendance")',
+                    type: "POST",
+                    datatype: "json",
+                    data: { "EmployeeCode": data, "Dates": value },
+                    success: function (data) {
+                        bootbox.alert("Amount of " + message+" deducted from salary");
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong.Please try after sometime");
+                    }
+                });                      
+            }
+        });        
+    }
 
     $('#select').on('change', function () {
         var v = $('#select').val();

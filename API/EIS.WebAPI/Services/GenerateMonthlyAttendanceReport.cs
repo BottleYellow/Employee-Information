@@ -270,7 +270,7 @@ namespace EIS.WebAPI.Services
             char c = '0';
             var InputOne = DateTime.Now.AddMonths(-1).Month.ToString().PadLeft(2, c);
             var InputTwo = DateTime.Now.Year.ToString();
-
+            bool status = true;
             IList<AttendanceData> attendanceData = new List<AttendanceData>();
             Attendance_Report Model = new Attendance_Report();
             Model.sP_GetAttendanceCountReports = new List<SP_GetAttendanceCountReport>();
@@ -279,8 +279,9 @@ namespace EIS.WebAPI.Services
             var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo";
-            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
+            var SP_Status = new SqlParameter("@Status", status);
+            string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo,@Status";
+            Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
 
             string attendanceReportPath = @"C:\Temp\AttendanceReportToAdmin\" + year + "\\" + monthName + "\\" + "AttendanceReport.xlsx";
             if (File.Exists(attendanceReportPath))

@@ -291,6 +291,8 @@ namespace EIS.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<string>("SalaryDeducted");
+
                     b.Property<int>("TenantId");
 
                     b.Property<TimeSpan>("TimeIn")

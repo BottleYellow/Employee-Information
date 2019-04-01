@@ -99,6 +99,7 @@ namespace EIS.Entities.SP
         public Nullable<DateTime> Date { get; set; }
         public string Reason { get; set; }
         public string DateStatus { get; set; }
+        public string HrStatus { get; set; }
 
     }
     public class Attendance_Report_New

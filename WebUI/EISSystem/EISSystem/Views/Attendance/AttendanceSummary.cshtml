@@ -145,7 +145,7 @@
                         </div>
                         <div>
 
-                            <div class="container-fluid" id="attendanceReport" style="display:none;">
+                            <div class="container-fluid" id="attendanceReport" >
                                 <div>
                                     <h4><span id="report">Attendance Report</span></h4>
                                 </div>
@@ -154,26 +154,26 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeIn</div>
-                                            <div id="averageTimeIn" class="panel-body"></div>
+                                            <div id="averageTimeIn" class="panel-body">-</div>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average TimeOut</div>
-                                            <div id="averageTimeOut" class="panel-body"></div>
+                                            <div id="averageTimeOut" class="panel-body">-</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Average Working Hours</div>
-                                            <div id="averageHours" class="panel-body"><span></span></div>
+                                            <div id="averageHours" class="panel-body"><span>-</span></div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Additional Working Hours</div>
-                                            <div id="addtionalWorkingHours" class="panel-body"></div>
+                                            <div id="addtionalWorkingHours" class="panel-body">-</div>
                                         </div>
                                     </div>
 
@@ -184,42 +184,63 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading clickType">Present</div>
-                                            <div id="presentDays" class="panel-body"></div>
+                                            <div id="presentDays" class="panel-body">-</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading clickType">OnLeave</div>
-                                            <div id="absentDays" class="panel-body"></div>
+                                            <div id="absentDays" class="panel-body">-</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div id="wd" class="panel-heading">Working Days (Till Date)</div>
-                                            <div id="totalWorkingDays" class="panel-body"></div>
+                                            <div id="totalWorkingDays" class="panel-body">-</div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">Total Number Of Days</div>
-                                            <div id="totalNoOfDays" class="panel-body"></div>
+                                            <div id="totalNoOfDays" class="panel-body">-</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="tblExample" style="display:none;">
-                                    <table id="example" class="table table-hover table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Status</th>
-                                                <th>Time In</th>
-                                                <th>Time Out</th>
-                                                <th>Total Hours</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="tblExample" style="display:none;">
+                                        <table id="example" class="table table-hover table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Time In</th>
+                                                    <th>Time Out</th>
+                                                    <th>Total Hours</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="tblExample1" style="display:none;">
+                                        <table id="example1" class="table table-hover table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Time In</th>
+                                                    <th>Time Out</th>
+                                                    <th>Total Hours</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                          
                             </div>
+                           
 
                         </div>
                     </div>
@@ -296,7 +317,6 @@
         });
 
         $('#locations').on('change', function () {
-            debugger;
                 $("#generateReport").prop("disabled", true);
             var loc = $('#locations').val();
             var employeeStatus = $('#selectstatus').val();
@@ -369,6 +389,7 @@
             status = $(this).html();
             $('#attendanceReport').show();
             $('#tblExample').show();
+            $('#tblExample1').show();
             var id = $('#selectEmployee').val();
             var v = $('#select').val();
             if (v == 'year') {
@@ -390,8 +411,7 @@
         function generateReport(value, type, id,status) {
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
-                
+                url: '@Url.Action("AttendanceSummary", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,               
                 beforeSend: function () {
                     $('.ajax-loader').css("visibility", "visible");
                 },
@@ -413,62 +433,80 @@
                     document.getElementById("totalNoOfDays").innerHTML = data._SP_ReportCount.TotalDays;
                     document.getElementById("addtionalWorkingHours").innerHTML = data._SP_ReportCount.AdditionalWorkingHours;
                     var array = [];
+                    var array1 = [];
+                    var countData = 1;
                     var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+                    var count = data._SP_AttendanceData.length;
+                    var countCheck = count / 2;
+                    if (countCheck <= 1) {
+                        countCheck = 1;
+                    }
                     for (var i = 0; i < data._SP_AttendanceData.length; i++) {
                         var date = moment(data._SP_AttendanceData[i].DateIn).format("DD MMM YYYY");
                         var timeIn;
                         var timeOut;
                         var Status = data._SP_AttendanceData[i].Status;
-                        if (status == Status)
-                        {
+                        if (status == Status) {
                             if (Status == "Present") {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm:ss');
                                 if (data._SP_AttendanceData[i].TimeOut == '-') {
                                     timeOut = data._SP_AttendanceData[i].TimeOut;
                                 } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm:ss');
                                 }
                             }
                             else if (Status == "OnLeave") {
-                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
-                            timeIn = '-';
-                            timeOut = '-';
-                        }
-                                array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                timeIn = '   -   ';
+                                timeOut = '   -   ';
                             }
+                            if (countData <= countCheck) {
+                                array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                            } else {
+                                array1.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                            }
+                            countData++;
+                        }
                         if (status == "Generate") {
                             if (Status == "Present") {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('hh:mm A');
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm:ss');
                                 if (data._SP_AttendanceData[i].TimeOut == '-') {
                                     timeOut = data._SP_AttendanceData[i].TimeOut;
                                 } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('hh:mm A');
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm:ss');
                                 }
                             }
                             else if (Status == "Absent") {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
-                                timeIn = '-';
-                                timeOut = '-';
+                                timeIn = '   -   ';
+                                timeOut = '   -   ';
                             }
                             else if (Status == "OnLeave") {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
-                                timeIn = '-';
-                                timeOut = '-';
+                                timeIn = '   -   ';
+                                timeOut = '   -   ';
                             }
                             else {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                                timeIn = '-';
-                                timeOut = '-';
+                                timeIn = '   -   ';
+                                timeOut = '   -   ';
                             }
-                            array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                      
+                            if (countData <= countCheck) {
+                                    array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                                } else {
+                                    array1.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
+                                }                  
+                            countData++;
                         }
                     }
                     $('#example').DataTable().destroy();
-
+                    $('#example1').DataTable().destroy();
                     $('#example').DataTable({
-                        scrollX:true,
+                        scrollX: true,
+                        "paging": false,
                         "aoColumns": [
                             { "sType": "date" }, 
                             null,
@@ -477,6 +515,18 @@
                             null
                         ],
                         data: array
+                    });
+                    $('#example1').DataTable({
+                        scrollX: true,
+                        "paging": false,
+                        "aoColumns": [
+                            { "sType": "date" },
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
+                        data: array1
                     });
                 },
                 error: function (error) {

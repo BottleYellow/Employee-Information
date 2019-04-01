@@ -343,7 +343,7 @@ namespace EIS.Repositories.Repository
             return Model;
         }
 
-        public List<AttendanceUpdateData> GetattendanceUpdateData(bool status)
+        public List<AttendanceUpdateData> GetattendanceUpdateData(string status)
         {
             AttendanceUpdateData attendance = new AttendanceUpdateData();
             List<AttendanceUpdateData> attendanceUpdates = new List<AttendanceUpdateData>();

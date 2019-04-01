@@ -223,6 +223,16 @@ namespace EIS.WebApp.Controllers
             string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);
         }
+
+        [HttpPost]
+        public IActionResult DeductFromSalary(string EmployeeCode,string Dates)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/DeductFromSalary/" + EmployeeCode+"/"+Dates);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            string data = JsonConvert.DeserializeObject<string>(stringData);
+
+            return Json(data);
+        }
         #endregion
 
 
