@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Select Status</label>
-                                <select id="status"  class="form-control show-tick">
+                                <select id="status" class="form-control show-tick">
                                     <option value="true">Active</option>
                                     <option value="false">InActive</option>
                                 </select>
@@ -112,26 +112,28 @@
                             <div class="col-md-2">
                                 <br />
                                 <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
-                            </div>                   
+                            </div>
                         </div>
                         <div>
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <table id="example" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Employee Code</th>
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Day</th>
-                                        <th>Clock In</th>
-                                        <th>Clock Out</th>
-                                        <th>Total Working Hours</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Code</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Day</th>
+                                            <th>Clock In</th>
+                                            <th>Clock Out</th>
+                                            <th>Total Working Hours</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -267,7 +269,7 @@
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
-                        scrollX:true,
+        
                         order:[3,'asc'],
                         "aoColumns": [
                             null,

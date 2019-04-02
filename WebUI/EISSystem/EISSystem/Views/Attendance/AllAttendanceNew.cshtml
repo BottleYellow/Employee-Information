@@ -25,21 +25,25 @@
             opacity: 0.5;
             text-decoration: none;
         }
+
         #locations {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
-        a{
-            color:black;
+
+        a {
+            color: black;
         }
-        a:hover{
-           color:blue;
-            cursor:pointer;
-        }
+
+            a:hover {
+                color: blue;
+                cursor: pointer;
+            }
+
         #generateReport {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        #select,#status {
+        #select, #status {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
@@ -73,27 +77,31 @@
             font-family: Arial;
             font-style: normal
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
-        
+
         .test + .tooltip > .tooltip-inner {
             background-color: #73AD21;
             color: #FFFFFF;
             border: 1px solid green;
             font-size: 9px;
         }
+
         .test + .tooltip.right > .tooltip-arrow {
             border-right: 5px solid black;
         }
-        .btn{
-            padding:4px 4px;
-            height:20px;
+
+        .tablebutton {
+            padding: 4px 4px;
+            height: 20px;
         }
-        .material-icons{
-            line-height:0;
-            height:4px;
+
+        .material-icons {
+            line-height: 0;
+            height: 4px;
         }
     </style>
 </head>
@@ -220,15 +228,15 @@
 
 
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();   
+        $('[data-toggle="tooltip"]').tooltip();
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         $('#banerPanelHeading').html(data[1].LocationName);
         $('#kondhwaPanelHeading').html(data[0].LocationName);
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);
-        //$('[data-toggle="popover"]').popover();     
+        //$('[data-toggle="popover"]').popover();
         //var date = new Date();
         //var cMonth = date.getMonth();
         //var cDate = date.getDate();
@@ -286,7 +294,7 @@
             error: function () {
                 bootbox.alert("Something went wrong..Please try after sometime");
             }
-        });         
+        });
     });
      $('#generateReport').on('click', function () {
             var v = $('#select').val();
@@ -296,7 +304,7 @@
                 var value = $("#inputyear").val();
                 if (location == 0) {
                     $('#baner').show();
-                    $('#kondhwa').show();               
+                    $('#kondhwa').show();
                 }
                 else if (location == 1) {
                     $('#baner').hide();
@@ -304,7 +312,7 @@
                 }
                 else if (location == 2) {
                     $('#kondhwa').hide();
-                    $('#baner').show();                  
+                    $('#baner').show();
                 }
                 var weeklyoff = calWeeklyOffYearly(value);
                 $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
@@ -345,7 +353,7 @@
                 var location = $('#locations').val();
                 if (location == 0) {
                     $('#baner').show();
-                    $('#kondhwa').show();            
+                    $('#kondhwa').show();
                 }
                 else if (location == 1) {
                     $('#baner').hide();
@@ -420,26 +428,26 @@
                                         checkDeducted = "NotDeducted";
                                         valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"<br />";
                                     }
-                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MM-YYYY")+"&";
+                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
 
                                 }
                             }
                         }
-                        x = valueWithOutPayDates.slice(0, -1);                       
+                        x = valueWithOutPayDates.slice(0, -1);
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         var totalLeavesTaken = '<div><a class="test" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
-                        var proposedLeaves = '<div><a class="test"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';                       
+                        var proposedLeaves = '<div><a class="test"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
                             if (checkDeducted != "Deducted") {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
                             } else {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
 
-                        }                                       
+                        }
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
@@ -465,25 +473,43 @@
             message = count + ' day';
         } else {
             message = count + ' days';
-        }     
-        
-        var messageText = 'Are you sure you want to deduct ' + message + ' of amount from salary';
-        bootbox.confirm(messageText, function (result) {
-            if (result) {
-                $.ajax({
-                    url: '@Url.Action("DeductFromSalary", "Attendance")',
-                    type: "POST",
-                    datatype: "json",
-                    data: { "EmployeeCode": data, "Dates": value },
-                    success: function (data) {
-                        bootbox.alert("Amount of " + message+" deducted from salary");
-                    },
-                    error: function () {
-                        bootbox.alert("Something went wrong.Please try after sometime");
-                    }
-                });                      
+        }
+        var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
+        bootbox.confirm({
+            message: messageText,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("DeductFromSalary", "Attendance")',
+                        type: "POST",
+                        datatype: "json",
+                        data: { "EmployeeCode": data, "Dates": value },
+                        success: function (data) {
+                            bootbox.alert({
+                                message: "Amount of " + message + " deducted from salary",
+                                callback: function () {
+                                    window.parent.location.reload();
+                                }
+                            });
+
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong.Please try after sometime");
+                        }
+                    });
+                }
             }
-        });        
+        });
     }
 
     $('#select').on('change', function () {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class EmployeeData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -187,7 +187,8 @@ namespace EIS.Data.Migrations
                     EmployeeCode = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Reason = table.Column<string>(nullable: true),
-                    DateStatus = table.Column<string>(nullable: true)
+                    DateStatus = table.Column<string>(nullable: true),
+                    HrStatus = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -280,6 +281,24 @@ namespace EIS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__sp_GetLeaveCount", x => x.LeaveCount);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "_sp_GetMonthlyAttendanceData",
+                columns: table => new
+                {
+                    SrId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EmployeeCode = table.Column<string>(nullable: true),
+                    DateIn = table.Column<DateTime>(nullable: true),
+                    TimeIn = table.Column<TimeSpan>(nullable: true),
+                    TimeOut = table.Column<TimeSpan>(nullable: true),
+                    TotalHours = table.Column<TimeSpan>(nullable: true),
+                    Status = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__sp_GetMonthlyAttendanceData", x => x.SrId);
                 });
 
             migrationBuilder.CreateTable(
@@ -530,8 +549,7 @@ namespace EIS.Data.Migrations
                     TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
                     TotalHours = table.Column<TimeSpan>(type: "time", nullable: true),
                     Message = table.Column<string>(nullable: true),
-                    HrStatus = table.Column<bool>(nullable: true),
-                    SalaryDeducted = table.Column<string>(nullable: true)
+                    HrStatus = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1075,6 +1093,9 @@ namespace EIS.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "_sp_GetLeaveCount");
+
+            migrationBuilder.DropTable(
+                name: "_sp_GetMonthlyAttendanceData");
 
             migrationBuilder.DropTable(
                 name: "_sp_MailConfigurations");

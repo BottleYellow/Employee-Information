@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190401090541_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190402090104_EmployeeData")]
+    partial class EmployeeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -279,7 +279,7 @@ namespace EIS.Data.Migrations
                     b.Property<string>("EmployeeCode")
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<bool?>("HrStatus");
+                    b.Property<string>("HrStatus");
 
                     b.Property<bool>("IsActive");
 
@@ -292,8 +292,6 @@ namespace EIS.Data.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
-
-                    b.Property<string>("SalaryDeducted");
 
                     b.Property<int>("TenantId");
 
@@ -1130,6 +1128,8 @@ namespace EIS.Data.Migrations
 
                     b.Property<string>("EmployeeCode");
 
+                    b.Property<string>("HrStatus");
+
                     b.Property<string>("Reason");
 
                     b.HasKey("Id");
@@ -1192,6 +1192,29 @@ namespace EIS.Data.Migrations
                     b.HasKey("EmployeeCode");
 
                     b.ToTable("_sp_GetEmployee");
+                });
+
+            modelBuilder.Entity("EIS.Entities.SP.SP_GetMonthlyAttendanceData", b =>
+                {
+                    b.Property<long?>("SrId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("DateIn");
+
+                    b.Property<string>("EmployeeCode");
+
+                    b.Property<string>("Status");
+
+                    b.Property<TimeSpan?>("TimeIn");
+
+                    b.Property<TimeSpan?>("TimeOut");
+
+                    b.Property<TimeSpan?>("TotalHours");
+
+                    b.HasKey("SrId");
+
+                    b.ToTable("_sp_GetMonthlyAttendanceData");
                 });
 
             modelBuilder.Entity("EIS.Entities.SP.Sp_AdminDashboardLeave", b =>
