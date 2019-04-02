@@ -16,11 +16,17 @@
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
-        div[class^="col"] {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
+        @@media (min-width:990px){
+            div#testStyle1 {
+            padding-left:0px;
+            padding-right:0px;
+            }
 
+            #testStyle2 {
+                padding-right: 0px;
+            }
+        }
+   
         .info-box {
             margin-bottom: 15px;
             cursor: pointer;
@@ -28,6 +34,11 @@
 
         .label-OnLeave {
             background-color: mediumslateblue;
+        }
+
+        .row { 
+            margin-left:-35px;
+            margin-right:-35px;
         }
 
         a:hover, a:focus {
@@ -45,35 +56,18 @@
             white-space: nowrap;
         }
 
-        a {
-            cursor: pointer;
-        }
-
-        .row {
-            margin-left: -7px;
-            margin-right: -7px;
-        }
-
-        .card {
-            margin-left: -7px;
-            margin-right: -7px;
-        }
-
-        .container-fluid {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-
         .card .body {
             padding: 0px;
+        }
+
+        a {
+            cursor: pointer;
         }
 
         label {
             padding: 15px;
         }
-        #pnl{
-            margin-left:-15px;
-        }
+       
     </style>
 </head>
 <div class="container-fluid">
@@ -101,7 +95,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="testStyle1">
             <div >
                 <a role="button" id="leaveButton">
                     <div class=" info-box bg-light-green hover-expand-effect">
@@ -116,7 +110,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="testStyle2">
             <div>
                 <a role="button" id="totalLeaveButton">
                     <div class="info-box bg-cyan hover-expand-effect">
@@ -154,33 +148,36 @@
                 </div>
 
                 <div class="body" id="attendanceCard">
-                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
-                        <thead>
-                            <tr class="info">
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Clock In</th>
-                                <th>Clock Out</th>
-                                <th>Working Hours</th>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="attendanceTable" style="width:100%">
+                            <thead>
+                                <tr class="info">
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Working Hours</th>
 
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
-                        <thead>
-                            <tr class="info">
-                                <th>Leave Type</th>
-                                <th>From Date</th>
-                                <th>To Date</th>
-                                <th>Days</th>
-                                <th>Status</th>
-                                <th>ApprovedBy</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="LeaveTable" hidden style="width:100%">
+                            <thead>
+                                <tr class="info">
+                                    <th>Leave Type</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Days</th>
+                                    <th>Status</th>
+                                    <th>ApprovedBy</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -211,7 +208,6 @@
                 <button type="button" class="btn btn-default" id="closeRequest" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
@@ -392,6 +388,7 @@
                 if (buttonSelected == "Leave") {
                     if (Status == "OnLeave") {
                         Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        TimeIn = '-';
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
                 } else {
@@ -405,8 +402,10 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else if (Status == "Absent") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                            TimeIn = '-';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            TimeIn = '-';   
                         }
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
@@ -417,7 +416,6 @@
         $('#attendanceTable').DataTable().destroy();
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
-                scrollX: true,
                 "order": [1, 'desc'],
                 "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                     if (aData[4].includes("Approved")) {
@@ -433,7 +431,6 @@
             });
         } else {
             $('#attendanceTable').DataTable({
-                scrollX: true,
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -456,7 +453,10 @@
             });
         }
     }
-
+    $('.exampleClass').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    });
     //function getData(Employees, buttonSelected) {
     //    var array=[];
     //    for (var i = 0; i < Employees.length; i++) {

@@ -87,9 +87,9 @@
         .test + .tooltip.right > .tooltip-arrow {
             border-right: 5px solid black;
         }
-        .btn{
-            padding:4px 4px;
-            height:20px;
+        .tablebutton {
+            padding: 4px 4px;
+            height: 20px;
         }
         .material-icons{
             line-height:0;
@@ -176,22 +176,24 @@
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <table id="example" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Location</th>
-                                        <th>Name</th>
-                                        <th>Total Working Days</th>
-                                        <th>Present Days</th>
-                                        <th>Total Granted Leaves</th>
-                                        <th>Total Leaves Taken</th>
-                                        <th>Proposed Leaves</th>
-                                        <th>Balance Leaves</th>
-                                        <th>Adjusted Leaves</th>
-                                        <th>Leaves Without Pay</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Name</th>
+                                            <th>Total Working Days</th>
+                                            <th>Present Days</th>
+                                            <th>Total Granted Leaves</th>
+                                            <th>Total Leaves Taken</th>
+                                            <th>Proposed Leaves</th>
+                                            <th>Balance Leaves</th>
+                                            <th>Adjusted Leaves</th>
+                                            <th>Leaves Without Pay</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -420,7 +422,7 @@
                                         checkDeducted = "NotDeducted";
                                         valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"<br />";
                                     }
-                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MM-YYYY")+"&";
+                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
 
                                 }
                             }
@@ -434,17 +436,16 @@
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
                             if (checkDeducted != "Deducted") {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
                             } else {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
 
                         }                                       
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
-                        $('#example').DataTable({
-                            scrollX: true,
+                        $('#example').DataTable({      
                             order: [1, 'asc'],
                             data: array,
                             "drawCallback": function (settings) {
@@ -465,25 +466,43 @@
             message = count + ' day';
         } else {
             message = count + ' days';
-        }     
-        
-        var messageText = 'Are you sure you want to deduct ' + message + ' of amount from salary';
-        bootbox.confirm(messageText, function (result) {
-            if (result) {
-                $.ajax({
-                    url: '@Url.Action("DeductFromSalary", "Attendance")',
-                    type: "POST",
-                    datatype: "json",
-                    data: { "EmployeeCode": data, "Dates": value },
-                    success: function (data) {
-                        bootbox.alert("Amount of " + message+" deducted from salary");
-                    },
-                    error: function () {
-                        bootbox.alert("Something went wrong.Please try after sometime");
-                    }
-                });                      
+        }             
+        var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
+        bootbox.confirm({
+            message: messageText,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("DeductFromSalary", "Attendance")',
+                        type: "POST",
+                        datatype: "json",
+                        data: { "EmployeeCode": data, "Dates": value },
+                        success: function (data) {
+                            bootbox.alert({
+                                message: "Amount of " + message + " deducted from salary",
+                                callback: function () {
+                                    window.parent.location.reload();
+                                }
+                            });
+                            
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong.Please try after sometime");
+                        }
+                    });
+                }
             }
-        });        
+        });                   
     }
 
     $('#select').on('change', function () {
@@ -513,5 +532,10 @@
                 maxDate: new Date(cYear, cMonth, cDate)
             });
         }
+    });
+
+    $('#example').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .column.adjust();
     });
 </script>
