@@ -2,10 +2,10 @@
 @using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
+@using System.Globalization;
 
 @using Microsoft.AspNetCore.Http;
-@model EIS.Entities.Leave.LeaveRequest;
-
+@model EIS.Entities.Models.LeaveRequestForEdit;
 @{
     string APIURL = MyHttpContext.APIBaseURL;
     string cookiesdata = Context.Session.GetString("CookieData");
@@ -15,212 +15,362 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
-
 }
-<html>
-<head>
-    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    <style>
-        * {
-            font-family: Arial;
-            font-style: normal
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <HeaderWithButton header-name="Edit Leave Request"></HeaderWithButton>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="body">
-                        <form id="cp" method="post">
-                            @if (ViewBag.ListOfPolicy != null)
-                            {
-                                <div class="form-group" id="LType">
-                                    <label asp-for="LeaveType">Leave Type : </label>
-                                    <select asp-for="TypeId" id="type" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" disabled>
-                                        <option value="0">-- Select Leave Type --</option>
-                                    </select>
-                                    <span asp-validation-for="LeaveType" class="text-danger"></span>
-                                </div>
-                            }
+<!-- Modal -->
+<style type="text/css">
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: relative;
+    }
 
-                            <label>Dates Requested : </label>
-                            <div class="row clearfix">
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <div style="width:125px;" class="form-line">
-                                            <input id="date1" asp-for="FromDate" type="date" onchange="FunDate1();" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="col-sm-1"><label>To</label></span>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <div style="width:125px;" class="form-line">
-                                            <input id="date2" asp-for="ToDate" type="date" onchange="FunDate2();" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Reason For Requested Leave :</label>
-                                <div class="form-line">
-                                    <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..." disabled></textarea>
-                                </div>
-                                <span asp-validation-for="Reason" class="text-danger"></span>
-                            </div>
-                            <!--#region HiddenFields-->
-                            <input id="requestid" type="hidden" asp-for="Id" />
-                            <input type="hidden" asp-for="TenantId" />
-                            <input type="hidden" asp-for="LeaveType" id="tp" />
-                            <input type="hidden" asp-for="RequestedDays" id="trd" />
-                            <input type="hidden" asp-for="Available" id="av" />
-                            <input type="hidden" asp-for="TypeId" id="typeid" />
-                            <input type="hidden" asp-for="PersonId" id="psid" />
-                            <input type="hidden" asp-for="RowVersion" />
-                            <input type="hidden" asp-for="EmployeeName" />
-                            <input type="hidden" asp-for="Status" />
-                            <input type="hidden" asp-for="CreatedDate" />
-                            <input type="hidden" asp-for="AppliedDate" />
-                            <!--#endregion-->
-                            <button id="btnSubmit" name="btnSubmit" type="button" class="btn btn-primary m-t-15 waves-effect" disabled>Save</button>
-                        </form>
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+        .ajax-loader img {
+            position: relative;
+            top: 45%;
+            left: 45%;
+        }
+
+    * {
+        font-family: Arial;
+        font-style: normal
+    }
+</style>
+<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+<div id="md1" class="modal-dialog" role="document">
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
+    <div class="modal-content" id="requestDiv">
+        <div class="modal-header">
+            <HeaderWithButton class="modal-title" header-name="Add Future Leave"></HeaderWithButton>
+        </div>
+        <div class="modal-body">
+            <form id="cp1" method="post">
+                @if (ViewBag.ListOfPolicy != null)
+    {
+            <div class="form-group" id="LeaveType1">
+                <label asp-for="LeaveType">Leave Type : </label>
+                <select id="type1" asp-for="CreditId" asp-items="@(new SelectList(@ViewBag.ListOfPolicy,"Id","LeaveType"))" class="form-control show-tick" disabled onchange="myFunction1();">
+                    <option value="0">-- Select Leave Type --</option>
+                </select>
+                <span asp-validation-for="LeaveType" class="text-danger"></span>
+            </div>
+}
+
+                <div class="form-group">
+                    <label>Dates Requested : </label>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="FromDate" id="dateFrom1" placeholder="select Date" autocomplete="off" disabled />
+                    </div>
+                    <span class="col-sm-1"><label>To</label></span>
+                    <div class="form-line">
+                        <input class="form-control" type="text" asp-for="ToDate" id="dateTo1" placeholder="select Date" autocomplete="off" disabled />
                     </div>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <label>Reason For Requested Leave :</label>
+                    <div class="form-line">
+                        <textarea id="reason" asp-for="Reason" rows="2" class="form-control no-resize" placeholder="Reason..."></textarea>
+                    </div>
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="LeaveType" id="tp" />
+                <input type="hidden" asp-for="RequestedDays" id="trd" />
+                <input type="hidden" asp-for="Available" id="av" />
+                <input type="hidden" asp-for="TypeId" id="typeid" />
+                <input type="hidden" asp-for="PersonId" id="psid" />
+                <input type="hidden" asp-for="Id" id="lid1" />
+                <input type="hidden" asp-for="AppliedDate" />
+                <input type="hidden" asp-for="ApprovedBy" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <input type="hidden" asp-for="EmployeeName" />
+                <input type="hidden" asp-for="RowVersion" />
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="TenantId" />
+                <div class="modal-footer">
+                    <button id="btnEditLeave" name="btnEditLeave" type="button" class="btn btn-link waves-effect">Submit</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
         </div>
+
     </div>
-    <script src="~/plugins/bootbox/bootbox.min.js"></script>
-    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-    <!-- Autosize Plugin Js -->
-    <script src="~/plugins/autosize/autosize.js"></script>
-    <!-- Moment Plugin Js -->
-    <script src="~/plugins/momentjs/moment.js"></script>
-    <script src="~/js/pages/forms/basic-form-elements.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-</body>
-</html>
+</div>
 
+
+
+
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
-    var availableLeaves;
+    var avln = null;
+    var availableLeaves1 = null;
+    var avl1 = null;
+    //    var d = new Date();
+    //d.setDate(d.getDate());
+    //var minDate = moment().add(-1, 'seconds').toDate();
+    //var defaultDate = moment().toDate();
+
+    //$('#dateFrom').datetimepicker({
+    //    useCurrent: false,
+    //    minDate: minDate,
+    //    format: "DD/MMM/YYYY"
+    //});
+    //$('#dateTo1').datetimepicker({
+    //    useCurrent: false,
+    //    minDate: minDate,
+    //    format: "DD/MMM/YYYY"
+    //});
     $(document).ready(function () {
-        @if (ViewBag.ListOfPolicy==null)
-        {
-            @:bootbox.alert({
-                @:message: "Leave Types are Not Added.You can not request for Leave."
-/**/
-            @:});
+        var d1 = document.getElementById("dateFrom1").value;
+        var d2 = document.getElementById("dateTo1").value;
+        var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+        var dt1 = moment(d1, cultureInfo).format("DD/MMM/YYYY");
+        var dt2 = moment(d2, cultureInfo).format("DD/MMM/YYYY");
+        if (dt1 == "Invalid date") {
+            $("#dateFrom1").val(d1);
+        } else {
+            $("#dateFrom1").val(dt1);
         }
-        var x = document.getElementById("type").value;
-        myFunction(x);
-    });
-    $('#btnSubmit').click(function () {
-        var form = $("#cp");
-        var rid = document.getElementById("requestid").value;
-        $.validator.unobtrusive.parse(form);
-        if (form.valid()) {
-            var d = form.serialize();
-            $.ajax({
-                url: '@Url.Action("EditLeaveRequest", "Leave")?id='+rid,
-                type: 'POST',
-                data: d,
-                success: function (data) {
-                    bootbox.alert({
-                        message: "Request Updated Successfully!",
-                        callback: function () {
-                            window.location.href = '@Url.Action("ShowMyLeaves", "Leave")';
-                        }
-                    });
-                },
-                error: function () {
-              bootbox.alert("Something went wrong..Please try after sometime");
-
-                }
+        if (dt2 == "Invalid date") {
+            $("#dateTo1").val(d2);
+        } else {
+            $("#dateTo1").val(dt2);
+        }
+        if ('@ViewBag.Status' == 'NoData') {
+            $('#requestDiv').hide();
+            bootbox.alert("<h4>Leave Types are Not Added.You can not request for Leave.</h4>", function () {
+                location.href = '@Url.Action("EmployeeLeaveHistory", "Leave")';
             });
-        }
-        return false;
-    });
-
-    function myFunction(x) {
-        $("#msg").remove();
-        if (x == "-- Select Leave Type --") {
-            $("#date1").prop("disabled", true);
-            $("#date2").prop("disabled", true);
-            $("#reason").prop("disabled", true);
-            $("#btnSubmit").prop("disabled", true);
-        }
-        var trd = document.getElementById("trd").value;
-        var pid = @cookies.PersonId;
-        $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-            var c = parseInt(data) + parseInt(trd);
-            availableLeaves = c;
-            if (data == 0) {
-                $("#LType").append('<span id="msg" class="text-danger">' + c + ' days are available</span>');
-            }
-            else if (data == -1) {
-                bootbox.alert({
-                    message: "Leaves are not credited in your account."
-                });
-            }
-            else {
-                var t = $("#type option:selected").text();
-                $("#tp").val(t);
-                $("#psid").val(pid);
-                $("#typeid").val(x);
-                $("#LType").append('<span id="msg" class="text-success">' + c + ' days are available</span>');
-                $("#date1").removeAttr('disabled');
-                $("#date2").removeAttr('disabled');
-                $("#reason").removeAttr('disabled');
-            }
-
-        });
-
-    }
-    function FunDate1() {
-        var x = document.getElementById("date1").value;
-        var d = new Date();
-        $("#date2").val('');
-        $("#btnSubmit").prop("disabled", true);
-        if (new Date(x) <= d) {
-            bootbox.alert({
-                message: "Please select valid date."
-            });
-            $("#date1").val('');
-            $("#date2").val('');
-        }
-    }
-    function FunDate2() {
-        var d1 = document.getElementById("date1").value;
-        var d2 = document.getElementById("date2").value;
-        var diff = new Date(new Date(d2) - new Date(d1));
-        var days = diff / 1000 / 60 / 60 / 24 + 1;
-        if (new Date(d1) > new Date(d2))
-        {
-            bootbox.alert({
-                message: "Please select valid date"
-            });
-            $("#date2").val('');
-            $("#btnSubmit").prop("disabled", true);
-        }
-        else if (parseInt(days) > parseInt(availableLeaves)) {
-            bootbox.alert({
-                message: "You can request leave for only " + availableLeaves + " days."
-            });
-            $("#btnSubmit").prop("disabled", true);
         }
         else {
-            $("#trd").val(days);
-            $("#av").val(availableLeaves);
-            $("#btnSubmit").removeAttr('disabled');
+            $("#msg1").remove();
+            //document.getElementById('type1').value = val;
+            //$("#type1").prop("selectedValue", val).change();
+            var firstDate = moment(document.getElementById("dateFrom1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var secondDate = moment(document.getElementById("dateTo1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(secondDate) - new Date(firstDate));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            //$("#trd").val(days);
         }
-    }
-    function calculate() {
+        myFunction1();
+        $("#btnEditLeave").prop("disabled", true);
+    });
+        $('#dateFrom1').on('dp.hide', function (e) {
+            var x = document.getElementById("dateFrom1").value;
+            var firstDate = moment(x, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d = new Date();
+            d.setDate(d.getDate() - 1);
+            $("#dateTo1").val('');
+            $("#btnEditLeave").prop("disabled", true);
+            //if (new Date(firstDate) <= d) {
+            //    bootbox.alert({
+            //        message: "Please select valid date."
+            //    });
+            //    $("#dateFrom").val('');
+            //    $("#dateTo1").val('');
+            //}
+        });
+        $('#dateTo1').on('dp.hide', function (e) {
+            var fd = document.getElementById("dateFrom1").value;
+            var sd = document.getElementById("dateTo1").value;
+            var d1 = moment(fd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d2 = moment(sd, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(d2) - new Date(d1));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            if (new Date(d1) > new Date(d2)) {
+                bootbox.alert({
+                    message: "Please select valid date"
+                });
+                $("#dateTo1").val('');
+                $("#btnEditLeave").prop("disabled", true);
+            }
+            else {
+                $("#btnEditLeave").removeAttr('disabled');
+            }
+        });
+        $('#btnEditLeave').click(function () {
+            var typeid = document.getElementById("type1").value;
+            var lid = document.getElementById("lid1").value;
+            var trd = document.getElementById("trd").value;
+            availableLeaves1 = availableLeaves1 - trd;
+            $("#av").val(availableLeaves1);
 
-    }
+            var d1 = moment(document.getElementById("dateFrom1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var d2 = moment(document.getElementById("dateTo1").value, "DD/MMM/YYYY").format("MM/DD/YYYY");
+            var diff = new Date(new Date(d2) - new Date(d1));
+            var days = diff / 1000 / 60 / 60 / 24 + 1;
+            var x = moment(document.getElementById("dateFrom1").value).format('DD-MMM-YYYY');
+            var y = moment(document.getElementById("dateTo1").value).format('DD-MMM-YYYY');
+            var result = null;
+            var pid = $("#psid").val();
+            $.ajax({
+                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y+"/"+lid,
+                type: 'GET',
+                success: function (data) {
+                    if (data == 'success') {
+                        $.ajax({
+                            url: "@APIURL/api/LeaveRequest/CalculateDates/" + pid + "/" + days + "/" + x + "/" + y,
+                            type: 'GET',
+                            success: function (data) {
+                                debugger;
+                                //days = data;
+                                if (data == 0) {
+                                    bootbox.alert({
+                                        message: "Plese select working days"
+                                    });
+                                    $("#btnEditLeave").prop("disabled", true);
+                                }
+                                else if (data > avl1 && avln != -2) {
+                                    bootbox.alert({
+                                        message: "You can request leave for only " + avl1 + " days."
+                                        });
+                                        $("#btnEditLeave").prop("disabled", true);
+                                }
+                                else {
+                                    $("#trd").val(data);
+                                    if (avln == -2) {
+                                        $("#av").val(0);
+                                     }
+                                    else {
+                                        $("#av").val(avln - data);
+                                    }
+                                    var form = $("#cp1");
+                                    $.validator.unobtrusive.parse(form);
+                                    if (form.valid()) {
+                                        var d = form.serialize();
+                                        bootbox.confirm({
+                                            message: "Are you sure you want to add Leave?",
+                                            buttons: {
+                                                confirm: {
+                                                    label: 'Yes',
+                                                    className: 'btn-success'
+                                                },
+                                                cancel: {
+                                                    label: 'No',
+                                                    className: 'btn-danger'
+                                                }
+                                            },
+                                            callback: function (result) {
+                                                if (result == true) {
+                                                    $.ajax({
+                                                        url: '@Url.Action("EditLeaveRequest", "Leave")',
+                                                        type: 'POST',
+                                                        data: d,
+                                                        beforeSend: function () {
+                                                            $('.ajax-loader').css("visibility", "visible");
+                                                        },
+                                                        success: function (data) {
+                                                            bootbox.alert({
+                                                                message: "Request Updated Successfully!",
+                                                                callback: function () {
+                                                                    window.location.href = '@Url.Action("EmployeeLeaveHistory","Leave")';
+                                                                }
+                                                            });
+                                                        },
+                                                        complete: function () {
+                                                            $('.ajax-loader').css("visibility", "hidden");
+                                                        },
+                                                        error: function (data) {
+                                                            alert(data.responseText);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    return false;
+                                }
+                            },
+                            error: function (data) {
+                            }
+                        });
+                    }
+                    else {
+                        bootbox.alert({
+                            message: data
+                        });
+                        $("#btnEditLeave").prop("disabled", true);
+                    }
+                },
+                error: function (data) {
+                }
+            });
+        });
+
+        function myFunction1() {
+            $("#msg1").remove();
+            var x = document.getElementById("type1").value;
+            if (x == 0) {
+                $("#dateFrom1").prop("disabled", true);
+                $("#dateTo1").prop("disabled", true);
+                $("#reason").prop("disabled", true);
+                $("#btnEditLeave").prop("disabled", true);
+            }
+            else {
+                var pid = $("#psid").val();
+                var RequstedDays = parseInt(document.getElementById("trd").value);
+                $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
+                    alert(data +" "+ RequstedDays);
+                    data = parseInt(data);
+                    avl1 = data + RequstedDays;
+                    availableLeaves1 = data ;
+                    avln = data;
+                    if (data == -1) {
+                        data = RequstedDays;
+                        avl1 = RequstedDays;
+                    } else if (data == -2) {
+                        data = data;
+                    }
+                    else {
+                        data = data + RequstedDays;
+                    }
+                    //data = data == -1 || data==-2 ? RequstedDays : data + RequstedDays;
+                    if (data == 0) {
+                        $("#LeaveType1").append('<span id="msg1" class="text-danger">' + data + ' days are available</span>');
+                    }
+                    else if (data == -1) {
+                        bootbox.alert({
+                            message: "Leaves are not credited in your account."
+                        });
+                    }
+                    else {
+                        var t = $("#type1 option:selected").text();
+                        $("#tp").val(t);
+                        $("#psid").val(pid);
+                        //$("#typeid").val(x);
+                        if (data == -2) {
+                            $("#LeaveType1").append('<span title="This leave will be treated as unpaid leave" id="msg1" class="text-success">Unpaid Leaves</span>');
+                         }
+                        else {
+                            $("#LeaveType1").append('<span id="msg1" class="text-success">' + data + ' days are available</span>');
+                        }
+                        $("#dateFrom1").removeAttr('disabled');
+                        $("#dateTo1").removeAttr('disabled');
+                        $("#reason").removeAttr('disabled');
+                        $("#btnEditLeave").removeAttr('disabled');
+                    }
+                });
+            }
+        }
 </script>
-
 
 

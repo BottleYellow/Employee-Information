@@ -132,7 +132,7 @@ namespace EIS.WebApp.Controllers
                 request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl+"/api/LeaveRequest/Future", request );
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/" + 0 + "/Future", request);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -159,7 +159,7 @@ namespace EIS.WebApp.Controllers
                 request.CreatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/Future", request);
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/"+0+"/Future", request);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
@@ -169,32 +169,69 @@ namespace EIS.WebApp.Controllers
             return PartialView("RequestLeave", request);
         }
         [DisplayName("Edit Leave Request")]
-        public IActionResult EditLeaveRequest(int id)
+        public IActionResult EditLeaveRequest(int id,int PersonId)
         {
-            response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
-            string stringData1 = response.Content.ReadAsStringAsync().Result;
-            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData1);
-            ViewBag.ListOfPolicy = data;
-            string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
-            LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
-            return View(leave);
+            response = _services.LeaveRules.GetResponse(ApiUrl + "/api/LeaveCredit/GetLeaveCreditsForEdit/" + PersonId);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData).ToList();
+            if (data.Count == 0)
+            {
+                ViewBag.Status = "NoData";
+                ViewBag.ListOfPolicy = data;
+            }
+            else
+                ViewBag.ListOfPolicy = data;
+            string Data = _services.LeaveRequest.GetResponse(ApiUrl + "/api/LeaveRequest/GetLeaveRequestForEdit/" + id + "").Content.ReadAsStringAsync().Result;
+            LeaveRequestForEdit leave = JsonConvert.DeserializeObject<LeaveRequestForEdit>(Data);
+            return PartialView("EditLeaveRequest",leave);
+            //response = _services.LeaveRules.GetResponse(ApiUrl+"/api/LeavePolicy" );
+            //string stringData1 = response.Content.ReadAsStringAsync().Result;
+            //data = JsonConvert.DeserializeObject<List<LeaveCredit>>(stringData1);
+            //ViewBag.ListOfPolicy = data;
+            //string stringData = _services.LeaveRequest.GetResponse(ApiUrl+"/api/LeaveRequest/" + id + "" ).Content.ReadAsStringAsync().Result;
+            //LeaveRequest leave = JsonConvert.DeserializeObject<LeaveRequest>(stringData);
+            //return View(leave);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditLeaveRequest(int id,LeaveRequest request)
+        public IActionResult EditLeaveRequest(int id,LeaveRequestForEdit request)
         {
             request.UpdatedDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 request.UpdatedBy = Convert.ToInt32(GetSession().PersonId);
                 request.IsActive = true;
-                HttpResponseMessage response = _services.LeaveRequest.PutResponse(ApiUrl+"/api/LeaveRequest/"+id, request );
+                LeaveRequest NewRequest = new LeaveRequest()
+                {
+                    Id = request.Id,
+                    AppliedDate = request.AppliedDate,
+                    ApprovedBy = request.ApprovedBy,
+                    ApprovedDays = request.ApprovedDays,
+                    Available = request.Available,
+                    CreatedBy = request.CreatedBy,
+                    CreatedDate = request.CreatedDate,
+                    EmployeeName = request.EmployeeName,
+                    FromDate = request.FromDate,
+                    ToDate = request.ToDate,
+                    IsActive = request.IsActive,
+                    LeaveType = request.LeaveType,
+                    PersonId = request.PersonId,
+                    Reason = request.Reason,
+                    RequestedDays = request.RequestedDays,
+                    RowVersion = request.RowVersion,
+                    Status = request.Status,
+                    TenantId = request.TenantId,
+                    TypeId = request.TypeId,
+                    UpdatedBy = request.UpdatedBy,
+                    UpdatedDate = request.UpdatedDate
+                };
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/" + id + "/Null", NewRequest);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();
                 }
             }
-            return View("RequestLeave", request);
+            return PartialView("EditLeaveRequest", request);
         }
         [DisplayName("Add Past Leave")]
         public IActionResult AddPastLeave()
@@ -223,7 +260,7 @@ namespace EIS.WebApp.Controllers
                 request.LeaveType = request.LeaveType + "(Past)";
                 request.IsActive = true;
                 request.Id = 0;
-                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/Past", request);
+                HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/"+0+"/Past", request);
                 if (response.IsSuccessStatusCode == true)
                 {
                     return View();

@@ -100,7 +100,12 @@ namespace EIS.WebAPI.Controllers
         {
             return _repository.LeaveRequest.FindByCondition(x => x.Id == id);
         }
-
+        [Route("GetLeaveRequestForEdit/{id}")]
+        [HttpGet("{id}")]
+        public LeaveRequestForEdit GetLeaveRequestForEdit([FromRoute] int id)
+        {
+            return _repository.LeaveRequest.GetLeaveRequestForEdit(id);
+        }
         [DisplayName("Show my leaves")]
         [HttpGet]
         [Route("Employee/{id}")]
@@ -132,7 +137,7 @@ namespace EIS.WebAPI.Controllers
             if (!string.IsNullOrEmpty(Status))
             {
                 string OldStatus = _repository.LeaveRequest.FindByCondition(x => x.Id == RequestId).Status;
-                string messsege = _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId);
+                string messsege = _repository.LeaveRequest.UpdateRequestStatus(RequestId, Status, PersonId, 0);
                 SendMail(RequestId, Status, OldStatus);
                 return Ok(messsege);
             }
@@ -148,38 +153,51 @@ namespace EIS.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
             _repository.LeaveRequest.UpdateAndSave(leave);
-            string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId);
+            string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId,0);
             return Ok(msg);
         }
 
 
         [DisplayName("Request for leave")]
-        [HttpPost("{type}")]
-        public IActionResult PostLeaveRequest([FromRoute]string type, [FromBody] LeaveRequest leave)
+        [HttpPost("{id}/{type}")]
+        public IActionResult PostLeaveRequest([FromRoute] int id,[FromRoute]string type, [FromBody] LeaveRequest leave)
         {
-
-            if (!ModelState.IsValid)
+            if (id == 0)
             {
-                return BadRequest(ModelState);
-            }
-            Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
-            leave.EmployeeName = p.FullName;
-            leave.TenantId = TenantId;
-            leave.TypeId = _repository.LeaveCredit.FindByCondition(x => x.Id == leave.TypeId).LeaveId;
-            _repository.LeaveRequest.CreateAndSave(leave);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                Person p = _repository.Employee.FindByCondition(x => x.Id == leave.PersonId);
+                leave.EmployeeName = p.FullName;
+                leave.TenantId = TenantId;
+                leave.TypeId = _repository.LeaveCredit.FindByCondition(x => x.Id == leave.TypeId).LeaveId;
+                _repository.LeaveRequest.CreateAndSave(leave);
 
-            string msg = null;
-            if (type == "Future")
-            {
-                msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId);
-            }
-            else if (type == "Past")
-            {
-                msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId);
-            }
+                string msg = null;
+                if (type == "Future")
+                {
+                    msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Pending", leave.PersonId,0);
+                }
+                else if (type == "Past")
+                {
+                    msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, "Approve", leave.PersonId,0);
+                }
 
-            SendMail(leave.Id, "Pending", null);
-            return Ok(msg);
+                SendMail(leave.Id, "Pending", null);
+                return Ok(msg);
+            }
+            else
+            {
+                float OldCount = _repository.LeaveRequest.FindByCondition(x => x.Id == leave.Id).RequestedDays;
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _repository.LeaveRequest.UpdateAndSave(leave);
+                string msg = _repository.LeaveRequest.UpdateRequestStatus(leave.Id, null, leave.PersonId, OldCount);
+                return Ok(msg);
+            }
         }
 
         // DELETE: api/Leaves/5
@@ -324,9 +342,9 @@ namespace EIS.WebAPI.Controllers
             return Ok();
         }
         [AllowAnonymous]
-        [Route("CheckDates/{type}/{PersonId}/{LeaveId}/{FromDate}/{ToDate}")]
+        [Route("CheckDates/{type}/{PersonId}/{LeaveId}/{FromDate}/{ToDate}/{RequestId}")]
         [HttpGet]
-        public IActionResult CheckForScheduledLeave([FromRoute]string type, [FromRoute]int PersonId, [FromRoute]int LeaveId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate)
+        public IActionResult CheckForScheduledLeave([FromRoute]string type, [FromRoute]int PersonId, [FromRoute]int LeaveId, [FromRoute]DateTime FromDate, [FromRoute]DateTime ToDate,[FromRoute]int? RequestId)
         {
             string result = null;
             var credit = _repository.LeaveCredit.FindByCondition(x => x.PersonId == PersonId && x.Id == LeaveId);
@@ -334,7 +352,7 @@ namespace EIS.WebAPI.Controllers
             {
                 if (type == "Future")
                 {
-                    result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate);
+                    result = _repository.LeaveRequest.CheckForScheduledLeave(PersonId, FromDate, ToDate,RequestId);
                 }
                 else if (type == "Past")
                 {

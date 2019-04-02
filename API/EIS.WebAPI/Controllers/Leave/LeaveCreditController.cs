@@ -53,6 +53,14 @@ namespace EIS.WebAPI.Controllers.Leave
            
             return credits;
         }
+        [Route("GetLeaveCreditsForEdit/{PersonId}")]
+        [HttpGet]
+        public List<LeaveCredit> GetLeaveCreditsForEdit([FromRoute]int PersonId)
+        {
+            List<LeaveCredit> credits = new List<LeaveCredit>();
+            credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId).ToList();
+            return credits;
+        }
         [DisplayName("leave Credits")]
         [HttpGet]
         [Route("GetLeaveCredits/{LocationId}")]

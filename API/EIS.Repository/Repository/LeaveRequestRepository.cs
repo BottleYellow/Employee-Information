@@ -33,12 +33,32 @@ namespace EIS.Repositories.Repository
                           select Requests;
             return results;
         }
-        public string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate)
+        public string CheckForScheduledLeave(int PersonId, DateTime FromDate, DateTime ToDate, int? LeaveId)
         {
             string result = "success";
-            IQueryable<LeaveRequest> requests = _dbContext.LeaveRequests.Where(x => ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+            List<Attendance> attendances = new List<Attendance>();
+            IQueryable<LeaveRequest> requests = null;
+            if (LeaveId == 0)
+            {
+                requests = _dbContext.LeaveRequests.Where(x => x.Status!="Cancelled" && x.Status!="Rejected" && ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+            }
+            else
+            {
+                requests= _dbContext.LeaveRequests.Where(x => x.Id != LeaveId && ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
+                for (var d = FromDate; d <= ToDate; d = d.AddDays(1))
+                {
+                    Attendance record = _dbContext.Attendances.Where(x => x.DateIn == d.Date && x.PersonId == PersonId).FirstOrDefault();
+                    if (record != null) attendances.Add(record);
+                }
+            }
+            //requests = LeaveId == 0 ? _dbContext.LeaveRequests.Where(x => ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId))
+            //                                                    : _dbContext.LeaveRequests.Where(x => x.Id!=LeaveId && ((x.FromDate <= FromDate && FromDate <= x.ToDate) || (x.FromDate <= ToDate && ToDate <= x.ToDate) || (FromDate <= x.FromDate && x.FromDate <= ToDate) || (FromDate <= x.ToDate && x.ToDate <= ToDate)) && (x.PersonId == PersonId));
             LeaveRequest request = null;
-            if (requests != null && requests.Count() > 0)
+            if (attendances.Count > 0)
+            {
+                result = "You must be present on requested Dates. Please Select Correct Dates";
+            }
+            else if (requests != null && requests.Count() > 0)
             {
                 result = "Leaves are already scheduled on requested dates";
                 request = requests.Where(x => x.Status == "Cancelled").FirstOrDefault();
@@ -96,7 +116,7 @@ namespace EIS.Repositories.Repository
             return result;
         }
 
-        public string UpdateRequestStatus(int RequestId, string Status,int PersonId)
+        public string UpdateRequestStatus(int RequestId, string Status,int PersonId,float? OldCountForEdit)
         {
             string messege = null;
             var leaveCredit = new LeaveCredit();
@@ -185,8 +205,8 @@ namespace EIS.Repositories.Repository
                 if (isPaid == true)
                 {
                     leaveCredit = _dbContext.LeaveCredit.Where(c => c.LeaveId == leaveRequest.TypeId && c.PersonId == leaveRequest.PersonId).FirstOrDefault();
-                    leaveCredit.Available = leaveRequest.Available - leaveRequest.RequestedDays;
-                    leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
+                    leaveCredit.Available = leaveCredit.Available + Convert.ToInt64(OldCountForEdit) - leaveRequest.RequestedDays;
+                    //leaveRequest.Available = leaveRequest.Available - leaveRequest.RequestedDays;
                 }
             }
             Save();
@@ -307,9 +327,9 @@ namespace EIS.Repositories.Repository
                 {
                     Id = data.Id,
                     LocationName = data.Person.Location.LocationName,
-                    EmployeeCode=data.Person.EmployeeCode,
+                    EmployeeCode = data.Person.EmployeeCode,
                     EmployeeName = data.EmployeeName,
-                    EmployeeRole=data.Person.Role.Name,
+                    EmployeeRole = data.Person.Role.Name,
                     RequestedDays = data.RequestedDays,
                     FromDate = data.FromDate,
                     ToDate = data.ToDate,
@@ -317,7 +337,8 @@ namespace EIS.Repositories.Repository
                     Available = data.Available,
                     AppliedDate = data.AppliedDate,
                     Status = data.Status,
-                    Reason = data.Reason
+                    Reason = data.Reason,
+                    PersonId = data.Person.Id
                 };
                 
                 if (idData != 0)
@@ -341,6 +362,38 @@ namespace EIS.Repositories.Repository
             sP_EmployeeLeave = _dbContext._sp_EmployeeLeaveRequest.FromSql(usp, SP_PersonId).ToList();
             return sP_EmployeeLeave;
 
+        }
+
+        public LeaveRequestForEdit GetLeaveRequestForEdit(int id)
+        {
+            LeaveRequest request = _dbContext.LeaveRequests.Where(x => x.Id == id).FirstOrDefault();
+            int CreditId = _dbContext.LeaveCredit.Where(x => x.PersonId == request.PersonId && x.LeaveId == request.TypeId).FirstOrDefault().Id;
+            LeaveRequestForEdit NewRequest = new LeaveRequestForEdit()
+            {
+                Id = request.Id,
+                AppliedDate = request.AppliedDate,
+                ApprovedBy = request.ApprovedBy,
+                ApprovedDays = request.ApprovedDays,
+                Available = request.Available,
+                CreatedBy = request.CreatedBy,
+                CreatedDate = request.CreatedDate,
+                EmployeeName = request.EmployeeName,
+                FromDate = request.FromDate,
+                IsActive = request.IsActive,
+                LeaveType = request.LeaveType,
+                PersonId = request.PersonId,
+                Reason = request.Reason,
+                RequestedDays = request.RequestedDays,
+                RowVersion = request.RowVersion,
+                Status = request.Status,
+                TenantId = request.TenantId,
+                ToDate = request.ToDate,
+                TypeId = request.TypeId,
+                UpdatedBy = request.UpdatedBy,
+                UpdatedDate = request.UpdatedDate,
+                CreditId = CreditId
+            };
+            return NewRequest;
         }
     }
 }
