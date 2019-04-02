@@ -213,7 +213,7 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet]
         [Route("GetAttendanceUpdateData/{status}")]
-        public IActionResult GetAttendanceUpdateData([FromRoute]bool status)
+        public IActionResult GetAttendanceUpdateData([FromRoute]string status)
         {
             List<AttendanceUpdateData> attendances = new List<AttendanceUpdateData>();
             attendances = _repository.Attendances.GetattendanceUpdateData(status);
@@ -240,19 +240,49 @@ namespace EIS.WebAPI.Controllers
                     attendance.TimeOut = outTime;
                     attendance.TotalHours = outTime - inTime;
                     attendance.IsActive = true;
-                    attendance.HrStatus = true;
+                    attendance.HrStatus = "Approved";
                     _repository.Attendances.UpdateAndSave(attendance);
                     status = "success";
                 }
                 else
                 {
                     attendance.Message ="HR MESSAGE: "+ message;
-                    attendance.HrStatus = true;
+                    attendance.HrStatus = "Rejected";
                     _repository.Attendances.UpdateAndSave(attendance);
                     status = "success";
                 }
             }
             return Ok(status);
+        }
+
+        [HttpGet]
+        [Route("DeductFromSalary/{EmployeeCode}/{Dates}")]
+        public IActionResult DeductFromSalary([FromRoute]string EmployeeCode,[FromRoute]string Dates)
+        {
+            int count = Dates.Count(x => x == '&')+1;
+            string[] stringDates = new string[count];
+            stringDates = Dates.Split("&");
+            int personId = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode).Id;
+            foreach(var date in stringDates)
+            {
+                DateTime dateTime = Convert.ToDateTime(date);
+                Attendance attendance = new Attendance
+                {
+                CreatedDate =DateTime.Now,
+                UpdatedDate=DateTime.Now,
+                DateIn= dateTime,
+                DateOut=dateTime,
+                TimeIn=new TimeSpan(),
+                EmployeeCode=EmployeeCode,
+                HrStatus="Deducted",
+                IsActive=false,
+                PersonId=personId
+                };
+                _repository.Attendances.CreateAndSave(attendance);
+            }
+            string status = "fine";
+          
+           return Ok(status);
         }
         #endregion
     }

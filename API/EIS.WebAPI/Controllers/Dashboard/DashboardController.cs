@@ -107,7 +107,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
                 newAttendance.TimeIn = new TimeSpan();
                 newAttendance.IsActive = false;
                 newAttendance.Message = message;
-                newAttendance.HrStatus = false;
+                newAttendance.HrStatus = "Approved";
                 newAttendance.CreatedDate = DateTime.Now;
                 newAttendance.UpdatedDate = DateTime.Now;
                 newAttendance.TenantId = TenantId;
@@ -117,7 +117,7 @@ namespace EIS.WebAPI.Controllers.Dashboard
             else
             {
                 attendance.Message = message;
-                attendance.HrStatus = false;
+                attendance.HrStatus = "Rejected";
                 _repository.Attendances.UpdateAndSave(attendance);
             }
 

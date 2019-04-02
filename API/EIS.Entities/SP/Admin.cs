@@ -58,6 +58,12 @@ namespace EIS.Entities.SP
         public string Status { get; set; }
     }
 
+    public class Attendance_Report
+    {
+        public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
+        public List<SP_GetMonthlyAttendanceData> SP_GetMonthlyAttendanceData { get; set; }
+    }
+
     public class SP_GetAttendanceCountReport
     {
         [Key]
@@ -70,7 +76,18 @@ namespace EIS.Entities.SP
         public Nullable<int> AbsentDay { get; set; }
         public Nullable<int> ExtraWorkingDays { get; set; }
     }
-    
+    public class SP_GetMonthlyAttendanceData
+    {
+        [Key]
+        public Nullable<long> SrId { get; set; }
+        public string EmployeeCode { get; set; }
+        public Nullable<System.DateTime> DateIn { get; set; }
+        public Nullable<System.TimeSpan> TimeIn { get; set; }
+        public Nullable<System.TimeSpan> TimeOut { get; set; }
+        public Nullable<System.TimeSpan> TotalHours { get; set; }
+        public string Status { get; set; }
+
+    }
     //New Implementation
     public class SP_GetAttendanceCountReport_New
     {
@@ -87,10 +104,7 @@ namespace EIS.Entities.SP
         public Nullable<int> AdjustedLeaves { get; set; }
         public Nullable<int> LeavesWithoutPay { get; set; }
     }
-    public class Attendance_Report
-    {
-        public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
-    }
+
 
     public class SP_GetAttendanceLeaveData
     {   [Key]
@@ -99,6 +113,7 @@ namespace EIS.Entities.SP
         public Nullable<DateTime> Date { get; set; }
         public string Reason { get; set; }
         public string DateStatus { get; set; }
+        public string HrStatus { get; set; }
 
     }
     public class Attendance_Report_New

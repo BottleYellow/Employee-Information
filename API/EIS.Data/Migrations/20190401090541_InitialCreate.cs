@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EIS.Data.Migrations
 {
-    public partial class EmployeeData : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -530,7 +530,8 @@ namespace EIS.Data.Migrations
                     TimeOut = table.Column<TimeSpan>(type: "time", nullable: true),
                     TotalHours = table.Column<TimeSpan>(type: "time", nullable: true),
                     Message = table.Column<string>(nullable: true),
-                    HrStatus = table.Column<bool>(nullable: true)
+                    HrStatus = table.Column<bool>(nullable: true),
+                    SalaryDeducted = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
