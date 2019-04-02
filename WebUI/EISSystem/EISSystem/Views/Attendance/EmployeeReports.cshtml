@@ -330,7 +330,6 @@
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
-                        scrollX:true,
                         "aoColumns": [
                             { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
                             null,
@@ -348,5 +347,9 @@
 
 
         }
+    });
+    $('#example').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
     });
 </script>
