@@ -16,6 +16,7 @@
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
+<<<<<<< HEAD
         @@media (min-width:990px) {
             div#testStyle1 {
                 padding-left: 0px;
@@ -26,7 +27,19 @@
                 padding-right: 0px;
             }
         }
+=======
+        @@media (min-width:990px){
+            div#testStyle1 {
+            padding-left:0px;
+            padding-right:0px;
+            }
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
 
+            #testStyle2 {
+                padding-right: 0px;
+            }
+        }
+   
         .info-box {
             margin-bottom: 15px;
             cursor: pointer;
@@ -36,9 +49,15 @@
             background-color: mediumslateblue;
         }
 
+<<<<<<< HEAD
         .row {
             margin-left: -35px;
             margin-right: -35px;
+=======
+        .row { 
+            margin-left:-35px;
+            margin-right:-35px;
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
         }
 
         a:hover, a:focus {
@@ -56,6 +75,13 @@
             white-space: nowrap;
         }
 
+<<<<<<< HEAD
+=======
+        .card .body {
+            padding: 0px;
+        }
+
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
         a {
             cursor: pointer;
         }
@@ -63,6 +89,10 @@
         label {
             padding: 15px;
         }
+<<<<<<< HEAD
+=======
+       
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
     </style>
 </head>
 <div class="container-fluid">
@@ -143,33 +173,36 @@
                 </div>
 
                 <div class="body" id="attendanceCard">
-                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="attendanceTable" style="width:100%">
-                        <thead>
-                            <tr class="info">
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Clock In</th>
-                                <th>Clock Out</th>
-                                <th>Working Hours</th>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="attendanceTable" style="width:100%">
+                            <thead>
+                                <tr class="info">
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Working Hours</th>
 
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="LeaveTable" hidden style="width:100%">
-                        <thead>
-                            <tr class="info">
-                                <th>Leave Type</th>
-                                <th>From Date</th>
-                                <th>To Date</th>
-                                <th>Days</th>
-                                <th>Status</th>
-                                <th>ApprovedBy</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="LeaveTable" hidden style="width:100%">
+                            <thead>
+                                <tr class="info">
+                                    <th>Leave Type</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Days</th>
+                                    <th>Status</th>
+                                    <th>ApprovedBy</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,7 +233,6 @@
                 <button type="button" class="btn btn-default" id="closeRequest" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 <script src="~/plugins/bootbox/bootbox.min.js"></script>
@@ -381,6 +413,7 @@
                 if (buttonSelected == "Leave") {
                     if (Status == "OnLeave") {
                         Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                        TimeIn = '-';
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
                 } else {
@@ -394,8 +427,10 @@
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                         } else if (Status == "Absent") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                            TimeIn = '-';
                         } else {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            TimeIn = '-';   
                         }
                         array.push([moment(Employees[i].DateIn).format("DD MMM YYYY"), Status, TimeIn, TimeOut, TotalHours])
                     }
@@ -406,7 +441,6 @@
         $('#attendanceTable').DataTable().destroy();
         if (buttonSelected == "totalLeave") {
             $('#LeaveTable').DataTable({
-                scrollX: true,
                 "order": [1, 'desc'],
                 "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                     if (aData[4].includes("Approved")) {
@@ -422,7 +456,6 @@
             });
         } else {
             $('#attendanceTable').DataTable({
-                scrollX: true,
                 "aoColumns": [
                     { "sType": "date" },
                     null,
@@ -445,7 +478,10 @@
             });
         }
     }
-
+    $('.exampleClass').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    });
     //function getData(Employees, buttonSelected) {
     //    var array=[];
     //    for (var i = 0; i < Employees.length; i++) {

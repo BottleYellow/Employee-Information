@@ -6432,7 +6432,7 @@
       ]
     },
     "Microsoft.AspNetCore.Razor.Language/2.2.0": {
-      "sha512": "lyW7L6NFJRSrsRRtfnZu7wzuBWZLroyR8EYRuXnIfjcnhR9EdyEq9rbzguasy/j5fQKbQOfiEDvUsMnDM+ICCA==",
+      "sha512": "zW2jJWCnijyoZqL3a4W5zuvObFluZ7dvZeasbZVhBc8h1ZD4INufdpWXgtxceiu5wqfnedH+mzGTUdM4jNccUQ==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.language/2.2.0",
       "files": [
@@ -7033,7 +7033,7 @@
       ]
     },
     "Microsoft.EntityFrameworkCore.Relational/2.2.0": {
-      "sha512": "gfozvhextM1sJkFQ3ME3s7CdC0bKACtv1KyN6kYvBXKCmdmgqkNOqZR/F70sjEpwqZbWwdVHJzPWMADxvcDR1w==",
+      "sha512": "JCmBWVP5ZJGC4eKQg2GYJs0W9RMQdSZ6jsWh9zZk2fuxpGJuVKTFy4eFAHq9dgKu7N07IW+CPkNBA8LthS3q0A==",
       "type": "package",
       "path": "microsoft.entityframeworkcore.relational/2.2.0",
       "files": [
@@ -7046,7 +7046,7 @@
       ]
     },
     "Microsoft.EntityFrameworkCore.SqlServer/2.2.0": {
-      "sha512": "MhJJXewP8zZVK0lX5MGwR+ZPzfONUvpb9FDKuB2DheJLlqiXY22BR+Ncobou1bf1JsP3hZYb9J0GCwNMFc8kpw==",
+      "sha512": "6wGv0oqusLfjfznd9hpbkeKs5vNYJ9UDyFMj+u2cHyZZZOKcGhtANXFqS5JusDWQmYfkX3tDZSRFIr+3zdCU8Q==",
       "type": "package",
       "path": "microsoft.entityframeworkcore.sqlserver/2.2.0",
       "files": [
@@ -7266,7 +7266,7 @@
       ]
     },
     "Microsoft.Extensions.DependencyInjection/2.2.0": {
-      "sha512": "ASF77AJjnyi9hL7IJU1KCAvnCTgI3JEwkU+D4gnKd53nFIYpibVjR6SW8tdTkkuZ+QkmIx2rPvKdTMNVPfVU9A==",
+      "sha512": "7JzIJyfA1Wr19ibRr67CoG3lFklnTkzhkJ6thWFcNrmZCgLf9oEqrED4Tz08y7F18wTWsWUnI52BCjraBGtPIA==",
       "type": "package",
       "path": "microsoft.extensions.dependencyinjection/2.2.0",
       "files": [
@@ -8213,11 +8213,11 @@
       ]
     },
     "Microsoft.NETCore.Jit/1.0.2": {
-      "sha512": "Ok2vWofa6X8WD9vc4pfLHwvJz1/B6t3gOAoZcjrjrQf7lQOlNIuZIZtLn3wnWX28DuQGpPJkRlBxFj7Z5txNqw==",
+      "sha512": "a3/4ipWrPfF2xhtnFQn5ZLLWIS71qWz4wewZ7twTu6V9ZcS4fDkj/Iq5gafewE24O6SYBhuCOgmVj8J0KSbthA==",
       "type": "package",
       "path": "microsoft.netcore.jit/1.0.2",
       "files": [
-        ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.jit.1.0.2.nupkg.sha512",
@@ -8243,11 +8243,11 @@
       ]
     },
     "Microsoft.NETCore.Portable.Compatibility/1.0.1": {
-      "sha512": "Vd+lvLcGwvkedxtKn0U8s9uR4p0Lm+0U2QvDsLaw7g4S1W4KfPDbaW+ROhhLCSOx/gMYC72/b+z+o4fqS/oxVg==",
+      "sha512": "hp49qd5uYt4rMzmn1olcunL8lKwJ+c5hWY5kTWfajL5F3S4pqIOfqKPg1wFUP1t5GlQUtZhwaJExFcpW/iKHvA==",
       "type": "package",
       "path": "microsoft.netcore.portable.compatibility/1.0.1",
       "files": [
-        ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -8326,11 +8326,11 @@
       ]
     },
     "Microsoft.NETCore.Runtime.CoreCLR/1.0.2": {
-      "sha512": "A0x1xtTjYJWZr2DRzgfCOXgB0JkQg8twnmtTJ79wFje+IihlLbXtx6Z2AxyVokBM5ruwTedR6YdCmHk39QJdtQ==",
+      "sha512": "U/Q9PXX6w+iZ1n9w1+e88eUaEV0FlexJujpAmwSCkKHn9taS4mTKw0AkYKC2lsicOhDbGjPsCIUuUwXDpP3SGw==",
       "type": "package",
       "path": "microsoft.netcore.runtime.coreclr/1.0.2",
       "files": [
-        ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.runtime.coreclr.1.0.2.nupkg.sha512",
@@ -8356,11 +8356,11 @@
       ]
     },
     "Microsoft.NETCore.Windows.ApiSets/1.0.1": {
-      "sha512": "SaToCvvsGMxTgtLv/BrFQ5IFMPRE1zpWbnqbpwykJa8W5XiX82CXI6K2o7yf5xS7EP6t/JzFLV0SIDuWpvBZVw==",
+      "sha512": "3e2QvoejF6Y75475kgqKjXbIDjRmzzruzPxNeV1eJVahGd0F7+vm3tzDfW16rKomROv72mxPa1QfTKvrnNsu/w==",
       "type": "package",
       "path": "microsoft.netcore.windows.apisets/1.0.1",
       "files": [
-        ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "microsoft.netcore.windows.apisets.1.0.1.nupkg.sha512",
@@ -9106,7 +9106,7 @@
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.5.0": {
-      "sha512": "X4hp5h5M2plTWZnUd79d0x4actSMj9L3Hv6e1Lu+oGi35XSaXg21ha4Rqmt2KrIesfUwMfpET8QhMkS1eiWqRQ==",
+      "sha512": "zmr7mxqvG7M7qWzPTHQEF0jIOo65vqsnaJ2s7AyZ9JQaSJ3rfXZ7vPGszw1EbvRATu6zsFMdpQeq1g7oaNocOg==",
       "type": "package",
       "path": "runtime.native.system.data.sqlclient.sni/4.5.0",
       "files": [
@@ -9798,11 +9798,19 @@
       ]
     },
     "System.ComponentModel/4.0.1": {
+<<<<<<< HEAD
       "sha512": "oBZFnm7seFiVfugsIyOvQCWobNZs7FzqDV/B7tx20Ep/l3UUFCPDkdTnCNaJZTU27zjeODmy2C/cP60u3D4c9w==",
       "type": "package",
       "path": "system.componentmodel/4.0.1",
       "files": [
         ".nupkg.metadata",
+=======
+      "sha512": "tN5DPMYg6yFO5lF5L5hF6TIZDcRQ/+f1YcXGP8y2Yy4971XoxPOLH4lkkL20v6zb4aAVsp+xrkRwzMFeR5ZHqw==",
+      "type": "package",
+      "path": "system.componentmodel/4.0.1",
+      "files": [
+        ".signature.p7s",
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -10128,7 +10136,7 @@
       ]
     },
     "System.Data.SqlClient/4.6.0": {
-      "sha512": "DLhg881ETdy/OmlbBCjfXGVU2Xlm9x5yHwhcl33SAfCIG05hAbgMcvHUZruIG1sBJolGzDhes7R7hAKPS1SOqw==",
+      "sha512": "cppLAiY36su7Hr9dOaeDXRkndLKtnh7HgQgOfAgV0oN764BQXShll7yBZ8OwPtdYUSuwTT0re7eDQPGhwnojVQ==",
       "type": "package",
       "path": "system.data.sqlclient/4.6.0",
       "files": [
@@ -11131,11 +11139,10 @@
       ]
     },
     "System.IO.Pipelines/4.5.2": {
-      "sha512": "hKbZx0AW9N6OLeXrgdrKJH5k8goImfd89EuvRtZRv6v7qBhwRX1mXEASYkoYIenmNrVtj0HYv4/Rk68t1e3agA==",
+      "sha512": "w+rt22tsDE5mwCZ+erMQMXfkoGwJL1RWlZxq49WD2/tLDnzHjoV5b/a3ns0tJdtP+SyR7JJO+6IFe8EWOHjTIg==",
       "type": "package",
       "path": "system.io.pipelines/4.5.2",
       "files": [
-        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -14387,35 +14394,47 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Aadyam\\.nuget\\packages\\": {},
+    "C:\\Users\\aadyamconsultant\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
       "projectName": "EIS.WebAPI",
       "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
       "outputPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.WebAPI\\obj\\",
+=======
+      "projectUniqueName": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "projectName": "EIS.WebAPI",
+      "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\EIS.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\aadyamconsultant\\.nuget\\packages\\",
+      "outputPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.WebAPI\\obj\\",
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Aadyam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\aadyamconsultant\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\aadyamconsultant\\Downloads": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
+<<<<<<< HEAD
             "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj": {
               "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj"
             },
@@ -14427,6 +14446,19 @@
             },
             "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Validations\\EIS.Validations.csproj": {
               "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Validations\\EIS.Validations.csproj"
+=======
+            "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj": {
+              "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj"
+            },
+            "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj": {
+              "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Data\\EIS.Data.csproj"
+            },
+            "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Validations\\EIS.Validations.csproj": {
+              "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Validations\\EIS.Validations.csproj"
+            },
+            "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj": {
+              "projectPath": "F:\\C Partition\\Documents\\Tejas Training\\Employee-Information\\API\\EIS.Repository\\EIS.Repositories.csproj"
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
             }
           }
         }

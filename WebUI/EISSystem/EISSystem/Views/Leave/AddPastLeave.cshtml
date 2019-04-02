@@ -200,9 +200,9 @@
         var y = moment(document.getElementById("date2").value).format('DD-MMM-YYYY');
         var result = null;
          var pid = @cookies.PersonId;
-         
+         var lid = null;
         $.ajax({
-            url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + typeid + "/" + x + "/" + y,
+            url: "@APIURL/api/LeaveRequest/CheckDates/Past/" + pid + "/" + typeid + "/" + x + "/" + y+"/"+ 0,
             type: 'GET',
             success: function (data) {
                 if (data == 'success') {

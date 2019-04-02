@@ -179,7 +179,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetYearlyAttendanceSummaryById([FromRoute] int year, [FromRoute]string id)
         {
             EmployeeAttendanceReport attendanceReport = new EmployeeAttendanceReport();
-            attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year", id, year, 1);
+            attendanceReport = _repository.Attendances.GetAttendanceReportSummary("Year", id, year, 0);
             return Ok(attendanceReport);
         }
 

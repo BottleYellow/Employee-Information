@@ -20,6 +20,6 @@ namespace EIS.Entities.Models
         public string Status { get; set; }
         public string ApprovedName { get; set; }
         public string Reason { get; set; }
-
+        public int PersonId { get; set; }
     }
 }

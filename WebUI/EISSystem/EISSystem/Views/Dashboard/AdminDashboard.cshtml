@@ -28,97 +28,106 @@
     table.dataTable tbody tr .present {
         background-color: #dff0d8;
     }
+
     .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
         background-color: #d0e9c6;
     }
+
     table.dataTable tbody tr .absent {
         background-color: #f2dede;
     }
-        .ajax-loader {
-            visibility: hidden;
-            position: absolute;
-            z-index: +100 !important;
-            width: 80%;
-            height: 80%;
+
+    .ajax-loader {
+        visibility: hidden;
+        position: absolute;
+        z-index: +100 !important;
+        width: 80%;
+        height: 80%;
+    }
+
+        .ajax-loader img {
+            position: relative;
+            top: 45%;
+            left: 45%;
         }
 
-            .ajax-loader img {
-                position: relative;
-                top: 45%;
-                left: 45%;
-            }
-
-        div[class^="col"] {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
+<<<<<<< HEAD
         .info-box {
 
             margin-bottom: 17px;
             cursor: pointer;
         }
+=======
+    div[class^="col"] {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
 
-        .label-OnLeave {
-            background-color: mediumslateblue;
-        }
+    .info-box {
+        margin-bottom: 17px;
+        cursor: pointer;
+    }
 
-        a:hover, a:focus {
-            text-decoration: none;
-        }
+    .label-OnLeave {
+        background-color: mediumslateblue;
+    }
 
-        .disabledLink {
-            color: currentColor;
-            cursor: not-allowed;
-            opacity: 0.5;
-            text-decoration: none;
-        }
+    a:hover, a:focus {
+        text-decoration: none;
+    }
 
-        a {
-            cursor: pointer;
-        }
+    .disabledLink {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
 
-        table.dataTable td {
-            margin-left: 0;
-            margin-right: auto;
-            padding: 3px 10px;
-            width: 1px;
-            white-space: nowrap;
-        }
+    a {
+        cursor: pointer;
+    }
 
-        .* {
-            font-family: Arial;
-            font-style: normal;
-        }
+    table.dataTable td {
+        margin-left: 0;
+        margin-right: auto;
+        padding: 3px 10px;
+        width: 1px;
+        white-space: nowrap;
+    }
 
-        .row {
-            margin-left: -7px;
-            margin-right: -7px;
-        }
+    .* {
+        font-family: Arial;
+        font-style: normal;
+    }
 
-        .card {
-            margin-left: -7px;
-            margin-right: -7px;
-        }
+    .row {
+        margin-left: -7px;
+        margin-right: -7px;
+    }
 
-        .container-fluid {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
+    .card {
+        margin-left: -7px;
+        margin-right: -7px;
+    }
 
-        .card .body {
-            padding: 0px;
-        }
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
-        label {
-            padding: 15px;
-        }
+    .card .body {
+        padding: 0px;
+    }
 
-        .* {
-            font-family: Arial;
-            font-style: normal;
-        }
-        
+    label {
+        padding: 15px;
+    }
+
+    .* {
+        font-family: Arial;
+        font-style: normal;
+    }
 </style>
 <head>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -155,7 +164,11 @@
                     </a>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " id="testStyle1">
+=======
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="testStyle1">
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 <div>
                     <a role="button" id="employeePresent">
                         <div class=" info-box bg-light-green hover-expand-effect">
@@ -205,7 +218,11 @@
                 </div>
 
             </div>
+<<<<<<< HEAD
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="testStyle2">
+=======
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " id="testStyle2">
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 <div>
                     <a id="approvedLeaveButton" role="button">
                         <div class="info-box bg-green hover-expand-effect">
@@ -253,17 +270,18 @@
                         <h2 id="banerAttendanceHeader"></h2>
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="BanerAttendanceTable" style="width:100%">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+           </div>
                     </div>
                 </div>
 
@@ -276,22 +294,20 @@
                         <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="KondhwaAttendanceTable" style="width:100%">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-
-
             </div>
         </div>
         <!-- #END# Attendance Data -->
@@ -303,7 +319,8 @@
                         <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable"style="width:100%;">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="BanerLeavesTable" style="width:100%">
                                 <thead>
                                     <tr class="info">
                                         <th>Actions</th>
@@ -318,6 +335,7 @@
                                     </tr>
                                 </thead>
                             </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -328,7 +346,8 @@
                         <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%;">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos exampleClass" id="KondhwaLeavesTable" style="width:100%">
                                 <thead>
                                     <tr class="info">
                                         <th>Actions</th>
@@ -344,8 +363,9 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
+                        </div>
                     </div>
-                    </div>
+                </div>
             </div>
         </div>
         <!-- #END# Leave Data -->
@@ -487,6 +507,7 @@
                         var workingValue = Employees[i].WorkingHours;
                         var hr = workingValue.slice(0, 2);
                         var min = workingValue.slice(3, 5);
+<<<<<<< HEAD
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(parseInt(hr), 'h').format('HH:mm');
                         expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm').add(parseInt(min), 'm').format('HH:mm');
                         
@@ -500,6 +521,20 @@
                     
                     TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
                     //TimeOut =  + TimeOut + 
+=======
+                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
+                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('HH:mm:ss');
+
+                    }
+                    else {
+                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(08, 'h').format('hh:mm A');
+
+                    }
+                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
+                } else {
+                    TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('HH:mm:ss');
+
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 }
             if (Status == "Present") {
 
@@ -515,7 +550,11 @@
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 if (Employees[i].Status == 'Present') {
                     //banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
+<<<<<<< HEAD
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>" , TotalHours])
+=======
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row' style='padding:10px;'>"+Status + "<span class='label label-success'>" + TimeIn + "</span><span class='label label-success'>" + TimeOut + "</span></div>" , TotalHours])
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 }
                 else if (Employees[i].Status == 'Absent') {
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
@@ -523,7 +562,7 @@
                 else {
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
-               
+
                 //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
                 if (Employees[i].Status == 'Present') {
@@ -540,7 +579,6 @@
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
-            scrollX: true,
             paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
@@ -563,7 +601,6 @@
         });
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
-            scrollX: true,
             paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
@@ -583,7 +620,7 @@
                     $('td', nRow).addClass('warning');
                 }
             }
-        });   
+        });
     }
     function getLeavesData(Leaves) {
         var banerArrayLeaves = [];
@@ -595,19 +632,9 @@
             var Status = Leaves[i].Status;
             var actionButton;
             if (buttonSelected == "PendingLeaves") {
-                if (Status == "Pending") {
+                if (Status == "Pending" || Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
-
-                    if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                    } else {
-                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
-                    }
-                }
-                else if (Status == "Requested For Cancel") {
-                    Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                    actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
 
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
@@ -644,7 +671,6 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
-            scrollX:true,
             paging:false,
             "aoColumns": [
                 null,
@@ -675,7 +701,6 @@
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
-            scrollX: true,
             paging:false,
             "aoColumns": [
                 null,
@@ -756,4 +781,8 @@
             }
         });
     }
-</script>
+    $('.exampleClass').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    });
+</script>   

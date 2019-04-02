@@ -252,7 +252,7 @@
             var result = null;
 
             $.ajax({
-                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y,
+                url: "@APIURL/api/LeaveRequest/CheckDates/Future/" + pid + "/" + typeid + "/" + x + "/" + y+"/"+0,
                 type: 'GET',
                 success: function (data) {
                     if (data == 'success') {

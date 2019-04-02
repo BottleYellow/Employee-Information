@@ -93,7 +93,10 @@
         .test + .tooltip.right > .tooltip-arrow {
             border-right: 5px solid black;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
         .tablebutton {
             padding: 4px 4px;
             height: 20px;
@@ -184,22 +187,24 @@
                                 </div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
-                            <table id="example" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Location</th>
-                                        <th>Name</th>
-                                        <th>Total Working Days</th>
-                                        <th>Present Days</th>
-                                        <th>Total Granted Leaves</th>
-                                        <th>Total Leaves Taken</th>
-                                        <th>Proposed Leaves</th>
-                                        <th>Balance Leaves</th>
-                                        <th>Adjusted Leaves</th>
-                                        <th>Leaves Without Pay</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Name</th>
+                                            <th>Total Working Days</th>
+                                            <th>Present Days</th>
+                                            <th>Total Granted Leaves</th>
+                                            <th>Total Leaves Taken</th>
+                                            <th>Proposed Leaves</th>
+                                            <th>Balance Leaves</th>
+                                            <th>Adjusted Leaves</th>
+                                            <th>Leaves Without Pay</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -451,8 +456,7 @@
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
-                        $('#example').DataTable({
-                            scrollX: true,
+                        $('#example').DataTable({      
                             order: [1, 'asc'],
                             data: array,
                             "drawCallback": function (settings) {
@@ -473,7 +477,11 @@
             message = count + ' day';
         } else {
             message = count + ' days';
+<<<<<<< HEAD
         }
+=======
+        }             
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
         var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
         bootbox.confirm({
             message: messageText,
@@ -501,7 +509,11 @@
                                     window.parent.location.reload();
                                 }
                             });
+<<<<<<< HEAD
 
+=======
+                            
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                         },
                         error: function () {
                             bootbox.alert("Something went wrong.Please try after sometime");
@@ -509,7 +521,11 @@
                     });
                 }
             }
+<<<<<<< HEAD
         });
+=======
+        });                   
+>>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
     }
 
     $('#select').on('change', function () {
@@ -539,5 +555,10 @@
                 maxDate: new Date(cYear, cMonth, cDate)
             });
         }
+    });
+
+    $('#example').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .column.adjust();
     });
 </script>

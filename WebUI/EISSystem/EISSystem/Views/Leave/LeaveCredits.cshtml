@@ -67,20 +67,23 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
-                        <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Location</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>Valid From</th>
-                                    <th>Valid To</th>
-                                    <th>Days</th>
-                                    <th>Available</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Location</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>Valid From</th>
+                                        <th>Valid To</th>
+                                        <th>Days</th>
+                                        <th>Available</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    
                     </div>
                 </div>
             </div>
@@ -122,7 +125,6 @@
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
-                    scrollX:true,
                     order:[4,'asc'],
                     data: array
                 });
@@ -191,6 +193,10 @@
                 bootbox.alert("<h4>Unable to add the Record</h4>");
             }
         });
+    });
+    $('#example').on('shown.bs.collapse', function () {
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
     });
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>

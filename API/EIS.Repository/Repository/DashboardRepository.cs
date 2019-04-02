@@ -241,7 +241,7 @@ namespace EIS.Repositories.Repository
                            .Select(p => new
                            {
                                p,
-                               Attendances = p.Attendance.Where(a => a.DateIn == date)
+                               Attendances = p.Attendance.Where(a => a.DateIn == date && a.IsActive==true)
                            });
 
                 foreach (var x in results)
@@ -358,7 +358,7 @@ namespace EIS.Repositories.Repository
             for (DateTime date = beginDate; date < stopDate; date = date.AddDays(1))
             {
 
-                Attendance attendance = attendances.Where(x => x.DateIn == date).FirstOrDefault();
+                Attendance attendance = attendances.Where(x => x.DateIn == date && x.IsActive==true).FirstOrDefault();
                 Holiday holiday = holidays.Where(x => x.Date == date).FirstOrDefault();
                 if (attendance != null)
                 {
