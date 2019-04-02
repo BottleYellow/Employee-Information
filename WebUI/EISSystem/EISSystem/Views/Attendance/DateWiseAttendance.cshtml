@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Select Status</label>
-                                <select id="status" class="form-control show-tick">
+                                <select id="status"  class="form-control show-tick">
                                     <option value="true">Active</option>
                                     <option value="false">InActive</option>
                                 </select>
@@ -112,18 +112,14 @@
                             <div class="col-md-2">
                                 <br />
                                 <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
-                            </div>
+                            </div>                   
                         </div>
                         <div>
                             <div>
                                 <h4 id="report">Attendance Report</h4>
                             </div>
                             <div class="table-responsive">
-<<<<<<< HEAD
-                                <table id="example" class="table table-bordered table-striped table-hover">
-=======
                                 <table id="example" class="table table-bordered table-striped table-hover" style="width:100%">
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                                     <thead>
                                         <tr>
                                             <th>Employee Code</th>
@@ -138,10 +134,7 @@
                                     </thead>
                                 </table>
                             </div>
-<<<<<<< HEAD
-=======
                       
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                         </div>
                     </div>
                 </div>
@@ -276,12 +269,7 @@
                         array.push([data[i].EmployeeCode, data[i].FullName, Status, date,weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
                     }
                     $('#example').DataTable().destroy();
-<<<<<<< HEAD
-                    $('#example').DataTable({
-        
-=======
                     $('#example').DataTable({   
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                         order:[3,'asc'],
                         "aoColumns": [
                             null,

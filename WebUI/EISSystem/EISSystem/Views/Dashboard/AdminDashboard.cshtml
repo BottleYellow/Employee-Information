@@ -51,18 +51,10 @@
             left: 45%;
         }
 
-<<<<<<< HEAD
-        .info-box {
-
-            margin-bottom: 17px;
-            cursor: pointer;
-        }
-=======
     div[class^="col"] {
         padding-left: 15px;
         padding-right: 15px;
     }
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
 
     .info-box {
         margin-bottom: 17px;
@@ -164,11 +156,7 @@
                     </a>
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " id="testStyle1">
-=======
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="testStyle1">
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 <div>
                     <a role="button" id="employeePresent">
                         <div class=" info-box bg-light-green hover-expand-effect">
@@ -218,11 +206,7 @@
                 </div>
 
             </div>
-<<<<<<< HEAD
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="testStyle2">
-=======
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 " id="testStyle2">
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 <div>
                     <a id="approvedLeaveButton" role="button">
                         <div class="info-box bg-green hover-expand-effect">
@@ -496,7 +480,7 @@
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-            var TimeIn = Employees[i].TimeIn == null ? '-' : "   <span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeIn, 'HH:mm').format('HH:mm') + "</span>  ";
+            var TimeIn = Employees[i].TimeIn == null ? '-' : moment(Employees[i].TimeIn, 'HH:mm:ss').format('HH:mm:ss');
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var todayDate = moment(new Date()).format("DD-MMM-YYYY");
             var selectedDate = moment(dateSelected).format("DD-MMM-YYYY");
@@ -507,21 +491,6 @@
                         var workingValue = Employees[i].WorkingHours;
                         var hr = workingValue.slice(0, 2);
                         var min = workingValue.slice(3, 5);
-<<<<<<< HEAD
-                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(parseInt(hr), 'h').format('HH:mm');
-                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm').add(parseInt(min), 'm').format('HH:mm');
-                        
-                    }
-                    else {
-                        expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(08, 'h').format('hh:mm');
-                        
-                    }
-                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
-                } else {
-                    
-                    TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
-                    //TimeOut =  + TimeOut + 
-=======
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm:ss').add(parseInt(hr), 'h').format('HH:mm:ss');
                         expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm:ss').add(parseInt(min), 'm').format('HH:mm:ss');
 
@@ -534,7 +503,6 @@
                 } else {
                     TimeOut = Employees[i].TimeOut == null ? '-' : moment(Employees[i].TimeOut, 'HH:mm:ss').format('HH:mm:ss');
 
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 }
             if (Status == "Present") {
 
@@ -550,29 +518,25 @@
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 if (Employees[i].Status == 'Present') {
                     //banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
-<<<<<<< HEAD
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>" , TotalHours])
-=======
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row' style='padding:10px;'>"+Status + "<span class='label label-success'>" + TimeIn + "</span><span class='label label-success'>" + TimeOut + "</span></div>" , TotalHours])
->>>>>>> c4ee9f08a08e0d351dcb870b789187b4aca0ca36
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 else {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
 
                 //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
                 if (Employees[i].Status == 'Present') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status +  TimeIn + TimeOut + "</div>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='absent'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 else {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
                 }
                 //KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
@@ -582,12 +546,6 @@
             paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
-            "bAutoWidth": false, // Disable the auto width calculation 
-            "aoColumns": [
-                { "sWidth": "40%" }, // 1st column width 
-                { "sWidth": "30%" }, // 2nd column width 
-                { "sWidth": "30%" } // 3rd column width and so on 
-            ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("success")) {
                     $('td', nRow).addClass('success');
@@ -604,12 +562,6 @@
             paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
-            "bAutoWidth": false, // Disable the auto width calculation 
-            "aoColumns": [
-                { "sWidth": "40%" }, // 1st column width 
-                { "sWidth": "30%" }, // 2nd column width 
-                { "sWidth": "30%" } // 3rd column width and so on 
-            ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("success")) {
                     $('td', nRow).addClass('success');
