@@ -25,6 +25,11 @@
         }
     }
 
+    td > label {
+        padding: 0px;
+        margin-bottom: 0px;
+    }
+
     table.dataTable tbody tr .present {
         background-color: #dff0d8;
     }
@@ -111,6 +116,7 @@
     .card .body {
         padding: 0px;
     }
+
 
     label {
         padding: 15px;
@@ -250,14 +256,27 @@
         <div id="attendanceData">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
-                        <h2 id="banerAttendanceHeader"></h2>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-success"></button>
-                        <label>Present</label>
-                        <button type="button" class="btn btn-danger"></button>
-                        <label>Absent</label>
+                    <div class="header" style="background-color:aliceblue; padding:0px">
+                        <h2 id="banerAttendanceHeader1"></h2>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-right:10px">
+                                        <h2 id="banerAttendanceHeader"></h2>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success"></button>
+                                        <label style="font-size:14px">- Clock In</label><br />
+                                        <button type="button" class="btn btn-danger"></button>
+                                        <label style="font-size:14px">- Clock Out</label><br />
+                                        <button type="button" class="btn btn-warning"></button>
+                                        <label style="font-size:14px">- Exp Time Out</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
                     </div>
                     <div class="body">
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
@@ -279,14 +298,31 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
-                        <h2 id="kondhwaAttendanceHeader"></h2>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-success"></button>
-                        <label>Present</label>
-                        <button type="button" class="btn btn-danger"></button>
-                        <label>Absent</label>
+                    @*<div class="header" style="background-color:aliceblue;">
+                            <h2 id="kondhwaAttendanceHeader"></h2>
+                        </div>*@
+                    <div class="header" style="background-color:aliceblue; padding:0px">
+                        <h2 id="kondhwaAttendanceHeader1"></h2>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-right:10px">
+                                        <h2 id="kondhwaAttendanceHeader"></h2>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success"></button>
+                                        <label style="font-size:14px">- Clock In</label><br />
+                                        <button type="button" class="btn btn-danger"></button>
+                                        <label style="font-size:14px">- Clock Out</label><br />
+                                        <button type="button" class="btn btn-warning"></button>
+                                        <label style="font-size:14px">- Exp Time Out</label>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+
                     </div>
                     <div class="body">
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
@@ -382,8 +418,10 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="button" id="banerDate" autocomplete="off"/>');
-        $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right" id="kondhwaDate"></span> ');
+        $('#banerAttendanceHeader').html(locationNameBaner);
+        $('#banerAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="banerDate" autocomplete="off"/>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa);
+        $('#kondhwaAttendanceHeader1').html('<span style="float:right; margin-top:15px;" id="kondhwaDate"></span> ');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
@@ -504,7 +542,7 @@
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(08, 'h').format('hh:mm');
 
                     }
-                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
+                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">' + expectedTimeOutDate + '</span>';
                 } else {
 
                     TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;background-color:#00b3b3;' class='label'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";

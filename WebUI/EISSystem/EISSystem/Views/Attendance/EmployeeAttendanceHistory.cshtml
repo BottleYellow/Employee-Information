@@ -13,8 +13,25 @@
     }
 }
 <style type="text/css">
+    @@media (max-width: 990px) {
+        #second {
+            padding-right: 30px;
+        }
+    }
+
     .clickType {
         cursor: pointer;
+    }
+
+    #first {
+        margin-right: -15px;
+        margin-top: -15px;
+    }
+
+    #second {
+        margin-left: 15px;
+        margin-top: -15px;
+        padding-left: 1px;
     }
 
     .label-OnLeave {
@@ -28,6 +45,9 @@
 
     div .panel-primary {
         text-align: center;
+        margin-left: 0;
+        margin-right: -10px;
+        margin-bottom: 0;
     }
 
     .dataTables_wrapper .myexport .dt-buttons {
@@ -77,6 +97,11 @@
     * {
         font-family: Arial;
         font-style: normal
+    }
+
+    div[class^="col"] {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 </style>
 <head>
@@ -148,102 +173,111 @@
 
                             </div>
                         </div>
-                        <div>
+                        <div id="attendanceReport">
+                            @*<div>
+                                    <h4><span id="report">Employee Attendance History</span></h4>
+                                </div>*@
+                            <div class="row">
 
-                            <div class="container-fluid" id="attendanceReport">
-                                <div>
-                                    <h4><span id="report">Employee Attendance Report</span></h4>
-                                </div>
-                                <div class="row">
-
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average TimeIn</div>
-                                            <div id="averageTimeIn" class="panel-body">-</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average TimeOut</div>
-                                            <div id="averageTimeOut" class="panel-body">-</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Average Working Hours</div>
-                                            <div id="averageHours" class="panel-body"><span>-</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Additional Working Hours</div>
-                                            <div id="addtionalWorkingHours" class="panel-body">-</div>
-                                        </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">Average TimeIn</div>
+                                        <div id="averageTimeIn" class="panel-body">-</div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading clickType">Present</div>
-                                            <div id="presentDays" class="panel-body">-</div>
-                                        </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">Average TimeOut</div>
+                                        <div id="averageTimeOut" class="panel-body">-</div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading clickType">OnLeave</div>
-                                            <div id="absentDays" class="panel-body">-</div>
-                                        </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">Average Working Hours</div>
+                                        <div id="averageHours" class="panel-body"><span>-</span></div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div id="wd" class="panel-heading">Working Days (Till Date)</div>
-                                            <div id="totalWorkingDays" class="panel-body">-</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">Total Number Of Days</div>
-                                            <div id="totalNoOfDays" class="panel-body">-</div>
-                                        </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">Additional Working Hours</div>
+                                        <div id="addtionalWorkingHours" class="panel-body">-</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div id="tblExample" style="display:none;">
-                                        <div class="table-responsive">
-                                            <table id="example" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Total Hours</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading clickType">Present</div>
+                                        <div id="presentDays" class="panel-body">-</div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div id="tblExample1" style="display:none;">
-                                        <div class="table-responsive">
-                                            <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Total Hours</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading clickType">OnLeave</div>
+                                        <div id="absentDays" class="panel-body">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div id="wd" class="panel-heading">Working Days (Till Date)</div>
+                                        <div id="totalWorkingDays" class="panel-body">-</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">Total Number Of Days</div>
+                                        <div id="totalNoOfDays" class="panel-body">-</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
+        <div class="row clearfix">
+            <div id="AttendanceData">
+                <div id="first" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="card">
+                        <div class="body">
+                            <div id="tblExample" style="display:none;">
+                                <div class="table-responsive">
+                                    <table id="example" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Total Hours</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="second" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="card">
+                        <div class="body">
+                            <div id="tblExample1" style="display:none;">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Total Hours</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </body>
@@ -261,15 +295,15 @@
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/buttons.flash.min.js"></script>
-<script src="~/Ems/js/jszip.min.js"></script>
-<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 
 <script type="text/javascript">
     var status = "Generate";
     $(document).ready(function () {
+        $('#AttendanceData').hide();
         var loc = $('#locations').val();
         var employeeStatus = $('#selectstatus').val();
         $.ajax({
@@ -406,139 +440,140 @@
 
 
 
-        function generateReport(value, type, id,status) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("EmployeeAttendanceHistory", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
-                beforeSend: function () {
-                    $('.ajax-loader').css("visibility", "visible");
-                },
-                success: function (data) {
-                    debugger;
+    function generateReport(value, type, id, status) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeAttendanceHistory", "Attendance")?date=' + value + '&type=' + type + '&id=' + id,
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            success: function (data) {
+                debugger;
 
-                    var avgTimeIn=moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('HH:mm');
-                    if (avgTimeIn == "Invalid date") {
-                        avgTimeIn = "-";
-                    }
-                    var avgTimeOut = moment(data._SP_ReportCount.AverageTimeOut, 'HH:mm:ss').format('HH:mm');
-                    if (avgTimeOut == "Invalid date") {
-                        avgTimeOut = "-";
-                    }
-                    if (data._SP_ReportCount.AdditionalWorkingHours==null) {
-                        data._SP_ReportCount.AdditionalWorkingHours = "-";
-                    }
-                    if (data._SP_ReportCount.AverageHours == null) {
-                        data._SP_ReportCount.AverageHours = "-";
-                    }
-                    document.getElementById("averageTimeIn").innerHTML = avgTimeIn;
-                    document.getElementById("averageHours").innerHTML = data._SP_ReportCount.AverageHours;
-                    document.getElementById("averageTimeOut").innerHTML = avgTimeOut;
-                    document.getElementById("presentDays").innerHTML = data._SP_ReportCount.PresentDays;
-                    document.getElementById("absentDays").innerHTML = data._SP_ReportCount.LeaveDays;
-                    document.getElementById("totalWorkingDays").innerHTML = data._SP_ReportCount.TotalWorkingDays;
-                    document.getElementById("totalNoOfDays").innerHTML = data._SP_ReportCount.TotalDays;
-                    document.getElementById("addtionalWorkingHours").innerHTML = data._SP_ReportCount.AdditionalWorkingHours;
-                    var array = [];
-                    var array1 = [];
-                    var countData = 1;
-                    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
-                    var count = data._SP_AttendanceData.length;
-                    var countCheck = count / 2;
-                        countCheck++;
-                    for (var i = 0; i < data._SP_AttendanceData.length; i++) {
-                        var date = moment(data._SP_AttendanceData[i].DateIn).format("DD MMM YYYY");
-                        var timeIn;
-                        var timeOut;
-                        var Status = data._SP_AttendanceData[i].Status;
-                        var TotalHours = moment(data._SP_AttendanceData[i].TotalHours, 'HH:mm:ss').format('HH:mm');
-                        if (TotalHours == "Invalid date") {
-                            TotalHours = "-";
-                        }
-                        if (status == Status) {
-                            if (Status == "Present") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
-                                if (data._SP_AttendanceData[i].TimeOut == '-') {
-                                    timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
-                                } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') + '</span>';
-                                }
-                            }
-                            else if (Status == "OnLeave") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
-                                timeIn = '';
-                                timeOut = '';
-                            }
-                            if (countData <= countCheck) {
-                                array.push([date, Status + timeIn + timeOut, TotalHours])
-                            } else {
-                                array1.push([date, Status + timeIn + timeOut, TotalHours])
-                            }
-                            countData++;
-                        }
-                        if (status == "Generate") {
-                            if (Status == "Present") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') +'</span>    ';
-                                if (data._SP_AttendanceData[i].TimeOut == '-') {
-                                    timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">'+ data._SP_AttendanceData[i].TimeOut+'</span>';
-                                } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') +'</span>';
-                                }
-                            }
-                            else if (Status == "Absent") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
-                                timeIn = '';
-                                timeOut = '';
-                            }
-                            else if (Status == "OnLeave") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
-                                timeIn = '';
-                                timeOut = '';
-                            }
-                            else {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
-                                timeIn = '';
-                                timeOut = '';
-                            }
-
-                            if (countData <= countCheck) {
-                                array.push([date, Status + timeIn + timeOut, TotalHours])
-                            } else {
-                                array1.push([date, Status + timeIn + timeOut, TotalHours])
-                                }
-                            countData++;
-                        }
-                    }
-                    $('#example').DataTable().destroy();
-                    $('#example1').DataTable().destroy();
-                    $('#example').DataTable({
-                        "paging": false,
-                        "aoColumns": [
-                            { "sType": "date" },
-                            null,
-                            null
-                        ],
-                        data: array
-                    });
-                    $('#example1').DataTable({
-                        "paging": false,
-                        "aoColumns": [
-                            { "sType": "date" },
-                            null,
-                            null
-                        ],
-                        data: array1
-                    });
-                },
-                error: function (error) {
-                    bootbox.alert("Something went wrong..Please try after sometime");
-                },
-                complete: function () {
-                    $('.ajax-loader').css("visibility", "hidden");
+                var avgTimeIn = moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('HH:mm');
+                if (avgTimeIn == "Invalid date") {
+                    avgTimeIn = "-";
                 }
-            });
-        }
+                var avgTimeOut = moment(data._SP_ReportCount.AverageTimeOut, 'HH:mm:ss').format('HH:mm');
+                if (avgTimeOut == "Invalid date") {
+                    avgTimeOut = "-";
+                }
+                if (data._SP_ReportCount.AdditionalWorkingHours == null) {
+                    data._SP_ReportCount.AdditionalWorkingHours = "-";
+                }
+                if (data._SP_ReportCount.AverageHours == null) {
+                    data._SP_ReportCount.AverageHours = "-";
+                }
+                document.getElementById("averageTimeIn").innerHTML = avgTimeIn;
+                document.getElementById("averageHours").innerHTML = data._SP_ReportCount.AverageHours;
+                document.getElementById("averageTimeOut").innerHTML = avgTimeOut;
+                document.getElementById("presentDays").innerHTML = data._SP_ReportCount.PresentDays;
+                document.getElementById("absentDays").innerHTML = data._SP_ReportCount.LeaveDays;
+                document.getElementById("totalWorkingDays").innerHTML = data._SP_ReportCount.TotalWorkingDays;
+                document.getElementById("totalNoOfDays").innerHTML = data._SP_ReportCount.TotalDays;
+                document.getElementById("addtionalWorkingHours").innerHTML = data._SP_ReportCount.AdditionalWorkingHours;
+                var array = [];
+                var array1 = [];
+                var countData = 1;
+                var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+                var count = data._SP_AttendanceData.length;
+                var countCheck = count / 2;
+                countCheck++;
+                for (var i = 0; i < data._SP_AttendanceData.length; i++) {
+                    var date = moment(data._SP_AttendanceData[i].DateIn).format("DD MMM YYYY");
+                    var timeIn;
+                    var timeOut;
+                    var Status = data._SP_AttendanceData[i].Status;
+                    var TotalHours = moment(data._SP_AttendanceData[i].TotalHours, 'HH:mm:ss').format('HH:mm');
+                    if (TotalHours == "Invalid date") {
+                        TotalHours = "-";
+                    }
+                    if (status == Status) {
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            if (data._SP_AttendanceData[i].TimeOut == '-') {
+                                timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
+                            } else {
+                                timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') + '</span>';
+                            }
+                        }
+                        else if (Status == "OnLeave") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
+                            timeIn = '';
+                            timeOut = '';
+                        }
+                        if (countData <= countCheck) {
+                            array.push([date, Status + timeIn + timeOut, TotalHours])
+                        } else {
+                            array1.push([date, Status + timeIn + timeOut, TotalHours])
+                        }
+                        countData++;
+                    }
+                    if (status == "Generate") {
+                        if (Status == "Present") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            if (data._SP_AttendanceData[i].TimeOut == '-') {
+                                timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
+                            } else {
+                                timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') + '</span>';
+                            }
+                        }
+                        else if (Status == "Absent") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
+                            timeIn = '';
+                            timeOut = '';
+                        }
+                        else if (Status == "OnLeave") {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
+                            timeIn = '';
+                            timeOut = '';
+                        }
+                        else {
+                            Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
+                            timeIn = '';
+                            timeOut = '';
+                        }
+
+                        if (countData <= countCheck) {
+                            array.push([date, Status + timeIn + timeOut, TotalHours])
+                        } else {
+                            array1.push([date, Status + timeIn + timeOut, TotalHours])
+                        }
+                        countData++;
+                    }
+                }
+                $('#AttendanceData').show();
+                $('#example').DataTable().destroy();
+                $('#example1').DataTable().destroy();
+                $('#example').DataTable({
+                    "paging": false,
+                    "aoColumns": [
+                        { "sType": "date" },
+                        null,
+                        null
+                    ],
+                    data: array
+                });
+                $('#example1').DataTable({
+                    "paging": false,
+                    "aoColumns": [
+                        { "sType": "date" },
+                        null,
+                        null
+                    ],
+                    data: array1
+                });
+            },
+            error: function (error) {
+                bootbox.alert("Something went wrong..Please try after sometime");
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
+            }
+        });
+    }
     $('.tableClass').on('shown.bs.collapse', function () {
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
