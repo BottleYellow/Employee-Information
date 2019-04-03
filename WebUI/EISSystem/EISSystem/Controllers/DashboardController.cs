@@ -26,6 +26,9 @@ namespace EIS.WebApp.Controllers
         {
             _services = services;
         }
+
+        #region Admin Dashboard
+        [DisplayName("Admin Dashboard")]
         public IActionResult AdminDashboard()
         {
             ViewBag.Locations = GetLocations();
@@ -40,7 +43,10 @@ namespace EIS.WebApp.Controllers
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
         }
+        #endregion
 
+        #region HR Dashboard
+        [DisplayName("HR Dashboard")]
         public IActionResult HRDashboard()
         {
             ViewBag.Locations = GetLocations();            
@@ -89,6 +95,10 @@ namespace EIS.WebApp.Controllers
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
         }
+        #endregion
+
+        #region Manager Dashboard
+        [DisplayName("Manager Dashboard")]
         public IActionResult ManagerDashboard()
         {
             ViewBag.Locations = GetLocations();
@@ -119,6 +129,10 @@ namespace EIS.WebApp.Controllers
             Admin_Dashboard dashboard = JsonConvert.DeserializeObject<Admin_Dashboard>(stringData);
             return Json(dashboard);
         }
+        #endregion
+
+        #region Employee Dashboard
+        [DisplayName("Employee Dashboard")]
         public IActionResult EmployeeDashboard()
         {
             if (TempData["BirthdayAlert"] != null)
@@ -149,6 +163,9 @@ namespace EIS.WebApp.Controllers
             Employee_Dashboard dashboard = JsonConvert.DeserializeObject<Employee_Dashboard>(stringData);
             return Json(dashboard);
         }
+        #endregion
+
+        #region Admin Calendar
         [DisplayName("Admin Calendar")]
         public IActionResult Calendar()
         {
@@ -173,7 +190,9 @@ namespace EIS.WebApp.Controllers
             }
             return Json(data);
         }
+        #endregion
 
+        #region Employee Calendar
         [DisplayName("Employee Calendar")]
         public IActionResult EmployeeCalendar()
         {
@@ -197,7 +216,9 @@ namespace EIS.WebApp.Controllers
             }
             return Json(data);
         }
+        #endregion
 
+        #region Attendance Request
         [HttpPost]
         public IActionResult AttendanceRequest(string personId,string message,string dateSelected)
         {
@@ -207,6 +228,7 @@ namespace EIS.WebApp.Controllers
             string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);
         }
+        #endregion
     }
 
 }

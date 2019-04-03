@@ -218,7 +218,9 @@ namespace EIS.WebApp.Controllers
             List<SP_GetDateWiseAttendance> attendance = JsonConvert.DeserializeObject<List<SP_GetDateWiseAttendance>>(stringData);
             return Json(attendance);
         }
+        #endregion
 
+        #region Attendance Modify and Deduct From Salary
         [DisplayName("Attendance Modify")]
         [HttpGet]
         public IActionResult AttendanceUpdate()
@@ -240,7 +242,7 @@ namespace EIS.WebApp.Controllers
             string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);
         }
-
+        [DisplayName("Deduct From Salary")]
         [HttpPost]
         public IActionResult DeductFromSalary(string EmployeeCode,string Dates)
         {

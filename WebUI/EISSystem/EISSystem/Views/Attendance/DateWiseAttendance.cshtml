@@ -2,7 +2,7 @@
 @using System.Globalization
 @model IEnumerable<EIS.Entities.Employee.Person>
 <head>
-    <title>All Attendance</title>
+    <title>Datewise Attendance</title>
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -270,7 +270,8 @@
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({   
-                        order:[3,'asc'],
+                        order: [3, 'asc'],
+                        pageLength:50,
                         "aoColumns": [
                             null,
                             null,

@@ -2,7 +2,6 @@
 @model IEnumerable<EIS.Entities.Employee.Person>
 <head>
     <title>Attendance Summary</title>
-    <link href="~/Ems/css/toastr.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
@@ -42,8 +41,9 @@
             width: 1px;
             white-space: nowrap;
         }
-        a {
-            color: black;
+        a.test {
+            color: blue;
+            text-decoration:underline;
         }
         a:hover {
                 cursor: pointer;
@@ -187,7 +187,6 @@
 <script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
-<script src="~/Ems/js/toastr.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/js/TWeeklyOffCount.js"></script>
