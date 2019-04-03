@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-group" id="LeaveType" hidden>
                     <label asp-for="TypeId">Leave Type : </label>
-                    <select  title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction1();"></select>
+                    <select  title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction();"></select>
                     <span asp-validation-for="TypeId" class="text-danger"></span>
                 </div>
 
@@ -190,7 +190,7 @@
             $("#btnAddLeave").removeAttr('disabled');
         }
     });
-    function myFunction1() {
+    function myFunction() {
         var id = $('#selectEmployee').val();
         $("#msg1").remove();
         var x = document.getElementById("selectType").value;
