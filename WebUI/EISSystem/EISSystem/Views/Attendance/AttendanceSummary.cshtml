@@ -204,34 +204,36 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div id="tblExample" style="display:none;">
-                                        <table id="example" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-
-                                                    <th>Total Hours</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                                    <div class="col-md-6">
+                                        <div id="tblExample" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="example" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Status</th>
+                                                            <th>Total Hours</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="tblExample1" style="display:none;">
-                                        <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-
-                                                    <th>Total Hours</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                                    <div class="col-md-6">
+                                        <div id="tblExample1" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Status</th>
+                                                            <th>Total Hours</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>                          
                             </div>
                         </div>
                     </div>
@@ -449,16 +451,16 @@
                         }
                         if (status == Status) {
                             if (Status == "Present") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '-' : moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm');
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
                                 if (data._SP_AttendanceData[i].TimeOut == '-') {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut;
+                                    timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
                                 } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '-' : moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm');
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') + '</span>';
                                 }
                             }
                             else if (Status == "OnLeave") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
                                 timeIn = '';
                                 timeOut = '';
                             }
@@ -472,20 +474,20 @@
                         if (status == "Generate") {
                             if (Status == "Present") {
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') +'</span>    ';
+                                timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') +'</span>    ';
                                 if (data._SP_AttendanceData[i].TimeOut == '-') {
                                     timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">'+ data._SP_AttendanceData[i].TimeOut+'</span>';
                                 } else {
-                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') +'</span>';
+                                    timeOut = data._SP_AttendanceData[i].TimeOut == null ? '<span>-</span>' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeOut, 'HH:mm:ss').format('HH:mm') +'</span>';
                                 }
                             }
                             else if (Status == "Absent") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">AB</span>';
                                 timeIn = '';
                                 timeOut = '';
                             }
                             else if (Status == "OnLeave") {
-                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">' + Status + '</span>';
+                                Status = '<span style="font-size:14px; font-weight:normal;" class="label label-OnLeave">OL</span>';
                                 timeIn = '';
                                 timeOut = '';
                             }

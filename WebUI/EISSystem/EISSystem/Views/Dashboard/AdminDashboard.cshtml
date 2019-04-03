@@ -253,6 +253,12 @@
                     <div class="header" style="background-color:aliceblue;">
                         <h2 id="banerAttendanceHeader"></h2>
                     </div>
+                    <div>
+                        <button type="button" class="btn btn-success"></button>
+                        <label>Present</label>
+                        <button type="button" class="btn btn-danger"></button>
+                        <label>Absent</label>
+                    </div>
                     <div class="body">
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
                             <thead>
@@ -275,6 +281,12 @@
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
                         <h2 id="kondhwaAttendanceHeader"></h2>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success"></button>
+                        <label>Present</label>
+                        <button type="button" class="btn btn-danger"></button>
+                        <label>Absent</label>
                     </div>
                     <div class="body">
                         <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
@@ -473,7 +485,7 @@
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-            var TimeIn = Employees[i].TimeIn == null ? '-' : "   <span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeIn, 'HH:mm').format('HH:mm') + "</span>  ";
+            var TimeIn = Employees[i].TimeIn == null ? '-' : "   <span title='TimeOut' style='font-size:14px; font-weight:normal;background-color:#1affc6' class='label'>" + moment(Employees[i].TimeIn, 'HH:mm').format('HH:mm') + "</span>  ";
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var todayDate = moment(new Date()).format("DD-MMM-YYYY");
             var selectedDate = moment(dateSelected).format("DD-MMM-YYYY");
@@ -495,7 +507,7 @@
                     TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
                 } else {
 
-                    TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
+                    TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;background-color:#00b3b3;' class='label'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
                     //TimeOut =  + TimeOut +
                 }
             if (Status == "Present") {
