@@ -23,7 +23,11 @@
             padding-left: 0px;
             padding-right: 0px;
         }
-    }  
+    }
+    td > label {
+        padding: 0px;
+        margin-bottom: 0px;
+    }
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -237,7 +241,25 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2 id="banerAttendanceHeader"></h2>
+                        <h2 id="banerAttendanceHeader1"></h2>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-right:10px">
+                                        <h2 id="banerAttendanceHeader"></h2>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn" style="background-color:#008080;"></button>
+                                        <label style="font-size:14px;">- Clock In</label><br />
+                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
+                                        <label style="font-size:14px;">- Clock Out</label><br />
+                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
+                                        <label style="font-size:14px;">- Exp Time Out</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
                     </div>
                     <div class="body">
 
@@ -261,7 +283,26 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="header" style="background-color:aliceblue;">
-                        <h2 id="kondhwaAttendanceHeader"></h2>
+                        <h2 id="kondhwaAttendanceHeader1"></h2>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-right:10px">
+                                        <h2 id="kondhwaAttendanceHeader"></h2>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn" style="background-color:#008080;"></button>
+                                        <label style="font-size:14px;">- Clock In</label><br />
+                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
+                                        <label style="font-size:14px;">- Clock Out</label><br />
+                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
+                                        <label style="font-size:14px;">- Exp Time Out</label>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
                     </div>
                     <div class="body">
 
@@ -358,8 +399,10 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner + '<input style="float:right" type="button" id="banerDate" autocomplete="off"/>');
-        $('#kondhwaAttendanceHeader').html(locationNameKondhwa + '<span style="float:right" id="kondhwaDate"></span> ');
+        $('#banerAttendanceHeader').html(locationNameBaner);
+        $('#banerAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="banerDate" autocomplete="off"/>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa);
+        $('#kondhwaAttendanceHeader1').html('<span style="float:right; margin-top:15px;" id="kondhwaDate"></span> ');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
@@ -466,7 +509,7 @@
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
-            var TimeIn = Employees[i].TimeIn == null ? '-' : "   <span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeIn, 'HH:mm').format('HH:mm') + "</span>  ";
+            var TimeIn = Employees[i].TimeIn == null ? '-' : "   <span title='TimeIn' style='font-size:14px; font-weight:normal;background-color:#008080' class='label'>" + moment(Employees[i].TimeIn, 'HH:mm').format('HH:mm') + "</span>  ";
             var TotalHours = Employees[i].TotalHours == null ? '-' : Employees[i].TotalHours;
             var todayDate = moment(new Date()).format("DD-MMM-YYYY");
             var selectedDate = moment(dateSelected).format("DD-MMM-YYYY");
@@ -483,9 +526,10 @@
                     else {
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(08, 'h').format('hh:mm');
                     }
-                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;" class="label label-info">Exp: ' + expectedTimeOutDate + '</span>';
+                    TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;background-color:#cc6600;" class="label">' + expectedTimeOutDate + '</span>';
                 } else {
-                    TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;' class='label label-success'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
+
+                    TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;background-color:#00b3b3;' class='label'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
                 }
             if (Status == "Present") {
                 Status = '<span title="Present" style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
