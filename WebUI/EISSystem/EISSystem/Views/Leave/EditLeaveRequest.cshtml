@@ -51,7 +51,7 @@
     </div>
     <div class="modal-content" id="requestDiv">
         <div class="modal-header">
-            <HeaderWithButton class="modal-title" header-name="Add Future Leave"></HeaderWithButton>
+            <HeaderWithButton class="modal-title" header-name="Edit Leave Request"></HeaderWithButton>
         </div>
         <div class="modal-body">
             <form id="cp1" method="post">
@@ -257,7 +257,7 @@
                                     if (form.valid()) {
                                         var d = form.serialize();
                                         bootbox.confirm({
-                                            message: "Are you sure you want to add Leave?",
+                                            message: "Are you sure you want to update Leave?",
                                             buttons: {
                                                 confirm: {
                                                     label: 'Yes',
@@ -329,7 +329,6 @@
                 var pid = $("#psid").val();
                 var RequstedDays = parseInt(document.getElementById("trd").value);
                 $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data) {
-                    alert(data +" "+ RequstedDays);
                     data = parseInt(data);
                     avl1 = data + RequstedDays;
                     availableLeaves1 = data ;

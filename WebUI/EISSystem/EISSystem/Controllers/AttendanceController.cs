@@ -44,25 +44,19 @@ namespace EIS.WebApp.Controllers
             return Json(attendanceData);
         }
 
-        [HttpPost]
-        public IActionResult AllAttendanceSummary(string date, string type, int location, bool status)
-        {
-            string url = GetAllAttendanceData(date, type, location, status);
-            HttpResponseMessage response = _service.GetResponse(url);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
-            return Json(attendanceData);
-        }
+       
+        #endregion
 
+        #region Brief Attendance Reports
         [HttpGet]
         [DisplayName("Brief Attendance Report")]
-        public IActionResult AllAttendanceNew()
+        public IActionResult BriefAttendanceReport()
         {
             ViewBag.Locations = GetLocations();
             return View();
         }
         [HttpPost]
-        public IActionResult AllAttendanceNew(string date, string type, int location,bool status)
+        public IActionResult BriefAttendanceReport(string date, string type, int location,bool status)
         {
             string url = GetAllAttendanceNewData(date, type, location,status);
             HttpResponseMessage response = _service.GetResponse(url);
@@ -71,24 +65,36 @@ namespace EIS.WebApp.Controllers
             return Json(attendanceData);
         }
         #endregion
+
+        #region Attendance Summary
         [HttpGet]
         [DisplayName("Attendance Summary")]
-        public IActionResult AllAttendanceReport()
+        public IActionResult AttendanceSummary()
         {
             ViewBag.Locations = GetLocations();
             return View();
         }
+        //[HttpPost]
+        //public IActionResult AttendanceSummary(string date, string type, int location)
+        //{
+        //    bool status = true;
+        //    string url = GetAllAttendanceData(date, type, location,status);
+        //    HttpResponseMessage response = _service.GetResponse(url);
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
+        //    return Json(attendanceData);
+        //}
         [HttpPost]
-        public IActionResult AllAttendanceReport(string date, string type, int location)
+        public IActionResult AttendanceSummary(string date, string type, int location, bool status)
         {
-            bool status = true;
-            string url = GetAllAttendanceData(date, type, location,status);
+            string url = GetAllAttendanceData(date, type, location, status);
             HttpResponseMessage response = _service.GetResponse(url);
             string stringData = response.Content.ReadAsStringAsync().Result;
             Attendance_Report attendanceData = JsonConvert.DeserializeObject<Attendance_Report>(stringData);
             return Json(attendanceData);
         }
-            
+        #endregion
+
         #region[Attendance History]
         [DisplayName("My Attendance History")]
         [HttpGet]
@@ -113,7 +119,7 @@ namespace EIS.WebApp.Controllers
         #region[Employee Attendance History]
         [DisplayName("Employee Attendance History")]
         [HttpGet]
-        public IActionResult AttendanceSummary(int loc)
+        public IActionResult EmployeeAttendanceHistory(int loc)
         {
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Employee");
             string stringData = response.Content.ReadAsStringAsync().Result;
@@ -129,7 +135,7 @@ namespace EIS.WebApp.Controllers
             return View(employees);
         }
         [HttpPost]
-        public JsonResult AttendanceSummary(string date, string type, string id)
+        public JsonResult EmployeeAttendanceHistory(string date, string type, string id)
         {
             string url = GetAttendanceSummaryData(date, type, id);
             HttpResponseMessage response = _service.GetResponse(url);
@@ -245,8 +251,6 @@ namespace EIS.WebApp.Controllers
             return Json(data);
         }
         #endregion
-
-
 
         #region[Methods]
         [NonAction]
