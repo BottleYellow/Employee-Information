@@ -126,9 +126,10 @@
         font-family: Arial;
         font-style: normal;
     }
-    .header{
-        margin-left:10px;
-        margin-right:10px;
+
+    .header {
+        margin-left: 10px;
+        margin-right: 10px;
     }
 </style>
 <head>
@@ -260,7 +261,7 @@
         <div id="attendanceData">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue; padding:0px">
+                    <div class="header" style="background-color:aliceblue; padding:0px; margin:0px">
                         <h2 id="banerAttendanceHeader1"></h2>
                         <table>
                             <tbody>
@@ -283,16 +284,19 @@
 
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
 
                     </div>
                 </div>
@@ -305,7 +309,7 @@
                     @*<div class="header" style="background-color:aliceblue;">
                             <h2 id="kondhwaAttendanceHeader"></h2>
                         </div>*@
-                    <div class="header" style="background-color:aliceblue; padding:0px">
+                    <div class="header" style="background-color:aliceblue; padding:0px; margin:0px;">
                         <h2 id="kondhwaAttendanceHeader1"></h2>
                         <table>
                             <tbody>
@@ -329,17 +333,18 @@
 
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -356,21 +361,24 @@
                         <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Actions</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Requested Date</th>
-                                    <th>Status</th>
-                                    <th>Leave Reason</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -381,22 +389,25 @@
                         <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Actions</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Requested Date</th>
-                                    <th>Status</th>
-                                    <th>Leave Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -425,7 +436,7 @@
         $('#banerAttendanceHeader').html(locationNameBaner);
         $('#banerAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="banerDate" autocomplete="off"/>');
         $('#kondhwaAttendanceHeader').html(locationNameKondhwa);
-        $('#kondhwaAttendanceHeader1').html('<span style="float:right; margin-top:15px;" id="kondhwaDate"></span> ');
+        $('#kondhwaAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="kondhwaDate" autocomplete="off"/>');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
@@ -438,11 +449,22 @@
             defaultDate: d,
             maxDate:d
         });
+        $("#kondhwaDate").datetimepicker({
+            format: "DD-MMM-YYYY",
+            useCurrent: false,
+            defaultDate: d,
+            maxDate: d
+        });
         dateSelected = $("#banerDate").val();
         $('#kondhwaDate').html(dateSelected);
         $('#banerDate').on('dp.change', function () {
             dateSelected = $("#banerDate").val();
-            $('#kondhwaDate').html(dateSelected);
+            $('#kondhwaDate').val(dateSelected);
+            generateReport(buttonSelected, 0, dateSelected);
+        });
+        $('#kondhwaDate').on('dp.change', function () {
+            dateSelected = $("#kondhwaDate").val();
+            $('#banerDate').val(dateSelected);
             generateReport(buttonSelected, 0, dateSelected);
         });
         generateReport("All", 0, dateSelected);
@@ -590,7 +612,6 @@
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
-            scrollX: true,
             paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
@@ -613,7 +634,6 @@
         });
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
-            scrollX: true,
             paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
@@ -688,7 +708,6 @@
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
-            scrollX:true,
             paging:false,
             "aoColumns": [
                 null,
@@ -719,7 +738,6 @@
         $('#KondhwaLeavesTable').DataTable().destroy();
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
-            scrollX: true,
             paging:false,
             "aoColumns": [
                 null,

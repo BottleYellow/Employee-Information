@@ -66,10 +66,10 @@ namespace EIS.WebAPI.Services
             var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
-                    Id = p.Id,
-                    FullName = p.FullName,
-                    EmployeeCode = p.EmployeeCode,
-                    EmailAddress = p.EmailAddress
+                     p.Id,
+                     p.FullName,
+                     p.EmployeeCode,
+                     p.EmailAddress
                 }).ToList();
 
             int SrId = 0;
@@ -86,7 +86,7 @@ namespace EIS.WebAPI.Services
 
                 string InputTwo = month.ToString().PadLeft(2, c);
                 List<EmployeeAttendanceData> data1 = new List<EmployeeAttendanceData>();
-                List<EmployeeAttendanceData> data = Data(SrId, "Month", p.Id, InputOne, InputTwo, data1);
+                List<EmployeeAttendanceData> data = Data(SrId, "Month", p.EmployeeCode, InputOne, InputTwo, data1);
                 SrId = SrId + data.Count() + 4;
                 var memory = new MemoryStream();
                 using (var sw = new FileStream(attendanceReportPath, FileMode.Create, FileAccess.Write))
@@ -232,14 +232,14 @@ namespace EIS.WebAPI.Services
             }
         }
 
-        public List<EmployeeAttendanceData> Data(int SrId, string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
+        public List<EmployeeAttendanceData> Data(int SrId, string Type, string EmployeeCode, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
         {
             var SP_SrId = new SqlParameter("@SrId", SrId);
             var SP_SelectType = new SqlParameter("@SelectType", "Month");
-            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            var SP_PersonId = new SqlParameter("@EmployeeCode", EmployeeCode);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @PersonId, @SelectType, @InputOne, @InputTwo";
+            string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @EmployeeCode, @SelectType, @InputOne, @InputTwo";
             data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
             return data;
         }

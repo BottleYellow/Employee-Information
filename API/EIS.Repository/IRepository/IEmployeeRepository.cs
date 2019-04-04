@@ -20,5 +20,6 @@ namespace EIS.Repositories.IRepository
         List<SP_GetEmployee> getEmployees(int location);
         List<WeeklyOffs> GetWeeklyOffs();
         string GetWeeklyOffByPerson(int PersonId);
+        void UpdateProbation(int PersonId, int ProbationPeriod);
     }
 }

@@ -48,15 +48,19 @@ namespace EIS.Repositories.Repository
             Attendance_Report_New Model = new Attendance_Report_New();
             Model.sP_GetAttendanceCountReportsNew = new List<SP_GetAttendanceCountReport_New>();
             Model.sP_GetAttendanceLeaveDatas = new List<SP_GetAttendanceLeaveData>();
+            Model.SP_GetMonthlyAttendanceData = new List<SP_GetMonthlyAttendanceData>();
             var SP_locationId = new SqlParameter("@locationId", locationId);
             var SP_SelectType = new SqlParameter("@SelectType", SearchFor);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
             var SP_Status = new SqlParameter("@Status", status);
+            var SP_SrId = new SqlParameter("@SrId", 1);
             string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo,@Status";
             Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
             string uspLeaveData = "LMS.usp_GetAttendanceReportLeaveData @InputOne";
-            Model.sP_GetAttendanceLeaveDatas = _dbContext._sp_GetAttendanceLeaveData.FromSql(uspLeaveData, SP_InputOne).ToList();           
+            Model.sP_GetAttendanceLeaveDatas = _dbContext._sp_GetAttendanceLeaveData.FromSql(uspLeaveData, SP_InputOne).ToList();
+            usp = "LMS.usp_GetMonthlyAttendance @SrId, @SelectType, @InputOne, @InputTwo,@Status";
+            Model.SP_GetMonthlyAttendanceData = _dbContext._sp_GetMonthlyAttendanceData.FromSql(usp, SP_SrId, SP_SelectType, SP_InputOne, SP_InputTwo, SP_Status).ToList();
             return Model;
         }
         public EmployeeAttendanceReport GetAttendanceReportSummary(string type, string PersonId, int year, int? month)

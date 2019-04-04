@@ -103,6 +103,9 @@
         padding-left: 15px;
         padding-right: 15px;
     }
+    .card #attendanceReport{
+        margin-bottom:-20px;
+    }
 </style>
 <head>
     <title>Employee wise Reports</title>
@@ -427,12 +430,27 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
+                if (value == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Date)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 generateReport(value, 'year', id, status);
             }
 
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
+                var monthYear = value.split('/');
+                var y = monthYear[1];
+                var m = monthYear[0];
+                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Date)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 generateReport(value, 'month', id, status);
             }
         });
@@ -491,7 +509,7 @@
                     if (status == Status) {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#008080;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
                             if (data._SP_AttendanceData[i].TimeOut == '-') {
                                 timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
                             } else {
@@ -513,7 +531,7 @@
                     if (status == "Generate") {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#008080;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
                             if (data._SP_AttendanceData[i].TimeOut == '-') {
                                 timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
                             } else {

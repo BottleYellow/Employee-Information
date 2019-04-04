@@ -199,6 +199,7 @@
                                             <th>Present Days</th>
                                             <th>Total Granted Leaves</th>
                                             <th>Total Leaves Taken</th>
+                                            <th>Total Absent Days</th>
                                             <th>Proposed Leaves</th>
                                             <th>Balance Leaves</th>
                                             <th>Adjusted Leaves</th>
@@ -419,6 +420,8 @@
                         var valueProposed = "";
                         var valueWithOutPay = "";
                         var valueWithOutPayDates = "";
+                        var absentDays = "";
+                        var absentDaysDiv = "";
                         var checkDeducted = "";
                         var totalLeavesTaken = "";
                         var x = "";
@@ -443,7 +446,21 @@
                             }
                         }
                         x = valueWithOutPayDates.slice(0, -1);
-
+                        var a = 0;
+                        for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
+                            if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
+                                if (data.SP_GetMonthlyAttendanceData[j].Status == "Absent") {
+                                    a = a + 1;
+                                    absentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD MMM YYYY") + "<br />";
+                                }
+                            }
+                        }
+                        if (a == 0) {
+                            absentDaysDiv = '<div><a class="test hoverNonUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + absentDays + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays + '</a></div>';
+                        }
+                        else {
+                            absentDaysDiv = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + absentDays + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays + '</a></div>';
+                        }
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         if (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken == 0) {
@@ -452,6 +469,7 @@
                         else {
                             totalLeavesTaken = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         }
+
                         if (data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves == 0) {
                             proposedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
                         }
@@ -467,9 +485,9 @@
                             } else {
                                 leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
-
                         }
-                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
+
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
                         $('#example').DataTable({
