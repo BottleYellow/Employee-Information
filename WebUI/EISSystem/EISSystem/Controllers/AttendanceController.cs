@@ -221,27 +221,27 @@ namespace EIS.WebApp.Controllers
         #endregion
 
         #region Attendance Modify and Deduct From Salary
-        [DisplayName("Attendance Modify")]
-        [HttpGet]
-        public IActionResult AttendanceUpdate()
-        {
-            return View();
-        }
+        //[DisplayName("Attendance Modify")]
+        //[HttpGet]
+        //public IActionResult AttendanceUpdate()
+        //{
+        //    return View();
+        //}
 
-        [ActionName("AttendanceUpdate")]
-        [HttpPost]
-        public IActionResult AttendanceUpdate(string personId, string message,string requestedDate, string timeIn, string timeOut)
-        {
-            string url = "";
-            if (!string.IsNullOrEmpty(requestedDate))
-            {
-                url = ApiUrl + "/api/Attendances/AttendanceUpdate/" + personId + "/" + message + "/" + Convert.ToDateTime(requestedDate).ToString("MMM-dd-yyyy") + "/" + timeIn + "/"+ timeOut;
-            }
-            HttpResponseMessage response = _service.GetResponse(url);
-            string stringData = response.Content.ReadAsStringAsync().Result;
-            string data = JsonConvert.DeserializeObject<string>(stringData);
-            return Json(data);
-        }
+        //[ActionName("AttendanceUpdate")]
+        //[HttpPost]
+        //public IActionResult AttendanceUpdate(string personId, string message,string requestedDate, string timeIn, string timeOut)
+        //{
+        //    string url = "";
+        //    if (!string.IsNullOrEmpty(requestedDate))
+        //    {
+        //        url = ApiUrl + "/api/Attendances/AttendanceUpdate/" + personId + "/" + message + "/" + Convert.ToDateTime(requestedDate).ToString("MMM-dd-yyyy") + "/" + timeIn + "/"+ timeOut;
+        //    }
+        //    HttpResponseMessage response = _service.GetResponse(url);
+        //    string stringData = response.Content.ReadAsStringAsync().Result;
+        //    string data = JsonConvert.DeserializeObject<string>(stringData);
+        //    return Json(data);
+        //}
         [DisplayName("Deduct From Salary")]
         [HttpPost]
         public IActionResult DeductFromSalary(string EmployeeCode,string Dates)

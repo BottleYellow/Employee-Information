@@ -1,4 +1,4 @@
-﻿    @using EIS.WebApp.Services
+﻿@using EIS.WebApp.Services
 @using EIS.Entities.OtherEntities;
 @using Newtonsoft.Json
 
@@ -18,7 +18,9 @@
 <head>
     <title>Leave History</title>
     @*<link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />*@
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <style>
@@ -28,10 +30,12 @@
             opacity: 0.5;
             text-decoration: none;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         select {
             border: solid;
         }
@@ -155,7 +159,7 @@
                                         <div class="col-md-3 col-lg-3">
                                             <label style="color:white">Button</label><br />
                                             <button class="form-control clickType" type="button" id="generateReport" style="font-weight:bold; font-size:16px; background-color:#3399ff; color:white;">Generate</button>
-                                         
+
                                         </div>
                                     </div>
 
@@ -186,7 +190,7 @@
                                         </tr>
                                     </thead>
                                 </table>
-                            </div>                      
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -389,6 +393,7 @@
                 $('#example').DataTable().destroy();
                 var nameType = $.fn.dataTable.absoluteOrder('Pending');
                 $('#example').DataTable({
+                    sDom:'<"myexport"B>ifrtlp',
                     order: [[8, 'desc'],[7,'desc']],
                     columnDefs: [
                         { targets: 8, type: nameType }
@@ -405,6 +410,35 @@
                         null,
                         null,
                         null
+                    ],
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Employee Leave Report',
+                            text: 'PDF',
+                            titleAttr: 'Export to PDF',
+                            exportOptions: {
+                                columns: [2, 3,4, 5, 6,10]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'Employee Leave Report',
+                            text: 'Excel',
+                            titleAttr: 'Export to Excel ',
+                            exportOptions: {
+                                columns: [2, 3, 4, 5, 6, 10]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Employee Leave Report',
+                            text: 'Print',
+                            titleAttr: 'Print',
+                            exportOptions: {
+                                columns: [2, 3, 4, 5, 6, 10]
+                            }
+                        }
                     ],
                     data:array
                 });
@@ -530,11 +564,16 @@
             .columns.adjust();
     });
 </script>
+
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/datatables.net-plug-ins-1.10.19-sorting-absolute.js"></script>
-

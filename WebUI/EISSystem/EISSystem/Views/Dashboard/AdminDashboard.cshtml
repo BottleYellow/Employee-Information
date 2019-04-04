@@ -50,11 +50,11 @@
         height: 80%;
     }
 
-        .ajax-loader img {
-            position: relative;
-            top: 45%;
-            left: 45%;
-        }
+    .ajax-loader img {
+        position: relative;
+        top: 45%;
+        left: 45%;
+    }
 
     div[class^="col"] {
         padding-left: 15px;
@@ -115,12 +115,7 @@
 
     .card .body {
         padding: 0px;
-    }
-
-
-    label {
-        padding: 15px;
-    }
+    }  
 
     .* {
         font-family: Arial;
@@ -261,28 +256,9 @@
         <div id="attendanceData">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue; padding:0px; margin:0px">
-                        <h2 id="banerAttendanceHeader1"></h2>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="padding-right:10px">
-                                        <h2 id="banerAttendanceHeader"></h2>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn" style="background-color:#008080;"></button>
-                                        <label style="font-size:14px;">- Clock In</label><br />
-                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
-                                        <label style="font-size:14px;">- Clock Out</label><br />
-                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
-                                        <label style="font-size:14px;">- Exp Time Out</label>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-
-                    </div>
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
+                        <h2 id="banerAttendanceHeader"></h2>
+                    </div>           
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
@@ -307,30 +283,10 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     @*<div class="header" style="background-color:aliceblue;">
-                            <h2 id="kondhwaAttendanceHeader"></h2>
-                        </div>*@
-                    <div class="header" style="background-color:aliceblue; padding:0px; margin:0px;">
-                        <h2 id="kondhwaAttendanceHeader1"></h2>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="padding-right:10px">
-                                        <h2 id="kondhwaAttendanceHeader"></h2>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn" style="background-color:#008080;"></button>
-                                        <label style="font-size:14px;">- Clock In</label><br />
-                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
-                                        <label style="font-size:14px;">- Clock Out</label><br />
-                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
-                                        <label style="font-size:14px;">- Exp Time Out</label>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-
-                        </table>
-
+            <h2 id="kondhwaAttendanceHeader"></h2>
+        </div>*@
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
+                        <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -357,7 +313,7 @@
         <div id="leavesData" hidden>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
@@ -385,7 +341,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
@@ -433,10 +389,8 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner);
-        $('#banerAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="banerDate" autocomplete="off"/>');
-        $('#kondhwaAttendanceHeader').html(locationNameKondhwa);
-        $('#kondhwaAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="kondhwaDate" autocomplete="off"/>');
+        $('#banerAttendanceHeader').html(locationNameBaner+'<input style="float:right;" type="button" id="banerDate" autocomplete="off"/>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa+'<input style="float:right;" type="button" id="kondhwaDate" autocomplete="off"/>');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
@@ -654,6 +608,9 @@
                 }
             }
         });
+        $('#KondhwaAttendanceTable_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080; margin-left:5px;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;"> - Clock In</label> <button type="button" class="btn" style="background-color:#00b3b3;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;">- Clock Out</label><button type="button" class="btn" style="background-color:#cc6600;"></button><label class="labelData" style = "font-size:14px; padding-left:2px; padding-right:5px;"> - Exp Time Out</label>');
+        $('#BanerAttendanceTable_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080; margin-left:5px;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;"> - Clock In</label> <button type="button" class="btn" style="background-color:#00b3b3;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;">- Clock Out</label><button type="button" class="btn" style="background-color:#cc6600;"></button><label class="labelData" style = "font-size:14px; padding-left:2px; padding-right:5px;"> - Exp Time Out</label>');
+
     }
     function getLeavesData(Leaves) {
         var banerArrayLeaves = [];
@@ -765,7 +722,7 @@
                 }
             }
         });
-    }
+         }
     function UpdateStatus(RequestId, Status) {
         var msg;
         if (Status == "Approve") { msg = "Are you sure you want to Approve Leave?" }
@@ -819,3 +776,4 @@
         });
     }
 </script>
+

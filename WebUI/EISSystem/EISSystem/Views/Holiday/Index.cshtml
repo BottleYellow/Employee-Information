@@ -8,9 +8,14 @@
 <html>
 <head>
     <title>Holidays</title>
-    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style>
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
         li:hover {
             cursor: pointer;
         }
@@ -40,10 +45,12 @@
             width: 1px;
             white-space: nowrap;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -117,26 +124,41 @@
         $('#example').DataTable().destroy();
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
-            sDom: '<"myexport"B>ifrtlp',
+            sDom: '<"myexport"B>irtlp',
             fixedColumns: true,
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
             order:[1,'asc'],
             buttons: [
                 {
                     extend: 'pdfHtml5',
-                    title: 'EMPLOYEE PAST LEAVE REPORT',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf'
-                }
-            ],
-            'columnDefs': [
+                    title: 'Holidays',
+                    text: 'PDF',
+                    titleAttr: 'Export to PDF',
+                    exportOptions: {
+                        columns: [2, 3, 4, 5, 6, 10]
+                    }
+                },
                 {
-                    'searchable': false,
-                    'targets': [0, 1]
+                    extend: 'excel',
+                    title: 'Holidays',
+                    text: 'Excel',
+                    titleAttr: 'Export to Excel ',
+                    exportOptions: {
+                        columns: [2, 3, 4, 5, 6, 10]
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Holidays',
+                    text: 'Print',
+                    titleAttr: 'Print',
+                    exportOptions: {
+                        columns: [2, 3, 4, 5, 6, 10]
+                    }
                 }
             ],
+
             lengthMenu: [
                 [10, 25, -1],
                 ['10', '25', 'All']
@@ -251,16 +273,15 @@
     });
 </script>
 
-<script src="~/plugins/momentjs/moment.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap-datetimepicker1.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 

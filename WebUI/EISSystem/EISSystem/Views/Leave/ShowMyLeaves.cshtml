@@ -14,21 +14,25 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
-<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-<html>
 
+<html>
 <head>
     <title>My Leaves</title>
-    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
-
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style>
         .disabledLink {
             color: currentColor;
             cursor: not-allowed;
             opacity: 0.5;
             text-decoration: none;
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
         }
 
         li:hover {
@@ -42,10 +46,12 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -69,6 +75,7 @@
             width: 1px;
             white-space: nowrap;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -123,10 +130,6 @@
     </div>
 </body>
 </html>
-
-<script src="~/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/js/pages/ui/modals.js"></script>
-<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script>
     $(document).ready(function () {
         if ('@ViewBag.AvailableCount' != null) {
@@ -164,7 +167,7 @@
                     } else if (status == "Approved" || status.startsWith('Approved')) {
                         if (data[i].LeaveType.includes("Past")) {
                             approvedBy = "Past Leave Auto Approved";
-                        } 
+                        }
                         statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + status + '</span>';
                     } else {
                         statusView= '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
@@ -184,14 +187,31 @@
                     buttons: [
                         {
                             extend: 'pdfHtml5',
-                            title: 'EMPLOYEE REPORT',
-                            text: 'Export',
-                            titleAttr: 'Export to Pdf',
+                            title: 'Leave Report',
+                            text: 'PDF',
+                            titleAttr: 'Export to PDF',
                             exportOptions: {
-                                columns: [0, 1, 2, 4, 5]
+                                columns: [0, 1, 2, 3, 4, 5, 6]
                             }
-                        }
-                    ],
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'Leave Report',
+                            text: 'Excel',
+                            titleAttr: 'Export to Excel ',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Leave Report',
+                            text: 'Print',
+                            titleAttr: 'Print',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            }
+                        }],
                     data: array
                 });
             }
@@ -279,14 +299,19 @@
             .columns.adjust();
     });
 </script>
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+
+<script src="~/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-
-
-
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

@@ -2,21 +2,30 @@
 @using EIS.WebApp.Services
 
 <head>
-    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style>
         li:hover {
             cursor: pointer;
         }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+
         table.dataTable td {
             padding: 3px 10px;
             width: 1px;
             white-space: nowrap;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -75,18 +84,41 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#example').DataTable();
-        //{
-        //    //"aoColumns": [
-        //    //    { "sType": "date" },
-        //    //    null
-        //    //],
-        //});
+        $('#example').DataTable({
+            sDom: '<"myexport"B>ifrtlp',
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Leave Report',
+                    text: 'PDF',
+                    titleAttr: 'Export to PDF'
+                },
+                {
+                    extend: 'excel',
+                    title: 'Leave Report',
+                    text: 'Excel',
+                    titleAttr: 'Export to Excel '
+                },
+                {
+                    extend: 'print',
+                    title: 'Leave Report',
+                    text: 'Print',
+                    titleAttr: 'Print'
+                }]
+        });
     });
 </script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
 
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 

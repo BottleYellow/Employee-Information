@@ -24,10 +24,24 @@
             padding-right: 0px;
         }
     }
+
     td > label {
         padding: 0px;
         margin-bottom: 0px;
     }
+
+    table.dataTable tbody tr .present {
+        background-color: #dff0d8;
+    }
+
+    .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
+        background-color: #d0e9c6;
+    }
+
+    table.dataTable tbody tr .absent {
+        background-color: #f2dede;
+    }
+
     .ajax-loader {
         visibility: hidden;
         position: absolute;
@@ -102,16 +116,15 @@
     .card .body {
         padding: 0px;
     }
-    .card .header {
-        padding: 0px;
-    }
-    label {
-        padding: 15px;
-    }
 
     .* {
         font-family: Arial;
         font-style: normal;
+    }
+
+    .header {
+        margin-left: 10px;
+        margin-right: 10px;
     }
 </style>
 <head>
@@ -215,6 +228,7 @@
                         </div>
                     </a>
                 </div>
+
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div>
@@ -242,39 +256,23 @@
         <div id="attendanceData">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
-                        <h2 id="banerAttendanceHeader1"></h2>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="padding-right:10px">
-                                        <h2 id="banerAttendanceHeader"></h2>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn" style="background-color:#008080;"></button>
-                                        <label style="font-size:14px;">- Clock In</label><br />
-                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
-                                        <label style="font-size:14px;">- Clock Out</label><br />
-                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
-                                        <label style="font-size:14px;">- Exp Time Out</label>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
+                        <h2 id="banerAttendanceHeader"></h2>
                     </div>
                     <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
 
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
 
                     </div>
                 </div>
@@ -284,41 +282,25 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
-                        <h2 id="kondhwaAttendanceHeader1"></h2>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td style="padding-right:10px">
-                                        <h2 id="kondhwaAttendanceHeader"></h2>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn" style="background-color:#008080;"></button>
-                                        <label style="font-size:14px;">- Clock In</label><br />
-                                        <button type="button" class="btn" style="background-color:#00b3b3;"></button>
-                                        <label style="font-size:14px;">- Clock Out</label><br />
-                                        <button type="button" class="btn" style="background-color:#cc6600;"></button>
-                                        <label style="font-size:14px;">- Exp Time Out</label>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-
-                        </table>
+                    @*<div class="header" style="background-color:aliceblue;">
+                            <h2 id="kondhwaAttendanceHeader"></h2>
+                        </div>*@
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
+                        <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>
                     <div class="body">
-
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
-                            <thead>
-                                <tr class="info">
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Working Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaAttendanceTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Working Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -331,10 +313,11 @@
         <div id="leavesData" hidden>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="banerLeaveHeader"></h2>
                     </div>
                     <div class="body">
+                        <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerLeavesTable" style="width:100%;">
                                 <thead>
                                     <tr class="info">
@@ -350,32 +333,37 @@
                                     </tr>
                                 </thead>
                             </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="header" style="background-color:aliceblue;">
+                    <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="kondhwaLeaveHeader"></h2>
                     </div>
                     <div class="body">
-                        <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%">
-                            <thead>
-                                <tr class="info">
-                                    <th>Actions</th>
-                                    <th>Employee Name</th>
-                                    <th>Leave Type</th>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th>Days</th>
-                                    <th>Requested Date</th>
-                                    <th>Status</th>
-                                    <th>Leave Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="KondhwaLeavesTable" style="width:100%;">
+                                <thead>
+                                    <tr class="info">
+                                        <th>Actions</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Days</th>
+                                        <th>Requested Date</th>
+                                        <th>Status</th>
+                                        <th>Leave Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -401,10 +389,8 @@
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         locationNameBaner = data[1].LocationName.toUpperCase();
         locationNameKondhwa = data[0].LocationName.toUpperCase();
-        $('#banerAttendanceHeader').html(locationNameBaner);
-        $('#banerAttendanceHeader1').html('<input style="float:right; margin-top:15px;" type="button" id="banerDate" autocomplete="off"/>');
-        $('#kondhwaAttendanceHeader').html(locationNameKondhwa);
-        $('#kondhwaAttendanceHeader1').html('<span style="float:right; margin-top:15px;" id="kondhwaDate"></span> ');
+        $('#banerAttendanceHeader').html(locationNameBaner+'<input style="float:right;" type="button" id="banerDate" autocomplete="off"/>');
+        $('#kondhwaAttendanceHeader').html(locationNameKondhwa+'<input style="float:right;" type="button" id="kondhwaDate" autocomplete="off"/>');
         $('#banerLeaveHeader').html(locationNameBaner);
         $('#kondhwaLeaveHeader').html(locationNameKondhwa);
         selectOpt = $('#select option:selected').val();
@@ -415,21 +401,28 @@
             format: "DD-MMM-YYYY",
             useCurrent: false,
             defaultDate: d,
-
+            maxDate:d
+        });
+        $("#kondhwaDate").datetimepicker({
+            format: "DD-MMM-YYYY",
+            useCurrent: false,
+            defaultDate: d,
+            maxDate: d
         });
         dateSelected = $("#banerDate").val();
         $('#kondhwaDate').html(dateSelected);
-
         $('#banerDate').on('dp.change', function () {
             dateSelected = $("#banerDate").val();
-            $('#kondhwaDate').html(dateSelected);
+            $('#kondhwaDate').val(dateSelected);
+            generateReport(buttonSelected, 0, dateSelected);
+        });
+        $('#kondhwaDate').on('dp.change', function () {
+            dateSelected = $("#kondhwaDate").val();
+            $('#banerDate').val(dateSelected);
             generateReport(buttonSelected, 0, dateSelected);
         });
         generateReport("All", 0, dateSelected);
     });
-
-
-
     $('#allEmployee').on('click', function () {
         dateSelected = $("#banerDate").val();
         $('#kondhwaDate').html(dateSelected);
@@ -507,7 +500,6 @@
         });
     }
     function getData(Employees, dateSelected) {
-        debugger;
         var banerAttendanceArray = [];
         var KondhwaAttendanceArray=[];
         for (var i = 0; i < Employees.length; i++) {
@@ -523,15 +515,18 @@
                         var hr = workingValue.slice(0, 2);
                         var min = workingValue.slice(3, 5);
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(parseInt(hr), 'h').format('HH:mm');
-                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm').add(parseInt(min), 'm').format('hh:mm');
+                        expectedTimeOutDate = moment(expectedTimeOutDate, 'HH:mm').add(parseInt(min), 'm').format('HH:mm');
+
                     }
                     else {
                         expectedTimeOutDate = moment(Employees[i].TimeIn, 'HH:mm').add(08, 'h').format('hh:mm');
+
                     }
                     TimeOut = '<span title="Expected Time Out" style="font-size:14px; font-weight:normal;background-color:#cc6600;" class="label">' + expectedTimeOutDate + '</span>';
                 } else {
 
                     TimeOut = Employees[i].TimeOut == null ? '-' : "<span title='TimeOut' style='font-size:14px; font-weight:normal;background-color:#00b3b3;' class='label'>" + moment(Employees[i].TimeOut, 'HH:mm').format('HH:mm') + "</span>";
+                    //TimeOut =  + TimeOut +
                 }
             if (Status == "Present") {
                 Status = '<span title="Present" style="font-size:14px; font-weight:normal;" class="label label-success">P</span>';
@@ -546,7 +541,7 @@
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 if (Employees[i].Status == 'Present') {
                     //banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>", TotalHours])
+                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>" , TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
@@ -554,9 +549,11 @@
                 else {
                     banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
+
+                //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
                 if (Employees[i].Status == 'Present') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>", TotalHours])
+                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status +  TimeIn + TimeOut + "</div>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
                     KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
@@ -564,19 +561,19 @@
                 else {
                     KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
+                //KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
         }
         $('#BanerAttendanceTable').DataTable().destroy();
         $('#BanerAttendanceTable').DataTable({
-            scrollX: true,
             paging:false,
             data: banerAttendanceArray,
             "order": [2, "desc"],
-            "bAutoWidth": false, // Disable the auto width calculation 
+            "bAutoWidth": false, // Disable the auto width calculation
             "aoColumns": [
-                { "sWidth": "40%" }, // 1st column width 
-                { "sWidth": "30%" }, // 2nd column width 
-                { "sWidth": "30%" } // 3rd column width and so on 
+                { "sWidth": "40%" }, // 1st column width
+                { "sWidth": "30%" }, // 2nd column width
+                { "sWidth": "30%" } // 3rd column width and so on
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("success")) {
@@ -591,15 +588,14 @@
         });
         $('#KondhwaAttendanceTable').DataTable().destroy();
         $('#KondhwaAttendanceTable').DataTable({
-            scrollX: true,
             paging: false,
             data: KondhwaAttendanceArray,
             "order": [2, "desc"],
-            "bAutoWidth": false, // Disable the auto width calculation 
+            "bAutoWidth": false, // Disable the auto width calculation
             "aoColumns": [
-                { "sWidth": "40%" }, // 1st column width 
-                { "sWidth": "30%" }, // 2nd column width 
-                { "sWidth": "30%" } // 3rd column width and so on 
+                { "sWidth": "40%" }, // 1st column width
+                { "sWidth": "30%" }, // 2nd column width
+                { "sWidth": "30%" } // 3rd column width and so on
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
                 if (aData[1].includes("success")) {
@@ -612,6 +608,9 @@
                 }
             }
         });
+        $('#KondhwaAttendanceTable_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080; margin-left:5px;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;"> - Clock In</label> <button type="button" class="btn" style="background-color:#00b3b3;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;">- Clock Out</label><button type="button" class="btn" style="background-color:#cc6600;"></button><label class="labelData" style = "font-size:14px; padding-left:2px; padding-right:5px;"> - Exp Time Out</label>');
+        $('#BanerAttendanceTable_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080; margin-left:5px;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;"> - Clock In</label> <button type="button" class="btn" style="background-color:#00b3b3;"></button><label class="labelData" style="font-size:14px; padding-left:2px; padding-right:5px;">- Clock Out</label><button type="button" class="btn" style="background-color:#cc6600;"></button><label class="labelData" style = "font-size:14px; padding-left:2px; padding-right:5px;"> - Exp Time Out</label>');
+
     }
     function getLeavesData(Leaves) {
         var banerArrayLeaves = [];
@@ -626,7 +625,6 @@
                 if (Status == "Pending") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
-
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
@@ -636,7 +634,6 @@
                 else if (Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
-
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
@@ -647,7 +644,6 @@
                 if (Status == "Approved" || Status.startsWith('Approved')) {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
-
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
@@ -658,7 +654,6 @@
                 if (Status == "Rejected" || Status == "Cancelled") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
-
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
                         banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
@@ -667,13 +662,10 @@
                 }
             }
         }
-
-
         $('#BanerLeavesTable').DataTable().destroy();
         var nameType = $.fn.dataTable.absoluteOrder("Pending");
         $('#BanerLeavesTable').DataTable({
             paging:false,
-            scrollX: true,
             "aoColumns": [
                 null,
                 null,
@@ -704,7 +696,6 @@
         var nameType2 = $.fn.dataTable.absoluteOrder("Pending");
         $('#KondhwaLeavesTable').DataTable({
             paging:false,
-            scrollX: true,
             "aoColumns": [
                 null,
                 null,
@@ -731,7 +722,7 @@
                 }
             }
         });
-    }
+         }
     function UpdateStatus(RequestId, Status) {
         var msg;
         if (Status == "Approve") { msg = "Are you sure you want to Approve Leave?" }
@@ -785,3 +776,4 @@
         });
     }
 </script>
+

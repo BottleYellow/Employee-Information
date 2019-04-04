@@ -115,7 +115,6 @@
                                     <th>Email Address</th>
                                     <th>Joining Date</th>
                                     <th>Created By</th>
-
                                 </tr>
                             </thead>
                         </table>
@@ -247,10 +246,28 @@
                         {
                             extend: 'pdfHtml5',
                             title: 'EMPLOYEE REPORT',
-                            text: 'Export',
+                            text: 'PDF',
                             titleAttr: 'Export to Pdf',
                             exportOptions: {
-                                columns: [0, 1, 2, 4, 5, 6, 7, 8]
+                                columns: [2, 3, 5, 6, 7, 8, 9]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'EMPLOYEE REPORT',
+                            text: 'Excel',
+                            titleAttr: 'Export to Excel',
+                            exportOptions: {
+                                columns: [2, 3, 5, 6, 7, 8, 9]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'EMPLOYEE REPORT',
+                            text: 'Print',
+                            titleAttr: 'Export to Print',
+                            exportOptions: {
+                                columns: [2, 3, 5, 6, 7, 8, 9]
                             }
                         }
                     ],
