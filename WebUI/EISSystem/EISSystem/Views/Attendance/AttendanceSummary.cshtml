@@ -14,9 +14,14 @@
             background-color: #808080;
         }
 
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
         div .panel-primary {
             text-align: center
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
@@ -26,7 +31,7 @@
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        #select,#status {
+        #select, #status {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
@@ -41,13 +46,16 @@
             width: 1px;
             white-space: nowrap;
         }
+
         a.test {
             color: blue;
-            text-decoration:underline;
+            text-decoration: underline;
         }
+
         a:hover {
-                cursor: pointer;
+            cursor: pointer;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -55,16 +63,19 @@
             width: 80%;
             height: 80%;
         }
+
         .tooltip-inner {
+            white-space: pre-wrap;
             width: auto !important;
             max-height: 500px !important;
             overflow-y: scroll
         }
-            .ajax-loader img {
-                position: relative;
-                top: 45%;
-                left: 45%;
-            }
+
+        .ajax-loader img {
+            position: relative;
+            top: 45%;
+            left: 45%;
+        }
 
         * {
             font-family: Arial;
@@ -178,18 +189,24 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/toastr.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/js/TWeeklyOffCount.js"></script>
+
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
-<script src="~/js/TWeeklyOffCount.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
 
 <script type="text/javascript">
 
@@ -391,15 +408,15 @@
                             if (data.sP_GetAttendanceCountReports[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
                                 if (data.SP_GetMonthlyAttendanceData[j].Status == "Present") {
                                     if (data.SP_GetMonthlyAttendanceData[j].TimeOut == null) {
-                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD MMM YYYY") + " (" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + " -  NA " + ") <br />";
+                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-NA" + ") ";
                                     }
                                     else {
-                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD MMM YYYY") + " (" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + " - " + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ") <br />";
+                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-" + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ") ";
 
                                     }
 
                                 } else if (data.SP_GetMonthlyAttendanceData[j].Status == "Absent") {
-                                    AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD MMM YYYY") + "<br />";
+                                    AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY")+" ";
                                 }
                             }
                         }
@@ -411,14 +428,33 @@
                         //    leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         //} else {
                         //    leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
-                        //}   
+                        //}
                         array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName, data.sP_GetAttendanceCountReports[i].WorkingDay, Present, data.sP_GetAttendanceCountReports[i].NoLeave, Absent, data.sP_GetAttendanceCountReports[i].ExtraWorkingDays]);
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
-               
+                        sDom: '<"myexport"B>ifrtlp',
                         paging: false,
                         order: [1, 'asc'],
+                        buttons: [
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Attencdance Report',
+                                text: 'PDF',
+                                titleAttr: 'Export to PDF'
+                            },
+                            {
+                                extend: 'excel',
+                                title: 'Attencdance Report',
+                                text: 'Excel',
+                                titleAttr: 'Export to Excel '
+                            },
+                            {
+                                extend: 'print',
+                                title: 'Attencdance Report',
+                                text: 'Print',
+                                titleAttr: 'Print'
+                            }],
                         data: array,
                         "drawCallback": function (settings) {
                             $('[data-toggle="tooltip"]').tooltip({

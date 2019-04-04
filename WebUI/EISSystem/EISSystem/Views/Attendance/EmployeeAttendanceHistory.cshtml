@@ -103,12 +103,16 @@
         padding-left: 15px;
         padding-right: 15px;
     }
+
+    .card #attendanceReport {
+        margin-bottom: -20px;
+    }
 </style>
 <head>
     <title>Employee wise Reports</title>
-
-    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
@@ -123,6 +127,7 @@
         <div class="block-header">
             <HeaderWithButton header-name="Employee Attendance History"></HeaderWithButton>
         </div>
+        <div id="weareback">dfjlkasjdf</div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card" style="min-height:100px">
@@ -259,7 +264,7 @@
                 </div>
                 <div id="second" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="card">
-                        <div class="body">
+                        <div class="body">                           
                             <div id="tblExample1" style="display:none;">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
@@ -438,8 +443,6 @@
         });
     });
 
-
-
     function generateReport(value, type, id, status) {
         $.ajax({
             type: 'POST',
@@ -491,7 +494,7 @@
                     if (status == Status) {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#008080;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
                             if (data._SP_AttendanceData[i].TimeOut == '-') {
                                 timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
                             } else {
@@ -513,7 +516,7 @@
                     if (status == "Generate") {
                         if (Status == "Present") {
                             Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">P</span>    ';
-                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#00b3b3;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
+                            timeIn = data._SP_AttendanceData[i].TimeIn == null ? '<span>-</span>  ' : '<span style="font-size:14px; font-weight:normal;background-color:#008080;" class="label">' + moment(data._SP_AttendanceData[i].TimeIn, 'HH:mm:ss').format('HH:mm') + '</span>    ';
                             if (data._SP_AttendanceData[i].TimeOut == '-') {
                                 timeOut = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + data._SP_AttendanceData[i].TimeOut + '</span>';
                             } else {
@@ -565,6 +568,8 @@
                     ],
                     data: array1
                 });
+                $('#example_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
+                $('#example1_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
             },
             error: function (error) {
                 bootbox.alert("Something went wrong..Please try after sometime");

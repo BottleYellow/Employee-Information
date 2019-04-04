@@ -66,180 +66,180 @@ namespace EIS.WebAPI.Services
             var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
                 .Select(p => new
                 {
-                    Id = p.Id,
-                    FullName = p.FullName,
-                    EmployeeCode = p.EmployeeCode,
-                    EmailAddress = p.EmailAddress
+                     p.Id,                    
+                  p.FullName,
+                    p.EmployeeCode,
+                    p.EmailAddress
                 }).ToList();
 
             int SrId = 0;
             foreach (var p in results)
             {
-                string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.xlsx";
+                    string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.xlsx";
 
-                if (File.Exists(attendanceReportPath))
-                {
-                    File.Delete(attendanceReportPath);
-                }
-                string InputOne = year.ToString();
-                char c = '0';
-
-                string InputTwo = month.ToString().PadLeft(2, c);
-                List<EmployeeAttendanceData> data1 = new List<EmployeeAttendanceData>();
-                List<EmployeeAttendanceData> data = Data(SrId, "Month", p.Id, InputOne, InputTwo, data1);
-                SrId = SrId + data.Count() + 4;
-                var memory = new MemoryStream();
-                using (var sw = new FileStream(attendanceReportPath, FileMode.Create, FileAccess.Write))
-                {
-                    int i = 1;
-                    byte[] rgb1 = new byte[3] { 255, 255, 204 };
-                    byte[] rgb2 = new byte[3] { 214, 245, 214 };
-                    byte[] rgb3 = new byte[3] { 255, 214, 204 };
-                    byte[] rgb4 = new byte[3] { 255, 240, 179 };
-                    IWorkbook workbook;
-                    workbook = new XSSFWorkbook();
-                    ISheet sheet = workbook.CreateSheet("Attendance Report");
-                    IRow row = sheet.CreateRow(0);
-                    XSSFCellStyle headerStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-                    headerStyle.BorderBottom = BorderStyle.Medium;
-                    headerStyle.BorderTop = BorderStyle.Medium;
-                    headerStyle.BorderLeft = BorderStyle.Medium;
-                    headerStyle.BorderRight = BorderStyle.Medium;
-                    headerStyle.SetFillForegroundColor(new XSSFColor(rgb1));
-                    headerStyle.FillPattern = FillPattern.SolidForeground;
-
-                    XSSFCellStyle presentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-                    presentStyle.BorderBottom = BorderStyle.Medium;
-                    presentStyle.BorderLeft = BorderStyle.Medium;
-                    presentStyle.BorderRight = BorderStyle.Medium;
-                    presentStyle.SetFillForegroundColor(new XSSFColor(rgb2));
-                    presentStyle.FillPattern = FillPattern.SolidForeground;
-
-                    XSSFCellStyle absentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-                    absentStyle.BorderBottom = BorderStyle.Medium;
-                    absentStyle.BorderLeft = BorderStyle.Medium;
-                    absentStyle.BorderRight = BorderStyle.Medium;
-                    absentStyle.SetFillForegroundColor(new XSSFColor(rgb3));
-                    absentStyle.FillPattern = FillPattern.SolidForeground;
-
-                    XSSFCellStyle dateStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-                    dateStyle.BorderBottom = BorderStyle.Medium;
-                    dateStyle.BorderLeft = BorderStyle.Medium;
-                    dateStyle.BorderRight = BorderStyle.Medium;
-                    dateStyle.SetFillForegroundColor(new XSSFColor(rgb4));
-                    dateStyle.FillPattern = FillPattern.SolidForeground;
-
-                    row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("Employee Name:-");
-                    row.CreateCell(1).SetCellValue(p.FullName);
-                    row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("Employee Code:-");
-                    row.CreateCell(1).SetCellValue(p.EmployeeCode);
-                    row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("Monthly Attendance Report:-" + monthName + "/" + year);
-                    row = sheet.CreateRow(i++);
-                    row = sheet.CreateRow(i++);
-
-                    ICell cell0 = row.CreateCell(0);
-                    cell0.CellStyle = headerStyle;
-                    cell0.SetCellValue("DATE");
-                    ICell cell1 = row.CreateCell(1);
-                    cell1.SetCellValue("STATUS");
-                    cell1.CellStyle = headerStyle;
-                    ICell cell2 = row.CreateCell(2);
-                    cell2.CellStyle = headerStyle;
-                    cell2.SetCellValue("TIME IN");
-                    ICell cell3 = row.CreateCell(3);
-                    cell3.CellStyle = headerStyle;
-                    cell3.SetCellValue("TIME OUT");
-                    ICell cell4 = row.CreateCell(4);
-                    cell4.CellStyle = headerStyle;
-                    cell4.SetCellValue("TOTAL HOURS");
-
-                    sheet.SetColumnWidth(0, 4000);
-                    sheet.SetColumnWidth(1, 4000);
-                    sheet.SetColumnWidth(2, 4000);
-                    sheet.SetColumnWidth(3, 4000);
-                    sheet.SetColumnWidth(4, 4000);
-
-                    foreach (var attendance in data)
+                    if (File.Exists(attendanceReportPath))
                     {
-                        row = sheet.CreateRow(i);
-                        DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
-
-                        if (attendance.Status == "Present")
-                        {
-                            ICell cell00 = row.CreateCell(0);
-                            cell00.CellStyle = presentStyle;
-                            cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
-                            ICell cell01 = row.CreateCell(1);
-                            cell01.SetCellValue(attendance.Status);
-                            cell01.CellStyle = presentStyle;
-                            ICell cell02 = row.CreateCell(2);
-                            cell02.CellStyle = presentStyle;
-                            cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
-                            ICell cell03 = row.CreateCell(3);
-                            cell03.CellStyle = presentStyle;
-                            cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
-                            ICell cell04 = row.CreateCell(4);
-                            cell04.CellStyle = presentStyle;
-                            cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
-                        }
-                        else
-                        {
-                            ICell cell00 = row.CreateCell(0);
-                            cell00.CellStyle = absentStyle;
-                            cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
-                            ICell cell01 = row.CreateCell(1);
-                            cell01.SetCellValue(attendance.Status);
-                            cell01.CellStyle = absentStyle;
-                            ICell cell02 = row.CreateCell(2);
-                            cell02.CellStyle = absentStyle;
-                            cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
-                            ICell cell03 = row.CreateCell(3);
-                            cell03.CellStyle = absentStyle;
-                            cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
-                            ICell cell04 = row.CreateCell(4);
-                            cell04.CellStyle = absentStyle;
-                            cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
-                        }
-
-                        i++;
+                        File.Delete(attendanceReportPath);
                     }
-                    row = sheet.CreateRow(i++);
-                    row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("Total No of Days: -");
-                    row.CreateCell(1).SetCellValue(TotalDays.ToString());
-                    row = sheet.CreateRow(i++);
-                    row.CreateCell(0).SetCellValue("No of Days Present:-");
-                    row.CreateCell(1).SetCellValue(data.Where(x => x.Status == "Present").Count().ToString());
-                    workbook.Write(sw);
-                    workbook.Close();
-                }
-                data = null;
-                using (var stream = new FileStream(attendanceReportPath, FileMode.Open))
-                {
-                    stream.CopyToAsync(memory);
-                }
-                memory.Position = 0;
-                string To = p.EmailAddress;
-                string subject = "Monthly Attendance Report";
-                string body = "Dear " + p.FullName + "\n" +
-                    "Kindly find monthly attendance report in attachment.\n" +
-                    "Your Code Number: " + p.EmployeeCode + "\n" +
-                    "User Name: " + p.EmailAddress;
-                new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
+                    string InputOne = year.ToString();
+                    char c = '0';
+
+                    string InputTwo = month.ToString().PadLeft(2, c);
+                    List<EmployeeAttendanceData> data1 = new List<EmployeeAttendanceData>();
+                    List<EmployeeAttendanceData> data = Data(SrId, "Month", p.EmployeeCode, InputOne, InputTwo, data1);
+                    SrId = SrId + data.Count() + 4;
+                    var memory = new MemoryStream();
+                    using (var sw = new FileStream(attendanceReportPath, FileMode.Create, FileAccess.Write))
+                    {
+                        int i = 1;
+                        byte[] rgb1 = new byte[3] { 255, 255, 204 };
+                        byte[] rgb2 = new byte[3] { 214, 245, 214 };
+                        byte[] rgb3 = new byte[3] { 255, 214, 204 };
+                        byte[] rgb4 = new byte[3] { 255, 240, 179 };
+                        IWorkbook workbook;
+                        workbook = new XSSFWorkbook();
+                        ISheet sheet = workbook.CreateSheet("Attendance Report");
+                        IRow row = sheet.CreateRow(0);
+                        XSSFCellStyle headerStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+                        headerStyle.BorderBottom = BorderStyle.Medium;
+                        headerStyle.BorderTop = BorderStyle.Medium;
+                        headerStyle.BorderLeft = BorderStyle.Medium;
+                        headerStyle.BorderRight = BorderStyle.Medium;
+                        headerStyle.SetFillForegroundColor(new XSSFColor(rgb1));
+                        headerStyle.FillPattern = FillPattern.SolidForeground;
+
+                        XSSFCellStyle presentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+                        presentStyle.BorderBottom = BorderStyle.Medium;
+                        presentStyle.BorderLeft = BorderStyle.Medium;
+                        presentStyle.BorderRight = BorderStyle.Medium;
+                        presentStyle.SetFillForegroundColor(new XSSFColor(rgb2));
+                        presentStyle.FillPattern = FillPattern.SolidForeground;
+
+                        XSSFCellStyle absentStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+                        absentStyle.BorderBottom = BorderStyle.Medium;
+                        absentStyle.BorderLeft = BorderStyle.Medium;
+                        absentStyle.BorderRight = BorderStyle.Medium;
+                        absentStyle.SetFillForegroundColor(new XSSFColor(rgb3));
+                        absentStyle.FillPattern = FillPattern.SolidForeground;
+
+                        XSSFCellStyle dateStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+                        dateStyle.BorderBottom = BorderStyle.Medium;
+                        dateStyle.BorderLeft = BorderStyle.Medium;
+                        dateStyle.BorderRight = BorderStyle.Medium;
+                        dateStyle.SetFillForegroundColor(new XSSFColor(rgb4));
+                        dateStyle.FillPattern = FillPattern.SolidForeground;
+
+                        row = sheet.CreateRow(i++);
+                        row.CreateCell(0).SetCellValue("Employee Name:-");
+                        row.CreateCell(1).SetCellValue(p.FullName);
+                        row = sheet.CreateRow(i++);
+                        row.CreateCell(0).SetCellValue("Employee Code:-");
+                        row.CreateCell(1).SetCellValue(p.EmployeeCode);
+                        row = sheet.CreateRow(i++);
+                        row.CreateCell(0).SetCellValue("Monthly Attendance Report:-" + monthName + "/" + year);
+                        row = sheet.CreateRow(i++);
+                        row = sheet.CreateRow(i++);
+
+                        ICell cell0 = row.CreateCell(0);
+                        cell0.CellStyle = headerStyle;
+                        cell0.SetCellValue("DATE");
+                        ICell cell1 = row.CreateCell(1);
+                        cell1.SetCellValue("STATUS");
+                        cell1.CellStyle = headerStyle;
+                        ICell cell2 = row.CreateCell(2);
+                        cell2.CellStyle = headerStyle;
+                        cell2.SetCellValue("TIME IN");
+                        ICell cell3 = row.CreateCell(3);
+                        cell3.CellStyle = headerStyle;
+                        cell3.SetCellValue("TIME OUT");
+                        ICell cell4 = row.CreateCell(4);
+                        cell4.CellStyle = headerStyle;
+                        cell4.SetCellValue("TOTAL HOURS");
+
+                        sheet.SetColumnWidth(0, 4000);
+                        sheet.SetColumnWidth(1, 4000);
+                        sheet.SetColumnWidth(2, 4000);
+                        sheet.SetColumnWidth(3, 4000);
+                        sheet.SetColumnWidth(4, 4000);
+
+                        foreach (var attendance in data)
+                        {
+                            row = sheet.CreateRow(i);
+                            DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt");
+
+                            if (attendance.Status == "Present")
+                            {
+                                ICell cell00 = row.CreateCell(0);
+                                cell00.CellStyle = presentStyle;
+                                cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
+                                ICell cell01 = row.CreateCell(1);
+                                cell01.SetCellValue(attendance.Status);
+                                cell01.CellStyle = presentStyle;
+                                ICell cell02 = row.CreateCell(2);
+                                cell02.CellStyle = presentStyle;
+                                cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
+                                ICell cell03 = row.CreateCell(3);
+                                cell03.CellStyle = presentStyle;
+                                cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
+                                ICell cell04 = row.CreateCell(4);
+                                cell04.CellStyle = presentStyle;
+                                cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
+                            }
+                            else
+                            {
+                                ICell cell00 = row.CreateCell(0);
+                                cell00.CellStyle = absentStyle;
+                                cell00.SetCellValue(Convert.ToDateTime(attendance.DateIn).ToString("dd/MM/yyyy").ToString());
+                                ICell cell01 = row.CreateCell(1);
+                                cell01.SetCellValue(attendance.Status);
+                                cell01.CellStyle = absentStyle;
+                                ICell cell02 = row.CreateCell(2);
+                                cell02.CellStyle = absentStyle;
+                                cell02.SetCellValue(attendance.TimeIn == null ? "" : DateTime.Today.Add(attendance.TimeIn.GetValueOrDefault()).ToString("hh:mm tt"));
+                                ICell cell03 = row.CreateCell(3);
+                                cell03.CellStyle = absentStyle;
+                                cell03.SetCellValue(attendance.TimeOut == null ? "" : DateTime.Today.Add(attendance.TimeOut.GetValueOrDefault()).ToString("hh:mm tt"));
+                                ICell cell04 = row.CreateCell(4);
+                                cell04.CellStyle = absentStyle;
+                                cell04.SetCellValue(attendance.TotalHours == null ? "" : attendance.TotalHours.ToString());
+                            }
+
+                            i++;
+                        }
+                        row = sheet.CreateRow(i++);
+                        row = sheet.CreateRow(i++);
+                        row.CreateCell(0).SetCellValue("Total No of Days: -");
+                        row.CreateCell(1).SetCellValue(TotalDays.ToString());
+                        row = sheet.CreateRow(i++);
+                        row.CreateCell(0).SetCellValue("No of Days Present:-");
+                        row.CreateCell(1).SetCellValue(data.Where(x => x.Status == "Present").Count().ToString());
+                        workbook.Write(sw);
+                        workbook.Close();
+                    }
+                    data = null;
+                    using (var stream = new FileStream(attendanceReportPath, FileMode.Open))
+                    {
+                        stream.CopyToAsync(memory);
+                    }
+                    memory.Position = 0;
+                    string To = p.EmailAddress;
+                    string subject = "Monthly Attendance Report";
+                    string body = "Dear " + p.FullName + "\n" +
+                        "Kindly find monthly attendance report in attachment.\n" +
+                        "Your Code Number: " + p.EmployeeCode + "\n" +
+                        "User Name: " + p.EmailAddress;
+                    new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);                
             }
         }
 
-        public List<EmployeeAttendanceData> Data(int SrId, string Type, int PersonId, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
+        public List<EmployeeAttendanceData> Data(int SrId, string Type, string EmployeeCode, string InputOne, string InputTwo, List<EmployeeAttendanceData> data)
         {
             var SP_SrId = new SqlParameter("@SrId", SrId);
             var SP_SelectType = new SqlParameter("@SelectType", "Month");
-            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            var SP_PersonId = new SqlParameter("@EmployeeCode", EmployeeCode);
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
-            string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @PersonId, @SelectType, @InputOne, @InputTwo";
+            string usp = "LMS.usp_GetEmployeewiseAttendanceData @SrId, @EmployeeCode, @SelectType, @InputOne, @InputTwo";
             data = _dbContext._sp_GetEmployeeAttendanceData.FromSql(usp, SP_SrId, SP_PersonId, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
             return data;
         }

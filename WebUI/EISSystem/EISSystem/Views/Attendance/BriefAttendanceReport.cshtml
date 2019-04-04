@@ -15,6 +15,10 @@
             background-color: #808080;
         }
 
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
         div .panel-primary {
             text-align: center
         }
@@ -107,6 +111,9 @@
         .material-icons {
             line-height: 0;
             height: 4px;
+        }
+        .tooltip-inner {
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -219,19 +226,23 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
-<script src="~/Ems/js/dataTables.buttons.min.js"></script>
-<script src="~/Ems/js/pdfmake.min.js"></script>
-<script src="~/Ems/js/vfs_fonts.js"></script>
-<script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/toastr.js"></script>
-<script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/js/TWeeklyOffCount.js"></script>
+
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 
 <script type="text/javascript">
@@ -426,16 +437,16 @@
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken") {
-                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
+                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
-                                    valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<br />";
+                                    valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 } else {
                                     if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
                                         checkDeducted = "Deducted";
-                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag </i><br />";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
                                     } else {
                                         checkDeducted = "NotDeducted";
-                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"<br />";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"&#10;";
                                     }
                                     valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
 
@@ -447,10 +458,10 @@
                         //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         if (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken == 0) {
-                            totalLeavesTaken = '<div><a class="test hoverNonUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                            totalLeavesTaken = '<div><a class="test hoverNonUnderline" title="' + valueTaken + '" data-toggle="tooltip" data-placement="right" data-html="true">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         }
                         else {
-                            totalLeavesTaken = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                            totalLeavesTaken = '<div><a class="test hoverUnderline" title="'+valueTaken+'" data-toggle="tooltip" data-placement="right" data-html="true" >' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
                         }
                         if (data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves == 0) {
                             proposedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
@@ -472,9 +483,32 @@
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
-                        $('#example').DataTable({
+                    $('#example').DataTable({
+                        sDom: '<"myexport"B>ifrtlp',
                             order: [1, 'asc'],
-                            paging:false,
+                            paging: false,
+                            buttons: [
+                                {
+                                    extend: 'pdfHtml5',
+                                    title: 'Attencdance Report',
+                                    text: 'PDF',
+                                    titleAttr: 'Export to PDF',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+                                },
+                                {
+                                    extend: 'excel',
+                                    title: 'Attencdance Report',
+                                    text: 'Excel',
+                                    titleAttr: 'Export to Excel ',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] }
+                                },
+                                {
+                                    extend: 'print',
+                                    title: 'Attencdance Report',
+                                    text: 'Print',
+                                    titleAttr: 'Print',
+                                    exportOptions: { columns : [0,1,2,3,4,5,6,7,8] }
+                                }],
                             data: array,
                             "drawCallback": function (settings) {
                                 $('[data-toggle="tooltip"]').tooltip({

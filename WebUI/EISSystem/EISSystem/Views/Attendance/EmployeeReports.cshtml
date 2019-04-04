@@ -1,70 +1,5 @@
 ﻿@using System.Globalization
 @model IEnumerable<EIS.Entities.Employee.Attendance>
-
-<style type="text/css">
-    div .panel-primary {
-        text-align: center
-    }
-
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-
-    .label-OnLeave {
-        background-color: mediumslateblue;
-    }
-    .bootstrap-datetimepicker-widget tr:hover {
-        background-color: #808080;
-    }
-    .container-fluid {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-    #generateReport {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #select {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #inputyear, #inputmonth, #inputweek {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    .ajax-loader {
-        visibility: hidden;
-        position: absolute;
-        z-index: +100 !important;
-        width: 80%;
-        height: 80%;
-    }
-
-        .ajax-loader img {
-            position: relative;
-            top: 70%;
-            left: 40%;
-        }
-
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
-
-    table.dataTable td {
-        padding: 3px 10px;
-        width: 1px;
-        white-space: nowrap;
-    }
-
-    .row #headeropt {
-        padding: 0px;
-    }
-
-    .body #report {
-        margin-left: 15px;
-    }
-</style>
 <head>
     <title>Attendance History</title>
 
@@ -73,7 +8,75 @@
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <style type="text/css">
+        div .panel-primary {
+            text-align: center
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        .label-OnLeave {
+            background-color: mediumslateblue;
+        }
+
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 70%;
+                left: 40%;
+            }
+
+        * {
+            font-family: Arial;
+            font-style: normal
+        }
+
+        table.dataTable td {
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        .row #headeropt {
+            padding: 0px;
+        }
+
+        .body #report {
+            margin-left: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="ajax-loader">
@@ -210,12 +213,19 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/Ems/js/dataTables.responsive.min.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
     var date = new Date();
@@ -330,6 +340,7 @@
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
+                        sDom: '<"myexport"B>ifrtlp',
                         paging:false,
                         "aoColumns": [
                             { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
@@ -338,6 +349,25 @@
                             null,
                             null
                         ],
+                        buttons: [
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Leave Credits',
+                                text: 'PDF',
+                                titleAttr: 'Export to PDF'
+                            },
+                            {
+                                extend: 'excel',
+                                title: 'Leave Credits',
+                                text: 'Excel',
+                                titleAttr: 'Export to Excel '
+                            },
+                            {
+                                extend: 'print',
+                                title: 'Leave Credits',
+                                text: 'Print',
+                                titleAttr: 'Print'
+                            }],
                         data: array
                     });
                 },

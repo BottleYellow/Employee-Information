@@ -15,6 +15,10 @@
             background-color: #808080;
         }
 
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
         div .panel-primary {
             text-align: center
         }
@@ -164,23 +168,25 @@
 <script src="~/Ems/js/moment.min.js"></script>
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/moment1.js"></script>
-<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 @*for pdf*@
-<script src="~/Ems/js/dataTables.buttons.min.js"></script>
-<script src="~/Ems/js/pdfmake.min.js"></script>
-<script src="~/Ems/js/vfs_fonts.js"></script>
-<script src="~/Ems/js/buttons.html5.min.js"></script>
 <script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/Ems/js/toastr.js"></script>
-<script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/js/TWeeklyOffCount.js"></script>
-
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         $('#banerPanelHeading').html(data[1].LocationName);
@@ -261,7 +267,7 @@
                 });
             }
         });
-        
+
         $('#generateReport').on('click', function () {
             var v = $('#select').val();
             var location = $('#locations').val();
@@ -270,7 +276,7 @@
                 var value = $("#inputyear").val();
                 if (location == 0) {
                     $('#baner').show();
-                    $('#kondhwa').show();               
+                    $('#kondhwa').show();
                 }
                 else if (location == 1) {
                     $('#baner').hide();
@@ -278,7 +284,7 @@
                 }
                 else if (location == 2) {
                     $('#kondhwa').hide();
-                    $('#baner').show();                  
+                    $('#baner').show();
                 }
                 var weeklyoff = calWeeklyOffYearly(value);
                 $('#alltwoffb').text('Weekly Off : ' + (weeklyoff[0] + weeklyoff[1]));
@@ -319,7 +325,7 @@
                 var location = $('#locations').val();
                 if (location == 0) {
                     $('#baner').show();
-                    $('#kondhwa').show();            
+                    $('#kondhwa').show();
                 }
                 else if (location == 1) {
                     $('#baner').hide();
@@ -376,9 +382,28 @@
                         }
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
-                        //scrollX:true,
+                        sDom: '<"myexport"B>ifrtlp',
                         paging: false,
-                       order:[1,'asc'],
+                        order: [1, 'asc'],
+                        buttons: [
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Attencdance Report',
+                                text: 'PDF',
+                                titleAttr: 'Export to PDF'
+                            },
+                            {
+                                extend: 'excel',
+                                title: 'Attencdance Report',
+                                text: 'Excel',
+                                titleAttr: 'Export to Excel '
+                            },
+                            {
+                                extend: 'print',
+                                title: 'Attencdance Report',
+                                text: 'Print',
+                                titleAttr: 'Print'
+                            }],
                         data: array
                 });
                 },

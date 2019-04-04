@@ -7,6 +7,7 @@
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
     @*for pdf*@
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style type="text/css">
@@ -18,10 +19,12 @@
         .bootstrap-datetimepicker-widget tr:hover {
             background-color: #808080;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         #locations, #status {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
@@ -90,7 +93,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Select Status</label>
-                                <select id="status"  class="form-control show-tick">
+                                <select id="status" class="form-control show-tick">
                                     <option value="true">Active</option>
                                     <option value="false">InActive</option>
                                 </select>
@@ -112,7 +115,7 @@
                             <div class="col-md-2">
                                 <br />
                                 <input class="form-control" type="button" id="generateReport" value="Generate" style="font-weight:bold; font-size:16px; height:40px; background-color:#3399ff; color:white;" />
-                            </div>                   
+                            </div>
                         </div>
                         <div>
                             <div>
@@ -134,7 +137,7 @@
                                     </thead>
                                 </table>
                             </div>
-                      
+
                         </div>
                     </div>
                 </div>
@@ -152,15 +155,20 @@
 
 
 @*for pdf*@
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
@@ -192,7 +200,7 @@
                         $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     } else {
                         $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
-                    }                
+                    }
                     $.each(data, function (data, value) {
                         $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });
@@ -269,7 +277,8 @@
                         array.push([data[i].EmployeeCode, data[i].FullName, Status, date,weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
                     }
                     $('#example').DataTable().destroy();
-                    $('#example').DataTable({   
+                    $('#example').DataTable({
+                        sDom: '<"myexport"B>ifrtlp',
                         order: [3, 'asc'],
                         pageLength:50,
                         "aoColumns": [
@@ -281,6 +290,27 @@
                             null,
                             null,
                             null
+                        ],
+                        buttons: [
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Attendance Report',
+                                text: 'PDF',
+                                titleAttr: 'Export to PDF'
+                            },
+                            {
+                                extend: 'excel',
+                                title: 'Attendance Report',
+                                text: 'Excel',
+                                titleAttr: 'Export to Excel '
+
+                            },
+                            {
+                                extend: 'print',
+                                title: 'Attendance Report',
+                                text: 'Print',
+                                titleAttr: 'Print'
+                            }
                         ],
                         data: array
                     });
@@ -303,7 +333,7 @@
                         $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
                     } else {
                         $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
-                    }   
+                    }
                     $.each(data, function (data, value) {
                         $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
                     });

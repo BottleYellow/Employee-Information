@@ -1,10 +1,10 @@
-﻿    @model IEnumerable<EIS.Entities.Leave.LeaveCredit>
+﻿@model IEnumerable<EIS.Entities.Leave.LeaveCredit>
 <html>
 <head>
     <title>Leave Credits</title>
-    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
-
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <style>
         li:hover {
             cursor: pointer;
@@ -13,10 +13,12 @@
         .dataTables_wrapper .myexport .dt-buttons {
             float: right;
         }
+
         .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
+
         .ajax-loader {
             visibility: hidden;
             position: absolute;
@@ -30,6 +32,7 @@
                 top: 45%;
                 left: 45%;
             }
+
         table.dataTable td {
             margin-left: 0;
             margin-right: auto;
@@ -37,6 +40,7 @@
             width: 1px;
             white-space: nowrap;
         }
+
         * {
             font-family: Arial;
             font-style: normal
@@ -56,14 +60,14 @@
         </div>
         <div class="row clearfix">
             @*<div class="row">
-                <div class="col-md-9" style="height:50px">
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
-                            <option value="0">All</option>
-                        </select>
+                    <div class="col-md-9" style="height:50px">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                <option value="0">All</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>*@
+                </div>*@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body">
@@ -83,7 +87,7 @@
                                 </thead>
                             </table>
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
@@ -125,7 +129,37 @@
                 }
                 $('#example').DataTable().destroy();
                 $('#example').DataTable({
-                    order:[4,'asc'],
+                    sDom: '<"myexport"B>ifrtlp',
+                    order: [4, 'asc'],
+                    paging:false,
+                    buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Leave Credits',
+                            text: 'PDF',
+                            titleAttr: 'Export to PDF',
+                            exportOptions: {
+                                columns:[0,1,2,3,4,5,6]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'Leave Credits',
+                            text: 'Excel',
+                            titleAttr: 'Export to Excel ',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: 'Leave Credits',
+                            text: 'Print',
+                            titleAttr: 'Print',
+                            exportOptions: {
+                                columns:[0,1,2,3,4,5,6]
+                            }
+                        }],
                     data: array
                 });
             },
@@ -134,7 +168,7 @@
             }
         });
     }
-             
+
       $('#example').on('click', 'a.inactive', function (e) {
         e.preventDefault();
         var id = $(this).attr("id");
@@ -201,11 +235,11 @@
 </script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
 <script src="~/Ems/js/pdfmake.min.js"></script>
 <script src="~/Ems/js/vfs_fonts.js"></script>
 <script src="~/Ems/js/buttons.html5.min.js"></script>
-<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
-<script src="~/Ems/js/sorting-datetime-moment.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
-
-
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
