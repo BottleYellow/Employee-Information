@@ -2,45 +2,7 @@
 @using EIS.WebApp.Services;
 @{
 }
-<style type="text/css">
-    td {
-        width: 200px;
-        text-align: center
-    }
 
-    th {
-        font-size: medium;
-        text-align: center
-    }
-
-    div .panel-primary {
-        text-align: center
-    }
-
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-
-    .bootstrap-datetimepicker-widget tr:hover {
-        background-color: #808080;
-    }
-
-    #generateReport {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #select, #selectEmployee {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #fromDate, #ToDate {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
-</style>
 <head>
     <title>Employee wise Reports</title>
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -50,6 +12,42 @@
     <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
     @*for pdf*@
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        td {
+            width: 200px;
+            text-align: center
+        }
+
+        th {
+            font-size: medium;
+            text-align: center
+        }
+
+        div .panel-primary {
+            text-align: center
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select, #selectEmployee {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #fromDate, #ToDate {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">

@@ -15,71 +15,65 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
-<style>
-    #Imagediv {
-        position: relative;
-    }
-
-    #employeeImage {
-        opacity: 1;
-        display: block;
-        width: 100%;
-        height: auto;
-        transition: .5s ease;
-        backface-visibility: hidden;
-    }
-
-    .middle {
-        transition: .5s ease;
-        opacity: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        text-align: center;
-    }
-
-    .form-group:hover .image {
-        opacity: 0.3;
-    }
-
-    .form-group:hover .middle {
-        opacity: 1;
-    }
-
-    #my-button {
-        background-color: dodgerblue;
-        color: white;
-        font-size: 15px;
-    }
-
-    #my-file {
-        visibility: hidden;
-    }
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
-    .card{
-        margin-left:-15px;
-        margin-right:-15px;
-    }
-</style>
-
-
-<header>
+<head>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
     <style type="text/css">
         .form-group.required .control-label:after {
             color: #d00;
             content: "*";
             position: relative;
         }
+        #Imagediv {
+            position: relative;
+        }
+
+        #employeeImage {
+            opacity: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .form-group:hover .image {
+            opacity: 0.3;
+        }
+
+        .form-group:hover .middle {
+            opacity: 1;
+        }
+
+        #my-button {
+            background-color: dodgerblue;
+            color: white;
+            font-size: 15px;
+        }
+
+        #my-file {
+            visibility: hidden;
+        }
+
+        .card {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
     </style>
-</header>
+</head>
 <div class="container-fluid">
     <div class="block-header">
         <HeaderWithButton header-name="Edit Employee"></HeaderWithButton>

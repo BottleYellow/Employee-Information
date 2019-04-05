@@ -15,36 +15,36 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
-<!-- Modal -->
-<style type="text/css">
-    .form-group.required .control-label:after {
-        color: #d00;
-        content: "*";
-        position: relative;
-    }
-
-    .ajax-loader {
-        visibility: hidden;
-        position: absolute;
-        z-index: +100 !important;
-        width: 80%;
-        height: 80%;
-    }
-
-        .ajax-loader img {
+<head>
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <!-- Modal -->
+    <style type="text/css">
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
             position: relative;
-            top: 45%;
-            left: 45%;
         }
 
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
-</style>
-<link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
+    </style>
+
+</head>
+
 <div id="md1" class="modal-dialog" role="document">
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
