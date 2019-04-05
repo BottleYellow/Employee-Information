@@ -14,121 +14,117 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
-}
-<link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
-<style>
-    @@media (min-width: 990px) {
-        #testStyle1, #testStyle2 {
+} 
+
+<head>
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <style>
+        @@media (min-width: 990px) {
+            #testStyle1, #testStyle2 {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+
+        td > label {
+            padding: 0px;
+            margin-bottom: 0px;
+        }
+
+        table.dataTable tbody tr .present {
+            background-color: #dff0d8;
+        }
+
+        .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
+            background-color: #d0e9c6;
+        }
+
+        table.dataTable tbody tr .absent {
+            background-color: #f2dede;
+        }
+
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
+
+        div[class^="col"] {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .info-box {
+            margin-bottom: 17px;
+            cursor: pointer;
+        }
+
+        .label-OnLeave {
+            background-color: mediumslateblue;
+        }
+
+        a:hover, a:focus {
+            text-decoration: none;
+        }
+
+        .disabledLink {
+            color: currentColor;
+            cursor: not-allowed;
+            opacity: 0.5;
+            text-decoration: none;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        .row {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
+
+        .card {
+            margin-left: -7px;
+            margin-right: -7px;
+        }
+
+        .container-fluid {
             padding-left: 0px;
             padding-right: 0px;
         }
-    }
 
-    td > label {
-        padding: 0px;
-        margin-bottom: 0px;
-    }
+        .card .body {
+            padding: 0px;
+        }
 
-    table.dataTable tbody tr .present {
-        background-color: #dff0d8;
-    }
+        .header {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
 
-    .table-hover > tbody > tr > td.success:hover, .table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > table.dataTable tbody tr .present {
-        background-color: #d0e9c6;
-    }
-
-    table.dataTable tbody tr .absent {
-        background-color: #f2dede;
-    }
-
-    .ajax-loader {
-        visibility: hidden;
-        position: absolute;
-        z-index: +100 !important;
-        width: 80%;
-        height: 80%;
-    }
-
-    .ajax-loader img {
-        position: relative;
-        top: 45%;
-        left: 45%;
-    }
-
-    div[class^="col"] {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .info-box {
-        margin-bottom: 17px;
-        cursor: pointer;
-    }
-
-    .label-OnLeave {
-        background-color: mediumslateblue;
-    }
-
-    a:hover, a:focus {
-        text-decoration: none;
-    }
-
-    .disabledLink {
-        color: currentColor;
-        cursor: not-allowed;
-        opacity: 0.5;
-        text-decoration: none;
-    }
-
-    a {
-        cursor: pointer;
-    }
-
-    table.dataTable td {
-        margin-left: 0;
-        margin-right: auto;
-        padding: 3px 10px;
-        width: 1px;
-        white-space: nowrap;
-    }
-
-    .* {
-        font-family: Arial;
-        font-style: normal;
-    }
-
-    .row {
-        margin-left: -7px;
-        margin-right: -7px;
-    }
-
-    .card {
-        margin-left: -7px;
-        margin-right: -7px;
-    }
-
-    .container-fluid {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    .card .body {
-        padding: 0px;
-    }  
-
-    .* {
-        font-family: Arial;
-        font-style: normal;
-    }
-
-    .header {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-</style>
-<head>
-    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+        .dataTables_wrapper {
+            padding: 7px;
+        }
+    </style>
     <title>Admin Dashboard</title>
 </head>
 <div class="ajax-loader">
@@ -258,7 +254,7 @@
                 <div class="card">
                     <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="banerAttendanceHeader"></h2>
-                    </div>           
+                    </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped dashboard-task-infos" id="BanerAttendanceTable" style="width:100%;">
@@ -283,8 +279,8 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="card">
                     @*<div class="header" style="background-color:aliceblue;">
-            <h2 id="kondhwaAttendanceHeader"></h2>
-        </div>*@
+                            <h2 id="kondhwaAttendanceHeader"></h2>
+                        </div>*@
                     <div class="header" style="background-color:aliceblue; margin:0px;">
                         <h2 id="kondhwaAttendanceHeader"></h2>
                     </div>

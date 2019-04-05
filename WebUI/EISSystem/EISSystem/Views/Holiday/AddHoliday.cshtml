@@ -8,15 +8,12 @@
         content: "*";
         position: relative;
     }
-
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
 </style>
 <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+<link href="~/css/customStyle.css" rel="stylesheet" />
+
 <div id="md" class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -36,7 +33,7 @@
                 <div class="form-group required">
                     <label class="control-label" asp-for="Date">Holiday Date</label>
                     <div class="form-line">
-                        <input class="form-control" type="text" asp-for="Date" id="inputdate"  placeholder="Select Date" autocomplete="off" />
+                        <input class="form-control" type="text" asp-for="Date" id="inputdate" placeholder="Select Date" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Date" class="text-danger"></span>
                 </div>

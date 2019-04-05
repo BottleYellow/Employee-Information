@@ -12,102 +12,8 @@
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
 }
-<style type="text/css">
-    @@media (max-width: 990px) {
-        #second {
-            padding-right: 30px;
-        }
-    }
 
-    .clickType {
-        cursor: pointer;
-    }
 
-    #first {
-        margin-right: -15px;
-        margin-top: -15px;
-    }
-
-    #second {
-        margin-left: 15px;
-        margin-top: -15px;
-        padding-left: 1px;
-    }
-
-    .label-OnLeave {
-        background-color: mediumslateblue;
-    }
-
-    .container-fluid {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    div .panel-primary {
-        text-align: center;
-        margin-left: 0;
-        margin-right: -10px;
-        margin-bottom: 0;
-    }
-
-    .dataTables_wrapper .myexport .dt-buttons {
-        float: right;
-    }
-
-    .bootstrap-datetimepicker-widget tr:hover {
-        background-color: #808080;
-    }
-
-    #locations, #selectstatus {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #generateReport {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #select, #selectEmployee {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    #inputyear, #inputmonth, #inputweek {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    }
-
-    .ajax-loader {
-        visibility: hidden;
-        position: absolute;
-        z-index: +100 !important;
-        width: 80%;
-        height: 80%;
-    }
-
-        .ajax-loader img {
-            position: relative;
-            top: 45%;
-            left: 45%;
-        }
-
-    table.dataTable td {
-        padding: 3px 10px;
-        width: 1px;
-        white-space: nowrap;
-    }
-
-    * {
-        font-family: Arial;
-        font-style: normal
-    }
-
-    div[class^="col"] {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .card #attendanceReport {
-        margin-bottom: -20px;
-    }
-</style>
 <head>
     <title>Employee wise Reports</title>
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
@@ -118,6 +24,98 @@
     @*for pdf*@
     @*<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />*@
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        @@media (max-width: 990px) {
+            #second {
+                padding-right: 30px;
+            }
+        }
+
+        .clickType {
+            cursor: pointer;
+        }
+
+        #first {
+            margin-right: -15px;
+            margin-top: -15px;
+        }
+
+        #second {
+            margin-left: 15px;
+            margin-top: -15px;
+            padding-left: 1px;
+        }
+
+        .label-OnLeave {
+            background-color: mediumslateblue;
+        }
+
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        div .panel-primary {
+            text-align: center;
+            margin-left: 0;
+            margin-right: -10px;
+            margin-bottom: 0;
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        #locations, #selectstatus {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select, #selectEmployee {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
+
+        table.dataTable td {
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        div[class^="col"] {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .card #attendanceReport {
+            margin-bottom: -20px;
+        }
+    </style>
 </head>
 <body>
     <div class="ajax-loader">
@@ -568,8 +566,10 @@
                     ],
                     data: array1
                 });
+
                 $('#example_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
                 $('#example1_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
+
             },
             error: function (error) {
                 bootbox.alert("Something went wrong..Please try after sometime");
