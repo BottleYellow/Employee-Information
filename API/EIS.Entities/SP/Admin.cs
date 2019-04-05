@@ -99,6 +99,7 @@ namespace EIS.Entities.SP
         public Nullable<int> PresentDays { get; set; }
         public Nullable<int> TotalGrantedLeaves { get; set; }
         public Nullable<int> TotalLeavesTaken { get; set; }
+        public Nullable<int> TotalAbsentDays { get; set; }
         public Nullable<int> ProposedLeaves { get; set; }
         public string BalanceLeaves { get; set; } 
         public Nullable<int> AdjustedLeaves { get; set; }
@@ -120,6 +121,7 @@ namespace EIS.Entities.SP
     {
         public List<SP_GetAttendanceCountReport_New> sP_GetAttendanceCountReportsNew { get; set; }
         public List<SP_GetAttendanceLeaveData> sP_GetAttendanceLeaveDatas { get; set; }
+        public List<SP_GetMonthlyAttendanceData> SP_GetMonthlyAttendanceData { get; set; }
     }
 
 

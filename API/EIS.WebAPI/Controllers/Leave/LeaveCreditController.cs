@@ -45,10 +45,18 @@ namespace EIS.WebAPI.Controllers.Leave
         public List<LeaveCredit> GetLeaveCreditsByPerson([FromRoute]int PersonId)
         {
             List<LeaveCredit> credits = new List<LeaveCredit>();
-            credits = _repository.LeaveCredit.FindAll().Include(x=>x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available>0 && x.LeaveRule.IsPaid==true).ToList();
-            if (credits.Count == 0)
+            bool? IsOnProbation = _repository.Employee.FindByConditionWithNoTracking(x => x.Id == PersonId).IsOnProbation;
+            if (IsOnProbation == true)
             {
-                credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+                credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId).ToList();
+            }
+            else
+            {
+                credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0 && x.LeaveRule.IsPaid == true).ToList();
+                if (credits.Count == 0)
+                {
+                    credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+                }
             }
            
             return credits;

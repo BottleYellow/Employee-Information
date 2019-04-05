@@ -173,11 +173,21 @@ namespace EIS.WebAPI.Controllers
             }
             else 
             {
+                Person per = _repository.Employee.FindByConditionWithNoTracking(x => x.Id == person.Id);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
                 _repository.Employee.UpdateAndSave(person);
+                if (person.IsOnProbation == false && per.IsOnProbation == true)
+                {
+                    _repository.Employee.UpdateProbation(person.Id, 0);
+                }
+                else if (person.IsOnProbation == true && person.PropbationPeriodInMonth != per.PropbationPeriodInMonth)
+                {
+                    _repository.Employee.UpdateProbation(person.Id, Convert.ToInt32(person.PropbationPeriodInMonth));
+                }
+
                 Users u = _repository.Users.FindByCondition(x => x.PersonId == person.Id);
                 u.UserName = person.EmailAddress;
                 _repository.Users.UpdateAndSave(u);

@@ -8,6 +8,7 @@ using EIS.Entities.Hoildays;
 using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols;
 
 namespace EIS.Repositories.Repository
 {
@@ -113,6 +114,15 @@ namespace EIS.Repositories.Repository
                 type = person.WeeklyOff.Type;
             }
             return type;
+        }
+
+        public void UpdateProbation(int PersonId, int ProbationPeriod)
+        {
+            string usp = "LMS.usp_UpdateProbationPeriod @PersonId,@ProbationPeriod";
+            var param = new SqlParameter("@PersonId", PersonId);
+            var param2 = new SqlParameter("@ProbationPeriod", ProbationPeriod);
+            _dbContext.Database.ExecuteSqlCommand(usp, param, param2);
+            _dbContext.SaveChanges();
         }
     }
 }

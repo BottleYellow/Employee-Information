@@ -72,6 +72,7 @@ namespace EIS.Data.Context
         public virtual DbSet<ActualLeaveCount> _sp_GetLeaveCount { get; set; }
         [NotMapped]
         public virtual DbSet<SP_GetDateWiseAttendance> _sp_GetDateWiseAttendances { get; set; }
+        
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Person> Person { get; set; }

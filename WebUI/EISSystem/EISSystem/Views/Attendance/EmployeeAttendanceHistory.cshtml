@@ -125,7 +125,6 @@
         <div class="block-header">
             <HeaderWithButton header-name="Employee Attendance History"></HeaderWithButton>
         </div>
-        <div id="weareback">dfjlkasjdf</div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card" style="min-height:100px">
@@ -262,7 +261,7 @@
                 </div>
                 <div id="second" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="card">
-                        <div class="body">                           
+                        <div class="body">
                             <div id="tblExample1" style="display:none;">
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-hover table-striped table-bordered tableClass" style="width:100%">
@@ -430,16 +429,33 @@
             if (v == 'year') {
                 var value = $("#inputyear").val();
                 $("#inputyear").val(value);
+                if (value == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Date)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 generateReport(value, 'year', id, status);
             }
 
             else if (v == 'month') {
                 var value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
+                var monthYear = value.split('/');
+                var y = monthYear[1];
+                var m = monthYear[0];
+                if (new Date(y, m, 0).getMonth() == new Date().getMonth() && new Date(y, m, 0).getFullYear() == new Date().getFullYear()) {
+                    $("#wd").html("Working Days (Till Date)");
+                }
+                else {
+                    $("#wd").html("Total Working Days");
+                }
                 generateReport(value, 'month', id, status);
             }
         });
     });
+
+
 
     function generateReport(value, type, id, status) {
         $.ajax({
