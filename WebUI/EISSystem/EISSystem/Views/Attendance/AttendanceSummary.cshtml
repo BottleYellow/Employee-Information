@@ -408,15 +408,15 @@
                             if (data.sP_GetAttendanceCountReports[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
                                 if (data.SP_GetMonthlyAttendanceData[j].Status == "Present") {
                                     if (data.SP_GetMonthlyAttendanceData[j].TimeOut == null) {
-                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-NA" + ") ";
+                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-NA" + ")" + "&#10;";
                                     }
                                     else {
-                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-" + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ") ";
+                                        PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-" + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ")" + "&#10;";
 
                                     }
 
                                 } else if (data.SP_GetMonthlyAttendanceData[j].Status == "Absent") {
-                                    AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY")+" ";
+                                    AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
                                 }
                             }
                         }
