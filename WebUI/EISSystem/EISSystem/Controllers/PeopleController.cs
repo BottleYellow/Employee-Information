@@ -281,15 +281,20 @@ namespace EIS.WebApp.Controllers
         [DisplayName("Update Employee")]
         public IActionResult Edit(string EmployeeCode)
         {
+            if (EmployeeCode == null)
+            {
+                EmployeeCode = Convert.ToString(TempData["EmployeeCodeReturn"]);
+            }
+            TempData["EmployeeCodeReturn"] = EmployeeCode;
             ViewBag.EmployeeCode = EmployeeCode;
             ViewBag.Designations = rolesList;
             ViewBag.WeeklyOffs = GetWeeklyOffs();
             ViewBag.Locations = GetLocations();
             var data1 = from p in EmployeeData()
-                        where p.EmployeeCode!=EmployeeCode && p.Role.Name!="Employee"
+                        where p.EmployeeCode != EmployeeCode && p.Role.Name != "Employee"
                         select new Person { Id = p.Id, FirstName = p.FirstName + " " + p.LastName + " (" + p.Role.Name + ")" };
             ViewBag.Persons = data1;
-            string stringData = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + EmployeeCode + "" ).Content.ReadAsStringAsync().Result;
+            string stringData = _services.Employee.GetResponse(ApiUrl + "/api/employee/Profile/" + EmployeeCode + "").Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Person>(stringData);
             return View(data);
         }
@@ -298,6 +303,7 @@ namespace EIS.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Person person, IFormFile file)
         {
+            TempData["EmployeeCodeReturn"] = person.EmployeeCode;
             var tId = GetSession().TenantId;
             if (id != person.Id)
             {

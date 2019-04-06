@@ -435,21 +435,32 @@
                         var proposedLeaves = "";
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
-                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken") {
+                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken" || data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
                                     valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                    if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
+                                        if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
+                                            checkDeducted = "Deducted";
+                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
+                                        } else {
+                                            checkDeducted = "NotDeducted";
+                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                        }
+                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
+                                    }
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
                                     valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
-                                } else {
-                                    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
-                                        checkDeducted = "Deducted";
-                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
-                                    } else {
-                                        checkDeducted = "NotDeducted";
-                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"&#10;";
-                                    }
-                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
-
                                 }
+                                //else {
+                                //    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
+                                //        checkDeducted = "Deducted";
+                                //        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
+                                //    } else {
+                                //        checkDeducted = "NotDeducted";
+                                //        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"&#10;";
+                                //    }
+                                //    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
+
+                                //}
                             }
                         }
                         x = valueWithOutPayDates.slice(0, -1);

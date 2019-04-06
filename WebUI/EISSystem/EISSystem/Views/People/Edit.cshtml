@@ -14,6 +14,8 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
+    var data = TempData["EmployeeCodeReturn"];
+    TempData["EmployeeCodeReturn"] = data;
 }
 <head>
     <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -26,6 +28,7 @@
             content: "*";
             position: relative;
         }
+
         #Imagediv {
             position: relative;
         }
@@ -40,7 +43,7 @@
         }
 
         .middle {
-            transition: .5s ease;
+            transition: .1s ease;
             opacity: 0;
             position: absolute;
             top: 50%;
@@ -400,11 +403,11 @@
                         <button type="button" class="btn btn-primary" onclick="javascript: return SubmitForm();">Save</button>
                         @if (cookies.Role == "Admin" || cookies.Role == "HR")
                         {
-                            <button type="submit" formmethod="get" asp-action="Index" asp-controller="People" class="btn btn-primary">Cancel</button>
+                            <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@data" class="btn btn-primary">Cancel</button>
                         }
                         else
                         {
-                        <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@cookies.EmployeeCode" class="btn btn-primary">Cancel</button>
+                            <button type="submit" asp-action="Profile" asp-controller="People" asp-route-PersonId="@cookies.EmployeeCode" class="btn btn-primary">Cancel</button>
                         }
                     </form>
                 </div>
@@ -501,7 +504,7 @@
                 format: 'DD/MMM/YYYY'
             });
         }
-       
+
         if (document.getElementById("ip") != null) {
             var m = document.getElementById("ip").value;
             if (m == "true") {
