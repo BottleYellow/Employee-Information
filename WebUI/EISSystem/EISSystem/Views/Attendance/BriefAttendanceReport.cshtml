@@ -206,7 +206,7 @@
                                             <th>Total Absent Days</th>
                                             <th>Proposed Leaves</th>
                                             <th>Balance Leaves</th>
-                                            <th>Adjusted Leaves</th>
+                                            <th>Compulsant Leaves</th>
                                             <th>Leaves Without Pay</th>
                                         </tr>
                                     </thead>
@@ -425,12 +425,14 @@
                         var leaveWithoutPay = "";
                         var valueTaken = "";
                         var valueProposed = "";
+                        var valueAdjusted = "";
                         var valueWithOutPay = "";
                         var valueWithOutPayDates = "";
                         var absentDays = "";
                         var absentDaysDiv = "";
                         var checkDeducted = "";
                         var totalLeavesTaken = "";
+                        var AdjustedLeaves = "";
                         var x = "";
                         var proposedLeaves = "";
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
@@ -445,10 +447,13 @@
                                             checkDeducted = "NotDeducted";
                                             valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                         }
-                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
+                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&#10;";
                                     }
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
                                     valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                }
+                                else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Adjusted") {
+                                    valueAdjusted += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 }
                                 //else {
                                 //    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
@@ -495,6 +500,13 @@
                            proposedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
                         }
 
+                        if (data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves == 0) {
+                            AdjustedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
+                        }
+                        else {
+                            AdjustedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
+                        }
+
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
@@ -505,31 +517,39 @@
                             }
                         }
 
-                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
                         }
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
-                            order: [1, 'asc'],
+                            order: [0, 'asc'],
                             paging: false,
+                            columnDefs: [
+                                { className: 'text-center', targets: [2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                            ],
                             buttons: [
                                 {
                                     extend: 'pdfHtml5',
-                                    title: 'Attencdance Report',
+                                    title: 'Attendance Report',
                                     text: 'PDF',
                                     titleAttr: 'Export to PDF',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    customize: function (doc) {
+                                        doc.defaultStyle.alignment = 'center';
+                                        doc.styles.tableHeader[1].alignment = 'center';
+                                        doc.content.table.body[2].alignment = 'center';
+                                    }
                                 },
                                 {
                                     extend: 'excel',
-                                    title: 'Attencdance Report',
+                                    title: 'Attendance Report',
                                     text: 'Excel',
                                     titleAttr: 'Export to Excel ',
                                     exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
                                 },
                                 {
                                     extend: 'print',
-                                    title: 'Attencdance Report',
+                                    title: 'Attendance Report',
                                     text: 'Print',
                                     titleAttr: 'Print',
                                     exportOptions: { columns : [0,1,2,3,4,5,6,7,8,9] }

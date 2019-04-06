@@ -425,7 +425,7 @@
                         //} else {
                         //    leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
                         //}
-                        array.push([data.sP_GetAttendanceCountReports[i].LocationName, data.sP_GetAttendanceCountReports[i].EmployeeName, data.sP_GetAttendanceCountReports[i].WorkingDay, Present, data.sP_GetAttendanceCountReports[i].NoLeave, Absent, data.sP_GetAttendanceCountReports[i].ExtraWorkingDays]);
+                        array.push([data.sP_GetAttendanceCountReports[i].LocationName, DecorateString(data.sP_GetAttendanceCountReports[i].EmployeeName), data.sP_GetAttendanceCountReports[i].WorkingDay, Present, data.sP_GetAttendanceCountReports[i].NoLeave, Absent, data.sP_GetAttendanceCountReports[i].ExtraWorkingDays]);
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({

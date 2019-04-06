@@ -183,13 +183,13 @@
 
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div class="panel panel-primary">
-                                        <div class="panel-heading">Average TimeIn</div>
+                                        <div class="panel-heading">Average Time-In</div>
                                         <div id="averageTimeIn" class="panel-body">-</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div class="panel panel-primary">
-                                        <div class="panel-heading">Average TimeOut</div>
+                                        <div class="panel-heading">Average Time-Out</div>
                                         <div id="averageTimeOut" class="panel-body">-</div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div class="panel panel-primary">
-                                        <div class="panel-heading clickType">OnLeave</div>
+                                        <div class="panel-heading clickType">On Leave</div>
                                         <div id="absentDays" class="panel-body">-</div>
                                     </div>
                                 </div>
@@ -227,7 +227,7 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div class="panel panel-primary">
-                                        <div class="panel-heading">Total Number Of Days</div>
+                                        <div class="panel-heading">Total Number of Days</div>
                                         <div id="totalNoOfDays" class="panel-body">-</div>
                                     </div>
                                 </div>
@@ -314,7 +314,7 @@
             success: function (data) {
                 $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                 $.each(data, function (data, value) {
-                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(DecorateString(this.fullName)));
                 });
             },
             error: function () {
@@ -360,7 +360,7 @@
                 success: function (data) {
                     $('#selectEmployee').empty().append('<option selected="selected" value="0">Please select</option>');
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(DecorateString(this.fullName)));
                     });
                 },
                 error: function () {

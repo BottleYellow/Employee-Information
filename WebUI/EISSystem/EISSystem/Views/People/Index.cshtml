@@ -233,7 +233,7 @@
                         action = '<div class="dropdown"> <button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu "><li><a class="active" id=' + data[i].EmployeeCode + '>Activate</a></li></ul></div>';
                     }
 
-                    array.push([action,data[i].LocationName, data[i].EmployeeCode, data[i].FullName, image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy]);
+                    array.push([action, data[i].LocationName, data[i].EmployeeCode, DecorateString(data[i].FullName), image, data[i].Gender, dob, data[i].MobileNumber, data[i].EmailAddress, joinDate, data[i].CreatedBy]);
                 }
 
                 $('#example').DataTable().destroy();

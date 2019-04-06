@@ -768,9 +768,8 @@
         $('#spanEmail').html("");
         $('#spanMobileNumber').html("");
     });
-    input
     function MakeFirstLetterCapital(control) {
-        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1);
+        control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1).toLowerCase();
     }
     function ValidateFileUpload() {
         var fuData = document.getElementById('imageFile');

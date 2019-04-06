@@ -227,7 +227,7 @@
                     $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
                 }
                 $.each(data, function (data, value) {
-                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(DecorateString(this.fullName)));
                 });
             },
             error: function () {
@@ -384,7 +384,7 @@
                         action = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
                         status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + status + '</span>';
                     }
-                    array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, appliedDate, status, approvedBy, data[i].Reason])
+                    array.push([action, data[i].LocationName, DecorateString(data[i].EmployeeName), data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, appliedDate, status, approvedBy, data[i].Reason])
                 }
                 $('#example').DataTable().destroy();
                 var nameType = $.fn.dataTable.absoluteOrder('Pending');
@@ -530,7 +530,7 @@
                         $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
                     }
                     $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
+                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(DecorateString(this.fullName)));
                     });
                 },
                 error: function () {

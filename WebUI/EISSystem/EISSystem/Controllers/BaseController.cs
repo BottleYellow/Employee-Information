@@ -97,7 +97,7 @@ namespace EIS.WebApp.Controllers
                                             select new Person
                                             {
                                                 Id = e.Id,
-                                                FirstName = e.FirstName + " " + e.LastName + "(" + e.Location.LocationName + ")"
+                                                FirstName = MakeFirstCapital(e.FirstName) + " " +MakeFirstCapital(e.LastName) + "(" + e.Location.LocationName + ")"
                                             };
             return employees.OrderBy(x => x.FirstName).ToList();
         }
@@ -122,6 +122,24 @@ namespace EIS.WebApp.Controllers
             int recordsTotal = JsonConvert.DeserializeObject<int>(arrayData[0].ToString());
             IList<T1> data = JsonConvert.DeserializeObject<IList<T1>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = data });
-        }    
+        }
+
+        public string DecorateString(string value)
+        {
+            string result = "";
+            string[] a = value.Split(" ");
+            for(int b = 0; b < a.Length; b++)
+            {
+                result += char.ToUpper(a[b].ElementAt(0)) + a[b].Substring(1).ToLower()+" ";
+            }
+            return result;
+        }
+        public string MakeFirstCapital(string value)
+        {
+            string result="";
+            if(value.Length > 0)
+            result = char.ToUpper(value.ElementAt(0)) + value.Substring(1).ToLower();
+            return result;
+        }
     }
 }

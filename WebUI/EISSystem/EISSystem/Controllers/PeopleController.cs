@@ -72,6 +72,9 @@ namespace EIS.WebApp.Controllers
             response = _services.Employee.GetResponse(ApiUrl+"/api/employee/Profile/" + PersonId + "" );
             string stringData = response.Content.ReadAsStringAsync().Result;
             Person data = JsonConvert.DeserializeObject<Person>(stringData);
+            data.FirstName = MakeFirstCapital(data.FirstName);
+            data.MiddleName = MakeFirstCapital(data.MiddleName);
+            data.LastName = MakeFirstCapital(data.LastName);
             Attendance attendance = data.Attendance.Where(x => x.DateIn.Date == DateTime.Now.Date).FirstOrDefault();
             if (attendance != null)
             {

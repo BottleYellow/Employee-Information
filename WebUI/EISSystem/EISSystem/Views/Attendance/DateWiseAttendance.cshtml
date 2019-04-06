@@ -83,7 +83,7 @@
                         <div class="row col-md-12">
                             <div class="col-md-2">
                                 <label>Select Location</label>
-                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
+                                <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" onchange="OnLocationChange();" class="form-control show-tick">
                                     <option value="0">All</option>
                                 </select>
                             </div>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Select Employee</label>
-                                <select class="form-control" id="selectEmployee" asp-items="@(new SelectList(ViewBag.Persons,"EmployeeCode","FullName"))">
+                                <select class="form-control" id="selectEmployee">
                                     <option value="0">All</option>
                                 </select>
                             </div>
@@ -167,6 +167,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        OnLocationChange();
         $('select[id="selectEmployee"]').find('option[value=' + 1 + ']').attr("selected", true);
         var d = new Date();
         d.setDate(d.getDate());
@@ -184,28 +185,10 @@
             maxDate: maxDate,
             defaultDate: d
         });
-        $('#locations').on('change', function () {
-            debugger;
-            var loc = $('#locations').val();
-            var status = $('#status').val();
-            $.ajax({
-                type: 'GET',
-                url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + status,
-                success: function (data) {
-                    if (status == "true") {
-                        $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
-                    } else {
-                        $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
-                    }
-                    $.each(data, function (data, value) {
-                        $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(this.fullName));
-                    });
-                },
-                error: function () {
-                    bootbox.alert("Something went wrong..Please try after sometime");
-                }
 
-            });
+
+        $('#locations').on('change', function () {
+
         });
         var fromValue = $("#fromdate").val();
         var toValue = $("#todate").val();
@@ -269,8 +252,8 @@
                                 Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                                 timeIn = '-';
                                 timeOut = '-';
-                            }
-                        array.push([data[i].EmployeeCode, data[i].FullName, Status, date,weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
+                                }
+                        array.push([data[i].EmployeeCode, DecorateString(data[i].FullName), Status, date, weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
                     }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
@@ -317,7 +300,28 @@
             });
         }
     });
+    function OnLocationChange() {
+        var loc = $('#locations').val();
+        var status = $('#status').val();
+        $.ajax({
+            type: 'GET',
+            url: '@MyHttpContext.APIBaseURL/api/Employee/GetLocations/' + loc + '/' + status,
+            success: function (data) {
+                if (status == "true") {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="0">All</option>');
+                } else {
+                    $('#selectEmployee').empty().append('<option selected="selected" value="false">Please select</option>');
+                }
+                $.each(data, function (data, value) {
+                    $('#selectEmployee').append($("<option></option>").val(this.employeeCode).html(DecorateString(this.fullName)));
+                });
+            },
+            error: function () {
+                bootbox.alert("Something went wrong..Please try after sometime");
+            }
 
+        });
+    }
     $('#status').on('change', function () {
             var loc = $('#locations').val();
             var status = $('#status').val();

@@ -41,40 +41,42 @@ namespace EIS.WebAPI.Services
 
         public void EmailSentToAllEmployee()
         {
-            SendAttendanceReportToAdminHRManager();
             DateTime d = DateTime.Now;
-            d = d.AddMonths(-1);
-            int year = d.Year;
-            int month = d.Month;
-            string monthName = new DateTime(2000, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
-            int TotalDays = DateTime.DaysInMonth(year, month);
+            if (d.Day == 1)
+            {
+                SendAttendanceReportToAdminHRManager();
+                d = d.AddMonths(-1);
+                int year = d.Year;
+                int month = d.Month;
+                string monthName = new DateTime(2000, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+                int TotalDays = DateTime.DaysInMonth(year, month);
 
-            var rootPath = @"C:\Temp\";
-            if (!Directory.Exists(rootPath))
-            {
-                Directory.CreateDirectory(rootPath);
-            }
-            if (!Directory.Exists(rootPath + year + "\\"))
-            {
-                Directory.CreateDirectory(rootPath + year + "\\");
-            }
-            if (!Directory.Exists(rootPath + year + "\\" + monthName + "\\"))
-            {
-                Directory.CreateDirectory(rootPath + year + "\\" + monthName + "\\");
-            }
-
-            var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
-                .Select(p => new
+                var rootPath = @"C:\Temp\";
+                if (!Directory.Exists(rootPath))
                 {
-                     p.Id,                    
-                  p.FullName,
-                    p.EmployeeCode,
-                    p.EmailAddress
-                }).ToList();
+                    Directory.CreateDirectory(rootPath);
+                }
+                if (!Directory.Exists(rootPath + year + "\\"))
+                {
+                    Directory.CreateDirectory(rootPath + year + "\\");
+                }
+                if (!Directory.Exists(rootPath + year + "\\" + monthName + "\\"))
+                {
+                    Directory.CreateDirectory(rootPath + year + "\\" + monthName + "\\");
+                }
 
-            int SrId = 0;
-            foreach (var p in results)
-            {
+                var results = _dbContext.Person.Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true)
+                    .Select(p => new
+                    {
+                        p.Id,
+                        p.FullName,
+                        p.EmployeeCode,
+                        p.EmailAddress
+                    }).ToList();
+
+                int SrId = 0;
+                foreach (var p in results)
+                {
                     string attendanceReportPath = @"C:\Temp\" + year + "\\" + monthName + "\\" + p.EmployeeCode + "AttendanceReport.xlsx";
 
                     if (File.Exists(attendanceReportPath))
@@ -228,7 +230,8 @@ namespace EIS.WebAPI.Services
                         "Kindly find monthly attendance report in attachment.\n" +
                         "Your Code Number: " + p.EmployeeCode + "\n" +
                         "User Name: " + p.EmailAddress;
-                    new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);                
+                    new EmailManager(_configuration, _repository).SendEmail(subject, body, To, attendanceReportPath);
+                }
             }
         }
 

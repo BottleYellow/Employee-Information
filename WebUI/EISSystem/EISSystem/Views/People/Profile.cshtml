@@ -89,7 +89,7 @@
                             <img src="@MyHttpContext.AppBaseUrl//EmployeeData/@Model.TenantId@Model.EmployeeCode/Image/@Model.Image" alt="Profile Image" class="img img-circle" onerror="if (this.src!='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png') this.src='@MyHttpContext.AppBaseUrl/EmployeeData/DefaultImage/Default.png';"/>
                         </div>
                         <div class="content-area">
-                            <h3>@Html.DisplayFor(model => model.FullName)</h3>
+                            <h3>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.MiddleName) @Html.DisplayFor(model => model.LastName)</h3>
                             <div class="profile"><a href="@Url.Action("Edit", "People")?EmployeeCode=@Model.EmployeeCode">Edit Profile</a></div>
                             <div class="body table-responsive">
                                 <table name="profiletable" class="table table-bordered table-hover">

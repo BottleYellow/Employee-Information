@@ -537,25 +537,25 @@
             if (Employees[i].LocationName.toUpperCase() == locationNameBaner) {
                 if (Employees[i].Status == 'Present') {
                     //banerAttendanceArray.push([Employees[i].EmployeeName, "<table style='border-collapse: collapse;'><tr class='present'><td style='border:none;'>" + Status + "</td><td style='border:none;font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + TimeIn + TimeOut + "</div>" , TotalHours])
+                    banerAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status + TimeIn + TimeOut + "</div>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    banerAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
                 else {
-                    banerAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    banerAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
 
                 //$('#bstatus').css({ 'background-color': '#dff0d8' });
             } else {
                 if (Employees[i].Status == 'Present') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status +  TimeIn + TimeOut + "</div>", TotalHours])
+                    KondhwaAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status +  TimeIn + TimeOut + "</div>", TotalHours])
                 }
                 else if (Employees[i].Status == 'Absent') {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    KondhwaAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
                 else {
-                    KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
+                    KondhwaAttendanceArray.push([DecorateString(Employees[i].EmployeeName), "<div class='row'>" + Status + "  <span class='label'>" + TimeIn + "</span>  <span class='label'>" + TimeOut + "</span></div>", TotalHours])
                 }
                 //KondhwaAttendanceArray.push([Employees[i].EmployeeName, "<table><tr><td>" + Status + "</td><td style='font-size:12px;'>" + TimeIn + "<br/>" + TimeOut + "</td></tr></table>", TotalHours])
             }
@@ -622,18 +622,18 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Approve\')">Approve</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        banerArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
-                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        kondhwaArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
                 else if (Status == "Requested For Cancel") {
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-warning">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Accept Cancel\')">Accept Cancel</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject Cancel\')">Reject Cancel</a></li></ul></div>';
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        banerArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
-                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        kondhwaArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
             } else if (buttonSelected == "ApprovedLeaves") {
@@ -641,9 +641,9 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-success">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons" >build</i></button><ul class="dropdown-menu"><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Pending\')">Mark Pending</a></li><li><a onclick="javascript: UpdateStatus(' + Leaves[i].Id + ',\'Reject\')">Reject</a></li></ul></div>';
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        banerArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
-                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        kondhwaArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
             } else {
@@ -651,9 +651,9 @@
                     Status = '<span style="font-size:14px; font-weight:normal;" class="label label-danger">' + Status + '</span>';
                     actionButton = '<div class="dropdown"><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">build</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Approve</a></li><li><a class="disabledLink">Mark Pending</a></li></ul></div>';
                     if (Leaves[i].LocationName.toUpperCase() == locationNameBaner) {
-                        banerArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        banerArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     } else {
-                        kondhwaArrayLeaves.push([actionButton, Leaves[i].EmployeeName, Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
+                        kondhwaArrayLeaves.push([actionButton, DecorateString(Leaves[i].EmployeeName), Leaves[i].LeaveType, dateFrom, toDate, Leaves[i].RequestedDays, appliedDate, Status, Leaves[i].Reason])
                     }
                 }
             }

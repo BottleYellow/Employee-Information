@@ -45,7 +45,7 @@ namespace EIS.WebApp.Controllers
                 string CookieJson = JsonConvert.SerializeObject(CookiesData.Cookies);
                 HttpContext.Session.SetString("CookieData", CookieJson);
                 HttpContext.Session.SetString("IdCard", CookiesData.Person.EmployeeCode);
-                HttpContext.Session.SetString("Name", CookiesData.Person.FirstName + " " + CookiesData.Person.LastName);
+                HttpContext.Session.SetString("Name",MakeFirstCapital(CookiesData.Person.FirstName) + " " +MakeFirstCapital(CookiesData.Person.LastName));
                 HttpContext.Session.SetString("EmailId", CookiesData.Person.EmailAddress);
                 HttpContext.Session.SetString("ImagePath", "EmployeeData/" + CookiesData.Person.TenantId + CookiesData.Person.EmployeeCode + "/Image/" + CookiesData.Person.Image);
                 string role = CookiesData.Cookies.Role;
