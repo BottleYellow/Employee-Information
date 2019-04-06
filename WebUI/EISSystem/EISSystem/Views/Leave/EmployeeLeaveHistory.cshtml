@@ -386,6 +386,12 @@
                     }
                     array.push([action, data[i].LocationName, data[i].EmployeeName, data[i].LeaveType, fromDate, toDate, data[i].RequestedDays, appliedDate, status, approvedBy, data[i].Reason])
                 }
+                var title = '';
+                if (type == 'year') {
+                    title = 'Employee Leave Report (Year ' + value + ')';
+                } else {
+                    title = 'Employee Leave Report (Month ' + value + ')';
+                }
                 $('#example').DataTable().destroy();
                 var nameType = $.fn.dataTable.absoluteOrder('Pending');
                 $('#example').DataTable({
@@ -410,7 +416,7 @@
                     buttons: [
                         {
                             extend: 'pdfHtml5',
-                            title: 'Employee Leave Report',
+                            title: title,
                             text: 'PDF',
                             titleAttr: 'Export to PDF',
                             exportOptions: {
@@ -419,7 +425,7 @@
                         },
                         {
                             extend: 'excel',
-                            title: 'Employee Leave Report',
+                            title: title,
                             text: 'Excel',
                             titleAttr: 'Export to Excel ',
                             exportOptions: {
@@ -428,7 +434,7 @@
                         },
                         {
                             extend: 'print',
-                            title: 'Employee Leave Report',
+                            title: title,
                             text: 'Print',
                             titleAttr: 'Print',
                             exportOptions: {

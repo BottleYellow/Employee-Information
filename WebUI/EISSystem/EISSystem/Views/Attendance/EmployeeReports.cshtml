@@ -334,6 +334,12 @@
 
                         array.push([date, Status, timeIn, timeOut, data._SP_AttendanceData[i].TotalHours])
                     }
+                    var title = '';
+                    if (type == 'year') {
+                        title = 'Attendance Report (Year-' + value + ')';
+                    } else {
+                        title = 'Attendance Report (Month-' + value + ')';
+                    }
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
@@ -348,19 +354,19 @@
                         buttons: [
                             {
                                 extend: 'pdfHtml5',
-                                title: 'Leave Credits',
-                                text: 'PDF',
-                                titleAttr: 'Export to PDF'
+                                title: title,
+                                text: 'Pdf',
+                                titleAttr: 'Export to Pdf'
                             },
                             {
                                 extend: 'excel',
-                                title: 'Leave Credits',
+                                title: title,
                                 text: 'Excel',
                                 titleAttr: 'Export to Excel '
                             },
                             {
                                 extend: 'print',
-                                title: 'Leave Credits',
+                                title: title,
                                 text: 'Print',
                                 titleAttr: 'Print'
                             }],

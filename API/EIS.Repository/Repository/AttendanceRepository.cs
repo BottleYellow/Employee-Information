@@ -343,14 +343,20 @@ namespace EIS.Repositories.Repository
         public List<SP_GetDateWiseAttendance> dateWiseAttendances(string EmployeeCode, int LocationId, string fromDate, string toDate)
         {
             List<SP_GetDateWiseAttendance> Model = new List<SP_GetDateWiseAttendance>();
-            string sDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd").ToString();
-            string eDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd").ToString();
-            var SP_PersonId = new SqlParameter("@EmployeeCode", EmployeeCode);
-            var SP_LocationId = new SqlParameter("@LId", LocationId);
-            var SP_InputOne = new SqlParameter("@InputOne", sDate);
-            var SP_InputTwo = new SqlParameter("@InputTwo", eDate);
-            string usp = "LMS.usp_GetDateWiseAttendance @EmployeeCode, @LId, @InputOne, @InputTwo";
-            Model = _dbContext._sp_GetDateWiseAttendances.FromSql(usp, SP_PersonId, SP_LocationId, SP_InputOne, SP_InputTwo).ToList();
+            DateTime fD = Convert.ToDateTime(fromDate);
+            DateTime eD = Convert.ToDateTime(toDate);
+            string sDate = fD.ToString("yyyy-MM-dd").ToString();
+            string eDate = eD.ToString("yyyy-MM-dd").ToString();
+
+            if (fD <= eD)
+            {
+                var SP_PersonId = new SqlParameter("@EmployeeCode", EmployeeCode);
+                var SP_LocationId = new SqlParameter("@LId", LocationId);
+                var SP_InputOne = new SqlParameter("@InputOne", sDate);
+                var SP_InputTwo = new SqlParameter("@InputTwo", eDate);
+                string usp = "LMS.usp_GetDateWiseAttendance @EmployeeCode, @LId, @InputOne, @InputTwo";
+                Model = _dbContext._sp_GetDateWiseAttendances.FromSql(usp, SP_PersonId, SP_LocationId, SP_InputOne, SP_InputTwo).ToList();
+            }
             return Model;
         }
 

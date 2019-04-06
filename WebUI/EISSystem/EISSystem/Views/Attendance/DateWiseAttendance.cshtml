@@ -107,6 +107,7 @@
                             <div class="col-md-2">
                                 <label>To Date</label>
                                 <input class="form-control" type="text" id="todate" autocomplete="off" />
+                                <span id="toDateSpan" style="color:red"></span>
                             </div>
                             <div class="col-md-2">
                                 <br />
@@ -151,6 +152,7 @@
 
 
 @*for pdf*@
+<script src="~/Ems/js/cdnjs_cloudflare_ajax_libs_jszip_3_1_3_jszip_min.js"></script>
 <script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
 <script src="~/Ems/js/sorting-datetime-moment.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
@@ -217,7 +219,14 @@
             var empName = $('#selectEmployee').children("option:selected").text();
             var fromValue = $("#fromdate").val();
             var toValue = $("#todate").val();
-            generateReport(fromValue, toValue, id, loc);
+            if (new Date(toValue) < new Date(fromValue)) {
+                bootbox.alert('To Date must be greater than or equal to From Date');
+            }
+                generateReport(fromValue, toValue, id, loc);           
+        });
+
+        $('#todate').on('focus', function () {
+            $('#toDateSpan').html('');
         });
 
         function generateReport(fromValue, toValue, id, loc) {
@@ -272,6 +281,7 @@
                             }
                         array.push([data[i].EmployeeCode, data[i].FullName, Status, date,weekday[new Date(date).getDay()], timeIn, timeOut, data[i].TotalHours]);
                     }
+                    var title = 'Attendance Report (' + fromValue + ' - ' + toValue + ')';
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
@@ -290,20 +300,20 @@
                         buttons: [
                             {
                                 extend: 'pdfHtml5',
-                                title: 'Attendance Report',
-                                text: 'PDF',
-                                titleAttr: 'Export to PDF'
+                                title: title,
+                                text: 'Pdf',
+                                titleAttr: 'Export to Pdf'
                             },
                             {
                                 extend: 'excel',
-                                title: 'Attendance Report',
+                                title: title,
                                 text: 'Excel',
                                 titleAttr: 'Export to Excel '
 
                             },
                             {
                                 extend: 'print',
-                                title: 'Attendance Report',
+                                title: title,
                                 text: 'Print',
                                 titleAttr: 'Print'
                             }
