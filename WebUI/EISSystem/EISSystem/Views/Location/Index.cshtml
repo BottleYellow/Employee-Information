@@ -189,21 +189,10 @@
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
             scrollX:true,
-            sDom: '<"myexport"B>ifrtlp',
+            sDom: 'ifrtlp',
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            buttons: [
-                {
-                    extend: 'pdfHtml5',
-                    title: 'Location Report',
-                    text: 'Export',
-                    titleAttr: 'Export to Pdf',
-                    exportOptions: {
-                        columns: [0]
-                    }
-                }
-            ],
+            "filter": true, // this is for disable filter (search box)          
             "aoColumnDefs": [
                 { "aTargets": [0], "bSortable": true },
                 { "aTargets": ['_all'], "bSortable": false }

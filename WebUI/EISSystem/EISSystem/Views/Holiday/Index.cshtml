@@ -121,6 +121,7 @@
         $('#example tbody').empty();
         var dTable = $('#example').DataTable({
             sDom: '<"myexport"B>irtlp',
+            paging:false,
             fixedColumns: true,
             "processing": true, // for show progress bar
             "serverSide": true, // for process server side
@@ -132,7 +133,7 @@
                     text: 'PDF',
                     titleAttr: 'Export to PDF',
                     exportOptions: {
-                        columns: [2, 3, 4, 5, 6, 10]
+                        columns: [0,1,2, 3]
                     }
                 },
                 {
@@ -141,7 +142,7 @@
                     text: 'Excel',
                     titleAttr: 'Export to Excel ',
                     exportOptions: {
-                        columns: [2, 3, 4, 5, 6, 10]
+                        columns: [0,1,2, 3]
                     }
                 },
                 {
@@ -150,14 +151,9 @@
                     text: 'Print',
                     titleAttr: 'Print',
                     exportOptions: {
-                        columns: [2, 3, 4, 5, 6, 10]
+                        columns: [0,1,2, 3]
                     }
                 }
-            ],
-
-            lengthMenu: [
-                [10, 25, -1],
-                ['10', '25', 'All']
             ],
             ajax: {
                 //"url": "/Leave/PastLeaves",

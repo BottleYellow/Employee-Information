@@ -20,6 +20,7 @@
             float: right;
         }
 
+
         div .panel-primary {
             text-align: center
         }
@@ -229,7 +230,7 @@
 <script src="~/Ems/js/toastr.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/js/TWeeklyOffCount.js"></script>
-
+<script src="~/Ems/js/cdnjs_cloudflare_ajax_libs_jszip_3_1_3_jszip_min.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
 <script src="~/Ems/js/buttons.flash.min.js"></script>
@@ -519,40 +520,58 @@
 
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
                         }
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
+                    }
+                   
+                    var todayDate = new Date();
+                    var currentYear = todayDate.getFullYear();
+                    var firstDate = moment('01/01/'+currentYear).format("DD/MMM/YYYY")
+                    var currentDate = moment(todayDate).format("DD/MMM/YYYY")
+
+                    var title = 'Attendance Report ('+firstDate + ' - ' + currentDate+')';
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
-                            order: [0, 'asc'],
-                            paging: false,
-                            columnDefs: [
-                                { className: 'text-center', targets: [2, 3, 4, 5, 6, 7, 8, 9, 10] },
-                            ],
+                            order: [1, 'asc'],
+                        paging: false,
+                        'columnDefs': [
+                            {
+                                "targets": [2, 3, 4, 5, 6,7,8,9,10], // your case first column
+                                "className": "text-center",
+                            }
+                        ],
                             buttons: [
                                 {
                                     extend: 'pdfHtml5',
-                                    title: 'Attendance Report',
-                                    text: 'PDF',
-                                    titleAttr: 'Export to PDF',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
-                                    customize: function (doc) {
-                                        doc.defaultStyle.alignment = 'center';
-                                        doc.styles.tableHeader[1].alignment = 'center';
-                                        doc.content.table.body[2].alignment = 'center';
-                                    }
+                                    title: title,
+                                    text: 'Pdf',
+                                    titleAttr: 'Export to Pdf',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
                                 },
                                 {
                                     extend: 'excel',
-                                    title: 'Attendance Report',
+                                    title: title,
                                     text: 'Excel',
                                     titleAttr: 'Export to Excel ',
                                     exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
                                 },
                                 {
                                     extend: 'print',
-                                    title: 'Attendance Report',
+                                    title: title,
                                     text: 'Print',
                                     titleAttr: 'Print',
-                                    exportOptions: { columns : [0,1,2,3,4,5,6,7,8,9] }
+                                    customize: function (xlsx) {
+                                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                        $('row c[r^="C"]', sheet).attr('s', '51');
+                                        $('row c[r^="D"]', sheet).attr('s', '51');
+                                        $('row c[r^="E"]', sheet).attr('s', '51');
+                                        $('row c[r^="F"]', sheet).attr('s', '51');
+                                        $('row c[r^="G"]', sheet).attr('s', '51');
+                                        $('row c[r^="H"]', sheet).attr('s', '51');
+                                        $('row c[r^="I"]', sheet).attr('s', '51');
+                                        $('row c[r^="J"]', sheet).attr('s', '51');
+                                    }
+                                   
                                 }],
                             data: array,
                             "drawCallback": function (settings) {

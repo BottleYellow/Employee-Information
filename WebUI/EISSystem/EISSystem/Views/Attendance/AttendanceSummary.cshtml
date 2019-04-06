@@ -191,7 +191,7 @@
 <script src="~/Ems/js/toastr.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
 <script src="~/js/TWeeklyOffCount.js"></script>
-
+<script src="~/Ems/js/cdnjs_cloudflare_ajax_libs_jszip_3_1_3_jszip_min.js"></script>
 <script src="~/Ems/js/jquery.dataTables.min.js"></script>
 <script src="~/Ems/js/dataTables.buttons.min.js"></script>
 <script src="~/Ems/js/buttons.flash.min.js"></script>
@@ -202,6 +202,7 @@
 <script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
 
 
 <script type="text/javascript">
@@ -427,27 +428,56 @@
                         //}
                         array.push([data.sP_GetAttendanceCountReports[i].LocationName, DecorateString(data.sP_GetAttendanceCountReports[i].EmployeeName), data.sP_GetAttendanceCountReports[i].WorkingDay, Present, data.sP_GetAttendanceCountReports[i].NoLeave, Absent, data.sP_GetAttendanceCountReports[i].ExtraWorkingDays]);
                     }
+                    var title = '';     
+                    if (type == 'year') {
+                        title = 'Attendance Report (Year ' + value + ')';
+                    } else {
+                        title = 'Attendance Report (Month ' + value + ')';
+                    }
+
                     $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
                         paging: false,
                         order: [1, 'asc'],
+                        'columnDefs': [
+                            {
+                                "targets": [2,3,4,5,6], // your case first column
+                                "className": "text-center",
+                            }
+                        ],
                         buttons: [
                             {
                                 extend: 'pdfHtml5',
-                                title: 'Attendance Report',
-                                text: 'PDF',
-                                titleAttr: 'Export to PDF'
+                                title: title,
+                                text: 'Pdf',
+                                titleAttr: 'Export to Pdf',
+                                customize: function (doc) {
+                                    // Splice the image in after the header, but before the table
+                                    doc.content.splice(1, 0, {
+                                        margin: [0, 0, 0, 12],
+                                        alignment: 'center'
+                                    });
+                                }
                             },
                             {
                                 extend: 'excel',
-                                title: 'Attendance Report',
+                                title: title,
                                 text: 'Excel',
-                                titleAttr: 'Export to Excel '
+                                titleAttr: 'Export to Excel ',
+                                customize: function (xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                    $('row c[r^="C"]', sheet).attr('s', '51');
+                                    $('row c[r^="D"]', sheet).attr('s', '51');
+                                    $('row c[r^="E"]', sheet).attr('s', '51');
+                                    $('row c[r^="F"]', sheet).attr('s', '51');
+                                    $('row c[r^="G"]', sheet).attr('s', '51');
+                                }
+
                             },
                             {
                                 extend: 'print',
-                                title: 'Attendance Report',
+                                title: title,
                                 text: 'Print',
                                 titleAttr: 'Print'
                             }],

@@ -177,8 +177,8 @@
                         </div>
                         <div id="attendanceReport">
                             @*<div>
-                                    <h4><span id="report">Employee Attendance History</span></h4>
-                                </div>*@
+                                <h4><span id="report">Employee Attendance History</span></h4>
+                            </div>*@
                             <div class="row">
 
                                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -281,6 +281,17 @@
             </div>
 
         </div>
+        @*<table id="tblExampleHidden" class="table table-hover table-striped table-bordered tableClass" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Total Hours</th>
+                </tr>
+            </thead>
+        </table>
+           <button type="button" id="buttonTest" class="btn btn-default">Export</button>
+            *@
     </div>
 </body>
 
@@ -564,6 +575,7 @@
                 $('#AttendanceData').show();
                 $('#example').DataTable().destroy();
                 $('#example1').DataTable().destroy();
+ 
                 $('#example').DataTable({
                     "paging": false,
                     "aoColumns": [
@@ -586,6 +598,33 @@
                 $('#example_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
                 $('#example1_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
 
+                //$('#buttonTest').on('click', function () {
+                //    debugger;
+                //    $('#tblExampleHidden').DataTable().destroy();
+                //    $('#tblExampleHidden').DataTable({ dom: 'B'});
+                //    var data = $('#tblExampleHidden').DataTable().table().data();
+                //    $.merge(data, $('#example').DataTable().table().data());
+                //    $('#export-table').DataTable({
+                //        dom: 'B',
+                //        "aoColumns": [
+                //            { "sType": "date" },
+                //            null,
+                //            null
+                //        ],
+                //        data: data,
+                //        buttons: [{
+                //            extend: 'pdfHtml5'
+                //        }]
+                //        ,
+                //        drawCallback: function () {
+                //            $('#export-table_wrapper .buttons-pdf').click()
+                //            setTimeout(function () {
+                //                $('#export-table').DataTable().destroy(false);
+                //            }, 200)
+                //        }
+                //    });
+                //});
+
             },
             error: function (error) {
                 bootbox.alert("Something went wrong..Please try after sometime");
@@ -599,6 +638,8 @@
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
+
+    
 </script>
 
 
