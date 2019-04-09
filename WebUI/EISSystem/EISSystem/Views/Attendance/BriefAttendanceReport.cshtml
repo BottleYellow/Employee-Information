@@ -448,7 +448,7 @@
                                             checkDeducted = "NotDeducted";
                                             valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                         }
-                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&#10;";
+                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
                                     }
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
                                     valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
@@ -500,14 +500,12 @@
                         else {
                            proposedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
                         }
-
                         if (data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves == 0) {
                             AdjustedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
                         }
                         else {
                             AdjustedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
                         }
-
                         if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
@@ -517,12 +515,9 @@
                                 leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
                         }
-
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
-                        }
-                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, data.sP_GetAttendanceCountReportsNew[i].EmployeeName, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves, leaveWithoutPay]);
                     }
-                   
+
                     var todayDate = new Date();
                     var currentYear = todayDate.getFullYear();
                     var firstDate = moment('01/01/'+currentYear).format("DD/MMM/YYYY")
@@ -532,7 +527,7 @@
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
-                            order: [1, 'asc'],
+                            order: [0, 'asc'],
                         paging: false,
                         'columnDefs': [
                             {
@@ -546,20 +541,18 @@
                                     title: title,
                                     text: 'Pdf',
                                     titleAttr: 'Export to Pdf',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    customize: function (doc) {
+                                        doc.defaultStyle.alignment = 'center';
+                                        doc.styles.tableHeader.alignment = 'center';
+                                    }
                                 },
                                 {
                                     extend: 'excel',
                                     title: title,
                                     text: 'Excel',
                                     titleAttr: 'Export to Excel ',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] }
-                                },
-                                {
-                                    extend: 'print',
-                                    title: title,
-                                    text: 'Print',
-                                    titleAttr: 'Print',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
                                     customize: function (xlsx) {
                                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                         $('row c[r^="C"]', sheet).attr('s', '51');
@@ -571,7 +564,16 @@
                                         $('row c[r^="I"]', sheet).attr('s', '51');
                                         $('row c[r^="J"]', sheet).attr('s', '51');
                                     }
-                                   
+                                  
+                                },
+                                {
+                                    extend: 'print',
+                                    title: title,
+                                    text: 'Print',
+                                    titleAttr: 'Print',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    autoPrint: false
+
                                 }],
                             data: array,
                             "drawCallback": function (settings) {

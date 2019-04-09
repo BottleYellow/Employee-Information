@@ -62,6 +62,8 @@ namespace EIS.Entities.SP
     {
         public List<SP_GetAttendanceCountReport> sP_GetAttendanceCountReports { get; set; }
         public List<SP_GetMonthlyAttendanceData> SP_GetMonthlyAttendanceData { get; set; }
+        public List<SP_GetAttendanceLeaveData> sP_GetAttendanceLeaveDatas { get; set; }
+
     }
 
     public class SP_GetAttendanceCountReport
