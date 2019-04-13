@@ -510,9 +510,9 @@
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
                             if (checkDeducted != "Deducted") {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
                             } else {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
                         }
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
@@ -527,7 +527,9 @@
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
-                            order: [0, 'asc'],
+                        scrollY: 500,
+                        scrollCollapse: true,
+                        order: [0, 'asc'],
                         paging: false,
                         'columnDefs': [
                             {

@@ -39,11 +39,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
     <style>
-        @@media (max-width : 490px) {
+        /*@@media (max-width : 490px) {
             .login100-form-title {
                 font-size:20px;
             }
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -53,12 +53,12 @@
                 <div class="col-md-4"></div>
                 <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
                     <form class="login100-form validate-form" asp-action="Login" asp-controller="Account" method="post">
-                        <span class="login100-form-title p-b-49">
+                        @*<span class="login100-form-title p-b-49">
                             <img height="55" width="55" src="~/Ems/Logo/logo.png" />
                             Aadyam Consultant
-                        </span>
+                        </span>*@
                         <span class="login100-form-title p-b-49">
-                            EMS Login
+                            Login
                         </span>
                         <span>@Html.Raw(ViewBag.CheckCreadentials)</span>
                         <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
