@@ -528,7 +528,9 @@
                         $('#example').DataTable().destroy();
                     $('#example').DataTable({
                         sDom: '<"myexport"B>ifrtlp',
-                            order: [0, 'asc'],
+                        scrollY: 500,
+                        scrollCollapse: true,
+                        order: [0, 'asc'],
                         paging: false,
                         'columnDefs': [
                             {
