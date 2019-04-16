@@ -21,5 +21,6 @@ namespace EIS.Repositories.IRepository
         List<WeeklyOffs> GetWeeklyOffs();
         string GetWeeklyOffByPerson(int PersonId);
         void UpdateProbation(int PersonId, int ProbationPeriod);
+        TestModel TestData(int page, int pageData, string filterValue);
     }
 }

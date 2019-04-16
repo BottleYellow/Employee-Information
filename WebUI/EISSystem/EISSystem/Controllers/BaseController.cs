@@ -123,7 +123,7 @@ namespace EIS.WebApp.Controllers
             IList<T1> data = JsonConvert.DeserializeObject<IList<T1>>(arrayData[1].ToString());
             return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = data });
         }
-
+        [NonAction]
         public string DecorateString(string value)
         {
             string result = "";
@@ -134,6 +134,7 @@ namespace EIS.WebApp.Controllers
             }
             return result;
         }
+        [NonAction]
         public string MakeFirstCapital(string value)
         {
             string result="";

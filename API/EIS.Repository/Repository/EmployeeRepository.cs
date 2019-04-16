@@ -124,5 +124,32 @@ namespace EIS.Repositories.Repository
             _dbContext.Database.ExecuteSqlCommand(usp, param, param2);
             _dbContext.SaveChanges();
         }
+        public TestModel TestData(int page, int pageSize, string filterValue)
+        {
+            List<Person> people = new List<Person>();
+            TestModel testModel = new TestModel();
+            int test = pageSize * page;
+            int countValue = 0;
+            Person[] persons = new Person[pageSize];
+            if (filterValue == "NULL")
+            {
+                people = _dbContext.Person.Skip(test).Take(pageSize).ToList();
+                countValue = _dbContext.Person.Count();
+            }
+            else
+            {
+                countValue = _dbContext.Person.Where(x => x.EmployeeCode.Contains(filterValue) || x.FirstName.ToLower().Contains(filterValue.ToLower())).Count();
+                people = _dbContext.Person.Where(x => x.EmployeeCode.Contains(filterValue) || x.FirstName.ToLower().Contains(filterValue.ToLower())).Skip(test).Take(pageSize).ToList();
+            }
+            int i = 0;
+            foreach (var p in people)
+            {
+                persons[i] = p;
+                i++;
+            }
+            testModel.people = persons;
+            testModel.count = countValue;
+            return testModel;
+        }
     }
 }

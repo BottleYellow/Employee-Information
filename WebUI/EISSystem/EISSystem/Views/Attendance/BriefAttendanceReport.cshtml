@@ -100,6 +100,7 @@
             border-right: 5px solid black;
         }
 
+
         .tablebutton {
             padding: 4px 4px;
             height: 20px;
@@ -441,9 +442,9 @@
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken" || data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
                                     valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                     if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
-                                        if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
+                                        if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted  ") {
                                             checkDeducted = "Deducted";
-                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
+                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>" + "&#10;";
                                         } else {
                                             checkDeducted = "NotDeducted";
                                             valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
@@ -473,7 +474,7 @@
                         var a = 0;
                         for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
-                                if (data.SP_GetMonthlyAttendanceData[j].Status == "Absent") {
+                                if (data.SP_GetMonthlyAttendanceData[j].Status=='Absent') {
                                     a = a + 1;
                                     absentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
                                 }
@@ -510,9 +511,9 @@
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
                             if (checkDeducted != "Deducted") {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
                             } else {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
                         }
                         array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);

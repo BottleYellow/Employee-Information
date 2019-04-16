@@ -366,11 +366,12 @@
                                             <div class="form-group required">
                                                 <label class="control-label" asp-for="PropbationPeriodInMonth">Probation Period(In Month) : </label>
                                                 <div class="form-line">
-                                                    <input id="ppm" asp-for="PropbationPeriodInMonth" type="text" pattern="[1-9]" maxlength="1" class="form-control" />
+                                                    <input id="ppm" asp-for="PropbationPeriodInMonth" type="text"  maxlength="1" class="form-control" onkeypress="return event.charCode >= 49 && event.charCode <= 57"/>
                                                 </div>
+                                                <span asp-validation-for="PropbationPeriodInMonth" class="text-danger"></span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>e
                                 </div>
                             }
                             else
@@ -422,6 +423,12 @@
 <script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+    $("#ppm").focusout(function () {
+        var ppm2 = document.getElementById("ppm").value;
+        if (ppm2 == "" || ppm2 == "0") {
+            $("#ppm").val(ppm);
+        }
+    });
     function SubmitForm() {
 
         bootbox.confirm({
@@ -455,9 +462,11 @@
     function MakeFirstLetterCapital(control) {
         control.value = control.value.charAt(0).toUpperCase() + control.value.slice(1).toLowerCase();
     }
-   var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+    var cultureInfo = '@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()';
+    var ppm = null;
     $(document).ready(function () {
         if (document.getElementById("wh") != null) {
+             ppm = document.getElementById("ppm").value;
             var m = document.getElementById("wh").value;
             if (m == "") {
                 $('#wh').datetimepicker({

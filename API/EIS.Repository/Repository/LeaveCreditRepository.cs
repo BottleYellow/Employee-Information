@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using EIS.Data.Context;
 using EIS.Entities.Employee;
 using EIS.Entities.Leave;
+using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,16 +50,24 @@ namespace EIS.Repositories.Repository
         public float GetAvailableLeaves(int PersonId, int LeaveId)
         {
             float n;
-            bool isPaid = _dbContext.LeaveCredit.Include(x => x.LeaveRule).Where(x => x.Id == LeaveId).FirstOrDefault().LeaveRule.IsPaid;
+            bool isPaid = LeaveId == 0 ? true : _dbContext.LeaveCredit.Include(x => x.LeaveRule).Where(x => x.Id == LeaveId).FirstOrDefault().LeaveRule.IsPaid;
             if (isPaid == true)
             {
-                n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.Id == LeaveId).Select(x => x.Available).FirstOrDefault();
+                //n = _dbContext.LeaveCredit.Where(x => x.PersonId == PersonId && x.Id == LeaveId).Select(x => x.Available).FirstOrDefault();
+                Employee_Dashboard Model = new Employee_Dashboard();
+                Model.SP_EmployeeDashboardCount = new SP_EmployeeDashboardCount();
+                Model.SP_EmployeeDashboards = new List<SP_EmployeeDashboard>();
+                var param = new SqlParameter("@PersonId", PersonId);
+                string usp = "LMS.usp_GetEmployeeDashboardCountDetails @PersonId";
+                Model.SP_EmployeeDashboardCount = _dbContext._sp_EmployeeDashboardcount.FromSql(usp, param).FirstOrDefault();
+                n = Model.SP_EmployeeDashboardCount.AvailableLeaves;
             }
             else
             {
                 n = -2;
             }
             return n;
+           
         }
 
     }

@@ -183,7 +183,7 @@ namespace EIS.WebAPI.Controllers
                 {
                     _repository.Employee.UpdateProbation(person.Id, 0);
                 }
-                else if (person.IsOnProbation == true && person.PropbationPeriodInMonth != per.PropbationPeriodInMonth)
+                else if (per.JoinDate.Date!=person.JoinDate.Date || (person.IsOnProbation == true && person.PropbationPeriodInMonth != per.PropbationPeriodInMonth))
                 {
                     _repository.Employee.UpdateProbation(person.Id, Convert.ToInt32(person.PropbationPeriodInMonth));
                 }
@@ -365,6 +365,15 @@ namespace EIS.WebAPI.Controllers
             new EmailManager(_configuration,_repository).SendEmail(subject, body, To,null);
             return Ok();
         }
+
+
+        [Route("TestData/{page}/{pageSize}/{filterValue}")]
+        [HttpGet]
+        public TestModel TestGetData([FromRoute]int page, [FromRoute]int pageSize, [FromRoute]string filterValue)
+        {
+            TestModel data = _repository.Employee.TestData(page, pageSize, filterValue);
+            return data;
+        }   
 
     }
 }

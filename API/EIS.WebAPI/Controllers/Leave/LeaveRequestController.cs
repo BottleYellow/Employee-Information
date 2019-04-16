@@ -348,7 +348,7 @@ namespace EIS.WebAPI.Controllers
         {
             string result = null;
             var credit = _repository.LeaveCredit.FindByCondition(x => x.PersonId == PersonId && x.Id == LeaveId);
-            if (credit.ValidFrom <= FromDate.Date && FromDate.Date <= credit.ValidTo)
+            if (credit.ValidFrom <= FromDate.Date && FromDate.Date <= credit.ValidTo && credit.ValidFrom <= ToDate.Date && ToDate.Date <= credit.ValidTo)
             {
                 if (type == "Future")
                 {
@@ -426,11 +426,11 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAvailableCount([FromRoute]int personId)
         {
-            float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive == true).Sum(x => x.Available);
-            int value = Convert.ToInt32(leave);
-            if (value < 0) { value = 0; }
-                
-            return Ok(value);
+            //float leave = _repository.LeaveCredit.FindAllByCondition(x => x.PersonId == personId).Include(x => x.LeaveRule).Where(x => x.IsActive == true).Sum(x => x.Available);
+            //int value = Convert.ToInt32(leave);
+            //if (value < 0) { value = 0; }
+            float value = _repository.LeaveCredit.GetAvailableLeaves(personId, 0);    
+            return Ok(Convert.ToInt32(value));
         }
 
     }

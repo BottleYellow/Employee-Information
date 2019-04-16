@@ -74,4 +74,9 @@ namespace EIS.Entities.Employee
             }
         }
     }
+    public class TestModel
+    {
+        public Person[] people;
+        public int count;
+    }
 }
