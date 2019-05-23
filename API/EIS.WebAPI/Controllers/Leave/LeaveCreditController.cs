@@ -52,10 +52,15 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             else
             {
-                credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0 && x.LeaveRule.IsPaid == true).ToList();
-                if (credits.Count == 0)
+                //               credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0 && x.LeaveRule.IsPaid == true).ToList();
+                int avl = Convert.ToInt32(_repository.LeaveCredit.GetAvailableLeaves(PersonId, 0));
+                if (avl == 0)
                 {
                     credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+                }
+                else
+                {
+                    credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == true).ToList();
                 }
             }
            

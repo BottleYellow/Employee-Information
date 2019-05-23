@@ -34,7 +34,7 @@ namespace EIS.WebAPI.Services
             int day = DateTime.Now.Day;
             int month = DateTime.Now.Month;
             string emailBody = "Today is birthday of ";
-            var rootPath = @"C:\Temp\BirthdayImage\Birthday.jpg";
+            //var rootPath = @"C:\Temp\BirthdayImage\Birthday.jpg";
             List<Person> person = _repository.Employee.FindAllByCondition(x => x.DateOfBirth.Day == day && x.DateOfBirth.Month == month).ToList();
             if (person.Count > 0)
             {
@@ -45,7 +45,7 @@ namespace EIS.WebAPI.Services
                     string subject = "Birthday Wishes From Aadyam Consultant";
                   
                   
-                    Image img = Image.FromFile(rootPath);
+                    //Image img = Image.FromFile(rootPath);
                     string body = "Dear " + p.FullName + ", \n" + "Aadyam Consultant wishes you Happy Birthday\n";
 
                     new EmailManager(_configuration, _repository).SendEmail(subject, body, To,null);

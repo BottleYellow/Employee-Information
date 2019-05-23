@@ -11,7 +11,7 @@ namespace EIS.WebApp.Services
         private static IHttpContextAccessor m_httpContextAccessor;
 
         public static HttpContext Current => m_httpContextAccessor.HttpContext;
-        public static string APIBaseURL =>  $"http://localhost:54830/";//http://localhost:54830/
+        public static string APIBaseURL =>  $"http://localhost:54830/"; //http://aclpune.com/emsapi/
         public static string AppBaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
 
         internal static void Configure(IHttpContextAccessor contextAccessor)
