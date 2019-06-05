@@ -55,7 +55,7 @@
             <b>Employee Code : @Model.EmployeeCode</b><br />
             <b>Employee Name : @Model.EmployeeName</b>
             <div class="table-responsive">
-                <table id="example" class="table table-bordered table-striped table-hover order-column" style="width:100%">
+                <table id="example" class="table table-bordered table-striped table-hover order-column">
                     <thead>
                         <tr>
                             <th>Sr. No</th>
@@ -82,7 +82,22 @@
                                     @item.PaidStatus
                                 </td>
                                 <td>
-                                    @item.HrStatus
+                                    @if (item.HrStatus == null)
+                                    {
+                                        if (item.PaidStatus == "Unpaid")
+                                        {
+                                            <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
+                                        }
+                                        @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
+                                        else
+                                        {
+                                            <span>-</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @item.HrStatus
+                                    }
                                 </td>
                             </tr>
                         }
@@ -105,12 +120,49 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    function deductButton(employeeCode,date) {
+        var messageText = 'Are you sure you want to deduct amount of 1 day from salary';
+        bootbox.confirm({
+            message: messageText,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("DeductOneDayFromSalary", "Attendance")',
+                        type: "POST",
+                        datatype: "json",
+                        data: { "EmployeeCode": employeeCode, "Date": date },
+                        success: function () {
+                            bootbox.alert({
+                                message: "Amount of 1 day deducted from salary",
+                                callback: function () {
+                                    window.parent.location.reload();
+                                }
+                            });
+
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong.Please try after sometime");
+                        }
+                    });
+                }
+            }
+        });
+    }
     $(document).ready(function () {
         $('#example').DataTable({
             sDom: '<"myexport"B>ifrtlp',
             paging: false,
             scrollY: "400px",
-            scrollX: false,
             fixedColumns: true,
           
             buttons: [
@@ -131,7 +183,12 @@
                     title: 'Leaves In Detail',
                     text: 'Print',
                     titleAttr: 'Print'
-                }]
+                }],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData[4].includes("Deducted")) {
+                    $('td', nRow).addClass('danger');
+                }
+            }
         });
     });
 </script>

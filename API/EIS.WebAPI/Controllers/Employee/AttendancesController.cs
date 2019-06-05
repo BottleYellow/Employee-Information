@@ -284,6 +284,29 @@ namespace EIS.WebAPI.Controllers
           
            return Ok(status);
         }
+
+        [HttpGet]
+        [Route("DeductOneDayFromSalary/{EmployeeCode}/{Date}")]
+        public IActionResult DeductOneDayFromSalary([FromRoute]string EmployeeCode, [FromRoute]string Date)
+        {
+            int personId = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode).Id;
+                DateTime dateTime = Convert.ToDateTime(Date);
+                Attendance attendance = new Attendance
+                {
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
+                    DateIn = dateTime,
+                    DateOut = dateTime,
+                    TimeIn = new TimeSpan(),
+                    EmployeeCode = EmployeeCode,
+                    HrStatus = "Deducted",
+                    IsActive = false,
+                    PersonId = personId
+                };
+                _repository.Attendances.CreateAndSave(attendance);
+            string status = "fine";
+            return Ok(status);
+        }
         #endregion
 
         #region Leaves in Detail

@@ -260,7 +260,16 @@ namespace EIS.WebApp.Controllers
             HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/DeductFromSalary/" + EmployeeCode+"/"+Dates);
             string stringData = response.Content.ReadAsStringAsync().Result;
             string data = JsonConvert.DeserializeObject<string>(stringData);
+            return Json(data);
+        }
 
+        [DisplayName("Deduct OneDay From Salary")]
+        [HttpPost]
+        public IActionResult DeductOneDayFromSalary(string EmployeeCode, string Date)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/DeductOneDayFromSalary/" + EmployeeCode + "/" + Date);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);
         }
         #endregion
