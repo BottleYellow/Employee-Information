@@ -165,5 +165,19 @@ namespace EIS.Entities.SP
         public Nullable<System.TimeSpan> TotalHours { get; set; }
         public string Status { get; set; }
     }
-
+    public class SP_GetLeavesInDetail
+    {
+        [Key]
+        public Nullable<int> Id { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public string Reason { get; set; }
+        public string PaidStatus { get; set; }
+        public string HrStatus { get; set; }
+    }
+    public class LeavesInDetail
+    {
+        public string EmployeeCode { get; set; }
+        public string EmployeeName { get; set; }
+        public List<SP_GetLeavesInDetail> sP_GetLeavesInDetail { get; set; }
+    }
 }

@@ -379,5 +379,22 @@ namespace EIS.Repositories.Repository
             }).ToList();
             return attendanceUpdates;
         }
+
+        public LeavesInDetail GetLeavesInDetail(string Type, string InputOne, string InputTwo, string EmployeeCode)
+        {
+            //string InputTwo = month.ToString().PadLeft(2, c);=
+            LeavesInDetail Model = new LeavesInDetail();
+            Model.EmployeeCode = EmployeeCode;
+            Person person = _dbContext.Person.Where(x => x.EmployeeCode == EmployeeCode).FirstOrDefault();
+            Model.EmployeeName = person != null ? person.FullName : "";
+            Model.sP_GetLeavesInDetail = new List<SP_GetLeavesInDetail>();
+            var SP_SelectType = new SqlParameter("@SelectType", Type);
+            var SP_InputOne = new SqlParameter("@InputOne", InputOne);
+            var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
+            var SP_EmployeeCode = new SqlParameter("@EmployeeCode", EmployeeCode);
+            string usp = "LMS.usp_GetLeavesInDetail @SelectType, @InputOne, @InputTwo, @EmployeeCode";
+            Model.sP_GetLeavesInDetail = _dbContext._sp_GetLeavesInDetail.FromSql(usp, SP_SelectType, SP_InputOne, SP_InputTwo, SP_EmployeeCode).ToList();
+            return Model;
+        }
     }
 }

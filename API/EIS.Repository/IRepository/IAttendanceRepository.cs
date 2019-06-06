@@ -15,6 +15,7 @@ namespace EIS.Repositories.IRepository
         List<SP_GetDateWiseAttendance> dateWiseAttendances(string EmployeeCode, int LocationId, string fromDate, string toDate);
         Attendance_Report_New GetAttendanceCountReportNew(string SearchFor, string InputOne, string InputTwo, int locationId,bool status);
         List<AttendanceUpdateData> GetattendanceUpdateData(string status);
+        LeavesInDetail GetLeavesInDetail(string Type, string InputOne, string InputTwo, string EmployeeCode);
     }
 
 

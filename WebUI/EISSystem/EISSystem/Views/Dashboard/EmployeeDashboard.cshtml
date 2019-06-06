@@ -27,7 +27,19 @@
                 padding-right: 0px;
             }
         }
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
 
+            .ajax-loader img {
+                position: relative;
+                top: 45%;
+                left: 45%;
+            }
         .info-box {
             margin-bottom: 15px;
             cursor: pointer;
@@ -65,6 +77,9 @@
         }
     </style>
 </head>
+<div class="ajax-loader">
+    <img src="~/gif/Spinner.gif" />
+</div>
 <div class="container-fluid">
 
     <div class="block-header">
@@ -259,6 +274,9 @@
                             type: 'POST',
                             url: '@Url.Action("AttendanceRequest","Dashboard")',
                             data: { "personId": pid, "message": message, "dateSelected": date },
+                            beforeSend: function () {
+                                $('.ajax-loader').css("visibility", "visible");
+                            },
                             success: function (data) {
                                 if (data == "success") {
                                     bootbox.alert({
@@ -270,6 +288,9 @@
                                 } else {
                                     bootbox.alert("Something went wrong. Please try again later.");
                                 }
+                            },
+                            complete: function () {
+                                $('.ajax-loader').css("visibility", "hidden");
                             },
                             error: function () {
                                 bootbox.alert("Error Occurred. Please try again later.");
@@ -302,6 +323,9 @@
             type: 'POST',
             url: '@Url.Action("EmployeeDashboard","Dashboard")',
             data: { "PersonId": pid },
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
             success: function (data) {
                 if (data != null) {
                     document.getElementById("PresentDays").innerHTML = data.SP_EmployeeDashboardCount.PresentDays ;
@@ -320,6 +344,9 @@
                     }
 
                 }
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
             }
         });
     }

@@ -1,0 +1,151 @@
+﻿@model EIS.Entities.SP.LeavesInDetail;
+@using EIS.WebApp.Services
+
+<head>
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <style>
+        #example_wrapper > .table-scrollable > .dataTables_scroll >
+        .dataTables_scrollHead > .dataTables_scrollHeadInner {
+            width: 100% !important;
+        }
+
+            #example_wrapper > .table-scrollable > .dataTables_scroll >
+            .dataTables_scrollHead > .dataTables_scrollHeadInner table {
+                width: 100% !important;
+            }
+
+        li:hover {
+            cursor: pointer;
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+
+        table.dataTable td {
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    </style>
+</head>
+
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
+}
+
+
+<div id="md" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <HeaderWithButton header-name="Leaves In Detail"></HeaderWithButton>
+        </div>
+        <div class="modal-body">
+            <b>Employee Code : @Model.EmployeeCode</b><br />
+            <b>Employee Name : @Model.EmployeeName</b>
+            <div class="table-responsive">
+                <table id="example" class="table table-bordered table-striped table-hover order-column" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Sr. No</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Paid / Unpaid</th>
+                            <th>Deduction Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.sP_GetLeavesInDetail)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Id
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")
+                                </td>
+                                <td>
+                                    @item.Reason
+                                </td>
+                                <td>
+                                    @item.PaidStatus
+                                </td>
+                                <td>
+                                    @item.HrStatus
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+                    
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+<script src="~/plugins/momentjs/moment.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+
+<script src="~/js/pages/ui/modals.js"></script>
+<script src="~/plugins/bootbox/bootbox.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            sDom: '<"myexport"B>ifrtlp',
+            paging: false,
+            scrollY: "400px",
+            scrollX: false,
+            fixedColumns: true,
+          
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Leaves In Detail',
+                    text: 'Pdf',
+                    titleAttr: 'Export to PDF'
+                },
+                {
+                    extend: 'excel',
+                    title: 'Leaves In Detail',
+                    text: 'Excel',
+                    titleAttr: 'Export to Excel '
+                },
+                {
+                    extend: 'print',
+                    title: 'Leaves In Detail',
+                    text: 'Print',
+                    titleAttr: 'Print'
+                }]
+        });
+    });
+</script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+

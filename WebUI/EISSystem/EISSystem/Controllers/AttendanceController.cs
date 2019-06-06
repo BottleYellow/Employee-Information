@@ -64,6 +64,17 @@ namespace EIS.WebApp.Controllers
             Attendance_Report_New attendanceData = JsonConvert.DeserializeObject<Attendance_Report_New>(stringData);
             return Json(attendanceData);
         }
+
+        [HttpGet]
+        [DisplayName("Leaves In Detail")]
+        public IActionResult LeavesInDetail(string Type,string Year,string Month, string EmployeeCode)
+        {
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/GetLeavesInDetail/" + Type + "/" + Year + "/" + Month + "/" + EmployeeCode);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            LeavesInDetail  data = JsonConvert.DeserializeObject<LeavesInDetail>(stringData);
+            return PartialView("LeavesInDetail", data);
+        }
+     
         #endregion
 
         #region Attendance Summary

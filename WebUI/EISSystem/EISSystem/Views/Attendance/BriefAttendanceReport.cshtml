@@ -120,6 +120,7 @@
     <div class="ajax-loader">
         <img src="~/gif/Spinner.gif" />
     </div>
+    <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("LeavesInDetail")"></div>
     <div class="container-fluid">
         <div class="block-header">
             <HeaderWithButton header-name="Brief Attendance Report"></HeaderWithButton>
@@ -208,7 +209,7 @@
                                             <th>Total Absent Days</th>
                                             <th>Proposed Leaves</th>
                                             <th>Balance Leaves</th>
-                                            <th>Compulsant Leaves</th>
+                                            <th>Compensated Leaves</th>
                                             <th>Leaves Without Pay</th>
                                         </tr>
                                     </thead>
@@ -314,7 +315,7 @@
         });
     });
      $('#generateReport').on('click', function () {
-            var v = $('#select').val();
+         var v = $('#select').val();
          var location = $('#locations').val();
          var status = $('#status').val();
             if (v == 'year') {
@@ -483,9 +484,9 @@
                         var a = 0;
                         for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
                             if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
-                                if (data.SP_GetMonthlyAttendanceData[j].Status=='Absent') {
+                                if (data.SP_GetMonthlyAttendanceData[j].Status.startsWith('Absent')) {
                                     a = a + 1;
-                                    absentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
+                                    absentDays += data.SP_GetMonthlyAttendanceData[j].Status.includes("Unpaid") ? moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + " (Unpaid)" + "&#10;" : moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;" ;
                                 }
                             }
                         }
@@ -525,7 +526,8 @@
                                 leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
                         }
-                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName), data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
+                        var link = '<a onclick="javascript: GetLeaves(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\')">' + DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName)+'</a>'
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, link, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
                     }
 
                     var todayDate = new Date();
@@ -547,7 +549,7 @@
                         fixedColumns: true,
                         order: [0, 'asc'],
                         paging: false,
-                     
+
                         'columnDefs': [
                             {
                                 "targets": [2, 3, 4, 5, 6,7,8,9,10], // your case first column
@@ -583,7 +585,7 @@
                                         $('row c[r^="I"]', sheet).attr('s', '51');
                                         $('row c[r^="J"]', sheet).attr('s', '51');
                                     }
-                                  
+
                                 },
                                 {
                                     extend: 'print',
@@ -607,14 +609,26 @@
                 }
             });
     }
-  
+
+    function GetLeaves(Ecode) {
+        var Type = $('#select').val();
+        var Year = $("#inputyear").val();
+        var url = $("#modal-placeholder").data('url') + "?Type=" + Type + "&Year=" + Year + "&Month=01&EmployeeCode=" + Ecode;
+        $.get(url, function (data) {
+            $("#modal-placeholder").html(data);
+            $("#modal-placeholder").modal({ backdrop: 'static', keyboard: false },'show');
+        }).fail(function (xhr, status, error) {
+            if (xhr.status == 401) {
+                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+            } else {
+                bootbox.alert("<h4>Unable to retrieve the Record</h4>" + error);
+            }
+        });
+
+    }
+
     function test(data, count, value) {
-        var message = '';
-        if (count == "1") {
-            message = count + ' day';
-        } else {
-            message = count + ' days';
-        }
+        var message = count == 1 ? count + ' day' : count + ' days';
         var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
         bootbox.confirm({
             message: messageText,

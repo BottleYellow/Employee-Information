@@ -285,5 +285,15 @@ namespace EIS.WebAPI.Controllers
            return Ok(status);
         }
         #endregion
+
+        #region Leaves in Detail
+
+        [HttpGet("GetLeavesInDetail/{Type}/{InputOne}/{InputTwo}/{EmployeeCode}")]
+        public IActionResult GetLeavesInDetail([FromRoute] string Type, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]string EmployeeCode)
+        {
+            LeavesInDetail result = _repository.Attendances.GetLeavesInDetail(Type, InputOne, InputTwo, EmployeeCode);
+            return Ok(result);
+        }
+        #endregion
     }
 }
