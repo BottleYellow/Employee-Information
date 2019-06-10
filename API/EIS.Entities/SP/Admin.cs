@@ -173,6 +173,7 @@ namespace EIS.Entities.SP
         public string Reason { get; set; }
         public string PaidStatus { get; set; }
         public string HrStatus { get; set; }
+        public Nullable<System.DateTime> DeductionDate { get; set; }
     }
     public class LeavesInDetail
     {

@@ -214,7 +214,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
+        var data =@Html.Raw(Json.Serialize(ViewBag.Locations))
         $('#banerPanelHeading').html(data[1].LocationName);
         $('#kondhwaPanelHeading').html(data[0].LocationName);
         var currentDate = new Date();
@@ -423,7 +423,7 @@
                                         PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-" + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ")" + "&#10;";
                                     }
 
-                                } else if (data.SP_GetMonthlyAttendanceData[j].Status == "Absent") {
+                                } else if (data.SP_GetMonthlyAttendanceData[j].Status !=null && data.SP_GetMonthlyAttendanceData[j].Status.startsWith("Absent")) {
                                     AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
                                 }
                             }
@@ -433,7 +433,7 @@
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Adjusted") {
                                     valueExtraWorking += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 }
-                                else { 
+                                else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.startsWith("Taken")) { 
                                     valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 }
                             }

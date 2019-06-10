@@ -7,13 +7,11 @@
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="~/css/customStyle.css" rel="stylesheet" />
     <style>
-        #example_wrapper > .table-scrollable > .dataTables_scroll >
-        .dataTables_scrollHead > .dataTables_scrollHeadInner {
+        #LeaveDetails_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner {
             width: 100% !important;
         }
 
-            #example_wrapper > .table-scrollable > .dataTables_scroll >
-            .dataTables_scrollHead > .dataTables_scrollHeadInner table {
+            #LeaveDetails_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner table {
                 width: 100% !important;
             }
 
@@ -52,54 +50,58 @@
             <HeaderWithButton header-name="Leaves In Detail"></HeaderWithButton>
         </div>
         <div class="modal-body">
-            <b>Employee Code : @Model.EmployeeCode</b><br />
-            <b>Employee Name : @Model.EmployeeName</b>
+            <b style="color:black;">Employee Code : @Model.EmployeeCode</b><br />
+            <b style="color:black;">Employee Name : @Model.EmployeeName</b>
             <div class="table-responsive">
-                <table id="example" class="table table-bordered table-striped table-hover order-column">
+                <table id="LeaveDetails" class="table table-bordered table-striped table-hover order-column">
                     <thead>
                         <tr>
                             <th>Sr. No</th>
-                            <th>Date</th>
+                            <th>Leave / Absent Date</th>
                             <th>Reason</th>
                             <th>Paid / Unpaid</th>
                             <th>Deduction Status</th>
+                            <th>Date of Deduction</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.sP_GetLeavesInDetail)
                         {
-                            <tr>
-                                <td>
-                                    @item.Id
-                                </td>
-                                <td>
-                                    @Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")
-                                </td>
-                                <td>
-                                    @item.Reason
-                                </td>
-                                <td>
-                                    @item.PaidStatus
-                                </td>
-                                <td>
-                                    @if (item.HrStatus == null)
+                        <tr>
+                            <td>
+                                @item.Id
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                                @item.Reason
+                            </td>
+                            <td>
+                                @item.PaidStatus
+                            </td>
+                            <td>
+                                @if (item.HrStatus == null)
+                                {
+                                    if (item.PaidStatus == "Unpaid")
                                     {
-                                        if (item.PaidStatus == "Unpaid")
-                                        {
-                                            <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
-                                        }
-                                        @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
-                                        else
-                                        {
-                                            <span>-</span>
-                                        }
+                                        <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
                                     }
+                                    @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
                                     else
                                     {
-                                        @item.HrStatus
+                                        <span>-</span>
                                     }
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    @item.HrStatus
+                                }
+                            </td>
+                            <td>
+                                @item.DeductionDate
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -159,33 +161,32 @@
         });
     }
     $(document).ready(function () {
-        $('#example').DataTable({
+        var table = $('#LeaveDetails').DataTable({
             sDom: '<"myexport"B>ifrtlp',
             paging: false,
             scrollY: "400px",
-            fixedColumns: true,
-          
+            scrollCollapse: true,
             buttons: [
                 {
                     extend: 'pdfHtml5',
-                    title: 'Leaves In Detail',
+                    title: 'Leaves In Detail - @Model.EmployeeName',
                     text: 'Pdf',
                     titleAttr: 'Export to PDF'
                 },
                 {
                     extend: 'excel',
-                    title: 'Leaves In Detail',
+                    title: 'Leaves In Detail - @Model.EmployeeName',
                     text: 'Excel',
                     titleAttr: 'Export to Excel '
                 },
                 {
                     extend: 'print',
-                    title: 'Leaves In Detail',
+                    title: 'Leaves In Detail - @Model.EmployeeName',
                     text: 'Print',
                     titleAttr: 'Print'
                 }],
             "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                if (aData[4].includes("Deducted")) {
+                if (aData[2].startsWith("Absent")) {
                     $('td', nRow).addClass('danger');
                 }
             }

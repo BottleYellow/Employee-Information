@@ -3,10 +3,12 @@ using EIS.Entities.Generic;
 using EIS.Entities.Models;
 using EIS.Entities.SP;
 using EIS.Repositories.IRepository;
+using EIS.WebAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,9 +24,10 @@ namespace EIS.WebAPI.Controllers
     [ApiController]
     public class AttendancesController : BaseController
     {
-        public AttendancesController(IRepositoryWrapper repository) : base(repository)
+        public readonly IConfiguration _configuration;
+        public AttendancesController(IRepositoryWrapper repository,IConfiguration configuration) : base(repository)
         {
-
+            _configuration = configuration;
         }
 
         #region[Attendance]
@@ -256,41 +259,81 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("DeductFromSalary/{EmployeeCode}/{Dates}")]
-        public IActionResult DeductFromSalary([FromRoute]string EmployeeCode,[FromRoute]string Dates)
+        [Route("DeductFromSalary/{EmployeeCode}/{Dates}/{GrantedLeaves}/{TakenLeaves}")]
+        public IActionResult DeductFromSalary([FromRoute]string EmployeeCode,[FromRoute]string Dates,int GrantedLeaves,int TakenLeaves)
         {
             int count = Dates.Count(x => x == '&')+1;
             string[] stringDates = new string[count];
             stringDates = Dates.Split("&");
-            int personId = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode).Id;
+            Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);
+            int personId = person != null ? person.Id : 0;
+            string EmailId = person != null ? person.EmailAddress : "";
+            string EmpName = person != null ? person.FullName : "";
+            int DeductedCount = 0;
             foreach(var date in stringDates)
             {
+                List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(date) && x.HrStatus == "Deducted").ToList();
+                int Count = list != null ? list.Count : 0;
                 DateTime dateTime = Convert.ToDateTime(date);
-                Attendance attendance = new Attendance
+                if (Count == 0)
                 {
-                CreatedDate =DateTime.Now,
-                UpdatedDate=DateTime.Now,
-                DateIn= dateTime,
-                DateOut=dateTime,
-                TimeIn=new TimeSpan(),
-                EmployeeCode=EmployeeCode,
-                HrStatus="Deducted",
-                IsActive=false,
-                PersonId=personId
-                };
-                _repository.Attendances.CreateAndSave(attendance);
+                    Attendance attendance = new Attendance
+                    {
+                        CreatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
+                        DateIn = dateTime,
+                        DateOut = dateTime,
+                        TimeIn = new TimeSpan(),
+                        EmployeeCode = EmployeeCode,
+                        HrStatus = "Deducted",
+                        IsActive = false,
+                        PersonId = personId
+                    };
+                    _repository.Attendances.CreateAndSave(attendance);
+                    DeductedCount++;
+                }
             }
             string status = "fine";
-          
-           return Ok(status);
+            //Send Mail to Employee
+            string To = EmailId;
+            string subject = "Deduction of unpaid leaves";
+            string bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that your total leaves " +
+                "have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, your total leaves are " + TakenLeaves +
+                " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
+                "Thanks\n\nRegards,\n\nAadyam Consultants.";
+            new EmailManager(_configuration, _repository).SendEmail(subject, bodyForEmployee, To, null);
+            //Send Mail to Admin and HR
+            var results = _repository.Employee.FindAllWithNoTracking().Include(x => x.Role).Where(x => x.Role.Name.ToUpper() == "HR" || x.Role.Name.ToUpper() == "ADMIN")
+                 .Select(p => new
+                 {
+                     p.FullName,
+                     p.EmailAddress
+                 }).ToList();
+            foreach (var p in results)
+            {
+                To = p.EmailAddress;
+                string bodyForHRAndAdmin = "Dear " + p.FullName + ",\n\n" + "This is to inform you that total leaves of " + EmpName +
+                    " have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, his/her total leaves are " + TakenLeaves +
+                    " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
+                    "Thanks\n\nRegards,\n\nAadyam Consultants.";
+                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+            }
+            return Ok(status);
         }
 
         [HttpGet]
         [Route("DeductOneDayFromSalary/{EmployeeCode}/{Date}")]
         public IActionResult DeductOneDayFromSalary([FromRoute]string EmployeeCode, [FromRoute]string Date)
         {
-            int personId = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode).Id;
-                DateTime dateTime = Convert.ToDateTime(Date);
+            List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(Date) && x.HrStatus == "Deducted").ToList();
+            int Count = list != null ? list.Count : 0;
+            Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);
+            int personId = person != null ? person.Id : 0;
+            string EmailId = person != null ? person.EmailAddress : "";
+            string EmpName = person != null ? person.FullName : "";
+            DateTime dateTime = Convert.ToDateTime(Date);
+            if (Count == 0)
+            {
                 Attendance attendance = new Attendance
                 {
                     CreatedDate = DateTime.Now,
@@ -303,8 +346,32 @@ namespace EIS.WebAPI.Controllers
                     IsActive = false,
                     PersonId = personId
                 };
+
                 _repository.Attendances.CreateAndSave(attendance);
+            }
             string status = "fine";
+            //Send Mail to Employee
+            string To = EmailId;
+            string subject = "Deduction of unpaid leaves";
+            string bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that your unpaid leave of " + dateTime.ToString("dd-MMM-yyyy") +
+                " has been deducted from the salary payment, which please note.\n\n" +
+                "Thanks\n\nRegards,\n\nAadyam Consultants.";
+            new EmailManager(_configuration, _repository).SendEmail(subject, bodyForEmployee, To, null);
+            //Send Mail to Admin and HR
+            var results = _repository.Employee.FindAllWithNoTracking().Include(x => x.Role).Where(x => x.Role.Name.ToUpper() == "HR" || x.Role.Name.ToUpper() == "ADMIN")
+                 .Select(p => new
+                 {
+                     p.FullName,
+                     p.EmailAddress
+                 }).ToList();
+            foreach (var p in results)
+            {
+                To = p.EmailAddress;
+                string bodyForHRAndAdmin = "Dear " + p.FullName + ",\n\n" + "This is to inform you that unpaid leave of " + dateTime.ToString("dd-MMM-yyyy") +
+                " has been deducted from the salary payment of " + EmpName + ", which please note.\n\n" +
+                "Thanks\n\nRegards,\n\nAadyam Consultants.";
+                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+            }
             return Ok(status);
         }
         #endregion

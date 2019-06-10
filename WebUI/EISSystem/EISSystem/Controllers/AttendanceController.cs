@@ -255,9 +255,9 @@ namespace EIS.WebApp.Controllers
         //}
         [DisplayName("Deduct From Salary")]
         [HttpPost]
-        public IActionResult DeductFromSalary(string EmployeeCode,string Dates)
+        public IActionResult DeductFromSalary(string EmployeeCode,string Dates,int GrantedLeaves,int TakenLeaves)
         {
-            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/DeductFromSalary/" + EmployeeCode+"/"+Dates);
+            HttpResponseMessage response = _service.GetResponse(ApiUrl + "/api/Attendances/DeductFromSalary/" + EmployeeCode + "/" + Dates + "/" + GrantedLeaves + "/" + TakenLeaves);
             string stringData = response.Content.ReadAsStringAsync().Result;
             string data = JsonConvert.DeserializeObject<string>(stringData);
             return Json(data);

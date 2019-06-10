@@ -392,8 +392,9 @@ namespace EIS.Repositories.Repository
             var SP_InputOne = new SqlParameter("@InputOne", InputOne);
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
             var SP_EmployeeCode = new SqlParameter("@EmployeeCode", EmployeeCode);
-            string usp = "LMS.usp_GetLeavesInDetail @SelectType, @InputOne, @InputTwo, @EmployeeCode";
-            Model.sP_GetLeavesInDetail = _dbContext._sp_GetLeavesInDetail.FromSql(usp, SP_SelectType, SP_InputOne, SP_InputTwo, SP_EmployeeCode).ToList();
+            var SP_Flag = new SqlParameter("@Flag", "All");
+            string usp = "LMS.usp_GetLeavesInDetail @SelectType, @InputOne, @InputTwo, @EmployeeCode,@Flag";
+            Model.sP_GetLeavesInDetail = _dbContext._sp_GetLeavesInDetail.FromSql(usp, SP_SelectType, SP_InputOne, SP_InputTwo, SP_EmployeeCode, SP_Flag).ToList();
             return Model;
         }
     }

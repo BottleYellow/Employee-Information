@@ -444,20 +444,22 @@
                         var proposedLeaves = "";
                         var cnt = 0;
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
-                            if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
-                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Taken" || data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
+                        if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
+                            if ((data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.startsWith("Taken")) || (data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay"))) {
+                                if (!data.sP_GetAttendanceLeaveDatas[j].Reason.startsWith("Absent")) {
                                     valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
-                                    if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "WithoutPay") {
-                                        cnt = cnt + 1;
-                                        if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted  ") {
-                                            checkDeducted = "Deducted";
-                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>" + "&#10;";
-                                        } else {
-                                            checkDeducted = "NotDeducted";
-                                            valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
-                                        }
-                                        valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
+                                }
+                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay")) {
+                                    cnt = cnt + 1;
+                                    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted  ") {
+                                        checkDeducted = "Deducted";
+                                        //valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>" + "&#10;";
+                                    } else {
+                                        checkDeducted = "NotDeducted";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                     }
+                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
+                                }
                                 } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
                                     valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
                                 }
@@ -478,10 +480,10 @@
                             }
                         }
                         var withoutPayAbsent = 0;
-                        if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay > cnt) {
-                            withoutPayAbsent = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay - cnt;
-                            valueWithOutPay += "Absent Days : " + withoutPayAbsent + "&#10;";
-                        }
+                        //if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay > cnt) {
+                        //    withoutPayAbsent = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay - cnt;
+                        //    valueWithOutPay += "Absent Days : " + withoutPayAbsent + "&#10;";
+                        //}
                         x = valueWithOutPayDates.slice(0, -1);
                         var a = 0;
                         for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
@@ -523,7 +525,7 @@
                             leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         } else {
                             if (checkDeducted != "Deducted") {
-                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a></li></ul></div>';
+                                leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves + '\',\'' + (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays) + '\')">Deduct from salary</a></li></ul></div>';
                             } else {
                                 leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
@@ -621,7 +623,7 @@
             $("#modal-placeholder").modal({ backdrop: 'static', keyboard: false },'show');
         }).fail(function (xhr, status, error) {
             if (xhr.status == 401) {
-                bootbox.alert("<h4>Access denied..Unable to add the Record</h4>");
+                bootbox.alert("<h4>Access denied..</h4>");
             } else {
                 bootbox.alert("<h4>Unable to retrieve the Record</h4>" + error);
             }
@@ -629,7 +631,7 @@
 
     }
 
-    function test(data, count, value) {
+    function test(data, count, value,granted,taken) {
         var message = count == 1 ? count + ' day' : count + ' days';
         var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
         bootbox.confirm({
@@ -650,7 +652,7 @@
                         url: '@Url.Action("DeductFromSalary", "Attendance")',
                         type: "POST",
                         datatype: "json",
-                        data: { "EmployeeCode": data, "Dates": value },
+                        data: { "EmployeeCode": data, "Dates": value, "GrantedLeaves": granted, "TakenLeaves": taken },
                         success: function (data) {
                             bootbox.alert({
                                 message: "Amount of " + message + " deducted from salary",
