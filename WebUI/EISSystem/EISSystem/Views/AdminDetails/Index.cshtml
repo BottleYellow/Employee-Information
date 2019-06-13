@@ -3,7 +3,7 @@
 
 
 <head>
-    <title>List of Employees</title>
+    <title>List of Admins</title>
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
     <div class="block-header">
         <div class="row">
             <div class="col-md-12">
-                <HeaderWithButton header-name="List of Employees" btn-href="location.href='@rootPath/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
+                <HeaderWithButton header-name="List of Admins" btn-href="location.href='@rootPath/People/Create'" btn-text="Create" icon-name="person_add"></HeaderWithButton>
             </div>
         </div>
     </div>
@@ -82,11 +82,11 @@
     <div class="row clearfix">
         <div class="row">
             <div class="col-md-9" style="height:50px">
-                <div class="col-md-4 col-sm-6 col-xs-12">
+                @*<div class="col-md-4 col-sm-6 col-xs-12">
                     <select id="locations" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick">
                         <option value="0">All</option>
                     </select>
-                </div>
+                </div>*@
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <select class="form-control show-tick" id="select">
                         <option id="active" value="active">Active</option>
@@ -209,7 +209,7 @@
     });
     function generateReport(b,c) {
         $.ajax({
-            "url": '@Url.Action("Index", "People")?type=' + b + '&LocationId=' + c,
+            "url": '@Url.Action("Index", "AdminDetails")?type=' + b,
             "type": "POST",
             "datatype": "json",
             beforeSend: function () {

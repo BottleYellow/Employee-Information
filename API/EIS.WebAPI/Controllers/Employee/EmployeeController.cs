@@ -318,29 +318,19 @@ namespace EIS.WebAPI.Controllers
         [HttpGet]
         [Route("Data/{type}/{locationId}")]
         [AllowAnonymous]
-        public IActionResult GetData(bool type,int locationId)
+        public IActionResult GetEmployeesData(bool type,int locationId)
         {
-            //ArrayList employeeslist;
             List<SP_GetEmployee> list = null;
-            //if (sortGrid.LocationId == 0)
-            //{
             list = _repository.Employee.getEmployees(locationId).Where(x => x.IsActive == type).ToList();
-
-            //}
-            //else
-            //{
-            //    list = _repository.Employee.FindAllByCondition(x => x.TenantId == TenantId && x.IsActive == sortGrid.IsActive && x.LocationId == sortGrid.LocationId).Include(x => x.Location).Include(x => x.Role).Where(x => x.Role.Name != "Admin" && x.Location.IsActive == true);
-            //}
-            //if (sortGrid.Search == null)
-            //{
-            //    employeeslist = _repository.Employee.GetDataByGridCondition(null, sortGrid,list);
-            //}
-            //else
-            //{
-            //    string search = sortGrid.Search.ToLower();
-            //    employeeslist = _repository.Employee.GetDataByGridCondition(x =>x.Location.LocationName.ToLower().Contains(search)|| x.EmployeeCode == search || x.FirstName.ToLower().Contains(search)||x.MiddleName.ToLower().Contains(search)||x.LastName.ToLower().Contains(search)||x.EmailAddress.ToLower().Contains(search) || x.MobileNumber.Contains(search), sortGrid, list);
-            //}
-            //return Ok(employeeslist);
+            return Ok(list);
+        }
+        [HttpGet]
+        [Route("AdminData/{type}")]
+        [AllowAnonymous]
+        public IActionResult GetAdminsData(bool type)
+        {
+            List<SP_GetEmployee> list = null;
+            list = _repository.Employee.getAdmins().Where(x => x.IsActive == type).ToList();
             return Ok(list);
         }
         public string GetTitle(Gender gender)

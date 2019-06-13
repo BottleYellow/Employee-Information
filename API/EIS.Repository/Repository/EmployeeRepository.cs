@@ -151,5 +151,13 @@ namespace EIS.Repositories.Repository
             testModel.count = countValue;
             return testModel;
         }
+
+        public List<SP_GetEmployee> getAdmins()
+        {
+            List<SP_GetEmployee> _GetAdmins = new List<SP_GetEmployee>();
+            string usp = "LMS.usp_GetAdminDetails";
+            _GetAdmins = _dbContext._sp_GetEmployee.FromSql(usp).ToList();
+            return _GetAdmins;
+        }
     }
 }

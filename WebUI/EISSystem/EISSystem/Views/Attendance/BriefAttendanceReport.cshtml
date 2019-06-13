@@ -115,6 +115,7 @@
 
         .tooltip-inner {
             white-space: pre-wrap;
+            max-width:100%;
         }
     </style>
 </head>
@@ -207,12 +208,14 @@
                                             <th>Total Working Days</th>
                                             <th>Present Days</th>
                                             <th>Total Granted Leaves</th>
-                                            <th>Total Leaves Taken</th>
+                                            <th>Leaves Taken</th>
+                                            <th>Absent Days</th>
                                             <th>Total Absent Days</th>
                                             <th>Proposed Leaves</th>
                                             <th>Balance Leaves</th>
                                             <th>Compensated Leaves</th>
-                                            <th>Leaves Without Pay</th>
+                                            <th>Salary Deducted</th>
+                                            <th>Pending for Deduction</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -443,6 +446,7 @@
                         var x = "";
                         var proposedLeaves = "";
                         var cnt = 0;
+                        var DeductedCount = 0;
                         for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
                         if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
                             if ((data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.startsWith("Taken")) || (data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay"))) {
@@ -452,6 +456,7 @@
                                 if (data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay")) {
                                     cnt = cnt + 1;
                                     if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted  ") {
+                                        DeductedCount++;
                                         checkDeducted = "Deducted";
                                         //valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>" + "&#10;";
                                     } else {
@@ -530,8 +535,8 @@
                                 leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
                             }
                         }
-                        var link = '<a onclick="javascript: GetLeaves(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\')">' + DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName)+'</a>'
-                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, link, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, leaveWithoutPay]);
+                        var link = '<a onclick="javascript: GetLeaves(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\')">' + DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName) + '</a>'
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, link, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays), proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, DeductedCount, leaveWithoutPay]);
                     }
 
                     var todayDate = new Date();
@@ -556,7 +561,7 @@
 
                         'columnDefs': [
                             {
-                                "targets": [2, 3, 4, 5, 6,7,8,9,10], // your case first column
+                                "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10], // your case first column
                                 "className": "text-center",
                             }
                         ],
@@ -566,7 +571,9 @@
                                     title: title,
                                     text: 'Pdf',
                                     titleAttr: 'Export to Pdf',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    exportOptions: {
+                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                                    },
                                     customize: function (doc) {
                                         doc.defaultStyle.alignment = 'center';
                                         doc.styles.tableHeader.alignment = 'center';
@@ -577,7 +584,7 @@
                                     title: title,
                                     text: 'Excel',
                                     titleAttr: 'Export to Excel ',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
                                     customize: function (xlsx) {
                                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                         $('row c[r^="C"]', sheet).attr('s', '51');
@@ -588,6 +595,9 @@
                                         $('row c[r^="H"]', sheet).attr('s', '51');
                                         $('row c[r^="I"]', sheet).attr('s', '51');
                                         $('row c[r^="J"]', sheet).attr('s', '51');
+                                        $('row c[r^="K"]', sheet).attr('s', '51');
+                                        $('row c[r^="L"]', sheet).attr('s', '51');
+                                        $('row c[r^="M"]', sheet).attr('s', '51');
                                     }
 
                                 },
@@ -596,7 +606,7 @@
                                     title: title,
                                     text: 'Print',
                                     titleAttr: 'Print',
-                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
                                     autoPrint: false
 
                                 }],

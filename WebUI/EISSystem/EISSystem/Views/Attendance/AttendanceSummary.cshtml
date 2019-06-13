@@ -75,7 +75,8 @@
             white-space: pre-wrap;
             width: auto !important;
             max-height: 500px !important;
-            overflow-y: scroll
+            overflow-y: scroll;
+            max-width : 100%;
         }
 
         .ajax-loader img {
@@ -173,9 +174,12 @@
                                             <th>Name</th>
                                             <th>Total Working Days</th>
                                             <th>Present Days</th>
-                                            <th>Total Leaves</th>
+                                            <th>Leaves Taken</th>
                                             <th>Absent Days</th>
-                                            <th>Extra Working Days</th>
+                                            <th>Total Absent Days</th>
+                                            <th>Compensated Leaves</th>
+                                            <th>Salary Deducted</th>
+                                            @*<th>Pending for Deduction</th>*@
                                         </tr>
                                     </thead>
                                 </table>
@@ -268,7 +272,7 @@
 
         $('#select').on('change', function () {
             var v = $('#select').val();
-            if (v == 'year') {
+            if (v === 'year') {
                 var date = new Date();
                 var cMonth = date.getMonth();
                 var cDate = date.getDate();
@@ -281,11 +285,11 @@
                     maxDate: new Date(cYear, cMonth, cDate)
                 });
             }
-            else if (v == 'month') {
-                var date = new Date();
-                var cMonth = date.getMonth();
-                var cDate = date.getDate();
-                var cYear = date.getFullYear();
+            else if (v === 'month') {
+                date = new Date();
+                cMonth = date.getMonth();
+                cDate = date.getDate();
+                cYear = date.getFullYear();
                 $('#inputmonthdiv').show();
                 $('#inputyeardiv').hide();
                 $('#inputmonth').datetimepicker({
@@ -299,17 +303,17 @@
             var v = $('#select').val();
             var location = $('#locations').val();
             var status = $('#status').val();
-            if (v == 'year') {
+            if (v === 'year') {
                 var value = $("#inputyear").val();
-                if (location == 0) {
+                if (location === 0) {
                     $('#baner').show();
                     $('#kondhwa').show();
                 }
-                else if (location == 1) {
+                else if (location === 1) {
                     $('#baner').hide();
                     $('#kondhwa').show();
                 }
-                else if (location == 2) {
+                else if (location === 2) {
                     $('#kondhwa').hide();
                     $('#baner').show();
                 }
@@ -343,26 +347,26 @@
                 });
 
             }
-            else if (v == 'month') {
-                var value = $("#inputmonth").val();
+            else if (v === 'month') {
+                value = $("#inputmonth").val();
                 $("#inputmonth").val(value);
                 var monthYear = value.split('/');
                 var y = monthYear[1];
                 var m = monthYear[0];
-                var location = $('#locations').val();
-                if (location == 0) {
+                location = $('#locations').val();
+                if (location === 0) {
                     $('#baner').show();
                     $('#kondhwa').show();
                 }
-                else if (location == 1) {
+                else if (location === 1) {
                     $('#baner').hide();
                     $('#kondhwa').show();
                 }
-                else if (location == 2) {
+                else if (location === 2) {
                     $('#baner').show();
                     $('#kondhwa').hide();
                 }
-                var weeklyoff = calWeeklyOffMonthly(m, y);
+                weeklyoff = calWeeklyOffMonthly(m, y);
                 $('#alltwoffb').text('Weekly Off : ' + (weeklyoff + 2));
                 $('#alltwoffk').text('Weekly Off : ' + weeklyoff);
                 $.ajax({
@@ -413,65 +417,83 @@
                         var ExtraWorking = "";
                         var Present = "";
                         var Absent = "";
+                        var DeductedCount = 0;
+                        var PendingDeducted = 0;
                         for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
-                            if (data.sP_GetAttendanceCountReports[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
-                                if (data.SP_GetMonthlyAttendanceData[j].Status == "Present") {
-                                    if (data.SP_GetMonthlyAttendanceData[j].TimeOut == null) {
+                            if (data.sP_GetAttendanceCountReports[i].EmployeeCode === data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
+                                if (data.SP_GetMonthlyAttendanceData[j].Status === "Present") {
+                                    if (data.SP_GetMonthlyAttendanceData[j].TimeOut === null) {
                                         PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-NA" + ")" + "&#10;";
                                     }
                                     else {
                                         PresentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "(" + moment(data.SP_GetMonthlyAttendanceData[j].TimeIn, 'HH:mm:ss').format('HH:mm') + "-" + moment(data.SP_GetMonthlyAttendanceData[j].TimeOut, 'HH:mm:ss').format('HH:mm') + ")" + "&#10;";
                                     }
 
-                                } else if (data.SP_GetMonthlyAttendanceData[j].Status !=null && data.SP_GetMonthlyAttendanceData[j].Status.startsWith("Absent")) {
-                                    AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
+                                } else if (data.SP_GetMonthlyAttendanceData[j].Status !== null && data.SP_GetMonthlyAttendanceData[j].Status.startsWith("Absent")) {
+                                    if (data.SP_GetMonthlyAttendanceData[j].Status.includes("Unpaid")) {
+                                        if (data.SP_GetMonthlyAttendanceData[j].HrStatus !== null && data.SP_GetMonthlyAttendanceData[j].HrStatus.startsWith('Deducted')) {
+                                            DeductedCount++;
+                                        } else {
+                                            PendingDeducted++;
+                                        }
+                                        AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + " (Unpaid)" + "&#10;";
+                                    } else {
+                                        AbsentDays += moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;";
+                                    }
+                                    
                                 }
                             }
                         }
-                        for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
-                            if (data.sP_GetAttendanceCountReports[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
-                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Adjusted") {
-                                    valueExtraWorking += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                        
+                        for (var k = 0; k < data.sP_GetAttendanceLeaveDatas.length; k++) {
+                            if (data.sP_GetAttendanceCountReports[i].EmployeeCode === data.sP_GetAttendanceLeaveDatas[k].EmployeeCode) {
+                                if (data.sP_GetAttendanceLeaveDatas[k].DateStatus === "Adjusted") {
+                                    valueExtraWorking += moment(data.sP_GetAttendanceLeaveDatas[k].Date).format("DD-MMM-YYYY") + data.sP_GetAttendanceLeaveDatas[k].Reason + "&#10;";
                                 }
-                                else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.startsWith("Taken")) { 
-                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                else if (data.sP_GetAttendanceLeaveDatas[k].DateStatus !== null && data.sP_GetAttendanceLeaveDatas[k].DateStatus.startsWith("Taken")) { 
+                                    if (data.sP_GetAttendanceLeaveDatas[k].DateStatus.includes("WithoutPay") && data.sP_GetAttendanceLeaveDatas[k].HrStatus !== null && data.sP_GetAttendanceLeaveDatas[k].HrStatus.startsWith('Deducted')) {
+                                        DeductedCount++;
+                                    } else if (data.sP_GetAttendanceLeaveDatas[k].DateStatus.includes("WithoutPay") && data.sP_GetAttendanceLeaveDatas[k].HrStatus === null){
+                                        PendingDeducted++;
+                                    }
+                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[k].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[k].Reason + "&#10;";
                                 }
                             }
                         }
-                        if (data.sP_GetAttendanceCountReports[i].PresentDays == 0) {
+                        if (data.sP_GetAttendanceCountReports[i].PresentDays === 0) {
                             Present = '<div><a class="test hoverNonUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + PresentDays + '">' + data.sP_GetAttendanceCountReports[i].PresentDays + '</a></div>';
                         }
                         else { 
                             Present = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + PresentDays + '">' + data.sP_GetAttendanceCountReports[i].PresentDays + '</a></div>';
                         }
-                        if (data.sP_GetAttendanceCountReports[i].AbsentDay == 0) {
+                        if (data.sP_GetAttendanceCountReports[i].AbsentDay === 0) {
                             Absent = '<div><a class="test hoverNonUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + AbsentDays + '">' + data.sP_GetAttendanceCountReports[i].AbsentDay + '</a></div>';;
                         }
                         else {
                             Absent = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + AbsentDays + '">' + data.sP_GetAttendanceCountReports[i].AbsentDay + '</a></div>';;
                         }
-                        if (data.sP_GetAttendanceCountReports[i].NoLeave == 0) {
+                        if (data.sP_GetAttendanceCountReports[i].NoLeave === 0) {
                             totalLeavesTaken = '<div><a class="test hoverNonUnderline" title="' + valueTaken + '" data-toggle="tooltip" data-placement="right" data-html="true">' + data.sP_GetAttendanceCountReports[i].NoLeave + '</a></div>';
                         }
                         else {
                             totalLeavesTaken = '<div><a class="test hoverUnderline" title="' + valueTaken + '" data-toggle="tooltip" data-placement="right" data-html="true" >' + data.sP_GetAttendanceCountReports[i].NoLeave + '</a></div>';
                         }
-                        if (data.sP_GetAttendanceCountReports[i].ExtraWorkingDays == 0) {
+                        if (data.sP_GetAttendanceCountReports[i].ExtraWorkingDays === 0) {
                             ExtraWorking = '<div><a class="test hoverNonUnderline" title="' + valueExtraWorking + '" data-toggle="tooltip" data-placement="right" data-html="true">' + data.sP_GetAttendanceCountReports[i].ExtraWorkingDays + '</a></div>';
                         }
                         else {
                             ExtraWorking = '<div><a class="test hoverUnderline" title="' + valueExtraWorking + '" data-toggle="tooltip" data-placement="right" data-html="true">' + data.sP_GetAttendanceCountReports[i].ExtraWorkingDays + '</a></div>';
                         }
                         //var proposedLeaves = '<div><a class="test"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
-                        //if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
+                        //if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay === 0) {
                         //    leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
                         //} else {
                         //    leaveWithoutPay = '<div class="dropdown"><a class="test" data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons">update</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deduct from salary</a></li></ul></div>';
                         //}
-                        array.push([data.sP_GetAttendanceCountReports[i].LocationName, DecorateString(data.sP_GetAttendanceCountReports[i].EmployeeName), data.sP_GetAttendanceCountReports[i].WorkingDay, /*Present*/ data.sP_GetAttendanceCountReports[i].PresentDays, /*data.sP_GetAttendanceCountReports[i].NoLeave*/totalLeavesTaken, Absent, ExtraWorking]);
+                        array.push([data.sP_GetAttendanceCountReports[i].LocationName, DecorateString(data.sP_GetAttendanceCountReports[i].EmployeeName), data.sP_GetAttendanceCountReports[i].WorkingDay, /*Present*/ data.sP_GetAttendanceCountReports[i].PresentDays, /*data.sP_GetAttendanceCountReports[i].NoLeave*/totalLeavesTaken, Absent, (data.sP_GetAttendanceCountReports[i].AbsentDay + data.sP_GetAttendanceCountReports[i].NoLeave), ExtraWorking, DeductedCount]);
                     }
                     var title = '';     
-                    if (type == 'year') {
+                    if (type === 'year') {
                         title = 'Attendance Report (Year ' + value + ')';
                     } else {
                         title = 'Attendance Report (Month ' + value + ')';

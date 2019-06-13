@@ -88,7 +88,7 @@ namespace EIS.Entities.SP
         public Nullable<System.TimeSpan> TimeOut { get; set; }
         public Nullable<System.TimeSpan> TotalHours { get; set; }
         public string Status { get; set; }
-
+        public string HrStatus { get; set; }
     }
     //New Implementation
     public class SP_GetAttendanceCountReport_New

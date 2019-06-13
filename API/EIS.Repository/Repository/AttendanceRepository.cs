@@ -61,9 +61,11 @@ namespace EIS.Repositories.Repository
             string usp = "LMS.usp_GetAttendanceReportsNew @locationId, @SelectType, @InputOne, @InputTwo,@Status";
             Model.sP_GetAttendanceCountReportsNew = _dbContext._sp_GetAttendanceCountReportNew.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
             string uspLeaveData = "LMS.usp_GetAttendanceReportLeaveData @SelectType, @InputOne, @InputTwo";
-            Model.sP_GetAttendanceLeaveDatas = _dbContext._sp_GetAttendanceLeaveData.FromSql(uspLeaveData,SP_SelectType ,SP_InputOne,SP_InputTwo).ToList();
+            Model.sP_GetAttendanceLeaveDatas = _dbContext._sp_GetAttendanceLeaveData.FromSql(uspLeaveData, SP_SelectType, SP_InputOne, SP_InputTwo).ToList();
             usp = "LMS.usp_GetMonthlyAttendance @SrId, @SelectType, @InputOne, @InputTwo,@Status";
             Model.SP_GetMonthlyAttendanceData = _dbContext._sp_GetMonthlyAttendanceData.FromSql(usp, SP_SrId, SP_SelectType, SP_InputOne, SP_InputTwo, SP_Status).ToList();
+            //Model.sP_GetAttendanceLeaveDatas = new List<SP_GetAttendanceLeaveData>();
+            //Model.SP_GetMonthlyAttendanceData = new List<SP_GetMonthlyAttendanceData>();
             return Model;
         }
         public EmployeeAttendanceReport GetAttendanceReportSummary(string type, string PersonId, int year, int? month)

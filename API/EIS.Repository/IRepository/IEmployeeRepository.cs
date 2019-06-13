@@ -18,6 +18,7 @@ namespace EIS.Repositories.IRepository
         string GetEmployeeCode(int PersonId);
         List<GetAdminHrManager> getAdminHrManager();
         List<SP_GetEmployee> getEmployees(int location);
+        List<SP_GetEmployee> getAdmins();
         List<WeeklyOffs> GetWeeklyOffs();
         string GetWeeklyOffByPerson(int PersonId);
         void UpdateProbation(int PersonId, int ProbationPeriod);
