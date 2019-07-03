@@ -1,0 +1,484 @@
+﻿@using EIS.WebApp.Services
+@model IEnumerable<EIS.Entities.Employee.Person>
+<head>
+    <title>Brief Attendance Report</title>
+    <link href="~/Ems/css/toastr.css" rel="stylesheet" />
+    <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datetimepicker1.css" rel="stylesheet" />
+    @*for pdf*@
+    <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/customStyle.css" rel="stylesheet" />
+    <style type="text/css">
+
+        .bootstrap-datetimepicker-widget tr:hover {
+            background-color: #808080;
+        }
+
+        .dataTables_wrapper .myexport .dt-buttons {
+            float: right;
+        }
+
+        td.danger {
+            background-color: #f2dede !important;
+        }
+
+        div .panel-primary {
+            text-align: center
+        }
+
+        .disabledLink {
+            color: currentColor;
+            cursor: not-allowed;
+            opacity: 0.5;
+            text-decoration: none;
+        }
+
+        #locations {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        a.hoverNonUnderline {
+            color: black;
+            text-decoration: none;
+        }
+
+        a.hoverUnderline {
+            color: blue;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            cursor: pointer;
+        }
+
+        #generateReport {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #select, #status {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        #inputyear, #inputmonth, #inputweek {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        table.dataTable td {
+            margin-left: 0;
+            margin-right: auto;
+            padding: 3px 10px;
+            width: 1px;
+            white-space: nowrap;
+        }
+
+        .ajax-loader {
+            visibility: hidden;
+            position: absolute;
+            z-index: +100 !important;
+            width: 80%;
+            height: 80%;
+        }
+
+            .ajax-loader img {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+        .container-fluid {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .test + .tooltip > .tooltip-inner {
+            background-color: #73AD21;
+            color: #FFFFFF;
+            border: 1px solid green;
+            font-size: 9px;
+        }
+
+        .test + .tooltip.right > .tooltip-arrow {
+            border-right: 5px solid black;
+        }
+
+
+        .tablebutton {
+            padding: 4px 4px;
+            height: 20px;
+        }
+
+        .material-button {
+            line-height: 0;
+            height: 4px;
+        }
+
+        .tooltip-inner {
+            white-space: pre-wrap;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="ajax-loader">
+        <img src="~/gif/Spinner.gif" />
+    </div>
+    <div id="modal-placeholder" class="modal fade" role="dialog" data-url="@Url.Action("LeavesInDetail")"></div>
+    <div class="container-fluid">
+        <div class="block-header">
+            <HeaderWithButton header-name="My Brief Attendance"></HeaderWithButton>
+        </div>
+        <div></div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div>
+                            <div>
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Name</th>
+                                            <th>Total Working Days</th>
+                                            <th>Present Days</th>
+                                            <th>Avg. Working Hours</th>
+                                            <th>Total Granted Leaves</th>
+                                            <th>Leaves Taken</th>
+                                            <th>Absent Days</th>
+                                            <th>Total Absent Days</th>
+                                            <th>Proposed Leaves</th>
+                                            <th>Balance Leaves</th>
+                                            <th>Compensated Leaves</th>
+                                            <th>Salary Deducted</th>
+                                            <th>Pending for Deduction</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+@*for datetimepicker*@
+<script src="~/Ems/js/moment.min.js"></script>
+<script src="~/Ems/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/moment1.js"></script>
+@*for pdf*@
+<script src="~/Ems/js/moment.js-2.8.4-moment.min.js"></script>
+<script src="~/Ems/js/toastr.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootbox.js"></script>
+<script src="~/js/TWeeklyOffCount.js"></script>
+<script src="~/Ems/js/cdnjs_cloudflare_ajax_libs_jszip_3_1_3_jszip_min.js"></script>
+<script src="~/Ems/js/jquery.dataTables.min.js"></script>
+<script src="~/Ems/js/dataTables.buttons.min.js"></script>
+<script src="~/Ems/js/buttons.flash.min.js"></script>
+<script src="~/Ems/js/jszip.min.js"></script>
+<script src="~/Ems/js/pdfmake.min.js"></script>
+<script src="~/Ems/js/vfs_fonts.js"></script>
+<script src="~/Ems/js/buttons.html5.min.js"></script>
+<script src="~/Ems/js/buttons.print.min.js"></script>
+<script src="~/Ems/js/dataTables.responsive.min.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    var val = new Date().getFullYear();
+        generateReport(val);
+    });
+
+    function generateReport(value) {
+            $.ajax({
+                url: '@Url.Action("EmployeeBriefAttendance", "Attendance")',
+                type: "POST",
+                datatype: "json",
+                data: { "date": value, "type": "year", "location": 0 ,"status":true},
+                beforeSend: function () {
+                    $('.ajax-loader').css("visibility", "visible");
+                },
+                success: function (data) {
+                    debugger;
+                    var array = [];
+                    for (var i = 0; i < data.sP_GetAttendanceCountReportsNew.length; i++) {
+                        var leaveWithoutPay = "";
+                        var valueTaken = "";
+                        var valueProposed = "";
+                        var valueAdjusted = "";
+                        var valueWithOutPay = "";
+                        var valueWithOutPayDates = "";
+                        var absentDays = "";
+                        var absentDaysDiv = "";
+                        var checkDeducted = "";
+                        var totalLeavesTaken = "";
+                        var AdjustedLeaves = "";
+                        var x = "";
+                        var proposedLeaves = "";
+                        var cnt = 0;
+                        var DeductedCount = 0;
+                        for (var j = 0; j < data.sP_GetAttendanceLeaveDatas.length; j++) {
+                        if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.sP_GetAttendanceLeaveDatas[j].EmployeeCode) {
+                            if ((data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.startsWith("Taken")) || (data.sP_GetAttendanceLeaveDatas[j].DateStatus != null && data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay"))) {
+                                if (!data.sP_GetAttendanceLeaveDatas[j].Reason.startsWith("Absent")) {
+                                    valueTaken += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                }
+                                if (data.sP_GetAttendanceLeaveDatas[j].DateStatus.includes("WithoutPay")) {
+                                    cnt = cnt + 1;
+                                    var tempVal = data.sP_GetAttendanceLeaveDatas[j].HrStatus == null ? "" : data.sP_GetAttendanceLeaveDatas[j].HrStatus.trim();
+
+                                    if (tempVal == "Deducted") {
+                                        DeductedCount++;
+                                        checkDeducted = "Deducted";
+                                        //valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>" + "&#10;";
+                                    } else {
+                                        checkDeducted = "NotDeducted";
+                                        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                    }
+                                    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + "&";
+                                }
+                                } else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Proposed") {
+                                    valueProposed += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                }
+                                else if (data.sP_GetAttendanceLeaveDatas[j].DateStatus == "Adjusted") {
+                                    valueAdjusted += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY") + data.sP_GetAttendanceLeaveDatas[j].Reason + "&#10;";
+                                }
+                                //else {
+                                //    if (data.sP_GetAttendanceLeaveDatas[j].HrStatus == "Deducted") {
+                                //        checkDeducted = "Deducted";
+                                //        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason + "<i style='font-size:14px' class='material-icons'>flag</i>";
+                                //    } else {
+                                //        checkDeducted = "NotDeducted";
+                                //        valueWithOutPay += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD MMM YYYY") + "-" + data.sP_GetAttendanceLeaveDatas[j].Reason +"&#10;";
+                                //    }
+                                //    valueWithOutPayDates += moment(data.sP_GetAttendanceLeaveDatas[j].Date).format("DD-MMM-YYYY")+"&";
+
+                                //}
+                            }
+                        }
+                        var withoutPayAbsent = 0;
+                        //if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay > cnt) {
+                        //    withoutPayAbsent = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay - cnt;
+                        //    valueWithOutPay += "Absent Days : " + withoutPayAbsent + "&#10;";
+                        //}
+                        x = valueWithOutPayDates.slice(0, -1);
+                        var a = 0;
+                        for (var j = 0; j < data.SP_GetMonthlyAttendanceData.length; j++) {
+                            if (data.sP_GetAttendanceCountReportsNew[i].EmployeeCode == data.SP_GetMonthlyAttendanceData[j].EmployeeCode) {
+                                if (data.SP_GetMonthlyAttendanceData[j].Status.startsWith('Absent')) {
+                                    a = a + 1;
+                                    absentDays += data.SP_GetMonthlyAttendanceData[j].Status.includes("Without Pay") ? moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + " (Without Pay)" + "&#10;" : moment(data.SP_GetMonthlyAttendanceData[j].DateIn).format("DD-MMM-YYYY") + "&#10;" ;
+                                }
+                            }
+                        }
+                        if (a == 0) {
+                            absentDaysDiv = '<div><a class="test hoverNonUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + absentDays + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays + '</a></div>';
+                        }
+                        else {
+                            absentDaysDiv = '<div><a class="test hoverUnderline" data-toggle="tooltip" data-placement="right" data-html="true"  title="' + absentDays + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays + '</a></div>';
+                        }
+                        //var totalLeavesTaken = '<div><a href="#" title="' + value + '" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Click anywhere in the document to close this popover">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        //var totalLeavesTaken = '<div><a title="' + valueTaken + '">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        if (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken == 0) {
+                            totalLeavesTaken = '<div><a class="test hoverNonUnderline" title="' + valueTaken + '" data-toggle="tooltip" data-placement="right" data-html="true">' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        }
+                        else {
+                            totalLeavesTaken = '<div><a class="test hoverUnderline" title="'+valueTaken+'" data-toggle="tooltip" data-placement="right" data-html="true" >' + data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + '</a></div>';
+                        }
+
+                        if (data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves == 0) {
+                            proposedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
+                        }
+                        else {
+                           proposedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueProposed + '">' + data.sP_GetAttendanceCountReportsNew[i].ProposedLeaves + '</a></div>';
+                        }
+                        if (data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves == 0) {
+                            AdjustedLeaves = '<div><a class="test hoverNonUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
+                        }
+                        else {
+                            AdjustedLeaves = '<div><a class="test hoverUnderline"  data-toggle="tooltip" data-placement="right" data-html="true" title="' + valueAdjusted + '">' + data.sP_GetAttendanceCountReportsNew[i].AdjustedLeaves + '</a></div>';
+                        }
+                        //if (data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay == 0) {
+                            leaveWithoutPay = data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay;
+                        //} else {
+                        //    if (checkDeducted != "Deducted") {
+                        //        leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves + '\',\'' + (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays) + '\')">Deduct from salary</a></li></ul></div>';
+                        //    } else {
+                        //        leaveWithoutPay = '<div class="dropdown"><a class="test hoverUnderline" data-toggle="tooltip" style="padding-right:15px" data-placement="left" data-html="true" title="' + valueWithOutPay + '">' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + ' </a><button class="tablebutton btn btn-primary dropdown-toggle waves-effect" type="button" data-toggle="dropdown"><i class="material-icons material-button">monetization_on</i></button><ul class="dropdown-menu"><li><a class="disabledLink">Deducted from salary</a></li></ul></div>';
+                        //    }
+                        //}
+                        var link = '<a onclick="javascript: GetLeaves(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\')">' + DecorateString(data.sP_GetAttendanceCountReportsNew[i].EmployeeName) + '</a>'
+                        array.push([data.sP_GetAttendanceCountReportsNew[i].LocationName, link, data.sP_GetAttendanceCountReportsNew[i].WorkingDay, data.sP_GetAttendanceCountReportsNew[i].PresentDays, data.sP_GetAttendanceCountReportsNew[i].AverageWorkingHours, data.sP_GetAttendanceCountReportsNew[i].TotalGrantedLeaves, totalLeavesTaken, absentDaysDiv, (data.sP_GetAttendanceCountReportsNew[i].TotalLeavesTaken + data.sP_GetAttendanceCountReportsNew[i].TotalAbsentDays), proposedLeaves, data.sP_GetAttendanceCountReportsNew[i].BalanceLeaves, AdjustedLeaves, DeductedCount, leaveWithoutPay]);
+                    }
+
+                    var todayDate = new Date();
+                    var currentYear = todayDate.getFullYear();
+                    var firstDate = moment('01/01/'+currentYear).format("DD/MMM/YYYY")
+                    var currentDate = moment(todayDate).format("DD/MMM/YYYY")
+
+                    var title = 'Attendance Report (' + firstDate + ' - ' + currentDate + ')';
+
+                    $('#example').DataTable().destroy();
+                    $('#example').DataTable({
+                        sDom: '<"myexport"B>ifrtlp',
+                        //scrollY: 500,
+                        //scrollCollapse: true,
+                        //fixedHeader: false,
+                        //fixedColumns: true,
+                        scrollY: "300px",
+                        scrollX: true,
+                        scrollCollapse: true,
+                       // fixedColumns: true,
+                        order: [0, 'asc'],
+                        paging: false,
+
+                        'columnDefs': [
+                            {
+                                "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10,11,12], // your case first column
+                                "className": "text-center",
+                            }
+                        ],
+                            buttons: [
+                                {
+                                    extend: 'pdfHtml5',
+                                    title: title,
+                                    text: 'Pdf',
+                                    titleAttr: 'Export to Pdf',
+                                    exportOptions: {
+                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,12]
+                                    },
+                                    customize: function (doc) {
+                                        doc.defaultStyle.alignment = 'center';
+                                        doc.styles.tableHeader.alignment = 'center';
+                                    }
+                                },
+                                {
+                                    extend: 'excel',
+                                    title: title,
+                                    text: 'Excel',
+                                    titleAttr: 'Export to Excel ',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,12] },
+                                    customize: function (xlsx) {
+                                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                        $('row c[r^="C"]', sheet).attr('s', '51');
+                                        $('row c[r^="D"]', sheet).attr('s', '51');
+                                        $('row c[r^="E"]', sheet).attr('s', '51');
+                                        $('row c[r^="F"]', sheet).attr('s', '51');
+                                        $('row c[r^="G"]', sheet).attr('s', '51');
+                                        $('row c[r^="H"]', sheet).attr('s', '51');
+                                        $('row c[r^="I"]', sheet).attr('s', '51');
+                                        $('row c[r^="J"]', sheet).attr('s', '51');
+                                        $('row c[r^="K"]', sheet).attr('s', '51');
+                                        $('row c[r^="L"]', sheet).attr('s', '51');
+                                        $('row c[r^="M"]', sheet).attr('s', '51');
+                                    }
+
+                                },
+                                {
+                                    extend: 'print',
+                                    title: title,
+                                    text: 'Print',
+                                    titleAttr: 'Print',
+                                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,12] },
+                                    autoPrint: false
+
+                                }],
+                            data: array,
+                            "drawCallback": function (settings) {
+                                $('[data-toggle="tooltip"]').tooltip({
+                                    container: 'body'
+                                });
+                            }
+                        });
+                },
+                complete: function () {
+                    $('.ajax-loader').css("visibility", "hidden");
+                }
+            });
+    }
+
+    function GetLeaves(Ecode) {
+        var Type = $('#select').val();
+        var Year = $("#inputyear").val();
+        var url = $("#modal-placeholder").data('url') + "?Type=" + "Year" + "&Year=" + new Date().getFullYear() + "&Month=01&EmployeeCode=" + Ecode;
+        //$.get(url, function (data) {
+        //    $("#modal-placeholder").html(data);
+        //    $("#modal-placeholder").modal({ backdrop: 'static', keyboard: false },'show');
+        //}).fail(function (xhr, status, error) {
+        //    if (xhr.status == 401) {
+        //        bootbox.alert("<h4>Access denied..</h4>");
+        //    } else {
+        //        bootbox.alert("<h4>Unable to retrieve the Record</h4>" + error);
+        //    }
+        //    });
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            beforeSend: function () {
+                $('.ajax-loader').css("visibility", "visible");
+            },
+            success: function (data) {
+                $("#modal-placeholder").html(data);
+                $("#modal-placeholder").modal({ backdrop: 'static', keyboard: false }, 'show');
+            },
+            complete: function () {
+                $('.ajax-loader').css("visibility", "hidden");
+            },
+            error: function (jqXHR, exception) {
+                if (jqXHR.status === 401) {
+                    bootbox.alert("<h4>Access denied..</h4>");
+                } else {
+                    bootbox.alert("<h4>Unable to retrieve the Record</h4>" + exception);
+                }
+            }
+        });
+
+    }
+
+    function test(data, count, value,granted,taken) {
+        var message = count == 1 ? count + ' day' : count + ' days';
+        var messageText = 'Are you sure you want to deduct amount of ' + message + ' from salary';
+        bootbox.confirm({
+            message: messageText,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: '@Url.Action("DeductFromSalary", "Attendance")',
+                        type: "POST",
+                        datatype: "json",
+                        data: { "EmployeeCode": data, "Dates": value, "GrantedLeaves": granted, "TakenLeaves": taken },
+                        success: function (data) {
+                            bootbox.alert({
+                                message: "Amount of " + message + " deducted from salary",
+                                callback: function () {
+                                    window.parent.location.reload();
+                                }
+                            });
+
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong.Please try after sometime");
+                        }
+                    });
+                }
+            }
+        });
+    }
+</script>

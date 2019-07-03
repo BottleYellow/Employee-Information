@@ -97,10 +97,10 @@ $.AdminBSB.leftSideBar = {
 
         //Set menu height
         _this.setMenuHeight(true);
-        _this.checkStatusForResize(true);
+        //_this.checkStatusForResize(true);
         $(window).resize(function () {
             _this.setMenuHeight(false);
-            _this.checkStatusForResize(false);
+            //_this.checkStatusForResize(false);
         });
 
         //Set Waves

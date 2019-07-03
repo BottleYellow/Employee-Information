@@ -1,19 +1,35 @@
 ﻿@model EIS.Entities.SP.LeavesInDetail;
 @using EIS.WebApp.Services
+@using EIS.Entities.OtherEntities;
+@using Newtonsoft.Json
+
+@using Microsoft.AspNetCore.Http;
+@{
+    string rootPath = MyHttpContext.AppBaseUrl;
+    string APIURL = MyHttpContext.APIBaseURL;
+    string cookiesdata = Context.Session.GetString("CookieData");
+
+    CookieModel cookies = new CookieModel();
+    if (cookiesdata != null)
+    {
+        cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
+    }
+}
 
 <head>
     <link href="~/Ems/css/responsive.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Ems/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/plugins/FixedColumns-3.2.5/css/fixedColumns.dataTables.min.css" rel="stylesheet" />
     <link href="~/css/customStyle.css" rel="stylesheet" />
     <style>
-        #LeaveDetails_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner {
+        /*#LeaveDetails_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner {
             width: 100% !important;
         }
 
             #LeaveDetails_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner table {
                 width: 100% !important;
-            }
+            }*/
 
         li:hover {
             cursor: pointer;
@@ -37,11 +53,6 @@
     </style>
 </head>
 
-@{
-    string rootPath = MyHttpContext.AppBaseUrl;
-    string APIURL = MyHttpContext.APIBaseURL;
-}
-
 
 <div id="md" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -53,7 +64,7 @@
             <b style="color:black;">Employee Code : @Model.EmployeeCode</b><br />
             <b style="color:black;">Employee Name : @Model.EmployeeName</b>
             <div class="table-responsive">
-                <table id="LeaveDetails" class="table table-bordered table-striped table-hover order-column">
+                <table id="LeaveDetails" class="table table-bordered table-striped table-hover order-column" style="width:100%">
                     <thead>
                         <tr>
                             <th>Sr. No</th>
@@ -67,47 +78,54 @@
                     <tbody>
                         @foreach (var item in Model.sP_GetLeavesInDetail)
                         {
-                        <tr>
-                            <td>
-                                @item.Id
-                            </td>
-                            <td>
-                                @Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")
-                            </td>
-                            <td>
-                                @item.Reason
-                            </td>
-                            <td>
-                                @item.PaidStatus
-                            </td>
-                            <td>
-                                @if (item.HrStatus == null)
-                                {
-                                    if (item.PaidStatus == "Unpaid")
+                            <tr>
+                                <td>
+                                    @item.Id
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")
+                                </td>
+                                <td>
+                                    @item.Reason
+                                </td>
+                                <td>
+                                    @item.PaidStatus
+                                </td>
+                                <td>
+                                    @if (item.HrStatus == null)
                                     {
-                                        <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
+                                        if (item.PaidStatus == "Without Pay" && cookies.Role == "Admin")
+                                        {
+                                            <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
+                                        }
+                                        @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
+                                        else
+                                        {
+                                            <span>-</span>
+                                        }
                                     }
-                                    @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
+                                    else
+                                    {
+                                        @item.HrStatus
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.DeductionDate != null)
+                                    {
+                                        @Convert.ToDateTime(item.DeductionDate).ToString("dd MMM yyyy hh:mm tt")
+                                    }
                                     else
                                     {
                                         <span>-</span>
                                     }
-                                }
-                                else
-                                {
-                                    @item.HrStatus
-                                }
-                            </td>
-                            <td>
-                                @item.DeductionDate
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
             </div>
 
-                    
+
         </div>
     </div>
 </div>
@@ -163,6 +181,15 @@
     $(document).ready(function () {
         var table = $('#LeaveDetails').DataTable({
             sDom: '<"myexport"B>ifrtlp',
+            "aoColumns": [
+                null,
+                { "sType": "date" },  //  "sType": "date" TO SPECIFY SORTING IS APPLICABLE ON DATE
+                null,
+                null,
+                null,
+                null
+            ],
+            "order": [1, "asc"],
             paging: false,
             scrollY: "400px",
             scrollCollapse: true,
@@ -191,6 +218,8 @@
                 }
             }
         });
+        debugger;
+        table.columns.adjust();
     });
 </script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
@@ -206,4 +235,4 @@
 <script src="~/Ems/js/buttons.print.min.js"></script>
 <script src="~/Ems/js/dataTables.responsive.min.js"></script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-
+<script src="~/plugins/FixedColumns-3.2.5/js/dataTables.fixedColumns.min.js"></script>

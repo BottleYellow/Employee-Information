@@ -9,40 +9,44 @@ using System.Net.Mime;
 
 namespace EIS.WebAPI.Utilities
 {
-    public class EmailManager:BaseController
+    public class EmailManager : BaseController
     {
         public readonly IConfiguration _configuration;
-        public EmailManager(IConfiguration configuration, IRepositoryWrapper repository): base(repository)
+        public EmailManager(IConfiguration configuration, IRepositoryWrapper repository) : base(repository)
         {
             _configuration = configuration;
         }
 
         public void SendEmail(string Subject, string Body, string To, string fileAttachment)
         {
-            MailConfiguration mailConfiguration = _repository.Users.GetMailConfiguration();           
-            MailMessage mail = new MailMessage();
-            mail.To.Add(To);
-            mail.From = new MailAddress(mailConfiguration.UserId);
-            mail.Subject = Subject;
-            mail.Body = Body;
-            SmtpClient smtp = new SmtpClient
+            bool SendMails = _configuration.GetValue<bool>("Flags:SendMails");
+            if (SendMails)
             {
-                Host = mailConfiguration.Host,
-                Port = Convert.ToInt16(mailConfiguration.SMTPPort),
-                Credentials = new NetworkCredential(mailConfiguration.UserId, mailConfiguration.Password),
-                EnableSsl = true
-            };
-        if(!string.IsNullOrEmpty(fileAttachment))
-        {
-            Attachment data = new Attachment(fileAttachment, MediaTypeNames.Application.Octet);
-            mail.Attachments.Add(data);
-            smtp.Send(mail);
-            data.Dispose();
-        }
-        else
-        { 
-            smtp.SendAsync(mail,"test");
-        }
+                MailConfiguration mailConfiguration = _repository.Users.GetMailConfiguration();
+                MailMessage mail = new MailMessage();
+                mail.To.Add(To);
+                mail.From = new MailAddress(mailConfiguration.UserId);
+                mail.Subject = Subject;
+                mail.Body = Body;
+                SmtpClient smtp = new SmtpClient
+                {
+                    Host = mailConfiguration.Host,
+                    Port = Convert.ToInt16(mailConfiguration.SMTPPort),
+                    Credentials = new NetworkCredential(mailConfiguration.UserId, mailConfiguration.Password),
+                    EnableSsl = true
+                };
+                if (!string.IsNullOrEmpty(fileAttachment))
+                {
+                    Attachment data = new Attachment(fileAttachment, MediaTypeNames.Application.Octet);
+                    mail.Attachments.Add(data);
+                    smtp.Send(mail);
+                    data.Dispose();
+                }
+                else
+                {
+                    smtp.SendAsync(mail, "test");
+                }
+            }
         }
 
         public static string CreateRandomPassword(int PasswordLength)

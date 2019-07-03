@@ -74,8 +74,30 @@ namespace EIS.WebApp.Controllers
             LeavesInDetail  data = JsonConvert.DeserializeObject<LeavesInDetail>(stringData);
             return PartialView("LeavesInDetail", data);
         }
-     
+
         #endregion
+
+        [HttpGet]
+        [DisplayName("My Brief Attendance")]
+        public IActionResult EmployeeBriefAttendance()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EmployeeBriefAttendance(string date, string type, int location, bool status)
+        {
+            string EmployeeCode = GetSession().EmployeeCode;
+            string url = GetAllAttendanceNewData(date, type, location, status);
+            HttpResponseMessage response = _service.GetResponse(url);
+            string stringData = response.Content.ReadAsStringAsync().Result;
+            Attendance_Report_New attendanceData = JsonConvert.DeserializeObject<Attendance_Report_New>(stringData);
+            Attendance_Report_New requiredData = new Attendance_Report_New();
+            requiredData.sP_GetAttendanceCountReportsNew = attendanceData.sP_GetAttendanceCountReportsNew.Where(x => x.EmployeeCode == EmployeeCode).ToList();
+            requiredData.sP_GetAttendanceLeaveDatas = attendanceData.sP_GetAttendanceLeaveDatas.Where(x => x.EmployeeCode == EmployeeCode).ToList();
+            requiredData.SP_GetMonthlyAttendanceData = attendanceData.SP_GetMonthlyAttendanceData.Where(x => x.EmployeeCode == EmployeeCode).ToList();
+
+            return Json(requiredData);
+        }
 
         #region Attendance Summary
         [HttpGet]
@@ -368,7 +390,7 @@ namespace EIS.WebApp.Controllers
             }
             else
             {
-                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Month/" + monthYear[0] + "/" + monthYear[1] + "/" + location+"/"+ status;
+                url = ApiUrl + "/api/Attendances/GetAllAttendanceNew/Month/" + monthYear[1] + "/" + monthYear[0] + "/" + location+"/"+ status;
             }
             return url;
         }

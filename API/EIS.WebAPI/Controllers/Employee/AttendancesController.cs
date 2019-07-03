@@ -272,7 +272,7 @@ namespace EIS.WebAPI.Controllers
             int DeductedCount = 0;
             foreach(var date in stringDates)
             {
-                List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(date) && x.HrStatus == "Deducted").ToList();
+                List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(date) && x.HrStatus == "Deducted" && x.EmployeeCode == EmployeeCode).ToList();
                 int Count = list != null ? list.Count : 0;
                 DateTime dateTime = Convert.ToDateTime(date);
                 if (Count == 0)

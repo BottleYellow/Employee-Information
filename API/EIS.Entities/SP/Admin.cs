@@ -77,6 +77,7 @@ namespace EIS.Entities.SP
         public Nullable<int> NoLeave { get; set; }
         public Nullable<int> AbsentDay { get; set; }
         public Nullable<int> ExtraWorkingDays { get; set; }
+        public Nullable<int> DeductedDays { get; set; }
     }
     public class SP_GetMonthlyAttendanceData
     {
@@ -99,6 +100,7 @@ namespace EIS.Entities.SP
         public string LocationName { get; set; }
         public Nullable<int> WorkingDay { get; set; }
         public Nullable<int> PresentDays { get; set; }
+        public string AverageWorkingHours { get; set; }
         public Nullable<int> TotalGrantedLeaves { get; set; }
         public Nullable<int> TotalLeavesTaken { get; set; }
         public Nullable<int> TotalAbsentDays { get; set; }

@@ -39,7 +39,7 @@ namespace EIS.WebApp.Controllers
         }
         #endregion
 
-        [DisplayName("List of Admins")]
+        [DisplayName("List Of Admins")]
         public IActionResult Index()
         {
             return View();

@@ -33,6 +33,11 @@ namespace EIS.Repositories.Repository
             var SP_InputTwo = new SqlParameter("@InputTwo", InputTwo);
             var SP_Status = new SqlParameter("@Status", status);
             var SP_SrId = new SqlParameter("@SrId", 1);
+            if(SearchFor == "Month")
+            {
+                SP_InputOne = new SqlParameter("@InputOne", InputTwo);
+                SP_InputTwo = new SqlParameter("@InputTwo", InputOne);
+            }
             string usp = "LMS.usp_GetAttendanceCountReport @locationId, @SelectType, @InputOne, @InputTwo,@Status";
             Model.sP_GetAttendanceCountReports = _dbContext._sp_GetAttendanceCountReport.FromSql(usp, SP_locationId, SP_SelectType, SP_InputOne, SP_InputTwo,SP_Status).ToList();
             string uspLeaveData = "LMS.usp_GetAttendanceReportLeaveData @SelectType ,@InputOne, @InputTwo";
