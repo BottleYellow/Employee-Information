@@ -58,12 +58,12 @@
             <form id="cp1" method="post">
                 <div class="form-group">
                     <label asp-for="PersonId">Select Employee</label>
-                    <select  title="Select Employee" data-size="5" class="form-control" id="selectEmployee" name="selectEmployee"  data-live-search="true" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))"></select>
+                    <select title="Select Employee" data-size="5" class="form-control" id="selectEmployee" name="selectEmployee" data-live-search="true" asp-items="@(new SelectList(ViewBag.Persons,"Id","FirstName"))"></select>
                     <span asp-validation-for="PersonId" class="text-danger"></span>
                 </div>
                 <div class="form-group" id="LeaveType" hidden>
                     <label asp-for="TypeId">Leave Type : </label>
-                    <select  title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction();"></select>
+                    <select title="Select Leave Type" data-size="5" id="selectType" name="selectType" class="form-control" onchange="myFunction();"></select>
                     <span asp-validation-for="TypeId" class="text-danger"></span>
                 </div>
 
@@ -88,8 +88,8 @@
                 <input type="hidden" asp-for="LeaveType" id="tp1" />
                 <input type="hidden" asp-for="RequestedDays" id="trd1" />
                 <input type="hidden" asp-for="Available" id="av1" />
-                <input type="hidden" asp-for="TypeId"  id="typeid1" />
-                <input type="hidden" asp-for="PersonId"   id="psid1" />
+                <input type="hidden" asp-for="TypeId" id="typeid1" />
+                <input type="hidden" asp-for="PersonId" id="psid1" />
                 <div class="modal-footer">
                     <button id="btnAddLeave" name="btnAddLeave" type="button" class="btn btn-link waves-effect">Submit</button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
@@ -133,14 +133,14 @@
     $(document).ready(function () {
         $("#btnAddLeave").prop("disabled", true);
     });
-   
+
     $('#selectEmployee').on('change', function () {
         $("#btnAddLeave").prop("disabled", true);
         $("#msg1").remove();
         var id = $('#selectEmployee').val();
         $.ajax({
             type: 'GET',
-            url: "@APIURL/api/LeaveCredit/GetCreditsByPerson/" + parseInt(id),
+            url: "@APIURL/api/LeaveCredit/GetCreditsByPerson/" + parseInt(id) + "/Future",
             success: function (data) {
                 $('#selectType').empty();
                 $.each(data, function (data, value) {
@@ -234,7 +234,7 @@
         }
     }
     $('#btnAddLeave').click(function () {
-       
+
         var form = $("#cp1");
         $.validator.unobtrusive.parse(form);
         if (form.valid()) {

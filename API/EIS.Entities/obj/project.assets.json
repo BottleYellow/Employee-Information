@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
+      "projectUniqueName": "D:\\Tejas Workspace\\EMS\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
       "projectName": "EIS.Entities",
-      "projectPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
+      "projectPath": "D:\\Tejas Workspace\\EMS\\Employee-Information\\API\\EIS.Entities\\EIS.Entities.csproj",
       "packagesPath": "C:\\Users\\Aadyam\\.nuget\\packages\\",
-      "outputPath": "E:\\Training Project\\Employee Information System\\Employee-Information\\API\\EIS.Entities\\obj\\",
+      "outputPath": "D:\\Tejas Workspace\\EMS\\Employee-Information\\API\\EIS.Entities\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

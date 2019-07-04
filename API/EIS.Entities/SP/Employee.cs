@@ -48,4 +48,13 @@ namespace EIS.Entities.SP
         public string ApprovedBy { get; set; }
 
     }
+    public class SP_LeavePoliciesInDetail
+    {
+        [Key]
+        public int Id { get; set; }
+        public string LeaveType { get; set; }
+        public bool IsPaid { get; set; }
+        public int Validity { get; set; }
+        public int LeaveAvailed { get; set; }
+    }
 }

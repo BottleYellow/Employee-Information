@@ -25,7 +25,7 @@ namespace EIS.WebAPI.Controllers
     public class AttendancesController : BaseController
     {
         public readonly IConfiguration _configuration;
-        public AttendancesController(IRepositoryWrapper repository,IConfiguration configuration) : base(repository)
+        public AttendancesController(IRepositoryWrapper repository, IConfiguration configuration) : base(repository)
         {
             _configuration = configuration;
         }
@@ -95,15 +95,15 @@ namespace EIS.WebAPI.Controllers
 
         [DisplayName("Attendance Reports")]
         [HttpGet("GetAllAttendanceEmpCount/{SearchFor}/{InputOne}/{InputTwo}/{locationId}/{status}")]
-        public IActionResult GetAllAttendance([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId,[FromRoute]bool status)
+        public IActionResult GetAllAttendance([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId, [FromRoute]bool status)
         {
-            Attendance_Report attendanceData = _repository.Attendances.GetAttendanceCountReport(SearchFor, InputOne, InputTwo, locationId,status);
+            Attendance_Report attendanceData = _repository.Attendances.GetAttendanceCountReport(SearchFor, InputOne, InputTwo, locationId, status);
             return Ok(attendanceData);
         }
         [HttpGet("GetAllAttendanceNew/{SearchFor}/{InputOne}/{InputTwo}/{locationId}/{status}")]
-        public IActionResult GetAllAttendanceNew([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId,[FromRoute]bool status)
+        public IActionResult GetAllAttendanceNew([FromRoute] string SearchFor, [FromRoute] string InputOne, [FromRoute] string InputTwo, [FromRoute]int locationId, [FromRoute]bool status)
         {
-            Attendance_Report_New attendanceData = _repository.Attendances.GetAttendanceCountReportNew(SearchFor, InputOne, InputTwo, locationId,status);
+            Attendance_Report_New attendanceData = _repository.Attendances.GetAttendanceCountReportNew(SearchFor, InputOne, InputTwo, locationId, status);
             return Ok(attendanceData);
         }
         #endregion
@@ -151,7 +151,7 @@ namespace EIS.WebAPI.Controllers
                 endDate = startDate.AddMonths(1).AddDays(-1);
             }
             List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(startDate, endDate, attendanceData, Code, locationId);
-     
+
             return Ok(attendancelist);
         }
 
@@ -166,12 +166,12 @@ namespace EIS.WebAPI.Controllers
             DateTime sDate = Convert.ToDateTime(startDate);
             DateTime eDate = Convert.ToDateTime(endDate);
             DateTime startOfWeek = DateTime.Today.AddDays(-1 * (int)(DateTime.Today.DayOfWeek));
-            if (startOfWeek<=sDate)
+            if (startOfWeek <= sDate)
             {
                 eDate = DateTime.Now.Date;
             }
             IEnumerable<Attendance> attendanceData = _repository.Attendances.FindAllByCondition(x => x.DateIn.Date >= sDate && x.DateIn.Date <= eDate && x.PersonId == id);
-            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate, attendanceData,Code, locationId);
+            List<AttendanceReportByDate> attendancelist = _repository.Attendances.GetAttendanceReportByDate(sDate, eDate, attendanceData, Code, locationId);
             return Ok(attendancelist);
         }
         #endregion
@@ -210,7 +210,7 @@ namespace EIS.WebAPI.Controllers
         public IActionResult GetDateWiseAttendance([FromRoute]string id, [FromRoute]int LocationId, [FromRoute]string startDate, [FromRoute]string endDate)
         {
             List<SP_GetDateWiseAttendance> sP_GetDateWiseAttendance = new List<SP_GetDateWiseAttendance>();
-            sP_GetDateWiseAttendance = _repository.Attendances.dateWiseAttendances(id, LocationId,startDate, endDate);
+            sP_GetDateWiseAttendance = _repository.Attendances.dateWiseAttendances(id, LocationId, startDate, endDate);
             return Ok(sP_GetDateWiseAttendance);
         }
 
@@ -225,13 +225,13 @@ namespace EIS.WebAPI.Controllers
 
         [HttpGet]
         [Route("AttendanceUpdate/{personId}/{message}/{requestedDate}/{timeIn}/{timeOut}")]
-        public IActionResult AttendanceUpdate([FromRoute]string personId,[FromRoute]string message,[FromRoute]string requestedDate,[FromRoute]string timeIn,[FromRoute]string timeOut)
+        public IActionResult AttendanceUpdate([FromRoute]string personId, [FromRoute]string message, [FromRoute]string requestedDate, [FromRoute]string timeIn, [FromRoute]string timeOut)
         {
             string status = "";
             int id = Convert.ToInt32(personId);
             DateTime date = Convert.ToDateTime(requestedDate);
-            Attendance attendance = _repository.Attendances.FindByCondition(x => x.PersonId == id && x.DateIn== date);
-            if(attendance!=null)
+            Attendance attendance = _repository.Attendances.FindByCondition(x => x.PersonId == id && x.DateIn == date);
+            if (attendance != null)
             {
                 if (message == "Approve")
                 {
@@ -239,7 +239,7 @@ namespace EIS.WebAPI.Controllers
                     TimeSpan inTime = inDate.TimeOfDay;
                     DateTime outDate = DateTime.ParseExact(timeOut, "hh:mm tt", CultureInfo.InvariantCulture);
                     TimeSpan outTime = outDate.TimeOfDay;
-                    attendance.TimeIn= inTime;
+                    attendance.TimeIn = inTime;
                     attendance.TimeOut = outTime;
                     attendance.TotalHours = outTime - inTime;
                     attendance.IsActive = true;
@@ -249,7 +249,7 @@ namespace EIS.WebAPI.Controllers
                 }
                 else
                 {
-                    attendance.Message ="HR MESSAGE: "+ message;
+                    attendance.Message = "HR MESSAGE: " + message;
                     attendance.HrStatus = "Rejected";
                     _repository.Attendances.UpdateAndSave(attendance);
                     status = "success";
@@ -259,18 +259,19 @@ namespace EIS.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("DeductFromSalary/{EmployeeCode}/{Dates}/{GrantedLeaves}/{TakenLeaves}")]
-        public IActionResult DeductFromSalary([FromRoute]string EmployeeCode,[FromRoute]string Dates,int GrantedLeaves,int TakenLeaves)
+        [Route("DeductFromSalary/{EmployeeCode}/{Dates}/{GrantedLeaves}/{TakenLeaves}/{UnpaidAbsent}")]
+        public IActionResult DeductFromSalary([FromRoute]string EmployeeCode, [FromRoute]string Dates, [FromRoute]int GrantedLeaves, [FromRoute]int TakenLeaves, [FromRoute]int UnpaidAbsent)
         {
-            int count = Dates.Count(x => x == '&')+1;
+            int count = Dates.Count(x => x == '&') + 1;
             string[] stringDates = new string[count];
             stringDates = Dates.Split("&");
             Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);
             int personId = person != null ? person.Id : 0;
             string EmailId = person != null ? person.EmailAddress : "";
             string EmpName = person != null ? person.FullName : "";
+            bool IsOnProbation = person != null ? Convert.ToBoolean(person.IsOnProbation) : false;
             int DeductedCount = 0;
-            foreach(var date in stringDates)
+            foreach (var date in stringDates)
             {
                 List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(date) && x.HrStatus == "Deducted" && x.EmployeeCode == EmployeeCode).ToList();
                 int Count = list != null ? list.Count : 0;
@@ -293,14 +294,34 @@ namespace EIS.WebAPI.Controllers
                     DeductedCount++;
                 }
             }
-            string status = "fine";
-            //Send Mail to Employee
             string To = EmailId;
             string subject = "Deduction of unpaid leaves";
-            string bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that your total leaves " +
-                "have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, your total leaves are " + TakenLeaves +
-                " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
-                "Thanks\n\nRegards,\n\nAadyam Consultants.";
+            //Send Mail to Employee
+            string bodyForEmployee = "";
+            List<SP_LeavePoliciesInDetail> LeavePolicies = _repository.LeaveRequest.GetLeavePoliciesInDetails(personId);
+            string policies = "";
+            if (LeavePolicies.Count > 0)
+            {
+                policies = "The details of your leaves are as follows (no. of days) : \n";
+                foreach (var policy in LeavePolicies)
+                {
+                    policies += "" + policy.LeaveType + " : " + policy.LeaveAvailed + "\n";
+                }
+                policies += UnpaidAbsent > 0 ? "Absent days (Unpaid) : " + UnpaidAbsent + "\n" : null;
+                bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that your total leave till date are " + TakenLeaves + "." +
+                    "They are been exceeded by " + DeductedCount + " days and hence the  same has been deducted from your salary, which please note.\n\n" + policies + "\n" +
+                    "Thanks\n\nRegards,\n\nAadyam Consultants.";
+            }
+            else
+            {
+                if (IsOnProbation == true && UnpaidAbsent > 0)
+                {
+                    bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that you were absent for " + UnpaidAbsent + " days." +
+                        "This falls under your probation period and hence it has been deducted from your salary.\n\n" +
+                        "Thanks\n\nRegards,\n\nAadyam Consultants.";
+                }
+            }
+
             new EmailManager(_configuration, _repository).SendEmail(subject, bodyForEmployee, To, null);
             //Send Mail to Admin and HR
             var results = _repository.Employee.FindAllWithNoTracking().Include(x => x.Role).Where(x => x.Role.Name.ToUpper() == "HR" || x.Role.Name.ToUpper() == "ADMIN")
@@ -316,8 +337,9 @@ namespace EIS.WebAPI.Controllers
                     " have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, his/her total leaves are " + TakenLeaves +
                     " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
                     "Thanks\n\nRegards,\n\nAadyam Consultants.";
-                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+                //new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
             }
+            string status = "fine";
             return Ok(status);
         }
 
@@ -325,7 +347,7 @@ namespace EIS.WebAPI.Controllers
         [Route("DeductOneDayFromSalary/{EmployeeCode}/{Date}")]
         public IActionResult DeductOneDayFromSalary([FromRoute]string EmployeeCode, [FromRoute]string Date)
         {
-            List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(Date) && x.HrStatus == "Deducted").ToList();
+            List<Attendance> list = _repository.Attendances.FindAllByCondition(x => x.DateIn == Convert.ToDateTime(Date) && x.HrStatus == "Deducted" && x.EmployeeCode == EmployeeCode).ToList();
             int Count = list != null ? list.Count : 0;
             Person person = _repository.Employee.FindByCondition(x => x.EmployeeCode == EmployeeCode);
             int personId = person != null ? person.Id : 0;
@@ -370,7 +392,7 @@ namespace EIS.WebAPI.Controllers
                 string bodyForHRAndAdmin = "Dear " + p.FullName + ",\n\n" + "This is to inform you that unpaid leave of " + dateTime.ToString("dd-MMM-yyyy") +
                 " has been deducted from the salary payment of " + EmpName + ", which please note.\n\n" +
                 "Thanks\n\nRegards,\n\nAadyam Consultants.";
-                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+                //new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
             }
             return Ok(status);
         }
@@ -387,3 +409,9 @@ namespace EIS.WebAPI.Controllers
         #endregion
     }
 }
+
+
+//string bodyForEmployee = "Dear " + EmpName + ",\n\n" + "This is to inform you that your total leaves " +
+//    "have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, your total leaves are " + TakenLeaves +
+//    " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
+//    "Thanks\n\nRegards,\n\nAadyam Consultants.";

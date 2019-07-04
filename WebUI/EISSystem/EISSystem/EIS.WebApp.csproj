@@ -29,21 +29,6 @@
     <PackageReference Include="toastr" Version="2.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="EIS.Data">
-      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.Entities">
-      <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.2\EIS.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.Repositories">
-      <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.2\EIS.Repositories.dll</HintPath>
-    </Reference>
-    <Reference Include="EIS.Validations">
-      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 
   <ItemGroup>
     <Content Update="Views\Attendance\GetAllAttendanceMonthlyById.cshtml">
@@ -81,6 +66,22 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Ems\js\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Reference Include="EIS.Data">
+      <HintPath>..\..\..\API\EIS.Data\bin\Debug\netcoreapp2.2\EIS.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Entities">
+      <HintPath>..\..\..\API\EIS.Entities\bin\Debug\netcoreapp2.2\EIS.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Repositories">
+      <HintPath>..\..\..\API\EIS.Repository\bin\Debug\netcoreapp2.2\EIS.Repositories.dll</HintPath>
+    </Reference>
+    <Reference Include="EIS.Validations">
+      <HintPath>..\..\..\API\EIS.Validations\bin\Debug\netcoreapp2.2\EIS.Validations.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

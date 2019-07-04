@@ -309,7 +309,7 @@
         }
         else {
             var pid = @cookies.PersonId;
-            $.getJSON("@APIURL/api/LeaveRequest/" + pid + "/" + x + "", function (data1) {
+            $.getJSON("@APIURL/api/LeaveRequest/Past/" + pid + "/" + x + "", function (data1) {
                 availableLeaves = data1;
                 avl = data1;
                 if (data1 == 0) {
@@ -326,7 +326,7 @@
                     $("#psid").val(pid);
                     $("#typeid").val(x);
                     if (data1 == -2) {
-                        $("#LType").append('<span title="This leave will be treated as unpaid leave" id="msg1" class="text-success">Unpaid Leaves</span>');
+                        $("#LType").append('<span title="This leave will be treated as unpaid leave" id="msg2" class="text-success">Unpaid Leaves</span>');
                     }
                     else {
                         $("#LType").append('<span id="msg2" class="text-success">' + data1 + ' days are available</span>');

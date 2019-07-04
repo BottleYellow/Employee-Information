@@ -96,7 +96,7 @@
                                     {
                                         if (item.PaidStatus == "Without Pay" && cookies.Role == "Admin")
                                         {
-                                            <button onclick="javascript: deductButton('@Model.EmployeeCode','@item.Date');" class="btn btn-warning">Deduct from salary</button>
+                                            <button onclick="javascript: deductButton('@Model.EmployeeCode','@Convert.ToDateTime(item.Date).ToString("dd MMM yyyy")');" class="btn btn-warning">Deduct from salary</button>
                                         }
                                         @*<a onclick="javascript:test(\'' + data.sP_GetAttendanceCountReportsNew[i].EmployeeCode + '\',\'' + data.sP_GetAttendanceCountReportsNew[i].LeavesWithoutPay + '\',\'' + x + '\')">Deduct from salary</a>*@
                                         else

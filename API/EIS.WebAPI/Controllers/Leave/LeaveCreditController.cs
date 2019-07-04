@@ -40,9 +40,9 @@ namespace EIS.WebAPI.Controllers.Leave
             }).ToList(); ;
             return data;
         }
-        [Route("GetCreditsByPerson/{PersonId}")]
+        [Route("GetCreditsByPerson/{PersonId}/{LeaveType}")]
         [HttpGet]
-        public List<LeaveCredit> GetLeaveCreditsByPerson([FromRoute]int PersonId)
+        public List<LeaveCredit> GetLeaveCreditsByPerson([FromRoute]int PersonId, [FromRoute] string LeaveType)
         {
             List<LeaveCredit> credits = new List<LeaveCredit>();
             bool? IsOnProbation = _repository.Employee.FindByConditionWithNoTracking(x => x.Id == PersonId).IsOnProbation;
@@ -52,18 +52,25 @@ namespace EIS.WebAPI.Controllers.Leave
             }
             else
             {
-                //               credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0 && x.LeaveRule.IsPaid == true).ToList();
-                int avl = Convert.ToInt32(_repository.LeaveCredit.GetAvailableLeaves(PersonId, 0));
-                if (avl == 0)
+                if (LeaveType == "Past")
                 {
-                    credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+                    credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId).ToList();
                 }
                 else
                 {
-                    credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == true).ToList();
+                    //               credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.Available > 0 && x.LeaveRule.IsPaid == true).ToList();
+                    int avl = Convert.ToInt32(_repository.LeaveCredit.GetAvailableLeaves(PersonId, 0));
+                    if (avl == 0)
+                    {
+                        credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == false).ToList();
+                    }
+                    else
+                    {
+                        credits = _repository.LeaveCredit.FindAll().Include(x => x.LeaveRule).Where(x => x.IsActive == true && x.PersonId == PersonId && x.LeaveRule.IsPaid == true).ToList();
+                    }
                 }
             }
-           
+
             return credits;
         }
         [Route("GetLeaveCreditsForEdit/{PersonId}")]

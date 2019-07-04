@@ -395,5 +395,14 @@ namespace EIS.Repositories.Repository
             };
             return NewRequest;
         }
+
+        public List<SP_LeavePoliciesInDetail> GetLeavePoliciesInDetails(int PersonId)
+        {
+            List<SP_LeavePoliciesInDetail> LeavePoliciesInDetails = new List<SP_LeavePoliciesInDetail>();
+            var SP_PersonId = new SqlParameter("@PersonId", PersonId);
+            string usp = "LMS.usp_GetEmployeePoliciesInDetails @PersonId";
+            LeavePoliciesInDetails = _dbContext._sp_GetLeavePoliciesInDetail.FromSql(usp, SP_PersonId).ToList();
+            return LeavePoliciesInDetails;
+        }
     }
 }
