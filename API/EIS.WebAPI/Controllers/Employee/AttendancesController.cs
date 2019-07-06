@@ -337,7 +337,7 @@ namespace EIS.WebAPI.Controllers
                     " have been extended against granted (" + GrantedLeaves + " days) leaves, As per records, his/her total leaves are " + TakenLeaves +
                     " and hence the excess leaves, " + DeductedCount + " has been deducted from the salary payment, which please note.\n\n" +
                     "Thanks\n\nRegards,\n\nAadyam Consultants.";
-                //new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
             }
             string status = "fine";
             return Ok(status);
@@ -392,7 +392,7 @@ namespace EIS.WebAPI.Controllers
                 string bodyForHRAndAdmin = "Dear " + p.FullName + ",\n\n" + "This is to inform you that unpaid leave of " + dateTime.ToString("dd-MMM-yyyy") +
                 " has been deducted from the salary payment of " + EmpName + ", which please note.\n\n" +
                 "Thanks\n\nRegards,\n\nAadyam Consultants.";
-                //new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
+                new EmailManager(_configuration, _repository).SendEmail(subject, bodyForHRAndAdmin, To, null);
             }
             return Ok(status);
         }
