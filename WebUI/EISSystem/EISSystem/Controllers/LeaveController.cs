@@ -10,9 +10,11 @@ using EIS.Entities.Leave;
 using EIS.Entities.Models;
 using EIS.Entities.SP;
 using EIS.WebApp.Filters;
+using EIS.WebApp.Hubs;
 using EIS.WebApp.IServices;
 using EIS.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 
 namespace EIS.WebApp.Controllers
@@ -25,19 +27,22 @@ namespace EIS.WebApp.Controllers
         HttpResponseMessage response;
         List<LeaveCredit> data;
         private IServiceWrapper _services;
+        private IHubContext<PendingLeavesCountHub> _hubContext;
         #endregion
 
         #region Controller
-        public LeaveController(IServiceWrapper services, IEISService<EmployeeLeaves> service) : base(service)
+        public LeaveController(IServiceWrapper services, IEISService<EmployeeLeaves> service, IHubContext<PendingLeavesCountHub> hubContext) : base(service)
         {
             _services = services;
+            _hubContext = hubContext;
         }
         #endregion
 
         #region Requests
         [DisplayName("View All Requests")]
-        public IActionResult EmployeeLeaveHistory()
+        public IActionResult EmployeeLeaveHistory(string Status)
         {
+            ViewBag.Status = Status;
             ViewBag.Locations = GetLocations();
             return View();
         }
@@ -136,6 +141,7 @@ namespace EIS.WebApp.Controllers
                 HttpResponseMessage response = _services.LeaveRequest.PostResponse(ApiUrl + "/api/LeaveRequest/" + 0 + "/Future", request);
                 if (response.IsSuccessStatusCode == true)
                 {
+                    _hubContext.Clients.All.SendAsync("AddLeave", "");
                     return View();
                 }
             }

@@ -464,5 +464,14 @@ namespace EIS.WebAPI.Controllers
             return Ok(Convert.ToInt32(value));
         }
 
+        [AllowAnonymous]
+        [Route("GetPendingLeavesCount")]
+        [HttpGet]
+        public IActionResult GetPendingLeavesCount()
+        {
+            float value = _repository.LeaveRequest.GetPendingLeavesCount();
+            return Ok(Convert.ToInt32(value));
+        }
+
     }
 }

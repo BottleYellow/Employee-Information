@@ -256,6 +256,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $('#locations').val(2);
         $('[data-toggle="tooltip"]').tooltip();
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations));
         $('#banerPanelHeading').html(data[1].LocationName);
@@ -432,7 +433,6 @@
                     $('.ajax-loader').css("visibility", "visible");
                 },
                 success: function (data) {
-                    debugger;
                     var array = [];
                     for (var i = 0; i < data.sP_GetAttendanceCountReportsNew.length; i++) {
                         var leaveWithoutPay = "";
@@ -639,19 +639,22 @@
 
     function GetLeaves(Ecode) {
         var Type = $('#select').val();
-        var Year = $("#inputyear").val();
-        var url = $("#modal-placeholder").data('url') + "?Type=" + Type + "&Year=" + Year + "&Month=01&EmployeeCode=" + Ecode;
-        //$.get(url, function (data) {
-        //    $("#modal-placeholder").html(data);
-        //    $("#modal-placeholder").modal({ backdrop: 'static', keyboard: false },'show');
-        //}).fail(function (xhr, status, error) {
-        //    if (xhr.status == 401) {
-        //        bootbox.alert("<h4>Access denied..</h4>");
-        //    } else {
-        //        bootbox.alert("<h4>Unable to retrieve the Record</h4>" + error);
-        //    }
-        //    });
-
+        var Year = null;
+        var Month = null;
+        if (Type == 'year') {
+            Year = $("#inputyear").val();
+            Month = '01';
+        }
+        else if (Type == 'month') {
+            var value = $("#inputmonth").val();
+            var monthYear = value.split('/');
+            Year = monthYear[1];
+            Month = monthYear[0];
+        }
+        Year = Year == null ? new Date().getFullYear() : Year;
+        Month = Month == null ? new Date().getMonth() : Month;
+        var url = $("#modal-placeholder").data('url') + "?Type=" + Type + "&Year=" + Year + "&Month=" + Month + "&EmployeeCode=" + Ecode;
+       
         $.ajax({
             url: url,
             type: "GET",
@@ -723,7 +726,7 @@
             var cMonth = date.getMonth();
             var cDate = date.getDate();
             var cYear = date.getFullYear();
-            $('#inputyear').val(y);
+            $('#inputyear').val(cYear);
             $('#inputyeardiv').show();
             $('#inputmonthdiv').hide();
             $('#inputyear').datetimepicker({

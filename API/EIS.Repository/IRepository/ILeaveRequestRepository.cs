@@ -19,5 +19,6 @@ namespace EIS.Repositories.IRepository
         List<LeaveRequestViewModel> GetLeaveData(int locationId, string employeeId, int month, int year,int TenantId,string leaveType,bool status);
         List<SP_EmployeeLeaveRequest> GetEmployeeLeaveData(int PersonId);
         List<SP_LeavePoliciesInDetail> GetLeavePoliciesInDetails(int PersonId);
+        int GetPendingLeavesCount();
     }
 }

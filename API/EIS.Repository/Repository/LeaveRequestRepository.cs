@@ -337,7 +337,7 @@ namespace EIS.Repositories.Repository
                     Available = data.Available,
                     AppliedDate = data.AppliedDate,
                     Status = data.Status,
-                    Reason = data.Reason,
+                    Reason = string.IsNullOrEmpty(data.Reason) ? "-" : data.Reason,
                     PersonId = data.Person.Id
                 };
                 
@@ -403,6 +403,17 @@ namespace EIS.Repositories.Repository
             string usp = "LMS.usp_GetEmployeePoliciesInDetails @PersonId";
             LeavePoliciesInDetails = _dbContext._sp_GetLeavePoliciesInDetail.FromSql(usp, SP_PersonId).ToList();
             return LeavePoliciesInDetails;
+        }
+
+        public int GetPendingLeavesCount()
+        {
+            int result = 0;
+            ActualLeaveCount Model = new ActualLeaveCount();
+
+            string usp = "select * from [LMS].[GetPendingLeavesCount]()";
+            Model = _dbContext._sp_GetPendingLeaveCount.FromSql(usp).FirstOrDefault();
+            if (Model != null) result = Model.LeaveCount;
+            return result;
         }
     }
 }

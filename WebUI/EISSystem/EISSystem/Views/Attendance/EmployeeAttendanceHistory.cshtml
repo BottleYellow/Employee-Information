@@ -477,7 +477,6 @@
                 $('.ajax-loader').css("visibility", "visible");
             },
             success: function (data) {
-                debugger;
 
                 var avgTimeIn = moment(data._SP_ReportCount.AverageTimeIn, 'HH:mm:ss').format('HH:mm');
                 if (avgTimeIn == "Invalid date") {
@@ -600,7 +599,6 @@
                 $('#example1_wrapper').prepend('<button type="button" class="btn" style="background-color:#008080;"></button><label style = "font-size:14px; padding-left:2px; padding-right:5px;" > - Clock In</label > <button type="button" class="btn" style="background-color:#00b3b3;"></button><label style="font-size:14px;">- Clock Out</label>');
 
                 //$('#buttonTest').on('click', function () {
-                //    debugger;
                 //    $('#tblExampleHidden').DataTable().destroy();
                 //    $('#tblExampleHidden').DataTable({ dom: 'B'});
                 //    var data = $('#tblExampleHidden').DataTable().table().data();

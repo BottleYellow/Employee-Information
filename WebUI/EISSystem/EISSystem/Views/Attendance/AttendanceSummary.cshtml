@@ -190,6 +190,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $('#locations').val(2);
         var data =@Html.Raw(Json.Serialize(ViewBag.Locations))
         var currentDate = new Date();
         var m = ((currentDate.getMonth() + 1) >= 10) ? (currentDate.getMonth() + 1) : '0' + (currentDate.getMonth() + 1);

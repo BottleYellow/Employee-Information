@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Net;
+using EIS.WebApp.Hubs;
 
 namespace EIS.WebApp
 {
@@ -74,7 +75,8 @@ namespace EIS.WebApp
                         options.LoginPath = new PathString("/login");
                         options.SlidingExpiration = true;
                     });
-            services.AddMvc().AddJsonOptions(options => {
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 var resolver = options.SerializerSettings.ContractResolver;
                 if (resolver != null)
                 {
@@ -86,6 +88,7 @@ namespace EIS.WebApp
               .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling
                         = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,7 +103,7 @@ namespace EIS.WebApp
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            
+
             app.UseHttpContext();
             app.UseAuthentication();
             app.UseSession();
@@ -115,6 +118,16 @@ namespace EIS.WebApp
                 routes.MapRoute(
                     name: "default",
                     template: Template);
+
+                routes.MapRoute(
+                    name: "EmployeeLeaveHistory",
+                    template: "EmployeeLeaveHistory/{Status?}",
+                    defaults: new { controller = "Leave", action = "EmployeeLeaveHistory" });
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<PendingLeavesCountHub>("/PendingLeavesCountHub");
             });
         }
     }

@@ -595,7 +595,6 @@
         }
 
         $('#btnEmpNext').on('click', function () {
-            debugger;
             var gender = $('#selectGender').val();
             if (gender == "Select") {
                 $('#spanGender').html("Please Select Gender");
@@ -669,7 +668,6 @@
 
         });
         $('#btnPermNext').on('click', function () {
-            debugger;
             var form = $("#create");
             $.validator.unobtrusive.parse(form);
             if (form.valid()) {

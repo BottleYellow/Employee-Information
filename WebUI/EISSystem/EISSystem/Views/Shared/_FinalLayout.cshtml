@@ -7,12 +7,13 @@
 
 @{
     string rootPath = MyHttpContext.AppBaseUrl;
+    string API_Path = MyHttpContext.APIBaseURL;
 
-    string idcard = null, name = null, email = null,imagepath=null;
-    idcard=Context.Session.GetString("IdCard");
-    name= Context.Session.GetString("Name");
-    email= Context.Session.GetString("EmailId");
-    imagepath= Context.Session.GetString("ImagePath");
+    string idcard = null, name = null, email = null, imagepath = null, role = null;
+    idcard = Context.Session.GetString("IdCard");
+    name = Context.Session.GetString("Name");
+    email = Context.Session.GetString("EmailId");
+    imagepath = Context.Session.GetString("ImagePath");
 
     string cookiesdata = Context.Session.GetString("CookieData");
 
@@ -21,8 +22,10 @@
     {
         cookies = JsonConvert.DeserializeObject<CookieModel>(cookiesdata);
     }
+    role = cookies.Role;
     string DashboardName = cookies.Role + "Dashboard";
 }
+
 
 <html>
 <head>
@@ -92,16 +95,16 @@
                 <div class="align-right">
                 </div>
                 <ul id="navright" class="nav navbar-nav navbar-right menu">
-
-
+                    @if (role == "Admin" || role == "HR")
+                    {
+                        <li style="padding-right:15px;"><button id="plBtn" title="Pending Leaves" class="pulse-button"></button></li>
+                    }
                     @RenderSection("Attendance", required: false)
                     <li>
                         <a href="@rootPath/Account/Logout">
                             <span style="color:white;font-size:18px; padding-right:5px; padding-bottom:5px;" data-placement="left" data-toggle="tooltip" title="SignOut" class="glyphicon glyphicon-log-out"></span>
                         </a>
                     </li>
-
-
                     @RenderSection("EstimatedTimeOut", required: false)
                 </ul>
 
@@ -334,11 +337,12 @@
     <!-- Demo Js -->
     <script src="~/js/demo.js"></script>
     <script src="~/js/CustomizeString.js"></script>
-
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 </body>
 </html>
 
 <script type="text/javascript">
+
     $("#linkModal").click(function () {
         var url = $("#modal-placeholder1").data('url');
         $.get(url, function (data) {
@@ -354,6 +358,8 @@
 
     });
     $(document).ready(function () {
+        getPendingLeavesCount();
+        //getPendingLeavesCount();
         $('[data-toggle="tooltip"]').tooltip();
         $('#logout').click(function () {
             var url = "@rootPath/Account/logout";
@@ -369,4 +375,27 @@
             return false;
         });
     });
+    function getPendingLeavesCount() {
+         $.ajax({
+            url: "@API_Path/api/LeaveRequest/GetPendingLeavesCount",
+	        type: 'GET',
+            success: function (data) {
+                var btn = $(".pulse-button");
+                btn.html(data);
+	        },
+	        error: function (data) {
+	        }
+        });
+    }
+    $("#plBtn").on("click", function () {
+        if (!window.location.href.includes("Leave/EmployeeLeaveHistory")) {
+            window.location.href = "@rootPath/Leave/EmployeeLeaveHistory?Status=Pending";
+        }
+    });
+    //var connection = new signalR.HubConnection("PendingLeavesCountHub","","");
+    var connection = new signalR.HubConnectionBuilder().withUrl("/PendingLeavesCountHub").build();
+    connection.on("AddLeave", () => {
+        getPendingLeavesCount();
+    });
+    connection.start();
 </script>
