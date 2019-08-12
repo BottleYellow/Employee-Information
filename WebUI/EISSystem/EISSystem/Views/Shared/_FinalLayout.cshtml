@@ -382,6 +382,9 @@
             success: function (data) {
                 var btn = $(".pulse-button");
                 btn.html(data);
+                if (data == 0) {
+                    $(".pulse-button").css("display", 'none');
+                }
 	        },
 	        error: function (data) {
 	        }

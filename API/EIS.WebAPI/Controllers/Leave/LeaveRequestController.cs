@@ -287,10 +287,11 @@ namespace EIS.WebAPI.Controllers
             }
             else if (status == "Approve")
             {
+                int avl = Convert.ToInt32(_repository.LeaveCredit.GetAvailableLeaves(person.Id, 0));
                 LeaveCredit credit = _repository.LeaveCredit.FindByCondition(x => x.LeaveId == leave.TypeId && x.PersonId == leave.PersonId);
                 if (credit != null && isPaid == true)
                 {
-                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + credit.Available.ToString() + " days";
+                    body += "Your leave request for " + leave.RequestedDays.ToString() + " days from " + leave.FromDate.ToString("dd/MM/yyyy") + " to " + leave.ToDate.ToString("dd/MM/yyyy") + " has been approved.\n Remaining available leaves are " + avl.ToString() + " days";
                 }
                 else
                 {

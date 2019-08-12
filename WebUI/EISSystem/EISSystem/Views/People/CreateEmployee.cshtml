@@ -55,306 +55,303 @@
             <div class="card">
                 <div class="body">
                     <ul class="nav nav-tabs responsive" role="tablist">
-                        <li role="presentation" class="active" style="margin: 0 80px 0 0;" id="empli"><a  aria-controls="settings" role="tab"  id="aemp">Employee Personal Details</a></li>
+                        <li role="presentation" class="active" style="margin: 0 80px 0 0;" id="empli"><a aria-controls="settings" role="tab" id="aemp">Employee Personal Details</a></li>
                         <li role="presentation" style="margin: 0 80px 0 0;" id="permli"><a aria-controls="settings" role="tab" id="aperm">Permanent Address</a></li>
-                        <li role="presentation" style="margin: 0 80px 0 0;" id="currli"><a  aria-controls="settings" role="tab"  id="acurr">Current Addresses</a></li>
-                        <li role="presentation" style="margin: 0 80px 0 0;" id="emergli"><a  aria-controls="settings" role="tab"  id="aemerg">Emergency Addresses</a></li>
+                        <li role="presentation" style="margin: 0 80px 0 0;" id="currli"><a aria-controls="settings" role="tab" id="acurr">Current Addresses</a></li>
+                        <li role="presentation" style="margin: 0 80px 0 0;" id="emergli"><a aria-controls="settings" role="tab" id="aemerg">Emergency Addresses</a></li>
                     </ul>
                     <form asp-action="Create" method="post" enctype="multipart/form-data" id="create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset id="employee">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.EmployeeCode">Employee Code : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.EmployeeCode" class="form-control" id="EmployeeCode" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.EmployeeCode" class="text-danger"></span>
-                                                <span class="text-danger" id="spanEmployeeCode"></span>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.EmployeeCode">Employee Code : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.EmployeeCode" class="form-control" id="EmployeeCode" />
                                             </div>
+                                            <span asp-validation-for="@Model.people.EmployeeCode" class="text-danger"></span>
+                                            <span class="text-danger" id="spanEmployeeCode"></span>
                                         </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.LocationId">Location : </label>
-                                                <select asp-for="@Model.people.LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick" id="LocName" >
-                                                    <option value="0">-- Select Location --</option>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.LocationId">Location : </label>
+                                            <select asp-for="@Model.people.LocationId" asp-items="@(new SelectList(@ViewBag.Locations,"Id","LocationName"))" class="form-control show-tick" id="LocName">
+                                                <option value="0">-- Select Location --</option>
+                                            </select>
+                                            <span asp-validation-for="@Model.people.LocationId" class="text-danger" id="spanLocation"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.FirstName">First Name : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
+                                            </div>
+                                            <span asp-validation-for="@Model.people.FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="@Model.people.MiddleName">Middle Name : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.MiddleName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.MiddleName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.LastName">Last Name : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.LastName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.ContactNumber">Contact Number : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.ContactNumber" class="form-control" />
+                                            </div>
+                                            <span asp-validation-for="@Model.people.ContactNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.MobileNumber">Mobile Number : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.MobileNumber" class="form-control" />
+                                            </div>
+                                            <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
+                                            <span class="text-danger" id="spanMobileNumber"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.EmailAddress">Email Address : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.EmailAddress" type="email" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
+                                            <span class="text-danger" id="spanEmail"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="@Model.people.PersonalEmail">Personal Email Address : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.PersonalEmail" type="email" class="form-control" />
+                                            </div>
+                                            <span asp-validation-for="@Model.people.PersonalEmail" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Choose Image : </label>
+                                            <div class="form-line">
+                                                <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.Image" class="text-danger"></span>
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.DateOfBirth">Date Of Birth : </label>
+                                            <div class="form-line">
+                                                <input id="dob" class="form-control" type="text" asp-for="@Model.people.DateOfBirth" autocomplete="off" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.DateOfBirth" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.Gender">Gender : </label>
+                                            <select asp-for="@Model.people.Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick" id="selectGender">
+                                                <option value="Select">-- Select Gender --</option>
+                                            </select>
+                                            <span asp-validation-for="@Model.people.Gender" class="text-danger"></span>
+                                            <span class="text-danger" id="spanGender"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.RoleId">Role : </label>
+                                            <select id="did" asp-for="@Model.people.RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
+                                                <option value="0">-- Select Role --</option>
+                                            </select>
+                                            <span asp-validation-for="@Model.people.RoleId" class="text-danger"></span>
+                                            <span class="text-danger" id="spanRoleId"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.JoinDate">Joining Date : </label>
+                                            <div class="form-line">
+                                                <input id="doj" class="form-control" type="text" asp-for="@Model.people.JoinDate" autocomplete="off" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.JoinDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="@Model.people.ReportingPersonId">Reporting Person : </label>
+                                            <div class="form-line">
+                                                <select asp-for="@Model.people.ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
+                                                    <option value="0">-- Select --</option>
                                                 </select>
-                                                <span asp-validation-for="@Model.people.LocationId" class="text-danger" id="spanLocation"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.FirstName">First Name : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.FirstName" class="form-control" onchange="javascript: MakeFirstLetterCapital(this)" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.FirstName" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label asp-for="@Model.people.MiddleName">Middle Name : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.MiddleName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.MiddleName" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.LastName">Last Name : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.LastName" onchange="javascript: MakeFirstLetterCapital(this)" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.LastName" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.ContactNumber">Contact Number : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.ContactNumber" class="form-control" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.ContactNumber" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.MobileNumber">Mobile Number : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.MobileNumber" class="form-control" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.MobileNumber" class="text-danger"></span>
-                                                <span class="text-danger" id="spanMobileNumber"></span>                                             
-                                            </div>
-                                        </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
 
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="@Model.people.Salary">Salary : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.Salary" class="form-control" />
 
+                                            </div>
+                                            <span asp-validation-for="@Model.people.Salary" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="@Model.people.PanCard">PAN Card No. : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.PanCard" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.PanCard" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="control-label" asp-for="@Model.people.AadharCard">Aadhar No. : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.AadharCard" class="form-control" />
+
+                                            </div>
+                                            <span asp-validation-for="@Model.people.AadharCard" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.EmailAddress">Email Address : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.EmailAddress" type="email" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.EmailAddress" class="text-danger"></span>
-                                                <span  class="text-danger" id="spanEmail"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.PersonalEmail">Personal Email Address : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.PersonalEmail" type="email" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.PersonalEmail" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.WeeklyOffId">Weekly Off Type : </label>
+                                            <select id="wid" asp-for="@Model.people.WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs,"Id","Type"))" class="form-control show-tick">
+                                                <option value="0">-- Select Type --</option>
+                                            </select>
+                                            <span asp-validation-for="@Model.people.WeeklyOffId" class="text-danger" id="spanWeeklyOff"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label">Choose Image : </label>
-                                                <div class="form-line">
-                                                    <input formenctype="multipart/form-data" type="file" accept="image/*" class="form-control" name="file" id="imageFile" onchange="return ValidateFileUpload()" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.Image" class="text-danger"></span>
-                                                <span class="text-danger"></span>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.WorkingHours">Daily Working Hours : </label>
+                                            <div class="form-line">
+                                                <input asp-for="@Model.people.WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
                                             </div>
+                                            <span asp-validation-for="@Model.people.WorkingHours" class="text-danger"></span>
                                         </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.DateOfBirth">Date Of Birth : </label>
-                                                <div class="form-line">
-                                                    <input id="dob" class="form-control" type="text" asp-for="@Model.people.DateOfBirth" autocomplete="off" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.DateOfBirth" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.Gender">Gender : </label>
-                                                <select asp-for="@Model.people.Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Gender)))" class="form-control show-tick" id="selectGender">
-                                                    <option value="Select">-- Select Gender --</option>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.IsOnProbation">Is On Probation? : </label>
+                                            <div class="form-line">
+                                                <select id="ip" asp-for="@Model.people.IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
+                                                    <option value="false" selected>No</option>
+                                                    <option value="true">Yes</option>
                                                 </select>
-                                                <span asp-validation-for="@Model.people.Gender" class="text-danger" ></span>
-                                                <span class="text-danger" id="spanGender"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.RoleId">Role : </label>
-                                                <select id="did" asp-for="@Model.people.RoleId" asp-items="@(new SelectList(@ViewBag.Designations,"Id","Name"))" class="form-control show-tick">
-                                                    <option value="0">-- Select Role --</option>
-                                                </select>
-                                                <span asp-validation-for="@Model.people.RoleId" class="text-danger"></span>
-                                                <span  class="text-danger" id="spanRoleId"></span>
+                                <div id="period" class="col-md-3" hidden>
+                                    <div class="col-md-11 col-sm-9 col-xs-9">
+                                        <div class="form-group required">
+                                            <label class="control-label" asp-for="@Model.people.PropbationPeriodInMonth">Probation Period(In Month) : </label>
+                                            <div class="form-line">
+                                                <input id="ppm" min="1" max="12" asp-for="@Model.people.PropbationPeriodInMonth" class="form-control" />
                                             </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.JoinDate">Joining Date : </label>
-                                                <div class="form-line">
-                                                    <input id="doj" class="form-control" type="text" asp-for="@Model.people.JoinDate" autocomplete="off" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.JoinDate" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" asp-for="@Model.people.ReportingPersonId">Reporting Person : </label>
-                                                <div class="form-line">
-                                                    <select asp-for="@Model.people.ReportingPersonId" data-size="5" asp-items="@(new SelectList(@ViewBag.Persons,"Id","FirstName"))" class="form-control show-tick">
-                                                        <option value="0">-- Select --</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" asp-for="@Model.people.Salary">Salary : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.Salary" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.Salary" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" asp-for="@Model.people.PanCard">PAN Card No. : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.PanCard" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.PanCard" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" asp-for="@Model.people.AadharCard">Aadhar No. : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.AadharCard" class="form-control" />
-
-                                                </div>
-                                                <span asp-validation-for="@Model.people.AadharCard" class="text-danger"></span>
-                                            </div>
+                                            <span asp-validation-for="@Model.people.PropbationPeriodInMonth" class="text-danger"></span>
+                                            <span class="text-danger" id="spanProbation"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.WeeklyOffId">Weekly Off Type : </label>
-                                                <select id="wid" asp-for="@Model.people.WeeklyOffId" asp-items="@(new SelectList(@ViewBag.WeeklyOffs,"Id","Type"))" class="form-control show-tick">
-                                                    <option value="0">-- Select Type --</option>
-                                                </select>
-                                                <span asp-validation-for="@Model.people.WeeklyOffId" class="text-danger" id="spanWeeklyOff"></span>
+
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label asp-for="@Model.people.Description">Description : </label>
+                                            <div class="form-line">
+                                                <textarea asp-for="@Model.people.Description" rows="2" class="form-control no-resize" placeholder="About You..."></textarea>
                                             </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.WorkingHours">Daily Working Hours : </label>
-                                                <div class="form-line">
-                                                    <input asp-for="@Model.people.WorkingHours" id="wh" type="text" class="form-control" autocomplete="off" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.WorkingHours" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.IsOnProbation">Is On Probation? : </label>
-                                                <div class="form-line">
-                                                    <select id="ip" asp-for="@Model.people.IsOnProbation" class="form-control show-tick" onchange="showPeriod(this.value);">
-                                                        <option value="false" selected>No</option>
-                                                        <option value="true">Yes</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <span asp-validation-for="@Model.people.Description" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div id="period" class="col-md-3" hidden>
-                                        <div class="col-md-11 col-sm-9 col-xs-9">
-                                            <div class="form-group required">
-                                                <label class="control-label" asp-for="@Model.people.PropbationPeriodInMonth">Probation Period(In Month) : </label>
-                                                <div class="form-line">
-                                                    <input id="ppm" min="1" max="12" asp-for="@Model.people.PropbationPeriodInMonth" class="form-control" />
-                                                </div>
-                                                <span asp-validation-for="@Model.people.PropbationPeriodInMonth" class="text-danger"></span>
-                                                <span class="text-danger" id="spanProbation"></span>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+
                                     </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
 
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <label asp-for="@Model.people.Description">Description : </label>
-                                                <div class="form-line">
-                                                    <textarea asp-for="@Model.people.Description" rows="2" class="form-control no-resize" placeholder="About You..."></textarea>
-                                                </div>
-                                                <span asp-validation-for="@Model.people.Description" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                        </div>
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9" style="height:80px">
-                                        <div class="col-md-4 col-sm-6 col-xs-12">
-                                            <div class="form-group">
-                                                <button type="button" class="btn btn-primary" id="btnEmpNext">Next</button>
-                                                <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div style="height:80px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="btnEmpNext">Next</button>
+                                            <button type="button" class="btn btn-primary" id="cancel">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -373,7 +370,7 @@
                                     <input asp-for="@Model.permanent.City" class="form-control">
                                     <label class="form-label">City</label>
                                 </div>
-                                <span asp-validation-for="@Model.permanent.City" class="text-danger" ></span>
+                                <span asp-validation-for="@Model.permanent.City" class="text-danger"></span>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
@@ -387,7 +384,7 @@
                                     <input asp-for="@Model.permanent.Country" class="form-control">
                                     <label class="form-label">Country</label>
                                 </div>
-                                <span asp-validation-for="@Model.permanent.Country" class="text-danger" ></span>
+                                <span asp-validation-for="@Model.permanent.Country" class="text-danger"></span>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
@@ -407,42 +404,42 @@
                             <button type="button" class="btn btn-primary m-t-15 waves-effect" id="btnPermPrev">Previous</button>
                         </fieldset>
                         <fieldset id="currentAddress" hidden="hidden">
-                            <div class="form-group form-float">                              
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.Address" class="form-control" id="currentAddressValue">
                                     <label class="form-label">Address</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.Address" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">                              
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.City" class="form-control" id="currentCityValue">
                                     <label class="form-label">City</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.City" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">                              
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.State" class="form-control" id="currentStateValue">
                                     <label class="form-label">State</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.State" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">                               
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.Country" class="form-control" id="currentCountryValue">
                                     <label class="form-label">Country</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.Country" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">                               
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.PinCode" class="form-control" inputmode="numeric" maxlength="6" id="currentPinCodeValue">
                                     <label class="form-label">Pin Code</label>
                                 </div>
                                 <span asp-validation-for="@Model.current.PinCode" class="text-danger"></span>
                             </div>
-                            <div class="form-group form-float">                              
+                            <div class="form-group form-float">
                                 <div class="form-line">
                                     <input asp-for="@Model.current.PhoneNumber" class="form-control" inputmode="numeric" maxlength="10" id="currentPhoneNumberValue">
                                     <label class="form-label">Phone No</label>
@@ -547,7 +544,7 @@
         location.href = '@Url.Action("Index", "People")';
     });
     $('#btnSubmit').on('click', function () {
-            $('#create').submit();        
+            $('#create').submit();
     });
     function showPeriod(x) {
         if (x == "true") {
@@ -595,11 +592,11 @@
         }
 
         $('#btnEmpNext').on('click', function () {
-            var gender = $('#selectGender').val();
+            @*var gender = $('#selectGender').val();
             if (gender == "Select") {
                 $('#spanGender').html("Please Select Gender");
             }
-       
+
             var form = $("#create");
             $.validator.unobtrusive.parse(form);
             var dataa = $('#create').serialize();
@@ -608,44 +605,44 @@
                 type: 'POST',
                 datatype: 'JSON',
                 data: dataa,
-                success: function (data) {                  
+                success: function (data) {
                     var form = $("#create");
                     if (data.RoleValidation == "") {
                         $('#spanRoleId').html("");
                     } else {
                         $('#spanRoleId').html(data.RoleValidation);
-                    }  
+                    }
                     if (data.LocationValidation  == "") {
                         $('#spanLocation').html("");
                     } else {
                         $('#spanLocation').html(data.LocationValidation);
-                    }  
+                    }
                     if (data.WeeklyOffValidation == "") {
                         $('#spanWeeklyOff').html("");
                     } else {
                         $('#spanWeeklyOff').html(data.WeeklyOffValidation);
-                    }  
+                    }
                     if (data.EmployeeCodeCheckValidation == "") {
                         $('#spanEmployeeCode').html("");
                     } else {
                         $('#spanEmployeeCode').html(data.EmployeeCodeCheckValidation);
-                    } 
+                    }
                     if (data.MobileValidation == "") {
                         $('#spanMobileNumber').html("");
                     } else {
                         $('#spanMobileNumber').html(data.MobileValidation);
-                    } 
+                    }
                     if (data.ProbationValidation == "") {
                         $('#spanProbation').html("");
                     } else {
                         $('#spanProbation').html(data.ProbationValidation);
-                    }  
+                    }
                     if (data.EmailValidation == "") {
                         $('#spanEmail').html("");
                     } else {
                         $('#spanEmail').html(data.EmailValidation);
-                    }  
-                    
+                    }
+
                     $.validator.unobtrusive.parse(form);
                     if (form.valid()) {
                         var d = form.serialize();
@@ -661,10 +658,17 @@
                         }
 
                     }
-                   
+
                 }
-            });
-            
+            });*@
+            $('#permli').addClass("active");
+            $('#empli').removeClass("active");
+            $('#currli').removeClass("active");
+            $('#emergli').removeClass("active");
+            $('#employee').hide();
+            $('#permanentAddress').show();
+            $('#currentAddress').hide();
+            $('#emergencyAddress').hide();
 
         });
         $('#btnPermNext').on('click', function () {
@@ -713,7 +717,7 @@
                     $('#currentAddress').hide();
                     $('#emergencyAddress').show();
                 }}
-            
+
         });
         $('#btnEmergPrev').on('click', function () {
             $('.text-danger').html("");
@@ -725,7 +729,7 @@
                 $('#permanentAddress').hide();
                 $('#currentAddress').show();
                 $('#emergencyAddress').hide();
-            
+
         })
         $('#btnCurrPrev').on('click', function () {
 
@@ -738,7 +742,7 @@
                 $('#permanentAddress').show();
                 $('#currentAddress').hide();
                 $('#emergencyAddress').hide();
-            
+
         })
         $('#btnPermPrev').on('click', function () {
             $('.text-danger').html("");
@@ -750,9 +754,9 @@
                 $('#permanentAddress').hide();
                 $('#currentAddress').hide();
                 $('#emergencyAddress').hide();
-            
+
         })
-            
+
     })
     $('select').on('change', function () {
         $('#spanRoleId').html("");

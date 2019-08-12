@@ -57,8 +57,8 @@
 <div id="md" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <HeaderWithButton header-name="Leaves In Detail"></HeaderWithButton>
+            <button type="button" class="close" data-dismiss="modal">×</button>
         </div>
         <div class="modal-body">
             <b style="color:black;">Employee Code : @Model.EmployeeCode</b><br />
@@ -179,6 +179,9 @@
         });
     }
     $(document).ready(function () {
+        $(document).on('shown.bs.modal', '#modal-placeholder', function () {
+            table.columns.adjust();
+        });
         var table = $('#LeaveDetails').DataTable({
             sDom: '<"myexport"B>ifrtlp',
             "aoColumns": [
@@ -218,7 +221,6 @@
                 }
             }
         });
-        table.columns.adjust();
     });
 </script>
 <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
